@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Program/AlleyCat/Autowire/AutowireContext.cs" type="Script" id=1]
+[ext_resource path="res://Data/Configurations/Logging/Default Configuration.tscn" type="PackedScene" id=2]
+
+[node name="Root Context" type="Node"]
+
+script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
+
+[node name="Logging" parent="." index="0" instance=ExtResource( 2 )]
+
+

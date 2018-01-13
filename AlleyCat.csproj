@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{553FDF29-DE90-461E-993A-779ACB9C504E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
+    <RootNamespace>
+    </RootNamespace>
+    <AssemblyName>AlleyCat</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tools|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TOOLS;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GodotSharp">
+      <HintPath>$(ProjectDir)/.mono/assemblies/GodotSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
+      <HintPath>$(ProjectDir)/.mono/assemblies/GodotSharpEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Reactive.Core" />
+    <Reference Include="System.Reactive.Interfaces" />
+    <Reference Include="System.Reactive.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\NodeAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
+    <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Common\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IAutowireContext.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\InjectAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\InjectAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IServiceConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
+    <Compile Include="Program\AlleyCat\Event\EventTracker.cs" />
+    <Compile Include="Program\AlleyCat\Event\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
+    <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
+    <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\Console.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\HelpCommand.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommand.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ensure.That" Version="7.2.1" />
+    <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory" Version="4.0.0.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.1" />
+    <PackageReference Include="NETStandard.Library.NETFramework" Version="2.0.0-preview2-25405-01" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Program" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
