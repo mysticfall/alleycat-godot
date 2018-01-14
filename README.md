@@ -68,5 +68,21 @@ this
     .AddTo(this);
 ```
 
+Signals can be accessed in the same manner as well.
+```c#
+using AlleyCat.Event;
+
+[Node("Player")]
+private AnimationPlayer _player;
+
+public void _Ready() {
+    _player.OnAnimationStart()
+        .Where(e => e.Animation == "Show")
+        .Select(e => e.Animation)
+        .Subscribe(name => GD.Print("Playing animation: " + name))
+        .AddTo(this);
+}
+```
+
 ## LICENSE
 This project is provided under the terms of _[MIT License](LICENSE)_.
