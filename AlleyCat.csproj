@@ -73,9 +73,12 @@
     <Compile Include="Program\AlleyCat\Autowire\InjectAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IServiceConfiguration.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
+    <Compile Include="Program\AlleyCat\Event\AnimationPlayerEvents.cs" />
+    <Compile Include="Program\AlleyCat\Event\AnimationPlayerEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerExtensions.cs" />
     <Compile Include="Program\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\IEvent.cs" />
+    <Compile Include="Program\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
