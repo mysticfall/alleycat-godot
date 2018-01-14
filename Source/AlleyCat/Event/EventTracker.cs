@@ -1,95 +1,73 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Subjects;
+﻿using System.Diagnostics;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Event
 {
-    public class EventTracker : Node
+    public abstract class EventTracker<T> : Node where T : Node
     {
-        public const string DefaultName = "EventTracker";
+        [NotNull]
+        protected T Parent
+        {
+            get
+            {
+                Debug.Assert(_parent != null, "Node is not attached to parent yet.");
 
-        [CanBeNull]
-        public IObservable<Unit> OnReady =>_onReady;
+                return _parent;
+            }
+        }
 
-        [CanBeNull]
-        public IObservable<float> OnProcess =>_onProcess;
-
-        [CanBeNull]
-        public IObservable<float> OnPhysicsProcess =>_onPhysicsProcess;
-
-        [CanBeNull]
-        public IObservable<InputEvent> OnInput =>_onInput;
-
-        [CanBeNull]
-        public IObservable<Unit> OnDispose =>_onDispose;
-
-        private Subject<Unit> _onReady;
-
-        private Subject<float> _onProcess;
-
-        private Subject<float> _onPhysicsProcess;
-
-        private Subject<InputEvent> _onInput;
-
-        private Subject<Unit> _onDispose;
+        private T _parent;
 
         public override void _Ready()
         {
             base._Ready();
 
-            _onReady =  new Subject<Unit>();
-            _onProcess =  new Subject<float>();
-            _onPhysicsProcess =  new Subject<float>();
-            _onInput =  new Subject<InputEvent>();
-            _onDispose =  new Subject<Unit>();
-
             SetProcess(false);
             SetPhysicsProcess(false);
             SetProcessInput(false);
-
-            _onReady?.OnNext(Unit.Default);
         }
 
-        public override void _Process(float delta)
+        public override void _EnterTree()
         {
-            base._Process(delta);
+            base._EnterTree();
 
-            _onProcess?.OnNext(delta);
+            var parent = GetParent() as T;
+
+            Debug.Assert(parent != null,
+                $"Invalid parent type: '{GetParent()?.GetType()}', expected '{typeof(T)}'.");
+
+            _parent = parent;
+
+            Connect(parent);
         }
 
-        public override void _PhysicsProcess(float delta)
+        public override void _ExitTree()
         {
-            base._PhysicsProcess(delta);
+            base._ExitTree();
 
-            _onPhysicsProcess?.OnNext(delta);
+            if (_parent != null)
+            {
+                Disconnect(_parent);
+            }
+
+            _parent = null;
         }
 
-        public override void _Input(InputEvent @event)
+        protected virtual void Connect([NotNull] T parent)
         {
-            base._Input(@event);
+        }
 
-            _onInput?.OnNext(@event);
+        protected virtual void Disconnect([NotNull] T parent)
+        {
         }
 
         public override void Dispose(bool disposing)
         {
-            _onDispose?.OnNext(Unit.Default);
-            _onDispose?.Dispose();
-            _onDispose = null;
-
-            _onReady?.Dispose();
-            _onReady = null;
-
-            _onProcess?.Dispose();
-            _onProcess = null;
-
-            _onPhysicsProcess?.Dispose();
-            _onPhysicsProcess = null;
-
-            _onInput?.Dispose();
-            _onInput = null;
+            if (_parent != null)
+            {
+                Disconnect(_parent);
+            }
 
             base.Dispose(disposing);
         }
