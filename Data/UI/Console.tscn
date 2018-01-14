@@ -1,10 +1,31 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Program/AlleyCat/UI/Console/Console.cs" type="Script" id=1]
+[ext_resource path="res://Data/UI/Themes/Default.tres" type="Theme" id=1]
+[ext_resource path="res://Program/AlleyCat/UI/Console/Console.cs" type="Script" id=2]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="StyleBoxEmpty" id=1]
 
-resource_name = "Hide"
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+
+[sub_resource type="Animation" id=4]
+
 length = 0.5
 loop = false
 step = 0.1
@@ -45,7 +66,7 @@ tracks/2/keys = {
 "values": [ 0.0, 250.0 ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=5]
 
 length = 0.5
 loop = false
@@ -102,8 +123,13 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 1 )
-_sections_unfolded = [ "Grow Direction", "Margin", "Rect", "Size Flags", "Visibility" ]
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Grow Direction", "Margin", "Rect", "Size Flags", "Theme", "Visibility" ]
+ColorError = Color( 255, 0, 0, 1 )
+ColorWarning = Color( 255, 0, 0, 1 )
+BufferSize = 300
+ToggleAction = "ui_console"
 
 [node name="Container" type="VBoxContainer" parent="." index="0"]
 
@@ -123,36 +149,17 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Margin" ]
 
-[node name="ScrollPane" type="ScrollContainer" parent="Container" index="0"]
+[node name="Content" type="RichTextLabel" parent="Container" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1003.0
-margin_bottom = 203.0
+margin_bottom = 207.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 3
-scroll_horizontal_enabled = true
-scroll_horizontal = 0
-scroll_vertical_enabled = true
-scroll_vertical = 0
-_sections_unfolded = [ "Margin", "Scroll", "Size Flags" ]
-
-[node name="Content" type="RichTextLabel" parent="Container/ScrollPane" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1003.0
-margin_bottom = 203.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = true
+focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
@@ -165,10 +172,10 @@ meta_underlined = true
 tab_size = 4
 text = ""
 scroll_active = true
-scroll_following = false
-selection_enabled = false
+scroll_following = true
+selection_enabled = true
 override_selected_font_color = false
-_sections_unfolded = [ "Size Flags" ]
+_sections_unfolded = [ "BBCode", "Size Flags", "custom_colors", "custom_styles" ]
 
 [node name="InputPane" type="HBoxContainer" parent="Container" index="1"]
 
@@ -176,7 +183,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 207.0
+margin_top = 211.0
 margin_right = 1003.0
 margin_bottom = 231.0
 rect_pivot_offset = Vector2( 0, 0 )
@@ -194,7 +201,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 904.0
-margin_bottom = 24.0
+margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_next = NodePath("../Button")
 focus_mode = 2
@@ -202,6 +209,9 @@ mouse_filter = 0
 mouse_default_cursor_shape = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
+custom_styles/read_only = SubResource( 1 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
 focus_mode = 2
 context_menu_enabled = true
 placeholder_alpha = 0.6
@@ -218,7 +228,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 908.0
 margin_right = 952.0
-margin_bottom = 24.0
+margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -242,7 +252,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 956.0
 margin_right = 1003.0
-margin_bottom = 24.0
+margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_next = NodePath("../Input")
 focus_mode = 2
@@ -266,13 +276,15 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/Hide = SubResource( 1 )
-anims/Show = SubResource( 2 )
+anims/Hide = SubResource( 4 )
+anims/Show = SubResource( 5 )
 blend_times = [  ]
 autoplay = ""
 
-[connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="OnClearButtonPressed"]
+[connection signal="text_entered" from="Container/InputPane/Input" to="." method="OnTextInput"]
 
-[connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="OnCloseButtonPressed"]
+[connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="Clear"]
+
+[connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="Hide"]
 
 

@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://Data/UI/Console.tscn" type="PackedScene" id=1]
+[gd_scene format=2]
 
 [node name="Scene" type="Node"]
 
@@ -20,9 +18,5 @@ fov = 70.0
 size = 1.0
 near = 0.05
 far = 100.0
-
-[node name="UI" type="Node" parent="." index="1"]
-
-[node name="Console" parent="UI" index="0" instance=ExtResource( 1 )]
 
 

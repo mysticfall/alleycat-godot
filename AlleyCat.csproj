@@ -80,12 +80,16 @@
     <Compile Include="Program\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Event\ObservableExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Interaction\IHideable.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\Console.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\HelpCommand.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\IConsole.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommand.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommandProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,11 @@
+[gd_resource type="Theme" format=2]
+
+[resource]
+
+Console/colors/error = Color( 1, 0, 0, 1 )
+Console/colors/highlight = Color( 1, 1, 1, 1 )
+Console/colors/info = Color( 0.682091, 0.682091, 0.682091, 1 )
+Console/colors/warning = Color( 1, 0.713329, 0, 1 )
+Console/fonts/font = null
+_sections_unfolded = [ "/colors", "/styles", "Console", "Console/colors", "Fonts", "Fonts/fonts", "Resource" ]
+
