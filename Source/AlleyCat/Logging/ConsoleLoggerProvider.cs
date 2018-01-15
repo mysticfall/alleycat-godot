@@ -31,11 +31,11 @@ namespace AlleyCat.Logging
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName));
         }
 
-        public override void Dispose(bool disposing)
+        public override void _ExitTree()
         {
-            Cache.Dispose();
+            base._ExitTree();
 
-            base.Dispose(disposing);
+            Cache.Dispose();
         }
     }
 }

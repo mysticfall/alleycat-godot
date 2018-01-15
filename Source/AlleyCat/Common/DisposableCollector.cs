@@ -48,13 +48,6 @@ namespace AlleyCat.Common
             DisposeItems();
         }
 
-        public override void Dispose(bool disposing)
-        {
-            DisposeItems();
-
-            base.Dispose(disposing);
-        }
-
         private void DisposeItems()
         {
             _disposables?.ForEach(d => d.Dispose());

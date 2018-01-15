@@ -61,15 +61,5 @@ namespace AlleyCat.Event
         protected virtual void Disconnect([NotNull] T parent)
         {
         }
-
-        public override void Dispose(bool disposing)
-        {
-            if (_parent != null)
-            {
-                Disconnect(_parent);
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }

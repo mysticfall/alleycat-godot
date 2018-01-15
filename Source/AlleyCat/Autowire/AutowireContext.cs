@@ -85,11 +85,11 @@ namespace AlleyCat.Autowire
             };
         }
 
-        public override void Dispose(bool disposing)
+        public override void _ExitTree()
         {
-            _provider?.Dispose();
+            base._ExitTree();
 
-            base.Dispose(disposing);
+            _provider?.Dispose();
         }
 
         public static AutowireContext CreateRootContext() => new AutowireContext {Name = RootContextName};
