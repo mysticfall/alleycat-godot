@@ -90,6 +90,7 @@
     <Compile Include="Program\AlleyCat\UI\Console\IConsole.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommandProvider.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -22,13 +22,21 @@ namespace AlleyCat.UI.Console
 
         [Export, NotNull] public string ToggleAction = "ui_console";
 
+        public Color TextColor => GetColor("info", GetType().Name);
+
+        public Color HighlightColor => GetColor("highlight", GetType().Name);
+
+        public Color WarningColor => GetColor("warning", GetType().Name);
+
+        public Color ErrorColor => GetColor("error", GetType().Name);
+
         public IEnumerable<IConsoleCommand> SupportedCommands => _commands.Values;
 
         public IObservable<Unit> OnShow { get; private set; }
 
         public IObservable<Unit> OnHide { get; private set; }
 
-        public IObservable<bool> OnVisibilityChange { get; }
+        public IObservable<bool> OnVisibilityChange { get; private set; }
 
         [Node("Container/Content")]
         protected RichTextLabel Content { get; private set; }
@@ -74,10 +82,13 @@ namespace AlleyCat.UI.Console
             OnHide = onAnimationFinish
                 .Where(e => e.Animation == HideAnimation)
                 .AsUnitObservable();
+            OnVisibilityChange = onAnimationFinish.Select(_ => Visible);
 
             OnShow
                 .Subscribe(_ => Input.GrabFocus())
                 .AddTo(this);
+
+            Content.AddColorOverride("default_color", TextColor);
         }
 
         public new void Show() => PlayAnimation(ShowAnimation);
@@ -94,20 +105,25 @@ namespace AlleyCat.UI.Console
             }
         }
 
-        public IConsole Write(string text)
+        public IConsole Write(string text) => Write(text, new TextStyle());
+
+        public IConsole Write(string text, TextStyle style)
         {
             Ensure.Any.IsNotNull(text, nameof(text));
 
-            Content.AddText(text);
+            style.Write(text, Content);
 
             return this;
         }
 
-        public IConsole WriteLine(string text)
+        public IConsole WriteLine(string text) => WriteLine(text, new TextStyle());
+
+        public IConsole WriteLine(string text, TextStyle style)
         {
             Ensure.Any.IsNotNull(text, nameof(text));
 
-            Content.AddText(text);
+            style.Write(text, Content);
+
             Content.Newline();
 
             AdjustBuffer();
@@ -140,20 +156,16 @@ namespace AlleyCat.UI.Console
             }
             else
             {
-                var color = Theme.GetColor("error", "Console");
-
-                Content.PushColor(color);
-
-                WriteLine($"Unknown command: '{command}'.");
-
-                Content.Pop();
+                WriteLine($"Unknown command: '{command}'.", new TextStyle(WarningColor));
             }
+
+            NewLine();
         }
 
         [UsedImplicitly]
         protected void OnTextInput([NotNull] string line)
         {
-            WriteLine(line);
+            WriteLine(line, new TextStyle(HighlightColor));
 
             Input.Clear();
 
