@@ -53,6 +53,7 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />

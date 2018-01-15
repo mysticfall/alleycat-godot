@@ -9,10 +9,12 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.UI.Console
 {
-    public class Console : Panel, IConsole
+    [AutowireContext]
+    public class Console : Panel, IConsole, IServiceConfiguration
     {
         public const string ShowAnimation = "Show";
 
@@ -65,8 +67,6 @@ namespace AlleyCat.UI.Console
             SetProcess(false);
             SetPhysicsProcess(false);
 
-            this.Autowire();
-
             this.OnInput()
                 .Where(e => e.IsActionPressed(ToggleAction))
                 .Where(_ => !Player.IsPlaying())
@@ -89,6 +89,13 @@ namespace AlleyCat.UI.Console
                 .AddTo(this);
 
             Content.AddColorOverride("default_color", TextColor);
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Autowire();
         }
 
         public new void Show() => PlayAnimation(ShowAnimation);
@@ -182,6 +189,13 @@ namespace AlleyCat.UI.Console
             {
                 Content.RemoveLine(count - 1);
             }
+        }
+
+        public void Register(IServiceCollection collection)
+        {
+            Ensure.Any.IsNotNull(collection, nameof(collection));
+
+            collection.AddSingleton<IConsole>(this);
         }
     }
 }

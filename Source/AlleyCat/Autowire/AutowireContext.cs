@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -13,8 +12,6 @@ namespace AlleyCat.Autowire
 {
     public class AutowireContext : Node, IAutowireContext
     {
-        public const string RootContextName = "RootContext";
-
         private IServiceCollection _collection;
 
         private ServiceProvider _provider;
@@ -22,6 +19,18 @@ namespace AlleyCat.Autowire
         private IEnumerable<IAttributeProcessorFactory> _processorFactories;
 
         private static readonly IMemoryCache InjectorCache = new MemoryCache(new MemoryCacheOptions());
+
+        private IList<object> _queue;
+
+        private bool _ready;
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            _collection = new ServiceCollection();
+            _queue = new List<object>();
+        }
 
         public override void _Ready()
         {
@@ -32,16 +41,11 @@ namespace AlleyCat.Autowire
             Debug.Assert(
                 _processorFactories != null, "CreateProcessorFactories() returned null.");
 
-            _collection = new ServiceCollection();
-
-            var configs = this.GetChildren<IServiceConfiguration>();
-
-            foreach (var config in configs)
-            {
-                config.Register(_collection);
-            }
-
             _provider = _collection.BuildServiceProvider();
+
+            Resolve();
+
+            _ready = true;
         }
 
         [CanBeNull]
@@ -52,18 +56,35 @@ namespace AlleyCat.Autowire
             return _provider.GetService(serviceType);
         }
 
-        public void Resolve(object instance)
+        public void Register(object instance)
         {
             Ensure.Any.IsNotNull(instance, nameof(instance));
 
-            var type = instance.GetType();
-            var processors = InjectorCache.GetOrCreate(type, _ => CreateProcessors(type));
+            var provider = instance as IServiceConfiguration;
 
-            Debug.Assert(processors != null, "CreateProcessors() returned null.");
+            provider?.Register(_collection);
 
-            foreach (var processor in processors)
+            _queue.Add(instance);
+
+            if (_ready)
             {
-                processor.Process(this, instance);
+                Resolve();
+            }
+        }
+
+        protected void Resolve()
+        {
+            foreach (var instance in _queue)
+            {
+                var type = instance.GetType();
+                var processors = InjectorCache.GetOrCreate(type, _ => CreateProcessors(type));
+
+                Debug.Assert(processors != null, "CreateProcessors() returned null.");
+
+                foreach (var processor in processors)
+                {
+                    processor.Process(this, instance);
+                }
             }
         }
 
@@ -81,7 +102,7 @@ namespace AlleyCat.Autowire
             return new List<IAttributeProcessorFactory>
             {
                 new NodeAttributeProcessorFactory(),
-                new ServiceAttributeProcessorFactory(),
+                new ServiceAttributeProcessorFactory()
             };
         }
 
@@ -89,9 +110,10 @@ namespace AlleyCat.Autowire
         {
             base._ExitTree();
 
+            _queue = null;
+            _ready = false;
+
             _provider?.Dispose();
         }
-
-        public static AutowireContext CreateRootContext() => new AutowireContext {Name = RootContextName};
     }
 }

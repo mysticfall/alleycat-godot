@@ -5,6 +5,6 @@ namespace AlleyCat.Autowire
 {
     public interface IAutowireContext : IServiceProvider
     {
-        void Resolve([NotNull] object instance);
+        void Register([NotNull] object instance);
     }
 }

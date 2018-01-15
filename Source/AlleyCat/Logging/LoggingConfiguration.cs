@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
-    [UsedImplicitly]
+    [AutowireContext, UsedImplicitly]
     public class LoggingConfiguration : Node, IServiceConfiguration
     {
         public void Register(IServiceCollection collection)
@@ -38,6 +38,13 @@ namespace AlleyCat.Logging
 
             collection.AddTransient(_ => CreateLoggerForInvoker(factory));
             collection.AddSingleton<ILoggerFactory>(factory);
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Autowire();
         }
 
         private static ILogger CreateLoggerForInvoker(ILoggerFactory factory)

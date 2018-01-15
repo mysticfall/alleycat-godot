@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using AlleyCat.Autowire;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
@@ -21,6 +22,13 @@ namespace AlleyCat.Logging
             Ensure.Any.IsNotNull(cache, nameof(cache));
 
             Cache = cache;
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Autowire();
         }
 
         [NotNull]
