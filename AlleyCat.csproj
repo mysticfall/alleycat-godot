@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\InjectableAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\InjectableAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
@@ -63,6 +66,10 @@
     <Compile Include="Program\AlleyCat\Autowire\NodeAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\SingletonAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeExtensions.cs" />

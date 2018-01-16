@@ -9,12 +9,11 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.UI.Console
 {
-    [AutowireContext]
-    public class Console : Panel, IConsole, IServiceConfiguration
+    [AutowireContext, Singleton(typeof(IConsole))]
+    public class Console : Panel, IConsole
     {
         public const string ShowAnimation = "Show";
 
@@ -189,13 +188,6 @@ namespace AlleyCat.UI.Console
             {
                 Content.RemoveLine(count - 1);
             }
-        }
-
-        public void Register(IServiceCollection collection)
-        {
-            Ensure.Any.IsNotNull(collection, nameof(collection));
-
-            collection.AddSingleton<IConsole>(this);
         }
     }
 }

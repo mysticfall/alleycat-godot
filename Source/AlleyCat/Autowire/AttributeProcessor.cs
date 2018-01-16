@@ -1,6 +1,7 @@
 ﻿using System;
 using EnsureThat;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
@@ -9,6 +10,8 @@ namespace AlleyCat.Autowire
         [NotNull]
         public T Attribute { get; }
 
+        public abstract AutowirePhase ProcessPhase { get; }
+
         protected AttributeProcessor([NotNull] T attribute)
         {
             Ensure.Any.IsNotNull(attribute, nameof(attribute));
@@ -16,6 +19,7 @@ namespace AlleyCat.Autowire
             Attribute = attribute;
         }
 
-        public abstract void Process(IAutowireContext context, object service);
+        public abstract void Process(
+            IServiceCollection collection, IServiceProvider provider, object service);
     }
 }

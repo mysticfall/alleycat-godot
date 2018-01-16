@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
@@ -10,7 +11,7 @@ namespace AlleyCat.Autowire
         {
         }
 
-        protected override object GetDependency(IAutowireContext context, object service) =>
-            context.GetService(TargetType);
+        protected override object GetDependency(IServiceProvider provider, object service) =>
+            provider.GetService(TargetType);
     }
 }

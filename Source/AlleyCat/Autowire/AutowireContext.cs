@@ -30,21 +30,25 @@ namespace AlleyCat.Autowire
 
             _collection = new ServiceCollection();
             _queue = new List<object>();
+
+            _processorFactories = CreateProcessorFactories();
         }
 
         public override void _Ready()
         {
             base._Ready();
 
-            _processorFactories = CreateProcessorFactories();
-
             Debug.Assert(
                 _processorFactories != null, "CreateProcessorFactories() returned null.");
 
             _provider = _collection.BuildServiceProvider();
 
-            Resolve();
+            foreach (var instance in _queue)
+            {
+                ProcessAttributes(instance, AutowirePhase.Resolve);
+            }
 
+            _queue = null;
             _ready = true;
         }
 
@@ -66,25 +70,11 @@ namespace AlleyCat.Autowire
 
             _queue.Add(instance);
 
+            ProcessAttributes(instance, AutowirePhase.Register);
+
             if (_ready)
             {
-                Resolve();
-            }
-        }
-
-        protected void Resolve()
-        {
-            foreach (var instance in _queue)
-            {
-                var type = instance.GetType();
-                var processors = InjectorCache.GetOrCreate(type, _ => CreateProcessors(type));
-
-                Debug.Assert(processors != null, "CreateProcessors() returned null.");
-
-                foreach (var processor in processors)
-                {
-                    processor.Process(this, instance);
-                }
+                ProcessAttributes(instance, AutowirePhase.Resolve);
             }
         }
 
@@ -102,8 +92,25 @@ namespace AlleyCat.Autowire
             return new List<IAttributeProcessorFactory>
             {
                 new NodeAttributeProcessorFactory(),
-                new ServiceAttributeProcessorFactory()
+                new ServiceAttributeProcessorFactory(),
+                new SingletonAttributeProcessorFactory()
             };
+        }
+
+        private void ProcessAttributes(object instance, AutowirePhase phase)
+        {
+            var type = instance.GetType();
+            var processors = InjectorCache.GetOrCreate(type, _ => CreateProcessors(type));
+
+            Debug.Assert(processors != null, "CreateProcessors() returned null.");
+
+            foreach (var processor in processors)
+            {
+                if (processor.ProcessPhase == phase)
+                {
+                    processor.Process(_collection, this, instance);
+                }
+            }
         }
 
         public override void _ExitTree()
