@@ -7,7 +7,7 @@ namespace AlleyCat.Autowire
         [CanBeNull]
         public string Path { get; }
 
-        public NodeAttribute([CanBeNull] string path = null)
+        public NodeAttribute([CanBeNull] string path = null, bool required = true) : base(required)
         {
             Path = path;
         }
