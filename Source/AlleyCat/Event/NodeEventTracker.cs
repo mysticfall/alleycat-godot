@@ -93,6 +93,10 @@ namespace AlleyCat.Event
             base._Ready();
 
             _onReady?.OnNext(Unit.Default);
+
+            SetProcess(_onProcess != null);
+            SetPhysicsProcess(_onPhysicsProcess != null);
+            SetProcessInput(_onInput != null);
         }
 
         public override void _Process(float delta)
