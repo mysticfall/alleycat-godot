@@ -2,6 +2,6 @@
 {
     public enum AutowirePhase
     {
-        Register, Resolve
+        Register, Resolve, PostConstruct
     }
 }

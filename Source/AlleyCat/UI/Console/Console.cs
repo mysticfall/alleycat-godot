@@ -57,10 +57,9 @@ namespace AlleyCat.UI.Console
             _commands.Add(HelpCommand.Key, new HelpCommand());
         }
 
-        public override void _Ready()
+        [PostConstruct]
+        private void OnInitialize()
         {
-            base._Ready();
-
             Visible = false;
 
             SetProcess(false);

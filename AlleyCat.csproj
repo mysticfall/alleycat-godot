@@ -61,6 +61,9 @@
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\PostConstructAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\PostConstructAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\PostConstructAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttribute.cs" />

@@ -48,6 +48,11 @@ namespace AlleyCat.Autowire
                 ProcessAttributes(instance, AutowirePhase.Resolve);
             }
 
+            foreach (var instance in _queue)
+            {
+                ProcessAttributes(instance, AutowirePhase.PostConstruct);
+            }
+
             _queue = null;
             _ready = true;
         }
@@ -75,6 +80,7 @@ namespace AlleyCat.Autowire
             if (_ready)
             {
                 ProcessAttributes(instance, AutowirePhase.Resolve);
+                ProcessAttributes(instance, AutowirePhase.PostConstruct);
             }
         }
 
@@ -93,7 +99,8 @@ namespace AlleyCat.Autowire
             {
                 new NodeAttributeProcessorFactory(),
                 new ServiceAttributeProcessorFactory(),
-                new SingletonAttributeProcessorFactory()
+                new SingletonAttributeProcessorFactory(),
+                new PostConstructAttributeProcessorFactory()
             };
         }
 
