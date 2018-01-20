@@ -12,6 +12,8 @@ namespace AlleyCat.Autowire
 {
     public class AutowireContext : Node, IAutowireContext
     {
+        public Node Node => GetParent();
+
         public IAutowireContext Parent { get; private set; }
 
         public IServiceCollection ServiceCollection { get; } = new ServiceCollection();
@@ -24,16 +26,20 @@ namespace AlleyCat.Autowire
 
         private IList<object> _queue;
 
+        private bool _ready;
+
         public override void _EnterTree()
         {
             base._EnterTree();
 
-            var parent = GetParent().GetAutowireContext();
-
-            Parent = parent == this ? null : parent;
+            if (GetTree().Root != Node)
+            {
+                Parent = Node.GetParent().GetAutowireContext();
+            }
 
             ServiceCollection.Clear();
 
+            _ready = false;
             _queue = new List<object>();
             _processorFactories = CreateProcessorFactories();
         }
@@ -42,28 +48,24 @@ namespace AlleyCat.Autowire
         {
             base._Ready();
 
-            Debug.Assert(
-                _processorFactories != null, "CreateProcessorFactories() returned null.");
-
-            _provider = ServiceCollection.BuildServiceProvider();
-
-            foreach (var instance in _queue)
+            if (_provider == null)
             {
-                ProcessAttributes(instance, AutowirePhase.Resolve);
+                Build();
             }
 
-            foreach (var instance in _queue)
-            {
-                ProcessAttributes(instance, AutowirePhase.PostConstruct);
-            }
-
-            _queue = null;
+            _ready = true;
         }
 
         [CanBeNull]
         public object GetService([NotNull] Type serviceType)
         {
             Ensure.Any.IsNotNull(serviceType, nameof(serviceType));
+
+            if (_provider == null)
+            {
+                throw new InvalidOperationException(
+                    $"Context hasn't been initialized yet : '{this}'.");
+            }
 
             return _provider.GetService(serviceType);
         }
@@ -78,7 +80,7 @@ namespace AlleyCat.Autowire
 
             ProcessAttributes(instance, AutowirePhase.Register);
 
-            if (_queue == null)
+            if (_provider != null)
             {
                 ProcessAttributes(instance, AutowirePhase.Resolve);
                 ProcessAttributes(instance, AutowirePhase.PostConstruct);
@@ -86,7 +88,33 @@ namespace AlleyCat.Autowire
             else
             {
                 _queue.Add(instance);
+
+                if (instance == Node && _ready)
+                {
+                    Build();
+                }
             }
+        }
+
+        private void Build()
+        {
+            Debug.Assert(_provider == null, $"Context has already been built: '{this}'.");
+            Debug.Assert(_processorFactories != null,
+                $"CreateProcessorFactories() returned null: '{this}'.");
+
+            _provider = ServiceCollection.BuildServiceProvider();
+
+            foreach (var instance in _queue)
+            {
+                ProcessAttributes(instance, AutowirePhase.Resolve);
+            }
+
+            foreach (var instance in _queue)
+            {
+                ProcessAttributes(instance, AutowirePhase.PostConstruct);
+            }
+
+            _queue = null;
         }
 
         [NotNull]
@@ -134,7 +162,11 @@ namespace AlleyCat.Autowire
             ServiceCollection.Clear();
 
             _queue = null;
+
             _provider?.Dispose();
+            _provider = null;
         }
+
+        public override string ToString() => $"ApplicationContext({Node.Name})";
     }
 }

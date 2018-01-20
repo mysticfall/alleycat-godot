@@ -48,11 +48,6 @@ namespace AlleyCat.Autowire
 
             while (current != null)
             {
-                if (current is IAutowireContext context)
-                {
-                    return context;
-                }
-
                 var type = current.GetType();
 
                 var attribute = AttributeCache.GetOrCreate(
@@ -73,15 +68,7 @@ namespace AlleyCat.Autowire
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var parent = node.GetParent();
-
-            if (parent == null)
-            {
-                throw new InvalidOperationException(
-                    $"No IAutowireContext found for node: '{node.Name}'.");
-            }
-
-            var context = GetAutowireContext(parent);
+            var context = GetAutowireContext(node);
 
             if (context == null)
             {

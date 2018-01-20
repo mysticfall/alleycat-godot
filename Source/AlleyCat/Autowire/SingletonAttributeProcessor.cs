@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using System.Diagnostics;
+using EnsureThat;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,9 +16,13 @@ namespace AlleyCat.Autowire
             Ensure.Any.IsNotNull(context, nameof(context));
             Ensure.Any.IsNotNull(service, nameof(service));
 
+            var target = context.Node == service ? context.Parent : context;
+
+            Debug.Assert(target != null, "context.Parent != null");
+
             foreach (var type in Attribute.Types)
             {
-                context.ServiceCollection.AddSingleton(type, service);
+                target.ServiceCollection.AddSingleton(type, service);
             }
         }
     }
