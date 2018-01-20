@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -16,9 +15,9 @@ namespace AlleyCat.Autowire
         {
         }
 
-        protected override object GetDependency(IServiceProvider provider, object service)
+        protected override object GetDependency(IAutowireContext context, object service)
         {
-            Ensure.Any.IsNotNull(provider, nameof(provider));
+            Ensure.Any.IsNotNull(context, nameof(context));
 
             var node = service as Node;
 

@@ -48,6 +48,11 @@ namespace AlleyCat.Autowire
 
             while (current != null)
             {
+                if (current is IAutowireContext context)
+                {
+                    return context;
+                }
+
                 var type = current.GetType();
 
                 var attribute = AttributeCache.GetOrCreate(

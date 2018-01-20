@@ -1,5 +1,5 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
+using EnsureThat;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
@@ -11,7 +11,26 @@ namespace AlleyCat.Autowire
         {
         }
 
-        protected override object GetDependency(IServiceProvider provider, object service) =>
-            provider.GetService(TargetType);
+        protected override object GetDependency(IAutowireContext context, object service)
+        {
+            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.Any.IsNotNull(service, nameof(service));
+
+            var current = context;
+
+            while (current != null)
+            {
+                var dependency = current.GetService(TargetType);
+
+                if (dependency != null)
+                {
+                    return dependency;
+                }
+
+                current = context.Parent;
+            }
+
+            return null;
+        }
     }
 }

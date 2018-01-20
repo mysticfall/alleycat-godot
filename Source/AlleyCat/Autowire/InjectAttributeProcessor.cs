@@ -2,7 +2,6 @@
 using System.Reflection;
 using EnsureThat;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
@@ -39,14 +38,12 @@ namespace AlleyCat.Autowire
             }
         }
 
-        public override void Process(
-            IServiceCollection collection, IServiceProvider provider, object service)
+        public override void Process(IAutowireContext context, object service)
         {
-            Ensure.Any.IsNotNull(collection, nameof(collection));
-            Ensure.Any.IsNotNull(provider, nameof(provider));
+            Ensure.Any.IsNotNull(context, nameof(context));
             Ensure.Any.IsNotNull(service, nameof(service));
 
-            var dependency = GetDependency(provider, service);
+            var dependency = GetDependency(context, service);
 
             if (Required && dependency == null)
             {
@@ -61,6 +58,6 @@ namespace AlleyCat.Autowire
 
         [CanBeNull]
         protected abstract object GetDependency(
-            [NotNull] IServiceProvider provider, [NotNull] object service);
+            [NotNull] IAutowireContext context, [NotNull] object service);
     }
 }

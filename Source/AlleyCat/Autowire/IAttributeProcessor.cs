@@ -1,6 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+﻿using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
@@ -8,9 +6,6 @@ namespace AlleyCat.Autowire
     {
         AutowirePhase ProcessPhase { get; }
 
-        void Process(
-            [NotNull] IServiceCollection collection,
-            [NotNull] IServiceProvider provider, 
-            [NotNull] object service);
+        void Process([NotNull] IAutowireContext context, [NotNull] object service);
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using EnsureThat;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
@@ -22,11 +20,9 @@ namespace AlleyCat.Autowire
             Method = method;
         }
 
-        public override void Process(
-            IServiceCollection collection, IServiceProvider provider, object service)
+        public override void Process(IAutowireContext context, object service)
         {
-            Ensure.Any.IsNotNull(collection, nameof(collection));
-            Ensure.Any.IsNotNull(provider, nameof(provider));
+            Ensure.Any.IsNotNull(context, nameof(context));
             Ensure.Any.IsNotNull(service, nameof(service));
 
             Method.Invoke(service, new object[0]);

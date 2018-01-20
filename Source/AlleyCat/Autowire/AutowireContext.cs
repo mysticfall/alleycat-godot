@@ -12,7 +12,9 @@ namespace AlleyCat.Autowire
 {
     public class AutowireContext : Node, IAutowireContext
     {
-        private IServiceCollection _collection;
+        public IAutowireContext Parent { get; private set; }
+
+        public IServiceCollection ServiceCollection { get; } = new ServiceCollection();
 
         private ServiceProvider _provider;
 
@@ -22,15 +24,17 @@ namespace AlleyCat.Autowire
 
         private IList<object> _queue;
 
-        private bool _ready;
-
         public override void _EnterTree()
         {
             base._EnterTree();
 
-            _collection = new ServiceCollection();
-            _queue = new List<object>();
+            var parent = GetParent().GetAutowireContext();
 
+            Parent = parent == this ? null : parent;
+
+            ServiceCollection.Clear();
+
+            _queue = new List<object>();
             _processorFactories = CreateProcessorFactories();
         }
 
@@ -41,7 +45,7 @@ namespace AlleyCat.Autowire
             Debug.Assert(
                 _processorFactories != null, "CreateProcessorFactories() returned null.");
 
-            _provider = _collection.BuildServiceProvider();
+            _provider = ServiceCollection.BuildServiceProvider();
 
             foreach (var instance in _queue)
             {
@@ -54,7 +58,6 @@ namespace AlleyCat.Autowire
             }
 
             _queue = null;
-            _ready = true;
         }
 
         [CanBeNull]
@@ -71,16 +74,18 @@ namespace AlleyCat.Autowire
 
             var provider = instance as IServiceConfiguration;
 
-            provider?.Register(_collection);
-
-            _queue.Add(instance);
+            provider?.Register(ServiceCollection);
 
             ProcessAttributes(instance, AutowirePhase.Register);
 
-            if (_ready)
+            if (_queue == null)
             {
                 ProcessAttributes(instance, AutowirePhase.Resolve);
                 ProcessAttributes(instance, AutowirePhase.PostConstruct);
+            }
+            else
+            {
+                _queue.Add(instance);
             }
         }
 
@@ -115,7 +120,7 @@ namespace AlleyCat.Autowire
             {
                 if (processor.ProcessPhase == phase)
                 {
-                    processor.Process(_collection, this, instance);
+                    processor.Process(this, instance);
                 }
             }
         }
@@ -124,9 +129,11 @@ namespace AlleyCat.Autowire
         {
             base._ExitTree();
 
-            _queue = null;
-            _ready = false;
+            Parent = null;
 
+            ServiceCollection.Clear();
+
+            _queue = null;
             _provider?.Dispose();
         }
     }
