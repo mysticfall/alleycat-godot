@@ -15,7 +15,7 @@ namespace AlleyCat.Autowire
             Ensure.Any.IsNotNull(type, nameof(type));
 
             return type
-                .GetMembers(BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(m => (m.MemberType & (MemberTypes.Property | MemberTypes.Field)) != 0)
                 .Select(m => (m, m.GetCustomAttribute<T>()))
                 .Where((t, _) => t.Item2 != null)
