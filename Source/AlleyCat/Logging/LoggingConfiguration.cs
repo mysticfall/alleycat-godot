@@ -59,18 +59,8 @@ namespace AlleyCat.Logging
             return factory.CreateLogger(type);
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
+        public override void _EnterTree() => this.Prewire();
 
-            this.Prewire();
-        }
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Postwire();
-        }
+        public override void _Ready() => this.Postwire();
     }
 }

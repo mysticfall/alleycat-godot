@@ -32,25 +32,10 @@ namespace AlleyCat.Logging
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName));
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
+        public override void _EnterTree() => this.Prewire();
 
-            this.Prewire();
-        }
+        public override void _Ready() => this.Postwire();
 
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Postwire();
-        }
-
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-
-            Cache.Dispose();
-        }
+        public override void _ExitTree() => Cache.Dispose();
     }
 }

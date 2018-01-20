@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -182,18 +183,8 @@ namespace AlleyCat.UI.Console
             }
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
+        public override void _EnterTree() => this.Prewire();
 
-            this.Prewire();
-        }
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Postwire();
-        }
+        public override void _Ready() => this.Postwire();
     }
 }
