@@ -122,7 +122,7 @@ namespace AlleyCat.Autowire
         {
             Ensure.Any.IsNotNull(type, nameof(type));
 
-            return _processorFactories.SelectMany(f => f.Create(type));
+            return _processorFactories.SelectMany(f => f.Create(type)).ToList();
         }
 
         [NotNull]
