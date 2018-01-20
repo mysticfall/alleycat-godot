@@ -28,7 +28,7 @@ namespace AlleyCat.Autowire
 
             var viewport = node.GetTree().Root;
 
-            return _rootContext = viewport.GetChild<IAutowireContext>();
+            return _rootContext = GetLocalContext(viewport);
         }
 
         public static IAutowireContext GetLocalContext([NotNull] this Node node)
