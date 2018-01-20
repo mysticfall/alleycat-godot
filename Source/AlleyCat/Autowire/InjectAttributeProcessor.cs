@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using EnsureThat;
 using JetBrains.Annotations;
@@ -12,6 +13,11 @@ namespace AlleyCat.Autowire
 
         [NotNull]
         public Type TargetType { get; }
+
+        [NotNull]
+        public Type DependencyType { get; }
+
+        public bool Enumerable { get; }
 
         public override AutowirePhase ProcessPhase => AutowirePhase.Resolve;
 
@@ -35,6 +41,16 @@ namespace AlleyCat.Autowire
                     break;
                 default:
                     throw new InvalidOperationException($"Unknown member type: {member}.");
+            }
+
+            if (TargetType.IsGenericType && TargetType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                DependencyType = TargetType.GetGenericArguments()[0] ?? TargetType;
+                Enumerable = DependencyType != TargetType;
+            }
+            else
+            {
+                DependencyType = TargetType;
             }
         }
 

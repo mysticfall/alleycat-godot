@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Linq;
+using System.Reflection;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -9,6 +11,9 @@ namespace AlleyCat.Autowire
     {
         [CanBeNull]
         public string NodePath => Attribute.Path;
+
+        private static readonly MethodInfo CastEnumerable = typeof(Enumerable)
+            .GetMethod("Cast", new[] {typeof(IEnumerable)});
 
         public NodeAttributeProcessor([NotNull] MemberInfo member, [NotNull] NodeAttribute attribute)
             : base(member, attribute)
@@ -25,9 +30,27 @@ namespace AlleyCat.Autowire
                 opts => opts.WithMessage(
                     "[Node] attribute is only supported on members of a Node type class."));
 
-            var path = string.IsNullOrWhiteSpace(NodePath) ? NormalizeMemberName(Member.Name) : NodePath;
+            var hasPath = !string.IsNullOrWhiteSpace(NodePath);
 
-            return ((Node) service).GetNode(path);
+            object dependency;
+
+            if (Enumerable)
+            {
+                var parent = hasPath ? node?.GetNode(NodePath) : node;
+                var list = parent?.GetChildren().Where(DependencyType.IsInstanceOfType).ToList();
+
+                dependency = CastEnumerable
+                    .MakeGenericMethod(DependencyType)
+                    .Invoke(null, new object[] {list});
+            }
+            else
+            {
+                var path = hasPath ? NodePath : NormalizeMemberName(Member.Name);
+
+                dependency = node?.GetNode(path);
+            }
+
+            return dependency;
         }
 
         [NotNull]
@@ -37,8 +60,7 @@ namespace AlleyCat.Autowire
 
             var normalized = name.StartsWith("_") ? name.Substring(1) : name;
 
-            return normalized.Length < 2 ? normalized :
-                normalized.Substring(0, 1).ToUpper() + normalized.Substring(1);
+            return normalized.Length < 2 ? normalized : normalized.Substring(0, 1).ToUpper() + normalized.Substring(1);
         }
     }
 }
