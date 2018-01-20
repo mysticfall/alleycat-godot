@@ -25,7 +25,19 @@ namespace AlleyCat.Autowire
             Ensure.Any.IsNotNull(context, nameof(context));
             Ensure.Any.IsNotNull(service, nameof(service));
 
-            Method.Invoke(service, new object[0]);
+            try
+            {
+                Method.Invoke(service, new object[0]);
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException == null)
+                {
+                    throw;
+                }
+
+                throw e.InnerException;
+            }
         }
     }
 }
