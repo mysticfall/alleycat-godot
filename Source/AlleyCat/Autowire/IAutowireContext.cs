@@ -16,6 +16,8 @@ namespace AlleyCat.Autowire
         [NotNull]
         IServiceCollection ServiceCollection { get; }
 
-        void Register([NotNull] object instance);
+        void Prewire([NotNull] object instance);
+
+        void Postwire([NotNull] object instance);
     }
 }

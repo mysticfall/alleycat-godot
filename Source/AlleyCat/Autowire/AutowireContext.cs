@@ -26,8 +26,6 @@ namespace AlleyCat.Autowire
 
         private IList<object> _queue;
 
-        private bool _ready;
-
         public override void _EnterTree()
         {
             base._EnterTree();
@@ -39,7 +37,6 @@ namespace AlleyCat.Autowire
 
             ServiceCollection.Clear();
 
-            _ready = false;
             _queue = new List<object>();
             _processorFactories = CreateProcessorFactories();
         }
@@ -48,12 +45,10 @@ namespace AlleyCat.Autowire
         {
             base._Ready();
 
-            if (_provider == null)
+            if (_provider == null && Parent == null)
             {
                 Build();
             }
-
-            _ready = true;
         }
 
         [CanBeNull]
@@ -70,29 +65,46 @@ namespace AlleyCat.Autowire
             return _provider.GetService(serviceType);
         }
 
-        public void Register(object instance)
+        public void Prewire(object instance)
         {
             Ensure.Any.IsNotNull(instance, nameof(instance));
+
+            if (_queue == null)
+            {
+                throw new InvalidOperationException(
+                    $"Context hasn't been initialized yet : '{this}'.");
+            }
 
             var provider = instance as IServiceConfiguration;
 
             provider?.Register(ServiceCollection);
 
             ProcessAttributes(instance, AutowirePhase.Register);
+        }
 
-            if (_provider != null)
+        public void Postwire(object instance)
+        {
+            Ensure.Any.IsNotNull(instance, nameof(instance));
+
+            if (_provider == null)
             {
-                ProcessAttributes(instance, AutowirePhase.Resolve);
-                ProcessAttributes(instance, AutowirePhase.PostConstruct);
-            }
-            else
-            {
+                if (_queue == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Context hasn't been initialized yet : '{this}'.");
+                }
+
                 _queue.Add(instance);
 
-                if (instance == Node && _ready)
+                if (Node == instance)
                 {
                     Build();
                 }
+            }
+            else
+            {
+                ProcessAttributes(instance, AutowirePhase.Resolve);
+                ProcessAttributes(instance, AutowirePhase.PostConstruct);
             }
         }
 

@@ -64,7 +64,7 @@ namespace AlleyCat.Autowire
             return GetRootContext(node);
         }
 
-        public static void Autowire([NotNull] this Node node)
+        public static void Prewire([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
@@ -76,7 +76,22 @@ namespace AlleyCat.Autowire
                     $"No IAutowireContext found for node: '{node.Name}'.");
             }
 
-            context.Register(node);
+            context.Prewire(node);
+        }
+
+        public static void Postwire([NotNull] this Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            var context = GetAutowireContext(node);
+
+            if (context == null)
+            {
+                throw new InvalidOperationException(
+                    $"No IAutowireContext found for node: '{node.Name}'.");
+            }
+
+            context.Postwire(node);
         }
     }
 }

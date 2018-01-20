@@ -24,19 +24,26 @@ namespace AlleyCat.Logging
             Cache = cache;
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-
-            this.Autowire();
-        }
-
         [NotNull]
         public ILogger CreateLogger([NotNull] string categoryName)
         {
             Ensure.String.IsNotNullOrWhiteSpace(categoryName, nameof(categoryName));
 
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName));
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Prewire();
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Postwire();
         }
 
         public override void _ExitTree()

@@ -89,13 +89,6 @@ namespace AlleyCat.UI.Console
             Content.AddColorOverride("default_color", TextColor);
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-
-            this.Autowire();
-        }
-
         public new void Show() => PlayAnimation(ShowAnimation);
 
         public new void Hide() => PlayAnimation(HideAnimation);
@@ -187,6 +180,20 @@ namespace AlleyCat.UI.Console
             {
                 Content.RemoveLine(count - 1);
             }
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Prewire();
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Postwire();
         }
     }
 }

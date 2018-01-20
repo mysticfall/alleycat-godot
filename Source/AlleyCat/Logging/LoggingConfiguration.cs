@@ -40,13 +40,6 @@ namespace AlleyCat.Logging
             collection.AddSingleton<ILoggerFactory>(factory);
         }
 
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-
-            this.Autowire();
-        }
-
         private static ILogger CreateLoggerForInvoker(ILoggerFactory factory)
         {
             var stack = new StackTrace(false);
@@ -64,6 +57,20 @@ namespace AlleyCat.Logging
             }
 
             return factory.CreateLogger(type);
+        }
+
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            this.Prewire();
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Postwire();
         }
     }
 }
