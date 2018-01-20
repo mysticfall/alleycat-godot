@@ -13,18 +13,6 @@ namespace AlleyCat.Event
         private const string NodeName = "NodeEventTracker";
 
         [NotNull]
-        public static IObservable<Unit> OnReady([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnReady;
-        }
-
-        [NotNull]
         public static IObservable<float> OnProcess([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));

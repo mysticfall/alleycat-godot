@@ -9,20 +9,6 @@ namespace AlleyCat.Event
     public class NodeEventTracker : EventTracker<Node>
     {
         [NotNull]
-        public IObservable<Unit> OnReady
-        {
-            get
-            {
-                if (_onReady == null)
-                {
-                    _onReady = new Subject<Unit>();
-                }
-
-                return _onReady;
-            }
-        }
-
-        [NotNull]
         public IObservable<float> OnProcess
         {
             get
@@ -78,8 +64,6 @@ namespace AlleyCat.Event
             }
         }
 
-        private Subject<Unit> _onReady;
-
         private Subject<float> _onProcess;
 
         private Subject<float> _onPhysicsProcess;
@@ -91,8 +75,6 @@ namespace AlleyCat.Event
         public override void _Ready()
         {
             base._Ready();
-
-            _onReady?.OnNext(Unit.Default);
 
             SetProcess(_onProcess != null);
             SetPhysicsProcess(_onPhysicsProcess != null);
@@ -129,9 +111,6 @@ namespace AlleyCat.Event
             _onDispose?.OnNext(Unit.Default);
             _onDispose?.Dispose();
             _onDispose = null;
-
-            _onReady?.Dispose();
-            _onReady = null;
 
             _onProcess?.Dispose();
             _onProcess = null;
