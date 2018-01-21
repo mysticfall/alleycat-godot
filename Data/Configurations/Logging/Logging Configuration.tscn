@@ -2,10 +2,9 @@
 
 [ext_resource path="res://Program/AlleyCat/Logging/LoggingConfiguration.cs" type="Script" id=1]
 
-[node name="Logging" type="Node" index="0"]
+[node name="Logging" type="Node"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
-Test = "BBB"
 
 

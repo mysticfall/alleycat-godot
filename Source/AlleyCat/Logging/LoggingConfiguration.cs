@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AlleyCat.Autowire;
-using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,21 +8,33 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Logging
 {
     [AutowireContext]
-    public class LoggingConfiguration : Node, IServiceConfiguration
+    public class LoggingConfiguration : AutowiredNode, IServiceConfiguration, IServiceFactory<ILogger>
     {
+        public ILoggerFactory LoggerFactory { get; private set; }
+
+        [Service]
+        private IEnumerable<ILoggerProvider> _providers;
+
         public void Register(IServiceCollection collection)
         {
             Ensure.Any.IsNotNull(collection, nameof(collection));
 
-            var factory = new LoggerFactory();
-            var providers = this.GetChildren<ILoggerProvider>();
+            LoggerFactory = new LoggerFactory();
+
+            collection.AddSingleton(LoggerFactory);
+            collection.AddSingleton<IServiceFactory<ILogger>>(this);
+        }
+
+        [PostConstruct]
+        private void OnInitialize()
+        {
             var registered = false;
 
-            foreach (var provider in providers)
+            foreach (var provider in _providers)
             {
                 GD.Print($"Logging: Registering logger provider: '{provider.GetType().FullName}'.");
 
-                factory.AddProvider(provider);
+                LoggerFactory.AddProvider(provider);
 
                 if (!registered) registered = true;
             }
@@ -35,31 +44,14 @@ namespace AlleyCat.Logging
                 GD.Print("Warning: No logging provider has been configured.");
             }
 
-            collection.AddTransient(_ => CreateLoggerForInvoker(factory));
-            collection.AddSingleton<ILoggerFactory>(factory);
         }
 
-        private static ILogger CreateLoggerForInvoker(ILoggerFactory factory)
+        public ILogger Create(IAutowireContext context, object service)
         {
-            var stack = new StackTrace(false);
-            var markerType = typeof(AutowireContext);
+            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.Any.IsNotNull(service, nameof(service));
 
-            var type = stack.GetFrames()?
-                .Select(f => f.GetMethod().DeclaringType)
-                .SkipWhile(t => t != markerType)
-                .SkipWhile(t => t == markerType)
-                .First();
-
-            if (type == null)
-            {
-                throw new InvalidOperationException("Failed to determine invoker class.");
-            }
-
-            return factory.CreateLogger(type);
+            return LoggerFactory?.CreateLogger(service.GetType().FullName);
         }
-
-        public override void _EnterTree() => this.Prewire();
-
-        public override void _Ready() => this.Postwire();
     }
 }

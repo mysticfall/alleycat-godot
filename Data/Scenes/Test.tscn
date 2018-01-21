@@ -1,6 +1,6 @@
 [gd_scene format=2]
 
-[node name="Scene" type="Node" index="0"]
+[node name="Scene" type="Node"]
 
 [node name="Cameras" type="Node" parent="." index="0"]
 

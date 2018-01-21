@@ -1,14 +1,13 @@
 ﻿using AlleyCat.Autowire;
 using EnsureThat;
-using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
-    [UsedImplicitly]
-    public class ConsoleLoggerProvider : Node, ILoggerProvider
+    [Singleton(typeof(ILoggerProvider))]
+    public class ConsoleLoggerProvider : AutowiredNode, ILoggerProvider
     {
         [NotNull]
         protected IMemoryCache Cache { get; }
@@ -31,10 +30,6 @@ namespace AlleyCat.Logging
 
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName));
         }
-
-        public override void _EnterTree() => this.Prewire();
-
-        public override void _Ready() => this.Postwire();
 
         public override void _ExitTree() => Cache.Dispose();
     }

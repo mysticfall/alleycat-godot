@@ -7,7 +7,6 @@
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
-Test = "BBB"
 
 [node name="Console" parent="." index="0" instance=ExtResource( 2 )]
 
