@@ -27,7 +27,7 @@ namespace AlleyCat.Autowire
                     return dependency;
                 }
 
-                current = context.Parent;
+                current = current.Parent;
             }
 
             return null;
