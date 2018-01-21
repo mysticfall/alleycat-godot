@@ -59,6 +59,10 @@ public override void _EnterTree() => this.Prewire();
 public override void _Ready() => this.Postwire();
 ```
 
+And also, it is required to add `AlleyCat.Autowire.AutowireContext` class in the project's 
+autoload list with the name `AutowireContext`. It serves as the root context for all autowiring 
+processes in the project, and you can read more about context objects below.
+
 #### Injection Callback
 
 Any method annotated with `[PostConstruct]` attribute will get called once every declared 
