@@ -301,8 +301,13 @@ added to the project.
 
 ## Contact
 
-If you have any questions or suggestions about the project, please don't hesitate to contact me 
-by creating an issue, or send me a message on Godot's [Discord channel](https://discord.gg/zH7NUgz).
+If you have any questions or suggestions about the project, please visit 
+[the official forum thread](https://godotdevelopers.org/forum/discussion/18920/proof-on-concept-alley-cat-programmer-friendly-framework-for-godot-3-c)
+and leave a comment there. It's also a good place to keep track of the project's progress, so I 
+recommend you to check the thread from time to time.
+ 
+You can also contact me by visiting Godot's [Discord channel](https://discord.gg/zH7NUgz) and leave 
+a message to `@mysticfall`.
 
 ## LICENSE
 This project is provided under the terms of _[MIT License](LICENSE)_.
