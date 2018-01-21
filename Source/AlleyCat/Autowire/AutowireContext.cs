@@ -75,9 +75,14 @@ namespace AlleyCat.Autowire
                     $"Context hasn't been initialized yet : '{this}'.");
             }
 
-            var provider = instance as IServiceConfiguration;
+            if (instance is IServiceConfiguration provider)
+            {
+                var target = Node == instance ? Parent : this;
 
-            provider?.Register(ServiceCollection);
+                Debug.Assert(target != null, "target != null");
+
+                provider.Register(target.ServiceCollection);
+            }
 
             ProcessAttributes(instance, AutowirePhase.Register);
         }
