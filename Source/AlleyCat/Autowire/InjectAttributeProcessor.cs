@@ -61,7 +61,7 @@ namespace AlleyCat.Autowire
 
             var dependency = GetDependency(context, service);
 
-            if (Required && dependency == null)
+            if (Required && !HasValue(dependency, DependencyType))
             {
                 var member = $"{Member.DeclaringType?.FullName}.{Member.Name}";
 
@@ -70,6 +70,16 @@ namespace AlleyCat.Autowire
             }
 
             TargetSetter(service, dependency);
+        }
+
+        private bool HasValue(object dependency, Type type)
+        {
+            if (dependency == null)
+            {
+                return false;
+            }
+
+            return !Enumerable || EnumerableHelper.Any(dependency, type);
         }
 
         [CanBeNull]

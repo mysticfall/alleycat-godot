@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using EnsureThat;
 using Godot;
@@ -11,9 +10,6 @@ namespace AlleyCat.Autowire
     {
         [CanBeNull]
         public string NodePath => Attribute.Path;
-
-        private static readonly MethodInfo CastEnumerable = typeof(Enumerable)
-            .GetMethod("Cast", new[] {typeof(IEnumerable)});
 
         public NodeAttributeProcessor([NotNull] MemberInfo member, [NotNull] NodeAttribute attribute)
             : base(member, attribute)
@@ -39,9 +35,7 @@ namespace AlleyCat.Autowire
                 var parent = hasPath ? node?.GetNode(NodePath) : node;
                 var list = parent?.GetChildren().Where(DependencyType.IsInstanceOfType).ToList();
 
-                dependency = CastEnumerable
-                    .MakeGenericMethod(DependencyType)
-                    .Invoke(null, new object[] {list});
+                dependency = EnumerableHelper.Cast(list, DependencyType);
             }
             else
             {
