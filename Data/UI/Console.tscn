@@ -1,7 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Data/UI/Themes/Default.tres" type="Theme" id=1]
 [ext_resource path="res://Program/AlleyCat/UI/Console/Console.cs" type="Script" id=2]
+[ext_resource path="res://Program/AlleyCat/UI/Console/HelpCommand.cs" type="Script" id=3]
+[ext_resource path="res://Program/AlleyCat/UI/Console/ClearCommand.cs" type="Script" id=4]
+[ext_resource path="res://Program/AlleyCat/UI/Console/QuitConsoleCommand.cs" type="Script" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -108,7 +111,7 @@ tracks/2/keys = {
 "values": [ 250.0, 0.0 ]
 }
 
-[node name="Console" type="Panel"]
+[node name="Console" type="Panel" index="0"]
 
 self_modulate = Color( 1, 1, 1, 0.752941 )
 anchor_left = 0.0
@@ -278,6 +281,20 @@ anims/Hide = SubResource( 4 )
 anims/Show = SubResource( 5 )
 blend_times = [  ]
 autoplay = ""
+
+[node name="Commands" type="Node" parent="." index="2"]
+
+[node name="Help" type="Node" parent="Commands" index="0"]
+
+script = ExtResource( 3 )
+
+[node name="Clear" type="Node" parent="Commands" index="1"]
+
+script = ExtResource( 4 )
+
+[node name="Quit" type="Node" parent="Commands" index="2"]
+
+script = ExtResource( 5 )
 
 [connection signal="text_entered" from="Container/InputPane/Input" to="." method="OnTextInput"]
 

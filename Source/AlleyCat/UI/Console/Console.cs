@@ -31,7 +31,8 @@ namespace AlleyCat.UI.Console
 
         public Color ErrorColor => GetColor("error", GetType().Name);
 
-        public IEnumerable<IConsoleCommand> SupportedCommands => _commands.Values;
+        [Service]
+        public IEnumerable<IConsoleCommand> SupportedCommands { get; private set; }
 
         public IObservable<Unit> OnShow { get; private set; }
 
@@ -48,13 +49,11 @@ namespace AlleyCat.UI.Console
         [Node("AnimationPlayer")]
         protected AnimationPlayer Player { get; private set; }
 
-        private readonly IDictionary<string, IConsoleCommand> _commands;
+        private readonly IDictionary<string, IConsoleCommand> _commandMap;
 
         public Console()
         {
-            _commands = new Dictionary<string, IConsoleCommand>();
-
-            _commands.Add(HelpCommand.Key, new HelpCommand());
+            _commandMap = new Dictionary<string, IConsoleCommand>();
         }
 
         [PostConstruct]
@@ -64,6 +63,13 @@ namespace AlleyCat.UI.Console
 
             SetProcess(false);
             SetPhysicsProcess(false);
+
+            _commandMap.Clear();
+
+            foreach (var command in SupportedCommands)
+            {
+                _commandMap.Add(command.Key, command);
+            }
 
             this.OnInput()
                 .Where(e => e.IsActionPressed(ToggleAction))
@@ -148,7 +154,7 @@ namespace AlleyCat.UI.Console
         {
             Ensure.String.IsNotNullOrWhiteSpace(command, nameof(command));
 
-            if (_commands.TryGetValue(command, out var action))
+            if (_commandMap.TryGetValue(command, out var action))
             {
                 action.Execute(arguments, this);
             }
@@ -170,9 +176,11 @@ namespace AlleyCat.UI.Console
 
             WriteLine(line, new TextStyle(HighlightColor));
 
+            NewLine();
+
             Input.Clear();
 
-            var segments = line.Split();
+            var segments = line.Split().Select(w => w.Trim()).Where(w => !w.Empty()).ToList();
 
             Execute(segments.First(), segments.Skip(1).ToArray());
         }
