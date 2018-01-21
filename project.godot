@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-AutowireContext="res://Program/AlleyCat/Autowire/AutowireContext.cs"
+AutowireContext="*res://Program/AlleyCat/Autowire/AutowireContext.cs"
 Console="*res://Data/UI/Console.tscn"
 
 [input]
