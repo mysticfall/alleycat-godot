@@ -59,6 +59,7 @@
     <Compile Include="Program\AlleyCat\Autowire\EnumerableHelper.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttributeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IServiceFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\MemberAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
