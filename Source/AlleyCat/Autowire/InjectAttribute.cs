@@ -3,8 +3,8 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     public abstract class InjectAttribute : Attribute
     {
         public bool Required { get; }

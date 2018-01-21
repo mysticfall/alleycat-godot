@@ -5,13 +5,12 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
-    [AutowireContext, UsedImplicitly]
+    [AutowireContext]
     public class LoggingConfiguration : Node, IServiceConfiguration
     {
         public void Register(IServiceCollection collection)

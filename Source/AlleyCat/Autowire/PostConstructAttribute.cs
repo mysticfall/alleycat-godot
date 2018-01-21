@@ -3,8 +3,8 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     [AttributeUsage(AttributeTargets.Method)]
+    [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     public class PostConstructAttribute : Attribute
     {
     }

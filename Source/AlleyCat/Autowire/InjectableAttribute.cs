@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Autowire
 {
     [AttributeUsage(AttributeTargets.Class)]
+    [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     public abstract class InjectableAttribute : Attribute
     {
         [NotNull]
