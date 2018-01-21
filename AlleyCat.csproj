@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
     <Compile Include="Program\AlleyCat\Autowire\EnumerableHelper.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttribute.cs" />
