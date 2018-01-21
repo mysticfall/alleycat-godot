@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -164,6 +163,11 @@ namespace AlleyCat.UI.Console
         [UsedImplicitly]
         protected void OnTextInput([NotNull] string line)
         {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
             WriteLine(line, new TextStyle(HighlightColor));
 
             Input.Clear();
