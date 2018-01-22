@@ -306,7 +306,7 @@ added to the project.
 ## Contact
 
 If you have any questions or suggestions about the project, please visit 
-[the official forum thread](https://godotdevelopers.org/forum/discussion/18920/proof-on-concept-alley-cat-programmer-friendly-framework-for-godot-3-c)
+[the official forum thread](https://godotdevelopers.org/forum/discussion/18920/alley-cat)
 and leave a comment there. It's also a good place to keep track of the project's progress, so I 
 recommend you to check the thread from time to time.
  
