@@ -12,8 +12,7 @@ namespace AlleyCat.Logging
     {
         public ILoggerFactory LoggerFactory { get; private set; }
 
-        [Service]
-        private IEnumerable<ILoggerProvider> _providers;
+        [Service] private IEnumerable<ILoggerProvider> _providers;
 
         public void Register(IServiceCollection collection)
         {
@@ -21,8 +20,9 @@ namespace AlleyCat.Logging
 
             LoggerFactory = new LoggerFactory();
 
-            collection.AddSingleton(LoggerFactory);
-            collection.AddSingleton<IServiceFactory<ILogger>>(this);
+            collection
+                .AddSingleton(LoggerFactory)
+                .AddSingleton<IServiceFactory<ILogger>>(this);
         }
 
         [PostConstruct]
@@ -43,7 +43,6 @@ namespace AlleyCat.Logging
             {
                 GD.Print("Warning: No logging provider has been configured.");
             }
-
         }
 
         public ILogger Create(IAutowireContext context, object service)
