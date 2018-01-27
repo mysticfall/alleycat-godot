@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.ExceptionServices;
 using EnsureThat;
 using JetBrains.Annotations;
 
@@ -31,12 +32,7 @@ namespace AlleyCat.Autowire
             }
             catch (TargetInvocationException e)
             {
-                if (e.InnerException == null)
-                {
-                    throw;
-                }
-
-                throw e.InnerException;
+                ExceptionDispatchInfo.Capture(e.InnerException ?? e).Throw();
             }
         }
     }
