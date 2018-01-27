@@ -303,6 +303,34 @@ Currently, only `AnimationPlayer` is supported but as it's very easy to add supp
 node types, you can report an issue or create a pull request for missing classes and it will be 
 added to the project.
 
+## File API
+
+_Ally Cat_ provides `Microsoft.Extensions.FileProviders` and `System.IO.Stream` implementations 
+for Godot's `File` and `Directory` API, which means you can use 
+[data paths](http://docs.godotengine.org/en/latest/learning/features/misc/data_paths.html) to 
+manipulate them as they were normal file paths:
+
+```c#
+var provider = new FileProvider();
+var directory = provider.GetDirectoryContents("user://");
+
+for (var file in directory) {
+    GD.Print(file);
+}
+
+var file = new FileInfo("res://README.md");
+
+using (var reader = new StreamReader(file.CreateReadStream()))
+{
+    string line;
+
+    while ((line = reader.ReadLine()) != null)
+    {
+        GD.Print(line);
+    }
+}
+```
+
 ## Contact
 
 If you have any questions or suggestions about the project, please visit 
