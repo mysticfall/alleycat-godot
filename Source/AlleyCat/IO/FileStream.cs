@@ -28,6 +28,8 @@ namespace AlleyCat.IO
 
         private readonly FileAccess _access;
 
+        private bool _closed;
+
         public FileStream([NotNull] File file, FileAccess access)
         {
             Ensure.Any.IsNotNull(file, nameof(file));
@@ -45,6 +47,8 @@ namespace AlleyCat.IO
 
         public override long Seek(long offset, SeekOrigin origin)
         {
+            CheckClosed();
+
             switch (origin)
             {
                 case SeekOrigin.Begin:
@@ -60,27 +64,31 @@ namespace AlleyCat.IO
                     throw new ArgumentOutOfRangeException(nameof(origin), origin, null);
             }
 
-            _file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            CheckErrors();
 
             return Position;
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            CheckClosed();
+
             var remaining = (int) (Length - Position);
 
             var size = Math.Min(Math.Min(buffer.Length - offset, count), remaining);
             var data = _file.GetBuffer(size);
 
-            Array.Copy(data, 0, buffer, offset, data.Length);
+            CheckErrors();
 
-            _file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            Array.Copy(data, 0, buffer, offset, data.Length);
 
             return data.Length;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
+            CheckClosed();
+
             var size = Math.Min(buffer.Length - offset, count);
 
             if (offset == 0 && buffer.Length <= count)
@@ -96,7 +104,7 @@ namespace AlleyCat.IO
                 _file.StoreBuffer(data);
             }
 
-            _file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            CheckErrors();
         }
 
         public override void SetLength(long value)
@@ -117,8 +125,20 @@ namespace AlleyCat.IO
 
             _file.Dispose();
 
+            _closed = true;
+
             base.Dispose(disposing);
         }
+
+        private void CheckClosed()
+        {
+            if (_closed)
+            {
+                throw new ObjectDisposedException("The file was already closed.");
+            }
+        }
+
+        private void CheckErrors() => _file.GetError().ThrowIfNecessary(msg => new IOException(msg));
 
         [NotNull]
         public static FileStream Open([NotNull] string path, FileAccess access = FileAccess.Read)
