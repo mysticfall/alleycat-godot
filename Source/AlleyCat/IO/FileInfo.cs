@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 using File = Godot.File;
 
@@ -43,7 +44,7 @@ namespace AlleyCat.IO
         }
 
         [CanBeNull]
-        public string PhysicalPath => null;
+        public string PhysicalPath => ProjectSettings.GlobalizePath(Path);
 
         public DateTimeOffset LastModified
         {
