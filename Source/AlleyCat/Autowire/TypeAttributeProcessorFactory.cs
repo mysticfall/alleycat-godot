@@ -7,10 +7,10 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class TypeAttributeProcessorFactory<T> : IAttributeProcessorFactory
+    public abstract class TypeAttributeProcessorFactory<T> : INodeProcessorFactory
         where T : Attribute
     {
-        public IEnumerable<IAttributeProcessor> Create(Type type)
+        public IEnumerable<INodeProcessor> Create(Type type)
         {
             Ensure.Any.IsNotNull(type, nameof(type));
 
@@ -18,14 +18,13 @@ namespace AlleyCat.Autowire
 
             if (attribute == null)
             {
-                return Enumerable.Empty<IAttributeProcessor>();
+                return Enumerable.Empty<INodeProcessor>();
             }
 
             return new[] {CreateProcessor(type, attribute)};
         }
 
         [NotNull]
-        protected abstract IAttributeProcessor CreateProcessor(
-            [NotNull] Type type, [NotNull] T attribute);
+        protected abstract INodeProcessor CreateProcessor([NotNull] Type type, [NotNull] T attribute);
     }
 }

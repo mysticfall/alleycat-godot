@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
-    public interface IAutowireContext : IServiceProvider
+    public interface IAutowireContext : IServiceProvider, IDependencyNode
     {
         [NotNull]
         Node Node { get; }
@@ -13,11 +13,10 @@ namespace AlleyCat.Autowire
         [CanBeNull]
         IAutowireContext Parent { get; }
 
-        [NotNull]
-        IServiceCollection ServiceCollection { get; }
+        void AddService(Action<IServiceCollection> provider);
 
-        void Prewire([NotNull] object instance);
+        void Register([NotNull] Node node);
 
-        void Postwire([NotNull] object instance);
+        void Build();
     }
 }

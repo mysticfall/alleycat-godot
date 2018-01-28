@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.ExceptionServices;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
@@ -21,17 +22,24 @@ namespace AlleyCat.Autowire
             Method = method;
         }
 
-        public override void Process(IAutowireContext context, object service)
+        public override void Process(IAutowireContext context, Node node)
         {
             Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(service, nameof(service));
+            Ensure.Any.IsNotNull(node, nameof(node));
 
             try
             {
-                Method.Invoke(service, new object[0]);
+                Method.Invoke(node, new object[0]);
             }
             catch (TargetInvocationException e)
             {
+                //TODO: Until godotengine/godot#16107 gets fixed.
+                if (e.InnerException != null)
+                {
+                    GD.Print(e.InnerException.Message);
+                    GD.Print(e.InnerException.StackTrace);
+                }
+
                 ExceptionDispatchInfo.Capture(e.InnerException ?? e).Throw();
             }
         }

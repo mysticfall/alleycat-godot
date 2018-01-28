@@ -5,7 +5,7 @@ namespace AlleyCat.Autowire
 {
     public class ServiceAttributeProcessorFactory : MemberAttributeProcessorFactory<ServiceAttribute>
     {
-        protected override IAttributeProcessor CreateProcessor(
+        protected override INodeProcessor CreateProcessor(
             MemberInfo member, ServiceAttribute attribute)
         {
             Ensure.Any.IsNotNull(member, nameof(member));

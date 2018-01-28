@@ -1,21 +1,26 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    public class ServiceAttributeProcessor : InjectAttributeProcessor<ServiceAttribute>
+    public class ServiceAttributeProcessor : InjectAttributeProcessor<ServiceAttribute>, IDependencyConsumer
     {
+        public ISet<Type> Requires => new HashSet<Type> {DependencyType};
+
         public ServiceAttributeProcessor(
             [NotNull] MemberInfo member, [NotNull] ServiceAttribute attribute) : base(member, attribute)
         {
         }
 
-        protected override object GetDependency(IAutowireContext context, object service)
+        protected override object GetDependency(IAutowireContext context, Node node)
         {
             Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(service, nameof(service));
+            Ensure.Any.IsNotNull(node, nameof(node));
 
             var factoryType = typeof(IServiceFactory<>).MakeGenericType(TargetType);
 
@@ -37,7 +42,7 @@ namespace AlleyCat.Autowire
 
                         Debug.Assert(method != null, "method != null");
 
-                        dependency = method.Invoke(factory, new[] {context, service});
+                        dependency = method.Invoke(factory, new object[] {context, node});
                     }
                 }
 

@@ -6,9 +6,9 @@ using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
-    public class PostConstructAttributeProcessorFactory : IAttributeProcessorFactory
+    public class PostConstructAttributeProcessorFactory : INodeProcessorFactory
     {
-        public IEnumerable<IAttributeProcessor> Create(Type type)
+        public IEnumerable<INodeProcessor> Create(Type type)
         {
             Ensure.Any.IsNotNull(type, nameof(type));
 

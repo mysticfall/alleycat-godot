@@ -54,9 +54,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AutowireContextProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\AutowireContextProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\DependencyChain.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\DependencyNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\EnumerableHelper.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IDependencyConsumer.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IDependencyNode.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IDependencyProvider.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IServiceFactory.cs" />
@@ -64,6 +71,7 @@
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\NodeExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\NodeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\PostConstructAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\PostConstructAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\PostConstructAttributeProcessorFactory.cs" />
@@ -72,6 +80,7 @@
     <Compile Include="Program\AlleyCat\Autowire\NodeAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceDefinition.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
@@ -81,12 +90,12 @@
     <Compile Include="Program\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AttributeProcessor.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\IAttributeProcessor.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\IAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\INodeProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\INodeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IAutowireContext.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectAttributeProcessor.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\IServiceConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IServiceDefinitionProvider.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Program\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEvents.cs" />

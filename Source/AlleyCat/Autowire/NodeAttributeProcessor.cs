@@ -16,13 +16,11 @@ namespace AlleyCat.Autowire
         {
         }
 
-        protected override object GetDependency(IAutowireContext context, object service)
+        protected override object GetDependency(IAutowireContext context, Node node)
         {
             Ensure.Any.IsNotNull(context, nameof(context));
 
-            var node = service as Node;
-
-            Ensure.Any.IsNotNull(node, nameof(service),
+            Ensure.Any.IsNotNull(node, nameof(node),
                 opts => opts.WithMessage(
                     "[Node] attribute is only supported on members of a Node type class."));
 
@@ -32,7 +30,7 @@ namespace AlleyCat.Autowire
 
             if (Enumerable)
             {
-                var parent = hasPath ? node?.GetNode(NodePath) : node;
+                var parent = hasPath ? node.GetNode(NodePath) : node;
                 var list = parent?.GetChildren().Where(DependencyType.IsInstanceOfType).ToList();
 
                 dependency = EnumerableHelper.Cast(list, DependencyType);
@@ -41,7 +39,7 @@ namespace AlleyCat.Autowire
             {
                 var path = hasPath ? NodePath : NormalizeMemberName(Member.Name);
 
-                dependency = node?.GetNode(path);
+                dependency = node.GetNode(path);
             }
 
             return dependency;

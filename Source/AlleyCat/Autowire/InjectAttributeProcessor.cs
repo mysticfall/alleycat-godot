@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
@@ -54,12 +55,12 @@ namespace AlleyCat.Autowire
             }
         }
 
-        public override void Process(IAutowireContext context, object service)
+        public override void Process(IAutowireContext context, Node node)
         {
             Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(service, nameof(service));
+            Ensure.Any.IsNotNull(node, nameof(node));
 
-            var dependency = GetDependency(context, service);
+            var dependency = GetDependency(context, node);
 
             if (Required && !HasValue(dependency, DependencyType))
             {
@@ -69,7 +70,7 @@ namespace AlleyCat.Autowire
                     $"Cannot resolve required dependency for {member}.");
             }
 
-            TargetSetter(service, dependency);
+            TargetSetter(node, dependency);
         }
 
         private bool HasValue(object dependency, Type type)
@@ -83,7 +84,6 @@ namespace AlleyCat.Autowire
         }
 
         [CanBeNull]
-        protected abstract object GetDependency(
-            [NotNull] IAutowireContext context, [NotNull] object service);
+        protected abstract object GetDependency([NotNull] IAutowireContext context, [NotNull] Node node);
     }
 }

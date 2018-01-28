@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    public interface IAttributeProcessorFactory
+    public interface IDependencyProvider
     {
         [NotNull]
-        IEnumerable<IAttributeProcessor> Create([NotNull] Type type);
+        ISet<Type> Provides { get; }
     }
 }

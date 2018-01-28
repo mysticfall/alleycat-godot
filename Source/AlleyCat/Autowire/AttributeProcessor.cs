@@ -4,12 +4,10 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class AttributeProcessor<T> : IAttributeProcessor where T : Attribute
+    public abstract class AttributeProcessor<T> : NodeProcessor where T : Attribute
     {
         [NotNull]
         public T Attribute { get; }
-
-        public abstract AutowirePhase ProcessPhase { get; }
 
         protected AttributeProcessor([NotNull] T attribute)
         {
@@ -17,7 +15,5 @@ namespace AlleyCat.Autowire
 
             Attribute = attribute;
         }
-
-        public abstract void Process(IAutowireContext context, object service);
     }
 }

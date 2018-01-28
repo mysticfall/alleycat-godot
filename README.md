@@ -59,9 +59,11 @@ public override void _EnterTree() => this.Prewire();
 public override void _Ready() => this.Postwire();
 ```
 
-And also, it is required to add `AlleyCat.Autowire.AutowireContext` class in the project's 
-autoload list with the name `AutowireContext`. It serves as the root context for all autowiring 
-processes in the project, and you can read more about context objects below.
+And also, it is required to add `AlleyCat.Autowire.AutowireContext` class at the _last place_ 
+in the project's autoload list with the name `AutowireContext`.
+
+It serves as the root context for all autowiring processes in the project, and you can read 
+more about context objects below.
 
 #### Injection Callback
 
