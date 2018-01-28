@@ -48,6 +48,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Reactive.Core" />
     <Reference Include="System.Reactive.Interfaces" />
     <Reference Include="System.Reactive.Linq" />
@@ -81,6 +82,8 @@
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\ServiceDefinition.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceDefinitionProviderProcessor.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\ServiceDefinitionProviderProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
@@ -117,6 +120,13 @@
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\Setting\IniSettingsProvider.cs" />
+    <Compile Include="Program\AlleyCat\Setting\ISettings.cs" />
+    <Compile Include="Program\AlleyCat\Setting\ISettingsProvider.cs" />
+    <Compile Include="Program\AlleyCat\Setting\IWritableConfigurationProvider.cs" />
+    <Compile Include="Program\AlleyCat\Setting\JsonSettingsProvider.cs" />
+    <Compile Include="Program\AlleyCat\Setting\SettingsConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\Setting\SettingsFileProvider.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\ClearCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\ConsoleCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\Console.cs" />
@@ -131,9 +141,15 @@
     <PackageReference Include="Ensure.That" Version="7.2.1" />
     <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory" Version="4.0.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.0.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.1" />
     <PackageReference Include="NETStandard.Library.NETFramework" Version="2.0.0-preview2-25405-01" />
   </ItemGroup>
