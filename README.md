@@ -223,7 +223,7 @@ objects as its dependencies:
 
 ```c#
 // The game console class.
-[Autowire]
+[AutowireContext]
 public class Console : Node {
 
     [Service]
