@@ -59,6 +59,7 @@
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\CyclicDependencyException.cs" />
     <Compile Include="Program\AlleyCat\Autowire\DependencyChain.cs" />
     <Compile Include="Program\AlleyCat\Autowire\DependencyNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\EnumerableHelper.cs" />

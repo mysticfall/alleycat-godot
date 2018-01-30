@@ -34,11 +34,24 @@ namespace AlleyCat.Autowire
             Provides = definition.Provides;
         }
 
-        public bool DependsOn(DependencyNode other)
+        public bool DependsOn(DependencyNode other) => DependsOn(other, this);
+
+        private bool DependsOn(DependencyNode other, DependencyNode from)
         {
+            if (other.Instance == from.Instance)
+            {
+                return false;
+            }
+
             foreach (var node in Dependencies)
             {
-                if (node.Instance == other.Instance || node.DependsOn(other))
+                if (node.Instance == from.Instance)
+                {
+                    throw new CyclicDependencyException(
+                        $"Found cyclic dependency on node: '{node.Instance.Name}'.");
+                }
+
+                if (node.Instance == other.Instance || node.DependsOn(other, from))
                 {
                     return true;
                 }
