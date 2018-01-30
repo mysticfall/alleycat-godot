@@ -127,13 +127,16 @@
     <Compile Include="Program\AlleyCat\Setting\JsonSettingsProvider.cs" />
     <Compile Include="Program\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Program\AlleyCat\Setting\SettingsFileProvider.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\BasicConsoleCommands.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\ClearCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\ConsoleCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\Console.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\ConsoleCommandProvider.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\HelpCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\IConsole.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommand.cs" />
-    <Compile Include="Program\AlleyCat\UI\Console\QuitConsoleCommand.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\IConsoleCommandProvider.cs" />
+    <Compile Include="Program\AlleyCat\UI\Console\QuitCommand.cs" />
     <Compile Include="Program\AlleyCat\UI\Console\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

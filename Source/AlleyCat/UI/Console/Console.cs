@@ -31,8 +31,7 @@ namespace AlleyCat.UI.Console
 
         public Color ErrorColor => GetColor("error", GetType().Name);
 
-        [Service]
-        public IEnumerable<IConsoleCommand> SupportedCommands { get; private set; }
+        public IEnumerable<IConsoleCommand> SupportedCommands => _commandMap.Values;
 
         [Node("Container/Content")]
         protected RichTextLabel Content { get; private set; }
@@ -43,12 +42,13 @@ namespace AlleyCat.UI.Console
         [Node("AnimationPlayer")]
         protected AnimationPlayer Player { get; private set; }
 
+        [Service]
+        private IEnumerable<IConsoleCommandProvider> _providers;
+
         private readonly IDictionary<string, IConsoleCommand> _commandMap;
 
         public Console()
         {
-            SupportedCommands = Enumerable.Empty<IConsoleCommand>();
-
             _commandMap = new Dictionary<string, IConsoleCommand>();
         }
 
@@ -60,9 +60,11 @@ namespace AlleyCat.UI.Console
             SetProcess(false);
             SetPhysicsProcess(false);
 
+            var commands = _providers.SelectMany(p => p.Commands);
+
             _commandMap.Clear();
 
-            foreach (var command in SupportedCommands)
+            foreach (var command in commands)
             {
                 _commandMap.Add(command.Key, command);
             }

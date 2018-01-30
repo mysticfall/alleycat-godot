@@ -1,10 +1,8 @@
-using AlleyCat.Autowire;
 using EnsureThat;
 
 namespace AlleyCat.UI.Console
 {
-    [Singleton(typeof(IConsoleCommand))]
-    public abstract class ConsoleCommand : AutowiredNode, IConsoleCommand
+    public abstract class ConsoleCommand : IConsoleCommand
     {
         public abstract string Key { get; }
 
