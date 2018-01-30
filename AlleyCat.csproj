@@ -110,7 +110,6 @@
     <Compile Include="Program\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Program\AlleyCat\Event\ObservableExtensions.cs" />
-    <Compile Include="Program\AlleyCat\Interaction\IHideable.cs" />
     <Compile Include="Program\AlleyCat\IO\DirectoryContents.cs" />
     <Compile Include="Program\AlleyCat\IO\FileEnumerator.cs" />
     <Compile Include="Program\AlleyCat\IO\DirectoryInfo.cs" />

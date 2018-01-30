@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Reactive.Subjects;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;

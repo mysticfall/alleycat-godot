@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -19,7 +18,8 @@ namespace AlleyCat.UI.Console
 
         public const string HideAnimation = "Hide";
 
-        [Export] public int BufferSize = 300;
+        [Export]
+        public int BufferSize { get; set; } = 300;
 
         [Export, NotNull] public string ToggleAction = "ui_console";
 
@@ -34,12 +34,6 @@ namespace AlleyCat.UI.Console
         [Service]
         public IEnumerable<IConsoleCommand> SupportedCommands { get; private set; }
 
-        public IObservable<Unit> OnShow { get; private set; }
-
-        public IObservable<Unit> OnHide { get; private set; }
-
-        public IObservable<bool> OnVisibilityChange { get; private set; }
-
         [Node("Container/Content")]
         protected RichTextLabel Content { get; private set; }
 
@@ -53,6 +47,8 @@ namespace AlleyCat.UI.Console
 
         public Console()
         {
+            SupportedCommands = Enumerable.Empty<IConsoleCommand>();
+
             _commandMap = new Dictionary<string, IConsoleCommand>();
         }
 
@@ -73,40 +69,46 @@ namespace AlleyCat.UI.Console
 
             this.OnInput()
                 .Where(e => e.IsActionPressed(ToggleAction))
-                .Where(_ => !Player.IsPlaying())
-                .Select(_ => Visible ? HideAnimation : ShowAnimation)
-                .Subscribe(PlayAnimation)
+                .Subscribe(_ => Toggle())
                 .AddTo(this);
 
-            var onAnimationFinish = Player.OnAnimationFinish();
-
-            OnShow = onAnimationFinish
+            Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
-                .AsUnitObservable();
-            OnHide = onAnimationFinish
-                .Where(e => e.Animation == HideAnimation)
-                .AsUnitObservable();
-            OnVisibilityChange = onAnimationFinish.Select(_ => Visible);
-
-            OnShow
+                .AsUnitObservable()
                 .Subscribe(_ => Input.GrabFocus())
                 .AddTo(this);
 
             Content.AddColorOverride("default_color", TextColor);
         }
 
-        public new void Show() => PlayAnimation(ShowAnimation);
+        public void Open()
+        {
+            if (!Visible) PlayAnimation(ShowAnimation);
+        }
 
-        public new void Hide() => PlayAnimation(HideAnimation);
+        public void Close()
+        {
+            if (Visible) PlayAnimation(HideAnimation);
+        }
+
+        public void Toggle()
+        {
+            if (Visible)
+            {
+                Close();
+            }
+            else
+            {
+                Open();
+            }
+        }
 
         private void PlayAnimation(string name)
         {
-            if (!Player.IsPlaying())
-            {
-                Input.Clear();
+            if (Player.IsPlaying()) return;
 
-                Player.Play(name);
-            }
+            Input.Clear();
+            Player.Play(name);
         }
 
         public IConsole Write(string text) => Write(text, new TextStyle());

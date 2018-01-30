@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using AlleyCat.Interaction;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
-    public interface IConsole : IHideable
+    public interface IConsole
     {
+        int BufferSize { get; set; }
+
         Color TextColor { get; }
 
         Color HighlightColor { get; }
@@ -17,6 +18,12 @@ namespace AlleyCat.UI.Console
 
         [NotNull]
         IEnumerable<IConsoleCommand> SupportedCommands { get; }
+
+        void Open();
+
+        void Close();
+
+        void Toggle();
 
         [NotNull]
         IConsole Write([NotNull] string text);

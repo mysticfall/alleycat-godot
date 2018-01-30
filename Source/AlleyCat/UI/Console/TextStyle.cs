@@ -42,7 +42,7 @@ namespace AlleyCat.UI.Console
 
         public TextStyle WithUnderline() => new TextStyle(Color, Italics, Bold, true);
 
-        public TextStyle WithoutUnderline() => new TextStyle(Color, Italics, Bold, false);
+        public TextStyle WithoutUnderline() => new TextStyle(Color, Italics, Bold);
 
         public void Write([NotNull] string text, [NotNull] RichTextLabel label)
         {
