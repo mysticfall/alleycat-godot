@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    internal struct ServiceDefinition : IDependencyNode
+    internal struct ServiceDefinition : IDependencyResolver
     {
         [NotNull]
         public Type Type { get; }

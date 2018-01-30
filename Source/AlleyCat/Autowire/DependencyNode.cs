@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    internal struct DependencyNode : IDependencyNode, IComparable<DependencyNode>
+    internal struct DependencyNode : IDependencyResolver, IComparable<DependencyNode>
     {
         [NotNull]
         public Node Instance { get; }

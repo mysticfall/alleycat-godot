@@ -64,7 +64,7 @@
     <Compile Include="Program\AlleyCat\Autowire\DependencyNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\EnumerableHelper.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IDependencyConsumer.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\IDependencyNode.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\IDependencyResolver.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IDependencyProvider.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\InjectableAttributeProcessor.cs" />
