@@ -15,7 +15,7 @@ namespace AlleyCat.Autowire
         public IEnumerable<INodeProcessor> Processors { get; }
 
         [NotNull]
-        public ISet<IDependencyNode> Dependencies { get; }
+        public ISet<DependencyNode> Dependencies { get; }
 
         public ISet<Type> Requires { get; }
 
@@ -28,25 +28,42 @@ namespace AlleyCat.Autowire
             Instance = node;
 
             Processors = definition.Processors;
-            Dependencies = new HashSet<IDependencyNode>();
+            Dependencies = new HashSet<DependencyNode>();
 
             Requires = definition.Requires;
             Provides = definition.Provides;
         }
 
+        public bool DependsOn(DependencyNode other)
+        {
+            foreach (var node in Dependencies)
+            {
+                if (node.Instance == other.Instance || node.DependsOn(other))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public int CompareTo(DependencyNode other)
         {
-            if (other.Dependencies.Contains(this))
+            if (other.DependsOn(this))
             {
                 return -1;
             }
 
-            if (Dependencies.Contains(other))
+            if (DependsOn(other))
             {
                 return 1;
             }
 
             return 0;
         }
+
+        public override bool Equals(object obj) => obj is DependencyNode node && node.Instance == Instance;
+
+        public override int GetHashCode() => Instance.GetInstanceId();
     }
 }
