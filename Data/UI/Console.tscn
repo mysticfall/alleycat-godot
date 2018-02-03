@@ -287,6 +287,6 @@ script = ExtResource( 3 )
 
 [connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="Clear"]
 
-[connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="Hide"]
+[connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="Close"]
 
 
