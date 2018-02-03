@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -10,34 +9,11 @@ namespace AlleyCat.Autowire
 {
     public static class NodeExtensions
     {
-        private const string ContextName = "AutowireContext";
-
-        private static IAutowireContext _rootContext;
-
         private static readonly IMemoryCache AttributeCache = new MemoryCache(new MemoryCacheOptions());
 
         [NotNull]
-        public static IAutowireContext GetRootContext([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            if (_rootContext != null)
-            {
-                return _rootContext;
-            }
-
-            var viewport = node.GetTree().Root;
-
-            return _rootContext = GetLocalContext(viewport);
-        }
-
-        public static IAutowireContext GetLocalContext([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            return node.GetOrCreateNode(
-                ContextName, _ => new AutowireContext {Name = ContextName});
-        }
+        public static IAutowireContext GetRootContext([NotNull] this Node node) =>
+            AutowireContext.GetOrCreate(node.GetTree().Root);
 
         [NotNull]
         public static IAutowireContext GetAutowireContext([NotNull] this Node node)
@@ -55,7 +31,7 @@ namespace AlleyCat.Autowire
 
                 if (attribute != null)
                 {
-                    return GetLocalContext(current);
+                    return AutowireContext.GetOrCreate(current);
                 }
 
                 current = current.GetParent();
@@ -64,26 +40,22 @@ namespace AlleyCat.Autowire
             return GetRootContext(node);
         }
 
-        public static void Prewire([NotNull] this Node node)
+        public static void Autowire([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            GetAutowireContext(node);
-        }
-
-        public static void Postwire([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            var context = GetAutowireContext(node);
-
-            if (context == null)
+            if (!(GetAutowireContext(node) is AutowireContext context))
             {
                 throw new InvalidOperationException(
-                    $"No IAutowireContext found for node: '{node.Name}'.");
+                    $"No AutowireContext found for node: '{node.Name}'.");
             }
 
             context.Register(node);
+
+            if (context.Node == node)
+            {
+                context.Initialize();
+            }
         }
     }
 }

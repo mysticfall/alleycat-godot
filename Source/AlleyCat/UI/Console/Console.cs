@@ -199,8 +199,6 @@ namespace AlleyCat.UI.Console
             }
         }
 
-        public override void _EnterTree() => this.Prewire();
-
-        public override void _Ready() => this.Postwire();
+        public override void _Ready() => this.Autowire();
     }
 }

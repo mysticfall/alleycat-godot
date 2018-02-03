@@ -16,6 +16,11 @@ Actually, there's no easy way to use this framework in your project yet. The rea
 still lacks proper support for writing addons in C#, so until it gets resolved you'll need to download 
 the project itself and reuse it in the source level. 
 
+### Setup
+
+In order to use the framework, you'll need to register `AlleyCat.Bootstrap` class at the bottom of 
+the autoload list in _Project Settings_ window.
+
 ### Typed Node API
 
 _Alley Cat_ provides various generic extension methods for `Node` class with which you can find nodes 
@@ -48,22 +53,14 @@ other nodes or scoped services from any node.
 
 #### Requirements
 
-In order to make autowiring to work, you need to override both `_EnterTree()` and `_Ready()` 
-methods from every node in which you want to use the feature as follows.
+In order to make autowiring to work, you need to override `_Ready()` method from every node 
+in which you want to use the feature as follows.
 
 ```c#
 using AlleyCat.Autowire;
 
-public override void _EnterTree() => this.Prewire();
-
-public override void _Ready() => this.Postwire();
+public override void _Ready() => this.Autowire();
 ```
-
-And also, it is required to add `AlleyCat.Autowire.AutowireContext` class at the _last place_ 
-in the project's autoload list with the name `AutowireContext`.
-
-It serves as the root context for all autowiring processes in the project, and you can read 
-more about context objects below.
 
 #### Injection Callback
 
@@ -146,13 +143,15 @@ private IMyService OptionalService { get; private set; }
 ```
 
 Alternatively, you can register your services using `IServiceCollection` API directly, by making 
-your class implementing `IServiceConfiguration` interface. It can be useful when you want to register 
-non node type classes or transient scoped services, for example:
+your class implementing `IServiceDefinitionProvider` interface. It can be useful when you want 
+to register non node type classes or transient scoped services, for example:
 
 ```c#
-public class MyServiceProvider : Node, IServiceConfiguration {
+public class MyServiceProvider : Node, IServiceDefinitionProvider {
 
-    public void Register(IServiceCollection collection)
+    public IEnumerable<Type> ProvidedTypes => new[] { typeof(ILoggerFactory) }; 
+
+    public void AddServices(IServiceCollection collection)
     {
         var factory = new LoggerFactory();
         var providers = this.GetChildren<ILoggerProvider>();
@@ -172,8 +171,7 @@ public class MyServiceProvider : Node, IServiceConfiguration {
 ##### Context Hierarchies
 
 By default, all registered services belongs to the 'root context', which is represented by an 
-`AutowireContext` instance with the same name under `/root`. It will be automatically added when 
-requested, unless manually provided.
+`AutowireContext` instance attached to the scene root(`/root`).
 
 On the other hand, you can define other contexts other than the root and nest them to form a 
 context hierachy. In order to create a local context, all you have to do is to annotate a node 

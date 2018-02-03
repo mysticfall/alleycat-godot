@@ -55,8 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\AutowireContextProcessor.cs" />
-    <Compile Include="Program\AlleyCat\Autowire\AutowireContextProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
     <Compile Include="Program\AlleyCat\Autowire\CyclicDependencyException.cs" />
@@ -89,6 +87,7 @@
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
+    <Compile Include="Program\AlleyCat\Bootstrap.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\ErrorExtensions.cs" />
@@ -101,6 +100,7 @@
     <Compile Include="Program\AlleyCat\Autowire\InjectAttributeProcessor.cs" />
     <Compile Include="Program\AlleyCat\Autowire\IServiceDefinitionProvider.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
+    <Compile Include="Program\AlleyCat\Common\NodeStore.cs" />
     <Compile Include="Program\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEvents.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEventTracker.cs" />
