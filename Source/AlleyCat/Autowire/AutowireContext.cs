@@ -27,6 +27,8 @@ namespace AlleyCat.Autowire
 
         private ICollection<DependencyNode> _queue;
 
+        private bool _built;
+
         private static readonly IMemoryCache Cache = new MemoryCache(new MemoryCacheOptions());
 
         public override void _EnterTree()
@@ -48,10 +50,14 @@ namespace AlleyCat.Autowire
         {
             base._Ready();
 
+            Register(Node, true);
+
             var node = Node;
 
             Requires.Clear();
             Provides.Clear();
+
+            var localProvides = new HashSet<Type>();
 
             foreach (var dependency in _queue)
             {
@@ -61,9 +67,11 @@ namespace AlleyCat.Autowire
                 {
                     Provides.UnionWith(dependency.Provides);
                 }
+
+                localProvides.UnionWith(dependency.Provides);
             }
 
-            Requires.ExceptWith(Provides);
+            Requires.ExceptWith(localProvides);
 
             if (Parent == null)
             {
@@ -92,17 +100,33 @@ namespace AlleyCat.Autowire
             _provider = _services.BuildServiceProvider();
         }
 
-        public void Register(Node node)
+        public void Register(Node node) => Register(node, false);
+
+        private void Register(Node node, bool allowSelf)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
+            if (node == node.GetTree().Root || !allowSelf && node == Node)
+            {
+                return;
+            }
+
             var definition = Cache.GetOrCreate(node.GetType(), _ => CreateDefinition(node));
 
-            _queue.Add(new DependencyNode(node, definition));
+            if (_built)
+            {
+                Process(new DependencyNode(node, definition));
+            }
+            else
+            {
+                _queue.Add(new DependencyNode(node, definition));
+            }
         }
 
         public void Build()
         {
+            _built = true;
+
             foreach (var dependency in _queue)
             {
                 Process(dependency);
@@ -136,7 +160,7 @@ namespace AlleyCat.Autowire
             {
                 if (node is IServiceDefinitionProvider p)
                 {
-                    requires.UnionWith(p.ProvidedTypes);
+                    provides.UnionWith(p.ProvidedTypes);
                 }
 
                 foreach (var processor in processors)

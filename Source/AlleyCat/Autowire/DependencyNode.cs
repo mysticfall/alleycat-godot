@@ -17,9 +17,11 @@ namespace AlleyCat.Autowire
         [NotNull]
         public ISet<DependencyNode> Dependencies { get; }
 
-        public ISet<Type> Requires { get; }
+        public ISet<Type> Requires => _resolver.Requires;
 
-        public ISet<Type> Provides { get; }
+        public ISet<Type> Provides => _resolver.Provides;
+
+        private readonly IDependencyResolver _resolver;
 
         public DependencyNode([NotNull] Node node, ServiceDefinition definition)
         {
@@ -30,8 +32,14 @@ namespace AlleyCat.Autowire
             Processors = definition.Processors;
             Dependencies = new HashSet<DependencyNode>();
 
-            Requires = definition.Requires;
-            Provides = definition.Provides;
+            if (node is IAutowireContext context)
+            {
+                _resolver = context;
+            }
+            else
+            {
+                _resolver = definition;
+            }
         }
 
         public bool DependsOn(DependencyNode other) => DependsOn(other, this);
