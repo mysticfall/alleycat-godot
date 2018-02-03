@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using AlleyCat.Autowire;
 using EnsureThat;
-using Godot;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace AlleyCat.Logging
 {
     [AutowireContext]
     public class LoggingConfiguration : AutowiredNode, IServiceDefinitionProvider, IServiceFactory<ILogger>
     {
-        public ILoggerFactory LoggerFactory { get; private set; }
-
-        public IEnumerable<Type> ProvidedTypes => new[] {typeof(ILoggerFactory),typeof(ILogger)};
+        public IEnumerable<Type> ProvidedTypes => new[]
+        {
+            typeof(ILoggerFactory), 
+            typeof(ILogger), 
+            typeof(IOptions<LoggerFilterOptions>)
+        };
 
         [Service] private IEnumerable<ILoggerProvider> _providers;
 
@@ -21,27 +25,17 @@ namespace AlleyCat.Logging
         {
             Ensure.Any.IsNotNull(collection, nameof(collection));
 
-            LoggerFactory = new LoggerFactory();
+            collection.AddLogging(ConfigureLogger);
+        }
 
-            var registered = false;
+        protected virtual void ConfigureLogger([NotNull] ILoggingBuilder builder)
+        {
+            Ensure.Any.IsNotNull(builder, nameof(builder));
 
             foreach (var provider in _providers)
             {
-                GD.Print($"Logging: Registering logger provider: '{provider.GetType().FullName}'.");
-
-                LoggerFactory.AddProvider(provider);
-
-                if (!registered) registered = true;
+                builder.AddProvider(provider);
             }
-
-            if (!registered)
-            {
-                GD.Print("Warning: No logging provider has been configured.");
-            }
-
-            collection
-                .AddSingleton(LoggerFactory)
-                .AddSingleton<IServiceFactory<ILogger>>(this);
         }
 
         public ILogger Create(IAutowireContext context, object service)
@@ -49,7 +43,9 @@ namespace AlleyCat.Logging
             Ensure.Any.IsNotNull(context, nameof(context));
             Ensure.Any.IsNotNull(service, nameof(service));
 
-            return LoggerFactory?.CreateLogger(service.GetType().FullName);
+            var factory = this.GetRootContext().GetService<ILoggerFactory>();
+
+            return factory?.CreateLogger(service.GetType().FullName);
         }
     }
 }
