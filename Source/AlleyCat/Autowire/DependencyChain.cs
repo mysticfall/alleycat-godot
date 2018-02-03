@@ -21,8 +21,6 @@ namespace AlleyCat.Autowire
                 UpdateDependencies();
             }
 
-            _nodes.Sort();
-
             return _nodes.GetEnumerator();
         }
 
@@ -76,6 +74,8 @@ namespace AlleyCat.Autowire
             {
                 i.Item2.Dependencies.Add(i.Item1);
             }
+
+            _nodes.Sort();
 
             _dirty = false;
         }
