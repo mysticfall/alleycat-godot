@@ -120,6 +120,8 @@
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
+    <Compile Include="Program\AlleyCat\Logging\PrintLogger.cs" />
+    <Compile Include="Program\AlleyCat\Logging\PrintLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Setting\IniSettingsProvider.cs" />
     <Compile Include="Program\AlleyCat\Setting\ISettings.cs" />
     <Compile Include="Program\AlleyCat\Setting\ISettingsProvider.cs" />

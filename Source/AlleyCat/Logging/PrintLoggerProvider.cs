@@ -1,5 +1,4 @@
 ﻿using AlleyCat.Autowire;
-using AlleyCat.UI.Console;
 using EnsureThat;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
@@ -8,19 +7,16 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Logging
 {
     [Singleton(typeof(ILoggerProvider))]
-    public class ConsoleLoggerProvider : AutowiredNode, ILoggerProvider
+    public class PrintLoggerProvider : AutowiredNode, ILoggerProvider
     {
-        [Service]
-        public IConsole Console { get; private set; }
-
         [NotNull]
         protected IMemoryCache Cache { get; }
 
-        public ConsoleLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
+        public PrintLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
         {
         }
 
-        public ConsoleLoggerProvider([NotNull] IMemoryCache cache)
+        public PrintLoggerProvider([NotNull] IMemoryCache cache)
         {
             Ensure.Any.IsNotNull(cache, nameof(cache));
 
@@ -32,7 +28,7 @@ namespace AlleyCat.Logging
         {
             Ensure.String.IsNotNullOrWhiteSpace(categoryName, nameof(categoryName));
 
-            return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName, Console));
+            return Cache.GetOrCreate(categoryName, _ => new PrintLogger(categoryName));
         }
 
         public override void _ExitTree() => Cache.Dispose();
