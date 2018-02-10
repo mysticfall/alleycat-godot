@@ -10,7 +10,7 @@ namespace AlleyCat.Common
     public static class NodeExtensions
     {
         [NotNull]
-        public static T GetNode<T>([NotNull] this Node node, [NotNull] string path) where T : class
+        public static T GetNode<T>([NotNull] this Node node, [NotNull] NodePath path) where T : class
         {
             Ensure.Any.IsNotNull(node, nameof(node));
             Ensure.Any.IsNotNull(path, nameof(path));
@@ -29,7 +29,7 @@ namespace AlleyCat.Common
         [CanBeNull]
         public static T GetNodeOrDefault<T>(
             [NotNull] this Node node,
-            [NotNull] string path,
+            [NotNull] NodePath path,
             [CanBeNull] T defaultValue = default(T)) where T : class
         {
             Ensure.Any.IsNotNull(node, nameof(node));
@@ -41,7 +41,7 @@ namespace AlleyCat.Common
         [NotNull]
         public static TChild GetOrCreateNode<TParent, TChild>(
             [NotNull] this TParent node,
-            [NotNull] string path,
+            [NotNull] NodePath path,
             [NotNull] Func<Node, TChild> factory)
             where TParent : Node
             where TChild : Node
@@ -54,7 +54,7 @@ namespace AlleyCat.Common
 
             if (child == null)
             {
-                var segments = path.Split('/');
+                var segments = path.get_concatenated_subnames().Split('/');
 
                 Node parent;
 
