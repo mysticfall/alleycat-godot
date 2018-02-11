@@ -1,0 +1,33 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.s3tc.stex"
+path.etc2="res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.etc2.stex"
+
+[deps]
+
+source_file="res://Data/Textures/Characters/Human/Eye Overlay.png"
+source_md5="76b009394a0e81940fb132bcbe5231f3"
+
+dest_files=[ "res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.s3tc.stex", "res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.etc2.stex" ]
+dest_md5="942eebaf9f98d4dc4af618de9080907c"
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/normal_map=0
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0
