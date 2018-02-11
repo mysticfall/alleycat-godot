@@ -7,15 +7,15 @@ path="res://.import/Female.dae-f1ce84b62e3c497846373bc255288d93.scn"
 [deps]
 
 source_file="res://Data/Meshes/Characters/Human/Female/Female.dae"
-source_md5="98aa092517e876ff8314b60fec7264b2"
+source_md5="5a6d9b16f8b600d74c1fbceb41b61790"
 
 dest_files=[ "res://.import/Female.dae-f1ce84b62e3c497846373bc255288d93.scn" ]
-dest_md5="09d7efd10027e65f07a818972a735b9d"
+dest_md5="e2f907cb5e289151e067fa813ae7c2e5"
 
 [params]
 
 nodes/root_type="Spatial"
-nodes/root_name="Scene Root"
+nodes/root_name="Female"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
@@ -34,7 +34,7 @@ animation/filter_script=""
 animation/storage=false
 animation/keep_custom_tracks=false
 animation/optimizer/enabled=true
-animation/optimizer/max_linear_error=0.05
+animation/optimizer/max_linear_error=0.01
 animation/optimizer/max_angular_error=0.01
 animation/optimizer/max_angle=22
 animation/optimizer/remove_unused_tracks=true
