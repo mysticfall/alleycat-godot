@@ -35,7 +35,8 @@ debugger_agent/wait_timeout=10000
 
 [rendering]
 
+quality/filters/anisotropic_filter_level=16
 quality/subsurface_scattering/quality=2
 quality/subsurface_scattering/scale=1
-quality/filters/msaa=2
+quality/filters/msaa=3
 environment/default_environment="res://Data/Environments/Editor.tres"
