@@ -1,9 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Program/AlleyCat/Control/FreeViewControl.cs" type="Script" id=2]
+[ext_resource path="res://Program/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
+[ext_resource path="res://Program/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=4]
+[ext_resource path="res://Program/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=5]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=8]
 
 [sub_resource type="GIProbeData" id=1]
 
@@ -60,6 +64,93 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 [node name="Main Camera" type="Camera" parent="Cameras" index="0"]
 
 transform = Transform( -0.0528594, -0.245822, 0.967872, 0.00855307, 0.96908, 0.246596, -0.998564, 0.0213133, -0.0491225, 1.88376, 1.67717, -0.124339 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 50.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="Control" type="Node" parent="Cameras/Main Camera" index="0"]
+
+script = ExtResource( 2 )
+
+[node name="Rotation" type="Node" parent="Cameras/Main Camera/Control" index="0"]
+
+script = ExtResource( 3 )
+
+[node name="X" type="Node" parent="Cameras/Main Camera/Control/Rotation" index="0"]
+
+script = ExtResource( 4 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Y" type="Node" parent="Cameras/Main Camera/Control/Rotation" index="1"]
+
+script = ExtResource( 4 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Movement" type="Node" parent="Cameras/Main Camera/Control" index="1"]
+
+script = ExtResource( 3 )
+
+[node name="X" type="Node" parent="Cameras/Main Camera/Control/Movement" index="0"]
+
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 150.0
+WindowShift = 20.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
+
+[node name="Y" type="Node" parent="Cameras/Main Camera/Control/Movement" index="1"]
+
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 150.0
+WindowShift = 20.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
+
+[node name="Characters" type="Node" parent="." index="3"]
+
+[node name="Player" parent="Characters" index="0" instance=ExtResource( 6 )]
+
+transform = Transform( 0.376544, 0, 0.926398, 0, 1, 0, -0.926398, 0, 0.376544, 0.225557, 0.0821315, -0.0275235 )
+
+[node name="1st Person Camera" type="Camera" parent="Characters/Player" index="3"]
+
+transform = Transform( -1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -8.9407e-08, 1.74606, -0.89459 )
 visible = false
 keep_aspect = 1
 cull_mask = 1048575
@@ -69,29 +160,6 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = false
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 50.0
-_sections_unfolded = [ "Transform" ]
-
-[node name="Characters" type="Node" parent="." index="3"]
-
-[node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
-
-transform = Transform( 0.376544, 0, 0.926398, 0, 1, 0, -0.926398, 0, 0.376544, 0.225557, 0.0821315, -0.0275235 )
-
-[node name="1st Person Camera" type="Camera" parent="Characters/Player" index="3"]
-
-transform = Transform( -1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -8.9407e-08, 1.74606, -0.89459 )
-keep_aspect = 1
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = true
 fov = 70.0
 size = 1.0
 near = 0.05
@@ -109,9 +177,9 @@ editor/display_folded = true
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 3 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 3 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 7 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -120,9 +188,9 @@ transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 3 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 3 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 7 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -132,9 +200,9 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, -5 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 3 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 3 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 7 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -144,13 +212,13 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 15 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 3 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 3 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 7 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
-[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 4 )]
+[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 8 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65119, 0, -0.046721 )
 

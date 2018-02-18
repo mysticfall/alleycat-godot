@@ -106,6 +106,15 @@
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeStore.cs" />
     <Compile Include="Program\AlleyCat\Common\VariantTypeConverter.cs" />
+    <Compile Include="Program\AlleyCat\Control\ActionAxisInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\AxisInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\FreeViewControl.cs" />
+    <Compile Include="Program\AlleyCat\Control\IAxisInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\Input.cs" />
+    <Compile Include="Program\AlleyCat\Control\IInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\InputBindings.cs" />
+    <Compile Include="Program\AlleyCat\Control\MouseAxis.cs" />
+    <Compile Include="Program\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEvents.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerExtensions.cs" />
