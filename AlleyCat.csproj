@@ -88,10 +88,12 @@
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Bootstrap.cs" />
+    <Compile Include="Program\AlleyCat\Common\Directory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\IActivatable.cs" />
+    <Compile Include="Program\AlleyCat\Common\IDirectory.cs" />
     <Compile Include="Program\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AttributeProcessor.cs" />
