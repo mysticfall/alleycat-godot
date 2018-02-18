@@ -142,7 +142,7 @@ namespace AlleyCat.Common
         }
 
         [NotNull]
-        public static IEnumerable<T> GetChildren<T>([NotNull] this Node node) where T : class
+        public static IEnumerable<T> GetChildren<T>([NotNull] this Node node) 
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
