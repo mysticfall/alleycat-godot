@@ -54,7 +54,7 @@ namespace AlleyCat.Common
 
             if (child == null)
             {
-                var segments = path.get_concatenated_subnames().Split('/');
+                var segments = path.GetConcatenatedSubnames().Split('/');
 
                 Node parent;
 
