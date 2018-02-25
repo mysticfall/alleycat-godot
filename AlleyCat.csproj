@@ -54,6 +54,7 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program\AlleyCat\Animation\RootMotionPlayer.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
@@ -105,9 +106,12 @@
     <Compile Include="Program\AlleyCat\Autowire\IServiceDefinitionProvider.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeStore.cs" />
+    <Compile Include="Program\AlleyCat\Common\ProcessMode.cs" />
     <Compile Include="Program\AlleyCat\Common\VariantTypeConverter.cs" />
+    <Compile Include="Program\AlleyCat\Common\VectorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Program\AlleyCat\Control\AxisInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\CharacterControl.cs" />
     <Compile Include="Program\AlleyCat\Control\FreeViewControl.cs" />
     <Compile Include="Program\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Program\AlleyCat\Control\Input.cs" />
@@ -130,6 +134,12 @@
     <Compile Include="Program\AlleyCat\IO\FileProvider.cs" />
     <Compile Include="Program\AlleyCat\IO\FileStream.cs" />
     <Compile Include="Program\AlleyCat\IO\IWritableFileInfo.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\AnimationDrivenLocomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\ILocomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\ILocomotive.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\ImmediateLocomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\KinematicLocomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\Locomotion.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
