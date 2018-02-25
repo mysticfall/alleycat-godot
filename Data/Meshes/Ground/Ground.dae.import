@@ -10,12 +10,12 @@ source_file="res://Data/Meshes/Ground/Ground.dae"
 source_md5="e9a1d74e3b3910c374eba428981fc78d"
 
 dest_files=[ "res://.import/Ground.dae-c9f766c18d2c1247b1bc6a1a8b3d94cd.scn" ]
-dest_md5="5fdc2d1db8737bce2cef9391b478b8ae"
+dest_md5="0aa3fc3666f0058af813d72aa8c9989c"
 
 [params]
 
 nodes/root_type="Spatial"
-nodes/root_name="Scene Root"
+nodes/root_name="Ground"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
@@ -28,7 +28,7 @@ meshes/storage=0
 meshes/light_baking=0
 meshes/lightmap_texel_size=0.1
 external_files/store_in_subdir=false
-animation/import=true
+animation/import=false
 animation/fps=15
 animation/filter_script=""
 animation/storage=false
