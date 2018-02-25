@@ -6,8 +6,11 @@ using Godot;
 
 namespace AlleyCat.Control
 {
-    public class FreeViewControl : AutowiredNode
+    public class FreeViewControl : AutowiredNode, IActivatable
     {
+        [Export]
+        public bool Active { get; set; } = true;
+
         [Node("..")]
         public Spatial Target { get; private set; }
 
@@ -24,6 +27,7 @@ namespace AlleyCat.Control
 
             Rotation
                 .AsVector2Input()
+                .Where(_ => Active)
                 .Subscribe(v =>
                 {
                     Target.GlobalRotate(new Vector3(0, 1, 0), -v.x);
@@ -33,6 +37,7 @@ namespace AlleyCat.Control
 
             Movement
                 .AsVector2Input()
+                .Where(_ => Active)
                 .Select(v => new Vector3(v.x, 0, -v.y))
                 .Select(v => v * 0.1f)
                 .Subscribe(Target.TranslateObjectLocal)
