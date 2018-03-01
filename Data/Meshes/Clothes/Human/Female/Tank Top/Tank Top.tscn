@@ -21,8 +21,9 @@ surfaces/0 = {
 "vertex_count": 1283
 }
 
-[node name="Tank Top" type="MeshInstance"]
+[node name="Tank Top" type="MeshInstance" index="0"]
 
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -35,5 +36,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "Transform" ]
 
 

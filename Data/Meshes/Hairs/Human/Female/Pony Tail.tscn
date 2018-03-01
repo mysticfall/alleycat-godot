@@ -35,8 +35,9 @@ surfaces/1 = {
 "vertex_count": 338
 }
 
-[node name="Pony Tail" type="MeshInstance"]
+[node name="Pony Tail" type="MeshInstance" index="0"]
 
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -50,6 +51,6 @@ mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 1 )
 material/1 = ExtResource( 2 )
-_sections_unfolded = [ "material" ]
+_sections_unfolded = [ "Transform", "material" ]
 
 
