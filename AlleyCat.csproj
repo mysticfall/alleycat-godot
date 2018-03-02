@@ -89,6 +89,7 @@
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Bootstrap.cs" />
+    <Compile Include="Program\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\Directory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Program\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeStore.cs" />
     <Compile Include="Program\AlleyCat\Common\ProcessMode.cs" />
+    <Compile Include="Program\AlleyCat\Common\TransformExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Program\AlleyCat\Common\VectorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Control\ActionAxisInput.cs" />

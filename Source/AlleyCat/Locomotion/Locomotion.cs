@@ -33,8 +33,8 @@ namespace AlleyCat.Locomotion
 
             Debug.Assert(Target != null, $"Failed to find the target node: '{_targetPath}'.");
 
-            _requestedMovement = new Vector3(0, 0, 0);
-            _requestedRotation = new Vector3(0, 0, 0);
+            _requestedMovement = new Vector3();
+            _requestedRotation = new Vector3();
         }
 
         public override void _Process(float delta)

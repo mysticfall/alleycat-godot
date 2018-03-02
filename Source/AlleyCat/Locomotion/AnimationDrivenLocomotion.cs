@@ -3,6 +3,7 @@ using System.Diagnostics;
 using AlleyCat.Animation;
 using AlleyCat.Common;
 using Godot;
+using static AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Locomotion
 {
@@ -54,7 +55,7 @@ namespace AlleyCat.Locomotion
             Debug.Assert(Target != null, "Target != null");
 
             Target.GlobalTransform = rotation * Target.GlobalTransform;
-            Target.RotateObjectLocal(new Vector3(0, 1, 0), rotationalVelocity.y);
+            Target.RotateObjectLocal(Up, rotationalVelocity.y);
 
             return offset.origin / delta;
         }
