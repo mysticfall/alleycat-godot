@@ -1,20 +1,22 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=30 format=2]
 
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Face.material" type="Material" id=2]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Feet.material" type="Material" id=3]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Hands.material" type="Material" id=4]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Torso.material" type="Material" id=5]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Legs.material" type="Material" id=6]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Eyes.material" type="Material" id=7]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Eyelash.material" type="Material" id=8]
-[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.material" type="Material" id=10]
-[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail Band.material" type="Material" id=11]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Tank Top/Tank Top.tscn" type="PackedScene" id=12]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.material" type="Material" id=14]
-[ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=15]
+[ext_resource path="res://Program/AlleyCat/Character/Character.cs" type="Script" id=1]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=2]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Face.material" type="Material" id=3]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Feet.material" type="Material" id=4]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Hands.material" type="Material" id=5]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Torso.material" type="Material" id=6]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Legs.material" type="Material" id=7]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Eyes.material" type="Material" id=8]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Eyelash.material" type="Material" id=9]
+[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.material" type="Material" id=11]
+[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail Band.material" type="Material" id=12]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Tank Top/Tank Top.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.material" type="Material" id=15]
+[ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=16]
+[ext_resource path="res://Program/AlleyCat/Locomotion/AnimationDrivenLocomotion.cs" type="Script" id=17]
 
 [sub_resource type="ArrayMesh" id=1]
 
@@ -28,7 +30,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 1980,
-"material": ExtResource( 1 ),
+"material": ExtResource( 2 ),
 "name": "InnerMouth",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -41,7 +43,7 @@ surfaces/1 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 4536,
-"material": ExtResource( 2 ),
+"material": ExtResource( 3 ),
 "name": "Face",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -54,7 +56,7 @@ surfaces/2 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 2304,
-"material": ExtResource( 3 ),
+"material": ExtResource( 4 ),
 "name": "Feet",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -67,7 +69,7 @@ surfaces/3 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 3384,
-"material": ExtResource( 4 ),
+"material": ExtResource( 5 ),
 "name": "Hands",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -80,7 +82,7 @@ surfaces/4 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 4884,
-"material": ExtResource( 5 ),
+"material": ExtResource( 6 ),
 "name": "Torso",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -93,7 +95,7 @@ surfaces/5 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 2652,
-"material": ExtResource( 6 ),
+"material": ExtResource( 7 ),
 "name": "Legs",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -106,7 +108,7 @@ surfaces/6 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 1056,
-"material": ExtResource( 7 ),
+"material": ExtResource( 8 ),
 "name": "Eyes",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -119,14 +121,14 @@ surfaces/7 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 324,
-"material": ExtResource( 8 ),
+"material": ExtResource( 9 ),
 "name": "Eyelash",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 88
 }
 
-[sub_resource type="ArrayMesh" id=10]
+[sub_resource type="ArrayMesh" id=2]
 
 resource_name = "Scene.001"
 blend_shape_mode = 1
@@ -138,7 +140,7 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 16032,
-"material": ExtResource( 10 ),
+"material": ExtResource( 11 ),
 "name": "Pony Tail",
 "primitive": 4,
 "skeleton_aabb": [  ],
@@ -151,14 +153,14 @@ surfaces/1 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 1728,
-"material": ExtResource( 11 ),
+"material": ExtResource( 12 ),
 "name": "Pony Tail Band",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 338
 }
 
-[sub_resource type="ArrayMesh" id=11]
+[sub_resource type="ArrayMesh" id=3]
 
 resource_name = "Untitled"
 blend_shape_mode = 1
@@ -170,22 +172,21 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98263,
 "index_count": 5142,
-"material": ExtResource( 14 ),
+"material": ExtResource( 15 ),
 "name": "Skirt",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 1109
 }
 
-[sub_resource type="CapsuleShape" id=12]
+[sub_resource type="CapsuleShape" id=4]
 
 radius = 0.3
 height = 1.45219
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=5]
 
-resource_name = "Female Facial Expressions"
 length = 6.66667
 loop = false
 step = 0.1
@@ -1317,9 +1318,8 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1, 6.66667, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=6]
 
-resource_name = "Female Idle"
 length = 2.66667
 loop = true
 step = 0.1
@@ -2451,9 +2451,8 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, 3.20142e-08, -2.23517e-08, 0, 1.13382e-13, -2.22045e-15, 1, 1, 1, 1, 2.66667, 1, 0, 8.42847e-08, -1.49012e-08, -2.32831e-10, 5.91124e-14, 1.14131e-13, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=7]
 
-resource_name = "Female Reset"
 length = 0.0416667
 loop = false
 step = 0.1
@@ -3585,9 +3584,8 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1, 0.0416667, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=8]
 
-resource_name = "Female Run Forward"
 length = 1.33333
 loop = true
 step = 0.0
@@ -4733,9 +4731,8 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=9]
 
-resource_name = "Female Strafe Left"
 length = 1.33333
 loop = true
 step = 0.0
@@ -5881,9 +5878,8 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=10]
 
-resource_name = "Female Strafe Right"
 length = 1.33333
 loop = true
 step = 0.0
@@ -7029,9 +7025,8 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=11]
 
-resource_name = "Female Walk Backward"
 length = 1.33333
 loop = true
 step = 0.0
@@ -8177,9 +8172,8 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=12]
 
-resource_name = "Female Walk Forward"
 length = 1.33333
 loop = true
 step = 0.0
@@ -9325,7 +9319,7 @@ tracks/161/keys = {
 } ]
 }
 
-[node name="Female" type="KinematicBody" index="0"]
+[node name="Female" type="KinematicBody"]
 
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -9338,11 +9332,13 @@ axis_lock_angular_x = false
 axis_lock_angular_y = false
 axis_lock_angular_z = false
 collision/safe_margin = 0.001
+script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
+_skeletonPath = NodePath("HumanFemaleRig/Skeleton")
+_animationPlayerPath = NodePath("AnimationPlayer")
+_locomotionPath = NodePath("Locomotion")
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Skeleton" type="Skeleton" parent="HumanFemaleRig" index="0"]
 
@@ -10169,22 +10165,22 @@ material/5 = null
 material/6 = null
 material/7 = null
 
-[node name="Pony Tail" parent="HumanFemaleRig/Skeleton" index="1" instance=ExtResource( 9 )]
+[node name="Pony Tail" parent="HumanFemaleRig/Skeleton" index="1" instance=ExtResource( 10 )]
 
-mesh = SubResource( 10 )
+mesh = SubResource( 2 )
 material/0 = null
 material/1 = null
 
-[node name="Tank Top" parent="HumanFemaleRig/Skeleton" index="2" instance=ExtResource( 12 )]
+[node name="Tank Top" parent="HumanFemaleRig/Skeleton" index="2" instance=ExtResource( 13 )]
 
-[node name="Skirt" parent="HumanFemaleRig/Skeleton" index="3" instance=ExtResource( 13 )]
+[node name="Skirt" parent="HumanFemaleRig/Skeleton" index="3" instance=ExtResource( 14 )]
 
-mesh = SubResource( 11 )
+mesh = SubResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.04065, 0 )
-shape = SubResource( 12 )
+shape = SubResource( 4 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -10195,16 +10191,16 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-"anims/Female Facial Expressions" = SubResource( 2 )
-"anims/Female Idle" = SubResource( 3 )
-"anims/Female Reset" = SubResource( 4 )
-"anims/Female Run Forward" = SubResource( 5 )
-"anims/Female Strafe Left" = SubResource( 6 )
-"anims/Female Strafe Right" = SubResource( 7 )
-"anims/Female Walk Backward" = SubResource( 8 )
-"anims/Female Walk Forward" = SubResource( 9 )
+"anims/Female Facial Expressions" = SubResource( 5 )
+"anims/Female Idle" = SubResource( 6 )
+"anims/Female Reset" = SubResource( 7 )
+"anims/Female Run Forward" = SubResource( 8 )
+"anims/Female Strafe Left" = SubResource( 9 )
+"anims/Female Strafe Right" = SubResource( 10 )
+"anims/Female Walk Backward" = SubResource( 11 )
+"anims/Female Walk Forward" = SubResource( 12 )
 blend_times = [  ]
-script = ExtResource( 15 )
+script = ExtResource( 16 )
 RootBone = "Position"
 _skeletonPath = NodePath("../HumanFemaleRig/Skeleton")
 
@@ -10216,41 +10212,12 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
+"connections": [ "Walk", "out", 0, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
 "position": Vector2( 781.614, 192.848 ),
 "type": "output"
-}, {
-"filter": [  ],
-"from": "Female Idle",
-"id": "Idle",
-"position": Vector2( 50.9995, 80.9692 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Idle",
-"id": "Idle 2",
-"position": Vector2( 83.0141, 440.671 ),
-"type": "animation"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "Walk-Run",
-"position": Vector2( 193.967, 647.485 ),
-"type": "blend2"
-}, {
-"blend": 0.0,
-"id": "Left-Right",
-"position": Vector2( 377.845, 59.0209 ),
-"type": "blend3"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "Walk",
-"position": Vector2( 550.76, 192.898 ),
-"type": "blend2"
 }, {
 "blend": 0.0,
 "id": "Forward-Backward",
@@ -10258,22 +10225,15 @@ data = {
 "type": "blend3"
 }, {
 "filter": [  ],
-"from": "Female Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 18.0635, 591.551 ),
+"from": "Female Idle",
+"id": "Idle",
+"position": Vector2( 50.9995, 80.9692 ),
 "type": "animation"
 }, {
-"filter": [  ],
-"from": "Female Strafe Right",
-"id": "Strafe Right",
-"position": Vector2( 201.931, 175.895 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 63.0297, 299.821 ),
-"type": "animation"
+"blend": 0.0,
+"id": "Left-Right",
+"position": Vector2( 377.845, 59.0209 ),
+"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Female Strafe Left",
@@ -10286,8 +10246,51 @@ data = {
 "id": "Run Forward",
 "position": Vector2( 26.0646, 738.414 ),
 "type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 18.0635, 591.551 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk-Run",
+"position": Vector2( 193.967, 647.485 ),
+"type": "blend2"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk",
+"position": Vector2( 550.76, 192.898 ),
+"type": "blend2"
+}, {
+"filter": [  ],
+"from": "Female Strafe Right",
+"id": "Strafe Right",
+"position": Vector2( 201.931, 175.895 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Idle",
+"id": "Idle 2",
+"position": Vector2( 83.0141, 440.671 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 63.0297, 299.821 ),
+"type": "animation"
 } ]
 }
 _sections_unfolded = [ "Playback" ]
+
+[node name="Locomotion" type="Node" parent="." index="4"]
+
+script = ExtResource( 17 )
+Active = true
+_targetPath = NodePath("..")
+_animationTreePlayerPath = NodePath("../AnimationTreePlayer")
 
 

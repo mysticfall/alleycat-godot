@@ -91,6 +91,7 @@
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Bootstrap.cs" />
+    <Compile Include="Program\AlleyCat\Camera\CharacterCamera.cs" />
     <Compile Include="Program\AlleyCat\Character\Character.cs" />
     <Compile Include="Program\AlleyCat\Character\ICharacter.cs" />
     <Compile Include="Program\AlleyCat\Common\BasisExtensions.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Program\AlleyCat\Common\VectorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Program\AlleyCat\Control\AxisInput.cs" />
-    <Compile Include="Program\AlleyCat\Control\CharacterControl.cs" />
     <Compile Include="Program\AlleyCat\Control\FreeViewControl.cs" />
     <Compile Include="Program\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Program\AlleyCat\Control\Input.cs" />
@@ -125,6 +125,7 @@
     <Compile Include="Program\AlleyCat\Control\InputBindings.cs" />
     <Compile Include="Program\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Program\AlleyCat\Control\MouseAxisInput.cs" />
+    <Compile Include="Program\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEvents.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerExtensions.cs" />
@@ -144,8 +145,10 @@
     <Compile Include="Program\AlleyCat\Locomotion\ILocomotion.cs" />
     <Compile Include="Program\AlleyCat\Locomotion\ILocomotive.cs" />
     <Compile Include="Program\AlleyCat\Locomotion\ImmediateLocomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\IOrbitable.cs" />
     <Compile Include="Program\AlleyCat\Locomotion\KinematicLocomotion.cs" />
     <Compile Include="Program\AlleyCat\Locomotion\Locomotion.cs" />
+    <Compile Include="Program\AlleyCat\Locomotion\Orbiter.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\ConsoleLoggerProvider.cs" />
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />

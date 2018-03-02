@@ -1,15 +1,14 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=1]
-[ext_resource path="res://Program/AlleyCat/Control/FreeViewControl.cs" type="Script" id=2]
-[ext_resource path="res://Program/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
-[ext_resource path="res://Program/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=4]
-[ext_resource path="res://Program/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=5]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Program/AlleyCat/Locomotion/AnimationDrivenLocomotion.cs" type="Script" id=7]
-[ext_resource path="res://Program/AlleyCat/Control/CharacterControl.cs" type="Script" id=8]
-[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Program/AlleyCat/Camera/CharacterCamera.cs" type="Script" id=3]
+[ext_resource path="res://Program/AlleyCat/Control/PlayerControl.cs" type="Script" id=4]
+[ext_resource path="res://Program/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
+[ext_resource path="res://Program/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Program/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=7]
+[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=9]
 
 [sub_resource type="GIProbeData" id=1]
 
@@ -24,18 +23,6 @@ normal_bias = 0.0
 propagation = 0.7
 interior = false
 compress = false
-
-[sub_resource type="SphereMesh" id=2]
-
-radius = 1.0
-height = 2.0
-radial_segments = 64
-rings = 32
-is_hemisphere = false
-
-[sub_resource type="SphereShape" id=3]
-
-radius = 1.0
 
 [node name="Scene" type="Node" index="0"]
 
@@ -73,102 +60,16 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 8.0
 _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
-[node name="Cameras" type="Node" parent="." index="2"]
+[node name="Characters" type="Node" parent="." index="2"]
 
-[node name="Main Camera" type="Camera" parent="Cameras" index="0"]
-
-editor/display_folded = true
-transform = Transform( -0.0528594, -0.245822, 0.967872, 0.00855307, 0.96908, 0.246596, -0.998564, 0.0213133, -0.0491225, 1.88376, 1.67717, -0.124339 )
-visible = false
-keep_aspect = 1
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = true
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 50.0
-_sections_unfolded = [ "Transform" ]
-
-[node name="Control" type="Node" parent="Cameras/Main Camera" index="0"]
-
-script = ExtResource( 2 )
-Active = true
-
-[node name="Rotation" type="Node" parent="Cameras/Main Camera/Control" index="0"]
-
-script = ExtResource( 3 )
-
-[node name="X" type="Node" parent="Cameras/Main Camera/Control/Rotation" index="0"]
-
-script = ExtResource( 4 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 0
-Maximum = 0.1
-
-[node name="Y" type="Node" parent="Cameras/Main Camera/Control/Rotation" index="1"]
-
-script = ExtResource( 4 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 1
-Maximum = 0.1
-
-[node name="Movement" type="Node" parent="Cameras/Main Camera/Control" index="1"]
-
-script = ExtResource( 3 )
-
-[node name="X" type="Node" parent="Cameras/Main Camera/Control/Movement" index="0"]
-
-script = ExtResource( 5 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-PositiveAction = "move_right"
-NegativeAction = "move_left"
-
-[node name="Y" type="Node" parent="Cameras/Main Camera/Control/Movement" index="1"]
-
-script = ExtResource( 5 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-PositiveAction = "move_forward"
-NegativeAction = "move_back"
-
-[node name="Characters" type="Node" parent="." index="3"]
-
-[node name="Player" parent="Characters" index="0" instance=ExtResource( 6 )]
+[node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225457, 0 )
 _sections_unfolded = [ "Axis Lock", "Transform" ]
 
 [node name="Player Camera" type="Camera" parent="Characters/Player" index="4"]
 
-transform = Transform( -1, -2.39455e-08, 1.49085e-07, 0, 0.987345, 0.158584, -1.50996e-07, 0.158584, -0.987345, -1.19209e-07, 1.63446, -0.89459 )
+transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -1.19209e-07, 1.50374, 0.981279 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -181,27 +82,57 @@ fov = 70.0
 size = 1.0
 near = 0.05
 far = 100.0
-_sections_unfolded = [ "Transform" ]
-
-[node name="Locomotion" type="Node" parent="Characters/Player" index="5"]
-
-script = ExtResource( 7 )
-Active = true
-_targetPath = NodePath("..")
-_animationTreePlayerPath = NodePath("../AnimationTreePlayer")
-
-[node name="Control" type="Node" parent="Characters/Player" index="6"]
-
-script = ExtResource( 8 )
-Active = true
-
-[node name="Rotation" type="Node" parent="Characters/Player/Control" index="0"]
-
 script = ExtResource( 3 )
+_sections_unfolded = [ "Transform" ]
+Active = true
+MinimumDistance = 0.4
+_characterPath = NodePath("..")
+_headBone = "Head"
+
+[node name="Control" type="Node" parent="Characters/Player" index="5"]
+
+script = ExtResource( 4 )
+Active = true
+
+[node name="Movement" type="Node" parent="Characters/Player/Control" index="0"]
+
+script = ExtResource( 5 )
+
+[node name="X" type="Node" parent="Characters/Player/Control/Movement" index="0"]
+
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
+Polling = true
+
+[node name="Y" type="Node" parent="Characters/Player/Control/Movement" index="1"]
+
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
+Polling = true
+
+[node name="Rotation" type="Node" parent="Characters/Player/Control" index="1"]
+
+script = ExtResource( 5 )
 
 [node name="X" type="Node" parent="Characters/Player/Control/Rotation" index="0"]
 
-script = ExtResource( 4 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -214,7 +145,7 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Characters/Player/Control/Rotation" index="1"]
 
-script = ExtResource( 4 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -225,13 +156,13 @@ WindowShift = 5.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Movement" type="Node" parent="Characters/Player/Control" index="1"]
-
-script = ExtResource( 3 )
-
-[node name="X" type="Node" parent="Characters/Player/Control/Movement" index="0"]
+[node name="Zoom" type="Node" parent="Characters/Player/Control" index="2"]
 
 script = ExtResource( 5 )
+
+[node name="Value" type="Node" parent="Characters/Player/Control/Zoom" index="0"]
+
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -239,33 +170,23 @@ DeadZone = 0.0
 Interpolate = true
 WindowSize = 100.0
 WindowShift = 5.0
-PositiveAction = "move_right"
-NegativeAction = "move_left"
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
+Polling = false
 
-[node name="Y" type="Node" parent="Characters/Player/Control/Movement" index="1"]
-
-script = ExtResource( 5 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-PositiveAction = "move_forward"
-NegativeAction = "move_back"
-
-[node name="Static Objects" type="Node" parent="." index="4"]
+[node name="Static Objects" type="Node" parent="." index="3"]
 
 [node name="Walls" type="Spatial" parent="Static Objects" index="0"]
+
+editor/display_folded = true
 
 [node name="Front Wall" type="Spatial" parent="Static Objects/Walls" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 9 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 9 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 8 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -274,9 +195,9 @@ transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 9 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 9 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 8 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -286,9 +207,9 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, -5 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 9 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 9 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 8 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
@@ -298,17 +219,17 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 15 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 9 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 9 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 8 )]
 
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
-[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 10 )]
+[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 9 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65074, 0.00188553, -0.0470071 )
 
-[node name="GIProbe" type="GIProbe" parent="." index="5"]
+[node name="GIProbe" type="GIProbe" parent="." index="4"]
 
 transform = Transform( 0.104347, 0, 0, 0, 0.402325, 0, 0, 0, 1.10287, 2.24059, 0.930508, 0.993336 )
 layers = 1
@@ -322,60 +243,6 @@ normal_bias = 0.0
 interior = false
 compress = false
 data = SubResource( 1 )
-_sections_unfolded = [ "Transform" ]
-
-[node name="Ball" type="RigidBody" parent="." index="6"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82409, 3.04067, 2.09909 )
-input_ray_pickable = true
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-mode = 0
-mass = 3.0
-friction = 1.0
-bounce = 0.3
-gravity_scale = 1.0
-custom_integrator = false
-continuous_cd = false
-contacts_reported = 0
-contact_monitor = false
-sleeping = false
-can_sleep = true
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-linear_velocity = Vector3( 0, 0, 0 )
-linear_damp = -1.0
-angular_velocity = Vector3( 0, 0, 0 )
-angular_damp = -1.0
-_sections_unfolded = [ "Transform" ]
-
-[node name="MeshInstance" type="MeshInstance" parent="Ball" index="0"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.01446 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
-skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
-
-[node name="CollisionShape" type="CollisionShape" parent="Ball" index="1"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
-shape = SubResource( 3 )
-disabled = false
 _sections_unfolded = [ "Transform" ]
 
 
