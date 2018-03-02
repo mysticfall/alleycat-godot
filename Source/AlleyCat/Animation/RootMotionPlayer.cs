@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using AlleyCat.Common;
+﻿using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
@@ -27,8 +26,6 @@ namespace AlleyCat.Animation
             base._Ready();
 
             Skeleton = this.GetNode<Skeleton>(_skeletonPath);
-
-            Debug.Assert(Skeleton != null, $"Failed to find a skeleton: '{_skeletonPath}'.");
 
             _positionIndex = Skeleton.FindBone(RootBone);
             _initialTransform = Skeleton.GetBoneTransform(_positionIndex);

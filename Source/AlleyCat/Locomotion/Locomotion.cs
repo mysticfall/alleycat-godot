@@ -29,9 +29,7 @@ namespace AlleyCat.Locomotion
         {
             base._Ready();
 
-            Target = GetNode(_targetPath) as T;
-
-            Debug.Assert(Target != null, $"Failed to find the target node: '{_targetPath}'.");
+            Target = this.GetNode<T>(_targetPath);
 
             _requestedMovement = new Vector3();
             _requestedRotation = new Vector3();
