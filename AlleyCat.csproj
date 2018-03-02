@@ -54,6 +54,8 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program\AlleyCat\Animation\IAnimatable.cs" />
+    <Compile Include="Program\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Program\AlleyCat\Animation\RootMotionPlayer.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
@@ -89,6 +91,8 @@
     <Compile Include="Program\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Program\AlleyCat\Bootstrap.cs" />
+    <Compile Include="Program\AlleyCat\Character\Character.cs" />
+    <Compile Include="Program\AlleyCat\Character\ICharacter.cs" />
     <Compile Include="Program\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\Directory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />
