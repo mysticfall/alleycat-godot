@@ -7,6 +7,9 @@ namespace AlleyCat.Common
 {
     public static class VectorExtensions
     {
+        public static Vector3 Project(this Vector3 vector, Vector3 normal) =>
+            normal.Cross(vector.Cross(normal) / normal.Length()) / normal.Length();
+
         public static string ToFormatString(this Vector2 vector, [NotNull] string format = "###,##0.00")
         {
             Ensure.Any.IsNotNull(format, nameof(format));
