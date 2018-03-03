@@ -2,7 +2,7 @@ using Godot;
 
 namespace AlleyCat.Locomotion
 {
-    public interface IOrbitable
+    public interface IOrbiter
     {
         float Pitch { get; set; }
 

@@ -3,7 +3,7 @@ using Godot;
 
 namespace AlleyCat.Locomotion
 {
-    public abstract class Orbiter : Node, IOrbitable
+    public abstract class Orbiter : Node, IOrbiter
     {
         public abstract Spatial Target { get; }
 

@@ -9,7 +9,7 @@ using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Camera
 {
-    public class CharacterCamera : Godot.Camera, IOrbitable
+    public class CharacterCamera : Godot.Camera, IOrbiter
     {
         [Export]
         public bool Active { get; set; } = true;
