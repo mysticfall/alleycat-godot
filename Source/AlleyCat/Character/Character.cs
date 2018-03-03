@@ -5,7 +5,7 @@ using Godot;
 namespace AlleyCat.Character
 {
     [AutowireContext]
-    public class Character : KinematicBody, ICharacter
+    public abstract class Character : KinematicBody, ICharacter
     {
         [Service]
         public ILocomotion Locomotion { get; private set; }
@@ -15,6 +15,10 @@ namespace AlleyCat.Character
 
         [Service]
         public Skeleton Skeleton { get; private set; }
+
+        public abstract Vector3 Viewpoint { get; }
+
+        public abstract Vector3 LookingAt { get; }
 
         public override void _Ready()
         {

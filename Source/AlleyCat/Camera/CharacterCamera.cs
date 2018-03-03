@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -20,26 +19,11 @@ namespace AlleyCat.Camera
         [Export(PropertyHint.Range, "0, 5")]
         public float MinimumDistance { get; set; } = 0.4f;
 
-        public Vector3 Pivot
-        {
-            get
-            {
-                if (_positionIndex == -1)
-                {
-                    _positionIndex = Character.Skeleton.FindBone(_headBone);
-                }
-
-                Debug.Assert(_positionIndex != -1, $"Failed to find the head bone: '{_headBone}'.");
-
-                var head = Character.Skeleton.GetBoneGlobalPose(_positionIndex).origin;
-
-                return Character.Skeleton.GlobalTransform.Xform(head);
-            }
-        }
+        public Vector3 Pivot => Character.Viewpoint;
 
         public Vector3 Up => Axis.Up;
 
-        public Vector3 Forward => new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.basis.Forward());
+        public Vector3 Forward => new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.Forward());
 
         public Vector3 Right => Forward.Cross(Up);
 
@@ -50,10 +34,6 @@ namespace AlleyCat.Camera
         public float Distance { get; set; } = 1f;
 
         [Export, UsedImplicitly] private NodePath _character = "..";
-
-        [Export, NotNull] private string _headBone = "Head";
-
-        private int _positionIndex = -1;
 
         public override void _Ready()
         {

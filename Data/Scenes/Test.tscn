@@ -24,7 +24,7 @@ propagation = 0.7
 interior = false
 compress = false
 
-[node name="Scene" type="Node"]
+[node name="Scene" type="Node" index="0"]
 
 [node name="Environment" type="WorldEnvironment" parent="." index="0"]
 
@@ -66,6 +66,9 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225457, 0 )
 _sections_unfolded = [ "Axis Lock", "Transform" ]
+_headBone = "Head"
+_eyeBoneLeft = "LeftEye"
+_eyeBoneRight = "RightEye"
 
 [node name="Player Camera" type="Camera" parent="Characters/Player" index="4"]
 
@@ -87,7 +90,6 @@ _sections_unfolded = [ "Transform" ]
 Active = true
 MinimumDistance = 0.4
 _character = NodePath("..")
-_headBone = "Head"
 
 [node name="Control" type="Node" parent="Characters/Player" index="5"]
 
