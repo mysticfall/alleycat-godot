@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Program/AlleyCat/Character/Character.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=2]
@@ -15,8 +15,9 @@
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Tank Top/Tank Top.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.material" type="Material" id=15]
-[ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=16]
-[ext_resource path="res://Program/AlleyCat/Locomotion/AnimationDrivenLocomotion.cs" type="Script" id=17]
+[ext_resource path="res://Program/AlleyCat/Autowire/Binding.cs" type="Script" id=16]
+[ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=17]
+[ext_resource path="res://Program/AlleyCat/Locomotion/AnimationDrivenLocomotion.cs" type="Script" id=18]
 
 [sub_resource type="ArrayMesh" id=1]
 
@@ -9334,8 +9335,6 @@ axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
-_skeleton = NodePath("HumanFemaleRig/Skeleton")
-_animationPlayer = NodePath("AnimationPlayer")
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
@@ -10176,6 +10175,10 @@ material/1 = null
 
 mesh = SubResource( 3 )
 
+[node name="Binding" type="Node" parent="HumanFemaleRig/Skeleton" index="4"]
+
+script = ExtResource( 16 )
+
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.04065, 0 )
@@ -10199,12 +10202,17 @@ playback_speed = 1.0
 "anims/Female Walk Backward" = SubResource( 11 )
 "anims/Female Walk Forward" = SubResource( 12 )
 blend_times = [  ]
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 RootBone = "Position"
 _skeleton = NodePath("../HumanFemaleRig/Skeleton")
 
+[node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
+
+script = ExtResource( 16 )
+
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
 
+editor/display_folded = true
 playback_process_mode = 0
 master_player = NodePath("../AnimationPlayer")
 base_path = NodePath("..")
@@ -10285,9 +10293,13 @@ data = {
 }
 _sections_unfolded = [ "Playback" ]
 
+[node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
+
+script = ExtResource( 16 )
+
 [node name="Locomotion" type="Node" parent="." index="4"]
 
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 Active = true
 _target = NodePath("..")
 _animationPlayer = NodePath("../AnimationPlayer")

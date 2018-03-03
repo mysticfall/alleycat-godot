@@ -60,6 +60,7 @@
     <Compile Include="Program\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Program\AlleyCat\Autowire\AutowirePhase.cs" />
+    <Compile Include="Program\AlleyCat\Autowire\Binding.cs" />
     <Compile Include="Program\AlleyCat\Autowire\CyclicDependencyException.cs" />
     <Compile Include="Program\AlleyCat\Autowire\DependencyChain.cs" />
     <Compile Include="Program\AlleyCat\Autowire\DependencyNode.cs" />
