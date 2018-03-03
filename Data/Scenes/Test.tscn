@@ -86,7 +86,7 @@ script = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
 Active = true
 MinimumDistance = 0.4
-_characterPath = NodePath("..")
+_character = NodePath("..")
 _headBone = "Head"
 
 [node name="Control" type="Node" parent="Characters/Player" index="5"]

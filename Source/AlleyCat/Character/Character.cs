@@ -1,30 +1,31 @@
-using AlleyCat.Common;
+using AlleyCat.Autowire;
 using AlleyCat.Locomotion;
 using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Character
 {
+    [AutowireContext]
     public class Character : KinematicBody, ICharacter
     {
+        [Service]
         public ILocomotion Locomotion { get; private set; }
 
+        [Node]
         public AnimationPlayer AnimationPlayer { get; private set; }
 
+        [Node]
         public Skeleton Skeleton { get; private set; }
 
-        [Export] private NodePath _skeletonPath = "Skeleton";
+        [Export, UsedImplicitly] private NodePath _skeleton = "Skeleton";
 
-        [Export] private NodePath _animationPlayerPath = "AnimationPlayer";
-
-        [Export] private NodePath _locomotionPath = "Locomotion";
+        [Export, UsedImplicitly] private NodePath _animationPlayer = "AnimationPlayer";
 
         public override void _Ready()
         {
             base._Ready();
 
-            Locomotion = this.GetNode<ILocomotion>(_locomotionPath);
-            AnimationPlayer = this.GetNode<AnimationPlayer>(_animationPlayerPath);
-            Skeleton = this.GetNode<Skeleton>(_skeletonPath);
+            this.Autowire();
         }
     }
 }

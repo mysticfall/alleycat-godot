@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Locomotion;
@@ -13,6 +14,7 @@ namespace AlleyCat.Camera
         [Export]
         public bool Active { get; set; } = true;
 
+        [Node]
         public ICharacter Character { get; private set; }
 
         [Export(PropertyHint.Range, "0, 5")]
@@ -47,11 +49,9 @@ namespace AlleyCat.Camera
 
         public float Distance { get; set; } = 1f;
 
-        [Export]
-        private NodePath _characterPath = "..";
+        [Export, UsedImplicitly] private NodePath _character = "..";
 
-        [Export, NotNull]
-        private string _headBone  = "Head";
+        [Export, NotNull] private string _headBone = "Head";
 
         private int _positionIndex = -1;
 
@@ -59,7 +59,7 @@ namespace AlleyCat.Camera
         {
             base._Ready();
 
-            Character = this.GetNode<ICharacter>(_characterPath);
+            this.Autowire();
         }
 
         public void Rotate(Vector2 rotation)

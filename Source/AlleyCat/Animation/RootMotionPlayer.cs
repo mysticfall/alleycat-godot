@@ -1,4 +1,4 @@
-﻿using AlleyCat.Common;
+﻿using AlleyCat.Autowire;
 using Godot;
 using JetBrains.Annotations;
 
@@ -6,6 +6,7 @@ namespace AlleyCat.Animation
 {
     public class RootMotionPlayer : AnimationPlayer
     {
+        [Node]
         public Skeleton Skeleton { get; private set; }
 
         [Export, NotNull]
@@ -13,7 +14,7 @@ namespace AlleyCat.Animation
 
         public Transform Offset { get; private set; }
 
-        [Export] private NodePath _skeletonPath = "..";
+        [Export, UsedImplicitly] private NodePath _skeleton = "..";
 
         private Transform _initialTransform;
 
@@ -25,8 +26,12 @@ namespace AlleyCat.Animation
         {
             base._Ready();
 
-            Skeleton = this.GetNode<Skeleton>(_skeletonPath);
+            this.Autowire();
+        }
 
+        [PostConstruct]
+        protected virtual void OnInitialize()
+        {
             _positionIndex = Skeleton.FindBone(RootBone);
             _initialTransform = Skeleton.GetBoneTransform(_positionIndex);
 

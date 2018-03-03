@@ -1,16 +1,18 @@
 using System.Diagnostics;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Locomotion
 {
-    public abstract class Locomotion<T> : Node, ILocomotion where T : Spatial
+    [Singleton(typeof(ILocomotion))]
+    public abstract class Locomotion<T> : AutowiredNode, ILocomotion where T : Spatial
     {
         [Export]
         public bool Active { get; set; } = true;
 
-        [CanBeNull]
+        [CanBeNull, Node]
         public T Target { get; private set; }
 
         public Vector3 Velocity { get; private set; }
@@ -19,18 +21,15 @@ namespace AlleyCat.Locomotion
 
         protected virtual ProcessMode ProcessMode { get; } = ProcessMode.Idle;
 
-        [Export] private NodePath _targetPath = "..";
+        [Export, UsedImplicitly] private NodePath _target = "..";
 
         private Vector3 _requestedMovement;
 
         private Vector3 _requestedRotation;
 
-        public override void _Ready()
+        [PostConstruct]
+        protected virtual void OnInitialize()
         {
-            base._Ready();
-
-            Target = this.GetNode<T>(_targetPath);
-
             _requestedMovement = new Vector3();
             _requestedRotation = new Vector3();
         }

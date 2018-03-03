@@ -9319,7 +9319,7 @@ tracks/161/keys = {
 } ]
 }
 
-[node name="Female" type="KinematicBody"]
+[node name="Female" type="KinematicBody" index="0"]
 
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -9334,9 +9334,8 @@ axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
-_skeletonPath = NodePath("HumanFemaleRig/Skeleton")
-_animationPlayerPath = NodePath("AnimationPlayer")
-_locomotionPath = NodePath("Locomotion")
+_skeleton = NodePath("HumanFemaleRig/Skeleton")
+_animationPlayer = NodePath("AnimationPlayer")
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
@@ -10202,7 +10201,7 @@ playback_speed = 1.0
 blend_times = [  ]
 script = ExtResource( 16 )
 RootBone = "Position"
-_skeletonPath = NodePath("../HumanFemaleRig/Skeleton")
+_skeleton = NodePath("../HumanFemaleRig/Skeleton")
 
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
 
@@ -10212,17 +10211,18 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
+"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
 "position": Vector2( 781.614, 192.848 ),
 "type": "output"
 }, {
-"blend": 0.0,
-"id": "Forward-Backward",
-"position": Vector2( 348.87, 418.683 ),
-"type": "blend3"
+"filter": [  ],
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
+"type": "animation"
 }, {
 "filter": [  ],
 "from": "Female Idle",
@@ -10235,22 +10235,21 @@ data = {
 "position": Vector2( 377.845, 59.0209 ),
 "type": "blend3"
 }, {
-"filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
-"type": "animation"
+"blend": 0.0,
+"id": "Forward-Backward",
+"position": Vector2( 348.87, 418.683 ),
+"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Female Walk Forward",
 "id": "Walk Forward",
 "position": Vector2( 18.0635, 591.551 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -10290,7 +10289,8 @@ _sections_unfolded = [ "Playback" ]
 
 script = ExtResource( 17 )
 Active = true
-_targetPath = NodePath("..")
-_animationTreePlayerPath = NodePath("../AnimationTreePlayer")
+_target = NodePath("..")
+_animationPlayer = NodePath("../AnimationPlayer")
+_animationTreePlayer = NodePath("../AnimationTreePlayer")
 
 

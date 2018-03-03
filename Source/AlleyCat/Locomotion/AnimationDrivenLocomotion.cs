@@ -1,28 +1,31 @@
 using System;
 using System.Diagnostics;
 using AlleyCat.Animation;
-using AlleyCat.Common;
+using AlleyCat.Autowire;
 using Godot;
+using JetBrains.Annotations;
 using static AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Locomotion
 {
     public class AnimationDrivenLocomotion : KinematicLocomotion
     {
-        public AnimationPlayer AnimationPlayer => RootMotionPlayer;
+        [Node]
+        public AnimationPlayer AnimationPlayer { get; private set; }
 
-        public RootMotionPlayer RootMotionPlayer { get; private set; }
-
+        [Node]
         public AnimationTreePlayer AnimationTreePlayer { get; private set; }
 
-        [Export] private NodePath _animationTreePlayerPath = "../AnimationTreePlayer";
+        public RootMotionPlayer RootMotionPlayer => AnimationPlayer as RootMotionPlayer;
 
-        public override void _Ready()
+        [Export, UsedImplicitly] private NodePath _animationPlayer = "../AnimationPlayer";
+
+        [Export, UsedImplicitly] private NodePath _animationTreePlayer = "../AnimationTreePlayer";
+
+        [PostConstruct]
+        protected override void OnInitialize()
         {
-            base._Ready();
-
-            AnimationTreePlayer = this.GetNode<AnimationTreePlayer>(_animationTreePlayerPath);
-            RootMotionPlayer = this.GetNode<RootMotionPlayer>(AnimationTreePlayer.MasterPlayer);
+            base.OnInitialize();
 
             AnimationTreePlayer.Active = false;
             AnimationPlayer.PlaybackActive = false;
