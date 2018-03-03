@@ -39,7 +39,7 @@ namespace AlleyCat.Camera
 
         public Vector3 Up => Axis.Up;
 
-        public Vector3 Forward => Character.Skeleton.GlobalTransform.basis.Forward().Project(Axis.Up);
+        public Vector3 Forward => new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.basis.Forward());
 
         public Vector3 Right => Forward.Cross(Up);
 
