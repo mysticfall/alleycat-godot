@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using EnsureThat;
 using Godot;
@@ -9,15 +8,13 @@ namespace AlleyCat.Autowire
 {
     public class NodeAttributeProcessorFactory : MemberAttributeProcessorFactory<NodeAttribute>
     {
-        protected override INodeProcessor CreateProcessor(
-            Type type, MemberInfo member, NodeAttribute attribute)
+        protected override INodeProcessor CreateProcessor(MemberInfo member, NodeAttribute attribute)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
             Ensure.Any.IsNotNull(member, nameof(member));
             Ensure.Any.IsNotNull(attribute, nameof(attribute));
 
             var fieldName = ToPrivateFieldName(member.Name);
-            var field = type.GetField(fieldName,
+            var field = member.DeclaringType?.GetField(fieldName,
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
             return new NodeAttributeProcessor(member, field, attribute);

@@ -37,7 +37,22 @@ namespace AlleyCat.Autowire
                     break;
                 case PropertyInfo property:
                     TargetType = property.PropertyType;
-                    TargetSetter = property.SetValue;
+
+                    if (property.CanWrite)
+                    {
+                        TargetSetter = property.SetValue;
+                    } else
+                    {
+                        var writeableProperty = property.DeclaringType?.GetProperty(property.Name);
+
+                        if (writeableProperty == null)
+                        {
+                            throw new InvalidOperationException(
+                                $"Property '{property.DeclaringType?.Name}.{property.Name}' is not writeable.");
+                        }
+
+                        TargetSetter = writeableProperty.SetValue;
+                    }
 
                     break;
                 default:
@@ -64,7 +79,10 @@ namespace AlleyCat.Autowire
 
             if (Required && !HasValue(dependency, DependencyType))
             {
-                var member = $"{Member.DeclaringType?.FullName}.{Member.Name}";
+                var type = Member.DeclaringType;
+                var prefix = type?.Namespace == null ? "" : type.Namespace + ".";
+
+                var member = $"{prefix}{type?.Name}.{Member.Name}";
 
                 throw new InvalidOperationException(
                     $"Cannot resolve required dependency for {member}.");
