@@ -1,17 +1,43 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Text;
 using EnsureThat;
+using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
     public class NodeAttributeProcessorFactory : MemberAttributeProcessorFactory<NodeAttribute>
     {
         protected override INodeProcessor CreateProcessor(
-            MemberInfo member, NodeAttribute attribute)
+            Type type, MemberInfo member, NodeAttribute attribute)
         {
+            Ensure.Any.IsNotNull(type, nameof(type));
             Ensure.Any.IsNotNull(member, nameof(member));
             Ensure.Any.IsNotNull(attribute, nameof(attribute));
 
-            return new NodeAttributeProcessor(member, attribute);
+            var fieldName = ToPrivateFieldName(member.Name);
+            var field = type.GetField(fieldName,
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+
+            return new NodeAttributeProcessor(member, field, attribute);
+        }
+
+        [NotNull]
+        protected static string ToPrivateFieldName([NotNull] string name)
+        {
+            Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
+
+            if (name.StartsWith("_"))
+            {
+                return name + "Path";
+            }
+
+            return new StringBuilder()
+                .Append("_")
+                .Append(name.Left(1).to_lower())
+                .Append(name.Substring(1))
+                .ToString();
         }
     }
 }

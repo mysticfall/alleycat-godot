@@ -93,6 +93,7 @@ _headBone = "Head"
 
 script = ExtResource( 4 )
 Active = true
+_camera = NodePath("../Player Camera")
 
 [node name="Movement" type="Node" parent="Characters/Player/Control" index="0"]
 

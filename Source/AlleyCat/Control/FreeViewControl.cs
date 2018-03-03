@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
@@ -11,7 +12,7 @@ namespace AlleyCat.Control
         [Export]
         public bool Active { get; set; } = true;
 
-        [Node("..")]
+        [Node]
         public Spatial Target { get; private set; }
 
         [Node]
@@ -19,6 +20,8 @@ namespace AlleyCat.Control
 
         [Node]
         public InputBindings Movement { get; private set; }
+
+        [Export, UsedImplicitly] private NodePath _target = "..";
 
         [PostConstruct]
         private void OnInitialize()

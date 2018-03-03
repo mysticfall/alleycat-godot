@@ -6,6 +6,7 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
+using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Control
@@ -18,7 +19,7 @@ namespace AlleyCat.Control
         [Node("..")]
         public ICharacter Character { get; private set; }
 
-        [Node("../Player Camera")]
+        [Node]
         public CharacterCamera Camera { get; private set; }
 
         [Node]
@@ -29,6 +30,8 @@ namespace AlleyCat.Control
 
         [Node]
         public InputBindings Zoom { get; private set; }
+
+        [Export, UsedImplicitly] private NodePath _camera = "../Player Camera";
 
         [PostConstruct]
         private void OnInitialize()

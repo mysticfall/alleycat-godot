@@ -9,11 +9,19 @@ namespace AlleyCat.Autowire
     public class NodeAttributeProcessor : InjectAttributeProcessor<NodeAttribute>
     {
         [CanBeNull]
-        public string NodePath => Attribute.Path;
+        public FieldInfo NodePathField { get; }
 
         public NodeAttributeProcessor([NotNull] MemberInfo member, [NotNull] NodeAttribute attribute)
             : base(member, attribute)
         {
+        }
+
+        public NodeAttributeProcessor(
+            [NotNull] MemberInfo member,
+            [CanBeNull] FieldInfo pathField,
+            [NotNull] NodeAttribute attribute) : base(member, attribute)
+        {
+            NodePathField = pathField;
         }
 
         protected override object GetDependency(IAutowireContext context, Node node)
@@ -24,25 +32,38 @@ namespace AlleyCat.Autowire
                 opts => opts.WithMessage(
                     "[Node] attribute is only supported on members of a Node type class."));
 
-            var hasPath = !string.IsNullOrWhiteSpace(NodePath);
+            var path = GetNodePath(node);
 
             object dependency;
 
             if (Enumerable)
             {
-                var parent = hasPath ? node.GetNode(NodePath) : node;
+                var parent = path == null ? node : node.GetNode(path);
                 var list = parent?.GetChildren().Where(DependencyType.IsInstanceOfType).ToList();
 
                 dependency = EnumerableHelper.Cast(list, DependencyType);
             }
             else
             {
-                var path = hasPath ? NodePath : NormalizeMemberName(Member.Name);
-
-                dependency = node.GetNode(path);
+                dependency = node.GetNode(path ?? NormalizeMemberName(Member.Name));
             }
 
             return dependency;
+        }
+
+        [CanBeNull]
+        protected NodePath GetNodePath([NotNull] Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            var path = NodePathField?.GetValue(node) as NodePath;
+
+            if (path == null && !string.IsNullOrEmpty(Attribute.Path))
+            {
+                path = Attribute.Path;
+            }
+
+            return path;
         }
 
         [NotNull]

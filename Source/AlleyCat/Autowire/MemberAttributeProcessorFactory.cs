@@ -19,11 +19,13 @@ namespace AlleyCat.Autowire
                 .Where(m => (m.MemberType & (MemberTypes.Property | MemberTypes.Field)) != 0)
                 .Select(m => (m, m.GetCustomAttribute<T>()))
                 .Where((t, _) => t.Item2 != null)
-                .Select(t => CreateProcessor(t.Item1, t.Item2));
+                .Select(t => CreateProcessor(type, t.Item1, t.Item2));
         }
 
         [NotNull]
         protected abstract INodeProcessor CreateProcessor(
-            [NotNull] MemberInfo member, [NotNull] T attribute);
+            [NotNull] Type type, 
+            [NotNull] MemberInfo member, 
+            [NotNull] T attribute);
     }
 }
