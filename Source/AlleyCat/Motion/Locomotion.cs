@@ -4,7 +4,7 @@ using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     [Singleton(typeof(ILocomotion))]
     public abstract class Locomotion<T> : AutowiredNode, ILocomotion where T : Spatial

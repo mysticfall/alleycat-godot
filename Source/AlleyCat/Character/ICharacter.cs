@@ -1,5 +1,5 @@
 using AlleyCat.Animation;
-using AlleyCat.Locomotion;
+using AlleyCat.Motion;
 
 namespace AlleyCat.Character
 {

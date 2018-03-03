@@ -17,7 +17,7 @@
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.material" type="Material" id=15]
 [ext_resource path="res://Program/AlleyCat/Autowire/Binding.cs" type="Script" id=16]
 [ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=17]
-[ext_resource path="res://Program/AlleyCat/Locomotion/AnimationDrivenLocomotion.cs" type="Script" id=18]
+[ext_resource path="res://Program/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=18]
 
 [sub_resource type="ArrayMesh" id=1]
 

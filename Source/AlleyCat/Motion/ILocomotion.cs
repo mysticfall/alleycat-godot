@@ -1,7 +1,7 @@
 using AlleyCat.Common;
 using Godot;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public interface ILocomotion : IActivatable
     {

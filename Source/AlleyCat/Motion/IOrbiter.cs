@@ -1,6 +1,6 @@
 using Godot;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public interface IOrbiter
     {

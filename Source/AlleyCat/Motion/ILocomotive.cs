@@ -1,4 +1,4 @@
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public interface ILocomotive
     {

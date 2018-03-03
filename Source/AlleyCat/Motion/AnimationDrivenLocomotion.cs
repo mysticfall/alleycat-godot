@@ -6,7 +6,7 @@ using Godot;
 using JetBrains.Annotations;
 using static AlleyCat.Common.VectorExtensions;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public class AnimationDrivenLocomotion : KinematicLocomotion
     {

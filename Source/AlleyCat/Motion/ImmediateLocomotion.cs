@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Godot;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public class ImmediateLocomotion : Locomotion<Spatial>
     {

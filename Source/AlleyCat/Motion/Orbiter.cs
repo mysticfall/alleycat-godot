@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace AlleyCat.Locomotion
+namespace AlleyCat.Motion
 {
     public abstract class Orbiter : Node, IOrbiter
     {

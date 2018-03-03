@@ -2,7 +2,7 @@ using System.Diagnostics;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.Locomotion;
+using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;

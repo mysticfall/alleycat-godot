@@ -1,5 +1,5 @@
 using AlleyCat.Autowire;
-using AlleyCat.Locomotion;
+using AlleyCat.Motion;
 using Godot;
 
 namespace AlleyCat.Character
