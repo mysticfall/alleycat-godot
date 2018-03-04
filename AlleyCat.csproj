@@ -96,6 +96,7 @@
     <Compile Include="Program\AlleyCat\Character\Character.cs" />
     <Compile Include="Program\AlleyCat\Character\Humanoid.cs" />
     <Compile Include="Program\AlleyCat\Character\ICharacter.cs" />
+    <Compile Include="Program\AlleyCat\Character\IHumanoid.cs" />
     <Compile Include="Program\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\Directory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />

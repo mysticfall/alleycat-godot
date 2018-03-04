@@ -1,3 +1,4 @@
+using System;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -14,16 +15,19 @@ namespace AlleyCat.Camera
         public bool Active { get; set; } = true;
 
         [Node]
-        public ICharacter Character { get; private set; }
+        public IHumanoid Character { get; private set; }
 
         [Export(PropertyHint.Range, "0, 5")]
         public float MinimumDistance { get; set; } = 0.4f;
 
-        public Vector3 Pivot => Character.Viewpoint;
+        public Vector3 Pivot => Character.Head.origin;
 
-        public Vector3 Up => Axis.Up;
+        public Vector3 Up => Distance > MinimumDistance ? Axis.Up : Character.Head.Up();
 
-        public Vector3 Forward => new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.Forward());
+        public Vector3 Forward =>
+            Distance > MinimumDistance
+                ? new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.Forward())
+                : Character.LookingAt;
 
         public Vector3 Right => Forward.Cross(Up);
 
@@ -31,7 +35,13 @@ namespace AlleyCat.Camera
 
         public float Yaw { get; set; }
 
-        public float Distance { get; set; } = 1f;
+        public float Distance
+        {
+            get => _distance;
+            set => _distance = Math.Max(value, MinimumDistance);
+        }
+
+        private float _distance = 1f;
 
         [Export, UsedImplicitly] private NodePath _character = "..";
 
@@ -54,15 +64,29 @@ namespace AlleyCat.Camera
 
             var pivot = Pivot;
 
-            var direction = -Forward
-                .Rotated(Up, Yaw)
-                .Rotated(Right.Rotated(Up, Yaw), Pitch);
+            if (Distance <= MinimumDistance)
+            {
+                var direction = Forward
+                    .Rotated(Up, Yaw)
+                    .Rotated(Right.Rotated(Up, Yaw), Pitch);
 
-            var transform = new Transform(Basis.Identity, pivot)
-                .Translated(direction * Distance)
-                .LookingAt(pivot, Up);
+                const float offset = 0.2f;
+                var transform = Character.Head.LookingAt(pivot + direction, Up);
 
-            GlobalTransform = transform;
+                GlobalTransform = new Transform(transform.basis, Character.Viewpoint + direction * offset);
+            }
+            else
+            {
+                var direction = -Forward
+                    .Rotated(Up, Yaw)
+                    .Rotated(Right.Rotated(Up, Yaw), Pitch);
+
+                var transform = new Transform(Basis.Identity, pivot)
+                    .Translated(direction * Distance)
+                    .LookingAt(pivot, Up);
+
+                GlobalTransform = transform;
+            }
         }
     }
 }

@@ -55,8 +55,7 @@ namespace AlleyCat.Control
             Zoom
                 .GetAxis("Value")
                 .Where(_ => Active)
-                .Select(v => Math.Max(Camera.Distance - v * 0.05f, Camera.MinimumDistance))
-                .Subscribe(v => Camera.Distance = v)
+                .Subscribe(v => Camera.Distance -= v * 0.05f)
                 .AddTo(this);
 
             this.OnProcess()

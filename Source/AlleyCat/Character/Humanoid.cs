@@ -4,12 +4,16 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
-using Axis = AlleyCat.Common.VectorExtensions; 
+using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Character
 {
-    public class Humanoid : Character
+    public class Humanoid : Character, IHumanoid
     {
+        public Transform Head => Skeleton.GlobalTransform *
+                                 new Transform(Skeleton.GetBoneTransform(_headIndex).basis,
+                                     Skeleton.GetBoneGlobalPose(_headIndex).origin);
+
         public override Vector3 Viewpoint
         {
             get

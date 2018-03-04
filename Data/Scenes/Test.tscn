@@ -64,7 +64,7 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
 [node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225457, 0 )
+transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.225457, 0 )
 _sections_unfolded = [ "Axis Lock", "Transform" ]
 _headBone = "Head"
 _eyeBoneLeft = "LeftEye"
