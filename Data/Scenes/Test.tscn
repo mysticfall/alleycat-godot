@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Program/AlleyCat/Camera/CharacterCamera.cs" type="Script" id=3]
 [ext_resource path="res://Program/AlleyCat/Control/PlayerControl.cs" type="Script" id=4]
 [ext_resource path="res://Program/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
@@ -66,9 +66,6 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.225457, 0 )
 _sections_unfolded = [ "Axis Lock", "Transform" ]
-_headBone = "Head"
-_eyeBoneLeft = "LeftEye"
-_eyeBoneRight = "RightEye"
 
 [node name="Player Camera" type="Camera" parent="Characters/Player" index="4"]
 
