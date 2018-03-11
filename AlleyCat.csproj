@@ -103,6 +103,7 @@
     <Compile Include="Program\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\IActivatable.cs" />
+    <Compile Include="Program\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Program\AlleyCat\Common\IDirectory.cs" />
     <Compile Include="Program\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Program\AlleyCat\Common\NodeExtensions.cs" />

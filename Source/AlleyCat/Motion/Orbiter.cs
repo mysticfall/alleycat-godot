@@ -7,7 +7,7 @@ namespace AlleyCat.Motion
     {
         public abstract Spatial Target { get; }
 
-        public abstract Vector3 Pivot { get; }
+        public abstract Vector3 Origin { get; }
 
         public abstract Vector3 Up { get; }
 
@@ -31,7 +31,7 @@ namespace AlleyCat.Motion
         {
             base._Process(delta);
 
-            var pivot = Pivot;
+            var pivot = Origin;
 
             var yaw = Math.PI / 180 * NormalizeAspectAngle(Yaw);
             var pitch = Math.PI / 180 * NormalizeAspectAngle(Pitch);

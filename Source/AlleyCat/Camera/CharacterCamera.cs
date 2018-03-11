@@ -20,7 +20,7 @@ namespace AlleyCat.Camera
         [Export(PropertyHint.Range, "0, 5")]
         public float MinimumDistance { get; set; } = 0.4f;
 
-        public Vector3 Pivot => Character.Head.origin;
+        public Vector3 Origin => Character.Head.origin;
 
         public Vector3 Up => Distance > MinimumDistance ? Axis.Up : Character.Head.Up();
 
@@ -62,7 +62,7 @@ namespace AlleyCat.Camera
         {
             base._Process(delta);
 
-            var pivot = Pivot;
+            var pivot = Origin;
 
             if (Distance <= MinimumDistance)
             {
