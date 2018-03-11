@@ -134,9 +134,13 @@
     <Compile Include="Program\AlleyCat\Event\AnimationPlayerExtensions.cs" />
     <Compile Include="Program\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\IEvent.cs" />
+    <Compile Include="Program\AlleyCat\Event\IReactiveProperty.cs" />
+    <Compile Include="Program\AlleyCat\Event\IReadOnlyReactiveProperty.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Program\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Program\AlleyCat\Event\ObservableExtensions.cs" />
+    <Compile Include="Program\AlleyCat\Event\ReactiveProperty.cs" />
+    <Compile Include="Program\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
     <Compile Include="Program\AlleyCat\IO\DirectoryContents.cs" />
     <Compile Include="Program\AlleyCat\IO\FileEnumerator.cs" />
     <Compile Include="Program\AlleyCat\IO\DirectoryInfo.cs" />
