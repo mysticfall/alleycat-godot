@@ -4,7 +4,7 @@
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Tank Top/Tank Top.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.tscn" type="PackedScene" id=3]
 
-[node name="Female" index="0" instance=ExtResource( 1 )]
+[node name="Female" instance=ExtResource( 1 )]
 
 [node name="Tank Top" parent="HumanFemaleRig/Skeleton" index="2" instance=ExtResource( 2 )]
 
@@ -14,7 +14,7 @@
 
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2 ],
+"connections": [ "Walk", "out", 0, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -27,11 +27,46 @@ data = {
 "position": Vector2( 50.9995, 80.9692 ),
 "type": "animation"
 }, {
+"filter": [  ],
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
+"type": "animation"
+}, {
 "blend": 0.0,
 "filter": [  ],
 "id": "Walk",
 "position": Vector2( 550.76, 192.898 ),
 "type": "blend2"
+}, {
+"filter": [  ],
+"from": "Female Idle",
+"id": "Idle 2",
+"position": Vector2( 83.0141, 440.671 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Right",
+"id": "Strafe Right",
+"position": Vector2( 201.931, 175.895 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 63.0297, 299.821 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"id": "Left-Right",
+"position": Vector2( 377.845, 59.0209 ),
+"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Female Walk Forward",
@@ -45,44 +80,9 @@ data = {
 "position": Vector2( 193.967, 647.485 ),
 "type": "blend2"
 }, {
-"filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
-"type": "animation"
-}, {
 "blend": 0.0,
 "id": "Forward-Backward",
 "position": Vector2( 348.87, 418.683 ),
-"type": "blend3"
-}, {
-"filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Strafe Right",
-"id": "Strafe Right",
-"position": Vector2( 201.931, 175.895 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Idle",
-"id": "Idle 2",
-"position": Vector2( 83.0141, 440.671 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 63.0297, 299.821 ),
-"type": "animation"
-}, {
-"blend": 0.0,
-"id": "Left-Right",
-"position": Vector2( 377.845, 59.0209 ),
 "type": "blend3"
 } ]
 }

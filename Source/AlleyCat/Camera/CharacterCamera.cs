@@ -20,9 +20,9 @@ namespace AlleyCat.Camera
         [Export(PropertyHint.Range, "0, 5")]
         public float MinimumDistance { get; set; } = 0.4f;
 
-        public Vector3 Origin => Character.Head.origin;
+        public Vector3 Origin => Character.Vision.Head.origin;
 
-        public Vector3 Up => Distance > MinimumDistance ? Axis.Up : Character.Head.Up();
+        public Vector3 Up => Distance > MinimumDistance ? Axis.Up : Character.Vision.Head.Up();
 
         public Vector3 Forward =>
             Distance > MinimumDistance
@@ -71,7 +71,7 @@ namespace AlleyCat.Camera
                     .Rotated(Right.Rotated(Up, Yaw), Pitch);
 
                 const float offset = 0.2f;
-                var transform = Character.Head.LookingAt(pivot + direction, Up);
+                var transform = Character.Vision.Head.LookingAt(pivot + direction, Up);
 
                 GlobalTransform = new Transform(transform.basis, Character.Viewpoint + direction * offset);
             }

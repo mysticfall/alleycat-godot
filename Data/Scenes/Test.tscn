@@ -24,7 +24,7 @@ propagation = 0.7
 interior = false
 compress = false
 
-[node name="Scene" type="Node" index="0"]
+[node name="Scene" type="Node"]
 
 [node name="Environment" type="WorldEnvironment" parent="." index="0"]
 
@@ -66,10 +66,6 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.225457, 0 )
 _sections_unfolded = [ "Axis Lock", "Transform" ]
-Key = null
-DisplayName = null
-Race = null
-Sex = 0
 
 [node name="Player Camera" type="Camera" parent="Characters/Player" index="4"]
 

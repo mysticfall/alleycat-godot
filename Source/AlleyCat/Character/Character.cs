@@ -1,14 +1,21 @@
 using AlleyCat.Autowire;
+using AlleyCat.Character.Generic;
 using AlleyCat.Motion;
+using AlleyCat.Sensor;
 using Godot;
 
 namespace AlleyCat.Character
 {
     [AutowireContext]
-    public abstract class Character : KinematicBody, ICharacter
+    public abstract class Character<TVision, TLocomotion> : KinematicBody, ICharacter<TVision, TLocomotion>
+        where TVision : class, IVision
+        where TLocomotion : class, ILocomotion
     {
         [Service]
-        public ILocomotion Locomotion { get; private set; }
+        public TVision Vision { get; private set; }
+
+        [Service]
+        public TLocomotion Locomotion { get; private set; }
 
         [Service]
         public AnimationPlayer AnimationPlayer { get; private set; }
@@ -16,9 +23,9 @@ namespace AlleyCat.Character
         [Service]
         public Skeleton Skeleton { get; private set; }
 
-        public abstract Vector3 Viewpoint { get; }
+        public Vector3 Viewpoint => Vision.Origin;
 
-        public abstract Vector3 LookingAt { get; }
+        public Vector3 LookingAt => Vision.Forward;
 
         public override void _Ready()
         {
@@ -26,5 +33,9 @@ namespace AlleyCat.Character
 
             this.Autowire();
         }
+
+        IVision ISeeing.Vision => Vision;
+
+        ILocomotion ILocomotive.Locomotion => Locomotion;
     }
 }

@@ -162,6 +162,12 @@
     <Compile Include="Program\AlleyCat\Logging\LoggingConfiguration.cs" />
     <Compile Include="Program\AlleyCat\Logging\PrintLogger.cs" />
     <Compile Include="Program\AlleyCat\Logging\PrintLoggerProvider.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\PairedEyeSight.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\IPairedEyeSight.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\IEyeSight.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\ISeeing.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\ISense.cs" />
+    <Compile Include="Program\AlleyCat\Sensor\IVision.cs" />
     <Compile Include="Program\AlleyCat\Setting\IniSettingsProvider.cs" />
     <Compile Include="Program\AlleyCat\Setting\ISettings.cs" />
     <Compile Include="Program\AlleyCat\Setting\ISettingsProvider.cs" />
