@@ -41,9 +41,11 @@ namespace AlleyCat.Autowire
                     if (property.CanWrite)
                     {
                         TargetSetter = property.SetValue;
-                    } else
+                    }
+                    else
                     {
-                        var writeableProperty = property.DeclaringType?.GetProperty(property.Name);
+                        var writeableProperty = property.DeclaringType?.GetProperty(
+                            property.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
                         if (writeableProperty == null)
                         {
