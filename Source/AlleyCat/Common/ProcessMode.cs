@@ -2,7 +2,7 @@
 {
     public enum ProcessMode
     {
-        Physics = 0,
-        Idle = 1
+        Physics,
+        Idle
     }
 }
