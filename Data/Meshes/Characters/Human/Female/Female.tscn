@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=2]
 
-[ext_resource path="res://Program/AlleyCat/Character/Humanoid.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=2]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Face.material" type="Material" id=3]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Feet.material" type="Material" id=4]
@@ -12,10 +12,10 @@
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.material" type="Material" id=11]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail Band.material" type="Material" id=12]
-[ext_resource path="res://Program/AlleyCat/Autowire/Binding.cs" type="Script" id=13]
-[ext_resource path="res://Program/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=14]
-[ext_resource path="res://Program/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=15]
-[ext_resource path="res://Program/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=16]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/Animation/RootMotionPlayer.cs" type="Script" id=14]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=15]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=16]
 
 [sub_resource type="ArrayMesh" id=1]
 

@@ -2,11 +2,11 @@
 
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Program/AlleyCat/Camera/CharacterCamera.cs" type="Script" id=3]
-[ext_resource path="res://Program/AlleyCat/Control/PlayerControl.cs" type="Script" id=4]
-[ext_resource path="res://Program/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
-[ext_resource path="res://Program/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
-[ext_resource path="res://Program/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Camera/CharacterCamera.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=7]
 [ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=9]
 
