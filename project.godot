@@ -37,6 +37,11 @@ zoom_in=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource
 zoom_out=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"pressed":false,"doubleclick":false,"script":null)
  ]
 
+[locale]
+
+locale_filter=[ 1, [ "en", "ko" ] ]
+translations=PoolStringArray( "res://Data/I18n/Messages.csv" )
+
 [mono]
 
 debugger_agent/wait_timeout=10000

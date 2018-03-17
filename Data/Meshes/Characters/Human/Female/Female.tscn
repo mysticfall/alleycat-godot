@@ -9314,6 +9314,10 @@ axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
+DisplayName = null
+_race = "Human"
+_sex = 1
+_key = null
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
@@ -10210,12 +10214,6 @@ data = {
 "type": "animation"
 }, {
 "filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
-}, {
-"filter": [  ],
 "from": "Female Run Forward",
 "id": "Run Forward",
 "position": Vector2( 26.0646, 738.414 ),
@@ -10228,21 +10226,9 @@ data = {
 "type": "blend2"
 }, {
 "filter": [  ],
-"from": "Female Idle",
-"id": "Idle 2",
-"position": Vector2( 83.0141, 440.671 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Strafe Right",
-"id": "Strafe Right",
-"position": Vector2( 201.931, 175.895 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 63.0297, 299.821 ),
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -10266,6 +10252,24 @@ data = {
 "id": "Forward-Backward",
 "position": Vector2( 348.87, 418.683 ),
 "type": "blend3"
+}, {
+"filter": [  ],
+"from": "Female Idle",
+"id": "Idle 2",
+"position": Vector2( 83.0141, 440.671 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Right",
+"id": "Strafe Right",
+"position": Vector2( 201.931, 175.895 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 63.0297, 299.821 ),
+"type": "animation"
 } ]
 }
 _sections_unfolded = [ "Playback" ]

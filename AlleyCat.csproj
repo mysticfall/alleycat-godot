@@ -97,6 +97,11 @@
     <Compile Include="Program\AlleyCat\Character\Humanoid.cs" />
     <Compile Include="Program\AlleyCat\Character\ICharacter.cs" />
     <Compile Include="Program\AlleyCat\Character\IHumanoid.cs" />
+    <Compile Include="Program\AlleyCat\Character\IRace.cs" />
+    <Compile Include="Program\AlleyCat\Character\IRaceRegistry.cs" />
+    <Compile Include="Program\AlleyCat\Character\Race.cs" />
+    <Compile Include="Program\AlleyCat\Character\RaceRegistry.cs" />
+    <Compile Include="Program\AlleyCat\Character\Sex.cs" />
     <Compile Include="Program\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Program\AlleyCat\Common\Directory.cs" />
     <Compile Include="Program\AlleyCat\Common\DisposableCollector.cs" />

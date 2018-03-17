@@ -1,4 +1,5 @@
 using AlleyCat.Animation;
+using AlleyCat.Common;
 using AlleyCat.Motion;
 using AlleyCat.Motion.Generic;
 using AlleyCat.Sensor;
@@ -7,8 +8,12 @@ using Godot;
 
 namespace AlleyCat.Character
 {
-    public interface ICharacter : IRigged, ILocomotive, ISeeing
+    public interface ICharacter : INamed, IRigged, ILocomotive, ISeeing
     {
+        IRace Race { get; }
+
+        Sex Sex { get; }
+
         Vector3 Viewpoint { get; }
 
         Vector3 LookingAt { get; }
