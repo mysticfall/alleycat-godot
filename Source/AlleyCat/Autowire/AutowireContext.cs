@@ -108,8 +108,6 @@ namespace AlleyCat.Autowire
         {
             CheckDisposed();
 
-            Register(Node);
-
             var node = Node;
 
             Requires.Clear();

@@ -50,7 +50,7 @@ namespace AlleyCat.Autowire
                     $"No AutowireContext found for node: '{node.Name}'.");
             }
 
-            context.Register(node);
+            context.Register(node);       
 
             if (context.Node == node)
             {
