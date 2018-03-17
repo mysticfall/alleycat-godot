@@ -27,7 +27,7 @@ namespace AlleyCat.Camera
         public Vector3 Forward =>
             Distance > MinimumDistance
                 ? new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.Forward())
-                : Character.LookingAt;
+                : Character.Vision.Forward;
 
         public Vector3 Right => Forward.Cross(Up);
 
@@ -73,7 +73,7 @@ namespace AlleyCat.Camera
                 const float offset = 0.2f;
                 var transform = Character.Vision.Head.LookingAt(pivot + direction, Up);
 
-                GlobalTransform = new Transform(transform.basis, Character.Viewpoint + direction * offset);
+                GlobalTransform = new Transform(transform.basis, Character.Vision.Origin + direction * offset);
             }
             else
             {

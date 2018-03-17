@@ -12,14 +12,12 @@ namespace AlleyCat.Character
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
     {
-        public string Key => _key;
+        public string Key => _key ?? Name;
 
-        [Export, UsedImplicitly]
-        public virtual string DisplayName { get; private set; }
+        public virtual string DisplayName => _displayName;
 
         public virtual IRace Race => RaceRegistry?[_race];
 
-        [Export, UsedImplicitly]
         public virtual Sex Sex => _sex;
 
         [Service]
@@ -37,20 +35,17 @@ namespace AlleyCat.Character
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }
 
-        public Vector3 Viewpoint => Vision.Origin;
-
-        public Vector3 LookingAt => Vision.Forward;
-
-        [Export, UsedImplicitly] private string _race;
-
-        [Export, UsedImplicitly] private Sex _sex;
-
         IVision ISeeing.Vision => Vision;
 
         ILocomotion ILocomotive.Locomotion => Locomotion;
 
-        [Export, UsedImplicitly]
-        private string _key;
+        [Export, UsedImplicitly] private string _key;
+
+        [Export, UsedImplicitly] private string _displayName;
+
+        [Export, UsedImplicitly] private string _race;
+
+        [Export, UsedImplicitly] private Sex _sex;
 
         public override void _Ready()
         {

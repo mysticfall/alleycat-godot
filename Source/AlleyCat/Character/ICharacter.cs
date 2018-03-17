@@ -4,19 +4,16 @@ using AlleyCat.Motion;
 using AlleyCat.Motion.Generic;
 using AlleyCat.Sensor;
 using AlleyCat.Sensor.Generic;
-using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Character
 {
     public interface ICharacter : INamed, IRigged, ILocomotive, ISeeing
     {
+        [CanBeNull]
         IRace Race { get; }
 
         Sex Sex { get; }
-
-        Vector3 Viewpoint { get; }
-
-        Vector3 LookingAt { get; }
     }
 
     namespace Generic

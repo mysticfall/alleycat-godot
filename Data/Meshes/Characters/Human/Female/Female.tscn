@@ -9314,10 +9314,10 @@ axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
-DisplayName = null
+_key = null
+_displayName = null
 _race = "Human"
 _sex = 1
-_key = null
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
@@ -10200,7 +10200,7 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
+"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -10212,18 +10212,6 @@ data = {
 "id": "Idle",
 "position": Vector2( 50.9995, 80.9692 ),
 "type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
-"type": "animation"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "Walk",
-"position": Vector2( 550.76, 192.898 ),
-"type": "blend2"
 }, {
 "filter": [  ],
 "from": "Female Strafe Left",
@@ -10246,6 +10234,18 @@ data = {
 "filter": [  ],
 "id": "Walk-Run",
 "position": Vector2( 193.967, 647.485 ),
+"type": "blend2"
+}, {
+"filter": [  ],
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk",
+"position": Vector2( 550.76, 192.898 ),
 "type": "blend2"
 }, {
 "blend": 0.0,
