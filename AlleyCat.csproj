@@ -196,6 +196,9 @@
     <Compile Include="Source\AlleyCat\Setting\JsonSettingsProvider.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
+    <Compile Include="Source\AlleyCat\UI\RangeEvents.cs" />
+    <Compile Include="Source\AlleyCat\UI\RangeEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\UI\RangeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\BasicConsoleCommands.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ClearCommand.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ConsoleCommand.cs" />
