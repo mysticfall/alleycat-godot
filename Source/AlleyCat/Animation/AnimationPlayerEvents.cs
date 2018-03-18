@@ -1,8 +1,9 @@
-﻿using EnsureThat;
+﻿using AlleyCat.Event;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Event
+namespace AlleyCat.Animation
 {
     public interface IAnimationPlayerEvent : IEvent<AnimationPlayer>
     {

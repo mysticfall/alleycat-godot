@@ -54,6 +54,9 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Animation\RootMotionPlayer.cs" />
@@ -149,9 +152,6 @@
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
-    <Compile Include="Source\AlleyCat\Event\AnimationPlayerEvents.cs" />
-    <Compile Include="Source\AlleyCat\Event\AnimationPlayerEventTracker.cs" />
-    <Compile Include="Source\AlleyCat\Event\AnimationPlayerExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />

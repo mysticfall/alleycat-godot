@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;

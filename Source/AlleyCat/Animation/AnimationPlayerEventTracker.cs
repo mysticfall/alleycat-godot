@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Reactive.Subjects;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Event
+namespace AlleyCat.Animation
 {
     public class AnimationPlayerEventTracker : EventTracker<AnimationPlayer>
     {

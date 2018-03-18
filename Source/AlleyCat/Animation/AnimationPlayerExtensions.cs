@@ -5,7 +5,7 @@ using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Event
+namespace AlleyCat.Animation
 {
     public static class AnimationPlayerExtensions
     {
