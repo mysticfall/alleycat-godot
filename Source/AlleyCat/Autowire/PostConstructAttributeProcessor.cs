@@ -36,7 +36,9 @@ namespace AlleyCat.Autowire
                 //TODO: Until godotengine/godot#16107 gets fixed.
                 if (e.InnerException != null)
                 {
-                    GD.Print(e.InnerException.Message);
+                    var type = e.InnerException.GetType();
+
+                    GD.Print(type.FullName + ": " + e.InnerException.Message);
                     GD.Print(e.InnerException.StackTrace);
                 }
 
