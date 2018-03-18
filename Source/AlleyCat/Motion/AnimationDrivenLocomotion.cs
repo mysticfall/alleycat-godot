@@ -2,25 +2,40 @@ using System;
 using System.Diagnostics;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using static AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
 {
-    public class AnimationDrivenLocomotion : KinematicLocomotion
+    public class AnimationDrivenLocomotion : KinematicLocomotion, IAnimationPostProcessor
     {
-        [Node]
-        public AnimationPlayer AnimationPlayer { get; private set; }
+        public const string WalkBlendNode = "Walk";
 
-        [Node]
+        public const string ForwardBlendNode = "Forward-Backward";
+
+        public const string SideBlendNode = "Left-Right";
+
+        [Service]
+        public PostProcessingAnimationPlayer AnimationPlayer { get; private set; }
+
+        [Service]
         public AnimationTreePlayer AnimationTreePlayer { get; private set; }
 
-        public RootMotionPlayer RootMotionPlayer => AnimationPlayer as RootMotionPlayer;
+        [Service]
+        public Skeleton Skeleton { get; private set; }
 
-        [Export, UsedImplicitly] private NodePath _animationPlayer = "../AnimationPlayer";
+        [Export, NotNull]
+        public string PositionBone { get; set; } = "Position";
 
-        [Export, UsedImplicitly] private NodePath _animationTreePlayer = "../AnimationTreePlayer";
+        private int _boneIndex;
+
+        private Transform _initialTransform;
+
+        private Transform _offset;
+
+        private Transform _lastPose;
 
         [PostConstruct]
         protected override void OnInitialize()
@@ -29,6 +44,22 @@ namespace AlleyCat.Motion
 
             AnimationTreePlayer.Active = false;
             AnimationPlayer.PlaybackActive = false;
+            AnimationPlayer.Processors.Add(this);
+
+            _boneIndex = Skeleton.FindBone(PositionBone);
+
+            Debug.Assert(_boneIndex != -1, $"Failed to find a bone named '{PositionBone}'.");
+
+            _initialTransform = Skeleton.GetBoneTransform(_boneIndex);
+
+            Reset();
+        }
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+
+            AnimationPlayer.Processors.Remove(this);
         }
 
         protected override Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity)
@@ -39,28 +70,56 @@ namespace AlleyCat.Motion
             {
                 var ratio = Math.Abs(velocity.z) / momentum;
 
-                AnimationTreePlayer.Blend2NodeSetAmount("Walk", ratio);
+                AnimationTreePlayer.Blend2NodeSetAmount(WalkBlendNode, ratio);
             }
 
-            AnimationTreePlayer.Blend3NodeSetAmount("Forward-Backward", -velocity.z);
-            AnimationTreePlayer.Blend3NodeSetAmount("Left-Right", velocity.x);
+            AnimationTreePlayer.Blend3NodeSetAmount(ForwardBlendNode, -velocity.z);
+            AnimationTreePlayer.Blend3NodeSetAmount(SideBlendNode, velocity.x);
 
             AnimationTreePlayer.Advance(0);
 
-            RootMotionPlayer.RecordOffset();
+            AnimationPlayer.BeforeFrame();
+
             AnimationTreePlayer.Advance(delta);
 
-            RootMotionPlayer.ApplyOffset();
+            AnimationPlayer.AfterFrame(delta);
 
-            var offset = RootMotionPlayer.Offset;
-            var rotation = new Transform(offset.basis, new Vector3());
+            var rotation = new Transform(_offset.basis, new Vector3());
 
             Debug.Assert(Target != null, "Target != null");
 
             Target.GlobalTransform = rotation * Target.GlobalTransform;
             Target.RotateObjectLocal(Up, rotationalVelocity.y);
 
-            return offset.origin / delta;
+            return _offset.origin / delta;
+        }
+
+        public void BeforeFrame(PostProcessingAnimationPlayer player)
+        {
+            Ensure.Any.IsNotNull(player, nameof(player));
+
+            _lastPose = Skeleton.GetBoneTransform(_boneIndex);
+        }
+
+        public void AfterFrame(PostProcessingAnimationPlayer player, float delta)
+        {
+            Ensure.Any.IsNotNull(player, nameof(player));
+
+            var pose = Skeleton.GetBoneTransform(_boneIndex);
+            var poseDelta = _lastPose.Inverse() * pose;
+
+            var basis = poseDelta.basis;
+            var origin = Skeleton.GlobalTransform.Xform(poseDelta.origin) - Skeleton.GlobalTransform.origin;
+
+            _offset = new Transform(basis, origin);
+            _lastPose = pose;
+
+            Skeleton.SetBonePose(_boneIndex, new Transform(Basis.Identity, new Vector3()));
+        }
+
+        public void Reset()
+        {
+            _lastPose = _initialTransform;
         }
     }
 }
