@@ -104,6 +104,9 @@
     <Compile Include="Source\AlleyCat\Character\IHumanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\IRace.cs" />
     <Compile Include="Source\AlleyCat\Character\IRaceRegistry.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorph.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphType.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\IMorphableCharacter.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\IMorphableRace.cs" />
     <Compile Include="Source\AlleyCat\Character\Race.cs" />
