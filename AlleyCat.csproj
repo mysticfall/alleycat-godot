@@ -57,9 +57,12 @@
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Animation\IAnimationPostProcessor.cs" />
+    <Compile Include="Source\AlleyCat\Animation\PostProcessingAnimationPlayer.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Animation\RootMotionPlayer.cs" />
+    <Compile Include="Source\AlleyCat\Animation\BonePostProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowirePhase.cs" />
