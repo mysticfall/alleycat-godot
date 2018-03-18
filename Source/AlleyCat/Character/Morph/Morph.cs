@@ -38,6 +38,15 @@ namespace AlleyCat.Character.Morph
             _value = new ReactiveProperty<TVal>(Definition.Default);
         }
 
-        public void Dispose() => _value.Dispose();
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _value.Dispose();
+        }
     }
 }
