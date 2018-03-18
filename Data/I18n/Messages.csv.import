@@ -8,10 +8,10 @@ type="Translation"
 files=[ "res://Data/I18n/Messages.en.translation", "res://Data/I18n/Messages.ko.translation" ]
 
 source_file="res://Data/I18n/Messages.csv"
-source_md5="659901727d335cfbeedfab5d77aacdf0"
+source_md5="9bd124cd7d899f2370d47db056d80287"
 
 dest_files=[ "res://Data/I18n/Messages.en.translation", "res://Data/I18n/Messages.ko.translation" ]
-dest_md5="f27b09e98b630a22f9b02f3704016b01"
+dest_md5="4cd570bd284054faf906cfdba71fab71"
 
 [params]
 

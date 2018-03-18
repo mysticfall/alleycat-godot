@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/RaceRegistry.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRace.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=3]
-[ext_resource path="res://Data/Configurations/Logging/Default Configuration.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=4]
+[ext_resource path="res://Data/Configurations/Logging/Default Configuration.tscn" type="PackedScene" id=5]
 
-[node name="Configuration" type="Node" index="0"]
+[node name="Configuration" type="Node"]
 
 [node name="Races" type="Node" parent="." index="0"]
 
@@ -25,11 +26,47 @@ _key = "Human"
 script = ExtResource( 3 )
 _key = "Head"
 
+[node name="Head Size" type="Node" parent="Races/Human/Morphs/Female/Head" index="0"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "HeadSize"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "Head"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
 [node name="Body" type="Node" parent="Races/Human/Morphs/Female" index="1"]
 
 script = ExtResource( 3 )
 _key = "Body"
 
-[node name="Logging" parent="." index="1" instance=ExtResource( 4 )]
+[node name="Arms Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="0"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ArmsLength"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "Arm"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 0, 1 )
+
+[node name="Legs Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="1"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "LegsLength"
+MinValue = 0.8
+MaxValue = 1.1
+Bone = "UpLeg"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 0, 0, 1 )
+
+[node name="Logging" parent="." index="1" instance=ExtResource( 5 )]
 
 

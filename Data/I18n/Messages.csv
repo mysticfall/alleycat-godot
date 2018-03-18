@@ -1,4 +1,7 @@
 id,en,ko
 "morph.Body","Body","전신"
+"morph.Body.ArmsLength","Arms Length","팔 길이"
+"morph.Body.LegsLength","Legs Length","다리 길이"
 "morph.Head","Head","머리"
+"morph.Head.HeadSize","Head Size","머리 크기"
 "race.Human","Human","인간"
