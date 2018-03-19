@@ -97,7 +97,6 @@
     <Compile Include="Source\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Bootstrap.cs" />
-    <Compile Include="Source\AlleyCat\Camera\CharacterCamera.cs" />
     <Compile Include="Source\AlleyCat\Character\Character.cs" />
     <Compile Include="Source\AlleyCat\Character\Humanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\ICharacter.cs" />
@@ -157,6 +156,7 @@
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerPerspective.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />

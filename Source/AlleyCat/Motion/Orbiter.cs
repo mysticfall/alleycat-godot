@@ -1,11 +1,21 @@
 using System;
+using AlleyCat.Autowire;
 using Godot;
+using JetBrains.Annotations;
+using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
 {
-    public abstract class Orbiter : Node, IOrbiter
+    public abstract class Orbiter : AutowiredNode, IOrbiter
     {
-        public abstract Spatial Target { get; }
+        [Export]
+        public bool Active { get; set; } = true;
+
+        [Node]
+        public Spatial Target { get; private set; }
+
+        [Export(PropertyHint.Range, "0, 5")]
+        public float MinimumDistance { get; set; } = 0.4f;
 
         public abstract Vector3 Origin { get; }
 
@@ -19,7 +29,38 @@ namespace AlleyCat.Motion
 
         public float Yaw { get; set; }
 
-        public float Distance { get; set; } = 1f;
+        public float Distance
+        {
+            get => _distance;
+            set => _distance = Math.Max(value, MinimumDistance);
+        }
+
+        protected virtual Transform TargetTransform
+        {
+            get
+            {
+                var pivot = Origin;
+
+                var direction = -Forward
+                    .Rotated(Up, Yaw)
+                    .Rotated(Right.Rotated(Up, Yaw), Pitch);
+
+                return new Transform(Basis.Identity, pivot)
+                    .Translated(direction * Distance)
+                    .LookingAt(pivot, Up);
+            }
+        }
+
+        [Export, UsedImplicitly] private NodePath _target = "..";
+
+        private float _distance = 1f;
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Autowire();
+        }
 
         public void Rotate(Vector2 rotation)
         {
@@ -31,29 +72,9 @@ namespace AlleyCat.Motion
         {
             base._Process(delta);
 
-            var pivot = Origin;
+            if (!Active) return;
 
-            var yaw = Math.PI / 180 * NormalizeAspectAngle(Yaw);
-            var pitch = Math.PI / 180 * NormalizeAspectAngle(Pitch);
-
-            var direction = -Forward
-                .Rotated(Up, (float) yaw)
-                .Rotated(Right.Rotated(Up, (float) yaw), (float) pitch);
-
-            var transform = new Transform(Basis.Identity, pivot)
-                .Translated(direction * Distance)
-                .LookingAt(pivot, Up);
-
-            Target.GlobalTransform = transform;
-        }
-
-        public static float NormalizeAspectAngle(float degrees)
-        {
-            var value = degrees;
-
-            while (value < 0) value += 360;
-
-            return value > 180 ? value - 360 : value;
+            Target.GlobalTransform = TargetTransform;
         }
     }
 }
