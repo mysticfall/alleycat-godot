@@ -109,16 +109,22 @@ tracks/2/keys = {
 "values": [ 250.0, 0.0 ]
 }
 
-[node name="Console" type="Panel" index="0"]
+[node name="Console" type="CanvasLayer"]
 
-self_modulate = Color( 1, 1, 1, 0.752941 )
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+_sections_unfolded = [ "Grow Direction", "Margin", "Rect", "Size Flags", "Theme", "Visibility" ]
+
+[node name="Panel" type="Panel" parent="." index="0"]
+
 anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.0
-margin_right = -1.0
-margin_bottom = 250.0
+margin_top = -200.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 0
 mouse_default_cursor_shape = 0
@@ -126,11 +132,11 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
-_sections_unfolded = [ "Grow Direction", "Margin", "Rect", "Size Flags", "Theme", "Visibility" ]
+_sections_unfolded = [ "Margin", "Rect", "Theme" ]
 BufferSize = 300
 ToggleAction = "ui_console"
 
-[node name="Container" type="VBoxContainer" parent="." index="0"]
+[node name="Container" type="VBoxContainer" parent="Panel" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -148,14 +154,14 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Margin" ]
 
-[node name="Content" type="RichTextLabel" parent="Container" index="0"]
+[node name="Content" type="RichTextLabel" parent="Panel/Container" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1003.0
-margin_bottom = 207.0
+margin_right = 1004.0
+margin_bottom = 156.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 focus_mode = 2
@@ -176,15 +182,15 @@ selection_enabled = true
 override_selected_font_color = false
 _sections_unfolded = [ "BBCode", "Size Flags", "custom_styles" ]
 
-[node name="InputPane" type="HBoxContainer" parent="Container" index="1"]
+[node name="InputPane" type="HBoxContainer" parent="Panel/Container" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 211.0
-margin_right = 1003.0
-margin_bottom = 231.0
+margin_top = 160.0
+margin_right = 1004.0
+margin_bottom = 180.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 1
 mouse_default_cursor_shape = 0
@@ -193,13 +199,13 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Hint", "Margin" ]
 
-[node name="Input" type="LineEdit" parent="Container/InputPane" index="0"]
+[node name="Input" type="LineEdit" parent="Panel/Container/InputPane" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 904.0
+margin_right = 905.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_next = NodePath("../Button")
@@ -219,14 +225,14 @@ caret_blink_speed = 0.65
 caret_position = 0
 _sections_unfolded = [ "Caret", "Grow Direction", "Margin", "Size Flags", "Theme", "custom_colors", "custom_styles" ]
 
-[node name="ClearButton" type="Button" parent="Container/InputPane" index="1"]
+[node name="ClearButton" type="Button" parent="Panel/Container/InputPane" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 908.0
-margin_right = 952.0
+margin_left = 909.0
+margin_right = 953.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
@@ -243,14 +249,14 @@ flat = false
 align = 1
 _sections_unfolded = [ "Margin", "Size Flags" ]
 
-[node name="CloseButton" type="Button" parent="Container/InputPane" index="2"]
+[node name="CloseButton" type="Button" parent="Panel/Container/InputPane" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 956.0
-margin_right = 1003.0
+margin_left = 957.0
+margin_right = 1004.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_next = NodePath("../Input")
@@ -268,7 +274,7 @@ flat = false
 align = 1
 _sections_unfolded = [ "Anchor", "Focus", "Margin" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Panel" index="1"]
 
 root_node = NodePath("..")
 autoplay = ""
@@ -279,14 +285,14 @@ anims/Hide = SubResource( 4 )
 anims/Show = SubResource( 5 )
 blend_times = [  ]
 
-[node name="BasicCommands" type="Node" parent="." index="2"]
+[node name="BasicCommands" type="Node" parent="Panel" index="2"]
 
 script = ExtResource( 3 )
 
-[connection signal="text_entered" from="Container/InputPane/Input" to="." method="OnTextInput"]
+[connection signal="text_entered" from="Panel/Container/InputPane/Input" to="Panel" method="OnTextInput"]
 
-[connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="Clear"]
+[connection signal="pressed" from="Panel/Container/InputPane/ClearButton" to="Panel" method="Clear"]
 
-[connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="Close"]
+[connection signal="pressed" from="Panel/Container/InputPane/CloseButton" to="Panel" method="Close"]
 
 
