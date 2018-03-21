@@ -61,18 +61,9 @@ _sections_unfolded = [ "Directional Shadow", "Light", "Shadow", "Transform" ]
 
 [node name="Cameras" type="Node" parent="." index="2"]
 
-[node name="Characters" type="Node" parent="." index="3"]
+[node name="Player Camera" type="Camera" parent="Cameras" index="0"]
 
-[node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
-
-transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.225457, 0 )
-_sections_unfolded = [ "Axis Lock", "Transform" ]
-_key = "Player"
-_displayName = "Player"
-
-[node name="Player Camera" type="Camera" parent="Characters/Player" index="4"]
-
-transform = Transform( 1, 0, 0, 0, 0.999999, 0, -1.19209e-07, 0, 0.999999, -5.96046e-08, 1.50374, 0.981279 )
+transform = Transform( 0.661697, 0, 0.74977, 0, 0.999999, 0, -0.749771, 0, 0.661696, 0.735734, 1.7292, 0.649309 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -87,15 +78,32 @@ near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="Control" type="Node" parent="Characters/Player" index="5"]
+[node name="Characters" type="Node" parent="." index="3"]
+
+[node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
+
+transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.225457, 0 )
+_sections_unfolded = [ "Axis Lock", "Transform" ]
+_key = "Player"
+_displayName = "Player"
+
+[node name="Control" type="Node" parent="Characters/Player" index="4"]
 
 script = ExtResource( 3 )
 Active = true
 MinimumDistance = 0.4
-_target = NodePath("../Player Camera")
+_target = NodePath("../../../Cameras/Player Camera")
 FirstPersonOffset = 0.2
 DefaultDistance = 1.0
 _character = NodePath("..")
+_maxFirstPersonPitch = 70.0
+_minFirstPersonPitch = -80.0
+_maxFirstPersonYaw = 90.0
+_minFirstPersonYaw = -90.0
+_maxThirdPersonPitch = 70.0
+_minThirdPersonPitch = -89.0
+_maxThirdPersonYaw = 180.0
+_minThirdPersonYaw = -180.0
 
 [node name="Movement" type="Node" parent="Characters/Player/Control" index="0"]
 

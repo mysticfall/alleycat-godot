@@ -63,6 +63,18 @@ namespace AlleyCat.Control
 
         [Export] public float DefaultDistance = 1f;
 
+        public override float MaximumPitch =>
+            Mathf.Deg2Rad(Perspective == ThirdPerson ? _maxThirdPersonPitch : _maxFirstPersonPitch);
+
+        public override float MinimumPitch =>
+            Mathf.Deg2Rad(Perspective == ThirdPerson ? _minThirdPersonPitch : _minFirstPersonPitch);
+
+        public override float MaximumYaw =>
+            Mathf.Deg2Rad(Perspective == ThirdPerson ? _maxThirdPersonYaw : _maxFirstPersonYaw);
+
+        public override float MinimumYaw =>
+            Mathf.Deg2Rad(Perspective == ThirdPerson ? _minThirdPersonYaw : _minFirstPersonYaw);
+
         public override Vector3 Origin => Character.Vision.Head.origin;
 
         public override Vector3 Up => Perspective == ThirdPerson ? Axis.Up : Character.Vision.Head.Up();
@@ -94,6 +106,22 @@ namespace AlleyCat.Control
         }
 
         [Export, UsedImplicitly] private NodePath _character = "..";
+
+        [Export, UsedImplicitly] private float _maxFirstPersonPitch = 70f;
+
+        [Export, UsedImplicitly] private float _minFirstPersonPitch = -80f;
+
+        [Export, UsedImplicitly] private float _maxFirstPersonYaw = 90f;
+
+        [Export, UsedImplicitly] private float _minFirstPersonYaw = -90f;
+
+        [Export, UsedImplicitly] private float _maxThirdPersonPitch = 70f;
+
+        [Export, UsedImplicitly] private float _minThirdPersonPitch = -89f;
+
+        [Export, UsedImplicitly] private float _maxThirdPersonYaw = 180f;
+
+        [Export, UsedImplicitly] private float _minThirdPersonYaw = -180f;
 
         private readonly ReactiveProperty<PlayerPerspective> _perspective;
 
