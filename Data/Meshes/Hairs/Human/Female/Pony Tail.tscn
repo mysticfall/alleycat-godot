@@ -16,7 +16,7 @@ surfaces/0 = {
 "format": 98263,
 "index_count": 16032,
 "material": ExtResource( 1 ),
-"name": "Pony Tail",
+"name": "Hair",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 3906
@@ -29,13 +29,14 @@ surfaces/1 = {
 "format": 98263,
 "index_count": 1728,
 "material": ExtResource( 2 ),
-"name": "Pony Tail Band",
+"name": "Hair Band",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 338
 }
+_sections_unfolded = [ "surface_1", "surface_2" ]
 
-[node name="Pony Tail" type="MeshInstance" index="0"]
+[node name="Hair" type="MeshInstance"]
 
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 layers = 1
