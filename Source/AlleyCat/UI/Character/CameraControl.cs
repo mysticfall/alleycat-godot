@@ -59,14 +59,14 @@ namespace AlleyCat.UI.Character
             Movement
                 .GetAxis()
                 .Where(_ => Active && _modifierPressed)
-                .Select(v => v * 0.05f)
+                .Select(v => v * 0.03f)
                 .Subscribe(v => _pivot.y += v)
                 .AddTo(this);
-            
+
             Rotation
                 .GetAxis()
                 .Where(_ => Active && _modifierPressed)
-                .Select(v => v * 0.1f)
+                .Select(v => v * 0.15f)
                 .Select(v => new Vector2(v, 0))
                 .Subscribe(Rotate)
                 .AddTo(this);
