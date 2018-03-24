@@ -75,6 +75,7 @@ plane = Plane( 0, 1, 0, 0 )
 [node name="Character Creator" type="Node" index="0"]
 
 script = ExtResource( 1 )
+_viewport = NodePath("UI/Viewport")
 
 [node name="Player" parent="." index="0" instance=ExtResource( 2 )]
 
@@ -104,6 +105,7 @@ script = ExtResource( 3 )
 Active = true
 MinimumDistance = 0.2
 _target = NodePath("..")
+ControlModifier = "point"
 _character = NodePath("../../Player")
 
 [node name="Movement" type="Node" parent="Camera/Control" index="0"]
@@ -153,7 +155,7 @@ Curve = null
 DeadZone = 0.0
 Interpolate = true
 WindowSize = 100.0
-WindowShift = 5.0
+WindowShift = 15.0
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false

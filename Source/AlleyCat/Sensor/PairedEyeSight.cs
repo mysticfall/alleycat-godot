@@ -65,9 +65,9 @@ namespace AlleyCat.Sensor
 
         [Export, NotNull] private string _headBone = "Head";
 
-        [Export, NotNull] private string _eyeBoneLeft = "LeftEye";
+        [Export, NotNull] private string _eyeBoneLeft = "Eye.L";
 
-        [Export, NotNull] private string _eyeBoneRight = "RightEye";
+        [Export, NotNull] private string _eyeBoneRight = "Eye.R";
 
         private int _headIndex;
 
