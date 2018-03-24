@@ -127,6 +127,7 @@ Maximum = 0.1
 
 [node name="Rotation" type="Node" parent="Camera/Control" index="1"]
 
+editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="Value" type="Node" parent="Camera/Control/Rotation" index="0"]
@@ -144,6 +145,7 @@ Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Camera/Control" index="2"]
 
+editor/display_folded = true
 script = ExtResource( 4 )
 
 [node name="Value" type="Node" parent="Camera/Control/Zoom" index="0"]

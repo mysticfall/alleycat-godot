@@ -38,12 +38,60 @@ Mirrored = false
 MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
 
+[node name="Eyes Size" type="Node" parent="Races/Human/Morphs/Female/Head" index="1"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "EyesSize"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "Eye"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Nose Size" type="Node" parent="Races/Human/Morphs/Female/Head" index="2"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "NoseSize"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "NoseBase"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Neck Size" type="Node" parent="Races/Human/Morphs/Female/Head" index="3"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "NeckSize"
+MinValue = 0.8
+MaxValue = 1.2
+Bone = "NeckAdjust"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
 [node name="Body" type="Node" parent="Races/Human/Morphs/Female" index="1"]
 
 script = ExtResource( 3 )
 _key = "Body"
 
-[node name="Arms Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="0"]
+[node name="Height" type="Node" parent="Races/Human/Morphs/Female/Body" index="0"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "Height"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "Global"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Arms Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="1"]
 
 script = ExtResource( 4 )
 Default = 1.0
@@ -55,7 +103,7 @@ Mirrored = true
 MorphType = 0
 Modifier = Vector3( 1, 0, 1 )
 
-[node name="Legs Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="1"]
+[node name="Legs Length" type="Node" parent="Races/Human/Morphs/Female/Body" index="2"]
 
 script = ExtResource( 4 )
 Default = 1.0
@@ -66,6 +114,138 @@ Bone = "UpLeg"
 Mirrored = true
 MorphType = 0
 Modifier = Vector3( 0, 0, 1 )
+
+[node name="Shoulders Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="3"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ShouldersSize"
+MinValue = 0.7
+MaxValue = 1.15
+Bone = "ShoulderAdjust"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Arms Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="4"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ArmsSize"
+MinValue = 0.9
+MaxValue = 1.2
+Bone = "ArmAdjust"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 0 )
+
+[node name="Forearms Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="5"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ForearmsSize"
+MinValue = 0.85
+MaxValue = 1.2
+Bone = "ForeArmAdjust"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 0 )
+
+[node name="Hands Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="6"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "HandsSize"
+MinValue = 0.9
+MaxValue = 1.08
+Bone = "Hand"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Chest Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="7"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ChestSize"
+MinValue = 0.9
+MaxValue = 1.1
+Bone = "Spine1Adjust"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1.3, 0 )
+
+[node name="Breasts Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="8"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "BreastsSize"
+MinValue = 0.7
+MaxValue = 1.4
+Bone = "InnerBreast"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Belly Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="9"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "BellySize"
+MinValue = 0.8
+MaxValue = 1.5
+Bone = "LowerBackBelly"
+Mirrored = false
+MorphType = 0
+Modifier = Vector3( 1, 1.3, 0 )
+
+[node name="Gluteus Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="10"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "GluteusSize"
+MinValue = 0.85
+MaxValue = 1.25
+Bone = "Gluteus"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+
+[node name="Thighs Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="11"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "ThighsSize"
+MinValue = 0.85
+MaxValue = 1.1
+Bone = "UpLegAdjust"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 0 )
+
+[node name="Calves Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="12"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "CalvesSize"
+MinValue = 0.85
+MaxValue = 1.1
+Bone = "LegAdjust"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 0 )
+
+[node name="Feet Size" type="Node" parent="Races/Human/Morphs/Female/Body" index="13"]
+
+script = ExtResource( 4 )
+Default = 1.0
+_key = "FeetSize"
+MinValue = 0.85
+MaxValue = 1.1
+Bone = "Foot"
+Mirrored = true
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
 
 [node name="Logging" parent="." index="1" instance=ExtResource( 5 )]
 
