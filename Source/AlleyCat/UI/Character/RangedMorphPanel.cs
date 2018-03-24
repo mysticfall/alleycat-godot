@@ -33,7 +33,7 @@ namespace AlleyCat.UI.Character
             Spinner.MaxValue = max;
             Spinner.Value = value;
 
-            Slider.OnValueChanged().Merge(Spinner.OnValueChanged())
+            Slider.OnValueChange().Merge(Spinner.OnValueChange())
                 .Select(e => e.Value)
                 .Subscribe(v => Morph.Value = v)
                 .AddTo(this);

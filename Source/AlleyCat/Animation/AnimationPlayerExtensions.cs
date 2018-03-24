@@ -9,7 +9,7 @@ namespace AlleyCat.Animation
 {
     public static class AnimationPlayerExtensions
     {
-        private const string NodeName = "AnimationPlayerTracker";
+        private const string NodeName = "AnimationPlayerEventTracker";
 
         [NotNull]
         public static IObservable<AnimationChangeEvent> OnAnimationChange(

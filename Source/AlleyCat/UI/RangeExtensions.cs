@@ -9,10 +9,10 @@ namespace AlleyCat.UI
 {
     public static class RangeExtensions
     {
-        private const string NodeName = "AnimationPlayerTracker";
+        private const string NodeName = "RangeEventTracker";
 
         [NotNull]
-        public static IObservable<ValueChangedEvent> OnValueChanged(
+        public static IObservable<ValueChangedEvent> OnValueChange(
             [NotNull] this Range range)
         {
             Ensure.Any.IsNotNull(range, nameof(range));
