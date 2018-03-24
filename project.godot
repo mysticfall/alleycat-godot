@@ -41,6 +41,7 @@ point=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_n
 
 [locale]
 
+test="en"
 locale_filter=[ 1, [ "en", "ko" ] ]
 translations=PoolStringArray( "res://Data/I18n/Messages.en.translation", "res://Data/I18n/Messages.ko.translation" )
 
