@@ -152,7 +152,7 @@ namespace AlleyCat.Control
                 .AddTo(this);
 
             Zoom
-                .GetAxis("Value")
+                .GetAxis()
                 .Where(_ => Active)
                 .Subscribe(v => Distance -= v * 0.05f)
                 .AddTo(this);

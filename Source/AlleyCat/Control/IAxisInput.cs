@@ -26,7 +26,7 @@ namespace AlleyCat.Control
     public static class AxisInputExtensions
     {
         [CanBeNull]
-        public static IAxisInput GetAxis([NotNull] this InputBindings bindings, [NotNull] string key)
+        public static IAxisInput GetAxis([NotNull] this InputBindings bindings, [NotNull] string key = "Value")
         {
             Ensure.Any.IsNotNull(bindings, nameof(bindings));
             Ensure.Any.IsNotNull(key, nameof(key));
