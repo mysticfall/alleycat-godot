@@ -81,7 +81,7 @@ namespace AlleyCat.Control
 
         public override Vector3 Forward =>
             Perspective == ThirdPerson
-                ? new Plane(Axis.Up, 0f).Project(Character.Skeleton.GlobalTransform.Forward())
+                ? new Plane(Axis.Up, 0f).Project(Character.GlobalTransform().Forward())
                 : Character.Vision.Forward;
 
         protected override Transform TargetTransform

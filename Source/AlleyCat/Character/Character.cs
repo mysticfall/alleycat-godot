@@ -35,6 +35,8 @@ namespace AlleyCat.Character
         [Service]
         public Skeleton Skeleton { get; private set; }
 
+        public Spatial Spatial => Skeleton;
+
         public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();
 
         public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
