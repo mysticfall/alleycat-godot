@@ -2433,7 +2433,7 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, 3.20142e-08, -2.23517e-08, 0, 1.13382e-13, -2.22045e-15, 1, 1, 1, 1, 2.66667, 1, 0, 8.42847e-08, -1.49012e-08, -2.32831e-10, 5.91124e-14, 1.14131e-13, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=14]
 
 resource_name = "Female Reset"
 length = 0.0416667
@@ -3567,7 +3567,7 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1, 0.0416667, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=15]
 
 resource_name = "Female Run Forward"
 length = 1.33333
@@ -4715,7 +4715,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=16]
 
 resource_name = "Female Strafe Left"
 length = 1.33333
@@ -5863,7 +5863,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=17]
 
 resource_name = "Female Strafe Right"
 length = 1.33333
@@ -7011,7 +7011,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=18]
 
 resource_name = "Female Walk Backward"
 length = 1.33333
@@ -8159,7 +8159,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=19]
 
 resource_name = "Female Walk Forward"
 length = 1.33333
@@ -9329,8 +9329,6 @@ _sex = 1
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
 [node name="Skeleton" type="Skeleton" parent="HumanFemaleRig" index="0"]
 
 bones/0/name = "Global"
@@ -10178,19 +10176,20 @@ _sections_unfolded = [ "Transform" ]
 
 root_node = NodePath("..")
 autoplay = ""
-playback_process_mode = 1
+playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
 "anims/Female Facial Expressions" = SubResource( 12 )
 "anims/Female Idle" = SubResource( 13 )
-"anims/Female Reset" = SubResource( 4 )
-"anims/Female Run Forward" = SubResource( 5 )
-"anims/Female Strafe Left" = SubResource( 6 )
-"anims/Female Strafe Right" = SubResource( 7 )
-"anims/Female Walk Backward" = SubResource( 8 )
-"anims/Female Walk Forward" = SubResource( 9 )
+"anims/Female Reset" = SubResource( 14 )
+"anims/Female Run Forward" = SubResource( 15 )
+"anims/Female Strafe Left" = SubResource( 16 )
+"anims/Female Strafe Right" = SubResource( 17 )
+"anims/Female Walk Backward" = SubResource( 18 )
+"anims/Female Walk Forward" = SubResource( 19 )
 blend_times = [  ]
 script = ExtResource( 14 )
+_sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
 
