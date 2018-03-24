@@ -128,9 +128,11 @@
     <Compile Include="Source\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectory.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />

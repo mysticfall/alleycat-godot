@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
+using AlleyCat.Common;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
@@ -31,6 +34,10 @@ namespace AlleyCat.Character
 
         [Service]
         public Skeleton Skeleton { get; private set; }
+
+        public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();
+
+        public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
 
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }
