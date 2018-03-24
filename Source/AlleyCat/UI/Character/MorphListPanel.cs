@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Character
 {
+    [Singleton(typeof(MorphListPanel))]
     public class MorphListPanel : Panel
     {
         [Node]

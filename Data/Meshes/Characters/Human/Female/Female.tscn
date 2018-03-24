@@ -9321,8 +9321,6 @@ _sex = 1
 
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
-editor/display_folded = true
-
 [node name="Skeleton" type="Skeleton" parent="HumanFemaleRig" index="0"]
 
 bones/0/name = "Global"
@@ -10198,18 +10196,12 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
+"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
 "position": Vector2( 781.614, 192.848 ),
 "type": "output"
-}, {
-"filter": [  ],
-"from": "Female Idle",
-"id": "Idle",
-"position": Vector2( 50.9995, 80.9692 ),
-"type": "animation"
 }, {
 "blend": 0.0,
 "id": "Left-Right",
@@ -10217,9 +10209,9 @@ data = {
 "type": "blend3"
 }, {
 "filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
+"from": "Female Idle",
+"id": "Idle",
+"position": Vector2( 50.9995, 80.9692 ),
 "type": "animation"
 }, {
 "filter": [  ],
@@ -10227,12 +10219,6 @@ data = {
 "id": "Walk Forward",
 "position": Vector2( 18.0635, 591.551 ),
 "type": "animation"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "Walk-Run",
-"position": Vector2( 193.967, 647.485 ),
-"type": "blend2"
 }, {
 "filter": [  ],
 "from": "Female Run Forward",
@@ -10244,6 +10230,18 @@ data = {
 "filter": [  ],
 "id": "Walk",
 "position": Vector2( 550.76, 192.898 ),
+"type": "blend2"
+}, {
+"filter": [  ],
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk-Run",
+"position": Vector2( 193.967, 647.485 ),
 "type": "blend2"
 }, {
 "blend": 0.0,
@@ -10289,7 +10287,6 @@ _eyeBoneRight = "RightEye"
 script = ExtResource( 16 )
 Active = true
 _target = NodePath("..")
-_animationPlayer = NodePath("../AnimationPlayer")
-_animationTreePlayer = NodePath("../AnimationTreePlayer")
+PositionBone = "Position"
 
 
