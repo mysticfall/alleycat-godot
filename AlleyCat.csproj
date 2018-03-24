@@ -204,6 +204,9 @@
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CameraControl.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CharacterCreator.cs" />
+    <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
+    <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\UI\ColorPickerButtonExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
