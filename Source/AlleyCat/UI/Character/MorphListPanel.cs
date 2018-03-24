@@ -28,15 +28,6 @@ namespace AlleyCat.UI.Character
             this.Autowire();
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialized()
-        {
-            Character
-                .OnMorphsChange
-                .Subscribe(LoadMorphs)
-                .AddTo(this);
-        }
-
         protected virtual void LoadMorphs(IMorphSet morphSet)
         {
             var index = 0;
@@ -52,6 +43,15 @@ namespace AlleyCat.UI.Character
 
                 index++;
             }
+        }
+
+        [PostConstruct]
+        protected virtual void OnInitialized()
+        {
+            Character
+                .OnMorphsChange
+                .Subscribe(LoadMorphs)
+                .AddTo(this);
         }
     }
 }

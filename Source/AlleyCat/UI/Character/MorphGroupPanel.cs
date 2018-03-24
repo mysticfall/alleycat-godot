@@ -18,6 +18,8 @@ namespace AlleyCat.UI.Character
         [Node]
         protected Container MorphsPanel { get; private set; }
 
+        [Export, UsedImplicitly] private PackedScene _colorMorphPanelScene;
+
         [Export, UsedImplicitly] private PackedScene _rangedMorphPanelScene;
 
         [PostConstruct]
@@ -39,17 +41,24 @@ namespace AlleyCat.UI.Character
             Morphs = morphs;
         }
 
+        [CanBeNull]
         protected virtual MorphPanel CreateMorphPanel([NotNull] IMorph morph)
         {
             Ensure.Any.IsNotNull(morph, nameof(morph));
 
             MorphPanel panel = null;
 
-            if (morph is IMorph<float, RangedMorphDefinition> rangedMorph)
+            switch (morph)
             {
-                panel = (MorphPanel) _rangedMorphPanelScene.Instance();
-                panel.LoadMorph(rangedMorph);
+                case IMorph<float, RangedMorphDefinition> _:
+                    panel = (MorphPanel) _rangedMorphPanelScene.Instance();
+                    break;
+                case IMorph<Color, ColorMorphDefinition> _:
+                    panel = (MorphPanel) _colorMorphPanelScene.Instance();
+                    break;
             }
+
+            panel?.LoadMorph(morph);
 
             return panel;
         }

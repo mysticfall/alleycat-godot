@@ -106,6 +106,9 @@
     <Compile Include="Source\AlleyCat\Character\Morph\BoneMorph.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphType.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\ColorMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorph.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\IMorphableCharacter.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\IMorphableRace.cs" />
     <Compile Include="Source\AlleyCat\Character\Race.cs" />
@@ -204,6 +207,7 @@
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CameraControl.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CharacterCreator.cs" />
+    <Compile Include="Source\AlleyCat\UI\Character\ColorMorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonExtensions.cs" />

@@ -20,4 +20,6 @@ id,en,ko
 "morph.Body.ThighsSize","Thighs Size","허벅지 크기"
 "morph.Body.CalvesSize","Calves Size","종아리 크기"
 "morph.Body.FeetSize","Feet Size","발 크기"
-
+"morph.Color","Color","색상"
+morph.Color.SkinTone,Skin Tone,피부색
+morph.Color.HairColor,Hair Color,머리색

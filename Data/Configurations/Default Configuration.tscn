@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/RaceRegistry.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRace.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=4]
-[ext_resource path="res://Data/Configurations/Logging/Default Configuration.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=5]
+[ext_resource path="res://Data/Configurations/Logging/Default Configuration.tscn" type="PackedScene" id=6]
 
 [node name="Configuration" type="Node"]
 
@@ -247,6 +248,27 @@ Mirrored = true
 MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
 
-[node name="Logging" parent="." index="1" instance=ExtResource( 5 )]
+[node name="Color" type="Node" parent="Races/Human/Morphs/Female" index="2"]
+
+script = ExtResource( 3 )
+_key = "Color"
+
+[node name="Skin Tone" type="Node" parent="Races/Human/Morphs/Female/Color" index="0"]
+
+script = ExtResource( 5 )
+Default = Color( 1, 1, 1, 1 )
+_key = "SkinTone"
+Mesh = "Body"
+_materials = "Face;Torso;Hands;Feet;Legs"
+
+[node name="Hair Color" type="Node" parent="Races/Human/Morphs/Female/Color" index="1"]
+
+script = ExtResource( 5 )
+Default = Color( 0.190393, 0.175557, 0.164256, 1 )
+_key = "HairColor"
+Mesh = "Hair"
+_materials = "Hair"
+
+[node name="Logging" parent="." index="1" instance=ExtResource( 6 )]
 
 
