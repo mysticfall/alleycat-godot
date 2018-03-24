@@ -75,13 +75,6 @@ namespace AlleyCat.Motion
 
         private float _distance = 1f;
 
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Autowire();
-        }
-
         public void Rotate(Vector2 rotation)
         {
             Yaw -= rotation.x;
