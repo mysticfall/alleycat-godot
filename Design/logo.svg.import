@@ -7,10 +7,10 @@ path="res://.import/logo.svg-28a3fa2d7a598231520fcecc1671aa71.stex"
 [deps]
 
 source_file="res://Design/logo.svg"
-source_md5="018d9b256275529a239f376ce62438b2"
+source_md5="1a3e686756d5b76f17d313d079aa3bb6"
 
 dest_files=[ "res://.import/logo.svg-28a3fa2d7a598231520fcecc1671aa71.stex" ]
-dest_md5="1b479bc7bc7dd1db309a5ac4e7646412"
+dest_md5="705a09a84f99f1e4bc0fee723c27d631"
 
 [params]
 
@@ -23,7 +23,7 @@ flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
-process/fix_alpha_border=true
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 stream=false

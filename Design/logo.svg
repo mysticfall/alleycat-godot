@@ -9,16 +9,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="229.13211"
-   height="63.999981"
-   id="svg3030"
+   width="450"
+   height="170"
+   id="svg2"
    version="1.1"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-   sodipodi:docname="logo.svg"
-   inkscape:export-xdpi="24"
-   inkscape:export-ydpi="24">
+   inkscape:version="0.92.2 2405546, 2018-03-11"
+   sodipodi:docname="logo.svg">
   <defs
-     id="defs3032" />
+     id="defs4" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -26,23 +24,25 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="111.29102"
-     inkscape:cy="27.636878"
+     inkscape:zoom="2.0043103"
+     inkscape:cx="220.97397"
+     inkscape:cy="38.881117"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1006"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1716"
+     inkscape:window-height="957"
+     inkscape:window-x="37"
+     inkscape:window-y="33"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0" />
+     fit-margin-bottom="0"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-global="false" />
   <metadata
-     id="metadata3035">
+     id="metadata7">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -57,110 +57,78 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-35.142578,-986.51972)">
-    <g
-       id="g82-3"
-       transform="matrix(4.162611,0,0,-4.162611,104.69892,525.90697)"
-       style="stroke-width:0.32031175"
-       inkscape:export-xdpi="9.6636086"
-       inkscape:export-ydpi="9.6636086" />
-    <g
-       id="g86-7"
-       transform="matrix(4.162611,0,0,-4.162611,784.07144,817.24284)"
-       style="stroke-width:0.32031175"
-       inkscape:export-xdpi="9.6636086"
-       inkscape:export-ydpi="9.6636086" />
+     transform="translate(-49.107723,-470.70853)">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.76040268;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect820"
+       width="450"
+       height="170"
+       x="49.107723"
+       y="470.70853"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="85.330002"
+       inkscape:export-ydpi="85.330002" />
     <path
-       style="fill:#478cbf;fill-opacity:1;stroke:none;stroke-width:0.12021048"
-       d="m 107.35406,986.51974 c -1.0034,0.002 -1.7702,0.45849 -3.04017,1.26216 -2.30426,1.26271 -4.542455,2.69317 -6.65637,4.21537 -4.104229,-1.39453 -6.509599,-1.81027 -9.823021,-2.37955 -4.470356,-0.76806 -8.991432,-1.35886 -13.517029,-1.38896 -4.723562,-0.0314 -9.374426,0.4276 -14.123457,1.262 -3.586575,0.63016 -4.788349,0.96273 -10.652959,2.50651 -2.113915,-1.5222 -4.351281,-2.95266 -6.65621,-4.21537 -3.175787,-0.97726 -4.462022,-1.72342 -7.742266,-0.59068 1.42774,2.51447 3.955129,15.03088 5.564482,17.26758 h 0.04505 v 17.3654 c 4.03e-4,2.1987 1.61e-4,4.3974 0,6.596 h 13.172862 c 0.542722,0 1.005882,0.4634 1.005882,1.0061 0,0.5427 -0.463165,1.0059 -1.005882,1.0059 H 40.75211 c -8.1e-5,0.4723 1.61e-4,0.9446 0,1.417 0,0.04 8.06e-4,0.08 0.0011,0.1195 h 13.171759 c 0.542722,0 1.005882,0.4633 1.005882,1.0061 0,0.5427 -0.463165,1.0058 -1.005882,1.0058 H 40.899858 c 0.07427,0.525 0.175988,1.0372 0.304631,1.5366 h 12.720483 c 0.542722,0 1.005882,0.4633 1.005882,1.006 0,0.5427 -0.463165,1.0059 -1.005882,1.0059 H 41.894398 c 3.777102,8.7103 16.492195,12.9326 31.683073,12.9906 h 0.02205 0.02252 c 15.190876,-0.058 27.902399,-4.2803 31.678339,-12.9906 H 92.490916 c -0.542716,0 -1.006039,-0.4632 -1.006039,-1.0059 0,-0.5427 0.463317,-1.006 1.006039,-1.006 h 13.499234 c 0.1286,-0.4994 0.23023,-1.0116 0.30447,-1.5366 H 92.490916 c -0.542716,0 -1.006039,-0.4631 -1.006039,-1.0058 0,-0.5428 0.463317,-1.0061 1.006039,-1.0061 h 13.950354 c 3.2e-4,-0.04 10e-4,-0.079 10e-4,-0.1195 -4.8e-4,-0.355 -7e-5,-0.9766 -3.2e-4,-1.417 H 92.490916 c -0.542716,0 -1.006039,-0.4632 -1.006039,-1.0059 0,-0.5427 0.463317,-1.0061 1.006039,-1.0061 h 13.950664 c -1e-5,-2.39 6.5e-4,-4.9436 6.5e-4,-6.596 0.01,-6.61 0.005,-10.7484 0.005,-17.3654 h 0.0451 c 1.03942,-3.1236 1.02535,-10.78961 3.49065,-17.44321 -1.14511,-0.46018 -1.94236,-0.49688 -2.6289,-0.49585 z m -0.91248,41.90046 c 0,0.729 1.6e-4,1.3866 4.8e-4,2.012 h 3.12933 c 0.54271,0 1.00588,-0.4632 1.00588,-1.0059 0,-0.5427 -0.46316,-1.0061 -1.00588,-1.0061 z m -3.2e-4,3.5485 c -0.005,0.6904 -0.0546,1.3611 -0.14665,2.0119 h 3.27676 c 0.54272,0 1.00588,-0.4631 1.00588,-1.0058 0,-0.5428 -0.46316,-1.0061 -1.00588,-1.0061 z m -0.45112,3.5485 c -0.1791,0.6954 -0.40975,1.366 -0.68975,2.0119 h 4.27098 c 0.54272,0 1.00588,-0.4632 1.00588,-1.0059 0,-0.5427 -0.46316,-1.006 -1.00588,-1.006 z m -64.095749,2.0119 c -0.280087,-0.6459 -0.510755,-1.3165 -0.68991,-2.0119 h -4.359969 c -0.542722,0 -1.006039,0.4633 -1.006039,1.006 0,0.5427 0.463322,1.0059 1.006039,1.0059 z m -0.994541,-3.5485 c -0.09208,-0.6508 -0.141508,-1.3215 -0.146645,-2.0119 h -3.908693 c -0.542722,0 -1.006039,0.4633 -1.006039,1.0061 0,0.5427 0.463322,1.0058 1.006039,1.0058 z m -0.147747,-3.5484 c 1.61e-4,-0.6707 -3.9e-5,-1.3413 0,-2.012 h -3.907591 c -0.542722,0 -1.006039,0.4634 -1.006039,1.0061 0,0.5427 0.463322,1.0059 1.006039,1.0059 z"
-       id="path3739"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.48830372"
+       d="m 387.74905,473.17788 c 4.55133,2.29383 7.62666,7.46771 9.94918,11.91766 0.40373,-2.4392 1.48503,-3.85545 1.93495,-6.21296 0.68158,-3.57153 2.18628,2.70929 2.84124,5.31267 0.516,6.9055 4.71834,12.71432 4.9899,19.63897 0.96122,5.27311 4.89806,8.82254 7.59921,13.15366 2.49477,4.68185 6.3304,8.41559 9.93393,12.20759 3.57073,2.25766 4.08744,3.13117 7.75808,4.82608 6.66856,4.05694 9.25848,5.49759 14.32546,11.39968 3.86883,6.22651 7.41328,12.69013 9.81334,19.61765 2.64372,6.74583 4.77248,14.26648 3.01992,21.47616 -1.40846,2.09815 -1.47898,6.2683 1.75481,6.59208 5.49952,-0.41436 11.18919,-4.1458 13.27576,-8.81996 2.09331,-4.68927 1.08614,-10.23403 -1.29302,-14.90268 -3.6405,-7.39477 -6.1833,-15.36403 -10.94675,-22.18388 -5.51485,-8.44678 -6.68483,-18.84785 -6.98719,-28.6666 0.52727,-7.39766 5.78255,-15.87762 13.83843,-16.17686 6.9824,1.21306 2.69461,7.11644 -0.99497,10.32614 -7.05735,6.13948 -4.29741,19.46543 -2.16938,25.42812 1.86619,5.22903 5.67067,11.17401 8.95168,16.60471 4.06908,6.7351 6.85002,14.33405 8.51275,22.01757 1.08872,6.30517 -1.63231,11.96732 -5.84437,16.51074 -3.35669,4.48221 -8.68868,7.30369 -13.70302,9.53717 -4.66452,1.36732 -9.51562,-2.24063 -14.03873,0.30521 -4.09907,4.07161 -10.05652,4.36479 -15.50365,4.94402 -7.94358,0.48785 -15.71683,-1.21061 -23.62171,-1.3427 -2.88655,0.85873 -6.46886,0.58381 -8.31636,-2.13641 -0.99179,-1.2279 -0.75032,-3.53101 1.08346,-3.82989 2.40772,-0.70156 -4.96342,-0.6335 -3.7538,-3.79963 -0.46671,-1.88997 1.1715,-3.17195 3.00606,-3.18916 3.87029,-1.38114 3.76818,-10.1543 2.38052,-9.76608 -4.34658,5.57877 -5.7152,12.72944 -9.1556,18.79967 -0.41169,1.76657 -0.73499,3.99243 -2.91444,4.40985 -3.02948,0.8895 -6.4042,1.09146 -9.50654,0.35089 -2.88983,-1.09236 -3.00341,-5.48945 -1.1292,-7.46172 1.74789,-0.95692 4.74182,-0.33196 5.4628,-2.79236 2.23848,-6.53103 4.02953,-13.18167 6.01215,-19.77628 -0.0298,-8.26612 0.75975,-14.39653 -2.58514,-21.68796 -3.64435,-5.66561 -4.08251,-7.66689 -4.08636,-14.66522 -1.01631,-5.78052 1.08628,-11.33411 0.91562,-17.07534 -0.20143,-3.66946 -3.61828,-6.57951 -7.26352,-6.10375 -4.24024,-0.93683 -7.81682,-4.36083 -10.02005,-7.96141 -2.12797,-3.88311 -1.82493,-8.84157 2.52771,-10.77722 1.89857,-2.87637 1.70608,-7.06632 4.85252,-9.17093 2.59436,-2.78144 6.32099,-3.78734 9.76607,-4.91356 1.66068,-2.53478 0.28742,-6.14654 0.33571,-9.01826 -0.0117,-1.07567 -0.50046,-2.06873 -1.00746,-2.94547 z m 4.42525,80.14285 c 0.41456,2.03546 0.19561,0.24135 0,0 z m 21.35112,38.71837 c -1.42209,2.6977 -0.53308,7.49624 2.06007,4.57785 -0.80889,-1.46456 -1.76016,-2.90003 -2.06007,-4.57785 z"
+       id="path3091"
        inkscape:connector-curvature="0"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893" />
-    <g
-       id="g4625"
-       transform="matrix(0.11488227,0,0,0.12731147,22.155586,933.05213)"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893">
-      <g
-         style="stroke-width:0.32031175"
-         transform="matrix(4.162611,0,0,-4.162611,389.21484,625.67104)"
-         id="g90-3">
-        <path
-           inkscape:connector-curvature="0"
-           id="path92-5"
-           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32031175"
-           d="m 0,0 c 0,-12.052 -9.765,-21.815 -21.813,-21.815 -12.042,0 -21.81,9.763 -21.81,21.815 0,12.044 9.768,21.802 21.81,21.802 C -9.765,21.802 0,12.044 0,0" />
-      </g>
-      <g
-         style="stroke-width:0.32031175"
-         transform="matrix(4.162611,0,0,-4.162611,367.36686,631.05679)"
-         id="g94-6">
-        <path
-           inkscape:connector-curvature="0"
-           id="path96-2"
-           style="fill:#414042;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32031175"
-           d="m 0,0 c 0,-7.994 -6.479,-14.473 -14.479,-14.473 -7.996,0 -14.479,6.479 -14.479,14.473 0,7.994 6.483,14.479 14.479,14.479 C -6.479,14.479 0,7.994 0,0" />
-      </g>
-    </g>
-    <g
-       id="g4631"
-       transform="matrix(0.11488227,0,0,0.12731147,6.4365009,933.05213)"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893">
-      <g
-         style="stroke-width:0.32031175"
-         transform="matrix(4.162611,0,0,-4.162611,634.78706,625.67104)"
-         id="g102-2">
-        <path
-           inkscape:connector-curvature="0"
-           id="path104-7"
-           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32031175"
-           d="m 0,0 c 0,-12.052 9.765,-21.815 21.815,-21.815 12.041,0 21.808,9.763 21.808,21.815 0,12.044 -9.767,21.802 -21.808,21.802 C 9.765,21.802 0,12.044 0,0" />
-      </g>
-      <g
-         style="stroke-width:0.32031175"
-         transform="matrix(4.162611,0,0,-4.162611,656.64056,631.05679)"
-         id="g106-0">
-        <path
-           inkscape:connector-curvature="0"
-           id="path108-9"
-           style="fill:#414042;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32031175"
-           d="m 0,0 c 0,-7.994 6.477,-14.473 14.471,-14.473 8.002,0 14.479,6.479 14.479,14.473 0,7.994 -6.477,14.479 -14.479,14.479 C 6.477,14.479 0,7.994 0,0" />
-      </g>
-    </g>
+       sodipodi:nodetypes="ccscccccccccsccccssscccccccccccccccccccccccccccccccc"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="85.330002"
+       inkscape:export-ydpi="85.330002" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.08064696"
-       d="m 70.385042,1020.1735 c -1.379882,0 -2.490763,0.9496 -2.490763,2.3294 v 0.7156 c 0,1.0861 2.299732,3.3258 3.948708,4.3112 -0.05039,0.6062 -0.279619,2.5197 -1.273969,4.4414 -1.199888,2.3189 -3.377908,4.5748 -7.916792,4.5748 a 0.70169872,0.70169872 0 1 0 0,1.4033 c 5.023542,0 7.799504,-2.6981 9.163039,-5.3333 0.300954,-0.5816 0.53756,-1.1547 0.725507,-1.6964 0.193842,0.5755 0.441866,1.1884 0.764414,1.8117 1.363534,2.6352 4.139654,5.3331 9.163196,5.3331 a 0.70169872,0.70169872 0 1 0 0,-1.4031 c -4.538883,0 -6.716904,-2.2561 -7.916791,-4.575 -1.099897,-2.1256 -1.265678,-4.2439 -1.285941,-4.586 1.717952,-1.1021 3.960679,-3.4516 3.960679,-4.2817 v -0.7156 c 0,-1.3798 -1.110881,-2.3294 -2.490762,-2.3294 z"
-       id="rect4572"
+       style="fill:#007400;fill-opacity:1;stroke:none"
+       d=""
+       id="path3117"
        inkscape:connector-curvature="0"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893" />
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="84.839996"
+       inkscape:export-ydpi="84.839996" />
+    <path
+       style="fill:#007400;fill-opacity:1;stroke:none"
+       d=""
+       id="path3200"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="84.839996"
+       inkscape:export-ydpi="84.839996" />
+    <path
+       style="fill:#d4fc44;fill-opacity:1;stroke:none"
+       d=""
+       id="path3087"
+       inkscape:connector-curvature="0"
+       transform="translate(0,308.2677)"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="84.839996"
+       inkscape:export-ydpi="84.839996" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:8.26440907px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.20661022"
-       x="122.46595"
-       y="1019.4911"
-       id="text4671"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:93.75431824px;line-height:1.25;font-family:Magik;-inkscape-font-specification:'Magik, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#1c0a00;fill-opacity:1;stroke:none;stroke-width:0.48830372"
+       x="51.28434"
+       y="607.09735"
+       id="text822"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="85.330002"
+       inkscape:export-ydpi="85.330002"><tspan
          sodipodi:role="line"
-         id="tspan4669"
-         x="122.46595"
-         y="1019.4911"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:39.66915894px;font-family:TSCu_Comic;-inkscape-font-specification:TSCu_Comic;word-spacing:-6.84005833px;stroke-width:0.20661022">Alley Cat</tspan></text>
+         id="tspan820"
+         x="51.28434"
+         y="607.09735"
+         style="stroke-width:0.48830372">Alley Cat</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:2.73602319px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.06840058"
-       x="128.56483"
-       y="1044.3778"
-       id="text4675"
-       inkscape:export-xdpi="191.8893"
-       inkscape:export-ydpi="191.8893"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.23000526px;line-height:1.25;font-family:'Inter UI';-inkscape-font-specification:'Inter UI, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.48830372"
+       x="277.99188"
+       y="630.18158"
+       id="text826"
+       inkscape:export-filename="/home/fender/workspace/AlleyCat/logo.png"
+       inkscape:export-xdpi="85.330002"
+       inkscape:export-ydpi="85.330002"><tspan
          sodipodi:role="line"
-         id="tspan4673"
-         x="128.56483"
-         y="1044.3778"
-         style="font-size:13.13291168px;stroke-width:0.06840058">GAME FRAMEWORK</tspan></text>
+         id="tspan824"
+         x="277.99188"
+         y="630.18158"
+         style="stroke-width:0.48830372">GAME FRAMEWORK</tspan></text>
   </g>
 </svg>
