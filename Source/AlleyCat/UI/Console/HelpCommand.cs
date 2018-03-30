@@ -16,7 +16,7 @@ namespace AlleyCat.UI.Console
         {
         }
 
-        public override void Execute(string[] args, IConsole console)
+        public override void Execute(string[] args, ICommandConsole console)
         {
             Ensure.Any.IsNotNull(console, nameof(console));
 
@@ -50,7 +50,7 @@ namespace AlleyCat.UI.Console
             }
         }
 
-        public override void DisplayUsage(IConsole console)
+        public override void DisplayUsage(ICommandConsole console)
         {
             Ensure.Any.IsNotNull(console, nameof(console));
 
@@ -67,7 +67,7 @@ namespace AlleyCat.UI.Console
                 .WriteLine(SceneTree.Tr("console.command.help.command"));
         }
 
-        public void DisplayCommandList(IConsole console)
+        public void DisplayCommandList(ICommandConsole console)
         {
             Ensure.Any.IsNotNull(console, nameof(console));
 

@@ -19,9 +19,9 @@ namespace AlleyCat.UI.Console
             SceneTree = sceneTree;
         }
 
-        public abstract void Execute(string[] args, IConsole console);
+        public abstract void Execute(string[] args, ICommandConsole console);
 
-        public virtual void DisplayUsage(IConsole console)
+        public virtual void DisplayUsage(ICommandConsole console)
         {
             Ensure.Any.IsNotNull(console, nameof(console));
 

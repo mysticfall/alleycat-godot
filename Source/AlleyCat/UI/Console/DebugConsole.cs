@@ -12,9 +12,11 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
-    [AutowireContext, Singleton(typeof(IConsole))]
-    public class Console : Panel, IConsole
+    [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
+    public class DebugConsole : Panel, ICommandConsole
     {
+        public const string ThemeType = "Console";
+
         public const string ShowAnimation = "Show";
 
         public const string HideAnimation = "Hide";
@@ -24,13 +26,13 @@ namespace AlleyCat.UI.Console
 
         [Export, NotNull] public string ToggleAction = "ui_console";
 
-        public Color TextColor => GetColor("info", GetType().Name);
+        public Color TextColor => GetColor("info", ThemeType);
 
-        public Color HighlightColor => GetColor("highlight", GetType().Name);
+        public Color HighlightColor => GetColor("highlight", ThemeType);
 
-        public Color WarningColor => GetColor("warning", GetType().Name);
+        public Color WarningColor => GetColor("warning", ThemeType);
 
-        public Color ErrorColor => GetColor("error", GetType().Name);
+        public Color ErrorColor => GetColor("error", ThemeType);
 
         public IEnumerable<IConsoleCommand> SupportedCommands => _commandMap.Values;
 
@@ -49,7 +51,7 @@ namespace AlleyCat.UI.Console
 
         private Input.MouseMode _mouseMode;
 
-        public Console()
+        public DebugConsole()
         {
             _commandMap = new Dictionary<string, IConsoleCommand>();
         }

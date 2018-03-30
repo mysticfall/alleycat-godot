@@ -14,6 +14,6 @@ namespace AlleyCat.UI.Console
         {
         }
 
-        public override void Execute(string[] args, IConsole console) => SceneTree.Quit();
+        public override void Execute(string[] args, ICommandConsole console) => SceneTree.Quit();
     }
 }

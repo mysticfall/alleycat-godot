@@ -211,6 +211,7 @@
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonExtensions.cs" />
+    <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Source\AlleyCat\UI\Console\BasicConsoleCommands.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ClearCommand.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ConsoleCommand.cs" />
-    <Compile Include="Source\AlleyCat\UI\Console\Console.cs" />
+    <Compile Include="Source\AlleyCat\UI\Console\DebugConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ConsoleCommandProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\HelpCommand.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\IConsole.cs" />

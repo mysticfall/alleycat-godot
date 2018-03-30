@@ -11,7 +11,7 @@ namespace AlleyCat.Logging
     public class ConsoleLoggerProvider : AutowiredNode, ILoggerProvider
     {
         [Service]
-        public IConsole Console { get; private set; }
+        public DebugConsole Console { get; private set; }
 
         [NotNull]
         protected IMemoryCache Cache { get; }

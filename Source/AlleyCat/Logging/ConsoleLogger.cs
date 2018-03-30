@@ -13,9 +13,9 @@ namespace AlleyCat.Logging
         public string Name { get; }
 
         [NotNull]
-        public IConsole Console { get; }
+        public DebugConsole Console { get; }
 
-        public ConsoleLogger([NotNull] string name, [NotNull] IConsole console)
+        public ConsoleLogger([NotNull] string name, [NotNull] DebugConsole console)
         {
             Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
             Ensure.Any.IsNotNull(console, nameof(console));

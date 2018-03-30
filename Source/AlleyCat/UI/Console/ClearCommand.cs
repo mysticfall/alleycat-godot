@@ -15,7 +15,7 @@ namespace AlleyCat.UI.Console
         {
         }
 
-        public override void Execute(string[] args, IConsole console)
+        public override void Execute(string[] args, ICommandConsole console)
         {
             Ensure.Any.IsNotNull(console, nameof(console));
 

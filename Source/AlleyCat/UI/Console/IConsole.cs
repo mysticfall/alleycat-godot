@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Godot;
 using JetBrains.Annotations;
 
@@ -17,15 +16,6 @@ namespace AlleyCat.UI.Console
         Color ErrorColor { get; }
 
         [NotNull]
-        IEnumerable<IConsoleCommand> SupportedCommands { get; }
-
-        void Open();
-
-        void Close();
-
-        void Toggle();
-
-        [NotNull]
         IConsole Write([NotNull] string text);
 
         [NotNull]
@@ -41,7 +31,5 @@ namespace AlleyCat.UI.Console
         IConsole NewLine();
 
         void Clear();
-
-        void Execute([NotNull] string command, [CanBeNull] string[] arguments = null);
     }
 }

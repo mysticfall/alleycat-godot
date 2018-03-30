@@ -10,8 +10,8 @@ namespace AlleyCat.UI.Console
         [NotNull]
         string Description { get; }
 
-        void Execute([CanBeNull] string[] args, [NotNull] IConsole console);
+        void Execute([CanBeNull] string[] args, [NotNull] ICommandConsole console);
 
-        void DisplayUsage([NotNull] IConsole console);
+        void DisplayUsage([NotNull] ICommandConsole console);
     }
 }
