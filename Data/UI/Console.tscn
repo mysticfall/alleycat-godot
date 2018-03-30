@@ -111,12 +111,13 @@ tracks/2/keys = {
 
 [node name="Console" type="CanvasLayer" index="0"]
 
+pause_mode = 2
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
 transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-_sections_unfolded = [ "Grow Direction", "Margin", "Rect", "Size Flags", "Theme", "Visibility" ]
+_sections_unfolded = [ "Grow Direction", "Margin", "Pause", "Rect", "Size Flags", "Theme", "Visibility" ]
 
 [node name="Panel" type="Panel" parent="." index="0"]
 

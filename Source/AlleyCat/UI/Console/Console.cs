@@ -38,15 +38,16 @@ namespace AlleyCat.UI.Console
         protected RichTextLabel Content { get; private set; }
 
         [Node("Container/InputPane/Input")]
-        protected LineEdit Input { get; private set; }
+        protected LineEdit InputField { get; private set; }
 
         [Node("AnimationPlayer")]
         protected AnimationPlayer Player { get; private set; }
 
-        [Service]
-        private IEnumerable<IConsoleCommandProvider> _providers;
+        [Service] private IEnumerable<IConsoleCommandProvider> _providers;
 
         private readonly IDictionary<string, IConsoleCommand> _commandMap;
+
+        private Input.MouseMode _mouseMode;
 
         public Console()
         {
@@ -78,7 +79,13 @@ namespace AlleyCat.UI.Console
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
                 .AsUnitObservable()
-                .Subscribe(_ => Input.GrabFocus())
+                .Subscribe(_ => OnShown())
+                .AddTo(this);
+
+            Player.OnAnimationFinish()
+                .Where(e => e.Animation == HideAnimation)
+                .AsUnitObservable()
+                .Subscribe(_ => OnHidden())
                 .AddTo(this);
 
             Content.AddColorOverride("default_color", TextColor);
@@ -106,11 +113,28 @@ namespace AlleyCat.UI.Console
             }
         }
 
+        protected void OnShown()
+        {
+            GetTree().SetPause(true);
+
+            _mouseMode = Input.GetMouseMode();
+
+            Input.SetMouseMode(Input.MouseMode.Visible);
+            InputField.GrabFocus();
+        }
+
+        protected void OnHidden()
+        {
+            Input.SetMouseMode(_mouseMode);
+
+            GetTree().SetPause(false);
+        }
+
         private void PlayAnimation(string name)
         {
             if (Player.IsPlaying()) return;
 
-            Input.Clear();
+            InputField.Clear();
             Player.Play(name);
         }
 
@@ -151,7 +175,7 @@ namespace AlleyCat.UI.Console
 
         public void Clear()
         {
-            Input.Clear();
+            InputField.Clear();
             Content.Clear();
         }
 
@@ -166,7 +190,7 @@ namespace AlleyCat.UI.Console
             else
             {
                 WriteLine(
-                    string.Format(Tr("console.error.command.invalid"), command), 
+                    string.Format(Tr("console.error.command.invalid"), command),
                     new TextStyle(WarningColor));
             }
 
@@ -185,7 +209,7 @@ namespace AlleyCat.UI.Console
 
             NewLine();
 
-            Input.Clear();
+            InputField.Clear();
 
             var segments = line.Split().Select(w => w.Trim()).Where(w => !w.Empty()).ToList();
 
