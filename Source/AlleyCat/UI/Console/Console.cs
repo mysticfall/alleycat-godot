@@ -165,7 +165,9 @@ namespace AlleyCat.UI.Console
             }
             else
             {
-                WriteLine($"Unknown command: '{command}'.", new TextStyle(WarningColor));
+                WriteLine(
+                    string.Format(Tr("console.error.command.invalid"), command), 
+                    new TextStyle(WarningColor));
             }
 
             NewLine();

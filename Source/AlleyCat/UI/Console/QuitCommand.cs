@@ -1,6 +1,4 @@
-using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
@@ -10,18 +8,12 @@ namespace AlleyCat.UI.Console
 
         public override string Key => Command;
 
-        public override string Description { get; } = "Exit the game immediately.";
+        public override string Description => SceneTree.Tr("console.command.quit");
 
-        [NotNull]
-        protected SceneTree SceneRoot { get; }
-
-        public QuitCommand([NotNull] SceneTree sceneRoot)
+        public QuitCommand(SceneTree sceneRoot) : base(sceneRoot)
         {
-            Ensure.Any.IsNotNull(sceneRoot, nameof(sceneRoot));
-
-            SceneRoot = sceneRoot;
         }
 
-        public override void Execute(string[] args, IConsole console) => SceneRoot.Quit();
+        public override void Execute(string[] args, IConsole console) => SceneTree.Quit();
     }
 }

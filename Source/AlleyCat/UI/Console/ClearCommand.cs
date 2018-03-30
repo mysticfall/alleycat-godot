@@ -1,4 +1,5 @@
 using EnsureThat;
+using Godot;
 
 namespace AlleyCat.UI.Console
 {
@@ -8,7 +9,11 @@ namespace AlleyCat.UI.Console
 
         public override string Key => Command;
 
-        public override string Description { get; } = "Clear the console.";
+        public override string Description => SceneTree.Tr("console.command.clear");
+
+        public ClearCommand(SceneTree sceneTree) : base(sceneTree)
+        {
+        }
 
         public override void Execute(string[] args, IConsole console)
         {

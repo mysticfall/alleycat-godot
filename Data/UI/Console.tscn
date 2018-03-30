@@ -109,7 +109,7 @@ tracks/2/keys = {
 "values": [ 250.0, 0.0 ]
 }
 
-[node name="Console" type="CanvasLayer"]
+[node name="Console" type="CanvasLayer" index="0"]
 
 layer = 1
 offset = Vector2( 0, 0 )
@@ -205,7 +205,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 905.0
+margin_right = 767.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_next = NodePath("../Button")
@@ -231,8 +231,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 909.0
-margin_right = 953.0
+margin_left = 771.0
+margin_right = 884.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
@@ -244,7 +244,7 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Clear"
+text = "console.ui.clear"
 flat = false
 align = 1
 _sections_unfolded = [ "Margin", "Size Flags" ]
@@ -255,7 +255,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 957.0
+margin_left = 888.0
 margin_right = 1004.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
@@ -269,7 +269,7 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Close"
+text = "console.ui.close"
 flat = false
 align = 1
 _sections_unfolded = [ "Anchor", "Focus", "Margin" ]

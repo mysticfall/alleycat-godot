@@ -1,4 +1,6 @@
 using EnsureThat;
+using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
@@ -7,6 +9,15 @@ namespace AlleyCat.UI.Console
         public abstract string Key { get; }
 
         public abstract string Description { get; }
+
+        protected SceneTree SceneTree { get; }
+
+        protected ConsoleCommand([NotNull] SceneTree sceneTree)
+        {
+            Ensure.Any.IsNotNull(sceneTree, nameof(sceneTree));
+
+            SceneTree = sceneTree;
+        }
 
         public abstract void Execute(string[] args, IConsole console);
 
@@ -17,7 +28,7 @@ namespace AlleyCat.UI.Console
             var highlight = new TextStyle(console.HighlightColor);
 
             console
-                .WriteLine("[Usage]")
+                .Write("[").Write(SceneTree.Tr("console.usage")).WriteLine("]")
                 .NewLine()
                 .Write("> ").WriteLine(Key, highlight)
                 .WriteLine(Description);

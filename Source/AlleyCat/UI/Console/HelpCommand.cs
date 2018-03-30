@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using EnsureThat;
+using Godot;
 
 namespace AlleyCat.UI.Console
 {
@@ -9,7 +10,11 @@ namespace AlleyCat.UI.Console
 
         public override string Key => Command;
 
-        public override string Description { get; } = "Show help information of console commands.";
+        public override string Description => SceneTree.Tr("console.command.help");
+
+        public HelpCommand(SceneTree sceneTree) : base(sceneTree)
+        {
+        }
 
         public override void Execute(string[] args, IConsole console)
         {
@@ -34,7 +39,7 @@ namespace AlleyCat.UI.Console
                     if (command == null)
                     {
                         console.WriteLine(
-                            $"No such command exists: '{name}'.",
+                            string.Format(SceneTree.Tr("console.error.command.invalid"), name),
                             new TextStyle(console.WarningColor));
                     }
                     else
@@ -52,14 +57,14 @@ namespace AlleyCat.UI.Console
             var highlight = new TextStyle(console.HighlightColor);
 
             console
-                .WriteLine("[Usage]")
+                .Write("[").Write(SceneTree.Tr("console.usage")).WriteLine("]")
                 .NewLine()
                 .Write("> ").WriteLine(Key, highlight)
-                .WriteLine("Show this instruction.")
+                .WriteLine(SceneTree.Tr("console.command.help.self"))
                 .Write("> ").WriteLine("help list", highlight)
-                .WriteLine("Display list of available commands.")
+                .WriteLine(SceneTree.Tr("console.command.help.list"))
                 .Write("> ").WriteLine("help <command>", highlight)
-                .WriteLine("Display help message for the specified command.");
+                .WriteLine(SceneTree.Tr("console.command.help.command"));
         }
 
         public void DisplayCommandList(IConsole console)
@@ -69,7 +74,7 @@ namespace AlleyCat.UI.Console
             var highlight = new TextStyle(console.HighlightColor);
 
             console
-                .WriteLine("[Commands]")
+                .Write("[").Write(SceneTree.Tr("console.commands")).WriteLine("]")
                 .NewLine();
 
             foreach (var command in console.SupportedCommands)

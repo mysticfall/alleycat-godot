@@ -6,11 +6,13 @@ namespace AlleyCat.UI.Console
     {
         protected override IEnumerable<IConsoleCommand> CreateCommands()
         {
+            var sceneTree = GetTree();
+
             return new IConsoleCommand[]
             {
-                new ClearCommand(),
-                new HelpCommand(),
-                new QuitCommand(GetTree())
+                new ClearCommand(sceneTree),
+                new HelpCommand(sceneTree),
+                new QuitCommand(sceneTree)
             };
         }
     }
