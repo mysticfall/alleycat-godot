@@ -6,6 +6,6 @@ namespace AlleyCat.UI.Console
     public interface IConsoleCommandProvider
     {
         [NotNull]
-        IEnumerable<IConsoleCommand> Commands { get; }
+        IEnumerable<IConsoleCommand> CreateCommands([NotNull] ICommandConsole console);
     }
 }

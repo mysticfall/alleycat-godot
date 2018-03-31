@@ -10,10 +10,10 @@ namespace AlleyCat.UI.Console
 
         public override string Description => SceneTree.Tr("console.command.quit");
 
-        public QuitCommand(SceneTree sceneRoot) : base(sceneRoot)
+        public QuitCommand(ICommandConsole console, SceneTree sceneRoot) : base(console, sceneRoot)
         {
         }
 
-        public override void Execute(string[] args, ICommandConsole console) => SceneTree.Quit();
+        public override void Execute(string[] args) => SceneTree.Quit();
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using EnsureThat;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace AlleyCat.UI.Console
 {
-    public class HelpCommand : ConsoleCommand
+    public class HelpCommand : ConsoleCommand, IAutoCompletionSupport
     {
         public const string Command = "help";
 
@@ -12,17 +12,15 @@ namespace AlleyCat.UI.Console
 
         public override string Description => SceneTree.Tr("console.command.help");
 
-        public HelpCommand(SceneTree sceneTree) : base(sceneTree)
+        public HelpCommand(ICommandConsole console, SceneTree sceneTree) : base(console, sceneTree)
         {
         }
 
-        public override void Execute(string[] args, ICommandConsole console)
+        public override void Execute(string[] args)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
-
             if (args == null || args.Length != 1)
             {
-                DisplayUsage(console);
+                DisplayUsage();
             }
             else
             {
@@ -30,33 +28,31 @@ namespace AlleyCat.UI.Console
 
                 if (name == "list")
                 {
-                    DisplayCommandList(console);
+                    DisplayCommandList();
                 }
                 else
                 {
-                    var command = console.SupportedCommands.FirstOrDefault(c => c.Key == name);
+                    var command = Console.SupportedCommands.FirstOrDefault(c => c.Key == name);
 
                     if (command == null)
                     {
-                        console.WriteLine(
+                        Console.WriteLine(
                             string.Format(SceneTree.Tr("console.error.command.invalid"), name),
-                            new TextStyle(console.WarningColor));
+                            new TextStyle(Console.WarningColor));
                     }
                     else
                     {
-                        command.DisplayUsage(console);
+                        command.DisplayUsage();
                     }
                 }
             }
         }
 
-        public override void DisplayUsage(ICommandConsole console)
+        public override void DisplayUsage()
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            var highlight = new TextStyle(Console.HighlightColor);
 
-            var highlight = new TextStyle(console.HighlightColor);
-
-            console
+            Console
                 .Write("[").Write(SceneTree.Tr("console.usage")).WriteLine("]")
                 .NewLine()
                 .Write("> ").WriteLine(Key, highlight)
@@ -67,24 +63,36 @@ namespace AlleyCat.UI.Console
                 .WriteLine(SceneTree.Tr("console.command.help.command"));
         }
 
-        public void DisplayCommandList(ICommandConsole console)
+        public void DisplayCommandList()
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            var highlight = new TextStyle(Console.HighlightColor);
 
-            var highlight = new TextStyle(console.HighlightColor);
-
-            console
+            Console
                 .Write("[").Write(SceneTree.Tr("console.commands")).WriteLine("]")
                 .NewLine();
 
-            foreach (var command in console.SupportedCommands)
+            foreach (var command in Console.SupportedCommands)
             {
-                console
+                Console
                     .Write(command.Key, highlight)
                     .Write(" - ")
                     .Write(command.Description)
                     .NewLine();
             }
+        }
+
+        public IEnumerable<string> SuggestCandidates(string text)
+        {
+            var commands = Console.SupportedCommands.Select(c => c.Key).Where(c => c != Key).ToList();
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                commands.Insert(0, "list");
+
+                return commands;
+            }
+
+            return "list".StartsWith(text) ? new[] {"list"} : commands.Where(c => c.StartsWith(text));
         }
     }
 }

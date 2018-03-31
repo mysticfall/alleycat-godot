@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
+using AlleyCat.Autowire;
+using EnsureThat;
 
 namespace AlleyCat.UI.Console
 {
-    public class BasicConsoleCommands : ConsoleCommandProvider
+    [Singleton(typeof(IConsoleCommandProvider))]
+    public class BasicConsoleCommands : AutowiredNode, IConsoleCommandProvider
     {
-        protected override IEnumerable<IConsoleCommand> CreateCommands()
+        public IEnumerable<IConsoleCommand> CreateCommands(ICommandConsole console)
         {
+            Ensure.Any.IsNotNull(console, nameof(console));
+
             var sceneTree = GetTree();
 
             return new IConsoleCommand[]
             {
-                new ClearCommand(sceneTree),
-                new HelpCommand(sceneTree),
-                new QuitCommand(sceneTree)
+                new ClearCommand(console, sceneTree),
+                new HelpCommand(console, sceneTree),
+                new QuitCommand(console, sceneTree)
             };
         }
     }

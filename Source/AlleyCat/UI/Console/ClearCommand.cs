@@ -1,4 +1,3 @@
-using EnsureThat;
 using Godot;
 
 namespace AlleyCat.UI.Console
@@ -11,15 +10,10 @@ namespace AlleyCat.UI.Console
 
         public override string Description => SceneTree.Tr("console.command.clear");
 
-        public ClearCommand(SceneTree sceneTree) : base(sceneTree)
+        public ClearCommand(ICommandConsole console, SceneTree sceneTree) : base(console, sceneTree)
         {
         }
 
-        public override void Execute(string[] args, ICommandConsole console)
-        {
-            Ensure.Any.IsNotNull(console, nameof(console));
-
-            console.Clear();
-        }
+        public override void Execute(string[] args) => Console.Clear();
     }
 }

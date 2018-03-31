@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -64,7 +65,7 @@ namespace AlleyCat.UI.Console
             SetProcess(false);
             SetPhysicsProcess(false);
 
-            var commands = _providers.SelectMany(p => p.Commands);
+            var commands = _providers.SelectMany(p => p.CreateCommands(this));
 
             _commandMap.Clear();
 
@@ -78,15 +79,20 @@ namespace AlleyCat.UI.Console
                 .Subscribe(_ => Toggle())
                 .AddTo(this);
 
+            this.OnInput()
+                .OfType<InputEventKey>()
+                .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed)
+                .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
+                .Subscribe(AutoComplete)
+                .AddTo(this);
+
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
-                .AsUnitObservable()
                 .Subscribe(_ => OnShown())
                 .AddTo(this);
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
-                .AsUnitObservable()
                 .Subscribe(_ => OnHidden())
                 .AddTo(this);
 
@@ -187,7 +193,7 @@ namespace AlleyCat.UI.Console
 
             if (_commandMap.TryGetValue(command, out var action))
             {
-                action.Execute(arguments, this);
+                action.Execute(arguments);
             }
             else
             {
@@ -197,6 +203,66 @@ namespace AlleyCat.UI.Console
             }
 
             NewLine();
+        }
+
+        private void AutoComplete(string text)
+        {
+            var candidates = SuggestCandidates(text).ToList();
+
+            if (candidates.Count == 1)
+            {
+                var suggestion = candidates.First();
+
+                InputField.Text = suggestion;
+                InputField.CaretPosition = suggestion.Length;
+            }
+            else if (candidates.Count > 1)
+            {
+                var normalized = Regex.Replace(text, @"\s+", " ");
+
+                InputField.Text = normalized;
+                InputField.CaretPosition = normalized.Length;
+
+                var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim());
+
+                Write(Tr("console.suggestions")).Write(": ");
+                WriteLine(string.Join(", ", suggestions), new TextStyle(HighlightColor));
+
+                NewLine();
+            }
+        }
+
+        public IEnumerable<string> SuggestCandidates(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return SupportedCommands.Select(c => c.Key);
+            }
+
+            var segments = text
+                .Split(' ')
+                .Select(s => s.Trim())
+                .ToList();
+
+            var command = segments.FirstOrDefault();
+
+            if (command == null || segments.Count < 1)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            if (!command.EndsWith(" ") && segments.Count == 1)
+            {
+                return SupportedCommands.Where(c => c.Key.StartsWith(command)).Select(c => c.Key);
+            }
+
+            var arguments = string.Join(" ", segments.Skip(1));
+
+            return SupportedCommands
+                .Where(c => c.Key == command)
+                .OfType<IAutoCompletionSupport>()
+                .SelectMany(c => c.SuggestCandidates(arguments))
+                .Select(s => string.Join(" ", command, s));
         }
 
         [UsedImplicitly]

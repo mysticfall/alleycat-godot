@@ -210,7 +210,6 @@ anchor_bottom = 0.0
 margin_right = 767.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
-focus_next = NodePath("../Button")
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 1
@@ -225,7 +224,7 @@ placeholder_alpha = 0.6
 caret_blink = true
 caret_blink_speed = 0.65
 caret_position = 0
-_sections_unfolded = [ "Caret", "Grow Direction", "Margin", "Size Flags", "Theme", "custom_colors", "custom_styles" ]
+_sections_unfolded = [ "Caret", "Focus", "Grow Direction", "Margin", "Size Flags", "Theme", "custom_colors", "custom_styles" ]
 
 [node name="ClearButton" type="Button" parent="Panel/Container/InputPane" index="1"]
 
@@ -249,7 +248,7 @@ group = null
 text = "console.ui.clear"
 flat = false
 align = 1
-_sections_unfolded = [ "Margin", "Size Flags" ]
+_sections_unfolded = [ "Focus", "Margin", "Size Flags" ]
 
 [node name="CloseButton" type="Button" parent="Panel/Container/InputPane" index="2"]
 
@@ -261,7 +260,6 @@ margin_left = 888.0
 margin_right = 1004.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
-focus_next = NodePath("../Input")
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
