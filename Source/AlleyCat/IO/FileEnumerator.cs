@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using AlleyCat.Common;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
-using Directory = Godot.Directory;
 
 namespace AlleyCat.IO
 {
@@ -43,12 +42,16 @@ namespace AlleyCat.IO
             _endsWithSeparator = _path.EndsWith(FileInfo.Separator);
 
             _directory = new Directory();
-            _directory.Open(path).ThrowIfNecessary(msg =>
+
+            try
+            {
+                _directory.Open(path).ThrowIfNecessary(
+                    e => $"Failed to open directory: '{path}' ({e}).");
+            }
+            finally
             {
                 _directory.Dispose();
-
-                return new IOException(msg);
-            });
+            }
 
             _directory.ListDirBegin(skipNavigational, skipHidden);
         }

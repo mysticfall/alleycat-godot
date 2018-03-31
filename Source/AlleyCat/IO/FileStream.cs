@@ -39,7 +39,7 @@ namespace AlleyCat.IO
                 nameof(file),
                 opt => opt.WithMessage("File is closed."));
 
-            file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            file.GetError().ThrowIfNecessary();
 
             _file = file;
             _access = access;
@@ -138,7 +138,7 @@ namespace AlleyCat.IO
             }
         }
 
-        private void CheckErrors() => _file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+        private void CheckErrors() => _file.GetError().ThrowIfNecessary();
 
         [NotNull]
         public static FileStream Open([NotNull] string path, FileAccess access = FileAccess.Read)
@@ -148,7 +148,7 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.Open(path, (int) ToModeFlags(access));
-            file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
@@ -164,7 +164,7 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenCompressed(path, (int) ToModeFlags(access), (int) mode);
-            file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
@@ -178,7 +178,7 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenEncrypted(path, (int) ToModeFlags(access), key);
-            file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
@@ -192,7 +192,7 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenEncryptedWithPass(path, (int) ToModeFlags(access), password);
-            file.GetError().ThrowIfNecessary(msg => new IOException(msg));
+            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
