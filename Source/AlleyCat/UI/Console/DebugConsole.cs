@@ -54,7 +54,7 @@ namespace AlleyCat.UI.Console
 
         public DebugConsole()
         {
-            _commandMap = new Dictionary<string, IConsoleCommand>();
+            _commandMap = new SortedDictionary<string, IConsoleCommand>();
         }
 
         [PostConstruct]
