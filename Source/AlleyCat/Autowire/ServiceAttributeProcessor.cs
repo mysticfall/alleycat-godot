@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
@@ -24,6 +25,8 @@ namespace AlleyCat.Autowire
 
             var factoryType = typeof(IServiceFactory<>).MakeGenericType(TargetType);
 
+            IEnumerable enumerable = null;
+
             var current = context;
 
             while (current != null)
@@ -48,13 +51,27 @@ namespace AlleyCat.Autowire
 
                 if (dependency != null)
                 {
-                    return dependency;
+                    if (Enumerable)
+                    {
+                        if (enumerable == null)
+                        {
+                            enumerable = (IEnumerable) dependency;
+                        }
+                        else
+                        {
+                            enumerable = EnumerableHelper.Concat(enumerable, (IEnumerable) dependency, DependencyType);
+                        }
+                    }
+                    else
+                    {
+                        return dependency;
+                    }
                 }
 
                 current = current.Parent;
             }
 
-            return null;
+            return enumerable;
         }
     }
 }
