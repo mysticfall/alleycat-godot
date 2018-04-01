@@ -34,17 +34,16 @@ namespace AlleyCat.Logging
 
             var message = formatter(state, exception);
 
-            if (!string.IsNullOrEmpty(message) || exception != null)
-            {
-                var prefix = GetLevelPrefix(logLevel);
+            if (string.IsNullOrEmpty(message) && exception == null) return;
 
-                GD.Print($"[{prefix}][{Name}] {message}");
-            }
+            var prefix = GetLevelPrefix(logLevel);
+
+            GD.Print($"[{prefix}][{Name}] {message}");
         }
 
         public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
 
-        protected string GetLevelPrefix(LogLevel level)
+        protected virtual string GetLevelPrefix(LogLevel level)
         {
             var prefix = level.ToString();
 

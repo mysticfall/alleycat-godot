@@ -9,60 +9,16 @@ namespace AlleyCat.Event
     public class NodeEventTracker : EventTracker<Node>
     {
         [NotNull]
-        public IObservable<float> OnProcess
-        {
-            get
-            {
-                if (_onProcess == null)
-                {
-                    _onProcess = new Subject<float>();
-                }
-
-                return _onProcess;
-            }
-        }
+        public IObservable<float> OnProcess => _onProcess ?? (_onProcess = new Subject<float>());
 
         [NotNull]
-        public IObservable<float> OnPhysicsProcess
-        {
-            get
-            {
-                if (_onPhysicsProcess == null)
-                {
-                    _onPhysicsProcess = new Subject<float>();
-                }
-
-                return _onPhysicsProcess;
-            }
-        }
+        public IObservable<float> OnPhysicsProcess => _onPhysicsProcess ?? (_onPhysicsProcess = new Subject<float>());
 
         [NotNull]
-        public IObservable<InputEvent> OnInput
-        {
-            get
-            {
-                if (_onInput == null)
-                {
-                    _onInput = new Subject<InputEvent>();
-                }
-
-                return _onInput;
-            }
-        }
+        public IObservable<InputEvent> OnInput => _onInput ?? (_onInput = new Subject<InputEvent>());
 
         [NotNull]
-        public IObservable<Unit> OnDispose
-        {
-            get
-            {
-                if (_onDispose == null)
-                {
-                    _onDispose = new Subject<Unit>();
-                }
-
-                return _onDispose;
-            }
-        }
+        public IObservable<Unit> OnDispose => _onDispose ?? (_onDispose = new Subject<Unit>());
 
         private Subject<float> _onProcess;
 

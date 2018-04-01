@@ -14,13 +14,11 @@ namespace AlleyCat.IO
 
         private const string ParentDir = "..";
 
-        public IFileInfo Current => _current;
+        public IFileInfo Current { get; private set; }
 
         object IEnumerator.Current => Current;
 
         private readonly Directory _directory;
-
-        private IFileInfo _current;
 
         private readonly string _path;
 
@@ -73,16 +71,16 @@ namespace AlleyCat.IO
 
                 if (_directory.CurrentIsDir())
                 {
-                    _current = new DirectoryInfo(absolute);
+                    Current = new DirectoryInfo(absolute);
                 }
                 else
                 {
-                    _current = new FileInfo(absolute);
+                    Current = new FileInfo(absolute);
                 }
             }
             else
             {
-                _current = null;
+                Current = null;
             }
 
             return hasNext;

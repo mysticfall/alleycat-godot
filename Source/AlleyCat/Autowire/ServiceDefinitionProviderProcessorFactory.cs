@@ -13,12 +13,9 @@ namespace AlleyCat.Autowire
         {
             Ensure.Any.IsNotNull(type, nameof(type));
 
-            if (NodeType.IsAssignableFrom(type))
-            {
-                return new[] {new ServiceDefinitionProviderProcessor()};
-            }
-
-            return Enumerable.Empty<INodeProcessor>();
+            return NodeType.IsAssignableFrom(type)
+                ? new[] {new ServiceDefinitionProviderProcessor()}
+                : Enumerable.Empty<INodeProcessor>();
         }
     }
 }

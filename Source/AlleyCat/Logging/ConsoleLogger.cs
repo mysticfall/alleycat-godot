@@ -71,7 +71,7 @@ namespace AlleyCat.Logging
 
         public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
 
-        protected string GetLevelPrefix(LogLevel level)
+        protected virtual string GetLevelPrefix(LogLevel level)
         {
             var prefix = level.ToString();
 

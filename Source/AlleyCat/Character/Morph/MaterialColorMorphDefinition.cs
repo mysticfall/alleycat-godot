@@ -29,9 +29,8 @@ namespace AlleyCat.Character.Morph
             }
 
             var mesh = meshObject.Meshes.FirstOrDefault(m => m.Name == Mesh);
-            var arrayMesh = mesh?.Mesh as ArrayMesh;
 
-            if (arrayMesh == null)
+            if (!(mesh?.Mesh is ArrayMesh arrayMesh))
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(morphable),

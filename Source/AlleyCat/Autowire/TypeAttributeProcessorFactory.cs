@@ -16,12 +16,7 @@ namespace AlleyCat.Autowire
 
             var attribute = type.GetCustomAttribute<T>();
 
-            if (attribute == null)
-            {
-                return Enumerable.Empty<INodeProcessor>();
-            }
-
-            return new[] {CreateProcessor(type, attribute)};
+            return attribute == null ? Enumerable.Empty<INodeProcessor>() : new[] {CreateProcessor(type, attribute)};
         }
 
         [NotNull]

@@ -17,8 +17,6 @@ namespace AlleyCat.UI.Character
         [Node]
         protected TabContainer TabContainer { get; private set; }
 
-        [Export, UsedImplicitly] private NodePath _character;
-
         [Export, UsedImplicitly] private PackedScene _groupPanelScene;
 
         public override void _Ready()

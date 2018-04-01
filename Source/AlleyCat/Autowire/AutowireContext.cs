@@ -21,7 +21,7 @@ namespace AlleyCat.Autowire
 
         public ISet<Type> Provides { get; } = new HashSet<Type>();
 
-        [NotNull] public static ICollection<INodeProcessorFactory> ProcessorFactories =
+        [NotNull] public static readonly ICollection<INodeProcessorFactory> ProcessorFactories =
             new List<INodeProcessorFactory>
             {
                 new NodeAttributeProcessorFactory(),
@@ -181,7 +181,7 @@ namespace AlleyCat.Autowire
             return new ServiceDefinition(node.GetType(), provides, requires, processors);
         }
 
-        private IList<INodeProcessor> CreateProcessors(Node node)
+        private static IList<INodeProcessor> CreateProcessors(Node node)
         {
             var type = node.GetType();
             var processors = ProcessorFactories.SelectMany(f => f.Create(type)).ToList();
@@ -216,7 +216,7 @@ namespace AlleyCat.Autowire
 
         public override string ToString() => $"ApplicationContext({Node.Name})";
 
-        internal static AutowireContext GetOrCreate(Node node) => 
+        internal static AutowireContext GetOrCreate(Node node) =>
             Store.GetOrCreate(node, _ => new AutowireContext(node));
 
         internal static void Shutdown() => Store.Dispose();

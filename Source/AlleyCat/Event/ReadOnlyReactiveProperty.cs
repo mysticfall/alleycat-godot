@@ -15,7 +15,7 @@ namespace AlleyCat.Event
     {
         private static readonly IEqualityComparer<T> DefaultEqualityComparer = EqualityComparer<T>.Default;
 
-        readonly bool _distinctUntilChanged;
+        private readonly bool _distinctUntilChanged;
 
         private bool _canPublishValueOnSubscribe;
 
