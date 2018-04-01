@@ -223,11 +223,31 @@ namespace AlleyCat.UI.Console
                 InputField.Text = normalized;
                 InputField.CaretPosition = normalized.Length;
 
-                var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim());
+                var lastSpace = normalized.LastIndexOf(' ');
+                var prefix = lastSpace > 0 ? normalized.Right(lastSpace) : normalized;
+
+                var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim()).ToList();
 
                 Write(Tr("console.suggestions")).Write(": ");
-                WriteLine(string.Join(", ", suggestions), new TextStyle(HighlightColor));
 
+                var highlight = new TextStyle(HighlightColor);
+                var first = true;
+
+                foreach (var suggestion in suggestions)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        Write(" ");
+                    }
+
+                    Write(prefix).Write(suggestion, highlight);
+                }
+
+                NewLine();
                 NewLine();
             }
         }
