@@ -36,9 +36,9 @@ namespace AlleyCat.UI.Console
 
                     if (command == null)
                     {
-                        Console.WriteLine(
-                            string.Format(SceneTree.Tr("console.error.command.invalid"), name),
-                            new TextStyle(Console.WarningColor));
+                        var message = string.Format(SceneTree.Tr("console.error.command.invalid"), name);
+
+                        Console.Warning(message).NewLine();
                     }
                     else
                     {
@@ -50,34 +50,27 @@ namespace AlleyCat.UI.Console
 
         public override void DisplayUsage()
         {
-            var highlight = new TextStyle(Console.HighlightColor);
-
             Console
-                .Write("[").Write(SceneTree.Tr("console.usage")).WriteLine("]")
+                .Text("[").Text(SceneTree.Tr("console.usage")).Text("]").NewLine()
                 .NewLine()
-                .Write("> ").WriteLine(Key, highlight)
-                .WriteLine(SceneTree.Tr("console.command.help.self"))
-                .Write("> ").WriteLine("help list", highlight)
-                .WriteLine(SceneTree.Tr("console.command.help.list"))
-                .Write("> ").WriteLine("help <command>", highlight)
-                .WriteLine(SceneTree.Tr("console.command.help.command"));
+                .Text("> ").Highlight(Key).NewLine()
+                .Text(SceneTree.Tr("console.command.help.self")).NewLine()
+                .Text("> ").Highlight("help list").NewLine()
+                .Text(SceneTree.Tr("console.command.help.list")).NewLine()
+                .Text("> ").Highlight("help <command>").NewLine()
+                .Text(SceneTree.Tr("console.command.help.command")).NewLine();
         }
 
         public void DisplayCommandList()
         {
-            var highlight = new TextStyle(Console.HighlightColor);
-
             Console
-                .Write("[").Write(SceneTree.Tr("console.commands")).WriteLine("]")
+                .Text("[").Text(SceneTree.Tr("console.commands")).Text("]").NewLine()
                 .NewLine();
 
             foreach (var command in Console.SupportedCommands)
             {
                 Console
-                    .Write(command.Key, highlight)
-                    .Write(" - ")
-                    .Write(command.Description)
-                    .NewLine();
+                    .Highlight(command.Key).Text(" - ").Text(command.Description).NewLine();
             }
         }
 

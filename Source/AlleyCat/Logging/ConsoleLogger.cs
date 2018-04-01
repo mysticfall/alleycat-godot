@@ -60,17 +60,12 @@ namespace AlleyCat.Logging
                         break;
                 }
 
-                var highlight = new TextStyle(Console.HighlightColor);
-
                 // ReSharper disable once AssignNullToNotNullAttribute
                 Console
-                    .Write("[", highlight)
-                    .Write(prefix, new TextStyle(color))
-                    .Write("]", highlight)
-                    .Write("[", highlight)
-                    .Write(Name)
-                    .Write("] ", highlight)
-                    .WriteLine(message);
+                    .Highlight("[").Write(prefix, new TextStyle(color)).Highlight("]")
+                    .Highlight("[").Text(Name).Highlight("] ")
+                    .Text(message)
+                    .NewLine();
             }
         }
 

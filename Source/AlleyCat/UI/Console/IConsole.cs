@@ -16,16 +16,7 @@ namespace AlleyCat.UI.Console
         Color ErrorColor { get; }
 
         [NotNull]
-        IConsole Write([NotNull] string text);
-
-        [NotNull]
         IConsole Write([NotNull] string text, TextStyle style);
-
-        [NotNull]
-        IConsole WriteLine([NotNull] string text);
-
-        [NotNull]
-        IConsole WriteLine([NotNull] string text, TextStyle style);
 
         [NotNull]
         IConsole NewLine();

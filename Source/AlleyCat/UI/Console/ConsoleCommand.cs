@@ -27,13 +27,11 @@ namespace AlleyCat.UI.Console
 
         public virtual void DisplayUsage()
         {
-            var highlight = new TextStyle(Console.HighlightColor);
-
             Console
-                .Write("[").Write(SceneTree.Tr("console.usage")).WriteLine("]")
+                .Text("[").Text(SceneTree.Tr("console.usage")).Text("]").NewLine()
                 .NewLine()
-                .Write("> ").WriteLine(Key, highlight)
-                .WriteLine(Description);
+                .Text("> ").Highlight(Key).NewLine()
+                .Text(Description).NewLine();
         }
     }
 }

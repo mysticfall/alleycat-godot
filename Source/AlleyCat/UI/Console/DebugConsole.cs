@@ -146,28 +146,11 @@ namespace AlleyCat.UI.Console
             Player.Play(name);
         }
 
-        public IConsole Write(string text) => Write(text, new TextStyle());
-
         public IConsole Write(string text, TextStyle style)
         {
             Ensure.Any.IsNotNull(text, nameof(text));
 
             style.Write(text, Content);
-
-            return this;
-        }
-
-        public IConsole WriteLine(string text) => WriteLine(text, new TextStyle());
-
-        public IConsole WriteLine(string text, TextStyle style)
-        {
-            Ensure.Any.IsNotNull(text, nameof(text));
-
-            style.Write(text, Content);
-
-            Content.Newline();
-
-            AdjustBuffer();
 
             return this;
         }
@@ -197,9 +180,9 @@ namespace AlleyCat.UI.Console
             }
             else
             {
-                WriteLine(
-                    string.Format(Tr("console.error.command.invalid"), command),
-                    new TextStyle(WarningColor));
+                var message = string.Format(Tr("console.error.command.invalid"), command);
+
+                this.Warning(message).NewLine();
             }
 
             NewLine();
@@ -228,9 +211,8 @@ namespace AlleyCat.UI.Console
 
                 var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim()).ToList();
 
-                Write(Tr("console.suggestions")).Write(": ");
+                this.Text(Tr("console.suggestions")).Text(": ");
 
-                var highlight = new TextStyle(HighlightColor);
                 var first = true;
 
                 foreach (var suggestion in suggestions)
@@ -241,10 +223,10 @@ namespace AlleyCat.UI.Console
                     }
                     else
                     {
-                        Write(" ");
+                        this.Text(" ");
                     }
 
-                    Write(prefix).Write(suggestion, highlight);
+                    this.Text(prefix).Highlight(suggestion);
                 }
 
                 NewLine();
@@ -293,9 +275,7 @@ namespace AlleyCat.UI.Console
                 return;
             }
 
-            WriteLine(line, new TextStyle(HighlightColor));
-
-            NewLine();
+            this.Highlight(line).NewLine().NewLine();
 
             InputField.Clear();
 

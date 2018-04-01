@@ -211,6 +211,7 @@
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonExtensions.cs" />
+    <Compile Include="Source\AlleyCat\UI\Console\ConsoleExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\IAutoCompletionSupport.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
