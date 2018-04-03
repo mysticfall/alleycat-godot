@@ -32,7 +32,7 @@ namespace AlleyCat.Autowire
 
             return new StringBuilder()
                 .Append("_")
-                .Append(name.Left(1).to_lower())
+                .Append(name.Left(1).ToLower())
                 .Append(name.Substring(1))
                 .ToString();
         }
