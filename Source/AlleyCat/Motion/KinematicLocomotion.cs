@@ -12,6 +12,9 @@ namespace AlleyCat.Motion
 
         public float FallDuration { get; private set; }
 
+        [Export]
+        public bool ApplyGravity { get; set; } = true;
+
         protected override ProcessMode ProcessMode { get; } = ProcessMode.Physics;
 
         public override void _Ready()
@@ -30,7 +33,7 @@ namespace AlleyCat.Motion
 
             Debug.Assert(Target != null, "Target != null");
 
-            if (Target.IsOnFloor())
+            if (Target.IsOnFloor() || !ApplyGravity)
             {
                 FallDuration = 0;
             }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=2]
@@ -16,10 +16,11 @@
 [ext_resource path="res://Data/Textures/Characters/Human/Eye_Albedo.png" type="Texture" id=14]
 [ext_resource path="res://Data/Textures/Characters/Human/Female/Eyelash_diffuse.png" type="Texture" id=15]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.tscn" type="PackedScene" id=16]
-[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=17]
-[ext_resource path="res://Source/AlleyCat/Animation/PostProcessingAnimationPlayer.cs" type="Script" id=18]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=19]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=20]
+[ext_resource path="res://Data/Textures/Hairs/Human/Female/ponytail01_diffuse.png" type="Texture" id=17]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=18]
+[ext_resource path="res://Source/AlleyCat/Animation/PostProcessingAnimationPlayer.cs" type="Script" id=19]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=20]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=21]
 
 [sub_resource type="ArrayMesh" id=1]
 
@@ -131,7 +132,7 @@ surfaces/7 = {
 "vertex_count": 88
 }
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=2]
 
 resource_name = "Eyes"
 render_priority = 0
@@ -192,7 +193,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Anisotropy", "Depth", "Flags", "Metallic", "NormalMap", "Parameters", "Refraction", "Roughness", "Subsurf Scatter", "Transmission" ]
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 
 resource_name = "Eyelash"
 render_priority = 0
@@ -246,13 +247,69 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Flags", "Metallic", "NormalMap", "Roughness" ]
 
-[sub_resource type="CapsuleShape" id=7]
+[sub_resource type="SpatialMaterial" id=4]
+
+resource_local_to_scene = true
+resource_name = "Hair"
+render_priority = 0
+flags_transparent = true
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 2
+params_depth_draw_mode = 3
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.272343, 0.256342, 0.227513, 1 )
+albedo_texture = ExtResource( 17 )
+metallic = 0.25
+metallic_specular = 0.2
+metallic_texture_channel = 0
+roughness = 0.92
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = true
+anisotropy = 0.8
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo", "Ambient Occlusion", "Anisotropy", "Depth", "Metallic", "NormalMap", "Parameters", "Resource", "Roughness" ]
+
+[sub_resource type="CapsuleShape" id=5]
 
 radius = 0.3
 height = 1.45219
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=6]
 
 length = 6.66667
 loop = false
@@ -1385,7 +1442,7 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1, 6.66667, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=7]
 
 length = 2.66667
 loop = true
@@ -2518,7 +2575,7 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, 3.20142e-08, -2.23517e-08, 0, 1.13382e-13, -2.22045e-15, 1, 1, 1, 1, 2.66667, 1, 0, 8.42847e-08, -1.49012e-08, -2.32831e-10, 5.91124e-14, 1.14131e-13, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=8]
 
 length = 0.0416667
 loop = false
@@ -3651,7 +3708,7 @@ tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1, 0.0416667, 1, 3.72529e-09, 1.72295e-08, -1.49012e-08, 0, 1.13375e-13, -2.22045e-15, 1, 1, 1, 1 )
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=9]
 
 length = 1.33333
 loop = true
@@ -4798,7 +4855,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=10]
 
 length = 1.33333
 loop = true
@@ -5945,7 +6002,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=11]
 
 length = 1.33333
 loop = true
@@ -7092,7 +7149,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=12]
 
 length = 1.33333
 loop = true
@@ -8239,7 +8296,7 @@ tracks/161/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=13]
 
 length = 1.33333
 loop = true
@@ -9400,7 +9457,7 @@ axis_lock_angular_y = false
 axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Transform", "collision" ]
 _key = null
 _displayName = null
 _race = "Human"
@@ -10230,20 +10287,22 @@ material/2 = ExtResource( 4 )
 material/3 = ExtResource( 5 )
 material/4 = ExtResource( 6 )
 material/5 = ExtResource( 7 )
-material/6 = SubResource( 3 )
-material/7 = SubResource( 4 )
+material/6 = SubResource( 2 )
+material/7 = SubResource( 3 )
 _sections_unfolded = [ "material" ]
 
 [node name="Hair" parent="HumanFemaleRig/Skeleton" index="1" instance=ExtResource( 16 )]
 
+material/0 = SubResource( 4 )
+
 [node name="Binding" type="Node" parent="HumanFemaleRig/Skeleton" index="2"]
 
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.04065, 0 )
-shape = SubResource( 7 )
+shape = SubResource( 5 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -10255,21 +10314,21 @@ autoplay = ""
 playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-"anims/Female Facial Expressions" = SubResource( 8 )
-"anims/Female Idle" = SubResource( 9 )
-"anims/Female Reset" = SubResource( 10 )
-"anims/Female Run Forward" = SubResource( 11 )
-"anims/Female Strafe Left" = SubResource( 12 )
-"anims/Female Strafe Right" = SubResource( 13 )
-"anims/Female Walk Backward" = SubResource( 14 )
-"anims/Female Walk Forward" = SubResource( 15 )
+"anims/Female Facial Expressions" = SubResource( 6 )
+"anims/Female Idle" = SubResource( 7 )
+"anims/Female Reset" = SubResource( 8 )
+"anims/Female Run Forward" = SubResource( 9 )
+"anims/Female Strafe Left" = SubResource( 10 )
+"anims/Female Strafe Right" = SubResource( 11 )
+"anims/Female Walk Backward" = SubResource( 12 )
+"anims/Female Walk Forward" = SubResource( 13 )
 blend_times = [  ]
-script = ExtResource( 18 )
+script = ExtResource( 19 )
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
 
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
 
@@ -10287,15 +10346,16 @@ data = {
 "position": Vector2( 781.614, 192.848 ),
 "type": "output"
 }, {
-"blend": 0.0,
-"id": "Left-Right",
-"position": Vector2( 377.845, 59.0209 ),
-"type": "blend3"
-}, {
 "filter": [  ],
 "from": "Female Idle",
 "id": "Idle",
 "position": Vector2( 50.9995, 80.9692 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
 "type": "animation"
 }, {
 "filter": [  ],
@@ -10304,11 +10364,10 @@ data = {
 "position": Vector2( 18.0635, 591.551 ),
 "type": "animation"
 }, {
-"filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
+"blend": 0.0,
+"id": "Left-Right",
+"position": Vector2( 377.845, 59.0209 ),
+"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Female Idle",
@@ -10356,11 +10415,11 @@ _sections_unfolded = [ "Playback" ]
 
 [node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
 
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 
 [node name="Vision" type="Node" parent="." index="4"]
 
-script = ExtResource( 19 )
+script = ExtResource( 20 )
 Active = true
 _headBone = "Head"
 _eyeBoneLeft = "Eye.L"
@@ -10368,7 +10427,7 @@ _eyeBoneRight = "Eye.R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
 
-script = ExtResource( 20 )
+script = ExtResource( 21 )
 Active = true
 _target = NodePath("..")
 PositionBone = "Position"
