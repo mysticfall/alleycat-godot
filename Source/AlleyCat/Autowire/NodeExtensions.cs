@@ -40,21 +40,21 @@ namespace AlleyCat.Autowire
             return GetRootContext(node);
         }
 
-        public static void Autowire([NotNull] this Node node)
+        public static void Autowire([NotNull] this Node node, IAutowireContext context = null)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            if (!(GetAutowireContext(node) is AutowireContext context))
+            if (!((context ?? GetAutowireContext(node)) is AutowireContext target))
             {
                 throw new InvalidOperationException(
                     $"No AutowireContext found for node: '{node.Name}'.");
             }
 
-            context.Register(node);       
+            target.Register(node);
 
-            if (context.Node == node)
+            if (target.Node == node)
             {
-                context.Initialize();
+                target.Initialize();
             }
         }
     }

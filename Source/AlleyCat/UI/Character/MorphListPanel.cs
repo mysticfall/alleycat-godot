@@ -11,7 +11,7 @@ namespace AlleyCat.UI.Character
     [Singleton(typeof(MorphListPanel))]
     public class MorphListPanel : Panel
     {
-        [Node]
+        [Service]
         public IMorphableCharacter Character { get; private set; }
 
         [Node]
@@ -19,11 +19,13 @@ namespace AlleyCat.UI.Character
 
         [Export, UsedImplicitly] private PackedScene _groupPanelScene;
 
-        public override void _Ready()
+        [PostConstruct]
+        protected virtual void OnInitialized()
         {
-            base._Ready();
-
-            this.Autowire();
+            Character
+                .OnMorphsChange
+                .Subscribe(LoadMorphs)
+                .AddTo(this);
         }
 
         protected virtual void LoadMorphs(IMorphSet morphSet)
@@ -43,13 +45,11 @@ namespace AlleyCat.UI.Character
             }
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialized()
+        public override void _Ready()
         {
-            Character
-                .OnMorphsChange
-                .Subscribe(LoadMorphs)
-                .AddTo(this);
+            base._Ready();
+
+            this.Autowire();
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
-    public class Binding : AutowiredNode, IServiceDefinitionProvider
+    public class Binding : Node, IServiceDefinitionProvider
     {
         public IEnumerable<Type> ProvidedTypes { get; private set; }
 
@@ -35,6 +35,13 @@ namespace AlleyCat.Autowire
             }
 
             ProvidedTypes = types;
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Autowire(GetParent()?.GetParent()?.GetAutowireContext());
         }
 
         public void AddServices(IServiceCollection collection)
