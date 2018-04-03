@@ -8,10 +8,7 @@ path.etc2="res://.import/F_H_bod_Albedo.png-27f24aa31b8137e0b696d08aa0e52d53.etc
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Female/F_H_bod_Albedo.png"
-source_md5="5e39b4b676f8a51b94fae126dd05e44d"
-
 dest_files=[ "res://.import/F_H_bod_Albedo.png-27f24aa31b8137e0b696d08aa0e52d53.s3tc.stex", "res://.import/F_H_bod_Albedo.png-27f24aa31b8137e0b696d08aa0e52d53.etc2.stex" ]
-dest_md5="4d709e7c3be3d85c4e5339f0a6120e4e"
 
 [params]
 

@@ -8,10 +8,7 @@ path.etc2="res://.import/F_H_bod_derm.png-a12ff0402ab39da095f7ed5f160bc9cc.etc2.
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Female/F_H_bod_derm.png"
-source_md5="15f9fa47ebc4b95fa05e5a45b5fbbb9b"
-
 dest_files=[ "res://.import/F_H_bod_derm.png-a12ff0402ab39da095f7ed5f160bc9cc.s3tc.stex", "res://.import/F_H_bod_derm.png-a12ff0402ab39da095f7ed5f160bc9cc.etc2.stex" ]
-dest_md5="f0af5c44f2e016d351ce7d50a5d576e4"
 
 [params]
 

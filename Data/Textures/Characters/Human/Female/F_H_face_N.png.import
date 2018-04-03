@@ -8,10 +8,7 @@ path.etc2="res://.import/F_H_face_N.png-c949fe48895652c1489a27d820dcdcf0.etc2.st
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Female/F_H_face_N.png"
-source_md5="37d40cddd74043f4328699b553aa7b5b"
-
 dest_files=[ "res://.import/F_H_face_N.png-c949fe48895652c1489a27d820dcdcf0.s3tc.stex", "res://.import/F_H_face_N.png-c949fe48895652c1489a27d820dcdcf0.etc2.stex" ]
-dest_md5="2c995f8f1f65ce6f8c95a9ff18c38796"
 
 [params]
 

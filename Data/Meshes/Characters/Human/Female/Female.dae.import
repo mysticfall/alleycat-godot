@@ -7,10 +7,7 @@ path="res://.import/Female.dae-f1ce84b62e3c497846373bc255288d93.scn"
 [deps]
 
 source_file="res://Data/Meshes/Characters/Human/Female/Female.dae"
-source_md5="07d87519852e237e3ec369f07217de2e"
-
 dest_files=[ "res://.import/Female.dae-f1ce84b62e3c497846373bc255288d93.scn" ]
-dest_md5="79c6d6c78525235b7ef2b261ace88e91"
 
 [params]
 

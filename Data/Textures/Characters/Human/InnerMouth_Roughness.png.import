@@ -8,10 +8,7 @@ path.etc2="res://.import/InnerMouth_Roughness.png-12a60a812cfd68889c0dbeaf361046
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/InnerMouth_Roughness.png"
-source_md5="55ac0e57b0bde2c8c650f5dd6d949ba1"
-
 dest_files=[ "res://.import/InnerMouth_Roughness.png-12a60a812cfd68889c0dbeaf3610468e.s3tc.stex", "res://.import/InnerMouth_Roughness.png-12a60a812cfd68889c0dbeaf3610468e.etc2.stex" ]
-dest_md5="2fcac14bb4f651d12a0de39a8843e355"
 
 [params]
 

@@ -8,10 +8,7 @@ path.etc2="res://.import/ponytail01_diffuse GS.png-18faa96f9a92bd5e45dda90102609
 [deps]
 
 source_file="res://Data/Textures/Hairs/Human/Female/ponytail01_diffuse GS.png"
-source_md5="93a8e84f68a4dfeaad052a18bce5c193"
-
 dest_files=[ "res://.import/ponytail01_diffuse GS.png-18faa96f9a92bd5e45dda901026097c8.s3tc.stex", "res://.import/ponytail01_diffuse GS.png-18faa96f9a92bd5e45dda901026097c8.etc2.stex" ]
-dest_md5="785fe9042d2754d1d56cd487af89c09e"
 
 [params]
 

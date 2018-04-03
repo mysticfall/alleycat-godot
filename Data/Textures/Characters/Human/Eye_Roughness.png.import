@@ -8,10 +8,7 @@ path.etc2="res://.import/Eye_Roughness.png-f00ffd951c6d9f84f139755fa9c7247c.etc2
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Eye_Roughness.png"
-source_md5="6a82555eef70f27010f200fc95d923ef"
-
 dest_files=[ "res://.import/Eye_Roughness.png-f00ffd951c6d9f84f139755fa9c7247c.s3tc.stex", "res://.import/Eye_Roughness.png-f00ffd951c6d9f84f139755fa9c7247c.etc2.stex" ]
-dest_md5="528efd3a19edd813fdddddf84b0678c3"
 
 [params]
 

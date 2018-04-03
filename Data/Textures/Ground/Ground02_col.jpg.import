@@ -8,10 +8,7 @@ path.etc2="res://.import/Ground02_col.jpg-ac8b80c7d8fb6f13f92e2cc4dde11733.etc2.
 [deps]
 
 source_file="res://Data/Textures/Ground/Ground02_col.jpg"
-source_md5="130c532f33a2f97824977600d0a7169a"
-
 dest_files=[ "res://.import/Ground02_col.jpg-ac8b80c7d8fb6f13f92e2cc4dde11733.s3tc.stex", "res://.import/Ground02_col.jpg-ac8b80c7d8fb6f13f92e2cc4dde11733.etc2.stex" ]
-dest_md5="a2182c06e800b9399e1e1d3830fa3c2f"
 
 [params]
 

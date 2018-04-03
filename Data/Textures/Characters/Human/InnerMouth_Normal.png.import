@@ -8,10 +8,7 @@ path.etc2="res://.import/InnerMouth_Normal.png-e575144e07b32afbd1940074c63221ef.
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/InnerMouth_Normal.png"
-source_md5="47bc251f54e45ff3a7486a05d008bbc2"
-
 dest_files=[ "res://.import/InnerMouth_Normal.png-e575144e07b32afbd1940074c63221ef.s3tc.stex", "res://.import/InnerMouth_Normal.png-e575144e07b32afbd1940074c63221ef.etc2.stex" ]
-dest_md5="5a6e2e60b5acfc64dad30acc7667643e"
 
 [params]
 

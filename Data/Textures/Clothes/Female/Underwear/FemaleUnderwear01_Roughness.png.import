@@ -8,10 +8,7 @@ path.etc2="res://.import/FemaleUnderwear01_Roughness.png-732f1ecaf1dc6198e8bc316
 [deps]
 
 source_file="res://Data/Textures/Clothes/Female/Underwear/FemaleUnderwear01_Roughness.png"
-source_md5="882b32bf1b8d1f9b808bf8ec63099b13"
-
 dest_files=[ "res://.import/FemaleUnderwear01_Roughness.png-732f1ecaf1dc6198e8bc316450c8d2a7.s3tc.stex", "res://.import/FemaleUnderwear01_Roughness.png-732f1ecaf1dc6198e8bc316450c8d2a7.etc2.stex" ]
-dest_md5="4990fa4e3d5ebd4c84e1b2978a5322da"
 
 [params]
 

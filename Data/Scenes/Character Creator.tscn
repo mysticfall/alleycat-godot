@@ -1,13 +1,14 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Source/AlleyCat/UI/Character/CameraControl.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=5]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
-[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanel.cs" type="Script" id=7]
-[ext_resource path="res://Data/UI/Character/MorphGroupPanel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/UI/Character/CameraControl.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanel.cs" type="Script" id=8]
+[ext_resource path="res://Data/UI/Character/MorphGroupPanel.tscn" type="PackedScene" id=9]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -82,6 +83,10 @@ _viewport = NodePath("UI/Viewport")
 _key = "Player"
 _displayName = "Player"
 
+[node name="Binding" type="Node" parent="Player" index="6"]
+
+script = ExtResource( 3 )
+
 [node name="Camera" type="Camera" parent="." index="1"]
 
 transform = Transform( -1, 0, -8.74227e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.999999, -3.38069e-07, 0.964255, -1.52218 )
@@ -101,7 +106,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Control" type="Node" parent="Camera" index="0"]
 
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 Active = true
 MinimumDistance = 0.2
 _target = NodePath("..")
@@ -110,11 +115,11 @@ _character = NodePath("../../Player")
 
 [node name="Movement" type="Node" parent="Camera/Control" index="0"]
 
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Value" type="Node" parent="Camera/Control/Movement" index="0"]
 
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -128,11 +133,11 @@ Maximum = 0.1
 [node name="Rotation" type="Node" parent="Camera/Control" index="1"]
 
 editor/display_folded = true
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Value" type="Node" parent="Camera/Control/Rotation" index="0"]
 
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -146,11 +151,11 @@ Maximum = 0.1
 [node name="Zoom" type="Node" parent="Camera/Control" index="2"]
 
 editor/display_folded = true
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Value" type="Node" parent="Camera/Control/Zoom" index="0"]
 
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -203,6 +208,7 @@ anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 6
 size_flags_horizontal = 1
@@ -217,14 +223,14 @@ anchor_right = 0.0
 anchor_bottom = 1.0
 margin_right = 340.0
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 _sections_unfolded = [ "Mouse", "Rect" ]
-_character = NodePath("../../Player")
-_groupPanelScene = ExtResource( 8 )
+_groupPanelScene = ExtResource( 9 )
 
 [node name="TabContainer" type="TabContainer" parent="UI/MorphsPanel" index="0"]
 
@@ -237,6 +243,7 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1

@@ -8,10 +8,7 @@ path.etc2="res://.import/Eye_Normal.png-9d5facb0f90ad544ec7692735141eb0b.etc2.st
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Eye_Normal.png"
-source_md5="40db90f568045f8ba4ae75f479440493"
-
 dest_files=[ "res://.import/Eye_Normal.png-9d5facb0f90ad544ec7692735141eb0b.s3tc.stex", "res://.import/Eye_Normal.png-9d5facb0f90ad544ec7692735141eb0b.etc2.stex" ]
-dest_md5="3338a464b3b0ad7aa6a6aa5bdd9db764"
 
 [params]
 

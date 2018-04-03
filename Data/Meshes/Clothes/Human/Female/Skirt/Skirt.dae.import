@@ -7,10 +7,7 @@ path="res://.import/Skirt.dae-0442b89dabb6145ab5dc085b042b5cd1.scn"
 [deps]
 
 source_file="res://Data/Meshes/Clothes/Human/Female/Skirt/Skirt.dae"
-source_md5="daf54d17ed169205f85694c766343ef6"
-
 dest_files=[ "res://.import/Skirt.dae-0442b89dabb6145ab5dc085b042b5cd1.scn" ]
-dest_md5="f809cb232dacc1e967fe1e055a56fd33"
 
 [params]
 

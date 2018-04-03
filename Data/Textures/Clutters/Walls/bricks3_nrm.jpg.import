@@ -8,10 +8,7 @@ path.etc2="res://.import/bricks3_nrm.jpg-128aa657a58e6862b8e9626f054e4b94.etc2.s
 [deps]
 
 source_file="res://Data/Textures/Clutters/Walls/bricks3_nrm.jpg"
-source_md5="37a89894bf13bf7ee8cba80a48c420aa"
-
 dest_files=[ "res://.import/bricks3_nrm.jpg-128aa657a58e6862b8e9626f054e4b94.s3tc.stex", "res://.import/bricks3_nrm.jpg-128aa657a58e6862b8e9626f054e4b94.etc2.stex" ]
-dest_md5="5f1ca4f940b8ded9deee83137452f866"
 
 [params]
 

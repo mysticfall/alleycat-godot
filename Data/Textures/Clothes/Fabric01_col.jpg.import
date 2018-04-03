@@ -8,10 +8,7 @@ path.etc2="res://.import/Fabric01_col.jpg-7c442a4a851ada2e2d65a86843c4679e.etc2.
 [deps]
 
 source_file="res://Data/Textures/Clothes/Fabric01_col.jpg"
-source_md5="5caa8c958b3254f44567c5f40a62f425"
-
 dest_files=[ "res://.import/Fabric01_col.jpg-7c442a4a851ada2e2d65a86843c4679e.s3tc.stex", "res://.import/Fabric01_col.jpg-7c442a4a851ada2e2d65a86843c4679e.etc2.stex" ]
-dest_md5="2b422d9f3ac912c8ae5946a64a4b84e6"
 
 [params]
 

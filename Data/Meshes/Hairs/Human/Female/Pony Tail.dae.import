@@ -7,10 +7,7 @@ path="res://.import/Pony Tail.dae-ca2f066133688417adec5b2128854289.scn"
 [deps]
 
 source_file="res://Data/Meshes/Hairs/Human/Female/Pony Tail.dae"
-source_md5="2a34e7d3d6c80c38b00d82f3b065a348"
-
 dest_files=[ "res://.import/Pony Tail.dae-ca2f066133688417adec5b2128854289.scn" ]
-dest_md5="8a0a6261708da695cc966a8127e7dc7e"
 
 [params]
 

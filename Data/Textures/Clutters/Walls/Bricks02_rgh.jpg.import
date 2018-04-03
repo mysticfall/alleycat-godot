@@ -7,10 +7,7 @@ path="res://.import/Bricks02_rgh.jpg-78b38219d8fdcdad589348b9c07d075a.stex"
 [deps]
 
 source_file="res://Data/Textures/Clutters/Walls/Bricks02_rgh.jpg"
-source_md5="be56c1334accceb6f5537e12dcef1ec8"
-
 dest_files=[ "res://.import/Bricks02_rgh.jpg-78b38219d8fdcdad589348b9c07d075a.stex" ]
-dest_md5="2d097b66a2c9227e3844308e0965ae1e"
 
 [params]
 

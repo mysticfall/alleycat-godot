@@ -8,10 +8,7 @@ path.etc2="res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.etc2.s
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Eye Overlay.png"
-source_md5="76b009394a0e81940fb132bcbe5231f3"
-
 dest_files=[ "res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.s3tc.stex", "res://.import/Eye Overlay.png-175421eee84a4ce7ba6a846e74a5c1d3.etc2.stex" ]
-dest_md5="942eebaf9f98d4dc4af618de9080907c"
 
 [params]
 

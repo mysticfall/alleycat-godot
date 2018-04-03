@@ -7,10 +7,7 @@ path="res://.import/Ground.dae-c9f766c18d2c1247b1bc6a1a8b3d94cd.scn"
 [deps]
 
 source_file="res://Data/Meshes/Ground/Ground.dae"
-source_md5="e9a1d74e3b3910c374eba428981fc78d"
-
 dest_files=[ "res://.import/Ground.dae-c9f766c18d2c1247b1bc6a1a8b3d94cd.scn" ]
-dest_md5="0aa3fc3666f0058af813d72aa8c9989c"
 
 [params]
 

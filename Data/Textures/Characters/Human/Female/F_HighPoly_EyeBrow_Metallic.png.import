@@ -7,10 +7,7 @@ path="res://.import/F_HighPoly_EyeBrow_Metallic.png-c1c903c60e5223fefd6437d9d5c7
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Female/F_HighPoly_EyeBrow_Metallic.png"
-source_md5="b0649e0264f5306ad709d3cfc9c490a3"
-
 dest_files=[ "res://.import/F_HighPoly_EyeBrow_Metallic.png-c1c903c60e5223fefd6437d9d5c74391.stex" ]
-dest_md5="c529bfe49a4170c25b0b6084f0b7e492"
 
 [params]
 

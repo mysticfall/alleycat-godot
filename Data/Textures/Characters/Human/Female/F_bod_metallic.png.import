@@ -8,10 +8,7 @@ path.etc2="res://.import/F_bod_metallic.png-b524927784f9aa4d25bbffe0133d012f.etc
 [deps]
 
 source_file="res://Data/Textures/Characters/Human/Female/F_bod_metallic.png"
-source_md5="7a472f23d885df1f797601c754bc5838"
-
 dest_files=[ "res://.import/F_bod_metallic.png-b524927784f9aa4d25bbffe0133d012f.s3tc.stex", "res://.import/F_bod_metallic.png-b524927784f9aa4d25bbffe0133d012f.etc2.stex" ]
-dest_md5="d3d383571450c9269942ddfe3ea0416f"
 
 [params]
 

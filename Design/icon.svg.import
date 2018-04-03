@@ -7,10 +7,7 @@ path="res://.import/icon.svg-7e2dcf014ef549f3197d173b4990dee1.stex"
 [deps]
 
 source_file="res://Design/icon.svg"
-source_md5="4de6a1a89a9d172fecd2c5e38fe758ef"
-
 dest_files=[ "res://.import/icon.svg-7e2dcf014ef549f3197d173b4990dee1.stex" ]
-dest_md5="9bcb2d9fa82fcac5f9eb56dea8fb9fdf"
 
 [params]
 

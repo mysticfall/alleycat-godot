@@ -7,10 +7,7 @@ path="res://.import/Tank Top.dae-8c5dfb3951712fc2e8b1097f93d7b28f.scn"
 [deps]
 
 source_file="res://Data/Meshes/Clothes/Human/Female/Tank Top/Tank Top.dae"
-source_md5="7f1a98d61fe2d6296e589c07b617b00f"
-
 dest_files=[ "res://.import/Tank Top.dae-8c5dfb3951712fc2e8b1097f93d7b28f.scn" ]
-dest_md5="f5ed5ccd90a64dabea0b28fcd82e042b"
 
 [params]
 

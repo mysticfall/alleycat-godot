@@ -8,10 +8,7 @@ path.etc2="res://.import/FemaleUnderwear01_Albedo.png-093824fddcfd3f9ff0d7e92c0e
 [deps]
 
 source_file="res://Data/Textures/Clothes/Female/Underwear/FemaleUnderwear01_Albedo.png"
-source_md5="8110d7b8a88dbc4f95e4f2202df6f838"
-
 dest_files=[ "res://.import/FemaleUnderwear01_Albedo.png-093824fddcfd3f9ff0d7e92c0e9c4c0d.s3tc.stex", "res://.import/FemaleUnderwear01_Albedo.png-093824fddcfd3f9ff0d7e92c0e9c4c0d.etc2.stex" ]
-dest_md5="e1ad6783eff922c4fa834116545d4863"
 
 [params]
 
