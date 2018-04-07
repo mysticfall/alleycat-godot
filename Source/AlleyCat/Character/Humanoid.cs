@@ -7,6 +7,7 @@ using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
 
@@ -14,7 +15,11 @@ namespace AlleyCat.Character
 {
     public class Humanoid : Character<IPairedEyeSight, ILocomotion>, IHumanoid
     {
-        public new IMorphableRace Race => (IMorphableRace) base.Race;
+        public override IRace Race => RaceRegistry?[_race];
+
+        IMorphableRace IMorphableCharacter.Race => (IMorphableRace) Race;
+
+        public override Sex Sex => _sex;
 
         public IMorphSet Morphs => _morphSet.Value;
 
@@ -22,9 +27,13 @@ namespace AlleyCat.Character
 
         private readonly IReactiveProperty<IMorphSet> _morphSet = new ReactiveProperty<IMorphSet>();
 
-        public void SwitchRace(Sex sex) => Switch(Race, sex);
+        [Export, UsedImplicitly] private string _race;
 
-        public void SwitchSex(string race) => Switch(race, Sex);
+        [Export, UsedImplicitly] private Sex _sex;
+
+        public void SwitchRace(Sex sex) => Switch(_race, sex);
+
+        public void SwitchSex(string race) => Switch(race, _sex);
 
         protected void Switch(string race, Sex sex)
         {
@@ -41,6 +50,9 @@ namespace AlleyCat.Character
         {
             Ensure.Any.IsNotNull(race, nameof(race));
 
+            _sex = sex;
+            _race = race.Key;
+
             var groups = race.GetMorphGroups(sex).ToList();
             var morphs = groups.SelectMany(g => g.ToList()).Select(d => d.CreateMorph(this));
 
@@ -51,7 +63,7 @@ namespace AlleyCat.Character
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            Switch(Race, Sex);
+            Switch(_race, _sex);
         }
     }
 }

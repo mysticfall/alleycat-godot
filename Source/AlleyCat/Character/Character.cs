@@ -19,9 +19,9 @@ namespace AlleyCat.Character
 
         public virtual string DisplayName => _displayName;
 
-        public virtual IRace Race => RaceRegistry?[_race];
+        public abstract IRace Race { get; }
 
-        public virtual Sex Sex => _sex;
+        public abstract Sex Sex { get; }
 
         [Service]
         public TVision Vision { get; private set; }
@@ -35,7 +35,7 @@ namespace AlleyCat.Character
         [Service]
         public Skeleton Skeleton { get; private set; }
 
-        public Spatial Spatial => Skeleton;
+        public Spatial Spatial => this;
 
         public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();
 
@@ -51,10 +51,6 @@ namespace AlleyCat.Character
         [Export, UsedImplicitly] private string _key;
 
         [Export, UsedImplicitly] private string _displayName;
-
-        [Export, UsedImplicitly] private string _race;
-
-        [Export, UsedImplicitly] private Sex _sex;
 
         public override void _Ready()
         {
