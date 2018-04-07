@@ -14,12 +14,17 @@ namespace AlleyCat.Autowire
         {
             Ensure.Any.IsNotNull(type, nameof(type));
 
-            return type
-                .GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            var declared = type
+                .GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
+                            BindingFlags.DeclaredOnly)
                 .Where(m => (m.MemberType & (MemberTypes.Property | MemberTypes.Field)) != 0)
                 .Select(m => (m, m.GetCustomAttribute<T>()))
                 .Where((t, _) => t.Item2 != null)
                 .Select(t => CreateProcessor(t.Item1, t.Item2));
+
+            var parent = type.BaseType;
+
+            return parent == null ? declared : declared.Concat(Create(parent));
         }
 
         [NotNull]
