@@ -13,15 +13,16 @@ namespace AlleyCat.Setting
     {
         public IEnumerable<Type> ProvidedTypes => new[] {typeof(IConfiguration)};
 
-        [Service(false)] private IEnumerable<ISettingsProvider> _providers;
+        [Service(false)]
+        protected IEnumerable<ISettingsProvider> Providers { get; private set; }
 
         public void AddServices(IServiceCollection collection)
         {
             var builder = CreateBuilder();
 
-            if (_providers != null)
+            if (Providers != null)
             {
-                foreach (var provider in _providers)
+                foreach (var provider in Providers)
                 {
                     provider.AddSettings(builder);
                 }
@@ -32,18 +33,21 @@ namespace AlleyCat.Setting
             collection
                 .AddOptions()
                 .AddSingleton<IConfiguration>(configuration);
+
+            if (Providers == null) return;
+
+            foreach (var provider in Providers)
+            {
+                provider.BindSettings(configuration, collection);
+            }
         }
 
         [NotNull]
         protected virtual IConfigurationBuilder CreateBuilder()
         {
-            var builder = new ConfigurationBuilder();
-
-            builder
+            return new ConfigurationBuilder()
                 .SetFileProvider(new FileProvider())
                 .SetFileLoadExceptionHandler(OnError);
-
-            return builder;
         }
 
         protected virtual void OnError([NotNull] FileLoadExceptionContext context)

@@ -202,11 +202,17 @@
     <Compile Include="Source\AlleyCat\Sensor\ISeeing.cs" />
     <Compile Include="Source\AlleyCat\Sensor\ISense.cs" />
     <Compile Include="Source\AlleyCat\Sensor\IVision.cs" />
+    <Compile Include="Source\AlleyCat\Setting\ConfigurationHelper.cs" />
     <Compile Include="Source\AlleyCat\Setting\IniSettingsProvider.cs" />
     <Compile Include="Source\AlleyCat\Setting\ISettings.cs" />
     <Compile Include="Source\AlleyCat\Setting\ISettingsProvider.cs" />
     <Compile Include="Source\AlleyCat\Setting\IWritableConfigurationProvider.cs" />
     <Compile Include="Source\AlleyCat\Setting\JsonSettingsProvider.cs" />
+    <Compile Include="Source\AlleyCat\Setting\Project\IProjectSettings.cs" />
+    <Compile Include="Source\AlleyCat\Setting\Project\PhysicsSettings.cs" />
+    <Compile Include="Source\AlleyCat\Setting\Project\ProjectSettingsConfigurationProvider.cs" />
+    <Compile Include="Source\AlleyCat\Setting\Project\ProjectSettingsProvider.cs" />
+    <Compile Include="Source\AlleyCat\Setting\SettingsAttribute.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CameraControl.cs" />

@@ -3,6 +3,7 @@ using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Setting
 {
@@ -23,6 +24,10 @@ namespace AlleyCat.Setting
             Ensure.String.IsNotNullOrWhiteSpace(File, nameof(File));
 
             AddSettings(builder, File, Optional, ReloadOnChange);
+        }
+
+        public virtual void BindSettings(IConfigurationRoot root, IServiceCollection collection)
+        {
         }
 
         protected abstract void AddSettings(

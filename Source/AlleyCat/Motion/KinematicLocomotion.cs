@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Setting.Project;
 using Godot;
+using Microsoft.Extensions.Options;
 
 namespace AlleyCat.Motion
 {
@@ -15,14 +18,17 @@ namespace AlleyCat.Motion
         [Export]
         public bool ApplyGravity { get; set; } = true;
 
+        public Physics3DSettings Physics3DSettings => _settings?.Value;
+
         protected override ProcessMode ProcessMode { get; } = ProcessMode.Physics;
 
-        public override void _Ready()
-        {
-            base._Ready();
+        [Service] private IOptions<Physics3DSettings> _settings;
 
-            Gravity = (float) ProjectSettings.GetSetting("physics/3d/default_gravity");
-            GravityVector = (Vector3) ProjectSettings.GetSetting("physics/3d/default_gravity_vector");
+        [PostConstruct]
+        protected virtual void OnInitialze()
+        {
+            Gravity = Physics3DSettings.DefaultGravity;
+            GravityVector = Physics3DSettings.DefaultGravityVector;
 
             FallDuration = 0;
         }
