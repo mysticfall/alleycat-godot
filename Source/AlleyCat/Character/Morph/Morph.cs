@@ -23,6 +23,12 @@ namespace AlleyCat.Character.Morph
             set => _value.Value = value;
         }
 
+        object IMorph.Value
+        {
+            get => _value.Value;
+            set => _value.Value = (TVal) value;
+        }
+
         public IObservable<TVal> OnChange => _value;
 
         IObservable<object> IMorph.OnChange => _value.Select(v => (object) v);
@@ -37,6 +43,8 @@ namespace AlleyCat.Character.Morph
 
             _value = new ReactiveProperty<TVal>(Definition.Default);
         }
+
+        public void Reset() => Value = Definition.Default;
 
         public void Dispose()
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.IO;
 using EnsureThat;
 using JetBrains.Annotations;
 
@@ -12,6 +13,8 @@ namespace AlleyCat.Character.Morph
     [Singleton(typeof(IMorphSet))]
     public class MorphSet : IMorphSet
     {
+        public string Key => "Morphs";
+
         public IEnumerable<IMorphGroup> Groups { get; }
 
         public IObservable<IMorph> OnMorph { get; }
@@ -50,6 +53,30 @@ namespace AlleyCat.Character.Morph
                 Ensure.Any.IsNotNull(key, nameof(key));
 
                 return _morphs[key];
+            }
+        }
+
+        public virtual void SaveState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            this.ToList().ForEach(m => state[m.Key] = m.Value);
+        }
+
+        public virtual void RestoreState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            foreach (var morph in this)
+            {
+                if (state.ContainsKey(morph.Key))
+                {
+                    morph.Value = state[morph.Key];
+                }
+                else
+                {
+                    morph.Reset();
+                }
             }
         }
 

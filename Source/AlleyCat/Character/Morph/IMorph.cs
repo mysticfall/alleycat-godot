@@ -8,13 +8,17 @@ namespace AlleyCat.Character.Morph
         IMorphDefinition Definition { get; }
 
         IObservable<object> OnChange { get; }
+
+        object Value { get; set; }
+
+        void Reset();
     }
 
     namespace Generic
     {
         public interface IMorph<TVal, out TDef> : IMorph where TDef : IMorphDefinition
         {
-            TVal Value { get; set; }
+            new TVal Value { get; set; }
 
             new TDef Definition { get; }
 

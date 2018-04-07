@@ -3,8 +3,10 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
+using AlleyCat.IO;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
@@ -57,6 +59,33 @@ namespace AlleyCat.Character
             base._Ready();
 
             this.Autowire();
+        }
+
+        public virtual void SaveState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            var transform = state.GetSection("Transform");
+
+            transform["Translation"] = Translation;
+            transform["Rotation"] = Rotation;
+        }
+
+        public virtual void RestoreState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            var transform = state.GetSection("Transform");
+
+            if (transform.ContainsKey("Translation"))
+            {
+                Translation = (Vector3) transform["Translation"];
+            }
+
+            if (transform.ContainsKey("Rotation"))
+            {
+                Rotation = (Vector3) transform["Rotation"];
+            }
         }
     }
 }

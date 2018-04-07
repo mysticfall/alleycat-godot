@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Character
 {
-    public interface ICharacter : INamed, IMeshObject, IRigged, ILocomotive, ISeeing
+    public interface ICharacter : IEntity, IMeshObject, IRigged, ILocomotive, ISeeing
     {
         [CanBeNull]
         IRace Race { get; }

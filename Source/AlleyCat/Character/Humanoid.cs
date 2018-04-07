@@ -4,6 +4,7 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Event;
+using AlleyCat.IO;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
@@ -64,6 +65,49 @@ namespace AlleyCat.Character
         protected virtual void OnInitialize()
         {
             Switch(_race, _sex);
+        }
+
+        public override void SaveState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            state["Sex"] = _sex;
+            state["Race"] = _race;
+
+            var transform = state.GetSection("Transform");
+
+            transform["Translation"] = Translation;
+            transform["Rotation"] = Rotation;
+
+            var morphs = state.GetSection(Morphs.Key);
+
+            Morphs.SaveState(morphs);
+        }
+
+        public override void RestoreState(IState state)
+        {
+            Ensure.Any.IsNotNull(state, nameof(state));
+
+            var transform = state.GetSection("Transform");
+
+            if (transform.ContainsKey("Translation"))
+            {
+                Translation = (Vector3) transform["Translation"];
+            }
+
+            if (transform.ContainsKey("Rotation"))
+            {
+                Rotation = (Vector3) transform["Rotation"];
+            }
+
+            Switch(
+                state.ContainsKey("Race") ? (string) state["Race"] : _race,
+                state.ContainsKey("Sex") ? (Sex) state["Sex"] : _sex
+            );
+
+            var morphs = state.GetSection(Morphs.Key);
+
+            Morphs.RestoreState(morphs);
         }
     }
 }

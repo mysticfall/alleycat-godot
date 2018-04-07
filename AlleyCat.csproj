@@ -137,6 +137,7 @@
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectory.cs" />
+    <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />
@@ -176,12 +177,15 @@
     <Compile Include="Source\AlleyCat\Event\ObservableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
+    <Compile Include="Source\AlleyCat\IO\DictionaryState.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryContents.cs" />
     <Compile Include="Source\AlleyCat\IO\FileEnumerator.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryInfo.cs" />
     <Compile Include="Source\AlleyCat\IO\FileInfo.cs" />
     <Compile Include="Source\AlleyCat\IO\FileProvider.cs" />
     <Compile Include="Source\AlleyCat\IO\FileStream.cs" />
+    <Compile Include="Source\AlleyCat\IO\IState.cs" />
+    <Compile Include="Source\AlleyCat\IO\IStateHolder.cs" />
     <Compile Include="Source\AlleyCat\IO\IWritableFileInfo.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\ILocomotion.cs" />
