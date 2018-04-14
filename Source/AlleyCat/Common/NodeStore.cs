@@ -56,7 +56,7 @@ namespace AlleyCat.Common
 
         protected override void Dispose(bool disposing)
         {
-            _store.Clear();
+            _store?.Clear();
 
             base.Dispose(disposing);
         }

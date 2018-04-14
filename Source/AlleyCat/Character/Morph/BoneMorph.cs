@@ -67,9 +67,9 @@ namespace AlleyCat.Character.Morph
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
+            AnimationPlayer?.Processors.Remove(this);
 
-            AnimationPlayer.Processors.Remove(this);
+            base.Dispose(disposing);
         }
     }
 }

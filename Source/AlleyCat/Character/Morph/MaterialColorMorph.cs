@@ -34,9 +34,9 @@ namespace AlleyCat.Character.Morph
 
         protected override void Dispose(bool disposing)
         {
+            _disposable?.Dispose();
+           
             base.Dispose(disposing);
-
-            _disposable.Dispose();
         }
     }
 }

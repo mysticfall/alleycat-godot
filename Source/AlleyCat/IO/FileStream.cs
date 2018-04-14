@@ -118,12 +118,12 @@ namespace AlleyCat.IO
 
         protected override void Dispose(bool disposing)
         {
-            if (_file.IsOpen())
+            if (_file != null && _file.IsOpen())
             {
                 _file.Close();
             }
 
-            _file.Dispose();
+            _file?.Dispose();
 
             _closed = true;
 

@@ -88,9 +88,11 @@ namespace AlleyCat.Character.Morph
 
         protected virtual void Dispose(bool disposing)
         {
-            foreach (var morph in this)
+            if (_morphs == null) return;
+
+            foreach (var morph in _morphs.Values)
             {
-                morph.Dispose();
+                morph?.Dispose();
             }
         }
     }

@@ -181,9 +181,9 @@ namespace AlleyCat.Control
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
+            _perspective?.Dispose();
 
-            _perspective.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

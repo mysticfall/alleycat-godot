@@ -54,7 +54,7 @@ namespace AlleyCat.Character.Morph
 
         protected virtual void Dispose(bool disposing)
         {
-            _value.Dispose();
+            _value?.Dispose();
         }
     }
 }
