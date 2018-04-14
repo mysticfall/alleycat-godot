@@ -61,13 +61,13 @@ namespace AlleyCat.Motion
 
         [Export, UsedImplicitly] private NodePath _target = "..";
 
-        public virtual float MaximumPitch => Mathf.PI / 2f;
+        public virtual float MaximumPitch => Mathf.Pi / 2f;
 
-        public virtual float MinimumPitch => -Mathf.PI / 2f;
+        public virtual float MinimumPitch => -Mathf.Pi / 2f;
 
-        public virtual float MaximumYaw => Mathf.PI;
+        public virtual float MaximumYaw => Mathf.Pi;
 
-        public virtual float MinimumYaw => -Mathf.PI;
+        public virtual float MinimumYaw => -Mathf.Pi;
 
         private float _pitch;
 
@@ -94,9 +94,9 @@ namespace AlleyCat.Motion
         {
             var value = angle;
 
-            while (value < 0) value += 2 * Mathf.PI;
+            while (value < 0) value += 2 * Mathf.Pi;
 
-            return value > Mathf.PI ? value - 2 * Mathf.PI : value;
+            return value > Mathf.Pi ? value - 2 * Mathf.Pi : value;
         }
     }
 }
