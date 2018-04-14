@@ -3,7 +3,7 @@
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Female.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/UI/Character/CameraControl.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/InspectingViewControl.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
@@ -111,10 +111,10 @@ Active = true
 MinimumDistance = 0.2
 _target = NodePath("..")
 ControlModifier = "point"
-_character = NodePath("../../Player")
+_pivot = NodePath("../../Player")
 
 [node name="Movement" type="Node" parent="Camera/Control" index="0"]
-
+editor/display_folded = true
 script = ExtResource( 5 )
 
 [node name="Value" type="Node" parent="Camera/Control/Movement" index="0"]
@@ -166,6 +166,9 @@ WindowShift = 15.0
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
+
+[node name="Binding" type="Node" parent="Camera/Control" index="3"]
+script = ExtResource( 3 )
 
 [node name="Ground" type="MeshInstance" parent="." index="2"]
 
@@ -250,6 +253,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 tab_align = 0
 tabs_visible = true
+drag_to_rearrange_enabled = false
 _sections_unfolded = [ "Margin", "Mouse", "Rect" ]
 
 

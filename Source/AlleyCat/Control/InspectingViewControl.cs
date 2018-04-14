@@ -1,21 +1,18 @@
 using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.Control;
 using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
 
-namespace AlleyCat.UI.Character
+namespace AlleyCat.Control
 {
-    [Singleton(typeof(CameraControl))]
-    public class CameraControl : Orbiter
+    public class InspectingViewControl : Orbiter
     {
         [Node]
-        public IHumanoid Character { get; set; }
+        public ITransformable Pivot { get; set; }
 
         [Node]
         public InputBindings Movement { get; private set; }
@@ -28,39 +25,45 @@ namespace AlleyCat.UI.Character
 
         [Export] public string ControlModifier = "point";
 
-        public override Vector3 Origin => _pivot;
+        public override Vector3 Origin => _origin;
 
         public override Vector3 Up => Axis.Up;
 
         public override Vector3 Forward =>
-            new Plane(Axis.Up, 0f).Project(Character.GlobalTransform().Forward());
+            new Plane(Axis.Up, 0f).Project(Pivot.GlobalTransform().Backward());
 
-        [Export, UsedImplicitly] private NodePath _character = "..";
+        [Export, UsedImplicitly] private NodePath _pivot = "../..";
 
-        private Vector3 _pivot;
+        private Vector3 _origin;
 
         private bool _modifierPressed;
 
         [PostConstruct]
         private void OnInitialize()
         {
-            var fov = (Target as Camera)?.Fov ?? 70f;
+            if (Pivot is IBounded bounded)
+            {
+                var bounds = bounded.Bounds;
 
-            var bounds = Character.Bounds;
-            var height = bounds.GetLongestAxisSize();
+                var fov = (Target as Camera)?.Fov ?? 70f;
+                var height = bounds.GetLongestAxisSize();
 
-            var distance = height / 2f / Math.Tan(Mathf.Deg2Rad(fov / 2f));
+                var distance = height / 2f / Math.Tan(Mathf.Deg2Rad(fov / 2f));
 
-            _pivot = (bounds.Position + bounds.End) / 2f;
+                _origin = (bounds.Position + bounds.End) / 2f;
 
-            Distance = (float) distance + 0.2f;
-            Yaw = 180;
+                Distance = (float) distance + 0.2f;
+            }
+            else
+            {
+                _origin = Pivot.Spatial.GlobalTransform.origin;
+            }
 
             Movement
                 .GetAxis()
                 .Where(_ => Active && _modifierPressed)
                 .Select(v => v * 0.03f)
-                .Subscribe(v => _pivot.y += v)
+                .Subscribe(v => _origin.y += v)
                 .AddTo(this);
 
             Rotation

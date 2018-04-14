@@ -2,6 +2,7 @@ using System;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using Godot;
 using JetBrains.Annotations;
 
@@ -17,7 +18,7 @@ namespace AlleyCat.UI.Character
         protected MorphListPanel MorphListPanel { get; private set; }
 
         [Service]
-        protected CameraControl CameraControl { get; private set; }
+        protected InspectingViewControl ViewControl { get; private set; }
 
         [Node]
         protected Godot.Control Viewport { get; private set; }
@@ -29,11 +30,11 @@ namespace AlleyCat.UI.Character
         {
             Viewport
                 .OnMouseEnter()
-                .Subscribe(_ => CameraControl.Active = true)
+                .Subscribe(_ => ViewControl.Active = true)
                 .AddTo(this);
             Viewport
                 .OnMouseExit()
-                .Subscribe(_ => CameraControl.Active = false)
+                .Subscribe(_ => ViewControl.Active = false)
                 .AddTo(this);
         }
     }

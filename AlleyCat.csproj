@@ -159,6 +159,7 @@
     <Compile Include="Source\AlleyCat\Common\VectorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\InspectingViewControl.cs" />
     <Compile Include="Source\AlleyCat\Control\FreeViewControl.cs" />
     <Compile Include="Source\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
@@ -219,7 +220,6 @@
     <Compile Include="Source\AlleyCat\Setting\SettingsAttribute.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
-    <Compile Include="Source\AlleyCat\UI\Character\CameraControl.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CharacterCreator.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\ColorMorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
