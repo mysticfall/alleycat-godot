@@ -5,7 +5,6 @@ using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using static AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
 {
@@ -89,7 +88,7 @@ namespace AlleyCat.Motion
             Debug.Assert(Target != null, "Target != null");
 
             Target.GlobalTransform = rotation * Target.GlobalTransform;
-            Target.RotateObjectLocal(Up, rotationalVelocity.y);
+            Target.RotateObjectLocal(Vector3.Up, rotationalVelocity.y);
 
             return _offset.origin / delta;
         }

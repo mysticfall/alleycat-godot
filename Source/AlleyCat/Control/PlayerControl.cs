@@ -77,11 +77,11 @@ namespace AlleyCat.Control
 
         public override Vector3 Origin => Character.Vision.Head.origin;
 
-        public override Vector3 Up => Perspective == ThirdPerson ? Axis.Up : Character.Vision.Head.Up();
+        public override Vector3 Up => Perspective == ThirdPerson ? Vector3.Up : Character.Vision.Head.Up();
 
         public override Vector3 Forward =>
             Perspective == ThirdPerson
-                ? new Plane(Axis.Up, 0f).Project(Character.GlobalTransform().Forward())
+                ? new Plane(Vector3.Up, 0f).Project(Character.GlobalTransform().Forward())
                 : Character.Vision.Forward;
 
         protected override Transform TargetTransform
@@ -168,14 +168,14 @@ namespace AlleyCat.Control
 
             if (Character.Locomotion.Velocity.LengthSquared() < 0.1f)
             {
-                Character.Locomotion.Rotate(Axis.Zero);
+                Character.Locomotion.Rotate(Vector3.Zero);
 
                 return;
             }
 
             var offset = Mathf.Lerp(0, Yaw, delta * 1.5f);
 
-            Character.Locomotion.Rotate(Axis.Up * offset);
+            Character.Locomotion.Rotate(Vector3.Up * offset);
             Yaw -= offset;
         }
 

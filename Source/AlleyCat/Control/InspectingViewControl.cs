@@ -27,10 +27,10 @@ namespace AlleyCat.Control
 
         public override Vector3 Origin => _origin;
 
-        public override Vector3 Up => Axis.Up;
+        public override Vector3 Up => Vector3.Up;
 
         public override Vector3 Forward =>
-            new Plane(Axis.Up, 0f).Project(Pivot.GlobalTransform().Backward());
+            new Plane(Vector3.Up, 0f).Project(Pivot.GlobalTransform().Backward());
 
         [Export, UsedImplicitly] private NodePath _pivot = "../..";
 
