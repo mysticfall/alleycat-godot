@@ -17,9 +17,9 @@ namespace AlleyCat.Control
 
         public override Spatial Target => Camera;
 
-        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Active);
+        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Active && Valid);
 
-        protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Active);
+        protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _camera = "..";
 

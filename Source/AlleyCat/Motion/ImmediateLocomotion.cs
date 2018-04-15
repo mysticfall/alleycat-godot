@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Godot;
 
 namespace AlleyCat.Motion
@@ -9,8 +8,6 @@ namespace AlleyCat.Motion
         {
             var axis = rotationalVelocity.Normalized();
             var rotation = rotationalVelocity.Length() * delta;
-
-            Debug.Assert(Target != null, "Target != null");
 
             Target.RotateObjectLocal(axis, rotation);
             Target.TranslateObjectLocal(velocity * delta);

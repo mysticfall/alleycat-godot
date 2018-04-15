@@ -25,7 +25,9 @@ namespace AlleyCat.Control
         [Export]
         public PlayerPerspective InitialPerspective { get; set; } = ThirdPerson;
 
-        public IObservable<PlayerPerspective> OnPerspectiveChange => _perspective.Where(v => Active);
+        public IObservable<PlayerPerspective> OnPerspectiveChange => _perspective.Where(v => Active && Valid);
+
+        public override bool Valid => base.Valid && Character != null;
 
         [Export]
         public float FirstPersonOffset { get; set; } = 0.2f;
@@ -82,7 +84,7 @@ namespace AlleyCat.Control
             }
         }
 
-        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active);
+        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _character = "..";
 

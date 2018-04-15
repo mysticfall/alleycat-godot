@@ -3,7 +3,7 @@ using Godot;
 
 namespace AlleyCat.Motion
 {
-    public interface ILocomotion : IActivatable
+    public interface ILocomotion : IActivatable, IValidatable
     {
         Vector3 Velocity { get; }
 

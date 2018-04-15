@@ -13,6 +13,8 @@ namespace AlleyCat.Motion
         [Export]
         public bool Active { get; set; } = true;
 
+        public virtual bool Valid => Target != null;
+
         public abstract Spatial Target { get; }
 
         public abstract Vector3 Origin { get; }
@@ -53,9 +55,9 @@ namespace AlleyCat.Motion
             }
         }
 
-        public IObservable<Vector2> OnRotationChange => _rotation.Where(v => Active);
+        public IObservable<Vector2> OnRotationChange => _rotation.Where(v => Active && Valid);
 
-        public IObservable<float> OnDistanceChange => _distance.Where(v => Active);
+        public IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
 
         public virtual Range<float> PitchRange => new Range<float>(-Mathf.Pi / 2f, Mathf.Pi / 2f);
 

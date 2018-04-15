@@ -4,7 +4,7 @@ using Godot;
 
 namespace AlleyCat.Motion
 {
-    public interface IOrbiter : IDirectional
+    public interface IOrbiter : IDirectional, IActivatable, IValidatable
     {
         float Yaw { get; set; }
 

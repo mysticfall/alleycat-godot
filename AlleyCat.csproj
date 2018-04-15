@@ -142,6 +142,7 @@
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />
     <Compile Include="Source\AlleyCat\Common\ITransformable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\INodeProcessor.cs" />

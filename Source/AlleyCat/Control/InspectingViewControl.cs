@@ -43,7 +43,7 @@ namespace AlleyCat.Control
                 .Where(_ => _modifierPressed)
                 .Select(v => new Vector2(v * 4f, 0));
 
-        protected virtual IObservable<float> MovementInput => _movementInput.GetAxis();
+        protected virtual IObservable<float> MovementInput => _movementInput.GetAxis().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _pivot = "../..";
 
@@ -68,7 +68,7 @@ namespace AlleyCat.Control
             Input.SetMouseMode(Input.MouseMode.Visible);
 
             MovementInput
-                .Where(_ => Active && _modifierPressed)
+                .Where(_ => _modifierPressed)
                 .Select(v => v * 0.05f)
                 .Subscribe(v => _offset.y += v)
                 .AddTo(this);
