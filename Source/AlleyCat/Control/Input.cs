@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using AlleyCat.Control.Generic;
 using EnsureThat;
 using Godot;
@@ -36,7 +37,7 @@ namespace AlleyCat.Control
         {
             Ensure.Any.IsNotNull(observer, nameof(observer));
 
-            return _observable.Subscribe(observer);
+            return _observable.Where(v => Active).Subscribe(observer);
         }
 
         [NotNull]

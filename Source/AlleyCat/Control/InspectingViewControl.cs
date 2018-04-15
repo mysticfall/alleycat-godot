@@ -2,45 +2,85 @@ using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Motion;
+using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Control
 {
-    public class InspectingViewControl : Orbiter
+    public class InspectingViewControl : OrbitingViewControl
     {
         [Node]
-        public ITransformable Pivot { get; set; }
+        public ITransformable Pivot { get; private set; }
 
-        [Node]
-        public InputBindings Movement { get; private set; }
+        public override Vector3 Origin
+        {
+            get
+            {
+                if (Pivot is IBounded bounded)
+                {
+                    var bounds = bounded.Bounds;
 
-        [Node]
-        public InputBindings Rotation { get; private set; }
+                    return (bounds.Position + bounds.End) / 2f + _offset;
+                }
 
-        [Node]
-        public InputBindings Zoom { get; private set; }
+                return Pivot == null ? new Vector3() : Pivot.Spatial.GlobalTransform.origin + _offset;
+            }
+        }
 
-        [Export] public string ControlModifier = "point";
-
-        public override Vector3 Origin => _origin;
+        public override Range<float> DistanceRange => new Range<float>(_minDistance, _maxDistance);
 
         public override Vector3 Up => Vector3.Up;
 
-        public override Vector3 Forward =>
-            new Plane(Vector3.Up, 0f).Project(Pivot.GlobalTransform().Backward());
+        public override Vector3 Forward => Pivot == null
+            ? Vector3.Back
+            : new Plane(Vector3.Up, 0f).Project(Pivot.GlobalTransform().Backward());
+
+        protected override IObservable<Vector2> ViewInput =>
+            _viewInput
+                .GetAxis()
+                .Where(_ => _modifierPressed)
+                .Select(v => new Vector2(v * 4f, 0));
+
+        protected virtual IObservable<float> MovementInput => _movementInput.GetAxis();
 
         [Export, UsedImplicitly] private NodePath _pivot = "../..";
 
-        private Vector3 _origin;
+        [Export, UsedImplicitly] private float _minDistance = 0.2f;
+
+        [Export, UsedImplicitly] private float _maxDistance = 3f;
+
+        [Export, UsedImplicitly] private string _controlModifier = "point";
+
+        [Node("Rotation")] private InputBindings _viewInput;
+
+        [Node("Movement")] private InputBindings _movementInput;
+
+        private Vector3 _offset;
 
         private bool _modifierPressed;
 
-        [PostConstruct]
-        private void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
+            Input.SetMouseMode(Input.MouseMode.Visible);
+
+            MovementInput
+                .Where(_ => Active && _modifierPressed)
+                .Select(v => v * 0.05f)
+                .Subscribe(v => _offset.y += v)
+                .AddTo(this);
+
+            this.OnInput()
+                .Where(e => !e.IsEcho())
+                .Select(e =>
+                    e.IsActionPressed(_controlModifier) ||
+                    !e.IsActionReleased(_controlModifier) && _modifierPressed)
+                .Subscribe(v => _modifierPressed = v)
+                .AddTo(this);
+
             if (Pivot is IBounded bounded)
             {
                 var bounds = bounded.Bounds;
@@ -50,51 +90,10 @@ namespace AlleyCat.Control
 
                 var distance = height / 2f / Math.Tan(Mathf.Deg2Rad(fov / 2f));
 
-                _origin = (bounds.Position + bounds.End) / 2f;
-
                 Distance = (float) distance + 0.2f;
             }
-            else
-            {
-                _origin = Pivot.Spatial.GlobalTransform.origin;
-            }
 
-            Movement
-                .GetAxis()
-                .Where(_ => Active && _modifierPressed)
-                .Select(v => v * 0.03f)
-                .Subscribe(v => _origin.y += v)
-                .AddTo(this);
-
-            Rotation
-                .GetAxis()
-                .Where(_ => Active && _modifierPressed)
-                .Select(v => v * 0.15f)
-                .Select(v => new Vector2(v, 0))
-                .Subscribe(Rotate)
-                .AddTo(this);
-
-            Zoom
-                .GetAxis()
-                .Where(_ => Active)
-                .Subscribe(v => Distance -= v * 0.05f)
-                .AddTo(this);
-        }
-
-        public override void _Input(InputEvent @event)
-        {
-            base._Input(@event);
-
-            if (ControlModifier == null) return;
-
-            if (@event.IsActionPressed(ControlModifier))
-            {
-                _modifierPressed = true;
-            }
-            else if (@event.IsActionReleased(ControlModifier))
-            {
-                _modifierPressed = false;
-            }
+            Active = false;
         }
     }
 }

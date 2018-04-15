@@ -4,7 +4,6 @@ using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
-using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
@@ -12,68 +11,46 @@ using static AlleyCat.Control.PlayerPerspective;
 
 namespace AlleyCat.Control
 {
-    public class PlayerControl : Orbiter
+    public class PlayerControl : OrbitingViewControl
     {
         [Node]
-        public IHumanoid Character { get; set; }
+        public IHumanoid Character { get; private set; }
 
         public PlayerPerspective Perspective
         {
             get => _perspective.Value;
-            set
+            set => _perspective.Value = value;
+        }
+
+        [Export]
+        public PlayerPerspective InitialPerspective { get; set; } = ThirdPerson;
+
+        public IObservable<PlayerPerspective> OnPerspectiveChange => _perspective.Where(v => Active);
+
+        [Export]
+        public float FirstPersonOffset { get; set; } = 0.2f;
+
+        public override Range<float> YawRange
+        {
+            get
             {
-                switch (value)
-                {
-                    case FirstPerson:
-                        if (_perspective.Value != FirstPerson)
-                        {
-                            Pitch = 0;
-                            Yaw = 0;
-                            Distance = MinimumDistance;
-                        }
+                var min = Perspective == FirstPerson ? _minFirstPersonRotation : _minThirdPersonRotation;
+                var max = Perspective == FirstPerson ? _maxFirstPersonRotation : _maxThirdPersonRotation;
 
-                        break;
-                    case ThirdPerson:
-                        if (_perspective.Value != ThirdPerson)
-                        {
-                            Pitch = 0;
-                            Yaw = 0;
-                            Distance = DefaultDistance > MinimumDistance ? Distance : MinimumDistance + 1f;
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(value), value, null);
-                }
+                return new Range<float>(Mathf.Deg2Rad(min.x), Mathf.Deg2Rad(max.x));
             }
         }
 
-        public IObservable<PlayerPerspective> OnPerspectiveChange => _perspective;
+        public override Range<float> PitchRange
+        {
+            get
+            {
+                var min = Perspective == FirstPerson ? _minFirstPersonRotation : _minThirdPersonRotation;
+                var max = Perspective == FirstPerson ? _maxFirstPersonRotation : _maxThirdPersonRotation;
 
-        [Node]
-        public InputBindings Movement { get; private set; }
-
-        [Node]
-        public InputBindings Rotation { get; private set; }
-
-        [Node]
-        public InputBindings Zoom { get; private set; }
-
-        [Export] public float FirstPersonOffset = 0.2f;
-
-        [Export] public float DefaultDistance = 1f;
-
-        public override float MaximumPitch =>
-            Mathf.Deg2Rad(Perspective == ThirdPerson ? _maxThirdPersonPitch : _maxFirstPersonPitch);
-
-        public override float MinimumPitch =>
-            Mathf.Deg2Rad(Perspective == ThirdPerson ? _minThirdPersonPitch : _minFirstPersonPitch);
-
-        public override float MaximumYaw =>
-            Mathf.Deg2Rad(Perspective == ThirdPerson ? _maxThirdPersonYaw : _maxFirstPersonYaw);
-
-        public override float MinimumYaw =>
-            Mathf.Deg2Rad(Perspective == ThirdPerson ? _minThirdPersonYaw : _minFirstPersonYaw);
+                return new Range<float>(Mathf.Deg2Rad(min.y), Mathf.Deg2Rad(max.y));
+            }
+        }
 
         public override Vector3 Origin => Character.Vision.Head.origin;
 
@@ -105,23 +82,19 @@ namespace AlleyCat.Control
             }
         }
 
+        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active);
+
         [Export, UsedImplicitly] private NodePath _character = "..";
 
-        [Export, UsedImplicitly] private float _maxFirstPersonPitch = 70f;
+        [Node("Movement")] private InputBindings _movementInput;
 
-        [Export, UsedImplicitly] private float _minFirstPersonPitch = -80f;
+        [Export, UsedImplicitly] private Vector2 _maxFirstPersonRotation = new Vector2(90f, 70f);
 
-        [Export, UsedImplicitly] private float _maxFirstPersonYaw = 90f;
+        [Export, UsedImplicitly] private Vector2 _minFirstPersonRotation = new Vector2(-90f, -80f);
 
-        [Export, UsedImplicitly] private float _minFirstPersonYaw = -90f;
+        [Export, UsedImplicitly] private Vector2 _maxThirdPersonRotation = new Vector2(180f, 70f);
 
-        [Export, UsedImplicitly] private float _maxThirdPersonPitch = 70f;
-
-        [Export, UsedImplicitly] private float _minThirdPersonPitch = -89f;
-
-        [Export, UsedImplicitly] private float _maxThirdPersonYaw = 180f;
-
-        [Export, UsedImplicitly] private float _minThirdPersonYaw = -180f;
+        [Export, UsedImplicitly] private Vector2 _minThirdPersonRotation = new Vector2(-180f, -89f);
 
         private readonly ReactiveProperty<PlayerPerspective> _perspective;
 
@@ -130,32 +103,25 @@ namespace AlleyCat.Control
             _perspective = new ReactiveProperty<PlayerPerspective>();
         }
 
-        [PostConstruct]
-        private void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Distance = DefaultDistance;
-
-            Movement
-                .AsVector2Input()
-                .Where(_ => Active && Character?.Locomotion != null)
+            MovementInput
+                .Where(_ => Character?.Locomotion != null)
                 .Select(v => new Vector3(v.x, 0, -v.y))
                 .Subscribe(v => Character.Locomotion.Move(v))
                 .AddTo(this);
 
-            Rotation
-                .AsVector2Input()
-                .Where(_ => Active)
-                .Select(v => v * 0.05f)
-                .Subscribe(Rotate)
+            OnDistanceChange
+                .Select(v => v <= DistanceRange.Min ? FirstPerson : ThirdPerson)
+                .Where(v => Perspective != v)
+                .Subscribe(v => Perspective = v)
                 .AddTo(this);
 
-            Zoom
-                .GetAxis()
-                .Where(_ => Active)
-                .Subscribe(v => Distance -= v * 0.05f)
-                .AddTo(this);
+            Perspective = InitialPerspective;
         }
 
         public override void _Process(float delta)
@@ -163,8 +129,6 @@ namespace AlleyCat.Control
             base._Process(delta);
 
             if (!Active) return;
-
-            _perspective.Value = Distance > MinimumDistance ? ThirdPerson : FirstPerson;
 
             if (Character.Locomotion.Velocity.LengthSquared() < 0.1f)
             {

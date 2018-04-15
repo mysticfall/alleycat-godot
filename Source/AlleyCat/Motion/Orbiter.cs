@@ -1,7 +1,9 @@
 using System;
+using System.Reactive.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
+using AlleyCat.Event;
 using Godot;
-using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
@@ -11,11 +13,7 @@ namespace AlleyCat.Motion
         [Export]
         public bool Active { get; set; } = true;
 
-        [Node]
-        public Spatial Target { get; private set; }
-
-        [Export(PropertyHint.Range, "0, 5")]
-        public float MinimumDistance { get; set; } = 0.4f;
+        public abstract Spatial Target { get; }
 
         public abstract Vector3 Origin { get; }
 
@@ -27,21 +25,43 @@ namespace AlleyCat.Motion
 
         public float Pitch
         {
-            get => _pitch;
-            set => _pitch = Mathf.Clamp(NormalizeAspectAngle(value), MinimumPitch, MaximumPitch);
+            get => Rotation.y;
+            set => Rotation = new Vector2(Yaw, value);
         }
 
         public float Yaw
         {
-            get => _yaw;
-            set => _yaw = Mathf.Clamp(NormalizeAspectAngle(value), MinimumYaw, MaximumYaw);
+            get => Rotation.x;
+            set => Rotation = new Vector2(value, Pitch);
         }
 
         public float Distance
         {
-            get => _distance;
-            set => _distance = Math.Max(value, MinimumDistance);
+            get => _distance.Value;
+            set => _distance.Value = DistanceRange.Clamp(value);
         }
+
+        public Vector2 Rotation
+        {
+            get => _rotation.Value;
+            set
+            {
+                var yaw = YawRange.Clamp(NormalizeAspectAngle(value.x));
+                var pitch = PitchRange.Clamp(NormalizeAspectAngle(value.y));
+
+                _rotation.Value = new Vector2(yaw, pitch);
+            }
+        }
+
+        public IObservable<Vector2> OnRotationChange => _rotation.Where(v => Active);
+
+        public IObservable<float> OnDistanceChange => _distance.Where(v => Active);
+
+        public virtual Range<float> PitchRange => new Range<float>(-Mathf.Pi / 2f, Mathf.Pi / 2f);
+
+        public virtual Range<float> YawRange => new Range<float>(-Mathf.Pi, Mathf.Pi);
+
+        public virtual Range<float> DistanceRange => new Range<float>(0.1f, 10f);
 
         protected virtual Transform TargetTransform
         {
@@ -59,26 +79,14 @@ namespace AlleyCat.Motion
             }
         }
 
-        [Export, UsedImplicitly] private NodePath _target = "..";
+        private readonly ReactiveProperty<Vector2> _rotation;
 
-        public virtual float MaximumPitch => Mathf.Pi / 2f;
+        private readonly ReactiveProperty<float> _distance;
 
-        public virtual float MinimumPitch => -Mathf.Pi / 2f;
-
-        public virtual float MaximumYaw => Mathf.Pi;
-
-        public virtual float MinimumYaw => -Mathf.Pi;
-
-        private float _pitch;
-
-        private float _yaw;
-
-        private float _distance = 1f;
-
-        public void Rotate(Vector2 rotation)
+        protected Orbiter()
         {
-            Yaw -= rotation.x;
-            Pitch -= rotation.y;
+            _rotation = new ReactiveProperty<Vector2>();
+            _distance = new ReactiveProperty<float>();
         }
 
         public override void _Process(float delta)
@@ -88,6 +96,14 @@ namespace AlleyCat.Motion
             if (!Active) return;
 
             Target.GlobalTransform = TargetTransform;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _rotation?.Dispose();
+            _distance?.Dispose();
+
+            base.Dispose(disposing);
         }
 
         private static float NormalizeAspectAngle(float angle)

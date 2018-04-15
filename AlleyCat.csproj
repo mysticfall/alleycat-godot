@@ -168,6 +168,7 @@
     <Compile Include="Source\AlleyCat\Control\InputBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\OrbitingViewControl.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerPerspective.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
