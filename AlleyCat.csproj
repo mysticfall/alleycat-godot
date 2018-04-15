@@ -153,6 +153,7 @@
     <Compile Include="Source\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeStore.cs" />
     <Compile Include="Source\AlleyCat\Common\ProcessMode.cs" />
+    <Compile Include="Source\AlleyCat\Common\Range.cs" />
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\TransformExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />
