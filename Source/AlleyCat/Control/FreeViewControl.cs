@@ -7,30 +7,32 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    public class FreeViewControl : AutowiredNode, IActivatable
+    public class FreeViewControl : AutowiredNode, IActivatable, IValidatable
     {
         [Export]
         public bool Active { get; set; } = true;
 
+        public virtual bool Valid => Target != null;
+
         [Node]
         public Spatial Target { get; private set; }
 
-        [Node]
-        public InputBindings Rotation { get; private set; }
+        protected IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Active && Valid);
 
-        [Node]
-        public InputBindings Movement { get; private set; }
+        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _target = "..";
+
+        [Node("Rotation")] private InputBindings _rotationInput;
+
+        [Node("Movement")] private InputBindings _movementInput;
 
         [PostConstruct]
         private void OnInitialize()
         {
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Rotation
-                .AsVector2Input()
-                .Where(_ => Active)
+            RotationInput
                 .Subscribe(v =>
                 {
                     Target.GlobalRotate(new Vector3(0, 1, 0), -v.x);
@@ -38,9 +40,7 @@ namespace AlleyCat.Control
                 })
                 .AddTo(this);
 
-            Movement
-                .AsVector2Input()
-                .Where(_ => Active)
+            MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y))
                 .Select(v => v * 0.1f)
                 .Subscribe(Target.TranslateObjectLocal)
