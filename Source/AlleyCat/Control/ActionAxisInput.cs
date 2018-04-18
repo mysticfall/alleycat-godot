@@ -30,7 +30,7 @@ namespace AlleyCat.Control
                 return this.OnProcess().Select(_ => Value);       
             }
 
-            var input = this.OnInput();
+            var input = this.OnUnhandledInput();
 
             var positive = input
                 .Where(e => e.IsActionPressed(PositiveAction))

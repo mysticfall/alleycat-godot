@@ -55,6 +55,21 @@ namespace AlleyCat.Event
         }
 
         [NotNull]
+        public static IObservable<InputEvent> OnUnhandledInput([NotNull] this Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+
+            Debug.Assert(tracker != null, "tracker != null");
+
+            tracker.SetProcessUnhandledInput(true);
+            tracker.SetProcessUnhandledKeyInput(true);
+
+            return tracker.OnUnhandledInput;
+        }
+
+        [NotNull]
         public static IObservable<Unit> OnDispose([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));

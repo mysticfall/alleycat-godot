@@ -28,7 +28,7 @@ namespace AlleyCat.Control
         {
             var viewport = GetViewport();
 
-            return this.OnProcess()
+            return this.OnUnhandledInput()
                 .Where(_ => _maximumValue > 0)
                 .Select(_ => viewport.GetMousePosition())
                 .Buffer(2)

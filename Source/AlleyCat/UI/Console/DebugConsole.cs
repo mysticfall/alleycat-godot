@@ -75,13 +75,17 @@ namespace AlleyCat.UI.Console
             }
 
             this.OnInput()
-                .Where(e => e.IsActionPressed(ToggleAction))
-                .Subscribe(_ => Toggle())
+                .Where(e => e.IsActionPressed(ToggleAction) && !e.IsEcho())
+                .Subscribe(_ =>
+                {
+                    GetTree().SetInputAsHandled();
+                    Toggle();
+                })
                 .AddTo(this);
 
-            this.OnInput()
+            this.OnUnhandledInput()
                 .OfType<InputEventKey>()
-                .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed)
+                .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
                 .Subscribe(AutoComplete)
                 .AddTo(this);
