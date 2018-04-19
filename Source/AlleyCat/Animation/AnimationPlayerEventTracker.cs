@@ -22,7 +22,7 @@ namespace AlleyCat.Animation
             {
                 if (_onAnimationStart == null)
                 {
-                    Parent.Connect(SignalOnAnimationStart, this, "FireOnAnimationStart");
+                    Parent.Connect(SignalOnAnimationStart, this, nameof(FireOnAnimationStart));
 
                     _onAnimationStart = new Subject<AnimationStartEvent>();
                 }
@@ -38,7 +38,7 @@ namespace AlleyCat.Animation
             {
                 if (_onAnimationFinish == null)
                 {
-                    Parent.Connect(SignalOnAnimationFinish, this, "FireOnAnimationFinish");
+                    Parent.Connect(SignalOnAnimationFinish, this, nameof(FireOnAnimationFinish));
 
                     _onAnimationFinish = new Subject<AnimationFinishEvent>();
                 }
@@ -54,7 +54,7 @@ namespace AlleyCat.Animation
             {
                 if (_onAnimationChange == null)
                 {
-                    Parent.Connect(SignalOnAnimationChange, this, "FireOnAnimationChange");
+                    Parent.Connect(SignalOnAnimationChange, this, nameof(FireOnAnimationChange));
 
                     _onAnimationChange = new Subject<AnimationChangeEvent>();
                 }
@@ -89,7 +89,7 @@ namespace AlleyCat.Animation
 
             if (_onAnimationChange != null)
             {
-                parent.Disconnect(SignalOnAnimationChange, this, "FireOnAnimationChange");
+                parent.Disconnect(SignalOnAnimationChange, this, nameof(FireOnAnimationChange));
 
                 _onAnimationChange.Dispose();
                 _onAnimationChange = null;
@@ -97,7 +97,7 @@ namespace AlleyCat.Animation
 
             if (_onAnimationStart != null)
             {
-                parent.Disconnect(SignalOnAnimationStart, this, "FireOnAnimationStart");
+                parent.Disconnect(SignalOnAnimationStart, this, nameof(FireOnAnimationStart));
 
                 _onAnimationStart.Dispose();
                 _onAnimationStart = null;
@@ -105,7 +105,7 @@ namespace AlleyCat.Animation
 
             if (_onAnimationFinish != null)
             {
-                parent.Disconnect(SignalOnAnimationFinish, this, "FireOnAnimationFinish");
+                parent.Disconnect(SignalOnAnimationFinish, this, nameof(FireOnAnimationFinish));
 
                 _onAnimationFinish.Dispose();
                 _onAnimationFinish = null;

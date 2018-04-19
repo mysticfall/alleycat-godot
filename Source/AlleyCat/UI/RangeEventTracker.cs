@@ -18,7 +18,7 @@ namespace AlleyCat.UI
             {
                 if (_onValueChange == null)
                 {
-                    Parent.Connect(SignalValueChange, this, "FireOnValueChange");
+                    Parent.Connect(SignalValueChange, this, nameof(FireOnValueChange));
 
                     _onValueChange = new Subject<ValueChangedEvent>();
                 }
@@ -41,7 +41,7 @@ namespace AlleyCat.UI
 
             if (_onValueChange != null)
             {
-                parent.Disconnect(SignalValueChange, this, "FireOnValueChange");
+                parent.Disconnect(SignalValueChange, this, nameof(FireOnValueChange));
 
                 _onValueChange.Dispose();
                 _onValueChange = null;

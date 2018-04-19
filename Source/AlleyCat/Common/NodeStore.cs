@@ -32,7 +32,7 @@ namespace AlleyCat.Common
 
             data = factory(node);
 
-            node.Connect("tree_exited", this, "OnNodeExited", new object[] {node});
+            node.Connect("tree_exited", this, nameof(OnNodeExited), new object[] {node});
 
             _store.Add(node.GetInstanceId(), data);
 

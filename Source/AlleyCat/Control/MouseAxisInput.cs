@@ -21,7 +21,7 @@ namespace AlleyCat.Control
 
             CalculateMaximumValue();
 
-            GetViewport().Connect("size_changed", this, "OnViewportSizeChange");
+            GetViewport().Connect("size_changed", this, nameof(CalculateMaximumValue));
         }
 
         protected override IObservable<float> CreateRawObservable()

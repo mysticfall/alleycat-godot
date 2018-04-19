@@ -18,7 +18,7 @@ namespace AlleyCat.UI
             {
                 if (_onColorChange == null)
                 {
-                    Parent.Connect(SignalColorChange, this, "FireOnColorChange");
+                    Parent.Connect(SignalColorChange, this, nameof(FireOnColorChange));
 
                     _onColorChange = new Subject<ColorChangedEvent>();
                 }
@@ -40,7 +40,7 @@ namespace AlleyCat.UI
 
             if (_onColorChange != null)
             {
-                parent.Disconnect(SignalColorChange, this, "FireOnColorChange");
+                parent.Disconnect(SignalColorChange, this, nameof(FireOnColorChange));
 
                 _onColorChange.Dispose();
                 _onColorChange = null;

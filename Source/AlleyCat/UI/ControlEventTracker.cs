@@ -19,7 +19,7 @@ namespace AlleyCat.UI
             {
                 if (_onMouseEnter == null)
                 {
-                    Parent.Connect(SignalMouseEnter, this, "FireOnMouseEnter");
+                    Parent.Connect(SignalMouseEnter, this, nameof(FireOnMouseEnter));
 
                     _onMouseEnter = new Subject<MouseEnteredEvent>();
                 }
@@ -35,7 +35,7 @@ namespace AlleyCat.UI
             {
                 if (_onMouseExit == null)
                 {
-                    Parent.Connect(SignalMouseExit, this, "FireOnMouseExit");
+                    Parent.Connect(SignalMouseExit, this, nameof(FireOnMouseExit));
 
                     _onMouseExit = new Subject<MouseExitedEvent>();
                 }
@@ -62,7 +62,7 @@ namespace AlleyCat.UI
 
             if (_onMouseEnter != null)
             {
-                parent.Disconnect(SignalMouseEnter, this, "FireOnMouseEnter");
+                parent.Disconnect(SignalMouseEnter, this, nameof(FireOnMouseEnter));
 
                 _onMouseEnter.Dispose();
                 _onMouseEnter = null;
@@ -70,7 +70,7 @@ namespace AlleyCat.UI
 
             if (_onMouseExit != null)
             {
-                parent.Disconnect(SignalMouseExit, this, "FireOnMouseExit");
+                parent.Disconnect(SignalMouseExit, this, nameof(FireOnMouseExit));
 
                 _onMouseExit.Dispose();
                 _onMouseExit = null;
