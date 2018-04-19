@@ -77,14 +77,17 @@ plane = Plane( 0, 1, 0, 0 )
 script = ExtResource( 1 )
 _viewport = NodePath("UI/Viewport")
 
-[node name="Player" parent="." index="0" instance=ExtResource( 2 )]
-_key = "Player"
-_displayName = "Player"
+[node name="Character" parent="." index="0" instance=ExtResource( 2 )]
+editor/display_folded = true
+_key = "Character"
+_displayName = "Character"
 
-[node name="Binding" type="Node" parent="Player" index="6"]
+[node name="Binding" type="Node" parent="Character" index="6"]
 script = ExtResource( 3 )
 
-[node name="Camera" type="Camera" parent="." index="1"]
+[node name="Cameras" type="Node" parent="." index="1"]
+
+[node name="Camera" type="Camera" parent="Cameras" index="0"]
 transform = Transform( -1, 0, -8.74227e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.999999, -3.38069e-07, 0.964255, -1.52218 )
 keep_aspect = 1
 cull_mask = 1048575
@@ -100,64 +103,9 @@ near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="Control" type="Node" parent="Camera" index="0"]
-script = ExtResource( 4 )
-Active = true
-InitialDistance = 1.0
-_camera = NodePath("..")
-_pivot = NodePath("../../Player")
-_controlModifier = "point"
+[node name="Static Objects" type="Node" parent="." index="2"]
 
-[node name="Movement" type="Node" parent="Camera/Control" index="0"]
-script = ExtResource( 5 )
-
-[node name="Value" type="Node" parent="Camera/Control/Movement" index="0"]
-script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 1
-Maximum = 0.1
-
-[node name="Rotation" type="Node" parent="Camera/Control" index="1"]
-script = ExtResource( 5 )
-
-[node name="Value" type="Node" parent="Camera/Control/Rotation" index="0"]
-script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 0
-Maximum = 0.1
-
-[node name="Zoom" type="Node" parent="Camera/Control" index="2"]
-script = ExtResource( 5 )
-
-[node name="Value" type="Node" parent="Camera/Control/Zoom" index="0"]
-script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 15.0
-PositiveAction = "zoom_in"
-NegativeAction = "zoom_out"
-Polling = false
-
-[node name="Binding" type="Node" parent="Camera/Control" index="3"]
-script = ExtResource( 3 )
-
-[node name="Ground" type="MeshInstance" parent="." index="2"]
+[node name="Ground" type="MeshInstance" parent="Static Objects" index="0"]
 editor/display_folded = true
 layers = 1
 material_override = null
@@ -172,7 +120,7 @@ mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 
-[node name="StaticBody" type="StaticBody" parent="Ground" index="0"]
+[node name="StaticBody" type="StaticBody" parent="Static Objects/Ground" index="0"]
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -182,11 +130,72 @@ bounce = 0.0
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="Static Objects/Ground/StaticBody" index="0"]
 shape = SubResource( 3 )
 disabled = false
 
-[node name="UI" type="Node" parent="." index="3"]
+[node name="Control" type="Node" parent="." index="3"]
+
+[node name="View" type="Node" parent="Control" index="0"]
+script = ExtResource( 4 )
+Active = true
+InitialDistance = 1.0
+_camera = NodePath("../../Cameras/Camera")
+_pivot = NodePath("../../Character")
+_minDistance = 0.2
+_maxDistance = 3.0
+_controlModifier = "point"
+
+[node name="Movement" type="Node" parent="Control/View" index="0"]
+editor/display_folded = true
+script = ExtResource( 5 )
+
+[node name="Value" type="Node" parent="Control/View/Movement" index="0"]
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Rotation" type="Node" parent="Control/View" index="1"]
+editor/display_folded = true
+script = ExtResource( 5 )
+
+[node name="Value" type="Node" parent="Control/View/Rotation" index="0"]
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Zoom" type="Node" parent="Control/View" index="2"]
+editor/display_folded = true
+script = ExtResource( 5 )
+
+[node name="Value" type="Node" parent="Control/View/Zoom" index="0"]
+script = ExtResource( 7 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 15.0
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
+Polling = false
+
+[node name="UI" type="Node" parent="." index="4"]
 
 [node name="Viewport" type="Container" parent="UI" index="0"]
 anchor_left = 0.0
@@ -195,13 +204,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 6
 size_flags_horizontal = 1
 size_flags_vertical = 1
 _sections_unfolded = [ "Mouse" ]
 
-[node name="MorphsPanel" type="Panel" parent="UI" index="1"]
+[node name="MorphsPanel" type="Panel" parent="UI/Viewport" index="0"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -217,7 +226,7 @@ script = ExtResource( 8 )
 _sections_unfolded = [ "Mouse", "Rect" ]
 _groupPanelScene = ExtResource( 9 )
 
-[node name="TabContainer" type="TabContainer" parent="UI/MorphsPanel" index="0"]
+[node name="TabContainer" type="TabContainer" parent="UI/Viewport/MorphsPanel" index="0"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0

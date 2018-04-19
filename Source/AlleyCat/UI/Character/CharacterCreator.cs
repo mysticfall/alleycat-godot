@@ -1,8 +1,5 @@
-using System;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
-using AlleyCat.Common;
-using AlleyCat.Control;
 using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
@@ -22,9 +19,6 @@ namespace AlleyCat.UI.Character
         [Service]
         protected MorphListPanel MorphListPanel { get; private set; }
 
-        [Service]
-        protected InspectingViewControl ViewControl { get; private set; }
-
         [Node]
         protected Godot.Control Viewport { get; private set; }
 
@@ -35,19 +29,6 @@ namespace AlleyCat.UI.Character
         public CharacterCreator()
         {
             _character = new ReactiveProperty<IMorphableCharacter>();
-        }
-
-        [PostConstruct]
-        private void OnInitialize()
-        {
-            Viewport
-                .OnMouseEnter()
-                .Subscribe(_ => ViewControl.Active = true)
-                .AddTo(this);
-            Viewport
-                .OnMouseExit()
-                .Subscribe(_ => ViewControl.Active = false)
-                .AddTo(this);
         }
 
         protected override void Dispose(bool disposing)

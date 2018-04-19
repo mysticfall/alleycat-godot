@@ -92,8 +92,6 @@ namespace AlleyCat.Control
 
                 Distance = (float) distance + 0.2f;
             }
-
-            Active = false;
         }
     }
 }
