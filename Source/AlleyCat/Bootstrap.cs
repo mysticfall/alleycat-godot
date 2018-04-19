@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 
@@ -12,6 +13,8 @@ namespace AlleyCat
             Ensure.Off();
 
             ToggleAssert();
+
+            VariantTypeConverter.Install();
         }
 
         [Conditional("DEBUG")]
