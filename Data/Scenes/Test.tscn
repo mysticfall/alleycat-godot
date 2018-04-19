@@ -1,383 +1,15 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_face_Albedo02.png" type="Texture" id=3]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_face_metallic.png" type="Texture" id=4]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_face_N.png" type="Texture" id=5]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_face_derm.png" type="Texture" id=6]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_bod_Albedo.png" type="Texture" id=7]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_bod_metallic.png" type="Texture" id=8]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_bod_N.png" type="Texture" id=9]
-[ext_resource path="res://Data/Textures/Characters/Human/Female/F_H_bod_derm.png" type="Texture" id=10]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Underwear/Underwear.tres" type="Material" id=11]
-[ext_resource path="res://Data/Textures/Hairs/Human/Female/ponytail01_diffuse.png" type="Texture" id=12]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=13]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=14]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=15]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=16]
-[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=17]
-[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=8]
 
-[sub_resource type="SpatialMaterial" id=1]
-
-resource_local_to_scene = true
-resource_name = "Face"
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.982574, 0.948444, 0.93592, 1 )
-albedo_texture = ExtResource( 3 )
-metallic = 0.1
-metallic_specular = 0.2
-metallic_texture = ExtResource( 4 )
-metallic_texture_channel = 0
-roughness = 0.82
-roughness_texture_channel = 4
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.1
-normal_texture = ExtResource( 5 )
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.2
-subsurf_scatter_texture = ExtResource( 6 )
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Flags", "Metallic", "NormalMap", "Parameters", "Resource", "Rim", "Roughness", "Subsurf Scatter", "Transmission", "Vertex Color" ]
-
-[sub_resource type="SpatialMaterial" id=2]
-
-resource_local_to_scene = true
-resource_name = "Feet"
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.980392, 0.945098, 0.933333, 1 )
-albedo_texture = ExtResource( 7 )
-metallic = 0.1
-metallic_specular = 0.2
-metallic_texture = ExtResource( 8 )
-metallic_texture_channel = 0
-roughness = 0.9
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.3
-normal_texture = ExtResource( 9 )
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.2
-subsurf_scatter_texture = ExtResource( 10 )
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Parameters", "Resource", "Subsurf Scatter" ]
-
-[sub_resource type="SpatialMaterial" id=3]
-
-resource_local_to_scene = true
-resource_name = "Hands"
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.980392, 0.945098, 0.933333, 1 )
-albedo_texture = ExtResource( 7 )
-metallic = 0.1
-metallic_specular = 0.2
-metallic_texture = ExtResource( 8 )
-metallic_texture_channel = 0
-roughness = 0.9
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.3
-normal_texture = ExtResource( 9 )
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.2
-subsurf_scatter_texture = ExtResource( 10 )
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Parameters", "Resource", "Subsurf Scatter" ]
-
-[sub_resource type="SpatialMaterial" id=4]
-
-resource_local_to_scene = true
-resource_name = "Torso"
-render_priority = 0
-next_pass = ExtResource( 11 )
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.980392, 0.945098, 0.933333, 1 )
-albedo_texture = ExtResource( 7 )
-metallic = 0.1
-metallic_specular = 0.2
-metallic_texture = ExtResource( 8 )
-metallic_texture_channel = 0
-roughness = 0.9
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.3
-normal_texture = ExtResource( 9 )
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.2
-subsurf_scatter_texture = ExtResource( 10 )
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Metallic", "NormalMap", "Parameters", "Resource", "Roughness", "Subsurf Scatter" ]
-
-[sub_resource type="SpatialMaterial" id=5]
-
-resource_local_to_scene = true
-resource_name = "Legs"
-render_priority = 0
-next_pass = ExtResource( 11 )
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.980392, 0.945098, 0.933333, 1 )
-albedo_texture = ExtResource( 7 )
-metallic = 0.1
-metallic_specular = 0.2
-metallic_texture = ExtResource( 8 )
-metallic_texture_channel = 0
-roughness = 0.9
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.3
-normal_texture = ExtResource( 9 )
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 0.2
-subsurf_scatter_texture = ExtResource( 10 )
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Parameters", "Resource", "Subsurf Scatter" ]
-
-[sub_resource type="SpatialMaterial" id=6]
-
-resource_local_to_scene = true
-resource_name = "Hair"
-render_priority = 0
-flags_transparent = true
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 2
-params_depth_draw_mode = 3
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.272343, 0.256342, 0.227513, 1 )
-albedo_texture = ExtResource( 12 )
-metallic = 0.25
-metallic_specular = 0.2
-metallic_texture_channel = 0
-roughness = 0.92
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = true
-anisotropy = 0.8
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Ambient Occlusion", "Anisotropy", "Depth", "Metallic", "NormalMap", "Parameters", "Resource", "Roughness" ]
-
-[sub_resource type="GIProbeData" id=7]
+[sub_resource type="GIProbeData" id=1]
 
 bounds = AABB( -101.457, -10, -10, 202.914, 20, 20 )
 cell_size = 0.792633
@@ -446,41 +78,28 @@ _sections_unfolded = [ "Transform" ]
 [node name="Characters" type="Node" parent="." index="3"]
 
 [node name="Player" parent="Characters" index="0" instance=ExtResource( 2 )]
-transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.241167, 0 )
-_sections_unfolded = [ "Axis Lock", "Transform", "collision" ]
+transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0, 0.195436, 0 )
 _key = "Player"
 _displayName = "Player"
 
-[node name="Body" parent="Characters/Player/HumanFemaleRig/Skeleton" index="0"]
-material/1 = SubResource( 1 )
-material/2 = SubResource( 2 )
-material/3 = SubResource( 3 )
-material/4 = SubResource( 4 )
-material/5 = SubResource( 5 )
-
-[node name="Hair" parent="Characters/Player/HumanFemaleRig/Skeleton" index="1"]
-material/0 = SubResource( 6 )
-
-material/0 = SubResource( 7 )
-
 [node name="Control" type="Node" parent="Characters/Player" index="4"]
-script = ExtResource( 13 )
+script = ExtResource( 3 )
 Active = true
 InitialDistance = 1.0
+_camera = NodePath("../../../Cameras/Player Camera")
 InitialPerspective = 1
 FirstPersonOffset = 0.2
 _character = NodePath("..")
-_camera = NodePath("../../../Cameras/Player Camera")
 _maxFirstPersonRotation = Vector2( 90, 70 )
 _minFirstPersonRotation = Vector2( -90, -80 )
 _maxThirdPersonRotation = Vector2( 180, 70 )
 _minThirdPersonRotation = Vector2( -180, -89 )
 
 [node name="Movement" type="Node" parent="Characters/Player/Control" index="0"]
-script = ExtResource( 14 )
+script = ExtResource( 4 )
 
 [node name="X" type="Node" parent="Characters/Player/Control/Movement" index="0"]
-script = ExtResource( 15 )
+script = ExtResource( 5 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -493,7 +112,7 @@ NegativeAction = "move_left"
 Polling = true
 
 [node name="Y" type="Node" parent="Characters/Player/Control/Movement" index="1"]
-script = ExtResource( 15 )
+script = ExtResource( 5 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -506,10 +125,10 @@ NegativeAction = "move_back"
 Polling = true
 
 [node name="Rotation" type="Node" parent="Characters/Player/Control" index="1"]
-script = ExtResource( 14 )
+script = ExtResource( 4 )
 
 [node name="X" type="Node" parent="Characters/Player/Control/Rotation" index="0"]
-script = ExtResource( 16 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -521,7 +140,7 @@ Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Characters/Player/Control/Rotation" index="1"]
-script = ExtResource( 16 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -533,10 +152,10 @@ Axis = 1
 Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Characters/Player/Control" index="2"]
-script = ExtResource( 14 )
+script = ExtResource( 4 )
 
 [node name="Value" type="Node" parent="Characters/Player/Control/Zoom" index="0"]
-script = ExtResource( 15 )
+script = ExtResource( 5 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -548,9 +167,6 @@ PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
 
-[node name="Locomotion" parent="Characters/Player" index="6"]
-ApplyGravity = false
-
 [node name="Static Objects" type="Node" parent="." index="4"]
 
 [node name="Walls" type="Spatial" parent="Static Objects" index="0"]
@@ -558,18 +174,18 @@ ApplyGravity = false
 [node name="Front Wall" type="Spatial" parent="Static Objects/Walls" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 17 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 17 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 7 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Back Wall" type="Spatial" parent="Static Objects/Walls" index="1"]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 17 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 17 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 7 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Left Wall" type="Spatial" parent="Static Objects/Walls" index="2"]
@@ -577,9 +193,9 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, -5 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 17 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 17 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 7 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Right Wall" type="Spatial" parent="Static Objects/Walls" index="3"]
@@ -587,12 +203,12 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 15 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 17 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 7 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 17 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 7 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
-[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 18 )]
+[node name="Ground" parent="Static Objects" index="1" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65074, 0.00188553, -0.0470071 )
 
 [node name="GIProbe" type="GIProbe" parent="." index="5"]
@@ -607,8 +223,6 @@ bias = 1.5
 normal_bias = 0.0
 interior = false
 compress = false
-data = SubResource( 7 )
+data = SubResource( 1 )
 _sections_unfolded = [ "Transform" ]
 
-
-[editable path="Characters/Player"]
