@@ -1,0 +1,128 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=5]
+
+[node name="Base Scene" type="Node" index="0"]
+
+[node name="Environment" type="Node" parent="." index="0"]
+
+[node name="Cameras" type="Node" parent="." index="1"]
+
+[node name="Main Camera" type="Camera" parent="Cameras" index="0"]
+transform = Transform( 0.661697, 0, 0.74977, 0, 0.999999, 0, -0.749771, 0, 0.661696, 0.735734, 1.7292, 0.649309 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="Entities" type="Node" parent="." index="2"]
+
+[node name="Characters" type="Node" parent="Entities" index="0"]
+
+[node name="Player" parent="Entities/Characters" index="0" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
+
+[node name="Static Objects" type="Node" parent="." index="3"]
+
+[node name="UI" type="Node" parent="." index="4"]
+
+[node name="Control" type="Node" parent="." index="5"]
+
+[node name="Player" type="Node" parent="Control" index="0"]
+script = ExtResource( 2 )
+Active = true
+InitialDistance = 1.0
+_camera = NodePath("../../Cameras/Main Camera")
+InitialPerspective = 1
+FirstPersonOffset = 0.2
+_character = NodePath("../../Entities/Characters/Player")
+_maxFirstPersonRotation = Vector2( 90, 70 )
+_minFirstPersonRotation = Vector2( -90, -80 )
+_maxThirdPersonRotation = Vector2( 180, 70 )
+_minThirdPersonRotation = Vector2( -180, -89 )
+
+[node name="Movement" type="Node" parent="Control/Player" index="0"]
+script = ExtResource( 3 )
+
+[node name="X" type="Node" parent="Control/Player/Movement" index="0"]
+script = ExtResource( 4 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
+Polling = true
+
+[node name="Y" type="Node" parent="Control/Player/Movement" index="1"]
+script = ExtResource( 4 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
+Polling = true
+
+[node name="Rotation" type="Node" parent="Control/Player" index="1"]
+script = ExtResource( 3 )
+
+[node name="X" type="Node" parent="Control/Player/Rotation" index="0"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Y" type="Node" parent="Control/Player/Rotation" index="1"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Zoom" type="Node" parent="Control/Player" index="2"]
+script = ExtResource( 3 )
+
+[node name="Value" type="Node" parent="Control/Player/Zoom" index="0"]
+script = ExtResource( 4 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
+Polling = false
+
