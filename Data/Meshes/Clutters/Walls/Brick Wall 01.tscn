@@ -14,13 +14,12 @@ subdivide_depth = 0
 points = PoolVector3Array( -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, 1, 1, 1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1 )
 
 [node name="Brick Wall 01" type="MeshInstance" index="0"]
-
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, -5 )
 layers = 1
 material_override = null
 cast_shadow = 1
 extra_cull_margin = 0.0
-use_in_baked_light = false
+use_in_baked_light = true
 lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
@@ -28,10 +27,9 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 1 )
-_sections_unfolded = [ "Transform", "material" ]
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="StaticBody" type="StaticBody" parent="." index="0"]
-
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -42,8 +40,6 @@ constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
-
 shape = SubResource( 2 )
 disabled = false
-
 
