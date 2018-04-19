@@ -31,8 +31,12 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="Console Logger" parent="Configuration/Logging" index="0" instance=ExtResource( 7 )]
 
-[node name="UI" type="Node" parent="." index="1"]
+[node name="UI" type="CanvasLayer" parent="." index="1"]
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 [node name="Console" parent="UI" index="0" instance=ExtResource( 8 )]
-scale = Vector2( 1, 1 )
 
