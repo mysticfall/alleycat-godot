@@ -7,7 +7,7 @@ namespace AlleyCat.Character.Morph
     {
         public string Key => _key ?? Name;
 
-        public virtual string DisplayName => Tr($"morph.{Group.Key}.{Key}");
+        public virtual string DisplayName => Tr(_displayName);
 
         [Export, UsedImplicitly]
         public T Default { get; private set; }
@@ -15,6 +15,8 @@ namespace AlleyCat.Character.Morph
         public IMorphGroup Group => (IMorphGroup) GetParent();
 
         [Export, UsedImplicitly] private string _key;
+
+        [Export, UsedImplicitly] private string _displayName;
 
         public abstract IMorph CreateMorph(IMorphable morphable);
     }
