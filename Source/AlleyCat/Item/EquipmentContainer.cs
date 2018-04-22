@@ -2,36 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using Godot;
 
 namespace AlleyCat.Item
 {
     [Singleton(typeof(IEquipmentContainer))]
     public class EquipmentContainer : SlotContainer<EquipmentSlot, IEquippable>, IEquipmentContainer
     {
+        [Ancestor]
         public IEquipmentHolder Holder { get; private set; }
 
         public override IReadOnlyDictionary<string, EquipmentSlot> Slots =>
             Holder.EquipmentSlots.ToDictionary();
-
-        public override void _EnterTree()
-        {
-            base._EnterTree();
-
-            Node parent = this;
-
-            while (Holder == null && (parent = parent.GetParent()) != null)
-            {
-                Holder = parent as IEquipmentHolder;
-            }
-        }
-
-        public override void _ExitTree()
-        {
-            Holder = null;
-
-            base._ExitTree();
-        }
 
         [PostConstruct(true)]
         protected virtual void OnInitialize()

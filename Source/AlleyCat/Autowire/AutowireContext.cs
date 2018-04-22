@@ -26,6 +26,7 @@ namespace AlleyCat.Autowire
             {
                 new NodeAttributeProcessorFactory(),
                 new ServiceAttributeProcessorFactory(),
+                new AncestorAttributeProcessorFactory(),
                 new ServiceDefinitionProviderProcessorFactory(),
                 new SingletonAttributeProcessorFactory(),
                 new PostConstructAttributeProcessorFactory()

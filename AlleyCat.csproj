@@ -65,6 +65,9 @@
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Animation\BonePostProcessor.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\AncestorAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowireContextAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowiredNode.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowirePhase.cs" />
