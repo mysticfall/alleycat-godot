@@ -14,7 +14,7 @@ namespace AlleyCat.Common
     public static class IdentifiableExtensions
     {
         [NotNull]
-        public static IDictionary<string, T> ToDictionary<T>([NotNull] this IEnumerable<T> items)
+        public static Dictionary<string, T> ToDictionary<T>([NotNull] this IEnumerable<T> items)
             where T : IIdentifiable
         {
             Ensure.Any.IsNotNull(items, nameof(items));
