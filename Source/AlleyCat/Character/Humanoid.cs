@@ -55,7 +55,7 @@ namespace AlleyCat.Character
             _race = race.Key;
 
             var groups = race.GetMorphGroups(sex).ToList();
-            var morphs = groups.SelectMany(g => g.ToList()).Select(d => d.CreateMorph(this));
+            var morphs = groups.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this));
 
             _morphSet.Value?.Dispose();
             _morphSet.Value = new MorphSet(morphs);

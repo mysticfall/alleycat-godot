@@ -136,7 +136,6 @@
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
-    <Compile Include="Source\AlleyCat\Common\IDirectory.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />

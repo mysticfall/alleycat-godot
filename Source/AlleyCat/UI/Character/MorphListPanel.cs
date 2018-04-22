@@ -36,7 +36,7 @@ namespace AlleyCat.UI.Character
             {
                 var tab = (MorphGroupPanel) _groupPanelScene.Instance();
 
-                tab.LoadGroup(group, morphSet.AsEnumerable().Where(m => m.Definition.Group == group));
+                tab.LoadGroup(group, morphSet.Values.Where(m => m.Definition.Group == group));
 
                 TabContainer.AddChild(tab);
                 TabContainer.SetTabTitle(index, group.DisplayName);

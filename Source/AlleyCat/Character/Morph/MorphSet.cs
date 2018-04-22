@@ -23,6 +23,14 @@ namespace AlleyCat.Character.Morph
 
         public int Count => _morphs.Count;
 
+        public IEnumerable<string> Keys => _morphs.Keys;
+
+        public IEnumerable<IMorph> Values => _morphs.Values;
+
+        public IEnumerator<KeyValuePair<string, IMorph>> GetEnumerator() => _morphs.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => _morphs.GetEnumerator();
+
         public MorphSet([NotNull] IEnumerable<IMorph> morphs)
         {
             Ensure.Any.IsNotNull(morphs, nameof(morphs));
@@ -35,16 +43,14 @@ namespace AlleyCat.Character.Morph
             OnMorph = list.Select(m => m.OnChange.Select(_ => m)).Merge();
         }
 
-        public IEnumerator<IMorph> GetEnumerator() => _morphs.Values.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
         public bool ContainsKey(string key)
         {
             Ensure.Any.IsNotNull(key, nameof(key));
 
             return _morphs.ContainsKey(key);
         }
+
+        public bool TryGetValue(string key, out IMorph value) => _morphs.TryGetValue(key, out value);
 
         public IMorph this[string key]
         {
@@ -67,7 +73,7 @@ namespace AlleyCat.Character.Morph
         {
             Ensure.Any.IsNotNull(state, nameof(state));
 
-            foreach (var morph in this)
+            foreach (var morph in Values)
             {
                 if (state.ContainsKey(morph.Key))
                 {
