@@ -45,7 +45,9 @@ namespace AlleyCat.Autowire
             }
             else
             {
-                dependency = node.GetNode(path ?? NormalizeMemberName(Member.Name));
+                var targetPath = path ?? NormalizeMemberName(Member.Name);
+
+                dependency = node.HasNode(targetPath) ? node.GetNode(targetPath) : null;
             }
 
             return dependency;
