@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.IO;
 using EnsureThat;
 using JetBrains.Annotations;
@@ -37,7 +38,7 @@ namespace AlleyCat.Character.Morph
 
             var list = morphs.ToList();
 
-            _morphs = list.ToDictionary(m => m.Key);
+            _morphs = list.ToDictionary();
 
             Groups = list.Select(m => m.Definition.Group).Distinct().ToList();
             OnMorph = list.Select(m => m.OnChange.Select(_ => m)).Merge();
