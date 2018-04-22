@@ -158,6 +158,11 @@
     <Compile Include="Source\AlleyCat\Common\TransformExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Source\AlleyCat\Common\VectorExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Condition\ICondition.cs" />
+    <Compile Include="Source\AlleyCat\Condition\IRestricted.cs" />
+    <Compile Include="Source\AlleyCat\Condition\LogicalOperation.cs" />
+    <Compile Include="Source\AlleyCat\Condition\LogicalOperationType.cs" />
+    <Compile Include="Source\AlleyCat\Condition\TypedCondition.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\InspectingViewControl.cs" />
