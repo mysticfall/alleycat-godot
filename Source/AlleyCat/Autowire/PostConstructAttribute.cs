@@ -7,5 +7,11 @@ namespace AlleyCat.Autowire
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     public class PostConstructAttribute : Attribute
     {
+        public bool Deferred { get; }
+
+        public PostConstructAttribute(bool deferred = false)
+        {
+            Deferred = deferred;
+        }
     }
 }

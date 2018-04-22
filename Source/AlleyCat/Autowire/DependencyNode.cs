@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -20,6 +21,8 @@ namespace AlleyCat.Autowire
 
         private readonly Action<IAutowireContext> _processor;
 
+        private readonly Action<IAutowireContext> _deferredProcessor;
+
         private readonly IDependencyResolver _resolver;
 
         public DependencyNode([NotNull] AutowireContext context)
@@ -31,6 +34,7 @@ namespace AlleyCat.Autowire
 
             _resolver = context;
             _processor = _ => context.Build();
+            _deferredProcessor = null;
         }
 
         public DependencyNode([NotNull] Node node, ServiceDefinition definition)
@@ -44,7 +48,19 @@ namespace AlleyCat.Autowire
 
             _processor = context =>
             {
-                foreach (var processor in definition.Processors)
+                var list = definition.Processors.Where(p => p.ProcessPhase != AutowirePhase.Deferred);
+
+                foreach (var processor in list)
+                {
+                    processor.Process(context, node);
+                }
+            };
+
+            _deferredProcessor = context =>
+            {
+                var list = definition.Processors.Where(p => p.ProcessPhase == AutowirePhase.Deferred);
+
+                foreach (var processor in list)
                 {
                     processor.Process(context, node);
                 }
@@ -52,6 +68,8 @@ namespace AlleyCat.Autowire
         }
 
         public void Process(IAutowireContext context) => _processor.Invoke(context);
+
+        public void ProcessDeferred(IAutowireContext context) => _deferredProcessor?.Invoke(context);
 
         public bool DependsOn(DependencyNode other) => DependsOn(other, this);
 

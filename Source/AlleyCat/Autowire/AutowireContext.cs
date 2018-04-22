@@ -150,6 +150,11 @@ namespace AlleyCat.Autowire
                 dependency.Process(this);
             }
 
+            foreach (var dependency in _queue)
+            {
+                dependency.ProcessDeferred(this);
+            }
+
             _queue.Clear();
         }
 

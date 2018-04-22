@@ -11,7 +11,8 @@ namespace AlleyCat.Autowire
         [NotNull]
         public MethodInfo Method { get; }
 
-        public override AutowirePhase ProcessPhase => AutowirePhase.PostConstruct;
+        public override AutowirePhase ProcessPhase =>
+            Attribute.Deferred ? AutowirePhase.Deferred : AutowirePhase.PostConstruct;
 
         public PostConstructAttributeProcessor(
             [NotNull] MethodInfo method, [NotNull] PostConstructAttribute attribute)
