@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRace.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlot.cs" type="Script" id=5]
 
 [node name="Human" type="Node" index="0"]
 script = ExtResource( 1 )
@@ -11,6 +12,7 @@ _key = "Human"
 _displayName = "race.Human"
 
 [node name="Morphs" type="Node" parent="." index="0"]
+editor/display_folded = true
 
 [node name="Female" type="Node" parent="Morphs" index="0"]
 
@@ -262,4 +264,16 @@ _displayName = "morph.Color.HairColor"
 UseAlpha = false
 Mesh = "Hair"
 _materials = "Hair"
+
+[node name="Slots" type="Node" parent="." index="1"]
+
+[node name="Equipments" type="Node" parent="Slots" index="0"]
+
+[node name="Shirt" type="Node" parent="Slots/Equipments" index="0"]
+script = ExtResource( 5 )
+_key = "Shirt"
+
+[node name="Pants" type="Node" parent="Slots/Equipments" index="1"]
+script = ExtResource( 5 )
+_key = "Pants"
 

@@ -67,9 +67,6 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 8.0
 _sections_unfolded = [ "Light", "Shadow", "Transform" ]
 
-[node name="Entities" parent="." index="3"]
-editor/display_folded = true
-
 [node name="Ground" parent="Static Objects" index="0" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65074, 0.00188553, -0.0470071 )
 _sections_unfolded = [ "Transform" ]

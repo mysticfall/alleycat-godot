@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/InnerMouth.material" type="Material" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://Source/AlleyCat/Animation/PostProcessingAnimationPlayer.cs" type="Script" id=19]
 [ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=20]
 [ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=21]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=22]
 
 [sub_resource type="ArrayMesh" id=1]
 
@@ -9444,7 +9445,6 @@ tracks/161/keys = {
 }
 
 [node name="Female" type="KinematicBody" index="0"]
-
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -9466,7 +9466,6 @@ _sex = 1
 [node name="HumanFemaleRig" type="Spatial" parent="." index="0"]
 
 [node name="Skeleton" type="Skeleton" parent="HumanFemaleRig" index="0"]
-
 bones/0/name = "Global"
 bones/0/parent = -1
 bones/0/rest = Transform( -1, -1.34309e-06, 3.4056e-13, 2.237e-13, -3.63406e-07, -1, 1.34309e-06, -1, 4.20122e-07, 5.8778e-09, -0.0114655, 0.01051 )
@@ -10269,7 +10268,6 @@ bones/159/enabled = true
 bones/159/bound_children = [  ]
 
 [node name="Body" type="MeshInstance" parent="HumanFemaleRig/Skeleton" index="0"]
-
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -10292,22 +10290,18 @@ material/7 = SubResource( 3 )
 _sections_unfolded = [ "material" ]
 
 [node name="Hair" parent="HumanFemaleRig/Skeleton" index="1" instance=ExtResource( 16 )]
-
 material/0 = SubResource( 4 )
 
 [node name="Binding" type="Node" parent="HumanFemaleRig/Skeleton" index="2"]
-
 script = ExtResource( 18 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
-
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.04065, 0 )
 shape = SubResource( 5 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
-
 editor/display_folded = true
 root_node = NodePath("..")
 autoplay = ""
@@ -10327,11 +10321,9 @@ script = ExtResource( 19 )
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
-
 script = ExtResource( 18 )
 
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
-
 editor/display_folded = true
 playback_process_mode = 0
 master_player = NodePath("../AnimationPlayer")
@@ -10339,7 +10331,7 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
+"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -10350,18 +10342,6 @@ data = {
 "from": "Female Idle",
 "id": "Idle",
 "position": Vector2( 50.9995, 80.9692 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 18.0635, 591.551 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -10375,6 +10355,17 @@ data = {
 "position": Vector2( 83.0141, 440.671 ),
 "type": "animation"
 }, {
+"blend": 0.0,
+"id": "Forward-Backward",
+"position": Vector2( 348.87, 418.683 ),
+"type": "blend3"
+}, {
+"filter": [  ],
+"from": "Female Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 63.0297, 299.821 ),
+"type": "animation"
+}, {
 "filter": [  ],
 "from": "Female Strafe Right",
 "id": "Strafe Right",
@@ -10382,9 +10373,9 @@ data = {
 "type": "animation"
 }, {
 "filter": [  ],
-"from": "Female Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 63.0297, 299.821 ),
+"from": "Female Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 18.0635, 591.551 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -10393,32 +10384,31 @@ data = {
 "position": Vector2( 550.76, 192.898 ),
 "type": "blend2"
 }, {
-"blend": 0.0,
 "filter": [  ],
-"id": "Walk-Run",
-"position": Vector2( 193.967, 647.485 ),
-"type": "blend2"
-}, {
-"blend": 0.0,
-"id": "Forward-Backward",
-"position": Vector2( 348.87, 418.683 ),
-"type": "blend3"
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
+"type": "animation"
 }, {
 "filter": [  ],
 "from": "Female Run Forward",
 "id": "Run Forward",
 "position": Vector2( 26.0646, 738.414 ),
 "type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk-Run",
+"position": Vector2( 193.967, 647.485 ),
+"type": "blend2"
 } ]
 }
 _sections_unfolded = [ "Playback" ]
 
 [node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
-
 script = ExtResource( 18 )
 
 [node name="Vision" type="Node" parent="." index="4"]
-
 script = ExtResource( 20 )
 Active = true
 _headBone = "Head"
@@ -10426,10 +10416,12 @@ _eyeBoneLeft = "Eye.L"
 _eyeBoneRight = "Eye.R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
-
 script = ExtResource( 21 )
 Active = true
 _target = NodePath("..")
+ApplyGravity = true
 PositionBone = "Position"
 
+[node name="Equipments" type="Node" parent="." index="6"]
+script = ExtResource( 22 )
 

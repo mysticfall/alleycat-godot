@@ -4,6 +4,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
 using AlleyCat.IO;
+using AlleyCat.Item;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
@@ -36,6 +37,11 @@ namespace AlleyCat.Character
 
         [Service]
         public Skeleton Skeleton { get; private set; }
+
+        [Service]
+        public IEquipmentContainer Equipments { get; private set; }
+
+        public IEnumerable<EquipmentSlot> EquipmentSlots => Race?.EquipmentSlots ?? Enumerable.Empty<EquipmentSlot>();
 
         public Spatial Spatial => this;
 
