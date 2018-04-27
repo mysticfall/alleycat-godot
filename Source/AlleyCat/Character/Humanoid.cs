@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
@@ -32,47 +31,21 @@ namespace AlleyCat.Character
 
         [Export, UsedImplicitly] private Sex _sex;
 
-        public void SwitchRace(Sex sex) => Switch(_race, sex);
-
-        public void SwitchSex(string race) => Switch(race, _sex);
-
-        protected void Switch(string race, Sex sex)
-        {
-            var value = (IMorphableRace) RaceRegistry[race];
-
-            Ensure.Any.IsNotNull(value, nameof(value));
-
-            Debug.Assert(value != null, $"Unknown race name '{value}'.");
-
-            Switch(value, sex);
-        }
-
-        protected virtual void Switch([NotNull] IMorphableRace race, Sex sex)
-        {
-            Ensure.Any.IsNotNull(race, nameof(race));
-
-            _sex = sex;
-            _race = race.Key;
-
-            var groups = race.GetMorphGroups(sex).ToList();
-            var morphs = groups.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this));
-
-            _morphSet.Value?.Dispose();
-            _morphSet.Value = new MorphSet(morphs);
-        }
-
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            Switch(_race, _sex);
+            var groups = ((IMorphableRace) Race)?.GetMorphGroups(Sex).ToList();
+            var morphs = groups?.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this));
+
+            if (morphs != null)
+            {
+                _morphSet.Value = new MorphSet(morphs);
+            }
         }
 
         public override void SaveState(IState state)
         {
             Ensure.Any.IsNotNull(state, nameof(state));
-
-            state["Sex"] = _sex;
-            state["Race"] = _race;
 
             var transform = state.GetSection("Transform");
 
@@ -99,11 +72,6 @@ namespace AlleyCat.Character
             {
                 Rotation = (Vector3) transform["Rotation"];
             }
-
-            Switch(
-                state.ContainsKey("Race") ? (string) state["Race"] : _race,
-                state.ContainsKey("Sex") ? (Sex) state["Sex"] : _sex
-            );
 
             var morphs = state.GetSection(Morphs.Key);
 

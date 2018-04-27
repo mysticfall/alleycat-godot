@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
-using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
@@ -22,10 +20,7 @@ namespace AlleyCat.UI.Character
         [PostConstruct]
         protected virtual void OnInitialized()
         {
-            Character
-                .OnMorphsChange
-                .Subscribe(LoadMorphs)
-                .AddTo(this);
+            LoadMorphs(Character.Morphs);
         }
 
         protected virtual void LoadMorphs(IMorphSet morphSet)
