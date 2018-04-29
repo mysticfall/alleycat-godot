@@ -38,7 +38,7 @@ namespace AlleyCat.Motion
         private Vector3 _requestedMovement;
 
         private Vector3 _requestedRotation;
-        
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {

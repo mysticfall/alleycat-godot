@@ -98,12 +98,7 @@ namespace AlleyCat.Control
 
         [Export, UsedImplicitly] private Vector2 _minThirdPersonRotation = new Vector2(-180f, -89f);
 
-        private readonly ReactiveProperty<PlayerPerspective> _perspective;
-
-        public PlayerControl()
-        {
-            _perspective = new ReactiveProperty<PlayerPerspective>();
-        }
+        private readonly ReactiveProperty<PlayerPerspective> _perspective = new ReactiveProperty<PlayerPerspective>();
 
         protected override void OnInitialize()
         {

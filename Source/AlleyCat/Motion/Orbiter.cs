@@ -89,15 +89,9 @@ namespace AlleyCat.Motion
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
-        private readonly ReactiveProperty<Vector2> _rotation;
+        private readonly ReactiveProperty<Vector2> _rotation = new ReactiveProperty<Vector2>();
 
-        private readonly ReactiveProperty<float> _distance;
-
-        protected Orbiter()
-        {
-            _rotation = new ReactiveProperty<Vector2>();
-            _distance = new ReactiveProperty<float>();
-        }
+        private readonly ReactiveProperty<float> _distance= new ReactiveProperty<float>();
 
         public override void _Process(float delta)
         {
