@@ -1,8 +1,8 @@
-﻿using Godot;
+﻿using AlleyCat.Common;
 
 namespace AlleyCat.Autowire
 {
-    public class AutowiredNode : Node
+    public class AutowiredNode : BaseNode
     {
         public override void _Ready()
         {

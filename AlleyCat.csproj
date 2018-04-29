@@ -131,14 +131,14 @@
     <Compile Include="Source\AlleyCat\Character\Morph\Morph.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\RangedMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Common\BaseNode.cs" />
     <Compile Include="Source\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\Directory.cs" />
-    <Compile Include="Source\AlleyCat\Common\DisposableCollector.cs" />
-    <Compile Include="Source\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
+    <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
