@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Control.Generic;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -13,7 +14,15 @@ namespace AlleyCat.Control
         public virtual string Key => Name;
 
         [Export]
-        public bool Active { get; set; } = true;
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
+
+        public IObservable<bool> OnActiveStateChange => _active;
+
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         private IObservable<T> _observable;
 
@@ -42,5 +51,12 @@ namespace AlleyCat.Control
 
         [NotNull]
         protected abstract IObservable<T> CreateObservable();
+
+        protected override void Dispose(bool disposing)
+        {
+            _active?.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }

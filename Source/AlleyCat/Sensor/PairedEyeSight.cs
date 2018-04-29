@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
@@ -11,7 +12,13 @@ namespace AlleyCat.Sensor
     public class PairedEyeSight : AutowiredNode, IPairedEyeSight
     {
         [Export]
-        public bool Active { get; set; } = true;
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
+
+        public IObservable<bool> OnActiveStateChange => _active;
 
         public Transform Head => Skeleton.GlobalTransform *
                                  new Transform(Skeleton.GetBoneTransform(_headIndex).basis,
@@ -75,6 +82,8 @@ namespace AlleyCat.Sensor
 
         private int _eyeIndexRight;
 
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {
@@ -90,6 +99,13 @@ namespace AlleyCat.Sensor
         public void LookAt(Vector3 target)
         {
             throw new NotImplementedException();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _active?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

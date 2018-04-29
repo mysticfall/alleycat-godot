@@ -11,7 +11,13 @@ namespace AlleyCat.Motion
     public abstract class Orbiter : AutowiredNode, IOrbiter
     {
         [Export]
-        public bool Active { get; set; } = true;
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
+
+        public IObservable<bool> OnActiveStateChange => _active;
 
         public virtual bool Valid => Target != null;
 
@@ -81,6 +87,8 @@ namespace AlleyCat.Motion
             }
         }
 
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
         private readonly ReactiveProperty<Vector2> _rotation;
 
         private readonly ReactiveProperty<float> _distance;
@@ -102,6 +110,7 @@ namespace AlleyCat.Motion
 
         protected override void Dispose(bool disposing)
         {
+            _active?.Dispose();
             _rotation?.Dispose();
             _distance?.Dispose();
 

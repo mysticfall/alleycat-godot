@@ -12,7 +12,13 @@ namespace AlleyCat.Motion
     public abstract class Locomotion<T> : AutowiredNode, ILocomotion where T : Spatial
     {
         [Export]
-        public bool Active { get; set; } = true;
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
+
+        public IObservable<bool> OnActiveStateChange => _active;
 
         public virtual bool Valid => Target != null;
 
@@ -27,10 +33,12 @@ namespace AlleyCat.Motion
 
         [Export, UsedImplicitly] private NodePath _target = "..";
 
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
         private Vector3 _requestedMovement;
 
         private Vector3 _requestedRotation;
-
+        
         [PostConstruct]
         protected virtual void OnInitialize()
         {
@@ -62,6 +70,13 @@ namespace AlleyCat.Motion
                 Velocity = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
                 RotationalVelocity = (before.basis.Inverse() * after.basis).GetEuler() / delta;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _active?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

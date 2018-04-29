@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
@@ -10,7 +11,13 @@ namespace AlleyCat.Control
     public class FreeViewControl : AutowiredNode, IActivatable, IValidatable
     {
         [Export]
-        public bool Active { get; set; } = true;
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
+
+        public IObservable<bool> OnActiveStateChange => _active;
 
         public virtual bool Valid => Target != null;
 
@@ -26,6 +33,8 @@ namespace AlleyCat.Control
         [Node("Rotation")] private InputBindings _rotationInput;
 
         [Node("Movement")] private InputBindings _movementInput;
+
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         [PostConstruct]
         private void OnInitialize()
@@ -45,6 +54,13 @@ namespace AlleyCat.Control
                 .Select(v => v * 0.1f)
                 .Subscribe(Target.TranslateObjectLocal)
                 .AddTo(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _active?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }
