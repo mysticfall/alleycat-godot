@@ -217,6 +217,7 @@
     <Compile Include="Source\AlleyCat\Motion\ILocomotive.cs" />
     <Compile Include="Source\AlleyCat\Motion\ImmediateLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\IOrbiter.cs" />
+    <Compile Include="Source\AlleyCat\Motion\IRotatable.cs" />
     <Compile Include="Source\AlleyCat\Motion\KinematicLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\Locomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\Orbiter.cs" />
