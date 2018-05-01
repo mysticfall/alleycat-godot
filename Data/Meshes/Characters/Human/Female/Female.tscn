@@ -18,7 +18,7 @@
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Pony Tail.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Data/Textures/Hairs/Human/Female/ponytail01_diffuse.png" type="Texture" id=17]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=18]
-[ext_resource path="res://Source/AlleyCat/Animation/PostProcessingAnimationPlayer.cs" type="Script" id=19]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=19]
 [ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=20]
 [ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=21]
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=22]
@@ -10317,7 +10317,6 @@ playback_speed = 1.0
 "anims/Female Walk Backward" = SubResource( 12 )
 "anims/Female Walk Forward" = SubResource( 13 )
 blend_times = [  ]
-script = ExtResource( 19 )
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
@@ -10331,7 +10330,7 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1 ],
+"connections": [ "Walk", "out", 0, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -10342,6 +10341,42 @@ data = {
 "from": "Female Idle",
 "id": "Idle",
 "position": Vector2( 50.9995, 80.9692 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk",
+"position": Vector2( 550.76, 192.898 ),
+"type": "blend2"
+}, {
+"filter": [  ],
+"from": "Female Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 18.0635, 591.551 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Right",
+"id": "Strafe Right",
+"position": Vector2( 201.931, 175.895 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Strafe Left",
+"id": "Strafe Left",
+"position": Vector2( 203.925, 22.0378 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Female Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 63.0297, 299.821 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -10356,51 +10391,15 @@ data = {
 "type": "animation"
 }, {
 "blend": 0.0,
-"id": "Forward-Backward",
-"position": Vector2( 348.87, 418.683 ),
-"type": "blend3"
-}, {
-"filter": [  ],
-"from": "Female Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 63.0297, 299.821 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Strafe Right",
-"id": "Strafe Right",
-"position": Vector2( 201.931, 175.895 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 18.0635, 591.551 ),
-"type": "animation"
-}, {
-"blend": 0.0,
-"filter": [  ],
-"id": "Walk",
-"position": Vector2( 550.76, 192.898 ),
-"type": "blend2"
-}, {
-"filter": [  ],
-"from": "Female Strafe Left",
-"id": "Strafe Left",
-"position": Vector2( 203.925, 22.0378 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
-"type": "animation"
-}, {
-"blend": 0.0,
 "filter": [  ],
 "id": "Walk-Run",
 "position": Vector2( 193.967, 647.485 ),
 "type": "blend2"
+}, {
+"blend": 0.0,
+"id": "Forward-Backward",
+"position": Vector2( 348.87, 418.683 ),
+"type": "blend3"
 } ]
 }
 _sections_unfolded = [ "Playback" ]
@@ -10408,20 +10407,24 @@ _sections_unfolded = [ "Playback" ]
 [node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
 script = ExtResource( 18 )
 
-[node name="Vision" type="Node" parent="." index="4"]
+[node name="Animations" type="Node" parent="." index="4"]
+script = ExtResource( 19 )
+Active = true
+
+[node name="Vision" type="Node" parent="." index="5"]
 script = ExtResource( 20 )
 Active = true
 _headBone = "Head"
 _eyeBoneLeft = "Eye.L"
 _eyeBoneRight = "Eye.R"
 
-[node name="Locomotion" type="Node" parent="." index="5"]
+[node name="Locomotion" type="Node" parent="." index="6"]
 script = ExtResource( 21 )
 Active = true
 _target = NodePath("..")
 ApplyGravity = true
 PositionBone = "Position"
 
-[node name="Equipments" type="Node" parent="." index="6"]
+[node name="Equipments" type="Node" parent="." index="7"]
 script = ExtResource( 22 )
 

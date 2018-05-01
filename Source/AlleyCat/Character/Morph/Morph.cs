@@ -35,6 +35,8 @@ namespace AlleyCat.Character.Morph
 
         private readonly ReactiveProperty<TVal> _value;
 
+        private readonly IDisposable _disposable;
+
         protected Morph([NotNull] TDef definition)
         {
             Ensure.Any.IsNotNull(definition, nameof(definition));
@@ -42,7 +44,13 @@ namespace AlleyCat.Character.Morph
             Definition = definition;
 
             _value = new ReactiveProperty<TVal>(Definition.Default);
+
+            _disposable = OnChange.Skip(1).Subscribe(Apply);
         }
+
+        public void Apply() => Apply(Value);
+
+        protected abstract void Apply(TVal value);
 
         public void Reset() => Value = Definition.Default;
 
@@ -55,6 +63,7 @@ namespace AlleyCat.Character.Morph
         protected virtual void Dispose(bool disposing)
         {
             _value?.Dispose();
+            _disposable?.Dispose();
         }
     }
 }

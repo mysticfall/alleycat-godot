@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnsureThat;
@@ -17,8 +16,6 @@ namespace AlleyCat.Character.Morph
 
         public IEnumerable<int> SurfaceIndexes { get; }
 
-        private readonly IDisposable _disposable;
-
         public MaterialColorMorph([NotNull] MeshInstance mesh,
             IEnumerable<int> indexes,
             [NotNull] MaterialColorMorphDefinition definition) : base(definition)
@@ -28,15 +25,8 @@ namespace AlleyCat.Character.Morph
 
             Mesh = mesh;
             SurfaceIndexes = indexes.ToList();
-
-            _disposable = OnChange.Subscribe(v => Materials.ToList().ForEach(m => m.AlbedoColor = v));
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            _disposable?.Dispose();
-           
-            base.Dispose(disposing);
-        }
+        protected override void Apply(Color value) => Materials.ToList().ForEach(m => m.AlbedoColor = value);
     }
 }

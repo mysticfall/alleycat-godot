@@ -2,13 +2,13 @@ using System;
 using System.Diagnostics;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
-using EnsureThat;
+using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
-    public class AnimationDrivenLocomotion : KinematicLocomotion, IAnimationPostProcessor
+    public class AnimationDrivenLocomotion : KinematicLocomotion
     {
         public const string WalkBlendNode = "Walk";
 
@@ -17,10 +17,7 @@ namespace AlleyCat.Motion
         public const string SideBlendNode = "Left-Right";
 
         [Service]
-        public PostProcessingAnimationPlayer AnimationPlayer { get; private set; }
-
-        [Service]
-        public AnimationTreePlayer AnimationTreePlayer { get; private set; }
+        public IAnimationStateManager AnimationManager { get; private set; }
 
         [Service]
         public Skeleton Skeleton { get; private set; }
@@ -41,47 +38,38 @@ namespace AlleyCat.Motion
         {
             base.OnInitialize();
 
-            AnimationTreePlayer.Active = false;
-            AnimationPlayer.PlaybackActive = false;
-            AnimationPlayer.Processors.Add(this);
-
             _boneIndex = Skeleton.FindBone(PositionBone);
 
             Debug.Assert(_boneIndex != -1, $"Failed to find a bone named '{PositionBone}'.");
 
             _initialTransform = Skeleton.GetBoneTransform(_boneIndex);
 
+            AnimationManager.OnBeforeAdvance
+                .Subscribe(_ => OnBeforeAnimation())
+                .AddTo(this);
+
+            AnimationManager.OnAdvance
+                .Subscribe(OnAnimation)
+                .AddTo(this);
+
             Reset();
-        }
-
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-
-            AnimationPlayer.Processors.Remove(this);
         }
 
         protected override Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity)
         {
+            var player = AnimationManager.TreePlayer;
+
             var momentum = Math.Abs(velocity.x) + Math.Abs(velocity.z);
 
             if (momentum > 0)
             {
                 var ratio = Math.Abs(velocity.z) / momentum;
 
-                AnimationTreePlayer.Blend2NodeSetAmount(WalkBlendNode, ratio);
+                player.Blend2NodeSetAmount(WalkBlendNode, ratio);
             }
 
-            AnimationTreePlayer.Blend3NodeSetAmount(ForwardBlendNode, -velocity.z);
-            AnimationTreePlayer.Blend3NodeSetAmount(SideBlendNode, velocity.x);
-
-            AnimationTreePlayer.Advance(0);
-
-            AnimationPlayer.BeforeFrame();
-
-            AnimationTreePlayer.Advance(delta);
-
-            AnimationPlayer.AfterFrame(delta);
+            player.Blend3NodeSetAmount(ForwardBlendNode, -velocity.z);
+            player.Blend3NodeSetAmount(SideBlendNode, velocity.x);
 
             var rotation = new Transform(_offset.basis, new Vector3());
 
@@ -93,17 +81,13 @@ namespace AlleyCat.Motion
             return _offset.origin / delta;
         }
 
-        public void BeforeFrame(PostProcessingAnimationPlayer player)
+        protected virtual void OnBeforeAnimation()
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
-
             _lastPose = Skeleton.GetBoneTransform(_boneIndex);
         }
 
-        public void AfterFrame(PostProcessingAnimationPlayer player, float delta)
+        protected virtual void OnAnimation(float delta)
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
-
             var pose = Skeleton.GetBoneTransform(_boneIndex);
             var poseDelta = _lastPose.Inverse() * pose;
 
@@ -116,6 +100,7 @@ namespace AlleyCat.Motion
             Skeleton.SetBonePose(_boneIndex, new Transform(Basis.Identity, new Vector3()));
         }
 
+        [UsedImplicitly]
         public void Reset()
         {
             _lastPose = _initialTransform;

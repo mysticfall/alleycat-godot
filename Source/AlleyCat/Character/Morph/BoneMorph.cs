@@ -8,28 +8,30 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
-    public class BoneMorph : Morph<float, BoneMorphDefinition>, IAnimationPostProcessor
+    public class BoneMorph : Morph<float, BoneMorphDefinition>
     {
         public Skeleton Skeleton { get; }
 
-        public PostProcessingAnimationPlayer AnimationPlayer { get; }
+        public IAnimationManager AnimationManager { get; }
 
         protected IEnumerable<int> BoneIndexes { get; }
 
+        private readonly IDisposable _disposable;
+
         public BoneMorph(
             [NotNull] Skeleton skeleton,
-            [NotNull] PostProcessingAnimationPlayer player,
+            [NotNull] IAnimationManager manager,
             [NotNull] BoneMorphDefinition definition) : base(definition)
         {
             Ensure.Any.IsNotNull(skeleton, nameof(skeleton));
-            Ensure.Any.IsNotNull(player, nameof(player));
+            Ensure.Any.IsNotNull(manager, nameof(manager));
 
             Skeleton = skeleton;
-            AnimationPlayer = player;
+            AnimationManager = manager;
 
             BoneIndexes = definition.Bones.Select(FindBone).ToList();
 
-            AnimationPlayer.Processors.Add(this);
+            _disposable = AnimationManager.OnAdvance.Subscribe(_ => Apply());
         }
 
         private int FindBone(string name)
@@ -46,11 +48,7 @@ namespace AlleyCat.Character.Morph
             return index;
         }
 
-        public void BeforeFrame(PostProcessingAnimationPlayer player)
-        {
-        }
-
-        public void AfterFrame(PostProcessingAnimationPlayer player, float delta)
+        protected override void Apply(float value)
         {
             var defaultScale = new Vector3(1, 1, 1) * Definition.Default;
             var deltaScale = new Vector3(1, 1, 1) * Value - defaultScale;
@@ -67,7 +65,7 @@ namespace AlleyCat.Character.Morph
 
         protected override void Dispose(bool disposing)
         {
-            AnimationPlayer?.Processors.Remove(this);
+            _disposable?.Dispose();
 
             base.Dispose(disposing);
         }

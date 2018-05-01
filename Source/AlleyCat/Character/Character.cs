@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
@@ -33,7 +34,7 @@ namespace AlleyCat.Character
         public TLocomotion Locomotion { get; private set; }
 
         [Service]
-        public AnimationPlayer AnimationPlayer { get; private set; }
+        public IAnimationManager AnimationManager { get; private set; }
 
         [Service]
         public Skeleton Skeleton { get; private set; }

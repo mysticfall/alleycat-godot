@@ -57,14 +57,15 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\AlleyCat\Animation\AnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
-    <Compile Include="Source\AlleyCat\Animation\IAnimationPostProcessor.cs" />
-    <Compile Include="Source\AlleyCat\Animation\PostProcessingAnimationPlayer.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationStateManager.cs" />
+    <Compile Include="Source\AlleyCat\Animation\IAnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
+    <Compile Include="Source\AlleyCat\Animation\IAnimationStateManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
-    <Compile Include="Source\AlleyCat\Animation\BonePostProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttribute.cs" />

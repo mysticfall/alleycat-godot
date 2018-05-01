@@ -38,6 +38,8 @@ namespace AlleyCat.Character.Morph
 
             var list = morphs.ToList();
 
+            list.ForEach(m => m.Apply());
+
             _morphs = list.ToDictionary();
 
             Groups = list.Select(m => m.Definition.Group).Distinct().ToList();

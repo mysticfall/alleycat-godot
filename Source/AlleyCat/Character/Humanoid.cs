@@ -35,7 +35,7 @@ namespace AlleyCat.Character
         protected virtual void OnInitialize()
         {
             var groups = ((IMorphableRace) Race)?.GetMorphGroups(Sex).ToList();
-            var morphs = groups?.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this));
+            var morphs = groups?.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this)).ToList();
 
             if (morphs != null)
             {

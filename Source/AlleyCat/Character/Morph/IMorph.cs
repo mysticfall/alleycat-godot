@@ -11,6 +11,8 @@ namespace AlleyCat.Character.Morph
 
         object Value { get; set; }
 
+        void Apply();
+
         void Reset();
     }
 

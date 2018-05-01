@@ -47,14 +47,7 @@ namespace AlleyCat.Character.Morph
                     "The specified morphable does not implement IRigged interface.");
             }
 
-            if (!(rig.AnimationPlayer is PostProcessingAnimationPlayer player))
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(morphable),
-                    "The specified morphable does not have an associated PostProcessingAnimationPlayer.");
-            }
-
-            return new BoneMorph(skeleton, player, this);
+            return new BoneMorph(skeleton, rig.AnimationManager, this);
         }
     }
 }
