@@ -8,40 +8,11 @@ using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
 {
-    public abstract class Orbiter : AutowiredNode, IOrbiter
+    public abstract class Orbiter : Rotatable, IOrbiter
     {
-        [Export]
-        public bool Active
-        {
-            get => _active.Value;
-            set => _active.Value = value;
-        }
-
-        public IObservable<bool> OnActiveStateChange => _active;
-
-        public virtual bool Valid => Target != null;
+        public override bool Valid => base.Valid && Target != null;
 
         public abstract Spatial Target { get; }
-
-        public abstract Vector3 Origin { get; }
-
-        public abstract Vector3 Up { get; }
-
-        public abstract Vector3 Forward { get; }
-
-        public Vector3 Right => Forward.Cross(Up);
-
-        public float Pitch
-        {
-            get => Rotation.y;
-            set => Rotation = new Vector2(Yaw, value);
-        }
-
-        public float Yaw
-        {
-            get => Rotation.x;
-            set => Rotation = new Vector2(value, Pitch);
-        }
 
         public float Distance
         {
@@ -49,25 +20,7 @@ namespace AlleyCat.Motion
             set => _distance.Value = DistanceRange.Clamp(value);
         }
 
-        public Vector2 Rotation
-        {
-            get => _rotation.Value;
-            set
-            {
-                var yaw = YawRange.Clamp(NormalizeAspectAngle(value.x));
-                var pitch = PitchRange.Clamp(NormalizeAspectAngle(value.y));
-
-                _rotation.Value = new Vector2(yaw, pitch);
-            }
-        }
-
-        public IObservable<Vector2> OnRotationChange => _rotation.Where(v => Active && Valid);
-
         public IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
-
-        public virtual Range<float> PitchRange => new Range<float>(-Mathf.Pi / 2f, Mathf.Pi / 2f);
-
-        public virtual Range<float> YawRange => new Range<float>(-Mathf.Pi, Mathf.Pi);
 
         public virtual Range<float> DistanceRange => new Range<float>(0.1f, 10f);
 
@@ -87,37 +40,22 @@ namespace AlleyCat.Motion
             }
         }
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private readonly ReactiveProperty<float> _distance = new ReactiveProperty<float>();
 
-        private readonly ReactiveProperty<Vector2> _rotation = new ReactiveProperty<Vector2>();
-
-        private readonly ReactiveProperty<float> _distance= new ReactiveProperty<float>();
-
-        public override void _Process(float delta)
+        [PostConstruct]
+        protected virtual void OnInitialize()
         {
-            base._Process(delta);
-
-            if (!Active) return;
-
-            Target.GlobalTransform = TargetTransform;
+            this.OnProcess()
+                .Where(_ => Active && Valid)
+                .Subscribe(_ => Target.GlobalTransform = TargetTransform)
+                .AddTo(this);
         }
 
         protected override void Dispose(bool disposing)
         {
-            _active?.Dispose();
-            _rotation?.Dispose();
             _distance?.Dispose();
 
             base.Dispose(disposing);
-        }
-
-        private static float NormalizeAspectAngle(float angle)
-        {
-            var value = angle;
-
-            while (value < 0) value += 2 * Mathf.Pi;
-
-            return value > Mathf.Pi ? value - 2 * Mathf.Pi : value;
         }
     }
 }
