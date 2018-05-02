@@ -9,7 +9,7 @@ using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Control
 {
-    public class InspectingViewControl : OrbitingViewControl
+    public class InspectingView : OrbitingView
     {
         [Node]
         public ITransformable Pivot { get; private set; }

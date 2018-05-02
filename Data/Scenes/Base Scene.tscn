@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/OrbitingCharacterView.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Control/HeadMountedView.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Control/FreeCameraView.cs" type="Script" id=9]
 
 [node name="Base Scene" type="Node" index="0"]
 
@@ -44,21 +48,183 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 [node name="Player" type="Node" parent="Control" index="0"]
 script = ExtResource( 2 )
 Active = true
-InitialDistance = 1.0
-_camera = NodePath("../../Cameras/Main Camera")
-InitialPerspective = 1
-FirstPersonOffset = 0.2
 _character = NodePath("../../Entities/Characters/Player")
-_maxFirstPersonRotation = Vector2( 90, 70 )
-_minFirstPersonRotation = Vector2( -90, -80 )
-_maxThirdPersonRotation = Vector2( 180, 70 )
-_minThirdPersonRotation = Vector2( -180, -89 )
+_camera = NodePath("../../Cameras/Main Camera")
 
-[node name="Movement" type="Node" parent="Control/Player" index="0"]
+[node name="Views" type="Node" parent="Control/Player" index="0"]
+
+[node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
 script = ExtResource( 3 )
+Active = true
+_maxYaw = 180.0
+_minYaw = -180.0
+_maxPitch = 90.0
+_minPitch = -89.0
+InitialDistance = 1.0
+
+[node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
+script = ExtResource( 4 )
+
+[node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
+script = ExtResource( 4 )
+
+[node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
+Polling = false
+
+[node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
+script = ExtResource( 7 )
+Active = false
+_maxYaw = 90.0
+_minYaw = -90.0
+_maxPitch = 70.0
+_minPitch = -80.0
+
+[node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
+script = ExtResource( 4 )
+
+[node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="1"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View" index="1"]
+script = ExtResource( 4 )
+
+[node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
+script = ExtResource( 8 )
+Active = true
+Action = "zoom_out"
+
+[node name="Free Camera View" type="Node" parent="Control/Player/Views" index="2"]
+script = ExtResource( 9 )
+Active = false
+_maxYaw = 180.0
+_minYaw = -180.0
+_maxPitch = 90.0
+_minPitch = -90.0
+
+[node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
+script = ExtResource( 4 )
+
+[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
+script = ExtResource( 5 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View" index="1"]
+script = ExtResource( 4 )
+
+[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
+Polling = true
+
+[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
+script = ExtResource( 6 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
+Polling = true
+
+[node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View" index="2"]
+script = ExtResource( 4 )
+
+[node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
+script = ExtResource( 8 )
+Active = true
+Action = "free_camera"
+
+[node name="Movement" type="Node" parent="Control/Player" index="1"]
+script = ExtResource( 4 )
 
 [node name="X" type="Node" parent="Control/Player/Movement" index="0"]
-script = ExtResource( 4 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -71,7 +237,7 @@ NegativeAction = "move_left"
 Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Movement" index="1"]
-script = ExtResource( 4 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -82,47 +248,4 @@ WindowShift = 5.0
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
-
-[node name="Rotation" type="Node" parent="Control/Player" index="1"]
-script = ExtResource( 3 )
-
-[node name="X" type="Node" parent="Control/Player/Rotation" index="0"]
-script = ExtResource( 5 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 0
-Maximum = 0.1
-
-[node name="Y" type="Node" parent="Control/Player/Rotation" index="1"]
-script = ExtResource( 5 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 1
-Maximum = 0.1
-
-[node name="Zoom" type="Node" parent="Control/Player" index="2"]
-script = ExtResource( 3 )
-
-[node name="Value" type="Node" parent="Control/Player/Zoom" index="0"]
-script = ExtResource( 4 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-PositiveAction = "zoom_in"
-NegativeAction = "zoom_out"
-Polling = false
 

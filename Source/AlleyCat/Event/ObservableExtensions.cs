@@ -9,11 +9,20 @@ namespace AlleyCat.Event
     public static class ObservableExtensions
     {
         [NotNull]
-        public static IObservable<Unit> AsUnitObservable<T>([NotNull] this IObservable<T> observable)
+        public static IObservable<Unit> AsUnitObservable<T>([NotNull] this IObservable<T> source)
         {
-            Ensure.Any.IsNotNull(observable, nameof(observable));
+            Ensure.Any.IsNotNull(source, nameof(source));
 
-            return observable.Select(_ => Unit.Default);
+            return source.Select(_ => Unit.Default);
+        }
+
+        [NotNull]
+        public static IObservable<Tuple<T, T>> Pairwise<T>([NotNull] this IObservable<T> source)
+        {
+            Ensure.Any.IsNotNull(source, nameof(source));
+
+            return source.Scan(
+                Tuple.Create(default(T), default(T)), (agg, current) => Tuple.Create(agg.Item2, current));
         }
 
         [NotNull]

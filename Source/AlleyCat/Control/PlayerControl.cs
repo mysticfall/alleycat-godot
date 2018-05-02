@@ -1,125 +1,132 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
 using Axis = AlleyCat.Common.VectorExtensions;
-using static AlleyCat.Control.PlayerPerspective;
 
 namespace AlleyCat.Control
 {
-    public class PlayerControl : OrbitingViewControl
+    [AutowireContext, Singleton(typeof(IPlayerControl))]
+    public class PlayerControl : AutowiredNode, IPlayerControl
     {
-        [Node]
-        public IHumanoid Character { get; private set; }
+        [Export]
+        public bool Active
+        {
+            get => _active.Value;
+            set => _active.Value = value;
+        }
 
-        public PlayerPerspective Perspective
+        public IObservable<bool> OnActiveStateChange => _active;
+
+        public virtual bool Valid => Character != null && Camera != null && Camera.IsCurrent();
+
+        [Node]
+        public IHumanoid Character { get; set; }
+
+        [Node]
+        public Camera Camera { get; set; }
+
+        [Service]
+        public IEnumerable<IPerspectiveView> Perspectives { get; private set; }
+
+        public IPerspectiveView Perspective
         {
             get => _perspective.Value;
             set => _perspective.Value = value;
         }
 
-        [Export]
-        public PlayerPerspective InitialPerspective { get; set; } = ThirdPerson;
-
-        public IObservable<PlayerPerspective> OnPerspectiveChange => _perspective.Where(v => Active && Valid);
-
-        public override bool Valid => base.Valid && Character != null;
-
-        [Export]
-        public float FirstPersonOffset { get; set; } = 0.2f;
-
-        public override Range<float> YawRange
-        {
-            get
-            {
-                var min = Perspective == FirstPerson ? _minFirstPersonRotation : _minThirdPersonRotation;
-                var max = Perspective == FirstPerson ? _maxFirstPersonRotation : _maxThirdPersonRotation;
-
-                return new Range<float>(Mathf.Deg2Rad(min.x), Mathf.Deg2Rad(max.x));
-            }
-        }
-
-        public override Range<float> PitchRange
-        {
-            get
-            {
-                var min = Perspective == FirstPerson ? _minFirstPersonRotation : _minThirdPersonRotation;
-                var max = Perspective == FirstPerson ? _maxFirstPersonRotation : _maxThirdPersonRotation;
-
-                return new Range<float>(Mathf.Deg2Rad(min.y), Mathf.Deg2Rad(max.y));
-            }
-        }
-
-        public override Vector3 Origin => Character.Vision.Head.origin;
-
-        public override Vector3 Up => Perspective == ThirdPerson ? Vector3.Up : Character.Vision.Head.Up();
-
-        public override Vector3 Forward =>
-            Perspective == ThirdPerson
-                ? new Plane(Vector3.Up, 0f).Project(Character.GlobalTransform().Forward())
-                : Character.Vision.Forward;
-
-        protected override Transform TargetTransform
-        {
-            get
-            {
-                if (Perspective == ThirdPerson)
-                {
-                    return base.TargetTransform;
-                }
-
-                var pivot = Origin;
-
-                var direction = Forward
-                    .Rotated(Up, Yaw)
-                    .Rotated(Right.Rotated(Up, Yaw), Pitch);
-
-                var transform = Character.Vision.Head.LookingAt(pivot + direction, Up);
-
-                return new Transform(transform.basis, Character.Vision.Origin + direction * FirstPersonOffset);
-            }
-        }
+        public IObservable<IPerspectiveView> OnPerspectiveChange => _perspective.Where(v => Active && Valid);
 
         protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _character = "..";
 
+        [Export, UsedImplicitly] private NodePath _camera = "..";
+
         [Node("Movement")] private InputBindings _movementInput;
 
-        [Export, UsedImplicitly] private Vector2 _maxFirstPersonRotation = new Vector2(90f, 70f);
+        private readonly ReactiveProperty<IPerspectiveView> _perspective = new ReactiveProperty<IPerspectiveView>();
 
-        [Export, UsedImplicitly] private Vector2 _minFirstPersonRotation = new Vector2(-90f, -80f);
+        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
-        [Export, UsedImplicitly] private Vector2 _maxThirdPersonRotation = new Vector2(180f, 70f);
+        private IPerspectiveView _lastPerspective;
 
-        [Export, UsedImplicitly] private Vector2 _minThirdPersonRotation = new Vector2(-180f, -89f);
-
-        private readonly ReactiveProperty<PlayerPerspective> _perspective = new ReactiveProperty<PlayerPerspective>();
-
-        protected override void OnInitialize()
+        [PostConstruct]
+        protected void OnInitialize()
         {
-            base.OnInitialize();
-
             Input.SetMouseMode(Input.MouseMode.Captured);
+
+            Camera = this.GetNodeOrDefault(_camera, GetViewport().GetCamera());
+            Character = Character ?? GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).FirstOrDefault();
+
+            IPerspectiveView active = null;
+
+            foreach (var perspective in Perspectives)
+            {
+                perspective.Camera = Camera;
+                perspective.Character = Character;
+
+                if (perspective.Active && active == null)
+                {
+                    active = perspective;
+                }
+
+                perspective.OnActiveStateChange
+                    .Where(s => !s && perspective == Perspective)
+                    .Select(_ => FindNextValidPerspective(perspective))
+                    .Where(p => p != null)
+                    .Subscribe(p => Perspective = p)
+                    .AddTo(this);
+
+                perspective.OnActiveStateChange
+                    .Where(s => s && perspective != Perspective)
+                    .Subscribe(_ => Perspective = perspective)
+                    .AddTo(this);
+            }
+
+            if (active != null)
+            {
+                Perspective = active;
+            }
 
             MovementInput
                 .Where(_ => Character?.Locomotion != null)
+                .Where(_ => Perspective.AutoActivate)
                 .Select(v => new Vector3(v.x, 0, -v.y))
-                .Subscribe(v => Character.Locomotion.Move(v))
+                .Subscribe(v => Character?.Locomotion.Move(v))
                 .AddTo(this);
 
-            OnDistanceChange
-                .Select(v => v <= DistanceRange.Min ? FirstPerson : ThirdPerson)
-                .Where(v => Perspective != v)
-                .Subscribe(v => Perspective = v)
+            OnPerspectiveChange
+                .Pairwise()
+                .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2))
                 .AddTo(this);
-
-            Perspective = InitialPerspective;
         }
+
+        protected virtual void OnPerspectiveChanged(IPerspectiveView previous, IPerspectiveView current)
+        {
+            if (previous is IRotatable previousRotatable && current is IRotatable currentRotatable)
+            {
+                currentRotatable.Rotation = previousRotatable.Rotation;
+            }
+
+            _lastPerspective = previous != null && previous.AutoActivate ? previous : null;
+
+            current?.Activate();
+            previous?.Deactivate();
+        }
+
+        protected IPerspectiveView FindNextValidPerspective([CanBeNull] IPerspectiveView current = null) =>
+            new[] {_lastPerspective}
+                .Where(p => p != null)
+                .Concat(Perspectives)
+                .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
 
         public override void _Process(float delta)
         {
@@ -127,21 +134,23 @@ namespace AlleyCat.Control
 
             if (!Active) return;
 
-            if (Character.Locomotion.Velocity.LengthSquared() < 0.1f)
+            // ReSharper disable once PossibleNullReferenceException
+            if (!Character.Locomotion.IsMoving())
             {
                 Character.Locomotion.Rotate(Vector3.Zero);
-
-                return;
             }
+            else if (Perspective is IRotatable rotatable)
+            {
+                var offset = Mathf.Lerp(0, rotatable.Yaw, delta * 1.5f);
 
-            var offset = Mathf.Lerp(0, Yaw, delta * 1.5f);
-
-            Character.Locomotion.Rotate(Vector3.Up * offset);
-            Yaw -= offset;
+                Character.Locomotion.Rotate(Vector3.Up * offset);
+                rotatable.Yaw -= offset;
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
+            _active?.Dispose();
             _perspective?.Dispose();
 
             base.Dispose(disposing);
