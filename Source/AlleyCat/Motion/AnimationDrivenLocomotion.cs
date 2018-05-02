@@ -29,9 +29,9 @@ namespace AlleyCat.Motion
 
         private Transform _initialTransform;
 
-        private Transform _offset;
+        private Transform _offset = new Transform(Basis.Identity, Vector3.Zero);
 
-        private Transform _lastPose;
+        private Transform _lastPose = new Transform(Basis.Identity, Vector3.Zero);
 
         [PostConstruct]
         protected override void OnInitialize()
