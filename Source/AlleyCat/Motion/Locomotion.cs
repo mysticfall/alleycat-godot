@@ -49,6 +49,11 @@ namespace AlleyCat.Motion
                 .Where(_ => Active && Valid)
                 .Subscribe(HandleProcess)
                 .AddTo(this);
+
+            OnActiveStateChange
+                .Where(v => !v && Valid)
+                .Subscribe(_ => this.Stop())
+                .AddTo(this);
         }
 
         public void Move(Vector3 velocity) => _requestedMovement = velocity;

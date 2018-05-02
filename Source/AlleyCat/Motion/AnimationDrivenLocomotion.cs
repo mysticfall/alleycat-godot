@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -52,6 +53,11 @@ namespace AlleyCat.Motion
                 .Subscribe(OnAnimation)
                 .AddTo(this);
 
+            OnActiveStateChange
+                .Where(v => !v && Valid)
+                .Subscribe(_ => ResetAnimations())
+                .AddTo(this);
+
             Reset();
         }
 
@@ -79,6 +85,15 @@ namespace AlleyCat.Motion
             Target.RotateObjectLocal(Vector3.Up, rotationalVelocity.y);
 
             return _offset.origin / delta;
+        }
+
+        protected virtual void ResetAnimations()
+        {
+            var player = AnimationManager.TreePlayer;
+
+            player.Blend2NodeSetAmount(WalkBlendNode, 0);
+            player.Blend3NodeSetAmount(ForwardBlendNode, 0);
+            player.Blend3NodeSetAmount(SideBlendNode, 0);
         }
 
         protected virtual void OnBeforeAnimation()
