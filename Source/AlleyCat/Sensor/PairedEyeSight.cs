@@ -1,74 +1,34 @@
 using System;
 using System.Diagnostics;
+using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
+using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Sensor
 {
     [Singleton(typeof(IVision), typeof(IEyeSight), typeof(IPairedEyeSight))]
-    public class PairedEyeSight : AutowiredNode, IPairedEyeSight
+    public class PairedEyeSight : Rotatable, IPairedEyeSight
     {
-        [Export]
-        public bool Active
-        {
-            get => _active.Value;
-            set => _active.Value = value;
-        }
-
-        public IObservable<bool> OnActiveStateChange => _active;
-
-        public Transform Head => Skeleton.GlobalTransform *
-                                 new Transform(Skeleton.GetBoneTransform(_headIndex).basis,
-                                     Skeleton.GetBoneGlobalPose(_headIndex).origin);
-
-        public Transform LeftEye => Skeleton.GlobalTransform *
-                                    new Transform(Skeleton.GetBoneTransform(_eyeIndexLeft).basis,
-                                        Skeleton.GetBoneGlobalPose(_eyeIndexLeft).origin);
-
-        public Transform RightEye => Skeleton.GlobalTransform *
-                                     new Transform(Skeleton.GetBoneTransform(_eyeIndexRight).basis,
-                                         Skeleton.GetBoneGlobalPose(_eyeIndexRight).origin);
-
         [Service]
         public Skeleton Skeleton { get; private set; }
 
-        public Vector3 Origin
-        {
-            get
-            {
-                var leftEye = Skeleton.GetBoneGlobalPose(_eyeIndexLeft).origin;
-                var rightEye = Skeleton.GetBoneGlobalPose(_eyeIndexRight).origin;
+        [Service]
+        public IAnimationManager AnimationManager { get; private set; }
 
-                return Skeleton.GlobalTransform.Xform((leftEye + rightEye) / 2f);
-            }
-        }
+        public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_headIndex);
 
-        public Vector3 Forward
-        {
-            get
-            {
-                var bodyRotation = Skeleton.GlobalTransform.basis;
-                var forward = Skeleton.GetBoneTransform(_headIndex).Forward();
+        public Transform LeftEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_eyeIndexLeft);
 
-                return bodyRotation.Xform(forward);
-            }
-        }
+        public Transform RightEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_eyeIndexRight);
 
-        public Vector3 Up
-        {
-            get
-            {
-                var bodyRotation = Skeleton.GlobalTransform.basis;
-                var forward = Skeleton.GetBoneTransform(_headIndex).Up();
+        public override Vector3 Origin => (LeftEye.origin + RightEye.origin) / 2f;
 
-                return bodyRotation.Xform(forward);
-            }
-        }
+        public override Vector3 Up => (Head.basis * _basis).Xform(Vector3.Up);
 
-        public Vector3 Right => Forward.Cross(Up);
+        public override Vector3 Forward => (Head.basis * _basis).Xform(Vector3.Forward);
 
         [Export, NotNull] private string _headBone = "Head";
 
@@ -82,7 +42,7 @@ namespace AlleyCat.Sensor
 
         private int _eyeIndexRight;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private Basis _basis;
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -94,18 +54,30 @@ namespace AlleyCat.Sensor
 
             Debug.Assert(_headIndex != -1, "Failed to find the head bone");
             Debug.Assert(_eyeIndexLeft != -1 || _eyeIndexRight != -1, "Failed to find the eye bones");
+
+            AnimationManager.OnAdvance.Subscribe(OnAnimation).AddTo(this);
+
+            var rotation = Skeleton.GetBoneGlobalPose(_headIndex).basis;
+
+            var up = rotation.XformInv(Vector3.Up).ClosestGlobalAxis();
+            var forward = rotation.XformInv(Vector3.Forward).ClosestGlobalAxis();
+
+            _basis = new Basis(forward.Cross(up), up, forward * -1).Inverse();
         }
 
+        protected virtual void OnAnimation(float delta)
+        {
+            var rotation = Basis.Identity.Rotated(_basis.Up(), Yaw);
+            var right = rotation.Xform(_basis.Right());
+
+            rotation = rotation.Rotated(right, Pitch);
+
+            Skeleton.SetBonePose(_headIndex, new Transform(rotation, Vector3.Zero));
+        }
+        
         public void LookAt(Vector3 target)
         {
             throw new NotImplementedException();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _active?.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }
