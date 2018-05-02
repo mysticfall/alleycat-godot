@@ -9,7 +9,6 @@ using AlleyCat.Event;
 using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
-using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Control
 {

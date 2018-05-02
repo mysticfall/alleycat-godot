@@ -1,5 +1,4 @@
 ﻿using Godot;
-using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Common
 {

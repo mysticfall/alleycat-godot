@@ -4,7 +4,6 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
-using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Motion
 {

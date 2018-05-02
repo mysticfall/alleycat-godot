@@ -9,7 +9,6 @@ using AlleyCat.Sensor;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Axis = AlleyCat.Common.VectorExtensions;
 
 namespace AlleyCat.Character
 {
