@@ -52,17 +52,15 @@ namespace AlleyCat.Control
                 .Select(v => v * 0.1f)
                 .Subscribe(v =>
                 {
-                    // ReSharper disable once PossibleNullReferenceException
-                    Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x);
-                    Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y);
+                    Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x);
+                    Camera?.RotateObjectLocal(new Vector3(1, 0, 0), -v.y);
                 })
                 .AddTo(this);
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y))
                 .Select(v => v * 0.02f)
-                // ReSharper disable once PossibleNullReferenceException
-                .Subscribe(v => Camera.TranslateObjectLocal(v))
+                .Subscribe(v => Camera?.TranslateObjectLocal(v))
                 .AddTo(this);
 
             ToggleInput?

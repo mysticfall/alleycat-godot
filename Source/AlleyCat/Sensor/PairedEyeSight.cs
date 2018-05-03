@@ -74,7 +74,7 @@ namespace AlleyCat.Sensor
 
             Skeleton.SetBonePose(_headIndex, new Transform(rotation, Vector3.Zero));
         }
-        
+
         public void LookAt(Vector3 target)
         {
             throw new NotImplementedException();
