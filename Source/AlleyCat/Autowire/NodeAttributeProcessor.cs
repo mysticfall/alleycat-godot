@@ -65,7 +65,7 @@ namespace AlleyCat.Autowire
                 path = Attribute.Path;
             }
 
-            return path;
+            return path == null || path.IsEmpty() ? null : path;
         }
 
         [NotNull]
