@@ -38,11 +38,15 @@ namespace AlleyCat.Sensor
 
         private int _headIndex;
 
+        private int _neckIndex;
+
         private int _eyeIndexLeft;
 
         private int _eyeIndexRight;
 
         private Basis _basis;
+
+        private Transform _restPose;
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -54,6 +58,9 @@ namespace AlleyCat.Sensor
 
             Debug.Assert(_headIndex != -1, "Failed to find the head bone");
             Debug.Assert(_eyeIndexLeft != -1 || _eyeIndexRight != -1, "Failed to find the eye bones");
+
+            _neckIndex = Skeleton.GetBoneParent(_headIndex);
+            _restPose = Skeleton.GetBoneRest(_headIndex);
 
             AnimationManager.OnAdvance.Subscribe(OnAnimation).AddTo(this);
 
@@ -77,7 +84,14 @@ namespace AlleyCat.Sensor
 
         public void LookAt(Vector3 target)
         {
-            throw new NotImplementedException();
+            var neckPose = Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_neckIndex);
+            var initial = (neckPose * _restPose).basis * _basis;
+
+            var transform = new Transform(initial, Vector3.Zero).LookingAt(target, initial.Up());
+            var euler = (initial.Inverse() * transform.basis).GetEuler();
+
+            Yaw = euler.y;
+            Pitch = euler.x;
         }
     }
 }
