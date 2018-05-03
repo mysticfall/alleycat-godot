@@ -43,6 +43,9 @@ namespace AlleyCat.Control
 
         [Node("Deactivate", false)] private InputBindings _deactivateInput;
 
+        protected virtual Vector3 FocalPoint =>
+            Character?.GlobalTransform().Xform(this.GetBasis().Forward() * 100) ?? Origin;
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {
@@ -51,19 +54,25 @@ namespace AlleyCat.Control
                 .Subscribe(v => Rotation -= v)
                 .AddTo(this);
 
-            OnRotationChange.Merge(
-                    OnActiveStateChange
-                        .Where(_ => Valid)
-                        .Select(v => v ? Rotation : Vector2.Zero))
-                // ReSharper disable once PossibleNullReferenceException
-                .Subscribe(v => Character.Vision.Rotation = v)
+            OnActiveStateChange
+                .Where(v => !v && Valid)
+                .Do(_ => this.Reset())
+                .Do(_ => Character?.Vision.Reset())
+                .Subscribe()
                 .AddTo(this);
 
-            this.OnProcess()
+            var onProcess = this.OnProcess().Where(_ => Active && Valid);
+
+            onProcess
                 .Where(_ => Active && Valid)
-                .Select(_ => new Transform(Basis.Identity, Origin).LookingAt(Origin + Forward, Up))
-                // ReSharper disable once PossibleNullReferenceException
-                .Subscribe(_ => Camera.GlobalTransform = _)
+                .Select(_ => FocalPoint)
+                .Subscribe(v => Character?.Vision.LookAt(v))
+                .AddTo(this);
+
+            onProcess
+                .Select(_ => new Transform(Basis.Identity, Origin))
+                .Select(t => t.LookingAt(Origin + Forward, Up))
+                .Subscribe(v => Camera?.SetGlobalTransform(v))
                 .AddTo(this);
 
             DeactivateInput?
