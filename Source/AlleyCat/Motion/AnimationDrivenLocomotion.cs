@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
@@ -58,7 +60,28 @@ namespace AlleyCat.Motion
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
 
+            AnimationManager.Player
+                .GetAnimationList()
+                .Select(AnimationManager.Player.GetAnimation)
+                .Where(a => a.Loop)
+                .ToList()
+                .ForEach(AddTrack);
+
             Reset();
+        }
+
+        private void AddTrack(Godot.Animation animation)
+        {
+            var args = new Dictionary<object, object>
+            {
+                {"method", "Reset"},
+                {"args", new string[0]}
+            };
+
+            var track = animation.AddTrack(Godot.Animation.TrackType.Method);
+
+            animation.TrackSetPath(track, GetPath());
+            animation.TrackInsertKey(track, animation.Length, args);
         }
 
         protected override Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity)

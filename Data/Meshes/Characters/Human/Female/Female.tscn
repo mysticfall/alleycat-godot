@@ -4841,20 +4841,6 @@ tracks/160/loop_wrap = true
 tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, -2.1304e-07, 3.72529e-08, -4.42378e-09, -3.04126e-10, 1.74035e-10, 1, 1, 1, 1, 1.33333, 1, 0, 3.93484e-08, -2.98023e-08, -6.98492e-10, -1.84176e-10, 4.95912e-10, 1, 1, 1, 1 )
-tracks/161/type = "method"
-tracks/161/path = NodePath("Locomotion")
-tracks/161/interp = 1
-tracks/161/loop_wrap = true
-tracks/161/imported = false
-tracks/161/enabled = true
-tracks/161/keys = {
-"times": PoolRealArray( 1.33333 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Reset"
-} ]
-}
 
 [sub_resource type="Animation" id=10]
 
@@ -5988,20 +5974,6 @@ tracks/160/loop_wrap = true
 tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, -7.95117e-08, -7.45058e-09, 0, -5.71626e-14, -1.33227e-15, 1, 1, 1, 1, 1.33333, 1, 1.11759e-08, -3.49246e-08, -1.49012e-08, 0, -3.33067e-16, -1.77636e-15, 1, 1, 1, 1 )
-tracks/161/type = "method"
-tracks/161/path = NodePath("Locomotion")
-tracks/161/interp = 1
-tracks/161/loop_wrap = true
-tracks/161/imported = false
-tracks/161/enabled = true
-tracks/161/keys = {
-"times": PoolRealArray( 1.33333 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Reset"
-} ]
-}
 
 [sub_resource type="Animation" id=11]
 
@@ -7135,20 +7107,6 @@ tracks/160/loop_wrap = true
 tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, -7.96281e-08, -1.49012e-08, 0, 1.70225e-13, -1.77636e-15, 1, 1, 1, 1, 1.33333, 1, 7.07805e-08, -4.99422e-08, -2.23517e-08, 0, 5.65103e-14, -2.66454e-15, 1, 1, 1, 1 )
-tracks/161/type = "method"
-tracks/161/path = NodePath("Locomotion")
-tracks/161/interp = 1
-tracks/161/loop_wrap = true
-tracks/161/imported = false
-tracks/161/enabled = true
-tracks/161/keys = {
-"times": PoolRealArray( 1.33333 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Reset"
-} ]
-}
 
 [sub_resource type="Animation" id=12]
 
@@ -8282,20 +8240,6 @@ tracks/160/loop_wrap = true
 tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 3.72529e-09, 4.70318e-08, -1.49012e-08, 0, 5.65173e-14, -1.77636e-15, 1, 1, 1, 1, 1.33333, 1, 3.72529e-09, -9.42964e-08, 0, 0, 5.6552e-14, 4.44089e-16, 1, 1, 1, 1 )
-tracks/161/type = "method"
-tracks/161/path = NodePath("Locomotion")
-tracks/161/interp = 1
-tracks/161/loop_wrap = true
-tracks/161/imported = false
-tracks/161/enabled = true
-tracks/161/keys = {
-"times": PoolRealArray( 1.33333 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Reset"
-} ]
-}
 
 [sub_resource type="Animation" id=13]
 
@@ -9429,20 +9373,6 @@ tracks/160/loop_wrap = true
 tracks/160/imported = true
 tracks/160/enabled = true
 tracks/160/keys = PoolRealArray( 0, 1, 0, -8.71951e-08, -2.23517e-08, -2.32831e-10, 1.13395e-13, -1.33227e-15, 1, 1, 1, 1, 1.33333, 1, 0, -5.22705e-08, -1.71363e-07, -2.32831e-10, 1.13375e-13, -2.66454e-15, 1, 1, 1, 1 )
-tracks/161/type = "method"
-tracks/161/path = NodePath("Locomotion")
-tracks/161/interp = 1
-tracks/161/loop_wrap = true
-tracks/161/imported = false
-tracks/161/enabled = true
-tracks/161/keys = {
-"times": PoolRealArray( 1.33333 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "Reset"
-} ]
-}
 
 [node name="Female" type="KinematicBody" index="0"]
 input_ray_pickable = true
@@ -10330,12 +10260,18 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
+"connections": [ "Walk", "out", 0, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
 "position": Vector2( 781.614, 192.848 ),
 "type": "output"
+}, {
+"filter": [  ],
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
+"type": "animation"
 }, {
 "filter": [  ],
 "from": "Female Idle",
@@ -10344,9 +10280,10 @@ data = {
 "type": "animation"
 }, {
 "blend": 0.0,
-"id": "Left-Right",
-"position": Vector2( 377.845, 59.0209 ),
-"type": "blend3"
+"filter": [  ],
+"id": "Walk-Run",
+"position": Vector2( 193.967, 647.485 ),
+"type": "blend2"
 }, {
 "filter": [  ],
 "from": "Female Idle",
@@ -10355,10 +10292,9 @@ data = {
 "type": "animation"
 }, {
 "blend": 0.0,
-"filter": [  ],
-"id": "Walk-Run",
-"position": Vector2( 193.967, 647.485 ),
-"type": "blend2"
+"id": "Left-Right",
+"position": Vector2( 377.845, 59.0209 ),
+"type": "blend3"
 }, {
 "blend": 0.0,
 "id": "Forward-Backward",
@@ -10375,12 +10311,6 @@ data = {
 "from": "Female Strafe Right",
 "id": "Strafe Right",
 "position": Vector2( 201.931, 175.895 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
 "type": "animation"
 }, {
 "blend": 0.0,
