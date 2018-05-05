@@ -1,3 +1,4 @@
+using System;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
@@ -10,6 +11,10 @@ namespace AlleyCat.Motion
         Vector3 Velocity { get; }
 
         Vector3 RotationalVelocity { get; }
+
+        IObservable<Vector3> OnVelocityChange { get; }
+
+        IObservable<Vector3> OnRotationalVelocityChange { get; }
 
         void Move(Vector3 velocity);
 

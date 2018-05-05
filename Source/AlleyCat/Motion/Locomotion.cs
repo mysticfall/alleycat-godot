@@ -25,15 +25,23 @@ namespace AlleyCat.Motion
         [Node]
         public T Target { get; private set; }
 
-        public Vector3 Velocity { get; private set; }
+        public Vector3 Velocity => _velocity.Value;
 
-        public Vector3 RotationalVelocity { get; private set; }
+        public Vector3 RotationalVelocity => _rotationalVelocity.Value;
+
+        public IObservable<Vector3> OnVelocityChange => _velocity;
+
+        public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity;
 
         protected virtual ProcessMode ProcessMode { get; } = ProcessMode.Idle;
 
         [Export, UsedImplicitly] private NodePath _target = "..";
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
+        private readonly ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
+
+        private readonly ReactiveProperty<Vector3> _rotationalVelocity = new ReactiveProperty<Vector3>();
 
         private Vector3 _requestedMovement;
 
@@ -72,8 +80,8 @@ namespace AlleyCat.Motion
 
             if (delta > 0)
             {
-                Velocity = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
-                RotationalVelocity = (before.basis.Inverse() * after.basis).GetEuler() / delta;
+                _velocity.Value = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
+                _rotationalVelocity.Value = (before.basis.Inverse() * after.basis).GetEuler() / delta;
             }
         }
 
