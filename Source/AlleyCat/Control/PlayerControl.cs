@@ -131,7 +131,7 @@ namespace AlleyCat.Control
         {
             base._Process(delta);
 
-            if (!Active) return;
+            if (!Active || !Valid) return;
 
             // ReSharper disable once PossibleNullReferenceException
             if (!Character.Locomotion.IsMoving())
