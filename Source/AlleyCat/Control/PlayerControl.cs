@@ -121,11 +121,13 @@ namespace AlleyCat.Control
             previous?.Deactivate();
         }
 
-        protected IPerspectiveView FindNextValidPerspective([CanBeNull] IPerspectiveView current = null) =>
-            new[] {_lastPerspective}
+        protected virtual IPerspectiveView FindNextValidPerspective([CanBeNull] IPerspectiveView current = null)
+        {
+            return new[] {_lastPerspective}
                 .Where(p => p != null)
                 .Concat(Perspectives)
                 .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
+        }
 
         public override void _Process(float delta)
         {
