@@ -18,17 +18,37 @@ namespace AlleyCat.Sensor
         [Service]
         public IAnimationManager AnimationManager { get; private set; }
 
-        public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_headIndex);
+        public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(HeadBone);
 
-        public Transform LeftEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_eyeIndexLeft);
+        public Transform Neck => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(NeckBone);
 
-        public Transform RightEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_eyeIndexRight);
+        public Transform LeftEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(LeftEyeBone);
 
-        public override Vector3 Origin => (LeftEye.origin + RightEye.origin) / 2f;
+        public Transform RightEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(RightEyeBone);
 
-        public override Vector3 Up => (Head.basis * _basis).Xform(Vector3.Up);
+        public Vector3 Viewpoint => (LeftEye.origin + RightEye.origin) / 2f;
 
-        public override Vector3 Forward => (Head.basis * _basis).Xform(Vector3.Forward);
+        public Vector3 LookDirection => (Head.basis * HeadOrientation).Xform(Vector3.Forward);
+
+        public override Vector3 Origin => Head.origin / 2f;
+
+        public override Vector3 Up => (Neck.basis * NeckOrientation).Xform(Vector3.Up);
+
+        public override Vector3 Forward => (Neck.basis * NeckOrientation).Xform(Vector3.Forward);
+
+        protected int HeadBone { get; private set; }
+
+        protected int NeckBone { get; private set; }
+
+        protected int LeftEyeBone { get; private set; }
+
+        protected int RightEyeBone { get; private set; }
+
+        protected Transform RestPose { get; private set; }
+
+        protected Basis HeadOrientation { get; private set; }
+
+        protected Basis NeckOrientation { get; private set; }
 
         [Export, NotNull] private string _headBone = "Head";
 
@@ -36,56 +56,53 @@ namespace AlleyCat.Sensor
 
         [Export, NotNull] private string _eyeBoneRight = "Eye.R";
 
-        private int _headIndex;
-
-        private int _neckIndex;
-
-        private int _eyeIndexLeft;
-
-        private int _eyeIndexRight;
-
-        private Basis _basis;
-
-        private Transform _restPose;
-
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            _headIndex = Skeleton.FindBone(_headBone);
+            HeadBone = Skeleton.FindBone(_headBone);
 
-            _eyeIndexLeft = Skeleton.FindBone(_eyeBoneLeft);
-            _eyeIndexRight = Skeleton.FindBone(_eyeBoneRight);
+            LeftEyeBone = Skeleton.FindBone(_eyeBoneLeft);
+            RightEyeBone = Skeleton.FindBone(_eyeBoneRight);
 
-            Debug.Assert(_headIndex != -1, "Failed to find the head bone");
-            Debug.Assert(_eyeIndexLeft != -1 || _eyeIndexRight != -1, "Failed to find the eye bones");
+            Debug.Assert(HeadBone != -1, "Failed to find the head bone");
+            Debug.Assert(LeftEyeBone != -1 || RightEyeBone != -1, "Failed to find the eye bones");
 
-            _neckIndex = Skeleton.GetBoneParent(_headIndex);
-            _restPose = Skeleton.GetBoneRest(_headIndex);
+            NeckBone = Skeleton.GetBoneParent(HeadBone);
+
+            Debug.Assert(HeadBone != -1, "Failed to find the neck bone");
+
+            RestPose = Skeleton.GetBoneRest(HeadBone);
 
             AnimationManager.OnAdvance.Subscribe(OnAnimation).AddTo(this);
 
-            var rotation = Skeleton.GetBoneGlobalPose(_headIndex).basis;
+            HeadOrientation = DetectOrientation(HeadBone);
+            NeckOrientation = DetectOrientation(NeckBone);
+        }
+
+        private Basis DetectOrientation(int bone)
+        {
+            var rotation = Skeleton.GetBoneGlobalPose(bone).basis;
 
             var up = rotation.XformInv(Vector3.Up).ClosestGlobalAxis();
             var forward = rotation.XformInv(Vector3.Forward).ClosestGlobalAxis();
 
-            _basis = BasisExtensions.CreateFromAxes(forward.Cross(up), up, forward * -1).Inverse();
+            return BasisExtensions.CreateFromAxes(forward.Cross(up), up, forward * -1).Inverse();
         }
 
         protected virtual void OnAnimation(float delta)
         {
-            var rotation = Basis.Identity.Rotated(_basis.Up(), Yaw);
-            var right = rotation.Xform(_basis.Right());
+            var rotation = Basis.Identity.Rotated(HeadOrientation.Up(), Yaw);
+            var right = rotation.Xform(HeadOrientation.Right());
 
             rotation = rotation.Rotated(right, Pitch);
 
-            Skeleton.SetBonePose(_headIndex, new Transform(rotation, Vector3.Zero));
+            Skeleton.SetBonePose(HeadBone, new Transform(rotation, Vector3.Zero));
         }
 
         public void LookAt(Vector3 target)
         {
-            var neckPose = Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(_neckIndex);
-            var initial = (neckPose * _restPose).basis * _basis;
+            var neckPose = Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(NeckBone);
+            var initial = (neckPose * RestPose).basis * HeadOrientation;
 
             var transform = new Transform(initial, Vector3.Zero).LookingAt(target, initial.Up());
             var euler = (initial.Inverse() * transform.basis).GetEuler();

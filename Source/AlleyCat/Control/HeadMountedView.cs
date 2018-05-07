@@ -5,6 +5,7 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
+using AlleyCat.Sensor;
 using Godot;
 using JetBrains.Annotations;
 
@@ -23,11 +24,17 @@ namespace AlleyCat.Control
 
         public bool AutoActivate => true;
 
-        public override Vector3 Origin => Character?.Vision.Origin ?? Vector3.Zero;
+        public IVision Vision => Character?.Vision;
 
-        public override Vector3 Up => Character?.Vision.Up ?? Vector3.Up;
+        public Vector3 Viewpoint => Vision?.Viewpoint ?? Vector3.Zero;
 
-        public override Vector3 Forward => Character?.Vision.Forward ?? Vector3.Forward;
+        public Vector3 LookDirection => Vision?.LookDirection ?? Forward;
+
+        public override Vector3 Origin => Vision?.Origin ?? Vector3.Zero;
+
+        public override Vector3 Up => Vision?.Up ?? Vector3.Up;
+
+        public override Vector3 Forward => Vision?.Forward ?? Vector3.Forward;
 
         protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Active && Valid);
 
@@ -57,7 +64,7 @@ namespace AlleyCat.Control
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Do(_ => this.Reset())
-                .Do(_ => Character?.Vision.Reset())
+                .Do(_ => Vision?.Reset())
                 .Subscribe()
                 .AddTo(this);
 
@@ -66,12 +73,12 @@ namespace AlleyCat.Control
             onProcess
                 .Where(_ => Active && Valid)
                 .Select(_ => FocalPoint)
-                .Subscribe(v => Character?.Vision.LookAt(v))
+                .Subscribe(v => Vision?.LookAt(v))
                 .AddTo(this);
 
             onProcess
-                .Select(_ => new Transform(Basis.Identity, Origin))
-                .Select(t => t.LookingAt(Origin + Forward, Up))
+                .Select(_ => new Transform(Basis.Identity, Viewpoint))
+                .Select(t => t.LookingAt(Viewpoint + LookDirection, Up))
                 .Subscribe(v => Camera?.SetGlobalTransform(v))
                 .AddTo(this);
 
