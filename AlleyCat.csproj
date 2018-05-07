@@ -229,7 +229,7 @@
     <Compile Include="Source\AlleyCat\Motion\ILocomotive.cs" />
     <Compile Include="Source\AlleyCat\Motion\ImmediateLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\IOrbiter.cs" />
-    <Compile Include="Source\AlleyCat\Motion\IRotatable.cs" />
+    <Compile Include="Source\AlleyCat\Motion\ITurretLike.cs" />
     <Compile Include="Source\AlleyCat\Motion\KinematicLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\Locomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\Orbiter.cs" />
@@ -238,7 +238,7 @@
     <Compile Include="Source\AlleyCat\Logging\LoggingConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Logging\PrintLogger.cs" />
     <Compile Include="Source\AlleyCat\Logging\PrintLoggerProvider.cs" />
-    <Compile Include="Source\AlleyCat\Motion\Rotatable.cs" />
+    <Compile Include="Source\AlleyCat\Motion\TurretLike.cs" />
     <Compile Include="Source\AlleyCat\Sensor\PairedEyeSight.cs" />
     <Compile Include="Source\AlleyCat\Sensor\IPairedEyeSight.cs" />
     <Compile Include="Source\AlleyCat\Sensor\IEyeSight.cs" />

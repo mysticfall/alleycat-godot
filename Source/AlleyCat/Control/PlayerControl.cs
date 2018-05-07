@@ -110,7 +110,7 @@ namespace AlleyCat.Control
 
         protected virtual void OnPerspectiveChanged(IPerspectiveView previous, IPerspectiveView current)
         {
-            if (previous is IRotatable previousRotatable && current is IRotatable currentRotatable)
+            if (previous is ITurretLike previousRotatable && current is ITurretLike currentRotatable)
             {
                 currentRotatable.Rotation = previousRotatable.Rotation;
             }
@@ -138,7 +138,7 @@ namespace AlleyCat.Control
             {
                 Character.Locomotion.Rotate(Vector3.Zero);
             }
-            else if (Perspective is IRotatable rotatable)
+            else if (Perspective is ITurretLike rotatable)
             {
                 var offset = Mathf.Lerp(0, rotatable.Yaw, delta * 1.5f);
 

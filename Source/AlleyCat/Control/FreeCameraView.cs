@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Control
 {
     [Singleton(typeof(IPerspectiveView))]
-    public class FreeCameraView : Rotatable, IPerspectiveView
+    public class FreeCameraView : TurretLike, IPerspectiveView
     {
         public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
 

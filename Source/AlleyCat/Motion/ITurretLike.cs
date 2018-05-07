@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
-    public interface IRotatable : IDirectional, IActivatable, IValidatable
+    public interface ITurretLike : IDirectional, IActivatable, IValidatable
     {
         float Yaw { get; set; }
 
@@ -21,16 +21,18 @@ namespace AlleyCat.Motion
         IObservable<Vector2> OnRotationChange { get; }
     }
 
-    public static class RotatableExtensions
+    public static class TurretLikeExtensions
     {
-        public static void Reset([NotNull] this IRotatable rotatable)
+        public static void Rotate([NotNull] this ITurretLike turret, Vector2 rotation)
         {
-            Ensure.Any.IsNotNull(rotatable, nameof(rotatable));
+            Ensure.Any.IsNotNull(turret, nameof(turret));
 
-            rotatable.Rotation = Vector2.Zero;
+            turret.Rotation = rotation;
         }
 
-        public static Basis GetBasis([NotNull] this IRotatable rotatable)
+        public static void Reset([NotNull] this ITurretLike turret) => Rotate(turret, Vector2.Zero);
+
+        public static Basis GetBasis([NotNull] this ITurretLike rotatable)
         {
             Ensure.Any.IsNotNull(rotatable, nameof(rotatable));
 

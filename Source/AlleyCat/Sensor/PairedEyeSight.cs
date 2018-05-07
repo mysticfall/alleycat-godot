@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Sensor
 {
     [Singleton(typeof(IVision), typeof(IEyeSight), typeof(IPairedEyeSight))]
-    public class PairedEyeSight : Rotatable, IPairedEyeSight
+    public class PairedEyeSight : TurretLike, IPairedEyeSight
     {
         [Service]
         public Skeleton Skeleton { get; private set; }

@@ -7,7 +7,7 @@ using Godot;
 
 namespace AlleyCat.Motion
 {
-    public abstract class Orbiter : Rotatable, IOrbiter
+    public abstract class Orbiter : TurretLike, IOrbiter
     {
         public override bool Valid => base.Valid && Target != null;
 

@@ -3,7 +3,7 @@ using Godot;
 
 namespace AlleyCat.Sensor
 {
-    public interface IVision : ISense, IRotatable
+    public interface IVision : ISense, ITurretLike
     {
         void LookAt(Vector3 target);
     }

@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Control
 {
     [Singleton(typeof(IPerspectiveView), typeof(IFirstPersonView))]
-    public class HeadMountedView : Rotatable, IFirstPersonView
+    public class HeadMountedView : TurretLike, IFirstPersonView
     {
         public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
 

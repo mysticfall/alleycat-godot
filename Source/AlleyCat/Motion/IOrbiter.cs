@@ -3,7 +3,7 @@ using AlleyCat.Common;
 
 namespace AlleyCat.Motion
 {
-    public interface IOrbiter : IRotatable
+    public interface IOrbiter : ITurretLike
     {
         float Distance { get; set; }
 

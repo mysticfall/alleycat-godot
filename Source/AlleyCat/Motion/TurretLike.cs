@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
-    public abstract class Rotatable : AutowiredNode, IRotatable
+    public abstract class TurretLike : AutowiredNode, ITurretLike
     {
         [Export]
         public bool Active
