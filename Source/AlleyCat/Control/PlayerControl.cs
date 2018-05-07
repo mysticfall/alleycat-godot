@@ -144,7 +144,7 @@ namespace AlleyCat.Control
             {
                 var offset = Mathf.Lerp(0, rotatable.Yaw, delta * 1.5f);
 
-                Character.Locomotion.Rotate(Vector3.Up * offset);
+                Character.Locomotion.Rotate(Vector3.Up * offset / delta);
                 rotatable.Yaw -= offset;
             }
         }

@@ -84,6 +84,19 @@ namespace AlleyCat.Motion
             animation.TrackInsertKey(track, animation.Length, args);
         }
 
+        protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)
+        {
+            base.Process(delta, velocity, rotationalVelocity);
+
+            Debug.Assert(Target != null, "Target != null");
+
+            var transform = Target.GlobalTransform;
+            var basis = transform.basis * _offset.basis *
+                        Basis.Identity.Rotated(Vector3.Up, rotationalVelocity.y * delta);
+
+            Target.GlobalTransform = new Transform(basis, transform.origin);
+        }
+
         protected override Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity)
         {
             var player = AnimationManager.TreePlayer;
@@ -99,13 +112,6 @@ namespace AlleyCat.Motion
 
             player.Blend3NodeSetAmount(ForwardBlendNode, -velocity.z);
             player.Blend3NodeSetAmount(SideBlendNode, velocity.x);
-
-            var rotation = new Transform(_offset.basis, new Vector3());
-
-            Debug.Assert(Target != null, "Target != null");
-
-            Target.GlobalTransform = rotation * Target.GlobalTransform;
-            Target.RotateObjectLocal(Vector3.Up, rotationalVelocity.y);
 
             return _offset.origin / delta;
         }
