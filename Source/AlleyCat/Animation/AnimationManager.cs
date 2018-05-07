@@ -39,11 +39,7 @@ namespace AlleyCat.Animation
         {
             Player.PlaybackActive = false;
 
-            var runInPhysicsLoop = Player.PlaybackProcessMode == AnimationPlayer.AnimationProcessMode.Physics;
-
-            var source = runInPhysicsLoop ? this.OnPhysicsProcess() : this.OnProcess();
-
-            source
+            OnLoop
                 .Where(_ => Active)
                 .Subscribe(Advance)
                 .AddTo(this);

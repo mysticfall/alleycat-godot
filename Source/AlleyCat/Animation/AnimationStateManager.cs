@@ -1,5 +1,4 @@
-﻿using System;
-using AlleyCat.Autowire;
+﻿using AlleyCat.Autowire;
 using Godot;
 
 namespace AlleyCat.Animation
@@ -15,18 +14,6 @@ namespace AlleyCat.Animation
             base.OnInitialize();
 
             TreePlayer.Active = false;
-
-            switch (Player.PlaybackProcessMode)
-            {
-                case AnimationPlayer.AnimationProcessMode.Physics:
-                    TreePlayer.PlaybackProcessMode = AnimationTreePlayer.AnimationProcessMode.Physics;
-                    break;
-                case AnimationPlayer.AnimationProcessMode.Idle:
-                    TreePlayer.PlaybackProcessMode = AnimationTreePlayer.AnimationProcessMode.Idle;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
 
         public override void Advance(float delta)

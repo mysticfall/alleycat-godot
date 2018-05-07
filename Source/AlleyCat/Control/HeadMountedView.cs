@@ -68,15 +68,15 @@ namespace AlleyCat.Control
                 .Subscribe()
                 .AddTo(this);
 
-            var onProcess = this.OnProcess().Where(_ => Active && Valid);
+            var onLoop = OnLoop.Where(_ => Active && Valid);
 
-            onProcess
+            onLoop
                 .Where(_ => Active && Valid)
                 .Select(_ => FocalPoint)
                 .Subscribe(v => Vision?.LookAt(v))
                 .AddTo(this);
 
-            onProcess
+            onLoop
                 .Select(_ => new Transform(Basis.Identity, Viewpoint))
                 .Select(t => t.LookingAt(Viewpoint + LookDirection, Up))
                 .Subscribe(v => Camera?.SetGlobalTransform(v))

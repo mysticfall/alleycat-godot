@@ -129,9 +129,9 @@ namespace AlleyCat.Control
                 .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
         }
 
-        public override void _Process(float delta)
+        protected override void ProcessLoop(float delta)
         {
-            base._Process(delta);
+            base.ProcessLoop(delta);
 
             if (!Active || !Valid) return;
 

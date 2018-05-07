@@ -141,6 +141,7 @@
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
+    <Compile Include="Source\AlleyCat\Common\IGameLoopAware.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />

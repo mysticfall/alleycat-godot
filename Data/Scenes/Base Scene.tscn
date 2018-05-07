@@ -51,6 +51,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 
 [node name="Player" type="Node" parent="Control" index="0"]
 script = ExtResource( 2 )
+ProcessMode = 2
 Active = true
 _characterPath = NodePath("../../Entities/Characters/Player")
 _cameraPath = NodePath("../../Cameras/Main Camera")
@@ -59,6 +60,7 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 
 [node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
 script = ExtResource( 3 )
+ProcessMode = 2
 Active = true
 _maxYaw = 180.0
 _minYaw = -180.0
@@ -70,6 +72,7 @@ _characterPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -97,6 +100,7 @@ Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
 script = ExtResource( 6 )
@@ -113,6 +117,7 @@ Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
 script = ExtResource( 7 )
+ProcessMode = 2
 Active = false
 _maxYaw = 90.0
 _minYaw = -90.0
@@ -123,6 +128,7 @@ _cameraPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -150,6 +156,7 @@ Maximum = 0.1
 
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View" index="1"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
 script = ExtResource( 8 )
@@ -158,6 +165,7 @@ Action = "zoom_out"
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views" index="2"]
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = false
 _maxYaw = 180.0
 _minYaw = -180.0
@@ -168,6 +176,7 @@ _cameraPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -195,6 +204,7 @@ Maximum = 0.1
 
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View" index="1"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
 script = ExtResource( 6 )
@@ -224,6 +234,7 @@ Polling = true
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View" index="2"]
 script = ExtResource( 4 )
+ProcessMode = 1
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
 script = ExtResource( 8 )
@@ -232,6 +243,7 @@ Action = "free_camera"
 
 [node name="Movement" type="Node" parent="Control/Player" index="1"]
 script = ExtResource( 4 )
+ProcessMode = 0
 
 [node name="X" type="Node" parent="Control/Player/Movement" index="0"]
 script = ExtResource( 6 )

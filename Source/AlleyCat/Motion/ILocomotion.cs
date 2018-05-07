@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
-    public interface ILocomotion : IActivatable, IValidatable
+    public interface ILocomotion : IActivatable, IValidatable, IGameLoopAware
     {
         Vector3 Velocity { get; }
 

@@ -5,7 +5,7 @@ using Godot;
 
 namespace AlleyCat.Animation
 {
-    public interface IAnimationManager : IActivatable
+    public interface IAnimationManager : IActivatable, IGameLoopAware
     {
         AnimationPlayer Player { get; }
 

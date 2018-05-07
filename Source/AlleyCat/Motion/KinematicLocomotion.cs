@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using AlleyCat.Autowire;
-using AlleyCat.Common;
 using AlleyCat.Setting.Project;
 using Godot;
 using Microsoft.Extensions.Options;
@@ -19,8 +18,6 @@ namespace AlleyCat.Motion
         public bool ApplyGravity { get; set; } = true;
 
         public Physics3DSettings Physics3DSettings => _settings?.Value;
-
-        protected override ProcessMode ProcessMode { get; } = ProcessMode.Physics;
 
         [Service] private IOptions<Physics3DSettings> _settings;
 

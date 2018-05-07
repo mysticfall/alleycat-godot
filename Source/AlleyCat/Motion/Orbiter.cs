@@ -44,7 +44,7 @@ namespace AlleyCat.Motion
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            this.OnProcess()
+            OnLoop
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
                 .AddTo(this);

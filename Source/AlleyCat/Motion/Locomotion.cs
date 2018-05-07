@@ -33,8 +33,6 @@ namespace AlleyCat.Motion
 
         public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity;
 
-        protected virtual ProcessMode ProcessMode { get; } = ProcessMode.Idle;
-
         [Export, UsedImplicitly] private NodePath _targetPath;
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
@@ -53,11 +51,6 @@ namespace AlleyCat.Motion
             _requestedMovement = new Vector3();
             _requestedRotation = new Vector3();
 
-            (ProcessMode == ProcessMode.Idle ? this.OnProcess() : this.OnPhysicsProcess())
-                .Where(_ => Active && Valid)
-                .Subscribe(HandleProcess)
-                .AddTo(this);
-
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => this.Stop())
@@ -70,8 +63,12 @@ namespace AlleyCat.Motion
 
         protected abstract void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity);
 
-        private void HandleProcess(float delta)
+        protected override void ProcessLoop(float delta)
         {
+            base.ProcessLoop(delta);
+
+            if (!Active || !Valid) return;
+
             var before = Target.GlobalTransform;
 
             Process(delta, _requestedMovement, _requestedRotation);

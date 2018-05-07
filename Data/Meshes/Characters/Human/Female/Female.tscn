@@ -10339,6 +10339,7 @@ script = ExtResource( 18 )
 
 [node name="Vision" type="Node" parent="." index="4"]
 script = ExtResource( 19 )
+ProcessMode = 0
 Active = true
 _maxYaw = 80.0
 _minYaw = -80.0
@@ -10350,6 +10351,7 @@ _eyeBoneRight = "Eye.R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
 script = ExtResource( 20 )
+ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
 ApplyGravity = true
@@ -10357,8 +10359,10 @@ PositionBone = "Position"
 
 [node name="Animations" type="Node" parent="." index="6"]
 script = ExtResource( 21 )
+ProcessMode = 2
 Active = true
 
 [node name="Equipments" type="Node" parent="." index="7"]
 script = ExtResource( 22 )
+ProcessMode = 0
 
