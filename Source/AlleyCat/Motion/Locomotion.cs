@@ -22,8 +22,8 @@ namespace AlleyCat.Motion
 
         public virtual bool Valid => Target != null;
 
-        [Node]
-        public T Target { get; private set; }
+        [Node(required: false)]
+        public T Target { get; set; }
 
         public Vector3 Velocity => _velocity.Value;
 
@@ -35,7 +35,7 @@ namespace AlleyCat.Motion
 
         protected virtual ProcessMode ProcessMode { get; } = ProcessMode.Idle;
 
-        [Export, UsedImplicitly] private NodePath _target = "..";
+        [Export, UsedImplicitly] private NodePath _targetPath;
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 

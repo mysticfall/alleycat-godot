@@ -16,7 +16,9 @@
 
 [node name="Cameras" type="Node" parent="." index="1"]
 
-[node name="Main Camera" type="Camera" parent="Cameras" index="0"]
+[node name="Main Camera" type="Camera" parent="Cameras" index="0" groups=[
+"MainCamera",
+]]
 transform = Transform( 0.661697, 0, 0.74977, 0, 0.999999, 0, -0.749771, 0, 0.661696, 0.735734, 1.7292, 0.649309 )
 keep_aspect = 1
 cull_mask = 1048575
@@ -36,7 +38,9 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Characters" type="Node" parent="Entities" index="0"]
 
-[node name="Player" parent="Entities/Characters" index="0" instance=ExtResource( 1 )]
+[node name="Player" parent="Entities/Characters" index="0" groups=[
+"Player",
+] instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 
 [node name="Static Objects" type="Node" parent="." index="3"]
@@ -48,8 +52,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 [node name="Player" type="Node" parent="Control" index="0"]
 script = ExtResource( 2 )
 Active = true
-_character = NodePath("../../Entities/Characters/Player")
-_camera = NodePath("../../Cameras/Main Camera")
+_characterPath = NodePath("../../Entities/Characters/Player")
+_cameraPath = NodePath("../../Cameras/Main Camera")
 
 [node name="Views" type="Node" parent="Control/Player" index="0"]
 
@@ -61,6 +65,8 @@ _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -89.0
 InitialDistance = 1.0
+_cameraPath = null
+_characterPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
 script = ExtResource( 4 )
@@ -112,6 +118,8 @@ _maxYaw = 90.0
 _minYaw = -90.0
 _maxPitch = 70.0
 _minPitch = -80.0
+_characterPath = null
+_cameraPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
 script = ExtResource( 4 )
@@ -155,6 +163,8 @@ _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -90.0
+_characterPath = null
+_cameraPath = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
 script = ExtResource( 4 )

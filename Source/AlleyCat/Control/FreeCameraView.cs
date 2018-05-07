@@ -35,9 +35,9 @@ namespace AlleyCat.Control
         [CanBeNull]
         protected virtual IObservable<bool> ToggleInput => _toggleInput.GetTrigger().Where(_ => Valid);
 
-        [Export, UsedImplicitly] private NodePath _character;
+        [Export, UsedImplicitly] private NodePath _characterPath;
 
-        [Export, UsedImplicitly] private NodePath _camera;
+        [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Rotation")] private InputBindings _rotationInput;
 

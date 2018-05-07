@@ -24,7 +24,7 @@ namespace AlleyCat.Control
 
         protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Active && Valid);
 
-        [Export, UsedImplicitly] private NodePath _camera;
+        [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Rotation")] private InputBindings _viewInput;
 

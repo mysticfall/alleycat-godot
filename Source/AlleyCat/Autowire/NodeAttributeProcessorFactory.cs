@@ -14,8 +14,11 @@ namespace AlleyCat.Autowire
             Ensure.Any.IsNotNull(attribute, nameof(attribute));
 
             var fieldName = ToPrivateFieldName(member.Name);
-            var field = member.DeclaringType?.GetField(fieldName,
+
+            FieldInfo FindField(string name) => member.DeclaringType?.GetField(name,
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+
+            var field = FindField(fieldName + "Path") ?? FindField(fieldName);
 
             return new NodeAttributeProcessor(member, field, attribute);
         }
@@ -24,11 +27,6 @@ namespace AlleyCat.Autowire
         protected static string ToPrivateFieldName([NotNull] string name)
         {
             Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
-
-            if (name.StartsWith("_"))
-            {
-                return name + "Path";
-            }
 
             return new StringBuilder()
                 .Append("_")

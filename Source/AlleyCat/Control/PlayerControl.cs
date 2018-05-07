@@ -26,10 +26,10 @@ namespace AlleyCat.Control
 
         public virtual bool Valid => Character != null && Camera != null && Camera.IsCurrent();
 
-        [Node]
+        [Node(required: false)]
         public IHumanoid Character { get; set; }
 
-        [Node]
+        [Node(required: false)]
         public Camera Camera { get; set; }
 
         [Service]
@@ -45,9 +45,9 @@ namespace AlleyCat.Control
 
         protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
-        [Export, UsedImplicitly] private NodePath _character = "..";
+        [Export, UsedImplicitly] private NodePath _characterPath;
 
-        [Export, UsedImplicitly] private NodePath _camera = "..";
+        [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Movement")] private InputBindings _movementInput;
 
@@ -62,7 +62,7 @@ namespace AlleyCat.Control
         {
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Camera = this.GetNodeOrDefault(_camera, GetViewport().GetCamera());
+            Camera = Camera ?? GetViewport().GetCamera();
             Character = Character ?? GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).FirstOrDefault();
 
             IPerspectiveView active = null;

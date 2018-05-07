@@ -28,7 +28,7 @@ namespace AlleyCat.Control
             ? Vector3.Forward
             : new Plane(Vector3.Up, 0f).Project(Character.GlobalTransform().Forward());
 
-        [Export, UsedImplicitly] private NodePath _character;
+        [Export, UsedImplicitly] private NodePath _characterPath;
 
         protected override void OnInitialize()
         {

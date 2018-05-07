@@ -10260,7 +10260,7 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Walk", "out", 0, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
+"connections": [ "Walk", "out", 0, "Walk Backward", "Forward-Backward", 0, "Idle 2", "Forward-Backward", 1, "Walk-Run", "Forward-Backward", 2, "Strafe Left", "Left-Right", 0, "Idle", "Left-Right", 1, "Strafe Right", "Left-Right", 2, "Walk Forward", "Walk-Run", 0, "Run Forward", "Walk-Run", 1, "Left-Right", "Walk", 0, "Forward-Backward", "Walk", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -10268,33 +10268,16 @@ data = {
 "type": "output"
 }, {
 "filter": [  ],
-"from": "Female Run Forward",
-"id": "Run Forward",
-"position": Vector2( 26.0646, 738.414 ),
-"type": "animation"
-}, {
-"filter": [  ],
 "from": "Female Idle",
 "id": "Idle",
 "position": Vector2( 50.9995, 80.9692 ),
 "type": "animation"
 }, {
-"blend": 0.0,
 "filter": [  ],
-"id": "Walk-Run",
-"position": Vector2( 193.967, 647.485 ),
-"type": "blend2"
-}, {
-"filter": [  ],
-"from": "Female Idle",
-"id": "Idle 2",
-"position": Vector2( 83.0141, 440.671 ),
+"from": "Female Run Forward",
+"id": "Run Forward",
+"position": Vector2( 26.0646, 738.414 ),
 "type": "animation"
-}, {
-"blend": 0.0,
-"id": "Left-Right",
-"position": Vector2( 377.845, 59.0209 ),
-"type": "blend3"
 }, {
 "blend": 0.0,
 "id": "Forward-Backward",
@@ -10312,6 +10295,23 @@ data = {
 "id": "Strafe Right",
 "position": Vector2( 201.931, 175.895 ),
 "type": "animation"
+}, {
+"blend": 0.0,
+"id": "Left-Right",
+"position": Vector2( 377.845, 59.0209 ),
+"type": "blend3"
+}, {
+"filter": [  ],
+"from": "Female Idle",
+"id": "Idle 2",
+"position": Vector2( 83.0141, 440.671 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Walk-Run",
+"position": Vector2( 193.967, 647.485 ),
+"type": "blend2"
 }, {
 "blend": 0.0,
 "filter": [  ],
@@ -10351,7 +10351,7 @@ _eyeBoneRight = "Eye.R"
 [node name="Locomotion" type="Node" parent="." index="5"]
 script = ExtResource( 20 )
 Active = true
-_target = NodePath("..")
+_targetPath = NodePath("..")
 ApplyGravity = true
 PositionBone = "Position"
 
