@@ -60,6 +60,14 @@ namespace AlleyCat.Control
 
         private bool _modifierPressed;
 
+        public InspectingView()
+        {
+        }
+
+        public InspectingView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        {
+        }
+
         protected override void OnInitialize()
         {
             base.OnInitialize();

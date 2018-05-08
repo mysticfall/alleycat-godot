@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Setting.Project;
 using Godot;
 using Microsoft.Extensions.Options;
@@ -20,6 +21,11 @@ namespace AlleyCat.Motion
         public Physics3DSettings Physics3DSettings => _settings?.Value;
 
         [Service] private IOptions<Physics3DSettings> _settings;
+
+        protected KinematicLocomotion()
+        {
+            ProcessMode = ProcessMode.Physics;
+        }
 
         [PostConstruct]
         protected virtual void OnInitialze()

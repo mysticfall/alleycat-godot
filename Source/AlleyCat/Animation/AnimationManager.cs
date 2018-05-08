@@ -34,6 +34,11 @@ namespace AlleyCat.Animation
 
         private readonly Subject<float> _onAdvance = new Subject<float>();
 
+        public AnimationManager()
+        {
+            ProcessMode = ProcessMode.Idle;
+        }
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {

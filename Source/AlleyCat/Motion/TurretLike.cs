@@ -59,17 +59,30 @@ namespace AlleyCat.Motion
 
         public virtual Range<float> PitchRange => new Range<float>(Mathf.Deg2Rad(_minPitch), Mathf.Deg2Rad(_maxPitch));
 
-        [Export, UsedImplicitly] private float _maxYaw = 180f;
+        [Export, UsedImplicitly] private float _maxYaw;
 
-        [Export, UsedImplicitly] private float _minYaw = -180f;
+        [Export, UsedImplicitly] private float _minYaw;
 
-        [Export, UsedImplicitly] private float _maxPitch = 90f;
+        [Export, UsedImplicitly] private float _maxPitch;
 
-        [Export, UsedImplicitly] private float _minPitch = -90f;
+        [Export, UsedImplicitly] private float _minPitch;
 
         private readonly ReactiveProperty<Vector2> _rotation = new ReactiveProperty<Vector2>();
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
+        protected TurretLike() : this(new Range<float>(-180f, 180f), new Range<float>(-90f, 90f))
+        {
+        }
+
+        protected TurretLike(Range<float> yawRange, Range<float> pitchRange)
+        {
+            _minYaw = yawRange.Min;
+            _maxYaw = yawRange.Max;
+
+            _minPitch = pitchRange.Min;
+            _maxPitch = pitchRange.Max;
+        }
 
         protected override void Dispose(bool disposing)
         {

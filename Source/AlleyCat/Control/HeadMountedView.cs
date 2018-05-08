@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
@@ -52,6 +51,15 @@ namespace AlleyCat.Control
 
         protected virtual Vector3 FocalPoint =>
             Character?.GlobalTransform().Xform(this.GetBasis().Forward() * 100) ?? Origin;
+
+        public HeadMountedView() : base(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
+        {
+            ProcessMode = ProcessMode.Idle;
+        }
+
+        public HeadMountedView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        {
+        }
 
         [PostConstruct]
         protected virtual void OnInitialize()

@@ -63,6 +63,11 @@ namespace AlleyCat.Control
 
         private IPerspectiveView _lastPerspective;
 
+        public PlayerControl()
+        {
+            ProcessMode = ProcessMode.Idle;
+        }
+
         [PostConstruct]
         protected void OnInitialize()
         {

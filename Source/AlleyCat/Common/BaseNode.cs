@@ -11,7 +11,7 @@ namespace AlleyCat.Common
     public class BaseNode : Node, IDisposableCollector, IGameLoopAware
     {
         [Export, UsedImplicitly]
-        public ProcessMode ProcessMode { get; private set; } = ProcessMode.Disable;
+        public ProcessMode ProcessMode { get; protected set; } = ProcessMode.Disable;
 
         public virtual IObservable<float> OnLoop => _onLoop;
 

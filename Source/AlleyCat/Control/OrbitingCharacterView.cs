@@ -30,6 +30,14 @@ namespace AlleyCat.Control
 
         [Export, UsedImplicitly] private NodePath _characterPath;
 
+        public OrbitingCharacterView() : base(new Range<float>(-180f, 180f), new Range<float>(-89f, 90f))
+        {
+        }
+
+        public OrbitingCharacterView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        {
+        }
+
         protected override void OnInitialize()
         {
             base.OnInitialize();

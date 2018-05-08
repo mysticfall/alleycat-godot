@@ -30,6 +30,14 @@ namespace AlleyCat.Control
 
         [Node("Zoom")] private InputBindings _zoomInput;
 
+        protected OrbitingView()
+        {
+        }
+
+        protected OrbitingView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        {
+        }
+
         protected override void OnInitialize()
         {
             base.OnInitialize();

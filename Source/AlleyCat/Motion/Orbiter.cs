@@ -41,6 +41,16 @@ namespace AlleyCat.Motion
 
         private readonly ReactiveProperty<float> _distance = new ReactiveProperty<float>();
 
+        protected Orbiter()
+        {
+            ProcessMode = ProcessMode.Idle;
+        }
+
+        protected Orbiter(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        {
+            ProcessMode = ProcessMode.Idle;
+        }
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {
