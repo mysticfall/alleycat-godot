@@ -27,7 +27,11 @@ namespace AlleyCat.Control
         public virtual bool Valid => Character != null && Camera != null && Camera.IsCurrent();
 
         [Node(required: false)]
-        public IHumanoid Character { get; set; }
+        public virtual IHumanoid Character
+        {
+            get => _character.Value;
+            set => _character.Value = value;
+        }
 
         [Node(required: false)]
         public Camera Camera { get; set; }
@@ -50,6 +54,8 @@ namespace AlleyCat.Control
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Movement")] private InputBindings _movementInput;
+
+        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
         private readonly ReactiveProperty<IPerspectiveView> _perspective = new ReactiveProperty<IPerspectiveView>();
 
@@ -106,6 +112,45 @@ namespace AlleyCat.Control
                 .Pairwise()
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2))
                 .AddTo(this);
+
+            var rotatableViews = OnPerspectiveChange.Select(p => p as ITurretLike);
+            var locomotion = _character.Where(c => c != null).Select(c => c.Locomotion);
+
+            var linearSpeed = locomotion.SelectMany(l => l.OnVelocityChange).Select(v => v.Length());
+
+            // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
+            var viewRotationSpeed =
+                rotatableViews.CombineLatest(linearSpeed, OnLoop, (view, speed, delta) =>
+                {
+                    if (view == null) return 0;
+
+                    var angularSpeed = Mathf.Deg2Rad(120) * Mathf.Sign(view.Yaw) * speed;
+
+                    return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(view.Yaw) ? angularSpeed : view.Yaw;
+                });
+
+            var offsetAngle =
+                viewRotationSpeed.CombineLatest(OnLoop, (speed, delta) => speed * delta);
+
+            locomotion
+                .Where(_ => Active && Valid)
+                .SelectMany(l => l.OnLoop)
+                .Zip(
+                    rotatableViews
+                        .CombineLatest(offsetAngle, (view, angle) => (view, angle))
+                        .MostRecent((null, 0)),
+                    (_, args) => args)
+                .Where(t => t.Item1 != null)
+                .Subscribe(t => t.Item1.Yaw -= t.Item2)
+                .AddTo(this);
+
+            OnLoop
+                .Where(_ => Active && Valid)
+                .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
+                .Select(speed => Character?.GlobalTransform().Up() * speed ?? Vector3.Zero)
+                .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
+                .Subscribe(t => t.Item1.Rotate(t.Item2))
+                .AddTo(this);
         }
 
         protected virtual void OnPerspectiveChanged(IPerspectiveView previous, IPerspectiveView current)
@@ -129,29 +174,10 @@ namespace AlleyCat.Control
                 .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
         }
 
-        protected override void ProcessLoop(float delta)
-        {
-            base.ProcessLoop(delta);
-
-            if (!Active || !Valid) return;
-
-            // ReSharper disable once PossibleNullReferenceException
-            if (!Character.Locomotion.IsMoving())
-            {
-                Character.Locomotion.Rotate(Vector3.Zero);
-            }
-            else if (Perspective is ITurretLike rotatable)
-            {
-                var offset = Mathf.Lerp(0, rotatable.Yaw, delta * 1.5f);
-
-                Character.Locomotion.Rotate(Vector3.Up * offset / delta);
-                rotatable.Yaw -= offset;
-            }
-        }
-
         protected override void Dispose(bool disposing)
         {
             _active?.Dispose();
+            _character?.Dispose();
             _perspective?.Dispose();
 
             base.Dispose(disposing);
