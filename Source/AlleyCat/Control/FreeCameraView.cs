@@ -50,16 +50,13 @@ namespace AlleyCat.Control
         {
             RotationInput
                 .Select(v => v * 0.1f)
-                .Subscribe(v =>
-                {
-                    Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x);
-                    Camera?.RotateObjectLocal(new Vector3(1, 0, 0), -v.y);
-                })
+                .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))
+                .Do(v => Camera?.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
+                .Subscribe()
                 .AddTo(this);
 
             MovementInput
-                .Select(v => new Vector3(v.x, 0, -v.y))
-                .Select(v => v * 0.02f)
+                .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
                 .Subscribe(v => Camera?.TranslateObjectLocal(v))
                 .AddTo(this);
 
