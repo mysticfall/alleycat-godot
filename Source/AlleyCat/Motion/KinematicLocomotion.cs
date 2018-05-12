@@ -53,7 +53,7 @@ namespace AlleyCat.Motion
                 effective += GravityVector * Gravity * FallDuration;
             }
 
-            Target.MoveAndSlide(effective);
+            Target.MoveAndSlide(effective, Vector3.Up);
         }
 
         protected abstract Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity);
