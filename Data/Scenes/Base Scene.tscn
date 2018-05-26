@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/ClothedFemale.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/OrbitingCharacterView.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=4]
@@ -19,7 +19,7 @@
 [node name="Main Camera" type="Camera" parent="Cameras" index="0" groups=[
 "MainCamera",
 ]]
-transform = Transform( 0.661697, 0, 0.74977, 0, 0.999999, 0, -0.749771, 0, 0.661696, 0.735734, 1.7292, 0.649309 )
+transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0.735734, 1.7292, 0.649309 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -30,7 +30,7 @@ projection = 0
 current = true
 fov = 70.0
 size = 1.0
-near = 0.05
+near = 0.001
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
@@ -41,7 +41,8 @@ _sections_unfolded = [ "Transform" ]
 [node name="Player" parent="Entities/Characters" index="0" groups=[
 "Player",
 ] instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
+_key = "Player"
+_displayName = "Player"
 
 [node name="Static Objects" type="Node" parent="." index="3"]
 
@@ -51,7 +52,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 
 [node name="Player" type="Node" parent="Control" index="0"]
 script = ExtResource( 2 )
-ProcessMode = 2
+ProcessMode = 1
 Active = true
 _characterPath = NodePath("../../Entities/Characters/Player")
 _cameraPath = NodePath("../../Cameras/Main Camera")
@@ -60,15 +61,15 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 
 [node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
 script = ExtResource( 3 )
-ProcessMode = 2
+ProcessMode = 1
 Active = true
 _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -89.0
 InitialDistance = 1.0
-_cameraPath = null
-_characterPath = null
+_cameraPath = NodePath("")
+_characterPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
 script = ExtResource( 4 )
@@ -117,14 +118,19 @@ Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
 script = ExtResource( 7 )
-ProcessMode = 2
+ProcessMode = 1
 Active = false
 _maxYaw = 90.0
 _minYaw = -90.0
 _maxPitch = 70.0
 _minPitch = -80.0
-_characterPath = null
-_cameraPath = null
+Stabilization = 1
+StabilizationFactor = 0.8
+TransitionTime = 2.0
+VelocityThreshold = 0.2
+Offset = 0.05
+_characterPath = NodePath("")
+_cameraPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
 script = ExtResource( 4 )
@@ -171,8 +177,8 @@ _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -90.0
-_characterPath = null
-_cameraPath = null
+_characterPath = NodePath("")
+_cameraPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
 script = ExtResource( 4 )

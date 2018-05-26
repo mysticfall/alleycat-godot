@@ -50,11 +50,11 @@ namespace AlleyCat.Sensor
 
         protected Basis NeckOrientation { get; private set; }
 
-        [Export, NotNull] private string _headBone = "Head";
+        [Export, NotNull] private string _headBone = "head";
 
-        [Export, NotNull] private string _eyeBoneLeft = "Eye.L";
+        [Export, NotNull] private string _eyeBoneLeft = "eye_L";
 
-        [Export, NotNull] private string _eyeBoneRight = "Eye.R";
+        [Export, NotNull] private string _eyeBoneRight = "eye_R";
 
         [PostConstruct]
         protected virtual void OnInitialize()

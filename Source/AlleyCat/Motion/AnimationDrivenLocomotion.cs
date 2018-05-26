@@ -13,20 +13,42 @@ namespace AlleyCat.Motion
 {
     public class AnimationDrivenLocomotion : KinematicLocomotion
     {
-        public const string WalkBlendNode = "Walk";
+        public const string MoveTransition = "Idle-Move";
 
-        public const string ForwardBlendNode = "Forward-Backward";
+        public const string DirectionTransition = "Move";
 
-        public const string SideBlendNode = "Left-Right";
+        public const string ScaleSpeed = "Speed";
+
+        public const int TransitionIdle = 0;
+
+        public const int TransitionMove = 1;
+
+        public const int TransitionForward = 0;
+
+        public const int TransitionBackward = 1;
+
+        public const int TransitionStrafe = 2;
+
+        public const string ForwardBlend = "Forward";
+
+        public const string BackwardBlend = "Backward";
+
+        public const string StrafeTransition = "Strafe";
+
+        public const int TransitionLeft = 0;
+
+        public const int TransitionRight = 1;
 
         [Service]
         public IAnimationStateManager AnimationManager { get; private set; }
+
+        public AnimationTreePlayer TreePlayer => AnimationManager.TreePlayer;
 
         [Service]
         public Skeleton Skeleton { get; private set; }
 
         [Export, NotNull]
-        public string PositionBone { get; set; } = "Position";
+        public string PositionBone { get; set; } = "root";
 
         private int _boneIndex;
 
@@ -35,12 +57,14 @@ namespace AlleyCat.Motion
         private Transform _offset = new Transform(Basis.Identity, Vector3.Zero);
 
         private Transform _lastPose = new Transform(Basis.Identity, Vector3.Zero);
+        private Label _label;
 
         [PostConstruct]
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
+            _label = new Label();
+            AddChild(_label);
             _boneIndex = Skeleton.FindBone(PositionBone);
 
             Debug.Assert(_boneIndex != -1, $"Failed to find a bone named '{PositionBone}'.");
@@ -81,6 +105,7 @@ namespace AlleyCat.Motion
             var track = animation.AddTrack(Godot.Animation.TrackType.Method);
 
             animation.TrackSetPath(track, GetPath());
+            animation.TrackInsertKey(track, 0, args);
             animation.TrackInsertKey(track, animation.Length, args);
         }
 
@@ -99,30 +124,40 @@ namespace AlleyCat.Motion
 
         protected override Vector3 KinematicProcess(float delta, Vector3 velocity, Vector3 rotationalVelocity)
         {
-            var player = AnimationManager.TreePlayer;
+            var speed = velocity.Length();
+            var direction = velocity.Normalized();
 
-            var momentum = Math.Abs(velocity.x) + Math.Abs(velocity.z);
-
-            if (momentum > 0)
+            if (speed > 0)
             {
-                var ratio = Math.Abs(velocity.z) / momentum;
+//                if (Mathf.Abs(direction.z) > 0)
+//                {
+                var forward = direction.z <= 0;
 
-                player.Blend2NodeSetAmount(WalkBlendNode, ratio);
+                TreePlayer.TransitionNodeSetCurrent(DirectionTransition,
+                    forward ? TransitionForward : TransitionBackward);
+                TreePlayer.Blend3NodeSetAmount(forward ? ForwardBlend : BackwardBlend, direction.x);
+//                }
+//                else
+//                {
+//                    TreePlayer.TransitionNodeSetCurrent(DirectionTransition, TransitionStrafe);
+//                    TreePlayer.TransitionNodeSetCurrent(StrafeTransition,
+//                        direction.x < 0 ? TransitionLeft : TransitionRight);
+//                }
+
+                TreePlayer.TransitionNodeSetCurrent(MoveTransition, TransitionMove);
+                TreePlayer.TimescaleNodeSetScale(ScaleSpeed, speed);
             }
-
-            player.Blend3NodeSetAmount(ForwardBlendNode, -velocity.z);
-            player.Blend3NodeSetAmount(SideBlendNode, velocity.x);
+            else
+            {
+                TreePlayer.TransitionNodeSetCurrent(MoveTransition, TransitionIdle);
+            }
 
             return _offset.origin / delta;
         }
 
         protected virtual void ResetAnimations()
         {
-            var player = AnimationManager.TreePlayer;
-
-            player.Blend2NodeSetAmount(WalkBlendNode, 0);
-            player.Blend3NodeSetAmount(ForwardBlendNode, 0);
-            player.Blend3NodeSetAmount(SideBlendNode, 0);
+            TreePlayer.TransitionNodeSetCurrent(MoveTransition, TransitionIdle);
         }
 
         protected virtual void OnBeforeAnimation()

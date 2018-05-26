@@ -1,10 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRace.cs" type="Script" id=1]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=2]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlot.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlot.cs" type="Script" id=2]
 
 [node name="Human" type="Node" index="0"]
 script = ExtResource( 1 )
@@ -12,268 +9,20 @@ _key = "Human"
 _displayName = "race.Human"
 
 [node name="Morphs" type="Node" parent="." index="0"]
-editor/display_folded = true
 
 [node name="Female" type="Node" parent="Morphs" index="0"]
-
-[node name="Head" type="Node" parent="Morphs/Female" index="0"]
-script = ExtResource( 2 )
-_key = "Head"
-_displayName = "morph.Head"
-
-[node name="Head Size" type="Node" parent="Morphs/Female/Head" index="0"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "HeadSize"
-_displayName = "morph.Head.HeadSize"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "Head"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Eyes Size" type="Node" parent="Morphs/Female/Head" index="1"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "EyesSize"
-_displayName = "morph.Head.EyesSize"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "Eye"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Nose Size" type="Node" parent="Morphs/Female/Head" index="2"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "NoseSize"
-_displayName = "morph.Head.NoseSize"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "NoseBase"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Neck Size" type="Node" parent="Morphs/Female/Head" index="3"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "NeckSize"
-_displayName = "morph.Head.NeckSize"
-MinValue = 0.8
-MaxValue = 1.2
-Bone = "NeckAdjust"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Body" type="Node" parent="Morphs/Female" index="1"]
-script = ExtResource( 2 )
-_key = "Body"
-_displayName = "morph.Body"
-
-[node name="Height" type="Node" parent="Morphs/Female/Body" index="0"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "Height"
-_displayName = "morph.Body.Height"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "Global"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Arms Length" type="Node" parent="Morphs/Female/Body" index="1"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ArmsLength"
-_displayName = "morph.Body.ArmsLength"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "Arm"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 0, 1 )
-
-[node name="Legs Length" type="Node" parent="Morphs/Female/Body" index="2"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "LegsLength"
-_displayName = "morph.Body.LegsLength"
-MinValue = 0.8
-MaxValue = 1.1
-Bone = "UpLeg"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 0, 0, 1 )
-
-[node name="Shoulders Size" type="Node" parent="Morphs/Female/Body" index="3"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ShouldersSize"
-_displayName = "morph.Body.ShouldersSize"
-MinValue = 0.7
-MaxValue = 1.15
-Bone = "ShoulderAdjust"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Arms Size" type="Node" parent="Morphs/Female/Body" index="4"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ArmsSize"
-_displayName = "morph.Body.ArmsSize"
-MinValue = 0.9
-MaxValue = 1.2
-Bone = "ArmAdjust"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 0 )
-
-[node name="Forearms Size" type="Node" parent="Morphs/Female/Body" index="5"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ForearmsSize"
-_displayName = "morph.Body.ForearmsSize"
-MinValue = 0.85
-MaxValue = 1.2
-Bone = "ForeArmAdjust"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 0 )
-
-[node name="Hands Size" type="Node" parent="Morphs/Female/Body" index="6"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "HandsSize"
-_displayName = "morph.Body.HandsSize"
-MinValue = 0.9
-MaxValue = 1.08
-Bone = "Hand"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Chest Size" type="Node" parent="Morphs/Female/Body" index="7"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ChestSize"
-_displayName = "ChestSize"
-MinValue = 0.9
-MaxValue = 1.1
-Bone = "Spine1Adjust"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1.3, 0 )
-
-[node name="Breasts Size" type="Node" parent="Morphs/Female/Body" index="8"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "BreastsSize"
-_displayName = "BreastsSize"
-MinValue = 0.7
-MaxValue = 1.4
-Bone = "InnerBreast"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Belly Size" type="Node" parent="Morphs/Female/Body" index="9"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "BellySize"
-_displayName = "morph.Body.BellySize"
-MinValue = 0.8
-MaxValue = 1.5
-Bone = "LowerBackBelly"
-Mirrored = false
-MorphType = 0
-Modifier = Vector3( 1, 1.3, 0 )
-
-[node name="Gluteus Size" type="Node" parent="Morphs/Female/Body" index="10"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "GluteusSize"
-_displayName = "morph.Body.GluteusSize"
-MinValue = 0.85
-MaxValue = 1.25
-Bone = "Gluteus"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Thighs Size" type="Node" parent="Morphs/Female/Body" index="11"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "ThighsSize"
-_displayName = "morph.Body.ThighsSize"
-MinValue = 0.85
-MaxValue = 1.1
-Bone = "UpLegAdjust"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 0 )
-
-[node name="Calves Size" type="Node" parent="Morphs/Female/Body" index="12"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "CalvesSize"
-_displayName = "morph.Body.CalvesSize"
-MinValue = 0.85
-MaxValue = 1.1
-Bone = "LegAdjust"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 0 )
-
-[node name="Feet Size" type="Node" parent="Morphs/Female/Body" index="13"]
-script = ExtResource( 3 )
-Default = 1.0
-_key = "FeetSize"
-_displayName = "morph.Body.FeetSize"
-MinValue = 0.85
-MaxValue = 1.1
-Bone = "Foot"
-Mirrored = true
-MorphType = 0
-Modifier = Vector3( 1, 1, 1 )
-
-[node name="Color" type="Node" parent="Morphs/Female" index="2"]
-script = ExtResource( 2 )
-_key = "Color"
-_displayName = "morph.Color"
-
-[node name="Skin Tone" type="Node" parent="Morphs/Female/Color" index="0"]
-script = ExtResource( 4 )
-Default = Color( 1, 1, 1, 1 )
-_key = "SkinTone"
-_displayName = "morph.Color.SkinTone"
-UseAlpha = false
-Mesh = "Body"
-_materials = "Face;Torso;Hands;Feet;Legs"
-
-[node name="Hair Color" type="Node" parent="Morphs/Female/Color" index="1"]
-script = ExtResource( 4 )
-Default = Color( 0.190393, 0.175557, 0.164256, 1 )
-_key = "HairColor"
-_displayName = "morph.Color.HairColor"
-UseAlpha = false
-Mesh = "Hair"
-_materials = "Hair"
 
 [node name="Slots" type="Node" parent="." index="1"]
 
 [node name="Equipments" type="Node" parent="Slots" index="0"]
 
 [node name="Shirt" type="Node" parent="Slots/Equipments" index="0"]
-script = ExtResource( 5 )
+script = ExtResource( 2 )
 _key = "Shirt"
+_displayName = null
 
 [node name="Pants" type="Node" parent="Slots/Equipments" index="1"]
-script = ExtResource( 5 )
+script = ExtResource( 2 )
 _key = "Pants"
+_displayName = null
 

@@ -109,7 +109,7 @@ namespace AlleyCat.Control
             MovementInput
                 .Where(_ => Character?.Locomotion != null)
                 .Where(_ => Perspective.AutoActivate)
-                .Select(v => new Vector3(v.x, 0, -v.y))
+                .Select(v => new Vector3(v.x, 0, -v.y) * 2)
                 .Subscribe(v => Character?.Locomotion.Move(v))
                 .AddTo(this);
 
