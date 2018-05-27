@@ -57,14 +57,12 @@ namespace AlleyCat.Motion
         private Transform _offset = new Transform(Basis.Identity, Vector3.Zero);
 
         private Transform _lastPose = new Transform(Basis.Identity, Vector3.Zero);
-        private Label _label;
 
         [PostConstruct]
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            _label = new Label();
-            AddChild(_label);
+
             _boneIndex = Skeleton.FindBone(PositionBone);
 
             Debug.Assert(_boneIndex != -1, $"Failed to find a bone named '{PositionBone}'.");
@@ -72,6 +70,7 @@ namespace AlleyCat.Motion
             _initialTransform = Skeleton.GetBoneTransform(_boneIndex);
 
             AnimationManager.OnBeforeAdvance
+                .Where(_ => Valid)
                 .Subscribe(_ => OnBeforeAnimation())
                 .AddTo(this);
 
