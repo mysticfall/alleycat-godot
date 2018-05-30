@@ -18,6 +18,10 @@ config/icon="res://icon.png"
 
 AlleyCat="*res://Data/AlleyCat.tscn"
 
+[gui]
+
+theme/custom_font="res://Data/Fonts/UI.tres"
+
 [input]
 
 ui_accept={
