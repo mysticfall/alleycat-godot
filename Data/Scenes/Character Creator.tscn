@@ -149,7 +149,7 @@ _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -90.0
 InitialDistance = 0.8
-_cameraPath = null
+_cameraPath = NodePath("../../Cameras/Camera")
 _pivot = NodePath("../../Character")
 _minDistance = 0.2
 _maxDistance = 3.0
@@ -190,7 +190,6 @@ Axis = 0
 Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View" index="2"]
-editor/display_folded = true
 script = ExtResource( 5 )
 ProcessMode = 0
 

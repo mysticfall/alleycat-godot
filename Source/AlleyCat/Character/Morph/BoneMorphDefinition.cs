@@ -30,7 +30,7 @@ namespace AlleyCat.Character.Morph
 
             Debug.Assert(Bone != null, "Bone != null");
 
-            Bones = Mirrored ? new[] {Bone + ".L", Bone + ".R"} : new[] {Bone};
+            Bones = Mirrored ? new[] {Bone + "_L", Bone + "_R"} : new[] {Bone};
         }
 
         public override IMorph CreateMorph(IMorphable morphable)
