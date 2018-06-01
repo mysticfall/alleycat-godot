@@ -30,7 +30,7 @@ namespace AlleyCat.Sensor
 
         public Vector3 LookDirection => (Head.basis * HeadOrientation).Xform(Vector3.Forward);
 
-        public override Vector3 Origin => Head.origin / 2f;
+        public override Vector3 Origin => Head.origin;
 
         public override Vector3 Up => (Neck.basis * NeckOrientation).Xform(Vector3.Up);
 

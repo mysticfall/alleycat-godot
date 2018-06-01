@@ -128,7 +128,7 @@ Stabilization = 1
 StabilizationFactor = 0.8
 TransitionTime = 2.0
 VelocityThreshold = 0.2
-Offset = 0.05
+Offset = 0.01
 _characterPath = NodePath("")
 _cameraPath = NodePath("")
 

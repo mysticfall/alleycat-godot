@@ -53,7 +53,7 @@ namespace AlleyCat.Control
         [CanBeNull]
         public IVision Vision => Character?.Vision;
 
-        public Vector3 Viewpoint => (Vision?.Viewpoint ?? Vector3.Zero) + Forward * Offset;
+        public Vector3 Viewpoint => Vision?.Viewpoint ?? Vector3.Zero;
 
         public override Vector3 Origin => Vision?.Origin ?? Vector3.Zero;
 
@@ -149,12 +149,17 @@ namespace AlleyCat.Control
                     .Select(ratio => GetUnstablizedQuat().Slerp(GetStablizedQuat(), ratio)));
 
             var cameraTransform = rotation
-                .Select(basis => new Transform(basis, Viewpoint))
-                .ToReactiveProperty();
+                .Select(basis =>
+                {
+                    var direction = Vision?.LookDirection ?? Forward;
+                    var origin = Viewpoint + direction * Offset;
+
+                    return new Transform(basis, origin);
+                });
 
             OnLoop
                 .Where(_ => Active && Valid)
-                .Zip(cameraTransform.MostRecent(cameraTransform.Value), (_, transform) => transform)
+                .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
                 .Subscribe(transform => Camera?.SetGlobalTransform(transform))
                 .AddTo(this);
         }
