@@ -50,6 +50,24 @@ namespace AlleyCat.Character
 
         public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
 
+        public Vector3 LabelPosition
+        {
+            get
+            {
+                if (_labelMarker != null)
+                {
+                    return _labelMarker.GlobalTransform.origin;
+                }
+
+                var bounds = Bounds;
+
+                return GlobalTransform.origin + (bounds.Position + bounds.End) / 2f;
+            }
+        }
+
+        public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
+            Enumerable.Empty<Marker>().ToDictionary();
+
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }
 
@@ -61,11 +79,22 @@ namespace AlleyCat.Character
 
         [Export, UsedImplicitly] private string _displayName;
 
+        [Service(false)] private IEnumerable<Marker> _markers;
+
+        private Marker _labelMarker;
+
         public override void _Ready()
         {
             base._Ready();
 
             this.Autowire();
+
+            if (_markers != null)
+            {
+                Markers = _markers.ToDictionary(m => m.Key);
+            }
+
+            _labelMarker = this.GetLabelMarker();
         }
 
         public virtual void SaveState(IState state)

@@ -143,10 +143,12 @@
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Common\IGameLoopAware.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IMarkable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />
     <Compile Include="Source\AlleyCat\Common\ITransformable.cs" />
     <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
+    <Compile Include="Source\AlleyCat\Common\Marker.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\INodeProcessor.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\UI\EntityLabel.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeExtensions.cs" />

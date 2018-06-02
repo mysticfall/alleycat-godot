@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Body.dae" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=15]
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=16]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=17]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -30,6 +31,9 @@ _displayName = null
 _race = "Human"
 _sex = 1
 
+[node name="Skeleton" parent="Rig" index="0"]
+bones/16/bound_children = [ NodePath("Chest") ]
+
 [node name="Mesh" parent="Rig/Skeleton" index="0"]
 material/1 = ExtResource( 3 )
 _sections_unfolded = [ "Material" ]
@@ -41,7 +45,17 @@ _sections_unfolded = [ "Material", "mesh" ]
 
 [node name="Short Hair" parent="Rig/Skeleton" index="3" instance=ExtResource( 6 )]
 
-[node name="Binding" type="Node" parent="Rig/Skeleton" index="4"]
+[node name="Chest" type="BoneAttachment" parent="Rig/Skeleton" index="4"]
+transform = Transform( -1, -5.35921e-07, -7.3388e-08, -4.70555e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.54373e-09, 1.15451, 0.030444 )
+bone_name = "spine03"
+_sections_unfolded = [ "Transform" ]
+
+[node name="Label" type="Spatial" parent="Rig/Skeleton/Chest" index="0"]
+transform = Transform( 1, 1.7053e-13, 4.26326e-14, 1.13687e-13, 1, 0, -7.10543e-14, -5.96046e-08, 1, -4.83513e-08, 0.0657289, 0.119175 )
+script = ExtResource( 17 )
+_key = "Label"
+
+[node name="Binding" type="Node" parent="Rig/Skeleton" index="5"]
 script = ExtResource( 7 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
