@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
@@ -10,14 +11,18 @@ namespace AlleyCat.Event
 {
     public static class NodeExtensions
     {
-        private const string NodeName = "NodeEventTracker";
+        private const string EventTrackerName = "NodeEventTracker";
+
+        private const string IdleSchedulerName = "IdleScheduler";
+
+        private const string PhysicsSchedulerName = "PhysicsScheduler";
 
         [NotNull]
         public static IObservable<float> OnProcess([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
 
             Debug.Assert(tracker != null, "tracker != null");
 
@@ -31,7 +36,7 @@ namespace AlleyCat.Event
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
 
             Debug.Assert(tracker != null, "tracker != null");
 
@@ -45,7 +50,7 @@ namespace AlleyCat.Event
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
 
             Debug.Assert(tracker != null, "tracker != null");
 
@@ -59,7 +64,7 @@ namespace AlleyCat.Event
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
 
             Debug.Assert(tracker != null, "tracker != null");
 
@@ -74,11 +79,35 @@ namespace AlleyCat.Event
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var tracker = node.GetOrCreateNode(NodeName, _ => new NodeEventTracker());
+            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
 
             Debug.Assert(tracker != null, "tracker != null");
 
             return tracker.OnDispose;
+        }
+
+        [NotNull]
+        public static IScheduler GetIdleScheduler([NotNull] this Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            var scheduler = node.GetOrCreateNode(IdleSchedulerName, _ => new NodeScheduler(ProcessMode.Idle));
+
+            Debug.Assert(scheduler != null, "scheduler != null");
+
+            return scheduler;
+        }
+
+        [NotNull]
+        public static IScheduler GetPhysicsScheduler([NotNull] this Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            var scheduler = node.GetOrCreateNode(PhysicsSchedulerName, _ => new NodeScheduler(ProcessMode.Physics));
+
+            Debug.Assert(scheduler != null, "scheduler != null");
+
+            return scheduler;
         }
     }
 }

@@ -84,24 +84,24 @@ ProcessMode = 0
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -112,12 +112,12 @@ ProcessMode = 0
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
 script = ExtResource( 8 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 10.0
+WindowShift = 1.0
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
@@ -145,24 +145,24 @@ ProcessMode = 0
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="1"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -193,24 +193,24 @@ ProcessMode = 0
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
 script = ExtResource( 7 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 3.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -221,12 +221,12 @@ ProcessMode = 0
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
 script = ExtResource( 8 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 10.0
+WindowShift = 1.0
 PositiveAction = "move_right"
 NegativeAction = "move_left"
 Polling = true
@@ -234,12 +234,12 @@ Polling = true
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
 script = ExtResource( 8 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 10.0
+WindowShift = 1.0
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true

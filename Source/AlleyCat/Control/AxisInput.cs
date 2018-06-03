@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
@@ -21,10 +22,10 @@ namespace AlleyCat.Control
         public virtual bool Interpolate { get; set; } = false;
 
         [Export(PropertyHint.ExpRange, "0, 1000, 1")]
-        public virtual float WindowSize { get; set; } = 100f;
+        public virtual float WindowSize { get; set; } = 5f;
 
         [Export(PropertyHint.ExpRange, "0, 1000, 1")]
-        public virtual float WindowShift { get; set; } = 5f;
+        public virtual float WindowShift { get; set; } = 1f;
 
         protected override IObservable<float> CreateObservable()
         {
@@ -38,7 +39,8 @@ namespace AlleyCat.Control
                 input = input
                     .Buffer(
                         TimeSpan.FromMilliseconds(WindowSize),
-                        TimeSpan.FromMilliseconds(WindowShift))
+                        TimeSpan.FromMilliseconds(WindowShift),
+                        this.GetIdleScheduler())
                     .Where(v => v.Any())
                     .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count);
             }

@@ -200,6 +200,7 @@
     <Compile Include="Source\AlleyCat\Event\IReadOnlyReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Event\NodeScheduler.cs" />
     <Compile Include="Source\AlleyCat\Event\ObservableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
@@ -305,8 +306,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.0.0" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.1" />
-    <PackageReference Include="NETStandard.Library.NETFramework" Version="2.0.1" />
+    <PackageReference Include="OptimizedPriorityQueue" Version="4.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />

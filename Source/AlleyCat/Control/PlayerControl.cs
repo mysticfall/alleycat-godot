@@ -7,7 +7,6 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
-using AlleyCat.UI;
 using Godot;
 using JetBrains.Annotations;
 
