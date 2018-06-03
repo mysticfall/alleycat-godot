@@ -38,8 +38,7 @@ namespace AlleyCat.Control
         [Export]
         public StabilizeMode Stabilization { get; set; } = StabilizeMode.WhileMoving;
 
-        [Export(PropertyHint.ExpRange, "0,1")]
-        public float StabilizationFactor { get; set; } = 0.8f;
+        public Range<float> StabilizationFactor => new Range<float>(_minStabilization, _maxStabilization);
 
         [Export(PropertyHint.ExpRange, "0.1,5")]
         public float TransitionTime { get; set; } = 2f;
@@ -70,6 +69,10 @@ namespace AlleyCat.Control
         [CanBeNull]
         protected virtual IObservable<bool> DeactivateInput =>
             _deactivateInput.GetTrigger().Where(_ => Active && Valid);
+
+        [Export(PropertyHint.ExpRange, "0,1")] private float _minStabilization = 0.2f;
+
+        [Export(PropertyHint.ExpRange, "0,1")] private float _maxStabilization = 0.8f;
 
         [Export, UsedImplicitly] private NodePath _characterPath;
 
@@ -136,7 +139,7 @@ namespace AlleyCat.Control
                     (delta, stablizing) => stablizing ? delta : -delta)
                 .Scan((time, delta) => Active ? Mathf.Max(0, Mathf.Min(TransitionTime, delta + time)) : 0)
                 .Select(influence => influence / TransitionTime)
-                .Select(ratio => Mathf.Max(ratio, StabilizationFactor));
+                .Select(StabilizationFactor.Clamp);
 
             var rotation = Observable.Merge(
                 transition

@@ -131,10 +131,11 @@ _minYaw = -90.0
 _maxPitch = 70.0
 _minPitch = -80.0
 Stabilization = 1
-StabilizationFactor = 0.8
 TransitionTime = 2.0
 VelocityThreshold = 0.2
 Offset = 0.01
+_minStabilization = 0.2
+_maxStabilization = 0.8
 _characterPath = NodePath("")
 _cameraPath = NodePath("")
 

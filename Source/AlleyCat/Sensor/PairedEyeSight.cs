@@ -32,9 +32,18 @@ namespace AlleyCat.Sensor
 
         public override Vector3 Origin => Head.origin;
 
-        public override Vector3 Up => (Neck.basis * NeckOrientation).Xform(Vector3.Up);
+        public override Vector3 Up => InitialRotation.Up();
 
-        public override Vector3 Forward => (Neck.basis * NeckOrientation).Xform(Vector3.Forward);
+        public override Vector3 Forward => InitialRotation.Forward();
+
+        protected Basis InitialRotation
+        {
+            get
+            {
+                var neckPose = Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(NeckBone);
+                return (neckPose * RestPose).basis * HeadOrientation;
+            }
+        }
 
         protected int HeadBone { get; private set; }
 
@@ -101,8 +110,7 @@ namespace AlleyCat.Sensor
 
         public void LookAt(Vector3 target)
         {
-            var neckPose = Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(NeckBone);
-            var initial = (neckPose * RestPose).basis * HeadOrientation;
+            var initial = InitialRotation;
 
             var transform = new Transform(initial, Vector3.Zero).LookingAt(target, initial.Up());
             var euler = (initial.Inverse() * transform.basis).GetEuler();
