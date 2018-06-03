@@ -184,8 +184,8 @@ Sensitivity = 0.5
 Curve = null
 DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 

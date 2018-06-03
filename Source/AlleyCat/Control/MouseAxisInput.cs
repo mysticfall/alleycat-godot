@@ -26,13 +26,10 @@ namespace AlleyCat.Control
 
         protected override IObservable<float> CreateRawObservable()
         {
-            var viewport = GetViewport();
-
             return this.OnUnhandledInput()
                 .Where(_ => _maximumValue > 0)
-                .Select(_ => viewport.GetMousePosition())
-                .Buffer(2)
-                .Select(p => p[1] - p[0])
+                .OfType<InputEventMouseMotion>()
+                .Select(e => e.Relative)
                 .Select(v => GetValue(v) / _maximumValue);
         }
 

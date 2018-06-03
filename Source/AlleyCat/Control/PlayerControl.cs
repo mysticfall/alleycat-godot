@@ -129,9 +129,11 @@ namespace AlleyCat.Control
                 {
                     if (view == null) return 0;
 
-                    var angularSpeed = Mathf.Deg2Rad(120) * Mathf.Sign(view.Yaw) * speed;
+                    var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(view.Yaw) * 3) *
+                                       Mathf.Sign(view.Yaw) *
+                                       speed;
 
-                    return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(view.Yaw) ? angularSpeed : view.Yaw;
+                    return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(view.Yaw) ? angularSpeed : view.Yaw / delta;
                 });
 
             var offsetAngle =
