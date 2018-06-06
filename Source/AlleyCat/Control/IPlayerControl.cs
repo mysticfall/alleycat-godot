@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    public interface IPlayerControl : ICharacterControl<IHumanoid>, IViewControl
+    public interface IPlayerControl : ICharacterControl<IHumanoid>
     {
         IEnumerable<IPerspectiveView> Perspectives { get; }
 

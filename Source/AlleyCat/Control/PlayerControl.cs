@@ -73,14 +73,12 @@ namespace AlleyCat.Control
         {
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Camera = Camera ?? GetViewport().GetCamera();
             Character = Character ?? GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).FirstOrDefault();
 
             IPerspectiveView active = null;
 
             foreach (var perspective in Perspectives)
             {
-                perspective.Camera = Camera;
                 perspective.Character = Character;
 
                 if (perspective.Active && active == null)

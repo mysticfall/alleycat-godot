@@ -14,11 +14,10 @@ namespace AlleyCat.Control
     {
         public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
 
-        [Node(required: false)]
         public virtual IHumanoid Character { get; set; }
 
         [Node(required: false)]
-        public virtual Camera Camera { get; set; }
+        public virtual Camera Camera { get; private set;  }
 
         public bool AutoActivate => false;
 
@@ -48,6 +47,8 @@ namespace AlleyCat.Control
         [PostConstruct]
         protected virtual void OnInitialize()
         {
+            Camera = Camera ?? GetViewport().GetCamera();
+
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))

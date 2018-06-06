@@ -187,7 +187,7 @@
     <Compile Include="Source\AlleyCat\Control\IPlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\IThirdPersonView.cs" />
     <Compile Include="Source\AlleyCat\Control\ITriggerInput.cs" />
-    <Compile Include="Source\AlleyCat\Control\IViewControl.cs" />
+    <Compile Include="Source\AlleyCat\Control\IView.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\OrbitingView.cs" />

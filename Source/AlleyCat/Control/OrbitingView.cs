@@ -8,10 +8,10 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    public abstract class OrbitingView : Orbiter
+    public abstract class OrbitingView : Orbiter, IView
     {
         [Node(required: false)]
-        public virtual Camera Camera { get; set; }
+        public virtual Camera Camera { get; private set; }
 
         public override Spatial Target => Camera;
 
@@ -41,6 +41,8 @@ namespace AlleyCat.Control
         protected override void OnInitialize()
         {
             base.OnInitialize();
+
+            Camera = Camera ?? GetViewport().GetCamera();
 
             ViewInput
                 .Select(v => v * 0.05f)

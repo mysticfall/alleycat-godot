@@ -11,7 +11,6 @@ namespace AlleyCat.Control
     [Singleton(typeof(IPerspectiveView), typeof(IThirdPersonView))]
     public class OrbitingCharacterView : OrbitingView, IThirdPersonView
     {
-        [Node(required: false)]
         public virtual IHumanoid Character { get; set; }
 
         public override Spatial Target => Camera;
