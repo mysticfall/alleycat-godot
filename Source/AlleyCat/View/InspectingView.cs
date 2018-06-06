@@ -2,11 +2,12 @@ using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     public class InspectingView : OrbitingView
     {

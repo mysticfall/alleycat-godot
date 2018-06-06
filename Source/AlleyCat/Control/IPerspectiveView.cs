@@ -1,5 +1,6 @@
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.View;
 
 namespace AlleyCat.Control
 {

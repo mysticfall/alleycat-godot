@@ -1,6 +1,6 @@
 using Godot;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     public interface IView
     {
