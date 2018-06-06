@@ -7,12 +7,13 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
+using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    [AutowireContext, Singleton(typeof(IPlayerControl))]
+    [AutowireContext, Singleton(typeof(IPlayerControl), typeof(IFocusTracker))]
     public class PlayerControl : AutowiredNode, IPlayerControl
     {
         [Export]
@@ -48,6 +49,21 @@ namespace AlleyCat.Control
         }
 
         public IObservable<IPerspectiveView> OnPerspectiveChange => _perspective.Where(v => Active && Valid);
+
+        public float MaxFocalDistance { get; set; } = 5f;
+
+        public IEntity FocusedObject => (Perspective as IFocusTracker)?.FocusedObject;
+
+        public IObservable<IEntity> OnFocusChange
+        {
+            get
+            {
+                var supported = OnPerspectiveChange.OfType<IFocusTracker>().SelectMany(t => t.OnFocusChange);
+                var unsupported = OnPerspectiveChange.Where(p => !(p is IFocusTracker)).Select(_ => default(IEntity));
+
+                return supported.Merge(unsupported).DistinctUntilChanged();
+            }
+        }
 
         protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
@@ -165,6 +181,11 @@ namespace AlleyCat.Control
             if (previous is ITurretLike previousRotatable && current is ITurretLike currentRotatable)
             {
                 currentRotatable.Rotation = previousRotatable.Rotation;
+            }
+
+            if (previous is IAutoFocusingView focusView && !(current is IAutoFocusingView))
+            {
+                focusView.DisableDof();
             }
 
             _lastPerspective = previous != null && previous.AutoActivate ? previous : null;

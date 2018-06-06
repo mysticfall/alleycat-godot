@@ -1,17 +1,20 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
+using AlleyCat.Physics;
+using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
     [Singleton(typeof(IPerspectiveView))]
-    public class FreeCameraView : TurretLike, IPerspectiveView
+    public class FreeCameraView : TurretLike, IPerspectiveView, IAutoFocusingView
     {
         public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
 
@@ -24,9 +27,18 @@ namespace AlleyCat.Control
         public IObservable<IHumanoid> OnCharacterChange => _character;
 
         [Node(required: false)]
-        public virtual Camera Camera { get; private set;  }
+        public virtual Camera Camera { get; private set; }
 
         public bool AutoActivate => false;
+
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float MaxDofDistance { get; set; } = 5f;
+
+        [Export(PropertyHint.ExpRange, "0,1")]
+        public float DofTransition { get; set; } = 0.5f;
+
+        [Export(PropertyHint.ExpRange, "10,1000")]
+        public float FocusSpeed { get; set; } = 100f;
 
         public override Vector3 Origin => Camera?.GlobalTransform.origin ?? Vector3.Zero;
 
@@ -58,6 +70,18 @@ namespace AlleyCat.Control
         {
             Camera = Camera ?? GetViewport().GetCamera();
 
+            OnActiveStateChange
+                .Where(_ => Valid)
+                // ReSharper disable once PossibleNullReferenceException
+                .Subscribe(v => Character.Locomotion.Active = !v)
+                .AddTo(this);
+
+            InitializeInput();
+            InitializeRaycast();
+        }
+
+        private void InitializeInput()
+        {
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))
@@ -73,11 +97,27 @@ namespace AlleyCat.Control
             ToggleInput?
                 .Subscribe(_ => Active = !Active)
                 .AddTo(this);
+        }
 
+        private void InitializeRaycast()
+        {
             OnActiveStateChange
-                .Where(_ => Valid)
-                // ReSharper disable once PossibleNullReferenceException
-                .Subscribe(v => Character.Locomotion.Active = !v)
+                .Where(s => s)
+                .Subscribe(_ => this.EnableDof())
+                .AddTo(this);
+
+            this.OnPhysicsProcess()
+                .Where(_ => Active && Valid)
+                .Select(_ => Origin + Forward * MaxDofDistance)
+                .Select(to => Camera.GetWorld().IntersectRay(Origin, to))
+                .Select(hit => hit == null ? float.MaxValue : Origin.DistanceTo(hit.Position))
+                .Buffer(
+                    TimeSpan.FromMilliseconds(FocusSpeed),
+                    TimeSpan.FromMilliseconds(10),
+                    this.GetPhysicsScheduler())
+                .Where(v => v.Any() && Active)
+                .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
+                .Subscribe(this.SetFocalDistance)
                 .AddTo(this);
         }
 

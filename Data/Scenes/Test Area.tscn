@@ -147,6 +147,20 @@ _sections_unfolded = [ "Transform" ]
 [node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 5 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
-[node name="Control" parent="." index="6"]
+[node name="Control" parent="." index="5"]
 editor/display_folded = true
+
+[node name="Third Person View" parent="Control/Player/Views" index="0"]
+MaxFocalDistance = 5.0
+
+[node name="First Person View" parent="Control/Player/Views" index="1"]
+MaxFocalDistance = 5.0
+MaxDofDistance = 5.0
+DofTransition = 0.5
+FocusSpeed = 100.0
+
+[node name="Free Camera View" parent="Control/Player/Views" index="2"]
+MaxDofDistance = 5.0
+DofTransition = 0.5
+FocusSpeed = 100.0
 

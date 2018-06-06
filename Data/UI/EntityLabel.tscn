@@ -16,12 +16,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_styles/panel = SubResource( 1 )
-_sections_unfolded = [ "Custom Styles" ]
+_sections_unfolded = [ "Custom Styles", "Mouse" ]
 
 [node name="Title" type="Label" parent="." index="0"]
 anchor_left = 0.5

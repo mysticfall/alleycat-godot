@@ -177,6 +177,7 @@
     <Compile Include="Source\AlleyCat\Control\HeadMountedView.cs" />
     <Compile Include="Source\AlleyCat\Control\IControl.cs" />
     <Compile Include="Source\AlleyCat\Control\IFirstPersonView.cs" />
+    <Compile Include="Source\AlleyCat\Control\IFocusTracker.cs" />
     <Compile Include="Source\AlleyCat\Control\FreeCameraView.cs" />
     <Compile Include="Source\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Source\AlleyCat\UI\Console\QuitCommand.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\AlleyCat\View\IAutoFocusingView.cs" />
     <Compile Include="Source\AlleyCat\View\InspectingView.cs" />
     <Compile Include="Source\AlleyCat\View\IView.cs" />
     <Compile Include="Source\AlleyCat\View\OrbitingView.cs" />

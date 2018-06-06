@@ -6,17 +6,17 @@
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Short Hair.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=7]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=8]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=10]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=11]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=12]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=13]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=14]
-[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=15]
-[ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=16]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=17]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=8]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=9]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=11]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=12]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=13]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=14]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=15]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=16]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=17]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -52,11 +52,11 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Label" type="Spatial" parent="Rig/Skeleton/Chest" index="0"]
 transform = Transform( 1, 1.7053e-13, 4.26326e-14, 1.13687e-13, 1, 0, -7.10543e-14, -5.96046e-08, 1, -4.83513e-08, 0.0657289, 0.119175 )
-script = ExtResource( 17 )
+script = ExtResource( 7 )
 _key = "Label"
 
 [node name="Binding" type="Node" parent="Rig/Skeleton" index="5"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
@@ -70,16 +70,16 @@ autoplay = ""
 playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/Idle = ExtResource( 8 )
-"anims/Walk Backward" = ExtResource( 9 )
-"anims/Walk Forward" = ExtResource( 10 )
-"anims/Walk Left" = ExtResource( 11 )
-"anims/Walk Right" = ExtResource( 12 )
+anims/Idle = ExtResource( 9 )
+"anims/Walk Backward" = ExtResource( 10 )
+"anims/Walk Forward" = ExtResource( 11 )
+"anims/Walk Left" = ExtResource( 12 )
+"anims/Walk Right" = ExtResource( 13 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
 playback_process_mode = 0
@@ -95,18 +95,6 @@ data = {
 "position": Vector2( 950.532, 468.573 ),
 "type": "output"
 }, {
-"filter": [  ],
-"from": "Walk Right",
-"id": "Right",
-"position": Vector2( 74.0187, 897.217 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Walk Left",
-"id": "Left",
-"position": Vector2( 73.0245, 771.352 ),
-"type": "animation"
-}, {
 "id": "Move",
 "position": Vector2( 449.807, 490.592 ),
 "transitions": [ {
@@ -118,6 +106,18 @@ data = {
 } ],
 "type": "transition",
 "xfade": 0.0
+}, {
+"filter": [  ],
+"from": "Walk Right",
+"id": "Right",
+"position": Vector2( 74.0187, 897.217 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Left",
+"id": "Left",
+"position": Vector2( 73.0245, 771.352 ),
+"type": "animation"
 }, {
 "filter": [  ],
 "from": "Idle",
@@ -143,15 +143,9 @@ data = {
 "type": "animation"
 }, {
 "filter": [  ],
-"from": "Walk Right",
-"id": "Forward Right",
-"position": Vector2( 65.0284, 303.817 ),
-"type": "animation"
-}, {
-"filter": [  ],
 "from": "Walk Left",
-"id": "Backward Left",
-"position": Vector2( 59.011, 418.663 ),
+"id": "Forward Left",
+"position": Vector2( 69.0319, 76.9283 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -161,8 +155,14 @@ data = {
 }, {
 "filter": [  ],
 "from": "Walk Left",
-"id": "Forward Left",
-"position": Vector2( 69.0319, 76.9283 ),
+"id": "Backward Left",
+"position": Vector2( 59.011, 418.663 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Right",
+"id": "Forward Right",
+"position": Vector2( 65.0284, 303.817 ),
 "type": "animation"
 }, {
 "filter": [  ],
@@ -200,10 +200,10 @@ data = {
 _sections_unfolded = [ "Playback" ]
 
 [node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="Vision" type="Node" parent="." index="4"]
-script = ExtResource( 13 )
+script = ExtResource( 14 )
 ProcessMode = 0
 Active = true
 _maxYaw = 80.0
@@ -215,7 +215,7 @@ _eyeBoneLeft = "eye_L"
 _eyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
-script = ExtResource( 14 )
+script = ExtResource( 15 )
 ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
@@ -223,11 +223,11 @@ ApplyGravity = true
 PositionBone = "root"
 
 [node name="Animations" type="Node" parent="." index="6"]
-script = ExtResource( 15 )
+script = ExtResource( 16 )
 ProcessMode = 1
 Active = true
 
 [node name="Equipments" type="Node" parent="." index="7"]
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 ProcessMode = 0
 

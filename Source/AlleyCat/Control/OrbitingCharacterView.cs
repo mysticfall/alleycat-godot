@@ -21,6 +21,13 @@ namespace AlleyCat.Control
 
         public IObservable<IHumanoid> OnCharacterChange => _character;
 
+        public IEntity FocusedObject => _focus?.Value;
+
+        public IObservable<IEntity> OnFocusChange => _focus ?? Observable.Empty<IEntity>();
+
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float MaxFocalDistance { get; set; } = 2f;
+
         public override Spatial Target => Camera;
 
         public override bool Valid => base.Valid && Character != null;
@@ -39,6 +46,8 @@ namespace AlleyCat.Control
 
         private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
+        private ReactiveProperty<IEntity> _focus;
+
         public OrbitingCharacterView() : base(new Range<float>(-180f, 180f), new Range<float>(-89f, 90f))
         {
         }
@@ -56,10 +65,20 @@ namespace AlleyCat.Control
                 .Where(v => v > 0)
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
+
+            _focus = this.OnPhysicsProcess()
+                .Where(_ => Active && Valid)
+                .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
+                .Select(direction => Origin + direction * MaxFocalDistance)
+                .Select(to => this.IntersectRay(to))
+                .Select(hit => hit?.Collider?.FindEntity())
+                .DistinctUntilChanged()
+                .ToReactiveProperty();
         }
 
         protected override void Dispose(bool disposing)
         {
+            _focus?.Dispose();
             _character?.Dispose();
 
             base.Dispose(disposing);

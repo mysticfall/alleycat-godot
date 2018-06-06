@@ -23,5 +23,22 @@ namespace AlleyCat.Common
 
             return marker;
         }
+
+        [CanBeNull]
+        public static IEntity FindEntity([NotNull] this Node node)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+
+            if (node is IEntity entity) return entity;
+
+            var parent = node.GetParent();
+
+            if (parent == null || parent == node.GetTree().CurrentScene)
+            {
+                return null;
+            }
+
+            return FindEntity(parent);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
@@ -6,13 +7,14 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
+using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
     [Singleton(typeof(IPerspectiveView), typeof(IFirstPersonView))]
-    public class HeadMountedView : TurretLike, IFirstPersonView
+    public class HeadMountedView : TurretLike, IFirstPersonView, IAutoFocusingView
     {
         public enum StabilizeMode
         {
@@ -50,10 +52,28 @@ namespace AlleyCat.Control
         [Export]
         public float Offset { get; set; }
 
+        public IEntity FocusedObject => _focus?.Value;
+
+        public IObservable<IEntity> OnFocusChange => _focus ?? Observable.Empty<IEntity>();
+
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float MaxFocalDistance { get; set; } = 2f;
+
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float MaxDofDistance { get; set; } = 5f;
+
+        [Export(PropertyHint.ExpRange, "0,1")]
+        public float DofTransition { get; set; } = 0.5f;
+
+        [Export(PropertyHint.ExpRange, "10,1000")]
+        public float FocusSpeed { get; set; } = 100f;
+
         [CanBeNull]
         public IVision Vision => Character?.Vision;
 
         public Vector3 Viewpoint => Vision?.Viewpoint ?? Vector3.Zero;
+
+        public Vector3 LookDirection => Vision?.LookDirection ?? Forward;
 
         public override Vector3 Origin => Vision?.Origin ?? Vector3.Zero;
 
@@ -85,6 +105,8 @@ namespace AlleyCat.Control
 
         private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
+        private ReactiveProperty<IEntity> _focus;
+
         public HeadMountedView() : base(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
         {
             ProcessMode = ProcessMode.Idle;
@@ -99,6 +121,13 @@ namespace AlleyCat.Control
         {
             Camera = Camera ?? GetViewport().GetCamera();
 
+            InitializeInput();
+            InitializeStabilization();
+            InitializeRaycast();
+        }
+
+        private void InitializeInput()
+        {
             ViewInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)
@@ -118,7 +147,10 @@ namespace AlleyCat.Control
             DeactivateInput?
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
+        }
 
+        private void InitializeStabilization()
+        {
             bool IsStablizationAllowed() =>
                 Stabilization == StabilizeMode.Always || Stabilization != StabilizeMode.Never;
 
@@ -155,13 +187,7 @@ namespace AlleyCat.Control
                     .Select(ratio => GetUnstablizedQuat().Slerp(GetStablizedQuat(), ratio)));
 
             var cameraTransform = rotation
-                .Select(basis =>
-                {
-                    var direction = Vision?.LookDirection ?? Forward;
-                    var origin = Viewpoint + direction * Offset;
-
-                    return new Transform(basis, origin);
-                });
+                .Select(basis => new Transform(basis, Viewpoint + LookDirection * Offset));
 
             OnLoop
                 .Where(_ => Active && Valid)
@@ -170,8 +196,38 @@ namespace AlleyCat.Control
                 .AddTo(this);
         }
 
+        private void InitializeRaycast()
+        {
+            OnActiveStateChange
+                .Where(s => s)
+                .Subscribe(_ => this.EnableDof())
+                .AddTo(this);
+
+            var onRayCast = this.OnPhysicsProcess()
+                .Where(_ => Active && Valid)
+                .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
+                .Select(to => this.IntersectRay(to));
+
+            onRayCast
+                .Select(hit => hit == null ? float.MaxValue : Viewpoint.DistanceTo(hit.Position))
+                .Buffer(
+                    TimeSpan.FromMilliseconds(FocusSpeed),
+                    TimeSpan.FromMilliseconds(10),
+                    this.GetPhysicsScheduler())
+                .Where(v => v.Any() && Active)
+                .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
+                .Subscribe(this.SetFocalDistance)
+                .AddTo(this);
+
+            _focus = onRayCast
+                .Where(hit => hit == null || Viewpoint.DistanceTo(hit.Position) <= MaxFocalDistance)
+                .Select(hit => hit?.Collider?.FindEntity())
+                .ToReactiveProperty();
+        }
+
         protected override void Dispose(bool disposing)
         {
+            _focus?.Dispose();
             _character?.Dispose();
 
             base.Dispose(disposing);
