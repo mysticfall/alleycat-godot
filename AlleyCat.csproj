@@ -243,6 +243,10 @@
     <Compile Include="Source\AlleyCat\Logging\PrintLogger.cs" />
     <Compile Include="Source\AlleyCat\Logging\PrintLoggerProvider.cs" />
     <Compile Include="Source\AlleyCat\Motion\TurretLike.cs" />
+    <Compile Include="Source\AlleyCat\Physics\Collision.cs" />
+    <Compile Include="Source\AlleyCat\Physics\Intersection.cs" />
+    <Compile Include="Source\AlleyCat\Physics\WorldExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Physics\RestInfo.cs" />
     <Compile Include="Source\AlleyCat\Sensor\PairedEyeSight.cs" />
     <Compile Include="Source\AlleyCat\Sensor\IPairedEyeSight.cs" />
     <Compile Include="Source\AlleyCat\Sensor\IEyeSight.cs" />
