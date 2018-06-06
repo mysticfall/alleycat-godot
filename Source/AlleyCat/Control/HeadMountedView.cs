@@ -6,6 +6,7 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
+using AlleyCat.Physics;
 using AlleyCat.Sensor;
 using AlleyCat.View;
 using Godot;
@@ -206,7 +207,7 @@ namespace AlleyCat.Control
             var onRayCast = this.OnPhysicsProcess()
                 .Where(_ => Active && Valid)
                 .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
-                .Select(to => this.IntersectRay(to));
+                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new object[] {Character}));
 
             onRayCast
                 .Select(hit => hit == null ? float.MaxValue : Viewpoint.DistanceTo(hit.Position))

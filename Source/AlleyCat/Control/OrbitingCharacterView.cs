@@ -4,6 +4,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Physics;
 using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
@@ -70,7 +71,7 @@ namespace AlleyCat.Control
                 .Where(_ => Active && Valid)
                 .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
                 .Select(direction => Origin + direction * MaxFocalDistance)
-                .Select(to => this.IntersectRay(to))
+                .Select(to => Camera.GetWorld().IntersectRay(Origin, to, new object[] {Character}))
                 .Select(hit => hit?.Collider?.FindEntity())
                 .DistinctUntilChanged()
                 .ToReactiveProperty();
