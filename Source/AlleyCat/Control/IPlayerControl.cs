@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    public interface IPlayerControl : ICharacterControl<IHumanoid>
+    public interface IPlayerControl : ICharacterAware<IHumanoid>
     {
         IEnumerable<IPerspectiveView> Perspectives { get; }
 
@@ -40,6 +40,5 @@ namespace AlleyCat.Control
         [CanBeNull]
         public static IThirdPersonView SwitchToThirdPerson([NotNull] this IPlayerControl control) =>
             SwitchPerspective<IThirdPersonView>(control);
-
     }
 }

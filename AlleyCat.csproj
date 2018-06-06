@@ -107,6 +107,7 @@
     <Compile Include="Source\AlleyCat\Character\Character.cs" />
     <Compile Include="Source\AlleyCat\Character\Humanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\ICharacter.cs" />
+    <Compile Include="Source\AlleyCat\Character\ICharacterAware.cs" />
     <Compile Include="Source\AlleyCat\Character\IHumanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\IRace.cs" />
     <Compile Include="Source\AlleyCat\Character\IRaceRegistry.cs" />
@@ -174,7 +175,6 @@
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\HeadMountedView.cs" />
-    <Compile Include="Source\AlleyCat\Control\ICharacterControl.cs" />
     <Compile Include="Source\AlleyCat\Control\IControl.cs" />
     <Compile Include="Source\AlleyCat\Control\IFirstPersonView.cs" />
     <Compile Include="Source\AlleyCat\Control\InspectingView.cs" />

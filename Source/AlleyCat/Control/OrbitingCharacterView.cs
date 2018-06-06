@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
@@ -11,7 +12,13 @@ namespace AlleyCat.Control
     [Singleton(typeof(IPerspectiveView), typeof(IThirdPersonView))]
     public class OrbitingCharacterView : OrbitingView, IThirdPersonView
     {
-        public virtual IHumanoid Character { get; set; }
+        public virtual IHumanoid Character
+        {
+            get => _character.Value;
+            set => _character.Value = value;
+        }
+
+        public IObservable<IHumanoid> OnCharacterChange => _character;
 
         public override Spatial Target => Camera;
 
@@ -28,6 +35,8 @@ namespace AlleyCat.Control
             : new Plane(Vector3.Up, 0f).Project(Character.GlobalTransform().Forward());
 
         [Export, UsedImplicitly] private NodePath _characterPath;
+
+        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
         public OrbitingCharacterView() : base(new Range<float>(-180f, 180f), new Range<float>(-89f, 90f))
         {
@@ -46,6 +55,13 @@ namespace AlleyCat.Control
                 .Where(v => v > 0)
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _character?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

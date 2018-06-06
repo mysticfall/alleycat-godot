@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Motion;
 using Godot;
 using JetBrains.Annotations;
@@ -14,7 +15,13 @@ namespace AlleyCat.Control
     {
         public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
 
-        public virtual IHumanoid Character { get; set; }
+        public virtual IHumanoid Character
+        {
+            get => _character.Value;
+            set => _character.Value = value;
+        }
+
+        public IObservable<IHumanoid> OnCharacterChange => _character;
 
         [Node(required: false)]
         public virtual Camera Camera { get; private set;  }
@@ -44,6 +51,8 @@ namespace AlleyCat.Control
 
         [Node("Toggle", false)] private InputBindings _toggleInput;
 
+        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
+
         [PostConstruct]
         protected virtual void OnInitialize()
         {
@@ -70,6 +79,13 @@ namespace AlleyCat.Control
                 // ReSharper disable once PossibleNullReferenceException
                 .Subscribe(v => Character.Locomotion.Active = !v)
                 .AddTo(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _character?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

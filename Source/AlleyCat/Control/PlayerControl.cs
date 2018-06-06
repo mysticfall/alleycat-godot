@@ -33,6 +33,8 @@ namespace AlleyCat.Control
             set => _character.Value = value;
         }
 
+        public IObservable<IHumanoid> OnCharacterChange => _character;
+
         [Node(required: false)]
         public Camera Camera { get; set; }
 
