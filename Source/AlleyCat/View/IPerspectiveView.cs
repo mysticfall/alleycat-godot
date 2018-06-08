@@ -1,8 +1,7 @@
 using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.View;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     public interface IPerspectiveView : IView, ICharacterAware<IHumanoid>, IActivatable, IValidatable
     {

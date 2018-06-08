@@ -4,6 +4,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
+using AlleyCat.View;
 using Godot;
 
 namespace AlleyCat.UI

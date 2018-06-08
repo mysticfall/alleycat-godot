@@ -1,4 +1,4 @@
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     public interface IFirstPersonView : IPerspectiveView, IFocusTracker
     {

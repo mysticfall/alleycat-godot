@@ -3,7 +3,7 @@
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Control/InspectingView.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]

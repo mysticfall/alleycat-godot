@@ -5,11 +5,10 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Physics;
-using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     [Singleton(typeof(IPerspectiveView), typeof(IThirdPersonView))]
     public class OrbitingCharacterView : OrbitingView, IThirdPersonView

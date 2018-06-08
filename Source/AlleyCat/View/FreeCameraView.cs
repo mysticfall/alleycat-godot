@@ -4,14 +4,14 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
-using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     [Singleton(typeof(IPerspectiveView))]
     public class FreeCameraView : TurretLike, IPerspectiveView, IAutoFocusingView

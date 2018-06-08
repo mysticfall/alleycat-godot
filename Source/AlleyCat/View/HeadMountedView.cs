@@ -4,15 +4,15 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
 using AlleyCat.Sensor;
-using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     [Singleton(typeof(IPerspectiveView), typeof(IFirstPersonView))]
     public class HeadMountedView : TurretLike, IFirstPersonView, IAutoFocusingView

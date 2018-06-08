@@ -1,8 +1,7 @@
 using System;
 using AlleyCat.Common;
-using AlleyCat.View;
 
-namespace AlleyCat.Control
+namespace AlleyCat.View
 {
     public interface IFocusTracker : IView, IActivatable, IValidatable
     {
