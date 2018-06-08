@@ -14,7 +14,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.UI.Console
 {
     [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
-    public class DebugConsole : Panel, ICommandConsole
+    public class DebugConsole : Panel, ICommandConsole, IHideableUI
     {
         public const string ThemeType = "Console";
 
@@ -79,7 +79,7 @@ namespace AlleyCat.UI.Console
                 .Subscribe(_ =>
                 {
                     GetTree().SetInputAsHandled();
-                    Toggle();
+                    this.Toggle();
                 })
                 .AddTo(this);
 
@@ -103,26 +103,14 @@ namespace AlleyCat.UI.Console
             Content.AddColorOverride("default_color", TextColor);
         }
 
-        public void Open()
+        public new void Show()
         {
             if (!Visible) PlayAnimation(ShowAnimation);
         }
 
-        public void Close()
+        public new void Hide()
         {
             if (Visible) PlayAnimation(HideAnimation);
-        }
-
-        public void Toggle()
-        {
-            if (Visible)
-            {
-                Close();
-            }
-            else
-            {
-                Open();
-            }
         }
 
         protected void OnShown()
