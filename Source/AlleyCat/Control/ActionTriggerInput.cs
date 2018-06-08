@@ -10,9 +10,24 @@ namespace AlleyCat.Control
         [Export]
         public string Action { get; set; }
 
-        protected override IObservable<bool> CreateObservable() => this.OnUnhandledInput()
-            .Where(_ => Action != null)
-            .Select(e => e.IsActionPressed(Action))
-            .Where(v => v);
+        [Export]
+        public bool UnhandledOnly { get; set; } = true;
+
+        [Export]
+        public bool StopPropagation { get; set; } = true;
+
+        protected override IObservable<bool> CreateObservable()
+        {
+            var input = UnhandledOnly ? this.OnUnhandledInput() : this.OnInput();
+
+            return input
+                .Where(_ => Action != null)
+                .Select(e => e.IsActionPressed(Action))
+                .Where(v => v)
+                .Do(_ =>
+                {
+                    if (StopPropagation) GetTree().SetInputAsHandled();
+                });
+        }
     }
 }
