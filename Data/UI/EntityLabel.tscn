@@ -57,6 +57,8 @@ size_flags_vertical = 1
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Custom Styles", "Mouse" ]
+InteractAction = "interact"
+DefaultKeyLabel = "?"
 
 [node name="Container" type="VBoxContainer" parent="." index="0"]
 anchor_left = 0.0
@@ -65,23 +67,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 4
 size_flags_vertical = 1
 custom_constants/separation = 4
 alignment = 1
-_sections_unfolded = [ "Custom Constants", "Size Flags" ]
+_sections_unfolded = [ "Custom Constants", "Mouse", "Size Flags" ]
 
 [node name="Title" type="Label" parent="Container" index="0"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 14.0
-margin_top = 17.0
-margin_right = 107.0
-margin_bottom = 37.0
+margin_left = 142.0
+margin_top = 110.0
+margin_right = 235.0
+margin_bottom = 130.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -97,26 +99,26 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Size Flags" ]
+_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Mouse", "Size Flags" ]
 
 [node name="Action" type="HBoxContainer" parent="Container" index="1"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 25.0
-margin_top = 41.0
-margin_right = 96.0
-margin_bottom = 67.0
+margin_left = 153.0
+margin_top = 134.0
+margin_right = 224.0
+margin_bottom = 160.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 6
 alignment = 0
-_sections_unfolded = [ "Custom Constants", "Size Flags" ]
+_sections_unfolded = [ "Custom Constants", "Mouse", "Size Flags" ]
 
 [node name="Shortcut" type="Label" parent="Container/Action" index="0"]
 anchor_left = 0.0
@@ -139,7 +141,7 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Custom Styles", "Margin", "Size Flags", "custom_styles/normal" ]
+_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Custom Styles", "Margin", "Mouse", "Size Flags", "custom_styles/normal" ]
 
 [node name="Action Title" type="Label" parent="Container/Action" index="1"]
 anchor_left = 0.0
@@ -165,5 +167,5 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Margin" ]
+_sections_unfolded = [ "Custom Colors", "Custom Fonts", "Margin", "Mouse" ]
 
