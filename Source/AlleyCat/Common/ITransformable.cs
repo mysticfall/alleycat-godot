@@ -9,8 +9,8 @@ namespace AlleyCat.Common
         Spatial Spatial { get; }
     }
 
-    public static class TransformableExtentions {
-
+    public static class TransformableExtentions
+    {
         public static Transform Transform([NotNull] this ITransformable transformable)
         {
             Ensure.Any.IsNotNull(transformable, nameof(transformable));
@@ -23,6 +23,21 @@ namespace AlleyCat.Common
             Ensure.Any.IsNotNull(transformable, nameof(transformable));
 
             return transformable.Spatial.GlobalTransform;
+        }
+
+        public static Vector3 Origin([NotNull] this ITransformable transformable)
+        {
+            Ensure.Any.IsNotNull(transformable, nameof(transformable));
+
+            return transformable.Spatial.GlobalTransform.origin;
+        }
+
+        public static float DistanceTo([NotNull] this ITransformable transformable, [NotNull] ITransformable target)
+        {
+            Ensure.Any.IsNotNull(transformable, nameof(transformable));
+            Ensure.Any.IsNotNull(target, nameof(target));
+
+            return Origin(transformable).DistanceTo(Origin(target));
         }
     }
 }
