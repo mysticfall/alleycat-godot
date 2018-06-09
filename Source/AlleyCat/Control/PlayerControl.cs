@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -13,7 +14,8 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    [AutowireContext, Singleton(typeof(IPlayerControl), typeof(IFocusTracker))]
+    [AutowireContext, Singleton(
+         typeof(IPlayerControl), typeof(IPerspectiveSwitcher), typeof(IFocusTracker))]
     public class PlayerControl : AutowiredNode, IPlayerControl
     {
         [Export]
@@ -65,6 +67,9 @@ namespace AlleyCat.Control
             }
         }
 
+        public IReadOnlyDictionary<string, IAction> Actions =>
+            _actions?.ActionMap ?? Enumerable.Empty<IAction>().ToDictionary(i => i.Key);
+
         protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
 
         [Export, UsedImplicitly] private NodePath _characterPath;
@@ -72,6 +77,8 @@ namespace AlleyCat.Control
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Movement")] private InputBindings _movementInput;
+
+        [Node("Actions", false)] private ActionBindings _actions;
 
         private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
@@ -121,6 +128,10 @@ namespace AlleyCat.Control
             {
                 Perspective = active;
             }
+
+            OnActiveStateChange
+                .Subscribe(v => Actions.Values.ToList().ForEach(a => a.Active = v))
+                .AddTo(this);
 
             MovementInput
                 .Where(_ => Character?.Locomotion != null)

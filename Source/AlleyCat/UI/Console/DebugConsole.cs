@@ -25,8 +25,6 @@ namespace AlleyCat.UI.Console
         [Export]
         public int BufferSize { get; set; } = 300;
 
-        [Export, NotNull] public string ToggleAction = "ui_console";
-
         public Color TextColor => GetColor("info", ThemeType);
 
         public Color HighlightColor => GetColor("highlight", ThemeType);
@@ -74,16 +72,7 @@ namespace AlleyCat.UI.Console
                 _commandMap.Add(command.Key, command);
             }
 
-            this.OnInput()
-                .Where(e => e.IsActionPressed(ToggleAction) && !e.IsEcho())
-                .Subscribe(_ =>
-                {
-                    GetTree().SetInputAsHandled();
-                    this.Toggle();
-                })
-                .AddTo(this);
-
-            this.OnUnhandledInput()
+            InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))

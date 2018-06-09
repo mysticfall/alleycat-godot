@@ -57,6 +57,9 @@
     <Reference Include="System.Reactive.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\AlleyCat\Action\Action.cs" />
+    <Compile Include="Source\AlleyCat\Action\IAction.cs" />
+    <Compile Include="Source\AlleyCat\Action\IActor.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
@@ -173,7 +176,10 @@
     <Compile Include="Source\AlleyCat\Condition\LogicalOperationType.cs" />
     <Compile Include="Source\AlleyCat\Condition\TypedCondition.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\ActionBinding.cs" />
+    <Compile Include="Source\AlleyCat\Control\ActionBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\IActionBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
     <Compile Include="Source\AlleyCat\Control\IInput.cs" />
@@ -264,6 +270,7 @@
     <Compile Include="Source\AlleyCat\UI\Console\ConsoleExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\IAutoCompletionSupport.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
+    <Compile Include="Source\AlleyCat\UI\Console\ToggleDebugConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
@@ -287,6 +294,7 @@
     <Compile Include="Source\AlleyCat\UI\Console\QuitCommand.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\AlleyCat\UI\ToggleUIAction.cs" />
     <Compile Include="Source\AlleyCat\View\FreeCameraView.cs" />
     <Compile Include="Source\AlleyCat\View\HeadMountedView.cs" />
     <Compile Include="Source\AlleyCat\View\IAutoFocusingView.cs" />

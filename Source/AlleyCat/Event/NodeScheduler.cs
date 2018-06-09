@@ -107,11 +107,11 @@ namespace AlleyCat.Event
         {
             public long Ticks { get; }
 
-            private readonly Action _action;
+            private readonly System.Action _action;
 
             private bool _done;
 
-            public Task(long ticks, Action action)
+            public Task(long ticks, System.Action action)
             {
                 Ticks = ticks;
 
