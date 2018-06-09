@@ -1,4 +1,5 @@
 "id","en","ko"
+"action.Pickup","Take","줍기"
 "console.commands","Commands","명령어"
 "console.command.clear","Clear the console.","콘솔의 내용을 지웁니다."
 "console.command.help","Show help information of console commands.","콘솔 명령어에 대한 도움말을 표시합니다."
@@ -35,3 +36,4 @@
 "morph.Color","Color","색상"
 "morph.Color.SkinTone","Skin Tone","피부색"
 "morph.Color.HairColor","Hair Color","머리색"
+"item.Rag","Rag","누더기"

@@ -11,9 +11,9 @@
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/Control/ActionBindings.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/UI/Console/ToggleDebugConsole.cs" type="Script" id=12]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Source/AlleyCat/UI/EntityLabel.cs" type="Script" id=14]
+[ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/UI/Console/ToggleDebugConsole.cs" type="Script" id=13]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=14]
 
 [node name="Base Scene" type="Node" index="0"]
 
@@ -49,9 +49,11 @@ _sections_unfolded = [ "Transform" ]
 _key = "Player"
 _displayName = "Player"
 
-[node name="Static Objects" type="Node" parent="." index="3"]
+[node name="Items" type="Node" parent="." index="3"]
 
-[node name="Control" type="Node" parent="." index="4"]
+[node name="Static Objects" type="Node" parent="." index="4"]
+
+[node name="Control" type="Node" parent="." index="5"]
 
 [node name="Player" type="Node" parent="Control" index="0"]
 script = ExtResource( 2 )
@@ -73,7 +75,7 @@ _maxPitch = 90.0
 _minPitch = -89.0
 InitialDistance = 1.0
 _cameraPath = NodePath("")
-MaxFocalDistance = 2.0
+MaxFocalDistance = 3.0
 _characterPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
@@ -134,7 +136,7 @@ Stabilization = 1
 TransitionTime = 2.0
 VelocityThreshold = 0.2
 Offset = 0.01
-MaxFocalDistance = 2.0
+MaxFocalDistance = 3.0
 MaxDofDistance = 5.0
 DofTransition = 0.5
 FocusSpeed = 100.0
@@ -297,6 +299,31 @@ PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
 
+[node name="Actions" type="Node" parent="Control/Player" index="2"]
+script = ExtResource( 10 )
+ProcessMode = 0
+
+[node name="Interact" type="Node" parent="Control/Player/Actions" index="0"]
+script = ExtResource( 11 )
+ProcessMode = 0
+Active = true
+_actor = NodePath("../../../../Entities/Characters/Player")
+
+[node name="Input" type="Node" parent="Control/Player/Actions/Interact" index="0"]
+pause_mode = 2
+script = ExtResource( 8 )
+Active = true
+Action = "interact"
+UnhandledOnly = true
+StopPropagation = true
+
+[node name="Action" type="Node" parent="Control/Player/Actions/Interact" index="1"]
+script = ExtResource( 12 )
+ProcessMode = 0
+Active = true
+_key = "Interact"
+_displayName = null
+
 [node name="Actions" type="Node" parent="Control" index="1"]
 script = ExtResource( 10 )
 ProcessMode = 0
@@ -304,6 +331,7 @@ ProcessMode = 0
 [node name="Toggle Console" type="Node" parent="Control/Actions" index="0"]
 script = ExtResource( 11 )
 ProcessMode = 0
+Active = true
 _actor = null
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console" index="0"]
@@ -315,14 +343,16 @@ UnhandledOnly = false
 StopPropagation = true
 
 [node name="Action" type="Node" parent="Control/Actions/Toggle Console" index="1"]
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _key = "ToggleConsole"
+_displayName = null
 
-[node name="UI" type="Node" parent="." index="5"]
+[node name="UI" type="Node" parent="." index="6"]
 
-[node name="Entity Label" parent="UI" index="0" instance=ExtResource( 13 )]
+[node name="Entity Label" parent="UI" index="0" instance=ExtResource( 14 )]
 visible = false
-script = ExtResource( 14 )
+InteractAction = "interact"
+DefaultKeyLabel = "?"
 

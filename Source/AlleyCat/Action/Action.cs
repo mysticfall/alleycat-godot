@@ -11,6 +11,8 @@ namespace AlleyCat.Action
     {
         public string Key => _key ?? Name;
 
+        public virtual string DisplayName => Tr(_displayName);
+
         [Export]
         public bool Active
         {
@@ -23,6 +25,8 @@ namespace AlleyCat.Action
         public virtual bool Valid => true;
 
         [Export, UsedImplicitly] private string _key;
+
+        [Export, UsedImplicitly] private string _displayName;
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 

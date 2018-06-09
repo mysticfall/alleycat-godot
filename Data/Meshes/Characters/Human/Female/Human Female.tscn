@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Body.dae" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=2]
@@ -9,14 +9,15 @@
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=8]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=10]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=11]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=12]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=13]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=14]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=15]
-[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=16]
-[ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=17]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=11]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=12]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=14]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=15]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=16]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=17]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentContainer.cs" type="Script" id=18]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -30,6 +31,9 @@ _key = null
 _displayName = null
 _race = "Human"
 _sex = 1
+
+[node name="Rig" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Skeleton" parent="Rig" index="0"]
 bones/16/bound_children = [ NodePath("Chest") ]
@@ -46,12 +50,12 @@ _sections_unfolded = [ "Material", "mesh" ]
 [node name="Short Hair" parent="Rig/Skeleton" index="3" instance=ExtResource( 6 )]
 
 [node name="Chest" type="BoneAttachment" parent="Rig/Skeleton" index="4"]
-transform = Transform( -1, -5.35921e-07, -7.3388e-08, -4.70555e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.54373e-09, 1.15451, 0.030444 )
+transform = Transform( -0.999592, 0.02858, -1.55123e-08, 0.0046229, 0.161686, -0.986831, -0.0282037, -0.986428, -0.161752, -0.0288466, 1.15626, 0.037993 )
 bone_name = "spine03"
 _sections_unfolded = [ "Transform" ]
 
 [node name="Label" type="Spatial" parent="Rig/Skeleton/Chest" index="0"]
-transform = Transform( 1, 1.7053e-13, 4.26326e-14, 1.13687e-13, 1, 0, -7.10543e-14, -5.96046e-08, 1, -4.83513e-08, 0.0657289, 0.119175 )
+transform = Transform( 1, 1.7053e-13, 4.26326e-14, 3.41061e-13, 1, 0, -8.52651e-14, -5.96046e-08, 1, 3.60053e-09, -0.0169366, 0.0746193 )
 script = ExtResource( 7 )
 _key = "Label"
 
@@ -71,10 +75,11 @@ playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
 anims/Idle = ExtResource( 9 )
-"anims/Walk Backward" = ExtResource( 10 )
-"anims/Walk Forward" = ExtResource( 11 )
-"anims/Walk Left" = ExtResource( 12 )
-"anims/Walk Right" = ExtResource( 13 )
+"anims/Pick Up" = ExtResource( 10 )
+"anims/Walk Backward" = ExtResource( 11 )
+"anims/Walk Forward" = ExtResource( 12 )
+"anims/Walk Left" = ExtResource( 13 )
+"anims/Walk Right" = ExtResource( 14 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -88,7 +93,7 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Idle-Move", "out", 0, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2, "Move", "Speed", 0, "Idle", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Left", "Strafe", 0, "Right", "Strafe", 1 ],
+"connections": [ "Idle-Move", "out", 0, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2, "Left", "Strafe", 0, "Right", "Strafe", 1, "Move", "Speed", 0, "Pickup", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Idle", "Pickup", 0, "Pickup Anim", "Pickup", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
@@ -119,33 +124,15 @@ data = {
 "position": Vector2( 73.0245, 771.352 ),
 "type": "animation"
 }, {
-"filter": [  ],
-"from": "Idle",
-"id": "Idle",
-"position": Vector2( 620.718, 341.74 ),
-"type": "animation"
-}, {
 "blend": 0.0,
 "id": "Forward",
 "position": Vector2( 243.904, 167.893 ),
 "type": "blend3"
 }, {
 "filter": [  ],
-"from": "Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 54.0293, 534.577 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 63.9974, 189.871 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Walk Left",
-"id": "Forward Left",
-"position": Vector2( 69.0319, 76.9283 ),
+"from": "Idle",
+"id": "Idle",
+"position": Vector2( 453.805, 230.85 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -155,9 +142,19 @@ data = {
 }, {
 "filter": [  ],
 "from": "Walk Left",
-"id": "Backward Left",
-"position": Vector2( 59.011, 418.663 ),
+"id": "Forward Left",
+"position": Vector2( 69.0319, 76.9283 ),
 "type": "animation"
+}, {
+"id": "Strafe",
+"position": Vector2( 237.928, 816.287 ),
+"transitions": [ {
+"auto_advance": false
+}, {
+"auto_advance": false
+} ],
+"type": "transition",
+"xfade": 0.0
 }, {
 "filter": [  ],
 "from": "Walk Right",
@@ -169,6 +166,24 @@ data = {
 "from": "Walk Right",
 "id": "Backward Right",
 "position": Vector2( 51.0203, 651.441 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Left",
+"id": "Backward Left",
+"position": Vector2( 59.011, 418.663 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 54.0293, 534.577 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 63.9974, 189.871 ),
 "type": "animation"
 }, {
 "id": "Speed",
@@ -186,15 +201,22 @@ data = {
 "type": "transition",
 "xfade": 0.5
 }, {
-"id": "Strafe",
-"position": Vector2( 237.928, 816.287 ),
-"transitions": [ {
-"auto_advance": false
+"filter": [  ],
+"from": "Pick Up",
+"id": "Pickup Anim",
+"position": Vector2( 443.8, 361.7 ),
+"type": "animation"
 }, {
-"auto_advance": false
-} ],
-"type": "transition",
-"xfade": 0.0
+"autorestart": false,
+"autorestart_delay": 1.0,
+"autorestart_random_delay": 0.825189,
+"fade_in": 0.2,
+"fade_out": 0.2,
+"filter": [  ],
+"id": "Pickup",
+"mix": false,
+"position": Vector2( 623.701, 339.712 ),
+"type": "oneshot"
 } ]
 }
 _sections_unfolded = [ "Playback" ]
@@ -203,7 +225,7 @@ _sections_unfolded = [ "Playback" ]
 script = ExtResource( 8 )
 
 [node name="Vision" type="Node" parent="." index="4"]
-script = ExtResource( 14 )
+script = ExtResource( 15 )
 ProcessMode = 0
 Active = true
 _maxYaw = 80.0
@@ -215,7 +237,7 @@ _eyeBoneLeft = "eye_L"
 _eyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
-script = ExtResource( 15 )
+script = ExtResource( 16 )
 ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
@@ -223,11 +245,11 @@ ApplyGravity = true
 PositionBone = "root"
 
 [node name="Animations" type="Node" parent="." index="6"]
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 ProcessMode = 1
 Active = true
 
 [node name="Equipments" type="Node" parent="." index="7"]
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 ProcessMode = 0
 
