@@ -88,7 +88,11 @@ namespace AlleyCat.Character
             base._Ready();
 
             this.Autowire();
+        }
 
+        [PostConstruct]
+        protected virtual void OnInitialize()
+        {
             if (_markers != null)
             {
                 Markers = _markers.ToDictionary(m => m.Key);
