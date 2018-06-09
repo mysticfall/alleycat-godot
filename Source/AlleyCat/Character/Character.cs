@@ -21,7 +21,7 @@ namespace AlleyCat.Character
     {
         public string Key => _key ?? Name;
 
-        public virtual string DisplayName => _displayName;
+        public virtual string DisplayName => Tr(_displayName);
 
         public abstract IRace Race { get; }
 
