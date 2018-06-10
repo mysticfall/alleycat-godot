@@ -29,10 +29,10 @@ _key = "HeadSize"
 _displayName = "morph.Head.HeadSize"
 MinValue = 0.94
 MaxValue = 1.4
-Bone = "head"
-Mirrored = false
 MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
+_bone = "head"
+_mirrored = false
 
 [node name="Body" type="Node" parent="Morphs/Female" index="1"]
 script = ExtResource( 2 )
@@ -47,10 +47,10 @@ _key = "LegsLength"
 _displayName = "morph.Body.LegsLength"
 MinValue = 0.85
 MaxValue = 1.1
-Bone = "thigh"
-Mirrored = true
 MorphType = 0
 Modifier = Vector3( 0, 0, 1 )
+_bone = "thigh"
+_mirrored = true
 
 [node name="Color" type="Node" parent="Morphs/Female" index="2"]
 script = ExtResource( 2 )

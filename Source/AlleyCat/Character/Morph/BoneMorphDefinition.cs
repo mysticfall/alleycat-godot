@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using AlleyCat.Animation;
 using EnsureThat;
 using Godot;
@@ -13,24 +12,23 @@ namespace AlleyCat.Character.Morph
         public IEnumerable<string> Bones { get; private set; }
 
         [Export, UsedImplicitly]
-        public string Bone { get; private set; }
-
-        [Export, UsedImplicitly]
-        public bool Mirrored { get; private set; }
-
-        [Export, UsedImplicitly]
         public BoneMorphType MorphType { get; private set; }
 
         [Export, UsedImplicitly]
         public Vector3 Modifier { get; private set; }
 
+        [Export, UsedImplicitly] private string _bone;
+
+        [Export, UsedImplicitly] private bool _mirrored;
+
         public override void _Ready()
         {
             base._Ready();
 
-            Debug.Assert(Bone != null, "Bone != null");
-
-            Bones = Mirrored ? new[] {Bone + "_L", Bone + "_R"} : new[] {Bone};
+            if (_bone != null)
+            {
+                Bones = _mirrored ? new[] {_bone + "_L", _bone + "_R"} : new[] {_bone};
+            }
         }
 
         public override IMorph CreateMorph(IMorphable morphable)
