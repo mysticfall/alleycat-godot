@@ -282,6 +282,7 @@
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\UI\CreateUIAction.cs" />
     <Compile Include="Source\AlleyCat\UI\EntityLabel.cs" />
     <Compile Include="Source\AlleyCat\UI\IHideableUI.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEvents.cs" />
