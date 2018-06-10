@@ -143,6 +143,7 @@
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
+    <Compile Include="Source\AlleyCat\Common\IdentifiableDirectory.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Source\AlleyCat\Common\ITransformable.cs" />
     <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
     <Compile Include="Source\AlleyCat\Common\Marker.cs" />
+    <Compile Include="Source\AlleyCat\Common\NodeDirectory.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\INodeProcessor.cs" />

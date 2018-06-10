@@ -5,7 +5,7 @@ using AlleyCat.Common;
 
 namespace AlleyCat.Control
 {
-    public class ActionBindings : Directory<ActionBinding>
+    public class ActionBindings : IdentifiableDirectory<ActionBinding>
     {
         public IReadOnlyDictionary<string, IAction> ActionMap =>
             this.Select(i => i.Value.Action).ToDictionary(i => i.Key);

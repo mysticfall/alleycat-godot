@@ -4,7 +4,7 @@ using AlleyCat.Common;
 namespace AlleyCat.Character
 {
     [Singleton(typeof(IRaceRegistry))]
-    public class RaceRegistry : Directory<IRace>, IRaceRegistry
+    public class RaceRegistry : IdentifiableDirectory<IRace>, IRaceRegistry
     {
         public override void _Ready()
         {

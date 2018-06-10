@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
-    public class MorphGroup : Directory<IMorphDefinition>, IMorphGroup
+    public class MorphGroup : IdentifiableDirectory<IMorphDefinition>, IMorphGroup
     {
         public string Key => _key ?? Name;
 

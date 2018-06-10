@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
 using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
-    public abstract class Directory<T> : AutowiredNode, IReadOnlyDictionary<string, T> where T : IIdentifiable
+    public abstract class Directory<T> : AutowiredNode, IReadOnlyDictionary<string, T>
     {
         public int Count => Cache.Count;
 
@@ -32,7 +33,8 @@ namespace AlleyCat.Common
 
         public T this[string key] => Cache[key];
 
-        protected virtual string GetKey(T item) => item.Key;
+        [NotNull]
+        protected abstract string GetKey([NotNull] T item);
 
         protected void ClearCache() => _cache = null;
     }
