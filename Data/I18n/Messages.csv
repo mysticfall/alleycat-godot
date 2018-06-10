@@ -1,5 +1,6 @@
 "id","en","ko"
 "action.Pickup","Take","줍기"
+"action.ToggleCosole","Toggle Console","콘솔을 보이거나 감춥니다"
 "console.commands","Commands","명령어"
 "console.command.clear","Clear the console.","콘솔의 내용을 지웁니다."
 "console.command.help","Show help information of console commands.","콘솔 명령어에 대한 도움말을 표시합니다."

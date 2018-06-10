@@ -12,7 +12,7 @@
 [ext_resource path="res://Source/AlleyCat/Control/ActionBindings.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/UI/Console/ToggleDebugConsole.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=13]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=14]
 
 [node name="Base Scene" type="Node" index="0"]
@@ -347,12 +347,11 @@ script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _key = "ToggleConsole"
-_displayName = null
+_displayName = "action.ToggleCosole"
+_ui = NodePath("/root/AlleyCat/UI/Console")
 
 [node name="UI" type="Node" parent="." index="6"]
 
 [node name="Entity Label" parent="UI" index="0" instance=ExtResource( 14 )]
 visible = false
-InteractAction = "interact"
-DefaultKeyLabel = "?"
 

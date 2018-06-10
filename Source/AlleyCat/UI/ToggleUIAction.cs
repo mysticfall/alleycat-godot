@@ -1,14 +1,19 @@
 using AlleyCat.Action;
+using AlleyCat.Common;
+using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
-    public abstract class ToggleUIAction : Action.Action
+    public class ToggleUIAction : Action.Action
     {
-        public abstract IHideableUI UI { get; }
+        public IHideableUI UI => this.GetNodeOrDefault<IHideableUI>(_ui);
 
         public override bool Valid => base.Valid && UI != null;
 
-        protected override void DoExecute(IActor actor) => UI.Toggle();
+        [Export, UsedImplicitly] private NodePath _ui;
+
+        protected override void DoExecute(IActor actor) => UI?.Toggle();
 
         public override bool AllowedFor(IActor context) => true;
     }
