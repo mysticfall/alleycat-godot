@@ -48,7 +48,7 @@ namespace AlleyCat.Character
 
         public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();
 
-        public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
+        public AABB Bounds => this.CalculateBounds();
 
         public Vector3 LabelPosition
         {
