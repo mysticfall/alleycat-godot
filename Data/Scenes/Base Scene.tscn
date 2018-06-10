@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
@@ -13,9 +13,11 @@
 [ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=12]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=13]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=14]
+[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=16]
 
-[node name="Base Scene" type="Node" index="0"]
+[node name="Base Scene" type="Node"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 
@@ -350,8 +352,31 @@ _key = "ToggleConsole"
 _displayName = "action.ToggleCosole"
 _ui = NodePath("/root/AlleyCat/UI/Console")
 
+[node name="Show Menu" type="Node" parent="Control/Actions" index="1"]
+script = ExtResource( 11 )
+ProcessMode = 0
+Active = true
+_actor = null
+
+[node name="Input" type="Node" parent="Control/Actions/Show Menu" index="0"]
+pause_mode = 2
+script = ExtResource( 8 )
+Active = true
+Action = "ui_cancel"
+UnhandledOnly = true
+StopPropagation = true
+
+[node name="Action" type="Node" parent="Control/Actions/Show Menu" index="1"]
+script = ExtResource( 14 )
+ProcessMode = 0
+Active = true
+_key = "ShowMenu"
+_displayName = "action.ShowMenu"
+UI = ExtResource( 15 )
+_parent = NodePath("../../../../UI")
+
 [node name="UI" type="Node" parent="." index="6"]
 
-[node name="Entity Label" parent="UI" index="0" instance=ExtResource( 14 )]
+[node name="Entity Label" parent="UI" index="0" instance=ExtResource( 16 )]
 visible = false
 

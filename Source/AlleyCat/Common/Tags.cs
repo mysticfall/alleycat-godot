@@ -5,5 +5,7 @@ namespace AlleyCat.Common
         public const string Player = "Player";
 
         public const string MainCamera = "MainCamera";
+
+        public const string Modal = "Modal";
     }
 }
