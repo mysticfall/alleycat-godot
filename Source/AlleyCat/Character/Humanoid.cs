@@ -31,8 +31,10 @@ namespace AlleyCat.Character
         [Export, UsedImplicitly] private Sex _sex;
 
         [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             var groups = ((IMorphableRace) Race)?.GetMorphGroups(Sex).ToList();
             var morphs = groups?.SelectMany(g => g.Values.ToList()).Select(d => d.CreateMorph(this)).ToList();
 
