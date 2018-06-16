@@ -86,11 +86,10 @@ namespace AlleyCat.View
 
         public override Range<float> PitchRange => Vision?.PitchRange ?? base.PitchRange;
 
-        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Active && Valid);
+        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Valid);
 
         [CanBeNull]
-        protected virtual IObservable<bool> DeactivateInput =>
-            _deactivateInput.GetTrigger().Where(_ => Active && Valid);
+        protected virtual IObservable<bool> DeactivateInput => _deactivateInput.GetTrigger().Where(_ => Valid);
 
         [Export(PropertyHint.ExpRange, "0,1")] private float _minStabilization = 0.2f;
 
@@ -129,6 +128,15 @@ namespace AlleyCat.View
 
         private void InitializeInput()
         {
+            OnActiveStateChange
+                .Subscribe(v => _viewInput.Active = v)
+                .AddTo(this);
+
+            OnActiveStateChange
+                .Where(_ => _deactivateInput != null)
+                .Subscribe(v => _deactivateInput.Active = v)
+                .AddTo(this);
+
             ViewInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)

@@ -26,7 +26,7 @@ namespace AlleyCat.Control
                 .Where(v => v)
                 .Do(_ =>
                 {
-                    if (StopPropagation) GetTree().SetInputAsHandled();
+                    if (Active && StopPropagation) GetTree().SetInputAsHandled();
                 });
         }
     }

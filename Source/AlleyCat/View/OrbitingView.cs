@@ -21,9 +21,9 @@ namespace AlleyCat.View
         [Export]
         public float InitialDistance { get; set; } = 0.8f;
 
-        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Active && Valid);
+        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Valid);
 
-        protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Active && Valid);
+        protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Valid);
 
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
@@ -44,6 +44,12 @@ namespace AlleyCat.View
             base.OnInitialize();
 
             Camera = Camera ?? GetViewport().GetCamera();
+
+            OnActiveStateChange
+                .Do(v => _viewInput.Active = v)
+                .Do(v => _zoomInput.Active = v)
+                .Subscribe()
+                .AddTo(this);
 
             ViewInput
                 .Select(v => v * 0.05f)

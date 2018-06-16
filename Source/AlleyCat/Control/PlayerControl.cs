@@ -70,7 +70,7 @@ namespace AlleyCat.Control
         public IReadOnlyDictionary<string, IAction> Actions =>
             _actions?.ActionMap ?? Enumerable.Empty<IAction>().ToDictionary(i => i.Key);
 
-        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
+        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Valid);
 
         [Export, UsedImplicitly] private NodePath _characterPath;
 
@@ -130,7 +130,9 @@ namespace AlleyCat.Control
             }
 
             OnActiveStateChange
-                .Subscribe(v => Actions.Values.ToList().ForEach(a => a.Active = v))
+                .Do(v => _movementInput.Active = v)
+                .Do(v => Actions.Values.ToList().ForEach(a => a.Active = v))
+                .Subscribe()
                 .AddTo(this);
 
             MovementInput

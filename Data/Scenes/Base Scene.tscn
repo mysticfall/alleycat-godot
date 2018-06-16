@@ -83,6 +83,7 @@ _characterPath = NodePath("")
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -111,6 +112,7 @@ Maximum = 0.1
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
 script = ExtResource( 6 )
@@ -126,7 +128,6 @@ NegativeAction = "zoom_out"
 Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
-editor/display_folded = true
 script = ExtResource( 7 )
 ProcessMode = 1
 Active = false
@@ -150,6 +151,7 @@ _cameraPath = NodePath("")
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -178,6 +180,7 @@ Maximum = 0.1
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View" index="1"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
 script = ExtResource( 8 )
@@ -204,6 +207,7 @@ _cameraPath = NodePath("")
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
 script = ExtResource( 5 )
@@ -232,6 +236,7 @@ Maximum = 0.1
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View" index="1"]
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
 script = ExtResource( 6 )
@@ -262,6 +267,7 @@ Polling = true
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View" index="2"]
 script = ExtResource( 4 )
 ProcessMode = 1
+Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
 script = ExtResource( 8 )
@@ -274,6 +280,7 @@ StopPropagation = true
 editor/display_folded = true
 script = ExtResource( 4 )
 ProcessMode = 0
+Active = true
 
 [node name="X" type="Node" parent="Control/Player/Movement" index="0"]
 script = ExtResource( 6 )

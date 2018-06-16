@@ -46,9 +46,9 @@ namespace AlleyCat.View
 
         public override Vector3 Up => Vector3.Up;
 
-        protected IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Active && Valid);
+        protected IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
 
-        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Active && Valid);
+        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Valid);
 
         [CanBeNull]
         protected virtual IObservable<bool> ToggleInput => _toggleInput.GetTrigger().Where(_ => Valid);
@@ -82,6 +82,17 @@ namespace AlleyCat.View
 
         private void InitializeInput()
         {
+            OnActiveStateChange
+                .Do(v => _rotationInput.Active = v)
+                .Do(v => _movementInput.Active = v)
+                .Subscribe()
+                .AddTo(this);
+
+            OnActiveStateChange
+                .Where(_ => _toggleInput != null)
+                .Subscribe(v => _toggleInput.Active = v)
+                .AddTo(this);
+
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))

@@ -46,7 +46,7 @@ namespace AlleyCat.Control
         {
             Ensure.Any.IsNotNull(observer, nameof(observer));
 
-            return _observable.Where(v => Active).Subscribe(observer);
+            return _observable.Where(_ => Active).Subscribe(observer);
         }
 
         [NotNull]

@@ -40,10 +40,10 @@ namespace AlleyCat.View
         protected override IObservable<Vector2> ViewInput =>
             _viewInput
                 .GetAxis()
-                .Where(_ => _modifierPressed)
+                .Where(_ => Valid && _modifierPressed)
                 .Select(v => new Vector2(v * 4f, 0));
 
-        protected virtual IObservable<float> MovementInput => _movementInput.GetAxis().Where(_ => Active && Valid);
+        protected virtual IObservable<float> MovementInput => _movementInput.GetAxis().Where(_ => Valid);
 
         [Export, UsedImplicitly] private NodePath _pivot = "../..";
 
@@ -75,6 +75,12 @@ namespace AlleyCat.View
 
             Input.SetMouseMode(Input.MouseMode.Visible);
 
+            OnActiveStateChange
+                .Do(v => _viewInput.Active = v)
+                .Do(v => _movementInput.Active = v)
+                .Subscribe()
+                .AddTo(this);
+
             MovementInput
                 .Where(_ => _modifierPressed)
                 .Select(v => v * 0.05f)
@@ -82,7 +88,7 @@ namespace AlleyCat.View
                 .AddTo(this);
 
             this.OnInput()
-                .Where(e => !e.IsEcho())
+                .Where(e => Active && !e.IsEcho())
                 .Select(e =>
                     e.IsActionPressed(_controlModifier) ||
                     !e.IsActionReleased(_controlModifier) && _modifierPressed)
