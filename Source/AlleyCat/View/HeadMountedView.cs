@@ -137,19 +137,20 @@ namespace AlleyCat.View
                 .Subscribe(v => _deactivateInput.Active = v)
                 .AddTo(this);
 
+            OnActiveStateChange
+                .Where(v => !v && Valid)
+                .Do(_ => Vision?.Reset())
+                .Subscribe()
+                .AddTo(this);
+
             ViewInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)
                 .AddTo(this);
 
             OnRotationChange
+                .Merge(OnActiveStateChange.Where(v => v).Select(_ => Rotation))
                 .Subscribe(v => Vision?.Rotate(v))
-                .AddTo(this);
-
-            OnActiveStateChange
-                .Where(v => !v && Valid)
-                .Do(_ => Vision?.Reset())
-                .Subscribe()
                 .AddTo(this);
 
             DeactivateInput?
