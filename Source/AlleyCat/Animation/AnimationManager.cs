@@ -6,6 +6,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
@@ -28,11 +29,15 @@ namespace AlleyCat.Animation
 
         public IObservable<float> OnAdvance => _onAdvance;
 
+        public IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
+
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
 
         private readonly Subject<float> _onAdvance = new Subject<float>();
+
+        private readonly Subject<AnimationEvent> _onAnimationEvent = new Subject<AnimationEvent>();
 
         public AnimationManager()
         {
@@ -59,6 +64,15 @@ namespace AlleyCat.Animation
             _onAdvance.OnNext(delta);
         }
 
+        [UsedImplicitly]
+        public void FireEvent(string name) => FireEvent(name, null);
+
+        [UsedImplicitly]
+        public void FireEvent(string name, string argument)
+        {
+            _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
+        }
+
         protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
 
         protected override void Dispose(bool disposing)
@@ -70,6 +84,9 @@ namespace AlleyCat.Animation
 
             _onAdvance?.OnCompleted();
             _onAdvance?.Dispose();
+
+            _onAnimationEvent?.OnCompleted();
+            _onAnimationEvent?.Dispose();
 
             base.Dispose(disposing);
         }

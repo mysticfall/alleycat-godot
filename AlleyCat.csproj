@@ -61,6 +61,7 @@
     <Compile Include="Source\AlleyCat\Action\IAction.cs" />
     <Compile Include="Source\AlleyCat\Action\IActor.cs" />
     <Compile Include="Source\AlleyCat\Action\IInteractable.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationEvent.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
