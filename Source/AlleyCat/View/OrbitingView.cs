@@ -44,6 +44,7 @@ namespace AlleyCat.View
             base.OnInitialize();
 
             Camera = Camera ?? GetViewport().GetCamera();
+            Distance = InitialDistance;
 
             OnActiveStateChange
                 .Do(v => _viewInput.Active = v)
@@ -62,7 +63,8 @@ namespace AlleyCat.View
 
             OnActiveStateChange
                 .Where(v => v)
-                .Subscribe(_ => Distance = InitialDistance)
+                .Skip(Active ? 1 : 0)
+                .Subscribe(_ => Distance = DistanceRange.Min + 0.1f)
                 .AddTo(this);
         }
     }
