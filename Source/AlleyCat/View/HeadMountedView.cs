@@ -148,7 +148,6 @@ namespace AlleyCat.View
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
-                .Do(_ => this.Reset())
                 .Do(_ => Vision?.Reset())
                 .Subscribe()
                 .AddTo(this);
