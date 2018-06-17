@@ -1,12 +1,11 @@
+using AlleyCat.Common;
 using EnsureThat;
 using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
-    public interface IHideableUI
+    public interface IHideableUI : IHideable
     {
-        bool Visible { get; set; }
-
         void Show();
 
         void Hide();
