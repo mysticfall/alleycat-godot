@@ -2,6 +2,7 @@
 using System.Reactive;
 using AlleyCat.Common;
 using Godot;
+using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
@@ -16,5 +17,7 @@ namespace AlleyCat.Animation
         IObservable<AnimationEvent> OnAnimationEvent { get; }
 
         void Advance(float delta);
+
+        void Play([NotNull] string animation, [CanBeNull] System.Action onFinish = null);
     }
 }

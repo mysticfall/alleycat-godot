@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
@@ -31,6 +32,8 @@ namespace AlleyCat.Animation
 
         public IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
+        protected bool PlayingOneShotAnimation { get; private set; }
+       
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
@@ -59,9 +62,51 @@ namespace AlleyCat.Animation
         {
             _onBeforeAdvance.OnNext(Unit.Default);
 
-            ProcessFrames(delta);
+            if (!PlayingOneShotAnimation)
+            {
+                ProcessFrames(delta);
+            }
 
             _onAdvance.OnNext(delta);
+        }
+
+        public virtual void Play(string animation, System.Action onFinish = null)
+        {
+            Ensure.Any.IsNotNull(animation, nameof(animation));
+
+            PlayingOneShotAnimation = true;
+            Player.PlaybackActive = true;
+
+            void Reset(bool invokeCallback)
+            {
+                PlayingOneShotAnimation = false;
+                Player.PlaybackActive = false;
+
+                if (invokeCallback)
+                {
+                    onFinish?.Invoke();
+                }
+            }
+
+            try
+            {
+                Player.Play(animation);
+
+                Player.OnAnimationFinish()
+                    .Where(e => e.Animation == animation)
+                    .AsUnitObservable()
+                    .Merge(
+                        Player.OnAnimationChange()
+                            .Where(e => e.OldAnimation == animation)
+                            .AsUnitObservable())
+                    .Subscribe(_ => Reset(true), _ => Reset(false))
+                    .AddTo(this);
+            }
+            catch (Exception)
+            {
+                Reset(false);
+                throw;
+            }
         }
 
         [UsedImplicitly]

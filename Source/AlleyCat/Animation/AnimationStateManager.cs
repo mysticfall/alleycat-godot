@@ -18,7 +18,10 @@ namespace AlleyCat.Animation
 
         public override void Advance(float delta)
         {
-            TreePlayer.Advance(0);
+            if (!PlayingOneShotAnimation)
+            {
+                TreePlayer.Advance(0);
+            }
 
             base.Advance(delta);
         }
