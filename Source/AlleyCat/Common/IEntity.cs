@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
-    public interface IEntity : INamed, IStateHolder, IMarkable, IHideable
+    public interface IEntity : INamed, IStateHolder, IMarkable, IHideable, IValidatable
     {
         Vector3 LabelPosition { get; }
     }

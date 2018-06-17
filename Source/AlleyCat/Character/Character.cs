@@ -68,6 +68,8 @@ namespace AlleyCat.Character
         public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
             Enumerable.Empty<Marker>().ToDictionary();
 
+        public bool Valid => !IsQueuedForDeletion();
+
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }
 

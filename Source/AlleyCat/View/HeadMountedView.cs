@@ -231,6 +231,7 @@ namespace AlleyCat.View
             _focus = onRayCast
                 .Where(hit => hit == null || Viewpoint.DistanceTo(hit.Position) <= MaxFocalDistance)
                 .Select(hit => hit?.Collider?.FindEntity())
+                .Select(e => e != null && e.Valid && e.Visible ? e : null)
                 .ToReactiveProperty();
         }
 

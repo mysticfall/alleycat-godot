@@ -72,6 +72,7 @@ namespace AlleyCat.View
                 .Select(direction => Origin + direction * MaxFocalDistance)
                 .Select(to => Camera.GetWorld().IntersectRay(Origin, to, new object[] {Character}))
                 .Select(hit => hit?.Collider?.FindEntity())
+                .Select(e => e != null && e.Valid && e.Visible ? e : null)
                 .DistinctUntilChanged()
                 .ToReactiveProperty();
         }

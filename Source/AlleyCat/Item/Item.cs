@@ -16,6 +16,8 @@ namespace AlleyCat.Item
 
         public virtual string DisplayName => Tr(_displayName);
 
+        public bool Valid => !IsQueuedForDeletion();
+
         public Spatial Spatial => this;
 
         public IEnumerable<MeshInstance> Meshes => this.GetChildren<MeshInstance>();
