@@ -75,11 +75,23 @@ _materials = "Skin"
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Shirt"
-_displayName = null
+_displayName = "slot.Shirt"
 
 [node name="Pants" type="Node" parent="Slots/Equipments" index="1"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Pants"
-_displayName = null
+_displayName = "slot.Pants"
+
+[node name="Left Hand" type="Node" parent="Slots/Equipments" index="2"]
+script = ExtResource( 5 )
+ProcessMode = 0
+_key = "LeftHand"
+_displayName = "slot.LeftHand"
+
+[node name="Right Hand" type="Node" parent="Slots/Equipments" index="3"]
+script = ExtResource( 5 )
+ProcessMode = 0
+_key = "RightHand"
+_displayName = "slot.RightHand"
 

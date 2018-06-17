@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
-    public interface IMeshObject : IBounded
+    public interface IMeshObject : IBounded, IHideable
     {
         IEnumerable<MeshInstance> Meshes { get; }
     }

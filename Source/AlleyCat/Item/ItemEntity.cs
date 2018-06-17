@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Item
 {
     [AutowireContext]
-    public class Item : RigidBody, IItem
+    public class ItemEntity : RigidBody, IItemEntity
     {
         public string Key => _key ?? Name;
 

@@ -17,7 +17,7 @@
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=16]
 
-[node name="Base Scene" type="Node"]
+[node name="Base Scene" type="Node" index="0"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 
@@ -67,7 +67,6 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 [node name="Views" type="Node" parent="Control/Player" index="0"]
 
 [node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
-editor/display_folded = true
 script = ExtResource( 3 )
 ProcessMode = 1
 Active = true
@@ -110,6 +109,7 @@ Axis = 1
 Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
+editor/display_folded = true
 script = ExtResource( 4 )
 ProcessMode = 0
 Active = true

@@ -1,50 +1,24 @@
-using System.Collections.Generic;
-using System.Linq;
-using AlleyCat.Autowire;
-using AlleyCat.Common;
-
 namespace AlleyCat.Item
 {
-    [Singleton(typeof(IEquipmentContainer))]
-    public class EquipmentContainer : SlotContainer<EquipmentSlot, IEquippable>, IEquipmentContainer
+    public abstract class EquipmentContainer : SlotContainer<EquipmentSlot, Equipment>, IEquipmentContainer
     {
-        [Ancestor]
-        public IEquipmentHolder Holder { get; private set; }
+        protected abstract IEquipmentHolder Holder { get; }
 
-        public override IReadOnlyDictionary<string, EquipmentSlot> Slots =>
-            Holder.EquipmentSlots.ToDictionary();
-
-        [PostConstruct(true)]
-        protected virtual void OnInitialize()
+        public override void Add(Equipment item)
         {
-            Values.ToList().ForEach(i => i.OnEquipped(this));
+            base.Add(item);
+
+            item.Equip(Holder);
         }
 
-        public override IEquippable Add(IEquippable item)
+        public override void Remove(Equipment item)
         {
-            var replacing = base.Add(item);
+            item.Unequip();
 
-            replacing?.OnUnequipped(this);
-            item.OnEquipped(this);
-
-            return replacing;
-        }
-
-        public override void Remove(IEquippable item)
-        {
             base.Remove(item);
-
-            item.OnUnequipped(this);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Values.ToList().ForEach(i => i.OnUnequipped(this));
-            }
-
-            base.Dispose(disposing);
-        }
+        public override bool AllowedFor(ISlotConfiguration context) =>
+            (context is EquipConfiguration || context is Equipment) && base.AllowedFor(context);
     }
 }

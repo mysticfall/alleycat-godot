@@ -1,9 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Source/AlleyCat/Item/Item.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Item/EquippableItem.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.material" type="Material" id=3]
 [ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Item/EquipConfiguration.cs" type="Script" id=5]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag Carried.tscn" type="PackedScene" id=7]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -67,6 +70,30 @@ ProcessMode = 0
 Active = true
 _key = "Pickup"
 _displayName = "action.Pickup"
-PickupDistance = 1.0
-Animation = "Pickup"
+PickupDistance = 1.2
+Animation = "Pick Up"
+
+[node name="Configurations" type="Node" parent="." index="3"]
+
+[node name="Wear" type="Node" parent="Configurations" index="0" groups=[
+"TagWear",
+]]
+script = ExtResource( 5 )
+ProcessMode = 0
+_key = "Wear"
+_slot = "Shirt"
+_additionalSlots = "Pants"
+_equipment = ExtResource( 6 )
+
+[node name="Carry" type="Node" parent="Configurations" index="1" groups=[
+"TagOneHand",
+"TagHand",
+"TagCarry",
+]]
+script = ExtResource( 5 )
+ProcessMode = 0
+_key = "Carry"
+_slot = "RightHand"
+_additionalSlots = null
+_equipment = ExtResource( 7 )
 

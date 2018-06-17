@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Condition;
 using AlleyCat.Item.Generic;
 using EnsureThat;
 using Godot;
@@ -11,7 +11,7 @@ namespace AlleyCat.Item
 {
     public abstract class SlotContainer<TSlot, TItem> : Directory<TItem>, ISlotContainer<TSlot, TItem>
         where TSlot : ISlot
-        where TItem : ISlotItem
+        where TItem : Node, ISlotItem
     {
         public abstract IReadOnlyDictionary<string, TSlot> Slots { get; }
 
@@ -19,72 +19,69 @@ namespace AlleyCat.Item
 
         public IObservable<TItem> OnRemove => _onRemove;
 
-        protected override string GetKey(TItem item) => item.Slot;
-
         private readonly Subject<TItem> _onAdd = new Subject<TItem>();
 
         private readonly Subject<TItem> _onRemove = new Subject<TItem>();
 
-        public virtual TItem Add(TItem item)
+        public virtual void Add(TItem item)
         {
             Ensure.Any.IsNotNull(item, nameof(item));
 
-            var key = item.Slot;
-
             Ensure.Bool.IsTrue(
-                ContainsKey(item.Slot),
-                nameof(item),
-                opt => opt.WithMessage($"Unknown slot: '{key}'."));
-
-            var slot = Slots[item.Slot];
-
-            Ensure.Bool.IsTrue(
-                slot.AllowedFor(item) && item.AllowedFor(this),
+                AllowedFor(item) &&
+                item.AllowedFor(this) &&
+                Slots.TryGetValue(item.Slot, out var slot) &&
+                slot.AllowedFor(item),
                 nameof(item),
                 opt => opt.WithMessage($"'{item}' is not allowed in this container: '{this}'."));
 
-            var replacing = this[key];
+            ItemsParent.AddChild(item);
 
-            var node = item as Node;
-
-            if (node != null)
-            {
-                ItemsParent.AddChild(node);
-            }
-
-            Cache[key] = item;
+            Cache[item.Slot] = item;
 
             _onAdd.OnNext(item);
-
-            return replacing;
         }
 
         public virtual void Remove(TItem item)
         {
             Ensure.Any.IsNotNull(item, nameof(item));
 
-            if (!Cache.Remove(item.Key)) return;
+            var key = this.Where(t => t.Value == item).Select(t => t.Key).FirstOrDefault();
 
-            var node = item as Node;
+            if (key == null) return;
 
-            if (node != null)
-            {
-                ItemsParent.RemoveChild(node);
-            }
+            ItemsParent.RemoveChild(item);
 
             _onRemove.OnNext(item);
         }
 
         public TItem Clear(string slot)
         {
-            var item = this[slot];
+            Ensure.Any.IsNotNull(slot, nameof(slot));
 
-            if (item == null) return default(TItem);
+            if (!ContainsKey(slot)) return default(TItem);
+
+            var item = this[slot];
 
             Remove(item);
 
             return item;
         }
+
+        public virtual bool AllowedFor(ISlotConfiguration context)
+        {
+            if (context == null) return false;
+
+            var allSlots = new HashSet<string>(context.GetAllSlots());
+
+            if (!allSlots.All(Slots.ContainsKey)) return false;
+
+            return !new HashSet<string>(this.OccupiedSlots()).Intersect(allSlots).Any();
+        }
+
+        public bool AllowedFor(object context) => AllowedFor(context as ISlotConfiguration);
+
+        protected override string GetKey(TItem item) => item.Slot;
 
         protected override void Dispose(bool disposing)
         {

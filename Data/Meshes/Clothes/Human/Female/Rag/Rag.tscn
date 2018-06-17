@@ -1,8 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedEquipment.cs" type="Script" id=1]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=2]
 
-[node name="Rag" type="MeshInstance" index="0"]
+[node name="Rag" type="Spatial" index="0"]
+script = ExtResource( 1 )
+ProcessMode = 0
+_key = "Rag"
+_displayName = "item.Rag"
+_slot = "Shirt"
+_additionalSlots = "Pants"
+_equippableItem = null
+_mesh = NodePath("Rag")
+
+[node name="Rag" type="MeshInstance" parent="." index="0"]
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -12,7 +23,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 1 )
+mesh = ExtResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 

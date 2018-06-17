@@ -58,8 +58,9 @@ namespace AlleyCat.UI
             var showAction = action.Select(a => a != null);
 
             var position = ticks
-                .CombineLatest(onFocus.Where(e => e != null), (_, e) => e.LabelPosition)
-                .Select(PlayerControl.Camera.UnprojectPosition)
+                .CombineLatest(onFocus, (_, e) => e)
+                .Where(e => e != null)
+                .Select(e => PlayerControl.Camera.UnprojectPosition(e.LabelPosition))
                 .Select(pos => new Vector2(pos.x - RectSize.x / 2f, pos.y - RectSize.y / 2f));
 
             showTitle

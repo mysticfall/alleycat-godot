@@ -1,11 +1,10 @@
-using System.Collections.Generic;
+using AlleyCat.Animation;
+using AlleyCat.Common;
 
 namespace AlleyCat.Item
 {
-    public interface IEquipmentHolder
+    public interface IEquipmentHolder : IRigged, IMarkable
     {
-        IEnumerable<EquipmentSlot> EquipmentSlots { get; }
-
         IEquipmentContainer Equipments { get; }
     }
 }

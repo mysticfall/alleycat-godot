@@ -1,10 +1,8 @@
-using AlleyCat.Common;
 using AlleyCat.Condition.Generic;
 
 namespace AlleyCat.Item
 {
-    public interface ISlotItem : INamed, IRestricted<ISlotContainer>
+    public interface ISlotItem : IItem, ISlotConfiguration, IRestricted<ISlotContainer>
     {
-        string Slot { get; }
     }
 }

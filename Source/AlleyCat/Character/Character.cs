@@ -42,8 +42,6 @@ namespace AlleyCat.Character
         [Service]
         public IEquipmentContainer Equipments { get; private set; }
 
-        public IEnumerable<EquipmentSlot> EquipmentSlots => Race?.EquipmentSlots ?? Enumerable.Empty<EquipmentSlot>();
-
         public Spatial Spatial => this;
 
         public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();

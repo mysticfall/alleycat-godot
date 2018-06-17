@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Character
 {
-    public interface ICharacter : IEntity, IMeshObject, IRigged, IActor, ILocomotive, ISeeing, IEquipmentHolder
+    public interface ICharacter : IEntity, IRigged, IActor, ILocomotive, ISeeing, IEquipmentHolder
     {
         [CanBeNull]
         IRace Race { get; }

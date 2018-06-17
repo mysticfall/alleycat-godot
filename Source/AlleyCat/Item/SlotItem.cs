@@ -1,4 +1,6 @@
-﻿using AlleyCat.Autowire;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AlleyCat.Autowire;
 using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
@@ -12,12 +14,18 @@ namespace AlleyCat.Item
 
         public virtual string DisplayName => Tr(_displayName);
 
-        [Export, UsedImplicitly]
-        public string Slot { get; private set; }
+        public string Slot => _slot;
+
+        public IEnumerable<string> AdditionalSlots =>
+            _additionalSlots?.Split(",").Select(v => v.Trim()).Where(v => v != "Null") ?? Enumerable.Empty<string>();
 
         [Export, UsedImplicitly] private string _key;
 
         [Export, UsedImplicitly] private string _displayName;
+
+        [Export, UsedImplicitly] private string _slot;
+
+        [Export, UsedImplicitly] private string _additionalSlots;
 
         [Node(required: false), UsedImplicitly]
         private ICondition<ISlotContainer> _allowedFor;
