@@ -50,6 +50,10 @@ namespace AlleyCat.Motion
         [Export, NotNull]
         public string PositionBone { get; set; } = "root";
 
+        public IEnumerable<string> AnimationPrefixes => _animationPrefixes.TrimToEnumerable();
+
+        [Export, UsedImplicitly] private string _animationPrefixes = "Walk,Run,Turn,Strafe";
+
         private int _boneIndex;
 
         private Transform _initialTransform;
@@ -83,10 +87,13 @@ namespace AlleyCat.Motion
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
 
+            var prefixes = new HashSet<string>(AnimationPrefixes);
+
             AnimationManager.Player
                 .GetAnimationList()
                 .Select(AnimationManager.Player.GetAnimation)
                 .Where(a => a.Loop)
+                .Where(a => prefixes.Count == 0 || prefixes.Any(p => a.GetName().StartsWith(p)))
                 .ToList()
                 .ForEach(AddTrack);
 
