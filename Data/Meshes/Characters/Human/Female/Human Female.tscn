@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Body.dae" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=2]
@@ -8,17 +8,18 @@
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Short Hair.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=8]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=10]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=11]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=12]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=13]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=14]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=15]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=16]
-[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=17]
-[ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=18]
-[ext_resource path="res://Source/AlleyCat/Item/RiggedEquipment.cs" type="Script" id=19]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=9]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=11]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=12]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=14]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=15]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=16]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=17]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=18]
+[ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=19]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedEquipment.cs" type="Script" id=20]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -106,12 +107,13 @@ autoplay = ""
 playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/Idle = ExtResource( 9 )
-"anims/Pick Up" = ExtResource( 10 )
-"anims/Walk Backward" = ExtResource( 11 )
-"anims/Walk Forward" = ExtResource( 12 )
-"anims/Walk Left" = ExtResource( 13 )
-"anims/Walk Right" = ExtResource( 14 )
+"anims/Hold in Right Hand" = ExtResource( 9 )
+anims/Idle = ExtResource( 10 )
+"anims/Pick Up" = ExtResource( 11 )
+"anims/Walk Backward" = ExtResource( 12 )
+"anims/Walk Forward" = ExtResource( 13 )
+"anims/Walk Left" = ExtResource( 14 )
+"anims/Walk Right" = ExtResource( 15 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -125,15 +127,20 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Idle-Move", "out", 0, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Move", "Speed", 0, "Idle", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Left", "Strafe", 0, "Right", "Strafe", 1, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2 ],
+"connections": [ "Override Blend 3", "out", 0, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Override Blend 1", "Override Blend 2", 0, "Override 2", "Override Blend 2", 1, "Override Blend 2", "Override Blend 3", 0, "Override 3", "Override Blend 3", 1, "Idle", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Move", "Speed", 0, "Left", "Strafe", 0, "Right", "Strafe", 1, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2, "Idle-Move", "Override Blend 1", 0, "Override 1", "Override Blend 1", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
-"position": Vector2( 950.532, 468.573 ),
+"position": Vector2( 1308.34, 468.573 ),
 "type": "output"
 }, {
+"blend": 0.0,
+"id": "Forward",
+"position": Vector2( 243.904, 167.893 ),
+"type": "blend3"
+}, {
 "id": "Move",
-"position": Vector2( 449.807, 490.592 ),
+"position": Vector2( 384.841, 490.592 ),
 "transitions": [ {
 "auto_advance": false
 }, {
@@ -147,25 +154,38 @@ data = {
 "filter": [  ],
 "from": "Walk Right",
 "id": "Right",
-"position": Vector2( 74.0187, 897.217 ),
+"position": Vector2( 85.013, 878.236 ),
 "type": "animation"
 }, {
 "filter": [  ],
 "from": "Walk Left",
 "id": "Left",
-"position": Vector2( 73.0245, 771.352 ),
+"position": Vector2( 86.0177, 764.359 ),
 "type": "animation"
-}, {
-"blend": 0.0,
-"id": "Forward",
-"position": Vector2( 243.904, 167.893 ),
-"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Idle",
 "id": "Idle",
-"position": Vector2( 622.702, 356.695 ),
+"position": Vector2( 512.759, 361.69 ),
 "type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Override Blend 2",
+"position": Vector2( 955.528, 468.583 ),
+"type": "blend2"
+}, {
+"animation": null,
+"filter": [  ],
+"id": "Override 3",
+"position": Vector2( 997.521, 613.469 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [  ],
+"id": "Override Blend 3",
+"position": Vector2( 1133.45, 468.603 ),
+"type": "blend2"
 }, {
 "filter": [  ],
 "from": "Walk Backward",
@@ -179,17 +199,6 @@ data = {
 "position": Vector2( 63.9974, 189.871 ),
 "type": "animation"
 }, {
-"id": "Speed",
-"position": Vector2( 622.702, 490.562 ),
-"scale": 1.0,
-"type": "timescale"
-}, {
-"filter": [  ],
-"from": "Walk Right",
-"id": "Forward Right",
-"position": Vector2( 65.0284, 303.817 ),
-"type": "animation"
-}, {
 "filter": [  ],
 "from": "Walk Left",
 "id": "Backward Left",
@@ -197,7 +206,7 @@ data = {
 "type": "animation"
 }, {
 "id": "Idle-Move",
-"position": Vector2( 782.629, 468.603 ),
+"position": Vector2( 654.696, 468.603 ),
 "transitions": [ {
 "auto_advance": false
 }, {
@@ -206,8 +215,25 @@ data = {
 "type": "transition",
 "xfade": 0.5
 }, {
+"filter": [  ],
+"from": "Walk Right",
+"id": "Forward Right",
+"position": Vector2( 65.0284, 303.817 ),
+"type": "animation"
+}, {
+"id": "Speed",
+"position": Vector2( 512.759, 490.562 ),
+"scale": 1.0,
+"type": "timescale"
+}, {
+"filter": [  ],
+"from": "Walk Left",
+"id": "Forward Left",
+"position": Vector2( 69.0319, 76.9283 ),
+"type": "animation"
+}, {
 "id": "Strafe",
-"position": Vector2( 237.928, 816.287 ),
+"position": Vector2( 244.924, 791.312 ),
 "transitions": [ {
 "auto_advance": false
 }, {
@@ -222,16 +248,28 @@ data = {
 "position": Vector2( 51.0203, 651.441 ),
 "type": "animation"
 }, {
-"filter": [  ],
-"from": "Walk Left",
-"id": "Forward Left",
-"position": Vector2( 69.0319, 76.9283 ),
-"type": "animation"
-}, {
 "blend": 0.0,
 "id": "Backward",
 "position": Vector2( 242.91, 512.56 ),
 "type": "blend3"
+}, {
+"animation": null,
+"filter": [  ],
+"id": "Override 2",
+"position": Vector2( 822.602, 615.447 ),
+"type": "animation"
+}, {
+"blend": 0.0,
+"filter": [ NodePath("Rig/Skeleton:calf_twist_L"), NodePath("Rig/Skeleton:foot_L"), NodePath("Rig/Skeleton:index00_L"), NodePath("Rig/Skeleton:middle01_L"), NodePath("Rig/Skeleton:ring00_L"), NodePath("Rig/Skeleton:pelvis"), NodePath("Rig/Skeleton:breast_L"), NodePath("Rig/Skeleton:toes_R"), NodePath("Rig/Skeleton:eye_R"), NodePath("Rig/Skeleton:index01_L"), NodePath("Rig/Skeleton:middle02_L"), NodePath("Rig/Skeleton:ring01_L"), NodePath("Rig/Skeleton:thumb01_L"), NodePath("Rig/Skeleton:lowerarm_L"), NodePath("Rig/Skeleton:root"), NodePath("Rig/Skeleton:index02_L"), NodePath("Rig/Skeleton:middle03_L"), NodePath("Rig/Skeleton:ring02_L"), NodePath("Rig/Skeleton:thumb02_L"), NodePath("Rig/Skeleton:thigh_R"), NodePath("Rig/Skeleton:toes_L"), NodePath("Rig/Skeleton:clavicle_L"), NodePath("Rig/Skeleton:eye_L"), NodePath("Rig/Skeleton:hand_L"), NodePath("Rig/Skeleton:index03_L"), NodePath("Rig/Skeleton:pinky00_L"), NodePath("Rig/Skeleton:ring03_L"), NodePath("Rig/Skeleton:thumb03_L"), NodePath("Rig/Skeleton:lowerarm_twist_L"), NodePath("Rig/Skeleton:calf_R"), NodePath("Rig/Skeleton:upperarm_L"), NodePath("Rig/Skeleton:pinky01_L"), NodePath("Rig/Skeleton:thigh_L"), NodePath("Rig/Skeleton:thigh_twist_R"), NodePath("Rig/Skeleton:pinky02_L"), NodePath("Rig/Skeleton:spine01"), NodePath("Rig/Skeleton:calf_L"), NodePath("Rig/Skeleton:calf_twist_R"), NodePath("Rig/Skeleton:foot_R"), NodePath("Rig/Skeleton:upperarm_twist_L"), NodePath("Rig/Skeleton:pinky03_L"), NodePath("Rig/Skeleton:neck"), NodePath("Rig/Skeleton:spine02"), NodePath("Rig/Skeleton:thigh_twist_L"), NodePath("Rig"), NodePath("Rig/Skeleton:breast_R"), NodePath("Rig/Skeleton:middle00_L"), NodePath("Rig/Skeleton:head"), NodePath("Rig/Skeleton:spine03") ],
+"id": "Override Blend 1",
+"position": Vector2( 784.632, 468.613 ),
+"type": "blend2"
+}, {
+"animation": null,
+"filter": [  ],
+"id": "Override 1",
+"position": Vector2( 653.706, 615.477 ),
+"type": "animation"
 } ]
 }
 _sections_unfolded = [ "Playback" ]
@@ -240,7 +278,7 @@ _sections_unfolded = [ "Playback" ]
 script = ExtResource( 8 )
 
 [node name="Vision" type="Node" parent="." index="4"]
-script = ExtResource( 15 )
+script = ExtResource( 16 )
 ProcessMode = 0
 Active = true
 _maxYaw = 80.0
@@ -252,30 +290,32 @@ _eyeBoneLeft = "eye_L"
 _eyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
 ApplyGravity = true
 PositionBone = "root"
+_animationPrefixes = "Walk,Run,Turn,Strafe"
 
 [node name="Animations" type="Node" parent="." index="6"]
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 ProcessMode = 1
 Active = true
 
 [node name="Equipments" type="Node" parent="." index="7"]
-script = ExtResource( 18 )
+script = ExtResource( 19 )
 ProcessMode = 0
 
 [node name="Rag" type="Spatial" parent="Equipments" index="0"]
-script = ExtResource( 19 )
+script = ExtResource( 20 )
 _sections_unfolded = [ "Material", "mesh" ]
 ProcessMode = 0
 _key = "Rag"
 _displayName = "item.Rag"
 _slot = "Shirt"
 _additionalSlots = "Pants"
+Animation = null
 _equippableItem = null
 _mesh = NodePath("../../Rig/Skeleton/Rag")
 
