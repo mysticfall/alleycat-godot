@@ -23,8 +23,7 @@ namespace AlleyCat.Item
         [Export]
         public string Animation { get; set; } = "Pick Up";
 
-        public IEnumerable<string> Tags => _tags?.Split(",").Select(v => v.Trim()).Where(v => v != "Null") ??
-                                           Enumerable.Empty<string>();
+        public IEnumerable<string> Tags => _tags.TrimToEnumerable();
 
         [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
 

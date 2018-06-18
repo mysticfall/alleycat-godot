@@ -173,6 +173,7 @@
     <Compile Include="Source\AlleyCat\Common\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Common\Range.cs" />
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\StringExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\Tags.cs" />
     <Compile Include="Source\AlleyCat\Common\TransformExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />

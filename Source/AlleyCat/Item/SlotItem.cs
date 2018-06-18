@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
@@ -16,8 +16,7 @@ namespace AlleyCat.Item
 
         public string Slot => _slot;
 
-        public IEnumerable<string> AdditionalSlots =>
-            _additionalSlots?.Split(",").Select(v => v.Trim()).Where(v => v != "Null") ?? Enumerable.Empty<string>();
+        public IEnumerable<string> AdditionalSlots => _additionalSlots.TrimToEnumerable();
 
         [Export, UsedImplicitly] private string _key;
 
