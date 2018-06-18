@@ -34,7 +34,7 @@ namespace AlleyCat.Item
 
             var configuration = Item.Configurations.Values
                 .TaggedAny(Tags.ToArray())
-                .FirstOrDefault(c => container.AllowedFor(c));
+                .FirstOrDefault(container.AllowedFor);
 
             if (configuration == null) return;
 
@@ -57,7 +57,6 @@ namespace AlleyCat.Item
 
         public override bool AllowedFor(IActor context) =>
             Item.NativeInstance != IntPtr.Zero &&
-            Item.Visible &&
             context is ICharacter character &&
             character.DistanceTo(Item) <= PickupDistance;
     }
