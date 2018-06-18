@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Item/AttachedEquipment.cs" type="Script" id=1]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag Item.mesh" type="ArrayMesh" id=2]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.material" type="Material" id=3]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=2]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag Item.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.material" type="Material" id=4]
 
 [node name="Rag" type="Spatial" index="0"]
 script = ExtResource( 1 )
@@ -11,11 +12,12 @@ _key = "Rag"
 _displayName = "item.Rag"
 _slot = "RightHand"
 _additionalSlots = null
+Animation = ExtResource( 2 )
 _equippableItem = null
 _mesh = NodePath("Rag")
 
 [node name="Rag" type="MeshInstance" parent="." index="0"]
-transform = Transform( -1, -8.74315e-08, 0, 8.74228e-08, -1.0001, 0, 0, 0, 1, 0, 0.017, -0.26 )
+transform = Transform( -1, -7.45058e-08, -6.70552e-08, 1.04308e-07, -0.819228, -0.573583, 1.49012e-08, -0.573641, 0.819146, -5.68107e-08, 0.126887, -0.218463 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -25,8 +27,8 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 2 )
+mesh = ExtResource( 3 )
 skeleton = NodePath("..")
-material/0 = ExtResource( 3 )
+material/0 = ExtResource( 4 )
 _sections_unfolded = [ "Material", "Transform" ]
 
