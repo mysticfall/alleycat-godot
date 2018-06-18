@@ -32,8 +32,6 @@ namespace AlleyCat.Animation
 
         public IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
-        protected bool PlayingOneShotAnimation { get; private set; }
-
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
@@ -41,6 +39,8 @@ namespace AlleyCat.Animation
         private readonly Subject<float> _onAdvance = new Subject<float>();
 
         private readonly Subject<AnimationEvent> _onAnimationEvent = new Subject<AnimationEvent>();
+
+        private bool _playingOneShotAnimation;
 
         public AnimationManager()
         {
@@ -62,7 +62,7 @@ namespace AlleyCat.Animation
         {
             _onBeforeAdvance.OnNext(Unit.Default);
 
-            if (!PlayingOneShotAnimation)
+            if (!_playingOneShotAnimation)
             {
                 ProcessFrames(delta);
             }
@@ -82,12 +82,12 @@ namespace AlleyCat.Animation
                 Player.AddAnimation(name, animation).ThrowIfNecessary();
             }
 
-            PlayingOneShotAnimation = true;
+            _playingOneShotAnimation = true;
             Player.PlaybackActive = true;
 
             void Reset(bool invokeCallback)
             {
-                PlayingOneShotAnimation = false;
+                _playingOneShotAnimation = false;
                 Player.PlaybackActive = false;
 
                 if (invokeCallback)

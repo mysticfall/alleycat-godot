@@ -123,17 +123,12 @@ base_path = NodePath("..")
 active = false
 data = {
 "active": false,
-"connections": [ "Override Blend 3", "out", 0, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Override Blend 1", "Override Blend 2", 0, "Override 2", "Override Blend 2", 1, "Override Blend 2", "Override Blend 3", 0, "Override 3", "Override Blend 3", 1, "Idle", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Move", "Speed", 0, "Left", "Strafe", 0, "Right", "Strafe", 1, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2, "Idle-Move", "Override Blend 1", 0, "Override 1", "Override Blend 1", 1 ],
+"connections": [ "One Shot Trigger", "out", 0, "Forward", "Move", 0, "Backward", "Move", 1, "Strafe", "Move", 2, "Forward Left", "Forward", 0, "Walk Forward", "Forward", 1, "Forward Right", "Forward", 2, "Override Blend 3", "One Shot Trigger", 0, "One Shot", "One Shot Trigger", 1, "Override Blend 2", "Override Blend 3", 0, "Override 3", "Override Blend 3", 1, "Override Blend 1", "Override Blend 2", 0, "Override 2", "Override Blend 2", 1, "Idle", "Idle-Move", 0, "Speed", "Idle-Move", 1, "Move", "Speed", 0, "Left", "Strafe", 0, "Right", "Strafe", 1, "Backward Left", "Backward", 0, "Walk Backward", "Backward", 1, "Backward Right", "Backward", 2, "Idle-Move", "Override Blend 1", 0, "Override 1", "Override Blend 1", 1 ],
 "master": NodePath("../AnimationPlayer"),
 "nodes": [ {
 "id": "out",
-"position": Vector2( 1308.34, 468.573 ),
+"position": Vector2( 1497.24, 468.573 ),
 "type": "output"
-}, {
-"blend": 0.0,
-"id": "Forward",
-"position": Vector2( 243.904, 167.893 ),
-"type": "blend3"
 }, {
 "id": "Move",
 "position": Vector2( 384.841, 490.592 ),
@@ -146,6 +141,11 @@ data = {
 } ],
 "type": "transition",
 "xfade": 0.0
+}, {
+"blend": 0.0,
+"id": "Forward",
+"position": Vector2( 243.904, 167.893 ),
+"type": "blend3"
 }, {
 "filter": [  ],
 "from": "Walk Right",
@@ -165,11 +165,28 @@ data = {
 "position": Vector2( 512.759, 361.69 ),
 "type": "animation"
 }, {
-"blend": 0.0,
+"autorestart": false,
+"autorestart_delay": 1.0,
+"autorestart_random_delay": 0.898441,
+"fade_in": 0.2,
+"fade_out": 0.2,
 "filter": [  ],
-"id": "Override Blend 2",
-"position": Vector2( 955.528, 468.583 ),
-"type": "blend2"
+"id": "One Shot Trigger",
+"mix": false,
+"position": Vector2( 1316.34, 468.583 ),
+"type": "oneshot"
+}, {
+"filter": [  ],
+"from": "Walk Backward",
+"id": "Walk Backward",
+"position": Vector2( 54.0293, 534.577 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 63.9974, 189.871 ),
+"type": "animation"
 }, {
 "animation": null,
 "filter": [  ],
@@ -183,17 +200,11 @@ data = {
 "position": Vector2( 1133.45, 468.603 ),
 "type": "blend2"
 }, {
+"blend": 0.0,
 "filter": [  ],
-"from": "Walk Backward",
-"id": "Walk Backward",
-"position": Vector2( 54.0293, 534.577 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 63.9974, 189.871 ),
-"type": "animation"
+"id": "Override Blend 2",
+"position": Vector2( 955.528, 468.583 ),
+"type": "blend2"
 }, {
 "filter": [  ],
 "from": "Walk Left",
@@ -256,7 +267,7 @@ data = {
 "type": "animation"
 }, {
 "blend": 0.0,
-"filter": [ NodePath("Rig/Skeleton:calf_twist_L"), NodePath("Rig/Skeleton:foot_L"), NodePath("Rig/Skeleton:index00_L"), NodePath("Rig/Skeleton:middle01_L"), NodePath("Rig/Skeleton:ring00_L"), NodePath("Rig/Skeleton:pelvis"), NodePath("Rig/Skeleton:breast_L"), NodePath("Rig/Skeleton:toes_R"), NodePath("Rig/Skeleton:eye_R"), NodePath("Rig/Skeleton:index01_L"), NodePath("Rig/Skeleton:middle02_L"), NodePath("Rig/Skeleton:ring01_L"), NodePath("Rig/Skeleton:thumb01_L"), NodePath("Rig/Skeleton:lowerarm_L"), NodePath("Rig/Skeleton:root"), NodePath("Rig/Skeleton:index02_L"), NodePath("Rig/Skeleton:middle03_L"), NodePath("Rig/Skeleton:ring02_L"), NodePath("Rig/Skeleton:thumb02_L"), NodePath("Rig/Skeleton:thigh_R"), NodePath("Rig/Skeleton:toes_L"), NodePath("Rig/Skeleton:clavicle_L"), NodePath("Rig/Skeleton:eye_L"), NodePath("Rig/Skeleton:hand_L"), NodePath("Rig/Skeleton:index03_L"), NodePath("Rig/Skeleton:pinky00_L"), NodePath("Rig/Skeleton:ring03_L"), NodePath("Rig/Skeleton:thumb03_L"), NodePath("Rig/Skeleton:lowerarm_twist_L"), NodePath("Rig/Skeleton:calf_R"), NodePath("Rig/Skeleton:upperarm_L"), NodePath("Rig/Skeleton:pinky01_L"), NodePath("Rig/Skeleton:thigh_L"), NodePath("Rig/Skeleton:thigh_twist_R"), NodePath("Rig/Skeleton:pinky02_L"), NodePath("Rig/Skeleton:spine01"), NodePath("Rig/Skeleton:calf_L"), NodePath("Rig/Skeleton:calf_twist_R"), NodePath("Rig/Skeleton:foot_R"), NodePath("Rig/Skeleton:upperarm_twist_L"), NodePath("Rig/Skeleton:pinky03_L"), NodePath("Rig/Skeleton:neck"), NodePath("Rig/Skeleton:spine02"), NodePath("Rig/Skeleton:thigh_twist_L"), NodePath("Rig"), NodePath("Rig/Skeleton:breast_R"), NodePath("Rig/Skeleton:middle00_L"), NodePath("Rig/Skeleton:head"), NodePath("Rig/Skeleton:spine03") ],
+"filter": [ NodePath("Rig/Skeleton:pelvis"), NodePath("Rig/Skeleton:ring00_L"), NodePath("Rig/Skeleton:middle01_L"), NodePath("Rig/Skeleton:index00_L"), NodePath("Rig/Skeleton:foot_L"), NodePath("Rig/Skeleton:calf_twist_L"), NodePath("Rig/Skeleton:root"), NodePath("Rig/Skeleton:lowerarm_L"), NodePath("Rig/Skeleton:thumb01_L"), NodePath("Rig/Skeleton:ring01_L"), NodePath("Rig/Skeleton:middle02_L"), NodePath("Rig/Skeleton:index01_L"), NodePath("Rig/Skeleton:eye_R"), NodePath("Rig/Skeleton:toes_R"), NodePath("Rig/Skeleton:breast_L"), NodePath("Rig/Skeleton:thigh_R"), NodePath("Rig/Skeleton:thumb02_L"), NodePath("Rig/Skeleton:ring02_L"), NodePath("Rig/Skeleton:middle03_L"), NodePath("Rig/Skeleton:index02_L"), NodePath("Rig/Skeleton:lowerarm_twist_L"), NodePath("Rig/Skeleton:thumb03_L"), NodePath("Rig/Skeleton:ring03_L"), NodePath("Rig/Skeleton:pinky00_L"), NodePath("Rig/Skeleton:index03_L"), NodePath("Rig/Skeleton:hand_L"), NodePath("Rig/Skeleton:eye_L"), NodePath("Rig/Skeleton:clavicle_L"), NodePath("Rig/Skeleton:toes_L"), NodePath("Rig/Skeleton:thigh_twist_R"), NodePath("Rig/Skeleton:thigh_L"), NodePath("Rig/Skeleton:pinky01_L"), NodePath("Rig/Skeleton:upperarm_L"), NodePath("Rig/Skeleton:calf_R"), NodePath("Rig/Skeleton:spine01"), NodePath("Rig/Skeleton:pinky02_L"), NodePath("Rig/Skeleton:thigh_twist_L"), NodePath("Rig/Skeleton:spine02"), NodePath("Rig/Skeleton:neck"), NodePath("Rig/Skeleton:pinky03_L"), NodePath("Rig/Skeleton:upperarm_twist_L"), NodePath("Rig/Skeleton:foot_R"), NodePath("Rig/Skeleton:calf_twist_R"), NodePath("Rig/Skeleton:calf_L"), NodePath("Rig/Skeleton:spine03"), NodePath("Rig/Skeleton:head"), NodePath("Rig/Skeleton:middle00_L"), NodePath("Rig/Skeleton:breast_R"), NodePath("Rig") ],
 "id": "Override Blend 1",
 "position": Vector2( 784.632, 468.613 ),
 "type": "blend2"
@@ -265,6 +276,12 @@ data = {
 "filter": [  ],
 "id": "Override 1",
 "position": Vector2( 653.706, 615.477 ),
+"type": "animation"
+}, {
+"animation": null,
+"filter": [  ],
+"id": "One Shot",
+"position": Vector2( 1174.42, 610.452 ),
 "type": "animation"
 } ]
 }

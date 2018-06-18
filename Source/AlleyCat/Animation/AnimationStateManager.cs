@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using AlleyCat.Autowire;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 
@@ -10,13 +12,21 @@ namespace AlleyCat.Animation
     [Singleton(typeof(IAnimationManager), typeof(IAnimationStateManager))]
     public class AnimationStateManager : AnimationManager, IAnimationStateManager
     {
+        public const string OneShotNode = "One Shot";
+
+        public const string OneShotTriggerNode = "One Shot Trigger";
+
         public const string OverrideNodePrefix = "Override ";
 
         public const string OverrideBlendNodePrefix = "Override Blend ";
 
+        private IScheduler _scheduler;
+
         private IDictionary<int, string> _overrides = new Dictionary<int, string>(0);
 
         private int _overridableSlots;
+
+        private IDisposable _oneShotAnimationCallback;
 
         [Service]
         public AnimationTreePlayer TreePlayer { get; private set; }
@@ -26,6 +36,8 @@ namespace AlleyCat.Animation
             base.OnInitialize();
 
             TreePlayer.Active = false;
+
+            _scheduler = this.GetScheduler(ProcessMode);
 
             _overridableSlots = TreePlayer.GetNodeList().Count(n => n.StartsWith(OverrideBlendNodePrefix));
             _overrides = Enumerable
@@ -38,15 +50,23 @@ namespace AlleyCat.Animation
 
         public override void Advance(float delta)
         {
-            if (!PlayingOneShotAnimation)
-            {
-                TreePlayer.Advance(0);
-            }
+            TreePlayer.Advance(0);
 
             base.Advance(delta);
         }
 
         protected override void ProcessFrames(float delta) => TreePlayer.Advance(delta);
+
+        public override void Play(Godot.Animation animation, System.Action onFinish = null)
+        {
+            _oneShotAnimationCallback?.Dispose();
+
+            TreePlayer.AnimationNodeSetAnimation(OneShotNode, animation);
+            TreePlayer.OneshotNodeStart(OneShotTriggerNode);
+
+            _oneShotAnimationCallback = _scheduler?.Schedule(
+                TimeSpan.FromSeconds(animation.Length), onFinish);
+        }
 
         public void Blend(Godot.Animation animation, float influence = 1f)
         {
@@ -80,6 +100,14 @@ namespace AlleyCat.Animation
             TreePlayer.AnimationNodeSetAnimation(OverrideNodePrefix + slot, null);
 
             _overrides.Remove(slot);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _oneShotAnimationCallback?.Dispose();
+            _oneShotAnimationCallback = null;
+
+            base.Dispose(disposing);
         }
     }
 }
