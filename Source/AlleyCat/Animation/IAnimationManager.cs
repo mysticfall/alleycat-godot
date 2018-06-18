@@ -18,6 +18,6 @@ namespace AlleyCat.Animation
 
         void Advance(float delta);
 
-        void Play([NotNull] string animation, [CanBeNull] System.Action onFinish = null);
+        void Play([NotNull] Godot.Animation animation, [CanBeNull] System.Action onFinish = null);
     }
 }

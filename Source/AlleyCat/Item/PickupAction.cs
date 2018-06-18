@@ -21,7 +21,7 @@ namespace AlleyCat.Item
         public float PickupDistance { get; set; } = 1.2f;
 
         [Export]
-        public string Animation { get; set; } = "Pick Up";
+        public Godot.Animation Animation { get; set; }
 
         public IEnumerable<string> Tags => _tags.TrimToEnumerable();
 
@@ -39,6 +39,15 @@ namespace AlleyCat.Item
                 .FirstOrDefault(c => container.AllowedFor(c));
 
             if (configuration == null) return;
+
+            if (Animation == null)
+            {
+                container.Equip(Item, configuration);
+
+                _deleted = true;
+
+                return;
+            }
 
             var animator = character.AnimationManager;
 

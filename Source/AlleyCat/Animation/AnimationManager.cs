@@ -33,7 +33,7 @@ namespace AlleyCat.Animation
         public IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
         protected bool PlayingOneShotAnimation { get; private set; }
-       
+
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
         private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
@@ -70,9 +70,17 @@ namespace AlleyCat.Animation
             _onAdvance.OnNext(delta);
         }
 
-        public virtual void Play(string animation, System.Action onFinish = null)
+        public virtual void Play(Godot.Animation animation, System.Action onFinish = null)
         {
             Ensure.Any.IsNotNull(animation, nameof(animation));
+
+            var name = animation.GetName();
+            var needToAdd = !Player.HasAnimation(name);
+
+            if (needToAdd)
+            {
+                Player.AddAnimation(name, animation).ThrowIfNecessary();
+            }
 
             PlayingOneShotAnimation = true;
             Player.PlaybackActive = true;
@@ -86,18 +94,23 @@ namespace AlleyCat.Animation
                 {
                     onFinish?.Invoke();
                 }
+
+                if (needToAdd)
+                {
+                    Player.RemoveAnimation(name);
+                }
             }
 
             try
             {
-                Player.Play(animation);
+                Player.Play(name);
 
                 Player.OnAnimationFinish()
-                    .Where(e => e.Animation == animation)
+                    .Where(e => e.Animation == name)
                     .AsUnitObservable()
                     .Merge(
                         Player.OnAnimationChange()
-                            .Where(e => e.OldAnimation == animation)
+                            .Where(e => e.OldAnimation == name)
                             .AsUnitObservable())
                     .Subscribe(_ => Reset(true), _ => Reset(false))
                     .AddTo(this);
