@@ -64,8 +64,11 @@ namespace AlleyCat.Animation
             TreePlayer.AnimationNodeSetAnimation(OneShotNode, animation);
             TreePlayer.OneshotNodeStart(OneShotTriggerNode);
 
-            _oneShotAnimationCallback = _scheduler?.Schedule(
-                TimeSpan.FromSeconds(animation.Length), onFinish);
+            if (onFinish != null)
+            {
+                _oneShotAnimationCallback = _scheduler?.Schedule(
+                    TimeSpan.FromSeconds(animation.Length), onFinish);
+            }
         }
 
         public void Blend(Godot.Animation animation, float influence = 1f)
