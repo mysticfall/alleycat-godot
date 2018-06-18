@@ -12,6 +12,8 @@ namespace AlleyCat.Animation
     [Singleton(typeof(IAnimationManager), typeof(IAnimationStateManager))]
     public class AnimationStateManager : AnimationManager, IAnimationStateManager
     {
+        public const string ResetAnimation = "Reset";
+
         public const string OneShotNode = "One Shot";
 
         public const string OneShotTriggerNode = "One Shot Trigger";
@@ -85,10 +87,22 @@ namespace AlleyCat.Animation
                     $"No overridable slots left: total = {_overridableSlots}.");
             }
 
+            var blendNode = OverrideBlendNodePrefix + slot;
+
             _overrides[slot] = animation.GetName();
 
             TreePlayer.AnimationNodeSetAnimation(OverrideNodePrefix + slot, animation);
-            TreePlayer.Blend2NodeSetAmount(OverrideBlendNodePrefix + slot, influence);
+            TreePlayer.Blend2NodeSetAmount(blendNode, influence);
+
+            var reset = Player.GetAnimation(ResetAnimation);
+
+            if (reset == null) return;
+
+            var filtered = new HashSet<string>(FindTransformTracks(animation).Select(p => p.ToString()));
+
+            FindTransformTracks(reset)
+                .ToList()
+                .ForEach(p => TreePlayer.Blend2NodeSetFilterPath(blendNode, p, !filtered.Contains(p.ToString())));
         }
 
         public void Unblend(string animation)
@@ -99,10 +113,33 @@ namespace AlleyCat.Animation
 
             if (slot == default(int)) return;
 
-            TreePlayer.Blend2NodeSetAmount(OverrideBlendNodePrefix + slot, 0);
-            TreePlayer.AnimationNodeSetAnimation(OverrideNodePrefix + slot, null);
+            var animNode = OverrideNodePrefix + slot;
+            var blendNode = OverrideBlendNodePrefix + slot;
+
+            TreePlayer.Blend2NodeSetAmount(blendNode, 0);
+            TreePlayer.AnimationNodeSetAnimation(animNode, null);
+
+            var reset = Player.GetAnimation(ResetAnimation);
+
+            if (reset != null)
+            {
+                FindTransformTracks(reset)
+                    .ToList()
+                    .ForEach(p => TreePlayer.Blend2NodeSetFilterPath(blendNode, p, true));
+            }
 
             _overrides.Remove(slot);
+        }
+
+        private static IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
+        {
+            var tracks = animation.GetTrackCount();
+
+            return Enumerable
+                .Range(0, tracks)
+                .Select(i => (animation.TrackGetPath(i), animation.TrackGetType(i)))
+                .Where(t => t.Item2 == Godot.Animation.TrackType.Transform)
+                .Select(t => t.Item1);
         }
 
         protected override void Dispose(bool disposing)
