@@ -27,8 +27,6 @@ namespace AlleyCat.Item
 
         [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
 
-        private bool _deleted;
-
         protected override void DoExecute(IActor actor)
         {
             var character = (ICharacter) actor;
@@ -44,33 +42,21 @@ namespace AlleyCat.Item
             {
                 container.Equip(Item, configuration);
 
-                _deleted = true;
-
                 return;
             }
 
             var animator = character.AnimationManager;
 
-            var listener = animator.OnAnimationEvent
+            animator.OnAnimationEvent
                 .Where(e => e.Name == "action." + Key)
-                .Subscribe(_ =>
-                {
-                    container.Equip(Item, configuration, false);
+                .Subscribe(_ => container.Equip(Item, configuration))
+                .AddTo(this);
 
-                    Item.Visible = false;
-                });
-
-            animator.Play(Animation, () =>
-            {
-                listener.Dispose();
-                Item.QueueFree();
-
-                _deleted = true;
-            });
+            animator.Play(Animation);
         }
 
         public override bool AllowedFor(IActor context) =>
-            !_deleted &&
+            Item.NativeInstance != IntPtr.Zero &&
             Item.Visible &&
             context is ICharacter character &&
             character.DistanceTo(Item) <= PickupDistance;
