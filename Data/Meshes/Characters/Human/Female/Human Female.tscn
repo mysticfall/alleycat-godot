@@ -57,8 +57,10 @@ skeleton = NodePath("..")
 material/0 = null
 
 [node name="Collar" parent="Rig/Skeleton" index="2" instance=ExtResource( 5 )]
+extra_cull_margin = 0.5
 
 [node name="Short Hair" parent="Rig/Skeleton" index="3" instance=ExtResource( 6 )]
+extra_cull_margin = 0.5
 
 [node name="Chest" type="BoneAttachment" parent="Rig/Skeleton" index="4"]
 transform = Transform( -1, -5.35921e-07, -7.3388e-08, -4.70555e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.54373e-09, 1.15451, 0.030444 )
