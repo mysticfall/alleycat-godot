@@ -142,11 +142,35 @@ namespace AlleyCat.Common
         }
 
         [NotNull]
-        public static IEnumerable<T> GetChildren<T>([NotNull] this Node node) 
+        public static IEnumerable<T> GetChildren<T>([NotNull] this Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
             return node.GetChildren().OfType<T>();
         }
+
+        [CanBeNull]
+        public static Node GetClosestAncestor(
+            [NotNull] this Node node, [NotNull] Func<Node, bool> predicate)
+        {
+            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.Any.IsNotNull(predicate, nameof(predicate));
+
+            var ancestor = node;
+
+            while ((ancestor = ancestor.GetParent()) != null)
+            {
+                if (predicate(ancestor))
+                {
+                    return ancestor;
+                }
+            }
+
+            return null;
+        }
+
+        [CanBeNull]
+        public static T GetClosestAncestor<T>([NotNull] this Node node) where T : class =>
+            GetClosestAncestor(node, a => a is T) as T;
     }
 }
