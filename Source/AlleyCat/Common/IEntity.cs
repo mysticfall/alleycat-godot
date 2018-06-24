@@ -5,25 +5,12 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
-    public interface IEntity : INamed, IMeshObject, ITransformable, IStateHolder, IMarkable, IValidatable
+    public interface IEntity : ILabelled, IStateHolder, IValidatable
     {
-        Vector3 LabelPosition { get; }
     }
 
     public static class EntityExtensions
     {
-        public const string LabelMarker = "Label";
-
-        [CanBeNull]
-        public static Marker GetLabelMarker([NotNull] this IEntity entity)
-        {
-            Ensure.Any.IsNotNull(entity, nameof(entity));
-
-            entity.Markers.TryGetValue(LabelMarker, out var marker);
-
-            return marker;
-        }
-
         [CanBeNull]
         public static IEntity FindEntity([NotNull] this Node node)
         {

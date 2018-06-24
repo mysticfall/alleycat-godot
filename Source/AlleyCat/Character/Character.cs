@@ -48,20 +48,7 @@ namespace AlleyCat.Character
 
         public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition
-        {
-            get
-            {
-                if (_labelMarker != null)
-                {
-                    return _labelMarker.GlobalTransform.origin;
-                }
-
-                var bounds = Bounds;
-
-                return GlobalTransform.origin + (bounds.Position + bounds.End) / 2f;
-            }
-        }
+        public Vector3 LabelPosition => _labelMarker?.GlobalTransform.origin ?? this.Center();
 
         public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
             Enumerable.Empty<Marker>().ToDictionary();

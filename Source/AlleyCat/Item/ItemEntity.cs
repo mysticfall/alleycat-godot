@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Item
 {
     [AutowireContext]
-    public class ItemEntity : RigidBody, IItemEntity
+    public class ItemEntity : RigidBody, IItemEntity, IMarkable
     {
         public string Key => _key ?? Name;
 
@@ -22,22 +22,9 @@ namespace AlleyCat.Item
 
         public IEnumerable<MeshInstance> Meshes => this.GetChildren<MeshInstance>();
 
-        public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
+        public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition
-        {
-            get
-            {
-                if (_labelMarker != null)
-                {
-                    return _labelMarker.GlobalTransform.origin;
-                }
-
-                var bounds = Bounds;
-
-                return GlobalTransform.origin + (bounds.Position + bounds.End) / 2f;
-            }
-        }
+        public Vector3 LabelPosition => _labelMarker?.GlobalTransform.origin ?? this.Center();
 
         public IEnumerable<IAction> Actions => _actions ?? Enumerable.Empty<IAction>();
 
