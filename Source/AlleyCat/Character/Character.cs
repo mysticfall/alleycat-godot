@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
@@ -53,7 +54,7 @@ namespace AlleyCat.Character
         public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
             Enumerable.Empty<Marker>().ToDictionary();
 
-        public bool Valid => !IsQueuedForDeletion();
+        public bool Valid => NativeInstance != IntPtr.Zero && !IsQueuedForDeletion();
 
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }

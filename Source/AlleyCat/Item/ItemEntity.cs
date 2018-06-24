@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
@@ -16,7 +17,7 @@ namespace AlleyCat.Item
 
         public virtual string DisplayName => Tr(_displayName);
 
-        public bool Valid => !IsQueuedForDeletion();
+        public bool Valid => NativeInstance != IntPtr.Zero && !IsQueuedForDeletion();
 
         public Spatial Spatial => this;
 
