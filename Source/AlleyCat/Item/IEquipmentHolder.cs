@@ -66,5 +66,15 @@ namespace AlleyCat.Item
 
             return holder.Equipments.Unequip(item);
         }
+
+        [CanBeNull]
+        public static Equipment Unequip(
+            [NotNull] this IEquipmentHolder holder,
+            [NotNull] string slot)
+        {
+            Ensure.Any.IsNotNull(holder, nameof(holder));
+
+            return holder.Equipments.Unequip(slot);
+        }
     }
 }

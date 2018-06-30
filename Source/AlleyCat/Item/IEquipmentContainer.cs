@@ -2,7 +2,6 @@ using System.Linq;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
-using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
@@ -67,6 +66,19 @@ namespace AlleyCat.Item
             item.Configuration?.Deactivate();
 
             return item;
+        }
+
+        [CanBeNull]
+        public static Equipment Unequip(
+            [NotNull] this IEquipmentContainer container,
+            [NotNull] string slot)
+        {
+            Ensure.Any.IsNotNull(container, nameof(container));
+            Ensure.Any.IsNotNull(slot, nameof(slot));
+
+            var item = container.FindItem(slot);
+
+            return item != null ? Unequip(container, item) : null;
         }
     }
 }
