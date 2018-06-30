@@ -30,15 +30,14 @@ namespace AlleyCat.Item
         protected override void DoExecute(IActor actor)
         {
             var character = (ICharacter) actor;
-            var container = character.Equipments;
 
-            var configuration = container.FindConfiguration(Item, Tags.ToArray());
+            var configuration = character.FindEquipConfiguration(Item, Tags.ToArray());
 
             if (configuration == null) return;
 
             if (Animation == null)
             {
-                container.Equip(Item, configuration);
+                character.Equip(Item, configuration);
 
                 return;
             }
@@ -47,7 +46,7 @@ namespace AlleyCat.Item
 
             animator.OnAnimationEvent
                 .Where(e => e.Name == "action." + Key)
-                .Subscribe(_ => container.Equip(Item, configuration))
+                .Subscribe(_ => character.Equip(Item, configuration))
                 .AddTo(this);
 
             animator.Play(Animation);
