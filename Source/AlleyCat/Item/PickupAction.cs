@@ -15,7 +15,7 @@ namespace AlleyCat.Item
     public class PickupAction : Action.Action
     {
         [Ancestor]
-        public EquippableItem Item { get; private set; }
+        public Equipment Item { get; private set; }
 
         [Export(PropertyHint.ExpRange, "0.1, 5")]
         public float PickupDistance { get; set; } = 1.2f;
@@ -32,9 +32,7 @@ namespace AlleyCat.Item
             var character = (ICharacter) actor;
             var container = character.Equipments;
 
-            var configuration = Item.Configurations.Values
-                .TaggedAny(Tags.ToArray())
-                .FirstOrDefault(container.AllowedFor);
+            var configuration = container.FindConfiguration(Item, Tags.ToArray());
 
             if (configuration == null) return;
 
@@ -56,7 +54,7 @@ namespace AlleyCat.Item
         }
 
         public override bool AllowedFor(IActor context) =>
-            Item.NativeInstance != IntPtr.Zero &&
+            !Item.Equipped &&
             context is ICharacter character &&
             character.DistanceTo(Item) <= PickupDistance;
     }

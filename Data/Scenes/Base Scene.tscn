@@ -17,7 +17,7 @@
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=16]
 
-[node name="Base Scene" type="Node" index="0"]
+[node name="Base Scene" type="Node"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 

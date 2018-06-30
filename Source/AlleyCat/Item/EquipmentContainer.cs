@@ -1,4 +1,6 @@
-using AlleyCat.Animation;
+using System.Collections.Generic;
+using System.Linq;
+using AlleyCat.Common;
 
 namespace AlleyCat.Item
 {
@@ -6,38 +8,29 @@ namespace AlleyCat.Item
     {
         protected abstract IEquipmentHolder Holder { get; }
 
-        public override void Add(Equipment item)
+        protected override IDictionary<string, Equipment> CreateCache() =>
+            Slots.Values
+                .Select(s => s.GetParent(Holder).GetChildOrDefault<Equipment>())
+                .Where(e => e != null)
+                .Distinct()
+                .ToDictionary(e => e.Slot);
+
+        protected override void DoAdd(Equipment item)
         {
-            base.Add(item);
+            item.GetParent()?.RemoveChild(item);
+
+            Slots[item.Slot].GetParent(Holder).AddChild(item);
 
             item.Equip(Holder);
-
-            var animator = Holder.AnimationManager as IAnimationStateManager;
-            var animation = item.Animation;
-
-            if (animator != null && animation != null)
-            {
-                //TODO Should leave some 'room' for root motion animations so that they can still fire Reset().
-                animator.Blend(animation, 0.99f);
-            }
         }
 
-        public override void Remove(Equipment item)
+        protected override void DoRemove(Equipment item)
         {
-            var animator = Holder.AnimationManager as IAnimationStateManager;
-            var animation = item.Animation;
-
-            if (animator != null && animation != null)
-            {
-                animator.Unblend(animation.GetName());
-            }
-
-            item.Unequip();
-
-            base.Remove(item);
+            item.Unequip(Holder);
+            item.GetParent()?.RemoveChild(item);
         }
 
         public override bool AllowedFor(ISlotConfiguration context) =>
-            (context is EquipConfiguration || context is Equipment) && base.AllowedFor(context);
+            (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
     }
 }

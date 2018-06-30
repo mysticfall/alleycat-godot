@@ -2,6 +2,7 @@ using System.Linq;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
@@ -13,17 +14,26 @@ namespace AlleyCat.Item
     public static class EquipmentContainerExtensions
     {
         [CanBeNull]
-        public static Equipment Equip(
+        public static EquipmentConfiguration FindConfiguration(
             [NotNull] this IEquipmentContainer container,
-            [NotNull] EquippableItem item,
+            [NotNull] Equipment item,
             params string[] tags)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
             Ensure.Any.IsNotNull(item, nameof(item));
 
             var allConfigs = item.Configurations.Values;
-            var configuration =
-                (tags.Any() ? allConfigs.TaggedAny(tags) : allConfigs).FirstOrDefault(container.AllowedFor);
+
+            return (tags.Any() ? allConfigs.TaggedAny(tags) : allConfigs).FirstOrDefault(container.AllowedFor);
+        }
+
+        [CanBeNull]
+        public static Equipment Equip(
+            [NotNull] this IEquipmentContainer container,
+            [NotNull] Equipment item,
+            params string[] tags)
+        {
+            var configuration = FindConfiguration(container, item, tags);
 
             return configuration == null ? null : Equip(container, item, configuration);
         }
@@ -31,43 +41,30 @@ namespace AlleyCat.Item
         [NotNull]
         public static Equipment Equip(
             [NotNull] this IEquipmentContainer container,
-            [NotNull] EquippableItem item,
-            [NotNull] EquipConfiguration configuration,
-            bool dispose = true)
+            [NotNull] Equipment item,
+            [NotNull] EquipmentConfiguration configuration)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
             Ensure.Any.IsNotNull(item, nameof(item));
             Ensure.Any.IsNotNull(configuration, nameof(configuration));
 
-            var equipment = configuration.CreateEquipment();
+            configuration.Activate();
+            container.Add(item);
 
-            container.Add(equipment);
-
-            if (dispose)
-            {
-                item.QueueFree();
-            }
-
-            return equipment;
+            return item;
         }
 
         [NotNull]
-        public static EquippableItem Unequip(
+        public static Equipment Unequip(
             [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment equipment,
-            bool dispose = true)
+            [NotNull] Equipment item)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
-            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+            Ensure.Any.IsNotNull(item, nameof(item));
 
-            container.Remove(equipment);
+            container.Remove(item);
 
-            var item = equipment.CreateItem();
-
-            if (dispose)
-            {
-                equipment.QueueFree();
-            }
+            item.Configuration?.Deactivate();
 
             return item;
         }

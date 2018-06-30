@@ -76,22 +76,26 @@ script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Shirt"
 _displayName = "slot.Shirt"
+EquipType = 1
 
 [node name="Pants" type="Node" parent="Slots/Equipments" index="1"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Pants"
 _displayName = "slot.Pants"
+EquipType = 1
 
 [node name="Left Hand" type="Node" parent="Slots/Equipments" index="2"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "LeftHand"
 _displayName = "slot.LeftHand"
+EquipType = 0
 
 [node name="Right Hand" type="Node" parent="Slots/Equipments" index="3"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "RightHand"
 _displayName = "slot.RightHand"
+EquipType = 0
 

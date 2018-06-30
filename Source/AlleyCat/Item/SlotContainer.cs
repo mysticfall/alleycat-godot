@@ -35,12 +35,14 @@ namespace AlleyCat.Item
                 nameof(item),
                 opt => opt.WithMessage($"'{item}' is not allowed in this container: '{this}'."));
 
-            AddChild(item);
+            DoAdd(item);
 
             Cache[item.Slot] = item;
 
             _onAdd.OnNext(item);
         }
+
+        protected abstract void DoAdd(TItem item);
 
         public virtual void Remove(TItem item)
         {
@@ -50,10 +52,12 @@ namespace AlleyCat.Item
 
             if (key == null) return;
 
-            RemoveChild(item);
+            DoRemove(item);
 
             _onRemove.OnNext(item);
         }
+
+        protected abstract void DoRemove(TItem item);
 
         public TItem Clear(string slot)
         {

@@ -1,18 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using AlleyCat.Action;
+using AlleyCat.Autowire;
+using AlleyCat.Common;
+using AlleyCat.Event;
+using AlleyCat.IO;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
 {
-    public abstract class Equipment : SlotItem
+    [AutowireContext]
+    public class Equipment : RigidBody, IInteractable, ISlotItem, IMarkable, IEntity
     {
-        [Export] public Godot.Animation Animation { get; set; }
+        public string Key => _key ?? Name;
 
-        [Export, UsedImplicitly] private PackedScene _equippableItem;
+        public virtual string DisplayName => Tr(_displayName);
 
-        public EquippableItem CreateItem() => (EquippableItem) _equippableItem?.Instance();
+        public string Slot => Configuration?.Slot;
 
-        public abstract void Equip(IEquipmentHolder holder);
+        public IEnumerable<string> AdditionalSlots => Configuration?.AdditionalSlots ?? Enumerable.Empty<string>();
 
-        public abstract void Unequip();
+        public EquipmentConfiguration Configuration => _configuration?.Value;
+
+        public IObservable<EquipmentConfiguration> OnConfigurationChange => _configuration;
+
+        public IReadOnlyDictionary<string, EquipmentConfiguration> Configurations { get; private set; } =
+            Enumerable.Empty<EquipmentConfiguration>().ToDictionary();
+
+        public virtual bool Valid => NativeInstance != IntPtr.Zero;
+
+        public bool Equipped => Configuration != null;
+
+        public Spatial Spatial => _mesh;
+
+        public Mesh ItemMesh => _itemMesh;
+
+        [Service] public CollisionShape Shape { get; private set; }
+
+        public IEnumerable<IAction> Actions => _actions ?? Enumerable.Empty<IAction>();
+
+        public IEnumerable<MeshInstance> Meshes =>
+            _mesh != null && _mesh.Visible ? new[] {_mesh} : Enumerable.Empty<MeshInstance>();
+
+        public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
+
+        public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
+            Enumerable.Empty<Marker>().ToDictionary();
+
+        public Vector3 LabelPosition => _labelMarker?.GlobalTransform.origin ?? this.Center();
+
+        [Export, UsedImplicitly] private string _key;
+
+        [Export, UsedImplicitly] private string _displayName;
+
+        [Export, UsedImplicitly] private Mesh _itemMesh;
+
+        [Service] private MeshInstance _mesh;
+
+        [Service] private IEnumerable<EquipmentConfiguration> _configurations;
+
+        [Service(false)] private IEnumerable<IAction> _actions;
+
+        [Service(false)] private IEnumerable<Marker> _markers;
+
+        private ReactiveProperty<EquipmentConfiguration> _configuration;
+
+        private Marker _labelMarker;
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            this.Autowire();
+        }
+
+        [PostConstruct]
+        protected virtual void OnInitialize()
+        {
+            Configurations = _configurations.ToDictionary();
+
+            var configurations = Configurations.Values.ToList();
+
+            _configuration = configurations.ToObservable()
+                .SelectMany(c => c.OnActiveStateChange.Select(s => (c, s)))
+                .Where(t => t.Item2)
+                .Select(t => t.Item1)
+                .Do(active => configurations.Where(c => c != active).ToList().ForEach(c => c.Deactivate()))
+                .ToReactiveProperty();
+
+            if (_markers != null)
+            {
+                Markers = _markers.ToDictionary(m => m.Key);
+            }
+
+            _labelMarker = this.GetLabelMarker();
+
+            UpdateEquipState(Equipped);
+        }
+
+        public virtual void Equip(IEquipmentHolder holder)
+        {
+            UpdateEquipState(true);
+
+            Configuration.OnEquip(holder, this);
+        }
+
+        public virtual void Unequip(IEquipmentHolder holder)
+        {
+            Configuration.OnUnequip(holder, this);
+
+            UpdateEquipState(false);
+        }
+
+        private void UpdateEquipState(bool equipped)
+        {
+            Mode = equipped ? ModeEnum.Kinematic : ModeEnum.Rigid;
+            Sleeping = equipped;
+            Shape.Disabled = equipped;
+            InputRayPickable = !equipped;
+        }
+
+        public bool AllowedFor(ISlotContainer context) => true;
+
+        public bool AllowedFor(object context) => true;
+
+        public virtual void SaveState(IState state)
+        {
+        }
+
+        public virtual void RestoreState(IState state)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _configuration?.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }
