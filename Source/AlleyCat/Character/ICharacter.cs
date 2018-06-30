@@ -1,5 +1,4 @@
 using AlleyCat.Action;
-using AlleyCat.Animation;
 using AlleyCat.Common;
 using AlleyCat.Item;
 using AlleyCat.Motion;
@@ -10,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Character
 {
-    public interface ICharacter : IEntity, IRigged, IActor, ILocomotive, ISeeing, IEquipmentHolder
+    public interface ICharacter : IEntity, IActor, ILocomotive, ISeeing, IEquipmentHolder
     {
         [CanBeNull]
         IRace Race { get; }
