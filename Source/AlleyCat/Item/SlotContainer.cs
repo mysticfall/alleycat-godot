@@ -35,7 +35,7 @@ namespace AlleyCat.Item
                 nameof(item),
                 opt => opt.WithMessage($"'{item}' is not allowed in this container: '{this}'."));
 
-            ItemsParent.AddChild(item);
+            AddChild(item);
 
             Cache[item.Slot] = item;
 
@@ -50,7 +50,7 @@ namespace AlleyCat.Item
 
             if (key == null) return;
 
-            ItemsParent.RemoveChild(item);
+            RemoveChild(item);
 
             _onRemove.OnNext(item);
         }

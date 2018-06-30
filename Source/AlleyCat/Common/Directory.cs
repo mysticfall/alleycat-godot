@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
-using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Common
@@ -19,13 +18,11 @@ namespace AlleyCat.Common
 
         IEnumerator IEnumerable.GetEnumerator() => Cache.GetEnumerator();
 
-        protected virtual Node ItemsParent => this;
-
         protected IDictionary<string, T> Cache => _cache ?? (_cache = CreateCache());
 
         private IDictionary<string, T> _cache;
 
-        private IDictionary<string, T> CreateCache() => ItemsParent.GetChildren<T>().ToDictionary(GetKey);
+        protected virtual IDictionary<string, T> CreateCache() => this.GetChildren<T>().ToDictionary(GetKey);
 
         public bool ContainsKey(string key) => Cache.ContainsKey(key);
 
