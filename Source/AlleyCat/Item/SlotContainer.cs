@@ -54,6 +54,8 @@ namespace AlleyCat.Item
 
             DoRemove(item);
 
+            Cache.Remove(item.Slot);
+
             _onRemove.OnNext(item);
         }
 
