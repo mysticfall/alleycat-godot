@@ -19,8 +19,11 @@ namespace AlleyCat.Item
         {
             item.GetParent()?.RemoveChild(item);
 
-            Slots[item.Slot].GetParent(Holder).AddChild(item);
+            var parent = Slots[item.Slot].GetParent(Holder);
 
+            parent.AddChild(item);
+
+            item.SetOwner(parent.GetOwner());
             item.Equip(Holder);
         }
 
