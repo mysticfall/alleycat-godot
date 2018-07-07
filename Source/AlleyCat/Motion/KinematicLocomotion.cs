@@ -28,8 +28,10 @@ namespace AlleyCat.Motion
         }
 
         [PostConstruct]
-        protected virtual void OnInitialze()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             Gravity = Physics3DSettings.DefaultGravity;
             GravityVector = Physics3DSettings.DefaultGravityVector;
 

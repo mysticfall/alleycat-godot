@@ -7,11 +7,11 @@ namespace AlleyCat.IO
     public class FileProvider : IFileProvider
     {
         [NotNull]
-        public IFileInfo GetFileInfo([NotNull] string subpath) => new FileInfo(subpath);
+        public IFileInfo GetFileInfo([NotNull] string subPath) => new FileInfo(subPath);
 
         [NotNull]
-        public IDirectoryContents GetDirectoryContents([NotNull] string subpath) =>
-            new DirectoryContents(subpath);
+        public IDirectoryContents GetDirectoryContents([NotNull] string subPath) =>
+            new DirectoryContents(subPath);
 
         [NotNull]
         public IChangeToken Watch([NotNull] string filter) => NullChangeToken.Singleton;
