@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using EnsureThat;
-using Godot;
 
 namespace AlleyCat.Autowire
 {
