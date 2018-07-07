@@ -1,6 +1,7 @@
 using AlleyCat.Animation;
 using AlleyCat.Common;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
@@ -60,21 +61,23 @@ namespace AlleyCat.Item
         [NotNull]
         public static Equipment Unequip(
             [NotNull] this IEquipmentHolder holder,
-            [NotNull] Equipment item)
+            [NotNull] Equipment item,
+            [CanBeNull] Node dropTo)
         {
             Ensure.Any.IsNotNull(holder, nameof(holder));
 
-            return holder.Equipments.Unequip(item);
+            return holder.Equipments.Unequip(item, dropTo);
         }
 
         [CanBeNull]
         public static Equipment Unequip(
             [NotNull] this IEquipmentHolder holder,
-            [NotNull] string slot)
+            [NotNull] string slot,
+            [CanBeNull] Node dropTo)
         {
             Ensure.Any.IsNotNull(holder, nameof(holder));
 
-            return holder.Equipments.Unequip(slot);
+            return holder.Equipments.Unequip(slot, dropTo);
         }
     }
 }

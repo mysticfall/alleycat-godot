@@ -2,6 +2,7 @@ using System.Linq;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
@@ -56,14 +57,22 @@ namespace AlleyCat.Item
         [NotNull]
         public static Equipment Unequip(
             [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment item)
+            [NotNull] Equipment item,
+            [CanBeNull] Node dropTo)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
             Ensure.Any.IsNotNull(item, nameof(item));
 
+            var parent = dropTo ?? item.GetTree().CurrentScene;
+            var transform = item.GlobalTransform;
+
             container.Remove(item);
 
             item.Configuration?.Deactivate();
+
+            parent.AddChild(item);
+
+            item.GlobalTransform = transform;
 
             return item;
         }
@@ -71,14 +80,15 @@ namespace AlleyCat.Item
         [CanBeNull]
         public static Equipment Unequip(
             [NotNull] this IEquipmentContainer container,
-            [NotNull] string slot)
+            [NotNull] string slot,
+            [CanBeNull] Node dropTo)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
             Ensure.Any.IsNotNull(slot, nameof(slot));
 
             var item = container.FindItem(slot);
 
-            return item != null ? Unequip(container, item) : null;
+            return item != null ? Unequip(container, item, dropTo) : null;
         }
     }
 }

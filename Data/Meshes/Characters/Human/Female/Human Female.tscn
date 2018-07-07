@@ -26,17 +26,12 @@ radius = 0.246558
 height = 1.13148
 _sections_unfolded = [ "Resource" ]
 
-[node name="Human Female" index="0" instance=ExtResource( 1 )]
+[node name="Human Female" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 _key = null
 _displayName = null
 _race = "Human"
 _sex = 1
-
-[node name="Skeleton" parent="Rig" index="0"]
-bones/16/bound_children = [ NodePath("Chest") ]
-bones/20/bound_children = [ NodePath("Left Hand") ]
-bones/45/bound_children = [ NodePath("Right Hand") ]
 
 [node name="Mesh" parent="Rig/Skeleton" index="0"]
 material/1 = ExtResource( 3 )

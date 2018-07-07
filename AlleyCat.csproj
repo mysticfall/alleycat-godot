@@ -225,6 +225,7 @@
     <Compile Include="Source\AlleyCat\IO\IWritableFileInfo.cs" />
     <Compile Include="Source\AlleyCat\Item\AttachedConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\CommonEquipmentTags.cs" />
+    <Compile Include="Source\AlleyCat\Item\DropAction.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\Equipment.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentContainer.cs" />
