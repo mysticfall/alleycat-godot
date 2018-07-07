@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.IO;
 using Godot;
 using JetBrains.Annotations;
@@ -23,22 +22,21 @@ namespace AlleyCat.Item
 
         public IEnumerable<string> AdditionalSlots => Configuration?.AdditionalSlots ?? Enumerable.Empty<string>();
 
-        public EquipmentConfiguration Configuration => _configuration?.Value;
-
-        public IObservable<EquipmentConfiguration> OnConfigurationChange => _configuration;
+        public EquipmentConfiguration Configuration => Configurations.Values.FirstOrDefault(c => c.Active);
 
         public IReadOnlyDictionary<string, EquipmentConfiguration> Configurations { get; private set; } =
             Enumerable.Empty<EquipmentConfiguration>().ToDictionary();
 
         public virtual bool Valid => NativeInstance != IntPtr.Zero;
 
-        public bool Equipped => Configuration != null;
+        public bool Equipped => Configuration != null && GetParent() != null;
 
         public Spatial Spatial => _mesh;
 
         public Mesh ItemMesh => _itemMesh;
 
-        [Service] public CollisionShape Shape { get; private set; }
+        [Service]
+        public CollisionShape Shape { get; private set; }
 
         public IEnumerable<IAction> Actions => _actions ?? Enumerable.Empty<IAction>();
 
@@ -66,8 +64,6 @@ namespace AlleyCat.Item
 
         [Service(false)] private IEnumerable<Marker> _markers;
 
-        private ReactiveProperty<EquipmentConfiguration> _configuration;
-
         private Marker _labelMarker;
 
         public override void _Ready()
@@ -84,12 +80,11 @@ namespace AlleyCat.Item
 
             var configurations = Configurations.Values.ToList();
 
-            _configuration = configurations.ToObservable()
-                .SelectMany(c => c.OnActiveStateChange.Select(s => (c, s)))
-                .Where(t => t.Item2)
-                .Select(t => t.Item1)
-                .Do(active => configurations.Where(c => c != active).ToList().ForEach(c => c.Deactivate()))
-                .ToReactiveProperty();
+            configurations.ToObservable()
+                .SelectMany(c => c.OnActiveStateChange.Where(s => s).Select(_ => c))
+                .SelectMany(active => configurations.Where(c => c != active && c.Active))
+                .Subscribe(c => c.Deactivate())
+                .AddTo(this);
 
             if (_markers != null)
             {
@@ -133,13 +128,6 @@ namespace AlleyCat.Item
 
         public virtual void RestoreState(IState state)
         {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _configuration?.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }
