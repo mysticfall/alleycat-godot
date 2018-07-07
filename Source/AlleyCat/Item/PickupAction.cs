@@ -46,6 +46,7 @@ namespace AlleyCat.Item
 
             animator.OnAnimationEvent
                 .Where(e => e.Name == "action." + Key)
+                .Take(1)
                 .Subscribe(_ => character.Equip(Item, configuration))
                 .AddTo(this);
 
