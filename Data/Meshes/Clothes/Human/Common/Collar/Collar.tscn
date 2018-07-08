@@ -51,15 +51,16 @@ editor/display_folded = true
 layers = 1
 material_override = null
 cast_shadow = 1
-extra_cull_margin = 0.0
+extra_cull_margin = 0.5
 use_in_baked_light = false
 lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
-skeleton = NodePath("..")
+skeleton = NodePath("")
 material/0 = null
+_sections_unfolded = [ "Geometry" ]
 
 [node name="Binding" type="Node" parent="Mesh" index="0"]
 script = ExtResource( 3 )
