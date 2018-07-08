@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
@@ -16,7 +16,8 @@
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=15]
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=16]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=18]
 
 [node name="Base Scene" type="Node"]
 
@@ -408,6 +409,25 @@ _parent = NodePath("../../../../UI")
 
 [node name="UI" type="Node" parent="." index="5"]
 
-[node name="Entity Label" parent="UI" index="0" instance=ExtResource( 17 )]
+[node name="Crosshair" type="TextureRect" parent="UI" index="0"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -3.0
+margin_top = -3.0
+margin_right = 3.0
+margin_bottom = 3.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 17 )
+stretch_mode = 4
+_sections_unfolded = [ "Rect", "texture" ]
+
+[node name="Entity Label" parent="UI" index="1" instance=ExtResource( 18 )]
 visible = false
 
