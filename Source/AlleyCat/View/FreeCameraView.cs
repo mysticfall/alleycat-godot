@@ -88,11 +88,6 @@ namespace AlleyCat.View
                 .Subscribe()
                 .AddTo(this);
 
-            OnActiveStateChange
-                .Where(_ => _toggleInput != null)
-                .Subscribe(v => _toggleInput.Active = v)
-                .AddTo(this);
-
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))
