@@ -20,7 +20,7 @@ input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
 collision_mask = 1
-mode = 3
+mode = 0
 mass = 0.5
 friction = 1.0
 bounce = 0.0
@@ -29,7 +29,7 @@ custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
 contact_monitor = false
-sleeping = true
+sleeping = false
 can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false
@@ -58,7 +58,7 @@ lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
-skeleton = NodePath("..")
+skeleton = NodePath("")
 material/0 = null
 
 [node name="Binding" type="Node" parent="Mesh" index="0"]
@@ -68,7 +68,7 @@ script = ExtResource( 3 )
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0111699 )
 shape = SubResource( 1 )
-disabled = true
+disabled = false
 
 [node name="Binding" type="Node" parent="CollisionShape" index="0"]
 script = ExtResource( 3 )

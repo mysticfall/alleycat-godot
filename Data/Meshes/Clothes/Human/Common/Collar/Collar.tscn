@@ -13,14 +13,14 @@
 
 [sub_resource type="BoxShape" id=1]
 
-extents = Vector3( 0.0625683, 0.0309091, 0.0861001 )
+extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
 [node name="Collar" type="RigidBody"]
 input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
 collision_mask = 1
-mode = 3
+mode = 0
 mass = 1.0
 friction = 1.0
 bounce = 0.0
@@ -29,7 +29,7 @@ custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
 contact_monitor = false
-sleeping = true
+sleeping = false
 can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false
@@ -67,9 +67,9 @@ script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00723294 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0164012, -0.00723294 )
 shape = SubResource( 1 )
-disabled = true
+disabled = false
 
 [node name="Binding" type="Node" parent="CollisionShape" index="0"]
 script = ExtResource( 3 )

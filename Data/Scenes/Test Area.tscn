@@ -23,7 +23,7 @@ propagation = 0.83
 interior = false
 compress = false
 
-[node name="Test Area" instance=ExtResource( 1 )]
+[node name="Test Area" index="0" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 ProcessMode = 0
 _key = "Test"
@@ -115,12 +115,15 @@ _key = "Prisoner5"
 _displayName = "Prisoner 5"
 
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
-transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.358328, -2.23504 )
+editor/display_folded = true
+transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.300541, -2.23504 )
 
 [node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 5 )]
-transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, 0.384164, -2.24173 )
+editor/display_folded = true
+transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, 0.288902, -2.24173 )
 
 [node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 6 )]
+editor/display_folded = true
 transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, 0.248664, -2.16465 )
 
 [node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 6 )]
