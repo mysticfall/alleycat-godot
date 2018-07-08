@@ -1,24 +1,25 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Body.dae" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=2]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Skin.material" type="Material" id=3]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Short Hair.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=7]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=8]
-[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=10]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Reset.anim" type="Animation" id=11]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=12]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=13]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=14]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=15]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=16]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=17]
-[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=18]
-[ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=19]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=6]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=8]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Idle.anim" type="Animation" id=11]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Reset.anim" type="Animation" id=12]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Backward.anim" type="Animation" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Forward.anim" type="Animation" id=14]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Left.anim" type="Animation" id=15]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Locomotion/Walk Right.anim" type="Animation" id=16]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=17]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=18]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManager.cs" type="Script" id=19]
+[ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=20]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -41,52 +42,61 @@ _sections_unfolded = [ "Material" ]
 extra_cull_margin = 0.5
 
 [node name="Collar" parent="Rig/Skeleton" index="2" instance=ExtResource( 5 )]
-extra_cull_margin = 0.5
+editor/display_folded = true
 
-[node name="Rag" parent="Rig/Skeleton" index="3" instance=ExtResource( 6 )]
+[node name="Mesh" parent="Rig/Skeleton/Collar" index="0"]
+mesh = ExtResource( 6 )
+skeleton = NodePath("../..")
+
+[node name="Wear" parent="Rig/Skeleton/Collar/Configurations" index="0"]
+Active = true
+
+[node name="Rag" parent="Rig/Skeleton" index="3" instance=ExtResource( 7 )]
 editor/display_folded = true
 
 [node name="Mesh" parent="Rig/Skeleton/Rag" index="0"]
-mesh = ExtResource( 7 )
+mesh = ExtResource( 8 )
 skeleton = NodePath("../..")
-material/0 = null
 
 [node name="Wear" parent="Rig/Skeleton/Rag/Configurations" index="0"]
 Active = true
 
 [node name="Chest" type="BoneAttachment" parent="Rig/Skeleton" index="4"]
+editor/display_folded = true
 transform = Transform( -1, -5.35921e-07, -7.3388e-08, -4.70555e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.54373e-09, 1.15451, 0.030444 )
 bone_name = "spine03"
 _sections_unfolded = [ "Transform" ]
 
 [node name="Label" type="Spatial" parent="Rig/Skeleton/Chest" index="0"]
 transform = Transform( 1, 1.7053e-13, 4.26326e-14, 3.41061e-13, 1, 0, -8.52651e-14, -5.96046e-08, 1, 3.60053e-09, -0.0169366, 0.0746193 )
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 _key = "Label"
 
 [node name="Right Hand" type="BoneAttachment" parent="Rig/Skeleton" index="5"]
+editor/display_folded = true
 transform = Transform( -0.0734935, -0.569706, -0.818555, 0.129921, -0.81925, 0.558525, -0.988797, -0.0652994, 0.134226, 0.575051, 1.05649, -0.0324158 )
 bone_name = "hand_R"
 _sections_unfolded = [ "Transform" ]
 
 [node name="Equip" type="Spatial" parent="Rig/Skeleton/Right Hand" index="0"]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 _sections_unfolded = [ "Transform" ]
 _key = "RightHand"
 
 [node name="Left Hand" type="BoneAttachment" parent="Rig/Skeleton" index="6"]
+editor/display_folded = true
 transform = Transform( -0.0731258, 0.570089, 0.818323, -0.130544, -0.818931, 0.558847, 0.988742, -0.0659613, 0.134307, -0.575052, 1.05649, -0.0324155 )
 bone_name = "hand_L"
 _sections_unfolded = [ "Transform" ]
 
 [node name="Equip" type="Spatial" parent="Rig/Skeleton/Left Hand" index="0"]
 transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0 )
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 _sections_unfolded = [ "Transform" ]
 _key = "LeftHand"
 
 [node name="Binding" type="Node" parent="Rig/Skeleton" index="7"]
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
@@ -95,24 +105,26 @@ disabled = false
 _sections_unfolded = [ "Transform" ]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+editor/display_folded = true
 root_node = NodePath("..")
 autoplay = ""
 playback_process_mode = 0
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/Idle = ExtResource( 10 )
-anims/Reset = ExtResource( 11 )
-"anims/Walk Backward" = ExtResource( 12 )
-"anims/Walk Forward" = ExtResource( 13 )
-"anims/Walk Left" = ExtResource( 14 )
-"anims/Walk Right" = ExtResource( 15 )
+anims/Idle = ExtResource( 11 )
+anims/Reset = ExtResource( 12 )
+"anims/Walk Backward" = ExtResource( 13 )
+"anims/Walk Forward" = ExtResource( 14 )
+"anims/Walk Left" = ExtResource( 15 )
+"anims/Walk Right" = ExtResource( 16 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="AnimationPlayer" index="0"]
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="AnimationTreePlayer" type="AnimationTreePlayer" parent="." index="3"]
+editor/display_folded = true
 playback_process_mode = 0
 master_player = NodePath("../AnimationPlayer")
 base_path = NodePath("..")
@@ -126,6 +138,12 @@ data = {
 "position": Vector2( 1497.24, 468.573 ),
 "type": "output"
 }, {
+"filter": [  ],
+"from": "Walk Right",
+"id": "Right",
+"position": Vector2( 85.013, 878.236 ),
+"type": "animation"
+}, {
 "id": "Move",
 "position": Vector2( 384.841, 490.592 ),
 "transitions": [ {
@@ -137,18 +155,6 @@ data = {
 } ],
 "type": "transition",
 "xfade": 0.0
-}, {
-"filter": [  ],
-"from": "Walk Right",
-"id": "Right",
-"position": Vector2( 85.013, 878.236 ),
-"type": "animation"
-}, {
-"filter": [  ],
-"from": "Walk Left",
-"id": "Left",
-"position": Vector2( 86.0177, 764.359 ),
-"type": "animation"
 }, {
 "blend": 0.0,
 "id": "Forward",
@@ -162,9 +168,21 @@ data = {
 "type": "animation"
 }, {
 "filter": [  ],
+"from": "Walk Left",
+"id": "Left",
+"position": Vector2( 86.0177, 764.359 ),
+"type": "animation"
+}, {
+"filter": [  ],
 "from": "Walk Backward",
 "id": "Walk Backward",
 "position": Vector2( 54.0293, 534.577 ),
+"type": "animation"
+}, {
+"filter": [  ],
+"from": "Walk Forward",
+"id": "Walk Forward",
+"position": Vector2( 63.9974, 189.871 ),
 "type": "animation"
 }, {
 "blend": 0.0,
@@ -178,12 +196,6 @@ data = {
 "id": "Override Blend 3",
 "position": Vector2( 1133.45, 468.603 ),
 "type": "blend2"
-}, {
-"filter": [  ],
-"from": "Walk Forward",
-"id": "Walk Forward",
-"position": Vector2( 63.9974, 189.871 ),
-"type": "animation"
 }, {
 "animation": null,
 "filter": [  ],
@@ -284,10 +296,10 @@ data = {
 _sections_unfolded = [ "Playback" ]
 
 [node name="Binding" type="Node" parent="AnimationTreePlayer" index="0"]
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="Vision" type="Node" parent="." index="4"]
-script = ExtResource( 16 )
+script = ExtResource( 17 )
 ProcessMode = 0
 Active = true
 _maxYaw = 80.0
@@ -299,7 +311,7 @@ _eyeBoneLeft = "eye_L"
 _eyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="5"]
-script = ExtResource( 17 )
+script = ExtResource( 18 )
 ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
@@ -308,13 +320,15 @@ PositionBone = "root"
 _animationPrefixes = "Walk,Run,Turn,Strafe"
 
 [node name="Animations" type="Node" parent="." index="6"]
-script = ExtResource( 18 )
+script = ExtResource( 19 )
 ProcessMode = 1
 Active = true
 
 [node name="Equipments" type="Node" parent="." index="7"]
-script = ExtResource( 19 )
+script = ExtResource( 20 )
 ProcessMode = 0
 
+
+[editable path="Rig/Skeleton/Collar"]
 
 [editable path="Rig/Skeleton/Rag"]

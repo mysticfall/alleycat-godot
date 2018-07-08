@@ -42,6 +42,8 @@
 "slot.Pants","Pants","바지"
 "slot.RightHand","Right Hand","오른손"
 "slot.LeftHand","Left Hand","왼손"
+"slot.Necklace","Necklace","목걸이"
+"item.Collar","Collar","목갑"
 "item.Rag","Rag","누더기"
 "ui.MainMenu.resume","Resume","계속하기"
 "ui.MainMenu.settings","Settings","게임 설정"

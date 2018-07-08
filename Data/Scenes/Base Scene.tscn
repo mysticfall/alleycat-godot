@@ -19,7 +19,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=18]
 
-[node name="Base Scene" type="Node"]
+[node name="Base Scene" type="Node" index="0"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 

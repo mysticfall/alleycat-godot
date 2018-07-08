@@ -1,18 +1,127 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Item.mesh" type="ArrayMesh" id=2]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=4]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=6]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=7]
+[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=8]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=9]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=10]
 
-[node name="Collar" type="MeshInstance" index="0"]
+[sub_resource type="BoxShape" id=1]
+
+extents = Vector3( 0.0625683, 0.0309091, 0.0861001 )
+
+[node name="Collar" type="RigidBody"]
+input_ray_pickable = false
+input_capture_on_drag = false
+collision_layer = 1
+collision_mask = 1
+mode = 3
+mass = 1.0
+friction = 1.0
+bounce = 0.0
+gravity_scale = 1.0
+custom_integrator = false
+continuous_cd = false
+contacts_reported = 0
+contact_monitor = false
+sleeping = true
+can_sleep = true
+axis_lock_linear_x = false
+axis_lock_linear_y = false
+axis_lock_linear_z = false
+axis_lock_angular_x = false
+axis_lock_angular_y = false
+axis_lock_angular_z = false
+linear_velocity = Vector3( 0, 0, 0 )
+linear_damp = -1.0
+angular_velocity = Vector3( 0, 0, 0 )
+angular_damp = -1.0
+script = ExtResource( 1 )
+_key = "Collar"
+_displayName = "item.Collar"
+_itemMesh = ExtResource( 2 )
+
+[node name="Mesh" type="MeshInstance" parent="." index="0"]
+editor/display_folded = true
 layers = 1
 material_override = null
 cast_shadow = 1
 extra_cull_margin = 0.0
-use_in_baked_light = true
+use_in_baked_light = false
 lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 1 )
+mesh = ExtResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
+
+[node name="Binding" type="Node" parent="Mesh" index="0"]
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00723294 )
+shape = SubResource( 1 )
+disabled = true
+
+[node name="Binding" type="Node" parent="CollisionShape" index="0"]
+script = ExtResource( 3 )
+
+[node name="Actions" type="Node" parent="." index="2"]
+
+[node name="Pickup" type="Node" parent="Actions" index="0"]
+script = ExtResource( 4 )
+ProcessMode = 0
+Active = true
+_key = "Pickup"
+_displayName = "action.Pickup"
+PickupDistance = 1.2
+Animation = ExtResource( 5 )
+_tags = "TagCarry,TagHand"
+
+[node name="Configurations" type="Node" parent="." index="3"]
+
+[node name="Wear" type="Node" parent="Configurations" index="0" groups=[
+"TagWear",
+]]
+script = ExtResource( 6 )
+ProcessMode = 0
+_key = "Wear"
+_slot = "Necklace"
+_additionalSlots = ""
+Active = false
+Mesh = ExtResource( 7 )
+Animation = null
+
+[node name="Carry" type="Node" parent="Configurations" index="1" groups=[
+"TagCarry",
+"TagHand",
+"TagOneHand",
+]]
+script = ExtResource( 8 )
+ProcessMode = 0
+_key = "Carry"
+_slot = "RightHand"
+_additionalSlots = null
+Active = false
+Mesh = null
+Animation = ExtResource( 9 )
+
+[node name="Markers" type="Spatial" parent="." index="4"]
+
+[node name="Label" type="Spatial" parent="Markers" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.104555, 0.0142181 )
+script = ExtResource( 10 )
+_key = "Label"
+
+[node name="Carry" type="Spatial" parent="Markers" index="1"]
+transform = Transform( -0.890473, -0.454006, -0.0306126, 0.403806, -0.757416, -0.51309, 0.209759, -0.469254, 0.857788, -0.00525796, 0.0126396, 0.137194 )
+script = ExtResource( 10 )
+_key = "Carry"
 

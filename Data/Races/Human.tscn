@@ -99,3 +99,10 @@ _key = "RightHand"
 _displayName = "slot.RightHand"
 EquipType = 0
 
+[node name="Necklace" type="Node" parent="Slots/Equipments" index="4"]
+script = ExtResource( 5 )
+ProcessMode = 0
+_key = "Necklace"
+_displayName = "slot.Necklace"
+EquipType = 1
+

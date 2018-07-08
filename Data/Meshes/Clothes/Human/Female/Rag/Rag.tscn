@@ -15,7 +15,7 @@
 
 extents = Vector3( 0.231997, 0.0309091, 0.219546 )
 
-[node name="Rag" type="RigidBody" index="0"]
+[node name="Rag" type="RigidBody"]
 input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
@@ -118,6 +118,5 @@ Animation = ExtResource( 9 )
 [node name="Carry" type="Spatial" parent="Markers" index="0"]
 transform = Transform( -1, -5.96046e-08, 0, 4.96565e-08, -0.833097, -0.553126, 3.29689e-08, -0.553126, 0.833097, 0, -0.0183101, 0.255009 )
 script = ExtResource( 10 )
-_sections_unfolded = [ "Transform" ]
 _key = "Carry"
 

@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Data/Scenes/Base Scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=2]
 [ext_resource path="res://Data/Environments/Symmetrical Garden.tres" type="Environment" id=3]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Data/Meshes/Ground/Ground.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Clutters/Walls/Brick Wall 01.tscn" type="PackedScene" id=8]
 
 [sub_resource type="GIProbeData" id=1]
 
@@ -113,14 +114,19 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92334, 0.235441, 1.29246 )
 _key = "Prisoner5"
 _displayName = "Prisoner 5"
 
-[node name="Rag" parent="Items" index="0" instance=ExtResource( 5 )]
-editor/display_folded = true
-transform = Transform( -0.890507, 0, -0.454969, 0, 1, 0, 0.454969, 0, -0.890507, -0.932997, 0.294008, -1.83417 )
+[node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
+transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.358328, -2.23504 )
 
-[node name="Rag2" parent="Items" index="1" instance=ExtResource( 5 )]
-transform = Transform( -0.999802, 0, -0.0198839, 0, 1, 0, 0.0198839, 0, -0.999802, -0.227284, 0.294008, -1.83417 )
+[node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 5 )]
+transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, 0.384164, -2.24173 )
 
-[node name="Ground" parent="Static Objects" index="0" instance=ExtResource( 6 )]
+[node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 6 )]
+transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, 0.248664, -2.16465 )
+
+[node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 6 )]
+transform = Transform( -0.976579, 0, 0.215161, 0, 1, 0, -0.215161, 0, -0.976579, 1.12769, 0.248664, -2.12004 )
+
+[node name="Ground" parent="Static Objects" index="0" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65074, 0.00188553, -0.0470071 )
 _sections_unfolded = [ "Transform" ]
 
@@ -131,18 +137,18 @@ editor/display_folded = true
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 7 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Front Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 7 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Front Wall" index="1" instance=ExtResource( 8 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Back Wall" type="Spatial" parent="Static Objects/Walls" index="1"]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0 )
 
-[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 7 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Back Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 7 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Back Wall" index="1" instance=ExtResource( 8 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Left Wall" type="Spatial" parent="Static Objects/Walls" index="2"]
@@ -150,20 +156,20 @@ editor/display_folded = true
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, -5 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 7 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Left Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 7 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Left Wall" index="1" instance=ExtResource( 8 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
 [node name="Right Wall" type="Spatial" parent="Static Objects/Walls" index="3"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3, 0, 15 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 7 )]
+[node name="Brick Wall" parent="Static Objects/Walls/Right Wall" index="0" instance=ExtResource( 8 )]
 
-[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 7 )]
+[node name="Brick Wall2" parent="Static Objects/Walls/Right Wall" index="1" instance=ExtResource( 8 )]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 5, 5, 1, 5 )
 
-[node name="Control" parent="." index="6"]
+[node name="Control" parent="." index="5"]
 editor/display_folded = true
 
