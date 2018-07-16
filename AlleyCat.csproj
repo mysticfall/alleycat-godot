@@ -247,6 +247,7 @@
     <Compile Include="Source\AlleyCat\Item\SlotContainer.cs" />
     <Compile Include="Source\AlleyCat\Item\SlotItem.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
+    <Compile Include="Source\AlleyCat\Motion\Billboard.cs" />
     <Compile Include="Source\AlleyCat\Motion\ILocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\ILocomotive.cs" />
     <Compile Include="Source\AlleyCat\Motion\ImmediateLocomotion.cs" />
