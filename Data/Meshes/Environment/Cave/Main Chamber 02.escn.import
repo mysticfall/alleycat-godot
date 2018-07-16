@@ -2,17 +2,17 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Ground.dae-c9f766c18d2c1247b1bc6a1a8b3d94cd.scn"
+path="res://.import/Main Chamber 02.escn-a1aa7597e5e215b28cc957c3973fcc55.scn"
 
 [deps]
 
-source_file="res://Data/Meshes/Ground/Ground.dae"
-dest_files=[ "res://.import/Ground.dae-c9f766c18d2c1247b1bc6a1a8b3d94cd.scn" ]
+source_file="res://Data/Meshes/Environment/Cave/Main Chamber 02.escn"
+dest_files=[ "res://.import/Main Chamber 02.escn-a1aa7597e5e215b28cc957c3973fcc55.scn" ]
 
 [params]
 
 nodes/root_type="Spatial"
-nodes/root_name="Ground"
+nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
@@ -25,7 +25,7 @@ meshes/storage=0
 meshes/light_baking=0
 meshes/lightmap_texel_size=0.1
 external_files/store_in_subdir=false
-animation/import=false
+animation/import=true
 animation/fps=15
 animation/filter_script=""
 animation/storage=false

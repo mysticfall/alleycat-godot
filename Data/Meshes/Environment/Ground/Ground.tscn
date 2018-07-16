@@ -1,7 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Data/Meshes/Ground/Ground.dae" type="PackedScene" id=1]
-[ext_resource path="res://Data/Meshes/Ground/Ground02.tres" type="Material" id=2]
+[ext_resource path="res://Data/Meshes/Environment/Ground/Ground.dae" type="PackedScene" id=1]
+[ext_resource path="res://Data/Meshes/Environment/Ground/Ground02.tres" type="Material" id=2]
+
 
 [sub_resource type="ConcavePolygonShape" id=1]
 

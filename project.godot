@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="AlleyCat"
-run/main_scene="res://Data/Scenes/Test Area.tscn"
+run/main_scene="res://Data/Scenes/Cave.tscn"
 config/icon="res://icon.png"
 
 [autoload]
