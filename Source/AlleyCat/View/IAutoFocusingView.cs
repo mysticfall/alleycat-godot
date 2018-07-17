@@ -8,7 +8,7 @@ namespace AlleyCat.View
     {
         float MaxDofDistance { get; set; }
 
-        float DofTransition { get; set; }
+        float FocusRange { get; set; }
 
         float FocusSpeed { get; set; }
     }
@@ -40,10 +40,10 @@ namespace AlleyCat.View
             env.DofBlurNearEnabled = true;
             env.DofBlurFarEnabled = distance <= view.MaxDofDistance;
 
-            var transition = view.DofTransition / 2f;
+            var offset = view.FocusRange / 2f;
 
-            env.DofBlurNearDistance = Mathf.Clamp(distance - transition, 0, view.MaxDofDistance);
-            env.DofBlurFarDistance = distance + transition;
+            env.DofBlurNearDistance = Mathf.Clamp(distance - offset, 0, view.MaxDofDistance);
+            env.DofBlurFarDistance = distance + offset;
         }
     }
 }

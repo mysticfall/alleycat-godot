@@ -19,7 +19,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=18]
 
-[node name="Base Scene" type="Node"]
+[node name="Base Scene" type="Node" index="0"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 
@@ -143,7 +143,7 @@ VelocityThreshold = 0.2
 Offset = 0.01
 MaxFocalDistance = 3.0
 MaxDofDistance = 5.0
-DofTransition = 0.5
+FocusRange = 3.0
 FocusSpeed = 100.0
 _minStabilization = 0.2
 _maxStabilization = 0.8
@@ -200,7 +200,7 @@ _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -90.0
 MaxDofDistance = 5.0
-DofTransition = 0.5
+FocusRange = 3.0
 FocusSpeed = 100.0
 _characterPath = NodePath("")
 _cameraPath = NodePath("")

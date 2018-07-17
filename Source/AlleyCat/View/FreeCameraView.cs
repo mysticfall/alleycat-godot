@@ -34,8 +34,8 @@ namespace AlleyCat.View
         [Export(PropertyHint.ExpRange, "1,10")]
         public float MaxDofDistance { get; set; } = 5f;
 
-        [Export(PropertyHint.ExpRange, "0,1")]
-        public float DofTransition { get; set; } = 0.5f;
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float FocusRange { get; set; } = 3f;
 
         [Export(PropertyHint.ExpRange, "10,1000")]
         public float FocusSpeed { get; set; } = 100f;
