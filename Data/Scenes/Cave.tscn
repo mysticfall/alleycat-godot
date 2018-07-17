@@ -36,7 +36,7 @@ subdivide_depth = 0
 [node name="Test Area" index="0" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 ProcessMode = 0
-_key = "Test"
+_key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93835, 8.22498, 1.25068 )
