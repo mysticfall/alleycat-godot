@@ -2,7 +2,7 @@
 
 namespace AlleyCat.Common
 {
-    public class IdentifiableDirectory<T> : Directory<T> where T : IIdentifiable
+    public class IdentifiableDirectory<T> : Directory<T> where T : class, IIdentifiable
     {
         protected override string GetKey(T item)
         {

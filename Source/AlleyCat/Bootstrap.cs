@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using AlleyCat.Autowire;
+﻿using AlleyCat.Autowire;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 
 namespace AlleyCat
@@ -10,15 +8,8 @@ namespace AlleyCat
     {
         public Bootstrap()
         {
-            Ensure.Off();
-
-            ToggleAssert();
-
             VariantTypeConverter.Install();
         }
-
-        [Conditional("DEBUG")]
-        private static void ToggleAssert() => Ensure.On();
 
         public override void _Ready()
         {

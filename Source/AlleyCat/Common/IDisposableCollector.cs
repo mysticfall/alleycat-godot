@@ -16,7 +16,7 @@ namespace AlleyCat.Common
 
         [NotNull]
         public static T AddTo<T>([NotNull] this T disposable, [NotNull] Node node)
-            where T : IDisposable
+            where T : class, IDisposable
         {
             Ensure.Any.IsNotNull(disposable, nameof(disposable));
             Ensure.Any.IsNotNull(node, nameof(node));
