@@ -11,7 +11,6 @@ namespace AlleyCat.Item
     {
         public string Key => _key ?? Name;
 
-        [Export, UsedImplicitly]
         public string Slot => _slot ?? Key;
 
         public IEnumerable<string> AdditionalSlots => _additionalSlots.TrimToEnumerable();
