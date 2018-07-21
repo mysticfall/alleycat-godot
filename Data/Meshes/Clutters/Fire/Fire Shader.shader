@@ -1,7 +1,8 @@
-// Adapted from 'Fire' by Xavier Benech, which is available under CC 3.0 BY NC SA:
-// https://www.shadertoy.com/view/XsXSWS
 shader_type spatial;
 render_mode unshaded, blend_add;
+
+// Adapted from 'Fire' by Xavier Benech, which is available under CC 3.0 BY NC SA:
+// https://www.shadertoy.com/view/XsXSWS
 
 uniform float strength : hint_range(0, 1) = 0.5;
 uniform float flicker : hint_range(0, 1) = 0.5;
