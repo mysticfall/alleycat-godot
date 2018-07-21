@@ -106,5 +106,5 @@ Button/styles/pressed = SubResource( 5 )
 Panel/styles/panel = SubResource( 7 )
 Panel/styles/panelf = null
 Panel/styles/panelnc = null
-_sections_unfolded = [ "Button", "Panel", "Panel/styles/panel", "Panel/styles/panelf" ]
+_sections_unfolded = [ "Panel/styles/panel", "Panel/styles/panelf" ]
 
