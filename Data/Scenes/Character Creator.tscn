@@ -22,6 +22,8 @@ flags_world_triplanar = false
 flags_fixed_size = false
 flags_albedo_tex_force_srgb = false
 flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
 vertex_color_use_as_albedo = false
 vertex_color_is_srgb = false
 params_diffuse_mode = 0
@@ -78,6 +80,7 @@ plane = Plane( 0, 1, 0, 0 )
 
 [node name="Character Creator" type="Node" index="0"]
 script = ExtResource( 1 )
+_sections_unfolded = [ "Script" ]
 ProcessMode = 0
 _viewport = NodePath("UI/Viewport")
 
@@ -159,6 +162,7 @@ _controlModifier = "point"
 editor/display_folded = true
 script = ExtResource( 5 )
 ProcessMode = 0
+Active = true
 
 [node name="Value" type="Node" parent="Control/View/Movement" index="0"]
 script = ExtResource( 6 )
@@ -176,6 +180,7 @@ Maximum = 0.1
 editor/display_folded = true
 script = ExtResource( 5 )
 ProcessMode = 0
+Active = true
 
 [node name="Value" type="Node" parent="Control/View/Rotation" index="0"]
 script = ExtResource( 6 )
@@ -192,6 +197,7 @@ Maximum = 0.1
 [node name="Zoom" type="Node" parent="Control/View" index="2"]
 script = ExtResource( 5 )
 ProcessMode = 0
+Active = true
 
 [node name="Value" type="Node" parent="Control/View/Zoom" index="0"]
 script = ExtResource( 7 )

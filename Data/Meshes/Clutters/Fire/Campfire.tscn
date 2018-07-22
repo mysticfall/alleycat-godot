@@ -4,7 +4,6 @@
 [ext_resource path="res://Data/Meshes/Clutters/Fire/Campfire.material" type="Material" id=2]
 [ext_resource path="res://Data/Textures/Particle/smoke.png" type="Texture" id=3]
 
-
 [sub_resource type="PlaneMesh" id=1]
 
 material = ExtResource( 2 )
@@ -100,6 +99,8 @@ flags_world_triplanar = false
 flags_fixed_size = false
 flags_albedo_tex_force_srgb = false
 flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
 vertex_color_use_as_albedo = false
 vertex_color_is_srgb = false
 params_diffuse_mode = 0
@@ -180,7 +181,7 @@ light_indirect_energy = 1.2
 light_negative = false
 light_specular = 0.5
 light_bake_mode = 1
-light_cull_mask = -1
+light_cull_mask = -1048575
 shadow_enabled = true
 shadow_color = Color( 0, 0, 0, 1 )
 shadow_bias = 0.15
