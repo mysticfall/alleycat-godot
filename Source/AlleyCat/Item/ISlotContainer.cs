@@ -27,6 +27,9 @@ namespace AlleyCat.Item
             IObservable<TItem> OnRemove { get; }
 
             [NotNull]
+            IObservable<IEnumerable<TItem>> OnItemsChange { get; }
+
+            [NotNull]
             IReadOnlyDictionary<string, TSlot> Slots { get; }
 
             void Add([NotNull] TItem item);

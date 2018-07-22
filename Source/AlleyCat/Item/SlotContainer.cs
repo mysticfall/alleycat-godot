@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
@@ -18,6 +19,9 @@ namespace AlleyCat.Item
         public IObservable<TItem> OnAdd => _onAdd;
 
         public IObservable<TItem> OnRemove => _onRemove;
+
+        public IObservable<IEnumerable<TItem>> OnItemsChange => 
+            OnAdd.Merge(OnRemove).Select(_ => Values).StartWith(Values);
 
         private readonly Subject<TItem> _onAdd = new Subject<TItem>();
 
