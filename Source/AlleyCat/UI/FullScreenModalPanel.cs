@@ -1,3 +1,4 @@
+using AlleyCat.Autowire;
 using Godot;
 
 namespace AlleyCat.UI
@@ -11,9 +12,16 @@ namespace AlleyCat.UI
         {
             base._Ready();
 
+            this.Autowire();
+
             GetTree().Paused = true;
 
             Input.SetMouseMode(Input.MouseMode.Visible);
+        }
+
+        [PostConstruct]
+        protected virtual void OnInitialize()
+        {
         }
 
         public void Resume()
