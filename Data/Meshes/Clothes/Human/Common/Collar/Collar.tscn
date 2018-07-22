@@ -15,7 +15,7 @@
 
 extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
-[node name="Collar" type="RigidBody"]
+[node name="Collar" type="RigidBody" index="0"]
 input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
@@ -42,8 +42,10 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
+EquipmentType = 1
 _key = "Collar"
 _displayName = "item.Collar"
+_description = "item.Collar.Description"
 _itemMesh = ExtResource( 2 )
 
 [node name="Mesh" type="MeshInstance" parent="." index="0"]

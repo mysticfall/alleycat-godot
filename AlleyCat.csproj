@@ -230,6 +230,7 @@
     <Compile Include="Source\AlleyCat\Item\EquipmentConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\Equipment.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentContainer.cs" />
+    <Compile Include="Source\AlleyCat\Item\EquipmentType.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipType.cs" />
     <Compile Include="Source\AlleyCat\Item\IEquipmentContainer.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentSlot.cs" />

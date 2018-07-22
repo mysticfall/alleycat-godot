@@ -18,6 +18,11 @@ namespace AlleyCat.Item
 
         public virtual string DisplayName => Tr(_displayName);
 
+        public virtual string Description => Tr(_description.TrimToEmpty());
+
+        [Export, UsedImplicitly]
+        public EquipmentType EquipmentType { get; private set; }
+
         public string Slot => Configuration?.Slot;
 
         public IEnumerable<string> AdditionalSlots => Configuration?.AdditionalSlots ?? Enumerable.Empty<string>();
@@ -53,6 +58,8 @@ namespace AlleyCat.Item
         [Export, UsedImplicitly] private string _key;
 
         [Export, UsedImplicitly] private string _displayName;
+        
+        [Export, UsedImplicitly] private string _description;
 
         [Export, UsedImplicitly] private Mesh _itemMesh;
 

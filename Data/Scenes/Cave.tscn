@@ -33,7 +33,7 @@ size = Vector2( 12, 14 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Test Area" index="0" instance=ExtResource( 1 )]
+[node name="Test Area" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 ProcessMode = 0
 _key = "Cave"
@@ -81,10 +81,12 @@ _displayName = "Prisoner 2"
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 6 )]
 editor/display_folded = true
 transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.0106896, -4.83758 )
+EquipmentType = 0
 
 [node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 6 )]
 editor/display_folded = true
 transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, -0.000949442, -4.84427 )
+EquipmentType = 0
 
 [node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 7 )]
 editor/display_folded = true
@@ -133,37 +135,4 @@ visible = false
 
 [node name="Control" parent="." index="5"]
 editor/display_folded = true
-
-[node name="X" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
-UnhandledOnly = true
-
-[node name="Y" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
-UnhandledOnly = true
-
-[node name="Value" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
-UnhandledOnly = true
-
-[node name="X" parent="Control/Player/Views/First Person View/Rotation" index="0"]
-UnhandledOnly = true
-
-[node name="Y" parent="Control/Player/Views/First Person View/Rotation" index="1"]
-UnhandledOnly = true
-
-[node name="X" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
-UnhandledOnly = true
-
-[node name="Y" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
-UnhandledOnly = true
-
-[node name="X" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
-UnhandledOnly = true
-
-[node name="Y" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
-UnhandledOnly = true
-
-[node name="X" parent="Control/Player/Movement" index="0"]
-UnhandledOnly = true
-
-[node name="Y" parent="Control/Player/Movement" index="1"]
-UnhandledOnly = true
 
