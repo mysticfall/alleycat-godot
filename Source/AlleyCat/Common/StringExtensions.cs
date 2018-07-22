@@ -22,6 +22,8 @@ namespace AlleyCat.Common
             return trimmed.Length == 0 ? null : trimmed;
         }
 
+        public static string TrimToEmpty([CanBeNull] this string value) => TrimToNull(value) ?? "";
+
         [CanBeNull]
         public static IEnumerable<string> TrimToEnumerable([CanBeNull] this string value, char separator = ',')
         {
