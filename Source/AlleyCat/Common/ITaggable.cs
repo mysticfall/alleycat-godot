@@ -44,10 +44,10 @@ namespace AlleyCat.Common
             Ensure.Any.IsNotNull(items, nameof(items));
 
             return items
-                .Select(i => (i, tags.Count(i.HasTag)))
-                .Where(t => t.Item2 > 0)
-                .OrderByDescending(t => t.Item2)
-                .Select(t => t.Item1);
+                .Select(item => (item, count: tags.Count(item.HasTag)))
+                .Where(t => t.count > 0)
+                .OrderByDescending(t => t.count)
+                .Select(t => t.item);
         }
     }
 }

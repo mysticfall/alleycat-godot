@@ -15,12 +15,9 @@ namespace AlleyCat.Common
             Ensure.Any.IsNotNull(node, nameof(node));
             Ensure.Any.IsNotNull(path, nameof(path));
 
-            var result = node.GetNode(path) as T;
-
-            if (result == null)
+            if (!(node.GetNode(path) is T result))
             {
-                throw new InvalidOperationException(
-                    $"Unable to find node '{path}' in '{node.Name}'.");
+                throw new InvalidOperationException($"Unable to find node '{path}' in '{node.Name}'.");
             }
 
             return result;
@@ -30,7 +27,7 @@ namespace AlleyCat.Common
         public static T GetNodeOrDefault<T>(
             [NotNull] this Node node,
             [NotNull] NodePath path,
-            [CanBeNull] T defaultValue = default(T)) where T : class
+            [CanBeNull] T defaultValue = default) where T : class
         {
             Ensure.Any.IsNotNull(node, nameof(node));
             Ensure.Any.IsNotNull(path, nameof(path));
@@ -102,7 +99,7 @@ namespace AlleyCat.Common
         [CanBeNull]
         public static T GetChildOrDefault<T>(
             [NotNull] this Node node,
-            [CanBeNull] T defaultValue = default(T)) where T : class
+            [CanBeNull] T defaultValue = default) where T : class
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 

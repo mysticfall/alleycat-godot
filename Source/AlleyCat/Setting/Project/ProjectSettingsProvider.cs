@@ -61,8 +61,9 @@ namespace AlleyCat.Setting.Project
             ConfigurationHelper.Configure(collection, section, type);
 
             GetMembers(type)
-                .Where(m => m.Item2.GetCustomAttribute<SettingsAttribute>() != null)
-                .Select(m => m.Item2)
+                .Select(t => (member: t.Item1, type: t.Item2))
+                .Where(m => m.type.GetCustomAttribute<SettingsAttribute>() != null)
+                .Select(m => m.type)
                 .ToList()
                 .ForEach(t => BindSettings(t, section, collection));
         }
@@ -99,25 +100,26 @@ namespace AlleyCat.Setting.Project
             var path = string.Join(":", prefix, key);
 
             var groups = GetMembers(type)
-                .GroupBy(m => m.Item2.GetCustomAttribute<SettingsAttribute>())
+                .Select(g => (member: g.Item1, type: g.Item2))
+                .GroupBy(m => m.type.GetCustomAttribute<SettingsAttribute>())
                 .ToList();
 
             var keys = groups
                 .Where(g => g.Key == null)
                 .SelectMany(g => g.AsEnumerable())
-                .Select(m => string.Join(":", string.Join(":", prefix, key), m.Item1.Name));
+                .Select(m => string.Join(":", string.Join(":", prefix, key), m.member.Name));
 
             var childKeys = groups
                 .Where(g => g.Key != null)
                 .SelectMany(g => g.AsEnumerable())
-                .SelectMany(g => FindKeys(g.Item2, path));
+                .SelectMany(g => FindKeys(g.type, path));
 
             var children = keys.Concat(childKeys);
 
             return new[] {path}.Concat(children);
         }
 
-        private IEnumerable<(MemberInfo, Type)> GetMembers(Type type)
+        private static IEnumerable<(MemberInfo, Type)> GetMembers(Type type)
         {
             return Cache.GetOrCreate(type, _ =>
             {

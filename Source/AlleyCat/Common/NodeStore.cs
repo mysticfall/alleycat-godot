@@ -16,7 +16,7 @@ namespace AlleyCat.Common
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            return !_store.TryGetValue(node.GetInstanceId(), out var data) ? default(T) : data;
+            return !_store.TryGetValue(node.GetInstanceId(), out var data) ? default : data;
         }
 
         [CanBeNull]

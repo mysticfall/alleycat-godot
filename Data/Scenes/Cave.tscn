@@ -134,3 +134,36 @@ visible = false
 [node name="Control" parent="." index="5"]
 editor/display_folded = true
 
+[node name="X" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
+UnhandledOnly = true
+
+[node name="Y" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
+UnhandledOnly = true
+
+[node name="Value" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
+UnhandledOnly = true
+
+[node name="X" parent="Control/Player/Views/First Person View/Rotation" index="0"]
+UnhandledOnly = true
+
+[node name="Y" parent="Control/Player/Views/First Person View/Rotation" index="1"]
+UnhandledOnly = true
+
+[node name="X" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
+UnhandledOnly = true
+
+[node name="Y" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
+UnhandledOnly = true
+
+[node name="X" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
+UnhandledOnly = true
+
+[node name="Y" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
+UnhandledOnly = true
+
+[node name="X" parent="Control/Player/Movement" index="0"]
+UnhandledOnly = true
+
+[node name="Y" parent="Control/Player/Movement" index="1"]
+UnhandledOnly = true
+

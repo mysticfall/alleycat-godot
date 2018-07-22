@@ -65,7 +65,7 @@ namespace AlleyCat.Item
         {
             Ensure.Any.IsNotNull(slot, nameof(slot));
 
-            if (!ContainsKey(slot)) return default(TItem);
+            if (!ContainsKey(slot)) return default;
 
             var item = this[slot];
 

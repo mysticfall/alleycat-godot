@@ -18,9 +18,9 @@ namespace AlleyCat.Autowire
                 .GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
                             BindingFlags.DeclaredOnly)
                 .Where(m => (m.MemberType & (MemberTypes.Property | MemberTypes.Field)) != 0)
-                .Select(m => (m, m.GetCustomAttribute<T>()))
-                .Where((t, _) => t.Item2 != null)
-                .Select(t => CreateProcessor(t.Item1, t.Item2));
+                .Select(m => (member: m, attribute: m.GetCustomAttribute<T>()))
+                .Where((t, _) => t.attribute != null)
+                .Select(t => CreateProcessor(t.member, t.attribute));
 
             var parent = type.BaseType;
 

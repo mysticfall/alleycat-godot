@@ -15,9 +15,9 @@ namespace AlleyCat.Autowire
             return type
                 .GetMembers(BindingFlags.Instance | BindingFlags.NonPublic)
                 .Where(m => (m.MemberType & MemberTypes.Method) != 0)
-                .Select(m => (m, m.GetCustomAttribute<PostConstructAttribute>()))
-                .Where((t, _) => t.Item2 != null)
-                .Select(t => new PostConstructAttributeProcessor((MethodInfo) t.Item1, t.Item2));
+                .Select(m => (member: m, attribute: m.GetCustomAttribute<PostConstructAttribute>()))
+                .Where((t, _) => t.attribute != null)
+                .Select(t => new PostConstructAttributeProcessor((MethodInfo) t.member, t.attribute));
         }
     }
 }

@@ -58,14 +58,14 @@ namespace AlleyCat.Event
 
         protected virtual IEqualityComparer<T> EqualityComparer => DefaultEqualityComparer;
 
-        public ReactiveProperty(T initialValue = default(T))
+        public ReactiveProperty(T initialValue = default)
         {
             HasValue = true;
             
             _value = initialValue;
         }
 
-        public ReactiveProperty([NotNull] IObservable<T> source, T initialValue = default(T))
+        public ReactiveProperty([NotNull] IObservable<T> source, T initialValue = default)
         {
             Ensure.Any.IsNotNull(source, nameof(source));
 

@@ -17,8 +17,6 @@ namespace AlleyCat.Event
 
         private readonly bool _distinctUntilChanged;
 
-        private bool _canPublishValueOnSubscribe;
-
         private bool _isDisposed;
 
         private Exception _lastException;
@@ -33,20 +31,21 @@ namespace AlleyCat.Event
 
         public T Value => _value;
 
-        public bool HasValue => _canPublishValueOnSubscribe;
+        public bool HasValue { get; private set; }
 
         protected virtual IEqualityComparer<T> EqualityComparer => DefaultEqualityComparer;
 
         public ReadOnlyReactiveProperty(
             [NotNull] IObservable<T> source,
-            T initialValue = default(T),
+            T initialValue = default,
             bool distinctUntilChanged = true)
         {
             Ensure.Any.IsNotNull(source, nameof(source));
 
+            HasValue = true;
+
             _distinctUntilChanged = distinctUntilChanged;
             _value = initialValue;
-            _canPublishValueOnSubscribe = true;
             _sourceConnection = source.Subscribe(new ReadOnlyReactivePropertyObserver(this));
         }
 
@@ -68,7 +67,7 @@ namespace AlleyCat.Event
 
             if (_isSourceCompleted)
             {
-                if (_canPublishValueOnSubscribe)
+                if (HasValue)
                 {
                     observer.OnNext(_value);
                     observer.OnCompleted();
@@ -88,7 +87,7 @@ namespace AlleyCat.Event
             if (p != null)
             {
                 var subscription = p.Subscribe(observer);
-                if (_canPublishValueOnSubscribe)
+                if (HasValue)
                 {
                     observer.OnNext(_value); // raise latest value on subscribe
                 }
@@ -142,7 +141,7 @@ namespace AlleyCat.Event
 
             public void OnNext(T value)
             {
-                if (_parent._distinctUntilChanged && _parent._canPublishValueOnSubscribe)
+                if (_parent._distinctUntilChanged && _parent.HasValue)
                 {
                     if (_parent.EqualityComparer.Equals(_parent._value, value)) return;
 
@@ -152,7 +151,7 @@ namespace AlleyCat.Event
                 else
                 {
                     _parent._value = value;
-                    _parent._canPublishValueOnSubscribe = true;
+                    _parent.HasValue = true;
 
                     _parent._publisher?.OnNext(value);
                 }

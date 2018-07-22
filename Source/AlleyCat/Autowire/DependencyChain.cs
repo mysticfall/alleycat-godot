@@ -64,15 +64,15 @@ namespace AlleyCat.Autowire
         private void UpdateDependencies()
         {
             var tuples =
-                from s in _nodes
-                from t in _nodes
-                where s.Instance != t.Instance
-                where s.Provides.Any(t.Requires.Contains)
-                select (s, t);
+                from source in _nodes
+                from target in _nodes
+                where source.Instance != target.Instance
+                where source.Provides.Any(target.Requires.Contains)
+                select (source, target);
 
             foreach (var i in tuples)
             {
-                i.Item2.Dependencies.Add(i.Item1);
+                i.target.Dependencies.Add(i.source);
             }
 
             _nodes.Sort();

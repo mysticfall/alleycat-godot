@@ -44,10 +44,10 @@ namespace AlleyCat.Animation
             _overridableSlots = TreePlayer.GetNodeList().Count(n => n.StartsWith(OverrideBlendNodePrefix));
             _overrides = Enumerable
                 .Range(1, _overridableSlots)
-                .Select(i => (i, OverrideNodePrefix + i))
-                .Select(t => (t.Item1, TreePlayer.AnimationNodeGetAnimation(t.Item2)?.GetName()))
-                .Where(t => t.Item2 != null)
-                .ToDictionary(t => t.Item1, t => t.Item2);
+                .Select(i => (Index: i, Name: OverrideNodePrefix + i))
+                .Select(t => (t.Index, Slot: TreePlayer.AnimationNodeGetAnimation(t.Name)?.GetName()))
+                .Where(t => t.Slot != null)
+                .ToDictionary(t => t.Index, t => t.Slot);
         }
 
         public override void Advance(float delta)
@@ -81,7 +81,7 @@ namespace AlleyCat.Animation
                 .Range(1, _overridableSlots)
                 .FirstOrDefault(i => !_overrides.ContainsKey(i));
 
-            if (slot == default(int))
+            if (slot == default)
             {
                 throw new InvalidOperationException(
                     $"No overridable slots left: total = {_overridableSlots}.");
@@ -111,7 +111,7 @@ namespace AlleyCat.Animation
 
             var slot = _overrides.FirstOrDefault(i => i.Value == animation).Key;
 
-            if (slot == default(int)) return;
+            if (slot == default) return;
 
             var animNode = OverrideNodePrefix + slot;
             var blendNode = OverrideBlendNodePrefix + slot;
@@ -137,9 +137,9 @@ namespace AlleyCat.Animation
 
             return Enumerable
                 .Range(0, tracks)
-                .Select(i => (animation.TrackGetPath(i), animation.TrackGetType(i)))
-                .Where(t => t.Item2 == Godot.Animation.TrackType.Transform)
-                .Select(t => t.Item1);
+                .Select(i => (path: animation.TrackGetPath(i), type: animation.TrackGetType(i)))
+                .Where(t => t.type == Godot.Animation.TrackType.Transform)
+                .Select(t => t.path);
         }
 
         protected override void Dispose(bool disposing)

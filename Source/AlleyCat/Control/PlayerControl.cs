@@ -176,8 +176,8 @@ namespace AlleyCat.Control
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
                         .MostRecent((null, 0)),
                     (_, args) => args)
-                .Where(t => t.Item1 != null)
-                .Subscribe(t => t.Item1.Yaw -= t.Item2)
+                .Where(t => t.view != null)
+                .Subscribe(t => t.view.Yaw -= t.angle)
                 .AddTo(this);
 
             OnLoop
@@ -185,7 +185,7 @@ namespace AlleyCat.Control
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character?.GlobalTransform().Up() * speed ?? Vector3.Zero)
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
-                .Subscribe(t => t.Item1.Rotate(t.Item2))
+                .Subscribe(t => t.loco.Rotate(t.velocity))
                 .AddTo(this);
         }
 
