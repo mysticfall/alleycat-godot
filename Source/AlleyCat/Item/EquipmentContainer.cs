@@ -10,8 +10,7 @@ namespace AlleyCat.Item
 
         protected override IDictionary<string, Equipment> CreateCache() =>
             Slots.Values
-                .Select(s => s.GetParent(Holder).GetChildOrDefault<Equipment>())
-                .Where(e => e != null)
+                .SelectMany(s => s.GetParent(Holder).GetChildren<Equipment>())
                 .Distinct()
                 .ToDictionary(e => e.Slot);
 
