@@ -380,6 +380,7 @@ ProcessMode = 0
 Active = true
 _key = "ToggleConsole"
 _displayName = "action.ToggleCosole"
+Modal = false
 _ui = NodePath("/root/AlleyCat/UI/Console")
 
 [node name="Show Menu" type="Node" parent="Control/Actions" index="1"]
@@ -402,6 +403,7 @@ ProcessMode = 0
 Active = true
 _key = "ShowMenu"
 _displayName = "action.ShowMenu"
+Modal = true
 UI = ExtResource( 16 )
 _parent = NodePath("../../../../UI")
 

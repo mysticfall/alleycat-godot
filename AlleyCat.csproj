@@ -323,6 +323,7 @@
     <Compile Include="Source\AlleyCat\UI\TreeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeItemChildren.cs" />
+    <Compile Include="Source\AlleyCat\UI\UIAction.cs" />
     <Compile Include="Source\AlleyCat\View\FreeCameraView.cs" />
     <Compile Include="Source\AlleyCat\View\HeadMountedView.cs" />
     <Compile Include="Source\AlleyCat\View\IAutoFocusingView.cs" />

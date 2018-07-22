@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
-    public class CreateUIAction : Action.Action
+    public class CreateUIAction : UIAction
     {
         [Export, UsedImplicitly]
         public PackedScene UI { get; private set; }
@@ -27,7 +27,5 @@ namespace AlleyCat.UI
 
             parent.AddChild(instance);
         }
-
-        public override bool AllowedFor(IActor context) => true;
     }
 }

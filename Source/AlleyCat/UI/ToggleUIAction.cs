@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
-    public class ToggleUIAction : Action.Action
+    public class ToggleUIAction : UIAction
     {
         public IHideableUI UI => this.GetNodeOrDefault<IHideableUI>(_ui);
 
@@ -14,7 +14,5 @@ namespace AlleyCat.UI
         [Export, UsedImplicitly] private NodePath _ui;
 
         protected override void DoExecute(IActor actor) => UI?.Toggle();
-
-        public override bool AllowedFor(IActor context) => true;
     }
 }
