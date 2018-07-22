@@ -9,7 +9,7 @@ namespace AlleyCat.Common
         Spatial Spatial { get; }
     }
 
-    public static class TransformableExtentions
+    public static class TransformableExtensions
     {
         public static Transform Transform([NotNull] this ITransformable transformable)
         {
