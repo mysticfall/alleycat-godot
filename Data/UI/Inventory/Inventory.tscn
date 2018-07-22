@@ -1,0 +1,317 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Data/UI/Blur Effect.tres" type="Material" id=1]
+[ext_resource path="res://Source/AlleyCat/UI/Inventory/InventoryView.cs" type="Script" id=2]
+[ext_resource path="res://Data/Themes/Fullscreen UI.tres" type="Theme" id=3]
+[ext_resource path="res://Data/UI/Inventory/Item Box.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Data/Fonts/Inspected Item Title.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Data/Fonts/Inspected Item Type.tres" type="DynamicFont" id=6]
+[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+bg_color = Color( 0, 0, 0, 0.25098 )
+draw_center = true
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color( 0.8, 0.8, 0.8, 1 )
+border_blend = false
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+corner_detail = 8
+expand_margin_left = 0.0
+expand_margin_right = 0.0
+expand_margin_top = 0.0
+expand_margin_bottom = 0.0
+shadow_color = Color( 0, 0, 0, 0.6 )
+shadow_size = 0
+anti_aliasing = true
+anti_aliasing_size = 1
+
+[node name="Inventory" type="Panel" index="0" groups=[
+"Modal",
+]]
+pause_mode = 2
+material = ExtResource( 1 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 5
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Margin", "Mouse", "Pause", "custom_styles/panel" ]
+CloseAction = "ui_cancel"
+
+[node name="List Panel" type="Panel" parent="." index="0"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 400.0
+margin_bottom = -10.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+theme = ExtResource( 3 )
+_sections_unfolded = [ "Margin", "Mouse", "custom_styles/panel", "theme" ]
+
+[node name="Tree" type="Tree" parent="List Panel" index="0"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+columns = 4
+allow_reselect = false
+allow_rmb_select = false
+hide_folding = true
+hide_root = true
+drop_mode_flags = 0
+select_mode = 1
+_sections_unfolded = [ "Margin" ]
+
+[node name="Content Panel" type="ViewportContainer" parent="." index="1"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 400.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 6
+size_flags_horizontal = 1
+size_flags_vertical = 1
+stretch = true
+stretch_shrink = 1
+_sections_unfolded = [ "Mouse", "Visibility" ]
+
+[node name="Viewport" type="Viewport" parent="Content Panel" index="0"]
+arvr = false
+size = Vector2( 623, 599 )
+own_world = false
+world = null
+transparent_bg = true
+msaa = 0
+hdr = true
+disable_3d = false
+keep_3d_linear = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 0
+render_target_update_mode = 3
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = true
+shadow_atlas_size = 0
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+
+[node name="Item Box" parent="Content Panel/Viewport" index="0" instance=ExtResource( 4 )]
+
+[node name="Info Panel" type="Panel" parent="Content Panel" index="1"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -188.0
+margin_top = -130.0
+margin_right = 188.0
+margin_bottom = -10.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+theme = ExtResource( 3 )
+_sections_unfolded = [ "Margin", "Theme" ]
+
+[node name="Title" type="Label" parent="Content Panel/Info Panel" index="0"]
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+margin_left = -20.0
+margin_top = 10.0
+margin_right = 20.0
+margin_bottom = 18.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 5 )
+text = "Item"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Custom Fonts" ]
+
+[node name="Type" type="Label" parent="Content Panel/Info Panel" index="1"]
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = -34.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = 18.0
+grow_horizontal = 0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color = Color( 0.647059, 0.647059, 0.647059, 1 )
+text = "Type"
+align = 2
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Custom Colors", "Custom Fonts" ]
+
+[node name="Description" type="RichTextLabel" parent="Content Panel/Info Panel" index="2"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 50.0
+margin_right = -10.0
+margin_bottom = -10.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "Description"
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
+_sections_unfolded = [ "Margin" ]
+
+[node name="Control" type="Node" parent="." index="2"]
+_sections_unfolded = [ "Script" ]
+
+[node name="View" type="Node" parent="Control" index="0"]
+script = ExtResource( 7 )
+ProcessMode = 2
+Active = true
+_maxYaw = 180.0
+_minYaw = -180.0
+_maxPitch = 90.0
+_minPitch = -90.0
+InitialDistance = 0.8
+_cameraPath = NodePath("../../Content Panel/Viewport/Item Box/Camera")
+_pivot = NodePath("../../Content Panel/Viewport/Item Box/Item")
+_minDistance = 0.2
+_maxDistance = 3.0
+_controlModifier = "point"
+
+[node name="Movement" type="Node" parent="Control/View" index="0"]
+editor/display_folded = true
+script = ExtResource( 8 )
+ProcessMode = 0
+Active = true
+
+[node name="Value" type="Node" parent="Control/View/Movement" index="0"]
+script = ExtResource( 9 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 5.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Rotation" type="Node" parent="Control/View" index="1"]
+editor/display_folded = true
+script = ExtResource( 8 )
+ProcessMode = 0
+Active = true
+
+[node name="Value" type="Node" parent="Control/View/Rotation" index="0"]
+script = ExtResource( 9 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 5.0
+WindowShift = 1.0
+Axis = 0
+Maximum = 0.1
+
+[node name="Zoom" type="Node" parent="Control/View" index="2"]
+editor/display_folded = true
+script = ExtResource( 8 )
+ProcessMode = 0
+Active = true
+
+[node name="Value" type="Node" parent="Control/View/Zoom" index="0"]
+script = ExtResource( 10 )
+Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 100.0
+WindowShift = 15.0
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
+Polling = false
+

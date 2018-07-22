@@ -1,6 +1,7 @@
 "id","en","ko"
 "action.Pickup","Take","줍기"
 "action.ToggleCosole","Toggle Console","콘솔을 보이거나 감춥니다"
+"action.ShowInventory","Show Inventory","소지품을 보입니다"
 "action.ShowMenu","Show Menu","게임 메뉴를 보입니다"
 "console.commands","Commands","명령어"
 "console.command.clear","Clear the console.","콘솔의 내용을 지웁니다."

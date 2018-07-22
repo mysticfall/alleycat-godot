@@ -300,6 +300,8 @@
     <Compile Include="Source\AlleyCat\UI\FullScreenModalPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\GameMenu.cs" />
     <Compile Include="Source\AlleyCat\UI\IHideableUI.cs" />
+    <Compile Include="Source\AlleyCat\UI\Inventory\InventoryView.cs" />
+    <Compile Include="Source\AlleyCat\UI\Inventory\ItemStand.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeExtensions.cs" />
