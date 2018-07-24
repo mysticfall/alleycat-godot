@@ -343,3 +343,8 @@ a message to `@mysticfall`.
 
 ## LICENSE
 This project is provided under the terms of _[MIT License](LICENSE)_.
+
+## CREDITS
+This project has been developed with [JetBrains Rider](https://jetbrains.com/rider), which I believe to be the best C# IDE available on Linux platform. JetBrains kindly offered me a free license under their [open source support program](https://www.jetbrains.com/buy/opensource/), so I mention it here to show my gratitude.
+
+[![Rider logo](https://pbs.twimg.com/profile_images/795623705091117058/lh1l265w_bigger.jpg)](https://jetbrains.com/rider)
