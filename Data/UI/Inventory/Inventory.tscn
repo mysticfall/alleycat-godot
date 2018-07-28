@@ -39,7 +39,7 @@ shadow_size = 0
 anti_aliasing = true
 anti_aliasing_size = 1
 
-[node name="Inventory" type="Panel" index="0" groups=[
+[node name="Inventory" type="Panel" groups=[
 "Modal",
 ]]
 pause_mode = 2
@@ -107,7 +107,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 400.0
+margin_left = 398.0
+margin_top = -2.0
+margin_right = -2.0
+margin_bottom = -2.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -157,12 +160,12 @@ margin_right = 188.0
 margin_bottom = -10.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = ExtResource( 3 )
-_sections_unfolded = [ "Margin", "Theme" ]
+_sections_unfolded = [ "Margin", "Mouse", "Theme" ]
 
 [node name="Title" type="Label" parent="Content Panel/Info Panel" index="0"]
 anchor_left = 0.5
@@ -251,43 +254,26 @@ ProcessMode = 2
 Active = true
 _maxYaw = 180.0
 _minYaw = -180.0
-_maxPitch = 90.0
-_minPitch = -90.0
-InitialDistance = 0.8
+_maxPitch = 89.5
+_minPitch = -89.5
+_initialDistance = 0.8
+_initialOffset = Vector3( 0, -0.02, 0 )
 _cameraPath = NodePath("../../Content Panel/Viewport/Item Box/Camera")
 _pivot = NodePath("../../Content Panel/Viewport/Item Box/Item")
 _minDistance = 0.2
 _maxDistance = 3.0
-_controlModifier = "point"
+_rotationModifier = "point"
+_panningModifier = "point2"
 
-[node name="Movement" type="Node" parent="Control/View" index="0"]
-editor/display_folded = true
+[node name="Rotation" type="Node" parent="Control/View" index="0"]
 script = ExtResource( 8 )
 ProcessMode = 0
 Active = true
 
-[node name="Value" type="Node" parent="Control/View/Movement" index="0"]
+[node name="X" type="Node" parent="Control/View/Rotation" index="0"]
 script = ExtResource( 9 )
 Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
-Interpolate = true
-WindowSize = 100.0
-WindowShift = 5.0
-Axis = 1
-Maximum = 0.1
-
-[node name="Rotation" type="Node" parent="Control/View" index="1"]
-editor/display_folded = true
-script = ExtResource( 8 )
-ProcessMode = 0
-Active = true
-
-[node name="Value" type="Node" parent="Control/View/Rotation" index="0"]
-script = ExtResource( 9 )
-Active = true
-Sensitivity = 0.5
+Sensitivity = 0.8
 Curve = null
 DeadZone = 0.0
 Interpolate = true
@@ -296,8 +282,19 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Zoom" type="Node" parent="Control/View" index="2"]
-editor/display_folded = true
+[node name="Y" type="Node" parent="Control/View/Rotation" index="1"]
+script = ExtResource( 9 )
+Active = true
+Sensitivity = 0.8
+Curve = null
+DeadZone = 0.0
+Interpolate = true
+WindowSize = 5.0
+WindowShift = 1.0
+Axis = 1
+Maximum = 0.1
+
+[node name="Zoom" type="Node" parent="Control/View" index="1"]
 script = ExtResource( 8 )
 ProcessMode = 0
 Active = true
@@ -305,7 +302,7 @@ Active = true
 [node name="Value" type="Node" parent="Control/View/Zoom" index="0"]
 script = ExtResource( 10 )
 Active = true
-Sensitivity = 0.5
+Sensitivity = 0.7
 Curve = null
 DeadZone = 0.0
 Interpolate = true

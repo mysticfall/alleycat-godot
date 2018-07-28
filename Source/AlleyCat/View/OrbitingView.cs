@@ -18,16 +18,13 @@ namespace AlleyCat.View
 
         public override bool Valid => base.Valid && Camera != null && Camera.IsCurrent();
 
-        [Export]
-        public float InitialDistance { get; set; } = 0.8f;
-
-        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Valid);
+        protected virtual IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
 
         protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Valid);
 
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
-        [Node("Rotation")] private InputBindings _viewInput;
+        [Node("Rotation")] private InputBindings _rotationInput;
 
         [Node("Zoom")] private InputBindings _zoomInput;
 
@@ -44,15 +41,14 @@ namespace AlleyCat.View
             base.OnInitialize();
 
             Camera = Camera ?? GetViewport().GetCamera();
-            Distance = InitialDistance;
 
             OnActiveStateChange
-                .Do(v => _viewInput.Active = v)
+                .Do(v => _rotationInput.Active = v)
                 .Do(v => _zoomInput.Active = v)
                 .Subscribe()
                 .AddTo(this);
 
-            ViewInput
+            RotationInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)
                 .AddTo(this);

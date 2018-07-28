@@ -3,7 +3,7 @@
 [ext_resource path="res://Source/AlleyCat/UI/Inventory/ItemStand.cs" type="Script" id=1]
 [ext_resource path="res://Data/Environments/Inspect.tres" type="Environment" id=2]
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="CubeMesh" id=1]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 flip_faces = false
@@ -25,7 +25,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = null
 script = ExtResource( 1 )
@@ -36,7 +36,7 @@ keep_aspect = 1
 cull_mask = 2
 environment = ExtResource( 2 )
 h_offset = 0.0
-v_offset = -0.1
+v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = true

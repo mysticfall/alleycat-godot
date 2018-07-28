@@ -84,6 +84,17 @@ namespace AlleyCat.Motion
             _maxPitch = pitchRange.Max;
         }
 
+        [PostConstruct]
+        protected virtual void OnInitialize()
+        {
+            Reset();
+        }
+
+        public virtual void Reset()
+        {
+            Rotation = Vector2.Zero;
+        }
+
         protected override void Dispose(bool disposing)
         {
             _active?.Dispose();

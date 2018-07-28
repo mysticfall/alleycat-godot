@@ -86,7 +86,7 @@ namespace AlleyCat.View
 
         public override Range<float> PitchRange => Vision?.PitchRange ?? base.PitchRange;
 
-        protected virtual IObservable<Vector2> ViewInput => _viewInput.AsVector2Input().Where(_ => Valid);
+        protected virtual IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
 
         [CanBeNull]
         protected virtual IObservable<bool> DeactivateInput => _deactivateInput.GetTrigger().Where(_ => Valid);
@@ -99,7 +99,7 @@ namespace AlleyCat.View
 
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
-        [Node("Rotation")] private InputBindings _viewInput;
+        [Node("Rotation")] private InputBindings _rotationInput;
 
         [Node("Deactivate", false)] private InputBindings _deactivateInput;
 
@@ -129,7 +129,7 @@ namespace AlleyCat.View
         private void InitializeInput()
         {
             OnActiveStateChange
-                .Subscribe(v => _viewInput.Active = v)
+                .Subscribe(v => _rotationInput.Active = v)
                 .AddTo(this);
 
             OnActiveStateChange
@@ -143,7 +143,7 @@ namespace AlleyCat.View
                 .Subscribe()
                 .AddTo(this);
 
-            ViewInput
+            RotationInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)
                 .AddTo(this);

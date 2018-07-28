@@ -19,6 +19,8 @@ namespace AlleyCat.Motion
         Range<float> PitchRange { get; }
 
         IObservable<Vector2> OnRotationChange { get; }
+
+        void Reset();
     }
 
     public static class TurretLikeExtensions
@@ -29,8 +31,6 @@ namespace AlleyCat.Motion
 
             turret.Rotation = rotation;
         }
-
-        public static void Reset([NotNull] this ITurretLike turret) => Rotate(turret, Vector2.Zero);
 
         public static Basis GetBasis([NotNull] this ITurretLike rotatable)
         {

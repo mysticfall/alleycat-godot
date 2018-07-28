@@ -20,7 +20,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
-[node name="Base Scene" type="Node" index="0"]
+[node name="Base Scene" type="Node"]
 
 [node name="Environment" type="Node" parent="." index="0"]
 
@@ -77,7 +77,8 @@ _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -89.0
-InitialDistance = 1.0
+_initialDistance = 0.8
+_initialOffset = Vector3( 0, 0, 0 )
 _cameraPath = NodePath("")
 MaxFocalDistance = 3.0
 _characterPath = NodePath("")
