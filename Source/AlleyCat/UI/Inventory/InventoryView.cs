@@ -6,6 +6,7 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Item;
 using AlleyCat.Item.Generic;
+using AlleyCat.View;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -22,6 +23,9 @@ namespace AlleyCat.UI.Inventory
         }
 
         public IObservable<IEquipmentHolder> OnHolderChange => _holder;
+
+        [Node("Control/View")]
+        protected InspectingView ViewControl { get; private set; }
 
         [Node("List Panel/Tree")]
         protected Tree Tree { get; private set; }
@@ -132,6 +136,8 @@ namespace AlleyCat.UI.Inventory
                 Title.Text = item.DisplayName;
                 Type.Text = item.EquipmentType.DisplayName(this);
                 Description.Text = item.Description;
+
+                ViewControl.Reset();
             }
         }
 
