@@ -131,6 +131,7 @@ namespace AlleyCat.Control
 
             OnActiveStateChange
                 .Do(v => _movementInput.Active = v)
+                .Do(v => Character?.Locomotion.Stop())
                 .Do(v => Perspective.Active = v)
                 .Do(v => Actions.Values.ToList().ForEach(a => a.Active = v))
                 .Subscribe()
