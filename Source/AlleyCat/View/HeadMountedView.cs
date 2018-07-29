@@ -116,9 +116,10 @@ namespace AlleyCat.View
         {
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             Camera = Camera ?? GetViewport().GetCamera();
 
             InitializeInput();

@@ -65,9 +65,10 @@ namespace AlleyCat.View
 
         private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             Camera = Camera ?? GetViewport().GetCamera();
 
             OnActiveStateChange

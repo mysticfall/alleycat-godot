@@ -65,9 +65,10 @@ namespace AlleyCat.Sensor
 
         [Export, NotNull] private string _eyeBoneRight = "eye_R";
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             HeadBone = Skeleton.FindBone(_headBone);
 
             LeftEyeBone = Skeleton.FindBone(_eyeBoneLeft);
