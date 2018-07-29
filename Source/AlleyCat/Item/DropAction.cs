@@ -1,5 +1,4 @@
 using AlleyCat.Action;
-using AlleyCat.Character;
 using AlleyCat.Game;
 using static AlleyCat.Item.CommonEquipmentTags;
 
@@ -21,8 +20,8 @@ namespace AlleyCat.Item
 
         public override bool AllowedFor(IActor context) =>
             Item.Slot != null &&
-            context is IHumanoid human &&
-            human.HasEquipment(Item.Slot) &&
+            context is IEquipmentHolder holder &&
+            holder.HasEquipment(Item.Slot) &&
             Item.Configuration.HasTag(Carry);
     }
 }
