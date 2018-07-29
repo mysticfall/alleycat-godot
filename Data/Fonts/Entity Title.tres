@@ -5,7 +5,7 @@
 
 [resource]
 
-size = 16
+size = 18
 outline_size = 2
 outline_color = Color( 0, 0, 0, 0.537255 )
 use_mipmaps = true
