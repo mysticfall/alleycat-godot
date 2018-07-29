@@ -8,13 +8,19 @@ namespace AlleyCat.UI
         [Export]
         public string CloseAction { get; set; } = "ui_cancel";
 
+        [Export]
+        public bool PauseWhenVisible { get; set; } = true;
+
         public override void _Ready()
         {
             base._Ready();
 
             this.Autowire();
 
-            GetTree().Paused = true;
+            if (PauseWhenVisible)
+            {
+                GetTree().Paused = true;
+            }
 
             Input.SetMouseMode(Input.MouseMode.Visible);
         }
@@ -26,7 +32,10 @@ namespace AlleyCat.UI
 
         public void Resume()
         {
-            GetTree().Paused = false;
+            if (PauseWhenVisible)
+            {
+                GetTree().Paused = false;
+            }
 
             Hide();
             QueueFree();
