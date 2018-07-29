@@ -6,5 +6,9 @@ namespace AlleyCat.Game
     public interface IScene : IStateHolder
     {
         PackedScene Pack();
+
+        NodePath CharactersPath { get; }
+
+        NodePath ItemsPath { get; }
     }
 }

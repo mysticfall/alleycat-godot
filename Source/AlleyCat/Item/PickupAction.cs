@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using Godot;
@@ -12,11 +11,8 @@ using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
 {
-    public class PickupAction : Action.Action
+    public class PickupAction : EquipmentAction
     {
-        [Ancestor]
-        public Equipment Item { get; private set; }
-
         [Export(PropertyHint.ExpRange, "0.1, 5")]
         public float PickupDistance { get; set; } = 1.2f;
 

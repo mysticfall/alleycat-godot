@@ -12,6 +12,12 @@ namespace AlleyCat.Game
     {
         public string Key => _key ?? Name;
 
+        [Export]
+        public NodePath CharactersPath { get; set; }
+
+        [Export]
+        public NodePath ItemsPath { get; set; }
+
         [Export, UsedImplicitly] private string _key;
 
         public PackedScene Pack()

@@ -1,21 +1,22 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=4]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=5]
-[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=6]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=7]
-[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=8]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=9]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=10]
+[ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=7]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=8]
+[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=9]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=10]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=11]
 
 [sub_resource type="BoxShape" id=1]
 
 extents = Vector3( 0.231997, 0.0309091, 0.219546 )
 
-[node name="Rag" type="RigidBody" index="0"]
+[node name="Rag" type="RigidBody"]
 input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
@@ -87,18 +88,26 @@ PickupDistance = 1.2
 Animation = ExtResource( 5 )
 _tags = "TagCarry,TagHand"
 
+[node name="Drop" type="Node" parent="Actions" index="1"]
+script = ExtResource( 6 )
+_sections_unfolded = [ "Script" ]
+ProcessMode = 0
+Active = true
+_key = "Drop"
+_displayName = "action.Drop"
+
 [node name="Configurations" type="Node" parent="." index="3"]
 
 [node name="Wear" type="Node" parent="Configurations" index="0" groups=[
 "TagWear",
 ]]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 ProcessMode = 0
 _key = "Wear"
 _slot = "Shirt"
 _additionalSlots = "Pants"
 Active = false
-Mesh = ExtResource( 7 )
+Mesh = ExtResource( 8 )
 Animation = null
 
 [node name="Carry" type="Node" parent="Configurations" index="1" groups=[
@@ -106,19 +115,19 @@ Animation = null
 "TagHand",
 "TagOneHand",
 ]]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 ProcessMode = 0
 _key = "Carry"
 _slot = "RightHand"
 _additionalSlots = null
 Active = false
 Mesh = null
-Animation = ExtResource( 9 )
+Animation = ExtResource( 10 )
 
 [node name="Markers" type="Spatial" parent="." index="4"]
 
 [node name="Carry" type="Spatial" parent="Markers" index="0"]
 transform = Transform( -1, -5.96046e-08, 0, 4.96565e-08, -0.833097, -0.553126, 3.29689e-08, -0.553126, 0.833097, 0, -0.0183101, 0.255009 )
-script = ExtResource( 10 )
+script = ExtResource( 11 )
 _key = "Carry"
 

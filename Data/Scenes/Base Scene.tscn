@@ -1,18 +1,18 @@
 [gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=2]
-[ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterView.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=5]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=6]
-[ext_resource path="res://Source/AlleyCat/View/HeadMountedView.cs" type="Script" id=7]
-[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=8]
-[ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=9]
-[ext_resource path="res://Source/AlleyCat/Control/ActionBindings.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterView.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/View/HeadMountedView.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=10]
+[ext_resource path="res://Source/AlleyCat/Control/ActionBindings.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=13]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=15]
 [ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
@@ -20,7 +20,13 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
-[node name="Base Scene" type="Node"]
+[node name="Base Scene" type="Node" index="0"]
+script = ExtResource( 1 )
+_sections_unfolded = [ "Script" ]
+ProcessMode = 0
+CharactersPath = NodePath("Entities/Characters")
+ItemsPath = NodePath("Entities/Items")
+_key = null
 
 [node name="Environment" type="Node" parent="." index="0"]
 
@@ -50,7 +56,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Player" parent="Entities/Characters" index="0" groups=[
 "Player",
-] instance=ExtResource( 1 )]
+] instance=ExtResource( 2 )]
 _key = "Player"
 _displayName = "Player"
 
@@ -61,7 +67,7 @@ _displayName = "Player"
 [node name="Control" type="Node" parent="." index="4"]
 
 [node name="Player" type="Node" parent="Control" index="0"]
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 ProcessMode = 1
 Active = true
 _characterPath = NodePath("../../Entities/Characters/Player")
@@ -70,7 +76,7 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 [node name="Views" type="Node" parent="Control/Player" index="0"]
 
 [node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 ProcessMode = 1
 Active = true
 _maxYaw = 180.0
@@ -84,12 +90,12 @@ MaxFocalDistance = 3.0
 _characterPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -101,7 +107,7 @@ Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -114,12 +120,12 @@ Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
 editor/display_folded = true
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -132,7 +138,7 @@ NegativeAction = "zoom_out"
 Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 ProcessMode = 1
 Active = false
 _maxYaw = 90.0
@@ -153,12 +159,12 @@ _characterPath = NodePath("")
 _cameraPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -170,7 +176,7 @@ Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="1"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -182,19 +188,19 @@ Axis = 1
 Maximum = 0.1
 
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View" index="1"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "zoom_out"
 UnhandledOnly = true
 StopPropagation = true
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views" index="2"]
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 ProcessMode = 0
 Active = false
 _maxYaw = 180.0
@@ -208,12 +214,12 @@ _characterPath = NodePath("")
 _cameraPath = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -225,7 +231,7 @@ Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -237,12 +243,12 @@ Axis = 1
 Maximum = 0.1
 
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View" index="1"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -255,7 +261,7 @@ NegativeAction = "move_left"
 Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -268,24 +274,24 @@ NegativeAction = "move_back"
 Polling = true
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View" index="2"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "free_camera"
 UnhandledOnly = true
 StopPropagation = true
 
 [node name="Movement" type="Node" parent="Control/Player" index="1"]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/Player/Movement" index="0"]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -298,7 +304,7 @@ NegativeAction = "move_left"
 Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Movement" index="1"]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -311,66 +317,43 @@ NegativeAction = "move_back"
 Polling = true
 
 [node name="Actions" type="Node" parent="Control/Player" index="2"]
-script = ExtResource( 10 )
+script = ExtResource( 11 )
 ProcessMode = 0
 
 [node name="Interact" type="Node" parent="Control/Player/Actions" index="0"]
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = NodePath("../../../../Entities/Characters/Player")
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact" index="0"]
 pause_mode = 2
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "interact"
 UnhandledOnly = true
 StopPropagation = true
 
 [node name="Action" type="Node" parent="Control/Player/Actions/Interact" index="1"]
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _key = "Interact"
 _displayName = null
 
-[node name="Drop" type="Node" parent="Control/Player/Actions" index="1"]
-script = ExtResource( 11 )
-ProcessMode = 0
-Active = true
-_actor = NodePath("../../../../Entities/Characters/Player")
-
-[node name="Input" type="Node" parent="Control/Player/Actions/Drop" index="0"]
-pause_mode = 2
-script = ExtResource( 8 )
-Active = true
-Action = "drop"
-UnhandledOnly = true
-StopPropagation = true
-
-[node name="Action" type="Node" parent="Control/Player/Actions/Drop" index="1"]
-script = ExtResource( 13 )
-ProcessMode = 0
-Active = true
-_key = "Drop"
-_displayName = null
-Slot = "RightHand"
-DropPath = "Entities/Items"
-
 [node name="Actions" type="Node" parent="Control" index="1"]
-script = ExtResource( 10 )
+script = ExtResource( 11 )
 ProcessMode = 0
 
 [node name="Toggle Console" type="Node" parent="Control/Actions" index="0"]
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console" index="0"]
 pause_mode = 2
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "ui_console"
 UnhandledOnly = false
@@ -386,14 +369,14 @@ Modal = false
 _ui = NodePath("/root/AlleyCat/UI/Console")
 
 [node name="Show Inventory" type="Node" parent="Control/Actions" index="1"]
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory" index="0"]
 pause_mode = 2
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "inventory"
 UnhandledOnly = true
@@ -410,14 +393,14 @@ UI = ExtResource( 16 )
 _parent = NodePath("../../../../UI")
 
 [node name="Show Menu" type="Node" parent="Control/Actions" index="2"]
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Menu" index="0"]
 pause_mode = 2
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 Active = true
 Action = "ui_cancel"
 UnhandledOnly = true
