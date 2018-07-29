@@ -1,13 +1,15 @@
 using System;
 using System.Reactive.Linq;
 using AlleyCat.Character.Morph.Generic;
+using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class Morph<TVal, TDef> : IMorph<TVal, TDef> where TDef : MorphDefinition<TVal>
+    public abstract class Morph<TVal, TDef> : BaseNode, IMorph<TVal, TDef> 
+        where TDef : MorphDefinition<TVal>
     {
         public string Key => Definition.Key;
 
@@ -54,16 +56,12 @@ namespace AlleyCat.Character.Morph
 
         public void Reset() => Value = Definition.Default;
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _value?.Dispose();
             _disposable?.Dispose();
+
+            base.OnPreDestroy();
         }
     }
 }

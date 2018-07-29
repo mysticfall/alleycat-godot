@@ -77,12 +77,12 @@ namespace AlleyCat.View
                 .ToReactiveProperty();
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _focus?.Dispose();
             _character?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

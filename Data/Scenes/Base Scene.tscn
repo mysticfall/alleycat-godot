@@ -20,7 +20,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
-[node name="Base Scene" type="Node" index="0"]
+[node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
@@ -96,6 +96,7 @@ Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -108,6 +109,7 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -126,6 +128,7 @@ Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -165,6 +168,7 @@ Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -177,6 +181,7 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="1"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -194,6 +199,7 @@ Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "zoom_out"
 UnhandledOnly = true
@@ -220,6 +226,7 @@ Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -232,6 +239,7 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -249,6 +257,7 @@ Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -262,6 +271,7 @@ Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.7
 Curve = null
@@ -280,6 +290,7 @@ Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "free_camera"
 UnhandledOnly = true
@@ -292,6 +303,7 @@ Active = true
 
 [node name="X" type="Node" parent="Control/Player/Movement" index="0"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -305,6 +317,7 @@ Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Movement" index="1"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -329,6 +342,7 @@ _actor = NodePath("../../../../Entities/Characters/Player")
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact" index="0"]
 pause_mode = 2
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "interact"
 UnhandledOnly = true
@@ -354,6 +368,7 @@ _actor = null
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console" index="0"]
 pause_mode = 2
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "ui_console"
 UnhandledOnly = false
@@ -377,6 +392,7 @@ _actor = null
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory" index="0"]
 pause_mode = 2
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "inventory"
 UnhandledOnly = true
@@ -401,6 +417,7 @@ _actor = null
 [node name="Input" type="Node" parent="Control/Actions/Show Menu" index="0"]
 pause_mode = 2
 script = ExtResource( 9 )
+ProcessMode = 0
 Active = true
 Action = "ui_cancel"
 UnhandledOnly = true

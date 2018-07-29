@@ -133,7 +133,7 @@ namespace AlleyCat.Animation
 
         protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _active?.Dispose();
 
@@ -146,7 +146,7 @@ namespace AlleyCat.Animation
             _onAnimationEvent?.OnCompleted();
             _onAnimationEvent?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

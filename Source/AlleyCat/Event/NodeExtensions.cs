@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using AlleyCat.Common;
 using EnsureThat;
@@ -72,18 +71,6 @@ namespace AlleyCat.Event
             tracker.SetProcessUnhandledKeyInput(true);
 
             return tracker.OnUnhandledInput;
-        }
-
-        [NotNull]
-        public static IObservable<Unit> OnDispose([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            var tracker = node.GetOrCreateNode(EventTrackerName, _ => new NodeEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnDispose;
         }
 
         [CanBeNull]

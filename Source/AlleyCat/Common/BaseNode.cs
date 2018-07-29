@@ -76,15 +76,23 @@ namespace AlleyCat.Common
             _disposables.Add(disposable);
         }
 
-        protected override void Dispose(bool disposing)
+        public override void _Notification(int what)
+        {
+            base._Notification(what);
+
+            if (what == NotificationPredelete)
+            {
+                OnPreDestroy();
+            }
+        }
+
+        protected virtual void OnPreDestroy()
         {
             _onLoop?.OnCompleted();
             _onLoop?.Dispose();
 
             _disposables?.Where(d => d != null).Reverse().ToList().ForEach(d => d.Dispose());
             _disposables = null;
-
-            base.Dispose(disposing);
         }
     }
 }

@@ -95,12 +95,12 @@ namespace AlleyCat.Motion
             Rotation = Vector2.Zero;
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _active?.Dispose();
             _rotation?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
 
         private static float NormalizeAspectAngle(float angle)

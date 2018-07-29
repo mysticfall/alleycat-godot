@@ -31,11 +31,11 @@ namespace AlleyCat.UI.Character
             _character = new ReactiveProperty<IMorphableCharacter>();
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _character.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

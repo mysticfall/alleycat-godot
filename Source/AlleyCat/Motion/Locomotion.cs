@@ -82,11 +82,11 @@ namespace AlleyCat.Motion
             }
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _active?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

@@ -26,11 +26,6 @@ namespace AlleyCat.Event
             SetProcess(false);
             SetPhysicsProcess(false);
             SetProcessInput(false);
-        }
-
-        public override void _EnterTree()
-        {
-            base._EnterTree();
 
             var parent = GetParent() as T;
 
@@ -38,24 +33,16 @@ namespace AlleyCat.Event
                 $"Invalid parent type: '{GetParent()?.GetType()}', expected '{typeof(T)}'.");
 
             _parent = parent;
-
-            Connect(parent);
         }
 
-        public override void _ExitTree()
+        public override void _Notification(int what)
         {
-            base._ExitTree();
+            base._Notification(what);
 
-            if (_parent != null)
+            if (what == NotificationPredelete && _parent != null)
             {
                 Disconnect(_parent);
             }
-
-            _parent = null;
-        }
-
-        protected virtual void Connect([NotNull] T parent)
-        {
         }
 
         protected virtual void Disconnect([NotNull] T parent)

@@ -131,7 +131,7 @@ namespace AlleyCat.View
                 .AddTo(this);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _rotating?.Dispose();
             _rotating = null;
@@ -139,7 +139,7 @@ namespace AlleyCat.View
             _panning?.Dispose();
             _panning = null;
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

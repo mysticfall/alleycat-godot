@@ -179,12 +179,14 @@ namespace AlleyCat.UI.Inventory
             action?.Execute(Character);
         }
 
-        protected override void Dispose(bool disposing)
+        public override void _Notification(int what)
         {
+            base._Notification(what);
+
+            if (what != NotificationPredelete) return;
+
             _character?.Dispose();
             _item?.Dispose();
-
-            base.Dispose(disposing);
         }
     }
 }

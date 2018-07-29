@@ -90,12 +90,12 @@ namespace AlleyCat.Motion
                 .AddTo(this);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _distance?.Dispose();
             _offset?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
 
         public override void Reset()

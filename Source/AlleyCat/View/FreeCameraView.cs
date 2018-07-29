@@ -128,11 +128,11 @@ namespace AlleyCat.View
                 .AddTo(this);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _character?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

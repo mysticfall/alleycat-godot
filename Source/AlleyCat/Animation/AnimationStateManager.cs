@@ -142,12 +142,12 @@ namespace AlleyCat.Animation
                 .Select(t => t.path);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _oneShotAnimationCallback?.Dispose();
             _oneShotAnimationCallback = null;
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

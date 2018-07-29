@@ -2,16 +2,13 @@ using System;
 using System.Reactive.Concurrency;
 using AlleyCat.Common;
 using EnsureThat;
-using Godot;
 using JetBrains.Annotations;
 using Priority_Queue;
 
 namespace AlleyCat.Event
 {
-    public class NodeScheduler : Node, IScheduler
+    public class NodeScheduler : BaseNode, IScheduler
     {
-        public ProcessMode ProcessMode { get; }
-
         public DateTimeOffset Now => DateTimeOffset.Now;
 
         private readonly IPriorityQueue<Task, double> _tasks = new SimplePriorityQueue<Task, double>();
@@ -19,9 +16,6 @@ namespace AlleyCat.Event
         public NodeScheduler(ProcessMode mode)
         {
             ProcessMode = mode;
-
-            SetProcess(ProcessMode == ProcessMode.Idle);
-            SetPhysicsProcess(ProcessMode == ProcessMode.Physics);
         }
 
         [NotNull]
@@ -60,27 +54,7 @@ namespace AlleyCat.Event
             return task;
         }
 
-        public override void _Process(float delta)
-        {
-            base._Process(delta);
-
-            if (ProcessMode == ProcessMode.Idle)
-            {
-                Process();
-            }
-        }
-
-        public override void _PhysicsProcess(float delta)
-        {
-            base._PhysicsProcess(delta);
-
-            if (ProcessMode == ProcessMode.Physics)
-            {
-                Process();
-            }
-        }
-
-        private void Process()
+        protected override void ProcessLoop(float delta)
         {
             lock (_tasks)
             {
@@ -91,16 +65,18 @@ namespace AlleyCat.Event
                     _tasks.Dequeue().Execute();
                 }
             }
+
+            base.ProcessLoop(delta);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
-            base.Dispose(disposing);
-
             lock (_tasks)
             {
                 _tasks.Clear();
             }
+
+            base.OnPreDestroy();
         }
 
         private class Task : IDisposable

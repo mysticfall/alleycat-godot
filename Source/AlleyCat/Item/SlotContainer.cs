@@ -93,12 +93,12 @@ namespace AlleyCat.Item
 
         protected override string GetKey(TItem item) => item.Slot;
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _onAdd?.Dispose();
             _onRemove?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

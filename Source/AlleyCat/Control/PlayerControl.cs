@@ -216,13 +216,13 @@ namespace AlleyCat.Control
                 .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _active?.Dispose();
             _character?.Dispose();
             _perspective?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }

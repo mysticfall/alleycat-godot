@@ -12,7 +12,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Character.Morph
 {
     [Singleton(typeof(IMorphSet))]
-    public class MorphSet : IMorphSet
+    public class MorphSet : BaseNode, IMorphSet
     {
         public string Key => "Morphs";
 
@@ -89,13 +89,7 @@ namespace AlleyCat.Character.Morph
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             if (_morphs == null) return;
 
@@ -103,6 +97,8 @@ namespace AlleyCat.Character.Morph
             {
                 morph?.Dispose();
             }
+
+            base.OnPreDestroy();
         }
     }
 }

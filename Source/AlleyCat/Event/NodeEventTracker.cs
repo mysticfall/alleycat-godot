@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Subjects;
 using Godot;
 using JetBrains.Annotations;
@@ -21,9 +20,6 @@ namespace AlleyCat.Event
         public IObservable<InputEvent> OnUnhandledInput =>
             _onUnhandledInput ?? (_onUnhandledInput = new Subject<InputEvent>());
 
-        [NotNull]
-        public IObservable<Unit> OnDispose => _onDispose ?? (_onDispose = new Subject<Unit>());
-
         private Subject<float> _onProcess;
 
         private Subject<float> _onPhysicsProcess;
@@ -31,8 +27,6 @@ namespace AlleyCat.Event
         private Subject<InputEvent> _onInput;
 
         private Subject<InputEvent> _onUnhandledInput;
-
-        private Subject<Unit> _onDispose;
 
         public override void _Ready()
         {
@@ -82,16 +76,8 @@ namespace AlleyCat.Event
             _onUnhandledInput?.OnNext(@event);
         }
 
-        protected override void Connect(Node parent)
-        {
-        }
-
         protected override void Disconnect(Node parent)
         {
-            _onDispose?.OnNext(Unit.Default);
-            _onDispose?.Dispose();
-            _onDispose = null;
-
             _onProcess?.Dispose();
             _onProcess = null;
 

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using AlleyCat.Common;
 using AlleyCat.Control.Generic;
 using AlleyCat.Event;
 using EnsureThat;
@@ -9,7 +10,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
-    public abstract class Input<T> : Node, IInput<T>
+    public abstract class Input<T> : BaseNode, IInput<T>
     {
         public virtual string Key => Name;
 
@@ -35,13 +36,6 @@ namespace AlleyCat.Control
             Debug.Assert(_observable != null, "CreateObservable() != null");
         }
 
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-
-            _observable = null;
-        }
-
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             Ensure.Any.IsNotNull(observer, nameof(observer));
@@ -52,11 +46,11 @@ namespace AlleyCat.Control
         [NotNull]
         protected abstract IObservable<T> CreateObservable();
 
-        protected override void Dispose(bool disposing)
+        protected override void OnPreDestroy()
         {
             _active?.Dispose();
 
-            base.Dispose(disposing);
+            base.OnPreDestroy();
         }
     }
 }
