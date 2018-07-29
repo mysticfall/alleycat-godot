@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Item;
@@ -16,19 +18,24 @@ namespace AlleyCat.UI.Inventory
     public class InventoryView : FullScreenModalPanel
     {
         [Node(required: false)]
-        public virtual IEquipmentHolder Holder
+        public virtual ICharacter Character
         {
-            get => _holder.Value;
-            set => _holder.Value = value;
+            get => _character.Value;
+            set => _character.Value = value;
         }
 
-        public IObservable<IEquipmentHolder> OnHolderChange => _holder;
+        public IObservable<IEquipmentHolder> OnHolderChange => _character;
+
+        public IObservable<Equipment> OnItemChange => _item ?? Observable.Empty<Equipment>();
 
         [Node("Control/View")]
         protected InspectingView ViewControl { get; private set; }
 
-        [Node("List Panel/Tree")]
+        [Node("List Panel/Layout/Tree")]
         protected Tree Tree { get; private set; }
+
+        [Node("List Panel/Layout/Buttons Panel")]
+        protected Container Buttons { get; private set; }
 
         [Node("Content Panel/Viewport/Item Box/Item")]
         protected MeshInstance ItemStand { get; private set; }
@@ -45,15 +52,21 @@ namespace AlleyCat.UI.Inventory
         [Node("Content Panel/Info Panel/Description")]
         protected RichTextLabel Description { get; private set; }
 
+        [Export, UsedImplicitly] private PackedScene _actionButton;
+
         private const string SlotKey = "Slot";
 
-        private readonly ReactiveProperty<IEquipmentHolder> _holder = new ReactiveProperty<IEquipmentHolder>();
+        private readonly ReactiveProperty<ICharacter> _character = new ReactiveProperty<ICharacter>();
+
+        private ReactiveProperty<Equipment> _item;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            Holder = Holder ?? GetTree().GetNodesInGroup<IEquipmentHolder>(Tags.Player).FirstOrDefault();
+            Debug.Assert(_actionButton != null, "_actionButton != null");
+
+            Character = Character ?? GetTree().GetNodesInGroup<ICharacter>(Tags.Player).FirstOrDefault();
 
             Tree.CreateItem();
 
@@ -65,12 +78,6 @@ namespace AlleyCat.UI.Inventory
 
             var container = OnHolderChange.Select(c => c.Equipments);
             var items = container.SelectMany(c => c.OnItemsChange);
-
-            var selected = Tree.OnItemSelect()
-                .Select(e => e.Source.GetSelected()?.GetMeta(SlotKey))
-                .OfType<string>()
-                .CombineLatest(container, (slot, slots) => (slot, slots))
-                .Select(t => t.slot != null ? t.slots.FindItem(t.slot) : null);
 
             void RemoveAllNodes()
             {
@@ -85,11 +92,17 @@ namespace AlleyCat.UI.Inventory
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)))
                 .AddTo(this);
 
-            selected
+            _item = Tree.OnItemSelect()
+                .Select(e => e.Source.GetSelected()?.GetMeta(SlotKey))
+                .OfType<string>()
+                .Merge(items.Select(_ => (string) null))
+                .CombineLatest(container, (slot, slots) => (slot, slots))
+                .Select(t => t.slot != null ? t.slots.FindItem(t.slot) : null)
+                .ToReactiveProperty();
+
+            OnItemChange
                 .Subscribe(DisplayItem)
                 .AddTo(this);
-
-            DisplayItem(null);
         }
 
         [NotNull]
@@ -119,6 +132,12 @@ namespace AlleyCat.UI.Inventory
 
         protected virtual void DisplayItem([CanBeNull] Equipment item)
         {
+            foreach (var button in Buttons.GetChildren().OfType<Button>())
+            {
+                button.Disconnect("pressed", this, nameof(OnButtonPress));
+                button.QueueFree();
+            }
+
             if (item == null)
             {
                 InfoPanel.Visible = false;
@@ -138,12 +157,32 @@ namespace AlleyCat.UI.Inventory
                 Description.Text = item.Description;
 
                 ViewControl.Reset();
+
+                var actions = item.Actions.Where(a => a.Active && a.Valid && a.AllowedFor(Character));
+
+                foreach (var action in actions)
+                {
+                    var button = (Button) _actionButton.Instance();
+
+                    button.Text = action.DisplayName;
+                    button.Connect("pressed", this, nameof(OnButtonPress), new object[] {action.Key});
+
+                    Buttons.AddChild(button);
+                }
             }
+        }
+
+        private void OnButtonPress(string key)
+        {
+            var action = _item.Value?.Actions.FirstOrDefault(a => a.Key == key);
+
+            action?.Execute(Character);
         }
 
         protected override void Dispose(bool disposing)
         {
-            _holder?.Dispose();
+            _character?.Dispose();
+            _item?.Dispose();
 
             base.Dispose(disposing);
         }
