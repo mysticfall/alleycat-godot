@@ -28,7 +28,7 @@ namespace AlleyCat.Motion
 
         public IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
 
-        public virtual Range<float> DistanceRange => new Range<float>(0.1f, 10f);
+        public virtual Range<float> DistanceRange => new Range<float>(_minDistance, _maxDistance);
 
         public Vector3 Offset
         {
@@ -62,6 +62,10 @@ namespace AlleyCat.Motion
             }
         }
 
+        [Export, UsedImplicitly] private float _minDistance = 0.1f;
+
+        [Export, UsedImplicitly] private float _maxDistance = 10f;
+
         [Export, UsedImplicitly] private float _initialDistance = 0.8f;
 
         [Export, UsedImplicitly] private Vector3 _initialOffset = Vector3.Zero;
@@ -75,9 +79,15 @@ namespace AlleyCat.Motion
             ProcessMode = ProcessMode.Idle;
         }
 
-        protected Orbiter(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        protected Orbiter(
+            Range<float> yawRange, 
+            Range<float> pitchRange,
+            Range<float> distanceRange) : base(yawRange, pitchRange)
         {
             ProcessMode = ProcessMode.Idle;
+
+            _minDistance = distanceRange.Min;
+            _maxDistance = distanceRange.Max;
         }
 
         protected override void OnInitialize()

@@ -112,7 +112,7 @@ namespace AlleyCat.Control
                 }
 
                 perspective.OnActiveStateChange
-                    .Where(s => !s && perspective == Perspective)
+                    .Where(s => Active && !s && perspective == Perspective)
                     .Select(_ => FindNextValidPerspective(perspective))
                     .Where(p => p != null)
                     .Subscribe(p => Perspective = p)

@@ -48,11 +48,17 @@ namespace AlleyCat.View
 
         private ReactiveProperty<IEntity> _focus;
 
-        public OrbitingCharacterView() : base(new Range<float>(-180f, 180f), new Range<float>(-89f, 90f))
+        public OrbitingCharacterView() : base(
+            new Range<float>(-180f, 180f),
+            new Range<float>(-89f, 90f),
+            new Range<float>(0.25f, 10f))
         {
         }
 
-        public OrbitingCharacterView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        public OrbitingCharacterView(
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
         {
         }
 

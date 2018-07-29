@@ -83,7 +83,10 @@ namespace AlleyCat.View
         {
         }
 
-        public InspectingView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        public InspectingView(
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
         {
         }
 

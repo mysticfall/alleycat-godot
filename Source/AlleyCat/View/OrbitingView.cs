@@ -32,7 +32,10 @@ namespace AlleyCat.View
         {
         }
 
-        protected OrbitingView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
+        protected OrbitingView(
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
         {
         }
 
@@ -55,12 +58,6 @@ namespace AlleyCat.View
 
             ZoomInput
                 .Subscribe(v => Distance -= v * 0.05f)
-                .AddTo(this);
-
-            OnActiveStateChange
-                .Where(v => v)
-                .Skip(Active ? 1 : 0)
-                .Subscribe(_ => Distance = DistanceRange.Min + 0.1f)
                 .AddTo(this);
         }
     }

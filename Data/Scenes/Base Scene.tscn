@@ -20,7 +20,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
-[node name="Base Scene" type="Node"]
+[node name="Base Scene" type="Node" index="0"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
@@ -83,6 +83,8 @@ _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -89.0
+_minDistance = 0.25
+_maxDistance = 10.0
 _initialDistance = 0.8
 _initialOffset = Vector3( 0, 0, 0 )
 _cameraPath = NodePath("")
