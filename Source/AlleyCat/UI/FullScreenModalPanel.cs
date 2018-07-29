@@ -1,4 +1,5 @@
 using AlleyCat.Autowire;
+using AlleyCat.Control;
 using Godot;
 
 namespace AlleyCat.UI
@@ -8,8 +9,13 @@ namespace AlleyCat.UI
         [Export]
         public string CloseAction { get; set; } = "ui_cancel";
 
+        [Service]
+        protected IPlayerControl PlayerControl { get; private set; }
+
         [Export]
         public bool PauseWhenVisible { get; set; } = true;
+
+        private bool _initialActiveState;
 
         public override void _Ready()
         {
@@ -20,6 +26,12 @@ namespace AlleyCat.UI
             if (PauseWhenVisible)
             {
                 GetTree().Paused = true;
+            }
+            else
+            {
+                _initialActiveState = PlayerControl.Active;
+
+                PlayerControl.Active = false;
             }
 
             Input.SetMouseMode(Input.MouseMode.Visible);
@@ -35,6 +47,10 @@ namespace AlleyCat.UI
             if (PauseWhenVisible)
             {
                 GetTree().Paused = false;
+            }
+            else
+            {
+                PlayerControl.Active = _initialActiveState;
             }
 
             Hide();

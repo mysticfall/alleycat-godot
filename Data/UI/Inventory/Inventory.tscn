@@ -59,7 +59,7 @@ custom_styles/panel = SubResource( 1 )
 script = ExtResource( 2 )
 _sections_unfolded = [ "Margin", "Mouse", "Pause", "custom_styles/panel" ]
 CloseAction = "ui_cancel"
-PauseWhenVisible = true
+PauseWhenVisible = false
 _actionButton = ExtResource( 3 )
 
 [node name="List Panel" type="Panel" parent="." index="0"]
