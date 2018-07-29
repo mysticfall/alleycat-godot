@@ -284,6 +284,9 @@
     <Compile Include="Source\AlleyCat\Setting\SettingsAttribute.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
+    <Compile Include="Source\AlleyCat\UI\ButtonEvents.cs" />
+    <Compile Include="Source\AlleyCat\UI\ButtonEventTracker.cs" />
+    <Compile Include="Source\AlleyCat\UI\ButtonExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CharacterCreator.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\ColorMorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
