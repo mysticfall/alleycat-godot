@@ -19,9 +19,7 @@ namespace AlleyCat.Control
         {
             base._Ready();
 
-            CalculateMaximumValue();
-
-            GetViewport().Connect("size_changed", this, nameof(CalculateMaximumValue));
+            _maximumValue = GetValue(GetViewport().Size) * Maximum;
         }
 
         protected override IObservable<float> CreateRawObservable()
@@ -31,11 +29,6 @@ namespace AlleyCat.Control
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)
                 .Select(v => GetValue(v) / _maximumValue);
-        }
-
-        private void CalculateMaximumValue()
-        {
-            _maximumValue = GetValue(GetViewport().Size) * Maximum;
         }
 
         private float GetValue(Vector2 position)
