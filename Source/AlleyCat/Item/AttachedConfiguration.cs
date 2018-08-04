@@ -16,7 +16,7 @@ namespace AlleyCat.Item
             {
                 equipment.Transform = transform;
 
-                mesh.Skeleton = equipment.GetPath();
+                mesh.Skeleton = mesh.GetPathTo(equipment);
             }
         }
     }

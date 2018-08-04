@@ -82,7 +82,7 @@ namespace AlleyCat.Item
             foreach (var mesh in equipment.Meshes)
             {
                 mesh.Mesh = equipment.ItemMesh;
-                mesh.Skeleton = equipment.GetPath();
+                mesh.Skeleton = mesh.GetPathTo(equipment);
             }
         }
 

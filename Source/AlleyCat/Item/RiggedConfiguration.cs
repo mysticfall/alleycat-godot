@@ -12,7 +12,7 @@ namespace AlleyCat.Item
             {
                 equipment.Transform = new Transform(Basis.Identity, Vector3.Zero);
 
-                mesh.Skeleton = holder.Skeleton.GetPath();
+                mesh.Skeleton = mesh.GetPathTo(holder.Skeleton);
             }
         }
     }
