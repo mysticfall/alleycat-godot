@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using Array = Godot.Array;
+using Gen = System.Collections.Generic;
 using Object = Godot.Object;
 
 namespace AlleyCat.Common
 {
     public class NodeStore<T> : Object
     {
-        private readonly IDictionary<int, T> _store = new Dictionary<int, T>();
+        private readonly Gen.IDictionary<int, T> _store = new Gen.Dictionary<int, T>();
 
         [CanBeNull]
         public T Get([NotNull] Node node)
@@ -32,7 +33,7 @@ namespace AlleyCat.Common
 
             data = factory(node);
 
-            node.Connect("tree_exited", this, nameof(OnNodeExited), new object[] {node});
+            node.Connect("tree_exited", this, nameof(OnNodeExited), new Array {node});
 
             _store.Add(node.GetInstanceId(), data);
 

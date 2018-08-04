@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Data/Scenes/Base Scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Data/Environments/Cave.tres" type="Environment" id=2]
@@ -23,7 +23,35 @@ propagation = 0.8
 interior = false
 compress = false
 
-[sub_resource type="PlaneMesh" id=2]
+[sub_resource type="PhysicsMaterial" id=2]
+
+bounce = 0.0
+bounce_combine_mode = 0
+friction = 1.0
+friction_combine_mode = 2
+
+[sub_resource type="PhysicsMaterial" id=3]
+
+bounce = 0.0
+bounce_combine_mode = 0
+friction = 1.0
+friction_combine_mode = 2
+
+[sub_resource type="PhysicsMaterial" id=4]
+
+bounce = 0.0
+bounce_combine_mode = 0
+friction = 1.0
+friction_combine_mode = 2
+
+[sub_resource type="PhysicsMaterial" id=5]
+
+bounce = 0.0
+bounce_combine_mode = 0
+friction = 1.0
+friction_combine_mode = 2
+
+[sub_resource type="PlaneMesh" id=6]
 
 material = ExtResource( 8 )
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
@@ -33,7 +61,6 @@ subdivide_width = 0
 subdivide_depth = 0
 
 [node name="Test Area" index="0" instance=ExtResource( 1 )]
-_key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93835, 8.22498, 1.25068 )
@@ -67,30 +94,28 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, 0.24747, 1.29029 )
 
 [node name="Prisoner" parent="Entities/Characters" index="1" instance=ExtResource( 4 )]
 transform = Transform( 0.314428, 0, 0.949281, 0, 1, 0, -0.949281, 0, 0.314428, 3.71469, 0, -1.10818 )
-_key = "Prisoner1"
-_displayName = "Prisoner 1"
 
 [node name="Prisoner2" parent="Entities/Characters" index="2" instance=ExtResource( 4 )]
 transform = Transform( 0.333089, 0, -0.942895, 0, 1, 0, 0.942895, 0, 0.333089, -0.553927, 0, 0 )
-_key = "Prisoner2"
-_displayName = "Prisoner 2"
 
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
 editor/display_folded = true
 transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.0106896, -4.83758 )
-EquipmentType = 0
+physics_material_override = SubResource( 2 )
 
 [node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 5 )]
 editor/display_folded = true
 transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, -0.000949442, -4.84427 )
-EquipmentType = 0
+physics_material_override = SubResource( 3 )
 
 [node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 6 )]
 editor/display_folded = true
 transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, -0.0411875, -4.76719 )
+physics_material_override = SubResource( 4 )
 
 [node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 6 )]
 transform = Transform( -0.976579, 0, 0.215161, 0, 1, 0, -0.215161, 0, -0.976579, 1.12769, -0.0411875, -4.72258 )
+physics_material_override = SubResource( 5 )
 
 [node name="Main Chamber 02" parent="Static Objects" index="0" instance=ExtResource( 7 )]
 
@@ -105,7 +130,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 6 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "mesh" ]
@@ -121,7 +146,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 6 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "mesh" ]

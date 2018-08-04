@@ -11,6 +11,6 @@ namespace AlleyCat.UI
         public bool Modal { get; set; }
 
         public override bool AllowedFor(IActor context) =>
-            !Modal || GetTree().GetNodesInGroup(TagModal).Length == 0;
+            !Modal || GetTree().GetNodesInGroup(TagModal).Count == 0;
     }
 }

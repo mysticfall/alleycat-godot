@@ -76,7 +76,7 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
                 .Select(direction => Origin + direction * MaxFocalDistance)
-                .Select(to => Camera.GetWorld().IntersectRay(Origin, to, new object[] {Character}))
+                .Select(to => Camera.GetWorld().IntersectRay(Origin, to, new Godot.Array {Character}))
                 .Select(hit => hit?.Collider?.FindEntity())
                 .Select(e => e != null && e.Valid && e.Visible ? e : null)
                 .DistinctUntilChanged()

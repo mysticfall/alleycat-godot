@@ -12,6 +12,7 @@ using AlleyCat.View;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using Array = Godot.Array;
 
 namespace AlleyCat.UI.Inventory
 {
@@ -165,7 +166,7 @@ namespace AlleyCat.UI.Inventory
                     var button = (Button) _actionButton.Instance();
 
                     button.Text = action.DisplayName;
-                    button.Connect("pressed", this, nameof(OnButtonPress), new object[] {action.Key});
+                    button.Connect("pressed", this, nameof(OnButtonPress), new Array {action.Key});
 
                     Buttons.AddChild(button);
                 }

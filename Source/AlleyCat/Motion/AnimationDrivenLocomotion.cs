@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
@@ -8,6 +7,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
+using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Motion
 {
@@ -50,7 +50,7 @@ namespace AlleyCat.Motion
         [Export, NotNull]
         public string PositionBone { get; set; } = "root";
 
-        public IEnumerable<string> AnimationPrefixes => _animationPrefixes.TrimToEnumerable();
+        public Gen.IEnumerable<string> AnimationPrefixes => _animationPrefixes.TrimToEnumerable();
 
         [Export, UsedImplicitly] private string _animationPrefixes = "Walk,Run,Turn,Strafe";
 
@@ -87,7 +87,7 @@ namespace AlleyCat.Motion
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
 
-            var prefixes = new HashSet<string>(AnimationPrefixes);
+            var prefixes = new Gen.HashSet<string>(AnimationPrefixes);
 
             AnimationManager.Player
                 .GetAnimationList()

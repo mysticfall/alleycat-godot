@@ -216,7 +216,7 @@ namespace AlleyCat.View
             var onRayCast = this.OnPhysicsProcess()
                 .Where(_ => Active && Valid)
                 .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
-                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new object[] {Character}));
+                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new Godot.Array {Character}));
 
             onRayCast
                 .Select(hit => hit == null ? float.MaxValue : Viewpoint.DistanceTo(hit.Position))

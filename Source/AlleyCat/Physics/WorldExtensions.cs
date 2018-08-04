@@ -3,6 +3,7 @@ using System.Linq;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Physics
 {
@@ -15,7 +16,7 @@ namespace AlleyCat.Physics
             [NotNull] this World world,
             Vector3 from,
             Vector3 to,
-            object[] exclude = null,
+            Array exclude = null,
             int collisionLayer = NoCollisionLayer)
         {
             Ensure.Any.IsNotNull(world, nameof(world));
@@ -37,7 +38,7 @@ namespace AlleyCat.Physics
 
             return world.DirectSpaceState
                 .IntersectShape(shape, maxResults)
-                .Cast<Dictionary<object, object>>()
+                .Cast<IDictionary<object, object>>()
                 .Where(d => d.ContainsKey("collider"))
                 .Select(d => new Collision(d));
         }
@@ -53,7 +54,7 @@ namespace AlleyCat.Physics
 
             return world.DirectSpaceState
                 .CollideShape(shape, maxResults)
-                .Cast<Dictionary<object, object>>()
+                .Cast<IDictionary<object, object>>()
                 .Where(d => d.ContainsKey("collider"))
                 .Select(d => new Collision(d));
         }

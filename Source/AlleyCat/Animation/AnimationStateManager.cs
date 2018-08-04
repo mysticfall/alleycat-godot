@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using AlleyCat.Autowire;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
+using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Animation
 {
@@ -24,7 +24,7 @@ namespace AlleyCat.Animation
 
         private IScheduler _scheduler;
 
-        private IDictionary<int, string> _overrides = new Dictionary<int, string>(0);
+        private Gen.IDictionary<int, string> _overrides = new Gen.Dictionary<int, string>(0);
 
         private int _overridableSlots;
 
@@ -98,7 +98,7 @@ namespace AlleyCat.Animation
 
             if (reset == null) return;
 
-            var filtered = new HashSet<string>(FindTransformTracks(animation).Select(p => p.ToString()));
+            var filtered = new Gen.HashSet<string>(FindTransformTracks(animation).Select(p => p.ToString()));
 
             FindTransformTracks(reset)
                 .ToList()
@@ -131,7 +131,7 @@ namespace AlleyCat.Animation
             _overrides.Remove(slot);
         }
 
-        private static IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
+        private static Gen.IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
         {
             var tracks = animation.GetTrackCount();
 
