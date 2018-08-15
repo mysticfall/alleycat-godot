@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Reactive;
 using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
-    public interface IAnimationManager : IActivatable, IGameLoopAware
+    public interface IAnimationManager : IActivatable
     {
         AnimationPlayer Player { get; }
-
-        IObservable<Unit> OnBeforeAdvance { get; }
 
         IObservable<float> OnAdvance { get; }
 
         IObservable<AnimationEvent> OnAnimationEvent { get; }
 
-        void Advance(float delta);
-
-        void Play([NotNull] Godot.Animation animation, [CanBeNull] System.Action onFinish = null);
+        void Play([NotNull] Godot.Animation animation);
     }
 }

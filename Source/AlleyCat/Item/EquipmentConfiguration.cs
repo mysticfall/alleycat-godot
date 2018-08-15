@@ -38,6 +38,12 @@ namespace AlleyCat.Item
         [Export]
         public Godot.Animation Animation { get; set; }
 
+        [Export]
+        public string AnimationBlend { get; set; }
+
+        [Export(PropertyHint.ExpRange, "0,10")]
+        public float AnimationTransition { get; set; } = 1f;
+
         public IEnumerable<string> Tags => GetGroups().OfType<string>();
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>();
@@ -55,10 +61,11 @@ namespace AlleyCat.Item
             Ensure.Any.IsNotNull(holder, nameof(holder));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
 
-            if (holder.AnimationManager is IAnimationStateManager animator && Animation != null)
+            if (holder.AnimationManager is IAnimationStateManager animator &&
+                Animation != null &&
+                AnimationBlend != null)
             {
-                //TODO Should leave some 'room' for root motion animations so that they can still fire Reset().
-                animator.Blend(Animation, 0.99f);
+                animator.Blend(AnimationBlend, Animation, transition: AnimationTransition);
             }
 
             if (Mesh == null) return;
@@ -74,9 +81,9 @@ namespace AlleyCat.Item
             Ensure.Any.IsNotNull(holder, nameof(holder));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
 
-            if (holder.AnimationManager is IAnimationStateManager animator && Animation != null)
+            if (holder.AnimationManager is IAnimationStateManager animator && AnimationBlend != null)
             {
-                animator.Unblend(Animation.GetName());
+                animator.Unblend(AnimationBlend, AnimationTransition);
             }
 
             foreach (var mesh in equipment.Meshes)

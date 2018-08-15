@@ -1,6 +1,4 @@
 using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -26,21 +24,14 @@ namespace AlleyCat.Animation
         [Service]
         public AnimationPlayer Player { get; private set; }
 
-        public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance;
+        //FIXME A temporary workaround until godotengine/godot#17623 gets fixed.
+        public virtual IObservable<float> OnAdvance => OnLoop;
 
-        public IObservable<float> OnAdvance => _onAdvance;
-
-        public IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
+        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
-        private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
-
-        private readonly Subject<float> _onAdvance = new Subject<float>();
-
         private readonly Subject<AnimationEvent> _onAnimationEvent = new Subject<AnimationEvent>();
-
-        private bool _playingOneShotAnimation;
 
         public AnimationManager()
         {
@@ -52,74 +43,23 @@ namespace AlleyCat.Animation
         {
             Player.PlaybackActive = false;
 
-            OnLoop
-                .Where(_ => Active)
-                .Subscribe(Advance)
+            OnActiveStateChange
+                .Subscribe(Player.SetActive)
                 .AddTo(this);
         }
 
-        public virtual void Advance(float delta)
-        {
-            _onBeforeAdvance.OnNext(Unit.Default);
-
-            if (!_playingOneShotAnimation)
-            {
-                ProcessFrames(delta);
-            }
-
-            _onAdvance.OnNext(delta);
-        }
-
-        public virtual void Play(Godot.Animation animation, System.Action onFinish = null)
+        public virtual void Play(Godot.Animation animation)
         {
             Ensure.Any.IsNotNull(animation, nameof(animation));
 
             var name = animation.GetName();
-            var needToAdd = !Player.HasAnimation(name);
 
-            if (needToAdd)
+            if (!Player.HasAnimation(name))
             {
                 Player.AddAnimation(name, animation).ThrowIfNecessary();
             }
 
-            _playingOneShotAnimation = true;
-            Player.PlaybackActive = true;
-
-            void Reset(bool invokeCallback)
-            {
-                _playingOneShotAnimation = false;
-                Player.PlaybackActive = false;
-
-                if (invokeCallback)
-                {
-                    onFinish?.Invoke();
-                }
-
-                if (needToAdd)
-                {
-                    Player.RemoveAnimation(name);
-                }
-            }
-
-            try
-            {
-                Player.Play(name);
-
-                Player.OnAnimationFinish()
-                    .Where(e => e.Animation == name)
-                    .AsUnitObservable()
-                    .Merge(
-                        Player.OnAnimationChange()
-                            .Where(e => e.OldAnimation == name)
-                            .AsUnitObservable())
-                    .Subscribe(_ => Reset(true), _ => Reset(false))
-                    .AddTo(this);
-            }
-            catch (Exception)
-            {
-                Reset(false);
-                throw;
-            }
+            Player.Play(name);
         }
 
         [UsedImplicitly]
@@ -131,17 +71,9 @@ namespace AlleyCat.Animation
             _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
         }
 
-        protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
-
         protected override void OnPreDestroy()
         {
             _active?.Dispose();
-
-            _onBeforeAdvance?.OnCompleted();
-            _onBeforeAdvance?.Dispose();
-
-            _onAdvance?.OnCompleted();
-            _onAdvance?.Dispose();
 
             _onAnimationEvent?.OnCompleted();
             _onAnimationEvent?.Dispose();

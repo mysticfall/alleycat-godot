@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Item.mesh" type="ArrayMesh" id=2]
@@ -12,11 +12,18 @@
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=10]
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=11]
 
-[sub_resource type="BoxShape" id=1]
+[sub_resource type="PhysicsMaterial" id=1]
+
+bounce = 0.0
+bounce_combine_mode = 0
+friction = 1.0
+friction_combine_mode = 2
+
+[sub_resource type="BoxShape" id=2]
 
 extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
-[node name="Collar" type="RigidBody" index="0"]
+[node name="Collar" type="RigidBody"]
 input_ray_pickable = false
 input_capture_on_drag = false
 collision_layer = 1
@@ -25,6 +32,7 @@ mode = 0
 mass = 1.0
 friction = 1.0
 bounce = 0.0
+physics_material_override = SubResource( 1 )
 gravity_scale = 1.0
 custom_integrator = false
 continuous_cd = false
@@ -49,7 +57,7 @@ _displayName = "item.Collar"
 _description = "item.Collar.Description"
 _itemMesh = ExtResource( 2 )
 
-[node name="Mesh" type="MeshInstance" parent="." index="0"]
+[node name="Mesh" type="MeshInstance" parent="."]
 editor/display_folded = true
 layers = 1
 material_override = null
@@ -65,21 +73,21 @@ skeleton = NodePath("")
 material/0 = null
 _sections_unfolded = [ "Geometry" ]
 
-[node name="Binding" type="Node" parent="Mesh" index="0"]
+[node name="Binding" type="Node" parent="Mesh"]
 script = ExtResource( 3 )
 
-[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="."]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0164012, -0.00723294 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 disabled = false
 
-[node name="Binding" type="Node" parent="CollisionShape" index="0"]
+[node name="Binding" type="Node" parent="CollisionShape"]
 script = ExtResource( 3 )
 
-[node name="Actions" type="Node" parent="." index="2"]
+[node name="Actions" type="Node" parent="."]
 
-[node name="Pickup" type="Node" parent="Actions" index="0"]
+[node name="Pickup" type="Node" parent="Actions"]
 script = ExtResource( 4 )
 ProcessMode = 0
 Active = true
@@ -89,7 +97,7 @@ PickupDistance = 1.2
 Animation = ExtResource( 5 )
 _tags = "TagCarry,TagHand"
 
-[node name="Drop" type="Node" parent="Actions" index="1"]
+[node name="Drop" type="Node" parent="Actions"]
 script = ExtResource( 6 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
@@ -97,9 +105,9 @@ Active = true
 _key = "Drop"
 _displayName = "action.Drop"
 
-[node name="Configurations" type="Node" parent="." index="3"]
+[node name="Configurations" type="Node" parent="."]
 
-[node name="Wear" type="Node" parent="Configurations" index="0" groups=[
+[node name="Wear" type="Node" parent="Configurations" groups=[
 "TagWear",
 ]]
 script = ExtResource( 7 )
@@ -110,8 +118,10 @@ _additionalSlots = ""
 Active = false
 Mesh = ExtResource( 8 )
 Animation = null
+AnimationBlend = ""
+AnimationTransition = 1.0
 
-[node name="Carry" type="Node" parent="Configurations" index="1" groups=[
+[node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",
 "TagHand",
 "TagOneHand",
@@ -120,19 +130,21 @@ script = ExtResource( 9 )
 ProcessMode = 0
 _key = "Carry"
 _slot = "RightHand"
-_additionalSlots = null
+_additionalSlots = ""
 Active = false
 Mesh = null
 Animation = ExtResource( 10 )
+AnimationBlend = "Hands"
+AnimationTransition = 1.0
 
-[node name="Markers" type="Spatial" parent="." index="4"]
+[node name="Markers" type="Spatial" parent="."]
 
-[node name="Label" type="Spatial" parent="Markers" index="0"]
+[node name="Label" type="Spatial" parent="Markers"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.104555, 0.0142181 )
 script = ExtResource( 11 )
 _key = "Label"
 
-[node name="Carry" type="Spatial" parent="Markers" index="1"]
+[node name="Carry" type="Spatial" parent="Markers"]
 transform = Transform( -0.890473, -0.454006, -0.0306126, 0.403806, -0.757416, -0.51309, 0.209759, -0.469254, 0.857788, -0.00525796, 0.0126396, 0.137194 )
 script = ExtResource( 11 )
 _key = "Carry"

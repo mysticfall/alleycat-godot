@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Concurrency;
 using AlleyCat.Autowire;
-using AlleyCat.Event;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using JetBrains.Annotations;
 using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Animation
@@ -12,142 +12,111 @@ namespace AlleyCat.Animation
     [Singleton(typeof(IAnimationManager), typeof(IAnimationStateManager))]
     public class AnimationStateManager : AnimationManager, IAnimationStateManager
     {
-        public const string ResetAnimation = "Reset";
-
-        public const string OneShotNode = "One Shot";
-
-        public const string OneShotTriggerNode = "One Shot Trigger";
-
-        public const string OverrideNodePrefix = "Override ";
-
-        public const string OverrideBlendNodePrefix = "Override Blend ";
-
-        private IScheduler _scheduler;
-
-        private Gen.IDictionary<int, string> _overrides = new Gen.Dictionary<int, string>(0);
-
-        private int _overridableSlots;
-
-        private IDisposable _oneShotAnimationCallback;
-
         [Service]
-        public AnimationTreePlayer TreePlayer { get; private set; }
+        public AnimationTree AnimationTree { get; private set; }
+
+        public AnimationNodeStateMachine States
+        {
+            get
+            {
+                var current = TransitionNode.GetInputConnection(TransitionNode.Current);
+
+                return RootNode?.GetNode(current) as AnimationNodeStateMachine;
+            }
+        }
+
+        public Gen.IReadOnlyDictionary<string, AnimationBlender> Blenders =>
+            _blenderMap ?? Enumerable.Empty<AnimationBlender>().ToDictionary(i => i.Key);
+
+        protected AnimationNodeBlendTree RootNode { get; private set; }
+
+        protected AnimationNodeTransition TransitionNode { get; private set; }
+
+        protected AnimationNodeAnimation ActionNode =>
+            _actionNode != null ? States.GetNode(_actionNode) as AnimationNodeAnimation : null;
+
+        [Export, UsedImplicitly] private string _actionNode = "Act";
+
+        [Export, UsedImplicitly] private string _transitionNode = "Transition";
+
+        private Gen.IEnumerable<AnimationBlender> _blenders;
+
+        private Gen.IReadOnlyDictionary<string, AnimationBlender> _blenderMap;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            TreePlayer.Active = false;
+            RootNode = (AnimationNodeBlendTree) AnimationTree?.TreeRoot;
 
-            _scheduler = this.GetScheduler(ProcessMode);
+            Debug.Assert(RootNode != null, "RootNode != null");
 
-            _overridableSlots = TreePlayer.GetNodeList().Count(n => n.StartsWith(OverrideBlendNodePrefix));
-            _overrides = Enumerable
-                .Range(1, _overridableSlots)
-                .Select(i => (Index: i, Name: OverrideNodePrefix + i))
-                .Select(t => (t.Index, Slot: TreePlayer.AnimationNodeGetAnimation(t.Name)?.GetName()))
-                .Where(t => t.Slot != null)
-                .ToDictionary(t => t.Index, t => t.Slot);
+            TransitionNode = RootNode.GetNode(_transitionNode) as AnimationNodeTransition;
+
+            Debug.Assert(TransitionNode != null, "TransitionNode != null");
+
+            var output = RootNode.GetNode("output");
+
+            Debug.Assert(output != null, "output != null");
+
+            _blenders = CreateBlenders(output);
+            _blenderMap = _blenders.ToDictionary();
         }
 
-        public override void Advance(float delta)
-        {
-            TreePlayer.Advance(0);
-
-            base.Advance(delta);
-        }
-
-        protected override void ProcessFrames(float delta) => TreePlayer.Advance(delta);
-
-        public override void Play(Godot.Animation animation, System.Action onFinish = null)
-        {
-            _oneShotAnimationCallback?.Dispose();
-
-            TreePlayer.AnimationNodeSetAnimation(OneShotNode, animation);
-            TreePlayer.OneshotNodeStart(OneShotTriggerNode);
-
-            if (onFinish != null)
-            {
-                _oneShotAnimationCallback = _scheduler?.Schedule(
-                    TimeSpan.FromSeconds(animation.Length), onFinish);
-            }
-        }
-
-        public void Blend(Godot.Animation animation, float influence = 1f)
+        public override void Play(Godot.Animation animation)
         {
             Ensure.Any.IsNotNull(animation, nameof(animation));
 
-            var slot = Enumerable
-                .Range(1, _overridableSlots)
-                .FirstOrDefault(i => !_overrides.ContainsKey(i));
+            var name = animation.GetName();
 
-            if (slot == default)
+            if (!Player.HasAnimation(name))
             {
-                throw new InvalidOperationException(
-                    $"No overridable slots left: total = {_overridableSlots}.");
+                Player.AddAnimation(name, animation).ThrowIfNecessary();
+
+                AnimationTree.InvalidateCaches();
             }
 
-            var blendNode = OverrideBlendNodePrefix + slot;
+            ActionNode?.SetAnimation(name);
 
-            _overrides[slot] = animation.GetName();
-
-            TreePlayer.AnimationNodeSetAnimation(OverrideNodePrefix + slot, animation);
-            TreePlayer.Blend2NodeSetAmount(blendNode, influence);
-
-            var reset = Player.GetAnimation(ResetAnimation);
-
-            if (reset == null) return;
-
-            var filtered = new Gen.HashSet<string>(FindTransformTracks(animation).Select(p => p.ToString()));
-
-            FindTransformTracks(reset)
-                .ToList()
-                .ForEach(p => TreePlayer.Blend2NodeSetFilterPath(blendNode, p, !filtered.Contains(p.ToString())));
+            States.Travel(_actionNode);
         }
 
-        public void Unblend(string animation)
+        protected override void ProcessLoop(float delta)
         {
-            Ensure.Any.IsNotNull(animation, nameof(animation));
+            base.ProcessLoop(delta);
 
-            var slot = _overrides.FirstOrDefault(i => i.Value == animation).Key;
+            if (!Active) return;
 
-            if (slot == default) return;
-
-            var animNode = OverrideNodePrefix + slot;
-            var blendNode = OverrideBlendNodePrefix + slot;
-
-            TreePlayer.Blend2NodeSetAmount(blendNode, 0);
-            TreePlayer.AnimationNodeSetAnimation(animNode, null);
-
-            var reset = Player.GetAnimation(ResetAnimation);
-
-            if (reset != null)
+            foreach (var blender in _blenders)
             {
-                FindTransformTracks(reset)
-                    .ToList()
-                    .ForEach(p => TreePlayer.Blend2NodeSetFilterPath(blendNode, p, true));
+                blender.Process(delta);
+            }
+        }
+
+        protected virtual Gen.IEnumerable<AnimationBlender> CreateBlenders(AnimationNode output)
+        {
+            var sources = new Gen.List<AnimationBlender>();
+            var parent = (AnimationNodeBlendTree) output.GetParent();
+
+            var node = output;
+
+            while (true)
+            {
+                var name = node.GetInputConnection(0);
+                var input = parent.GetNode(name);
+
+                if (input is AnimationNodeBlend2 next)
+                {
+                    node = next;
+                    sources.Add(new AnimationBlender(name, next));
+                }
+                else
+                {
+                    break;
+                }
             }
 
-            _overrides.Remove(slot);
-        }
-
-        private static Gen.IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
-        {
-            var tracks = animation.GetTrackCount();
-
-            return Enumerable
-                .Range(0, tracks)
-                .Select(i => (path: animation.TrackGetPath(i), type: animation.TrackGetType(i)))
-                .Where(t => t.type == Godot.Animation.TrackType.Transform)
-                .Select(t => t.path);
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _oneShotAnimationCallback?.Dispose();
-            _oneShotAnimationCallback = null;
-
-            base.OnPreDestroy();
+            return sources;
         }
     }
 }

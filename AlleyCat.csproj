@@ -68,6 +68,7 @@
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationStateManager.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationBlender.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationStateManager.cs" />
