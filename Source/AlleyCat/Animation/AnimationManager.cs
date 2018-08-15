@@ -66,7 +66,7 @@ namespace AlleyCat.Animation
         public void FireEvent(string name) => FireEvent(name, null);
 
         [UsedImplicitly]
-        public void FireEvent(string name, string argument)
+        public void FireEvent(string name, object argument)
         {
             _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
         }

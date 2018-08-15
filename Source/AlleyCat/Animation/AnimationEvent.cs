@@ -10,12 +10,12 @@ namespace AlleyCat.Animation
         public string Name { get; }
 
         [CanBeNull]
-        public string Argument { get; }
+        public object Argument { get; }
 
         public IAnimationManager Source { get; }
 
         public AnimationEvent(
-            [NotNull] string name, [CanBeNull] string argument, [NotNull] IAnimationManager source)
+            [NotNull] string name, [CanBeNull] object argument, [NotNull] IAnimationManager source)
         {
             Ensure.Any.IsNotNull(source, nameof(source));
 
