@@ -22,13 +22,19 @@ namespace AlleyCat.Animation
             [NotNull] this IAnimationStateManager manager,
             [NotNull] string position,
             [NotNull] Godot.Animation animation,
-            float amount = 1f,
             float timeScale = 1f,
+            float amount = 1f,
             float transition = 0f)
         {
             Ensure.Any.IsNotNull(manager, nameof(manager));
             Ensure.Any.IsNotNull(position, nameof(position));
             Ensure.Any.IsNotNull(animation, nameof(animation));
+
+            Ensure.Comparable.IsGte(timeScale, 0f, nameof(timeScale));
+            Ensure.Comparable.IsLte(timeScale, 1f, nameof(timeScale));
+            Ensure.Comparable.IsGte(amount, 0f, nameof(amount));
+            Ensure.Comparable.IsLte(amount, 1f, nameof(amount));
+            Ensure.Comparable.IsGte(transition, 0f, nameof(transition));
 
             manager.Blenders.TryGetValue(position, out var blender);
 
@@ -64,6 +70,8 @@ namespace AlleyCat.Animation
         {
             Ensure.Any.IsNotNull(manager, nameof(manager));
             Ensure.Any.IsNotNull(position, nameof(position));
+
+            Ensure.Comparable.IsGte(transition, 0f, nameof(transition));
 
             manager.Blenders.TryGetValue(position, out var blender);
 
