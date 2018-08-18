@@ -5,7 +5,7 @@
 [ext_resource path="res://Data/Themes/Fullscreen UI.tres" type="Theme" id=3]
 [ext_resource path="res://logo-trans.png" type="Texture" id=4]
 
-[node name="Menu Screen" type="Panel" index="0" groups=[
+[node name="Menu Screen" type="Panel" groups=[
 "Modal",
 ]]
 pause_mode = 2
@@ -23,8 +23,9 @@ size_flags_vertical = 1
 script = ExtResource( 2 )
 _sections_unfolded = [ "Margin", "Material", "Mouse", "Pause", "custom_styles/panel" ]
 CloseAction = "ui_cancel"
+PauseWhenVisible = true
 
-[node name="Panel" type="Panel" parent="." index="0"]
+[node name="Panel" type="Panel" parent="."]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -42,7 +43,7 @@ size_flags_vertical = 1
 theme = ExtResource( 3 )
 _sections_unfolded = [ "Margin", "custom_styles/panel", "theme" ]
 
-[node name="Logo" type="TextureRect" parent="Panel" index="0"]
+[node name="Logo" type="TextureRect" parent="Panel"]
 anchor_left = 0.5
 anchor_top = 0.0
 anchor_right = 0.5
@@ -61,7 +62,7 @@ texture = ExtResource( 4 )
 stretch_mode = 0
 _sections_unfolded = [ "Margin" ]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -80,14 +81,14 @@ custom_constants/separation = 10
 alignment = 2
 _sections_unfolded = [ "Custom Constants", "Margin", "Rect" ]
 
-[node name="ResumeButton" type="Button" parent="Panel/VBoxContainer" index="0"]
+[node name="ResumeButton" type="Button" parent="Panel/VBoxContainer"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 17.0
+margin_top = 38.0
 margin_right = 231.0
-margin_bottom = 62.0
+margin_bottom = 76.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -105,14 +106,14 @@ flat = false
 align = 1
 _sections_unfolded = [ "Mouse", "Theme", "shortcut", "theme" ]
 
-[node name="SettingsButton" type="Button" parent="Panel/VBoxContainer" index="1"]
+[node name="SettingsButton" type="Button" parent="Panel/VBoxContainer"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 72.0
+margin_top = 86.0
 margin_right = 231.0
-margin_bottom = 117.0
+margin_bottom = 124.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -131,12 +132,12 @@ flat = false
 align = 1
 _sections_unfolded = [ "Mouse", "Theme", "theme" ]
 
-[node name="QuitButton" type="Button" parent="Panel/VBoxContainer" index="2"]
+[node name="QuitButton" type="Button" parent="Panel/VBoxContainer"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 127.0
+margin_top = 134.0
 margin_right = 231.0
 margin_bottom = 172.0
 rect_pivot_offset = Vector2( 0, 0 )

@@ -41,7 +41,7 @@ anti_aliasing = true
 anti_aliasing_size = 1
 _sections_unfolded = [ "Border", "Border Width" ]
 
-[node name="Entity Label" type="Panel" index="0"]
+[node name="Entity Label" type="Panel"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -60,7 +60,7 @@ _sections_unfolded = [ "Custom Styles", "Mouse" ]
 InteractAction = "interact"
 DefaultKeyLabel = "?"
 
-[node name="Container" type="VBoxContainer" parent="." index="0"]
+[node name="Container" type="VBoxContainer" parent="."]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -75,15 +75,15 @@ custom_constants/separation = 4
 alignment = 1
 _sections_unfolded = [ "Custom Constants", "Mouse", "Size Flags" ]
 
-[node name="Title" type="Label" parent="Container" index="0"]
+[node name="Title" type="Label" parent="Container"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 142.0
-margin_top = 110.0
-margin_right = 235.0
-margin_bottom = 130.0
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 111.0
+margin_bottom = 31.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -101,15 +101,15 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Custom Colors", "Custom Fonts", "Mouse", "Size Flags" ]
 
-[node name="Action" type="HBoxContainer" parent="Container" index="1"]
+[node name="Action" type="HBoxContainer" parent="Container"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 153.0
-margin_top = 134.0
-margin_right = 224.0
-margin_bottom = 160.0
+margin_left = 21.0
+margin_top = 35.0
+margin_right = 100.0
+margin_bottom = 61.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -120,7 +120,7 @@ custom_constants/separation = 6
 alignment = 0
 _sections_unfolded = [ "Custom Constants", "Mouse", "Size Flags" ]
 
-[node name="Shortcut" type="Label" parent="Container/Action" index="0"]
+[node name="Shortcut" type="Label" parent="Container/Action"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -143,15 +143,15 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Custom Colors", "Custom Fonts", "Custom Styles", "Margin", "Mouse", "Size Flags", "custom_styles/normal" ]
 
-[node name="Action Title" type="Label" parent="Container/Action" index="1"]
+[node name="Action Title" type="Label" parent="Container/Action"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 30.0
-margin_top = 4.0
-margin_right = 71.0
-margin_bottom = 22.0
+margin_top = 3.0
+margin_right = 79.0
+margin_bottom = 23.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2

@@ -4,7 +4,6 @@
 [ext_resource path="res://Source/AlleyCat/UI/Console/DebugConsole.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/UI/Console/BasicConsoleCommands.cs" type="Script" id=3]
 
-
 [sub_resource type="StyleBoxEmpty" id=1]
 
 content_margin_left = -1.0
@@ -110,7 +109,7 @@ tracks/2/keys = {
 "values": [ 250.0, 0.0 ]
 }
 
-[node name="Console" type="Panel" index="0"]
+[node name="Console" type="Panel"]
 pause_mode = 2
 self_modulate = Color( 1, 1, 1, 0.705882 )
 anchor_left = 0.0
@@ -129,7 +128,7 @@ script = ExtResource( 2 )
 _sections_unfolded = [ "Margin", "Rect", "Theme", "Visibility" ]
 BufferSize = 300
 
-[node name="Container" type="VBoxContainer" parent="." index="0"]
+[node name="Container" type="VBoxContainer" parent="."]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -147,13 +146,13 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Margin" ]
 
-[node name="Content" type="RichTextLabel" parent="Container" index="0"]
+[node name="Content" type="RichTextLabel" parent="Container"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1004.0
-margin_bottom = 152.0
+margin_bottom = 150.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 focus_mode = 2
@@ -174,12 +173,12 @@ selection_enabled = true
 override_selected_font_color = false
 _sections_unfolded = [ "BBCode", "Size Flags", "custom_styles" ]
 
-[node name="InputPane" type="HBoxContainer" parent="Container" index="1"]
+[node name="InputPane" type="HBoxContainer" parent="Container"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 156.0
+margin_top = 154.0
 margin_right = 1004.0
 margin_bottom = 180.0
 rect_pivot_offset = Vector2( 0, 0 )
@@ -191,13 +190,13 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Hint", "Margin" ]
 
-[node name="Input" type="LineEdit" parent="Container/InputPane" index="0"]
+[node name="Input" type="LineEdit" parent="Container/InputPane"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 768.0
-margin_bottom = 24.0
+margin_right = 735.0
+margin_bottom = 26.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -211,20 +210,21 @@ custom_styles/normal = SubResource( 3 )
 secret_character = "*"
 focus_mode = 2
 context_menu_enabled = true
+clear_button_enabled = false
 placeholder_alpha = 0.6
 caret_blink = true
 caret_blink_speed = 0.65
 caret_position = 0
 _sections_unfolded = [ "Caret", "Focus", "Grow Direction", "Margin", "Size Flags", "Theme", "custom_colors", "custom_styles" ]
 
-[node name="ClearButton" type="Button" parent="Container/InputPane" index="1"]
+[node name="ClearButton" type="Button" parent="Container/InputPane"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 772.0
-margin_right = 885.0
-margin_bottom = 24.0
+margin_left = 739.0
+margin_right = 868.0
+margin_bottom = 26.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -241,14 +241,14 @@ flat = false
 align = 1
 _sections_unfolded = [ "Focus", "Margin", "Size Flags" ]
 
-[node name="CloseButton" type="Button" parent="Container/InputPane" index="2"]
+[node name="CloseButton" type="Button" parent="Container/InputPane"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 889.0
+margin_left = 872.0
 margin_right = 1004.0
-margin_bottom = 24.0
+margin_bottom = 26.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -265,7 +265,7 @@ flat = false
 align = 1
 _sections_unfolded = [ "Anchor", "Focus", "Margin" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("..")
 autoplay = ""
 playback_process_mode = 1
@@ -275,9 +275,9 @@ anims/Hide = SubResource( 4 )
 anims/Show = SubResource( 5 )
 blend_times = [  ]
 
-[node name="Commands" type="Node" parent="." index="2"]
+[node name="Commands" type="Node" parent="."]
 
-[node name="Basic Commands" type="Node" parent="Commands" index="0"]
+[node name="Basic Commands" type="Node" parent="Commands"]
 script = ExtResource( 3 )
 ProcessMode = 0
 

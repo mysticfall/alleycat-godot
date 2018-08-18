@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -34,6 +34,7 @@ params_depth_draw_mode = 0
 params_line_width = 1.0
 params_point_size = 1.0
 params_billboard_mode = 0
+params_billboard_keep_scale = false
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 0 )
@@ -74,27 +75,34 @@ size = Vector2( 2, 2 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[sub_resource type="PlaneShape" id=3]
+[sub_resource type="PhysicsMaterial" id=3]
+
+friction = 1.0
+rough = false
+bounce = 0.0
+absorbent = false
+
+[sub_resource type="PlaneShape" id=4]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[node name="Character Creator" type="Node" index="0"]
+[node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
 _viewport = NodePath("UI/Viewport")
 
-[node name="Character" parent="." index="0" instance=ExtResource( 2 )]
+[node name="Character" parent="." instance=ExtResource( 2 )]
 editor/display_folded = true
 _key = "Character"
 _displayName = "Character"
 
-[node name="Binding" type="Node" parent="Character" index="6"]
+[node name="Binding" type="Node" parent="Character"]
 script = ExtResource( 3 )
 
-[node name="Cameras" type="Node" parent="." index="1"]
+[node name="Cameras" type="Node" parent="."]
 
-[node name="Camera" type="Camera" parent="Cameras" index="0"]
+[node name="Camera" type="Camera" parent="Cameras"]
 transform = Transform( -1, 0, -8.74227e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.999999, -3.38069e-07, 0.964255, -1.52218 )
 keep_aspect = 1
 cull_mask = 1048575
@@ -110,9 +118,9 @@ near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="Static Objects" type="Node" parent="." index="2"]
+[node name="Static Objects" type="Node" parent="."]
 
-[node name="Ground" type="MeshInstance" parent="Static Objects" index="0"]
+[node name="Ground" type="MeshInstance" parent="Static Objects"]
 editor/display_folded = true
 layers = 1
 material_override = null
@@ -127,23 +135,24 @@ mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 
-[node name="StaticBody" type="StaticBody" parent="Static Objects/Ground" index="0"]
+[node name="StaticBody" type="StaticBody" parent="Static Objects/Ground"]
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
 collision_mask = 1
 friction = 1.0
 bounce = 0.0
+physics_material_override = SubResource( 3 )
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Static Objects/Ground/StaticBody" index="0"]
-shape = SubResource( 3 )
+[node name="CollisionShape" type="CollisionShape" parent="Static Objects/Ground/StaticBody"]
+shape = SubResource( 4 )
 disabled = false
 
-[node name="Control" type="Node" parent="." index="3"]
+[node name="Control" type="Node" parent="."]
 
-[node name="View" type="Node" parent="Control" index="0"]
+[node name="View" type="Node" parent="Control"]
 script = ExtResource( 4 )
 ProcessMode = 2
 Active = true
@@ -160,13 +169,14 @@ _maxDistance = 3.0
 _rotationModifier = "point"
 _panningModifier = "point2"
 
-[node name="Rotation" type="Node" parent="Control/View" index="0"]
+[node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/View/Rotation" index="0"]
+[node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.8
 Curve = null
@@ -177,8 +187,9 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Y" type="Node" parent="Control/View/Rotation" index="1"]
+[node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.0
 Curve = null
@@ -189,13 +200,14 @@ WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Pan" type="Node" parent="Control/View" index="1"]
+[node name="Pan" type="Node" parent="Control/View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/View/Pan" index="0"]
+[node name="X" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.0
 Curve = null
@@ -206,8 +218,9 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Y" type="Node" parent="Control/View/Pan" index="1"]
+[node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 6 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.8
 Curve = null
@@ -218,13 +231,14 @@ WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Zoom" type="Node" parent="Control/View" index="2"]
+[node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="Value" type="Node" parent="Control/View/Zoom" index="0"]
+[node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 7 )
+ProcessMode = 0
 Active = true
 Sensitivity = 0.5
 Curve = null
@@ -236,9 +250,9 @@ PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
 
-[node name="UI" type="Node" parent="." index="4"]
+[node name="UI" type="Node" parent="."]
 
-[node name="Viewport" type="Container" parent="UI" index="0"]
+[node name="Viewport" type="Container" parent="UI"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -251,7 +265,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 _sections_unfolded = [ "Mouse" ]
 
-[node name="MorphsPanel" type="Panel" parent="UI/Viewport" index="0"]
+[node name="MorphsPanel" type="Panel" parent="UI/Viewport"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -267,7 +281,7 @@ script = ExtResource( 8 )
 _sections_unfolded = [ "Mouse", "Rect" ]
 _groupPanelScene = ExtResource( 9 )
 
-[node name="TabContainer" type="TabContainer" parent="UI/Viewport/MorphsPanel" index="0"]
+[node name="TabContainer" type="TabContainer" parent="UI/Viewport/MorphsPanel"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0

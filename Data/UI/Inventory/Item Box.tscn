@@ -15,7 +15,7 @@ subdivide_depth = 0
 [node name="Item Box" type="Spatial"]
 _sections_unfolded = [ "Transform" ]
 
-[node name="Item" type="MeshInstance" parent="." index="0"]
+[node name="Item" type="MeshInstance" parent="."]
 layers = 2
 material_override = null
 cast_shadow = 1
@@ -30,7 +30,7 @@ skeleton = NodePath("..")
 material/0 = null
 script = ExtResource( 1 )
 
-[node name="Camera" type="Camera" parent="." index="1"]
+[node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.17517 )
 keep_aspect = 1
 cull_mask = 2
@@ -45,7 +45,7 @@ size = 1.0
 near = 0.05
 far = 5.0
 
-[node name="SpotLight" type="SpotLight" parent="." index="2"]
+[node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.982306, -0.0496866, 0.18057, -0.033412, 0.902203, 0.430016, -0.184277, -0.428441, 0.884579, 0.803995, 1.14584, 3.17286 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )

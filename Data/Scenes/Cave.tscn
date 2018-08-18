@@ -25,31 +25,31 @@ compress = false
 
 [sub_resource type="PhysicsMaterial" id=2]
 
-bounce = 0.0
-bounce_combine_mode = 0
 friction = 1.0
-friction_combine_mode = 2
+rough = false
+bounce = 0.0
+absorbent = false
 
 [sub_resource type="PhysicsMaterial" id=3]
 
-bounce = 0.0
-bounce_combine_mode = 0
 friction = 1.0
-friction_combine_mode = 2
+rough = false
+bounce = 0.0
+absorbent = false
 
 [sub_resource type="PhysicsMaterial" id=4]
 
-bounce = 0.0
-bounce_combine_mode = 0
 friction = 1.0
-friction_combine_mode = 2
+rough = false
+bounce = 0.0
+absorbent = false
 
 [sub_resource type="PhysicsMaterial" id=5]
 
-bounce = 0.0
-bounce_combine_mode = 0
 friction = 1.0
-friction_combine_mode = 2
+rough = false
+bounce = 0.0
+absorbent = false
 
 [sub_resource type="PlaneMesh" id=6]
 
@@ -61,6 +61,7 @@ subdivide_width = 0
 subdivide_depth = 0
 
 [node name="Test Area" index="0" instance=ExtResource( 1 )]
+_key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93835, 8.22498, 1.25068 )

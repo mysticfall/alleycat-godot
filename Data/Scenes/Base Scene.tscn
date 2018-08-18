@@ -20,7 +20,7 @@
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
-[node name="Base Scene" type="Node" index="0"]
+[node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
@@ -28,11 +28,11 @@ CharactersPath = NodePath("Entities/Characters")
 ItemsPath = NodePath("Entities/Items")
 _key = null
 
-[node name="Environment" type="Node" parent="." index="0"]
+[node name="Environment" type="Node" parent="."]
 
-[node name="Cameras" type="Node" parent="." index="1"]
+[node name="Cameras" type="Node" parent="."]
 
-[node name="Main Camera" type="Camera" parent="Cameras" index="0" groups=[
+[node name="Main Camera" type="Camera" parent="Cameras" groups=[
 "MainCamera",
 ]]
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0.735734, 1.7292, 0.649309 )
@@ -50,32 +50,32 @@ near = 0.001
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="Entities" type="Node" parent="." index="2"]
+[node name="Entities" type="Node" parent="."]
 
-[node name="Characters" type="Node" parent="Entities" index="0"]
+[node name="Characters" type="Node" parent="Entities"]
 
-[node name="Player" parent="Entities/Characters" index="0" groups=[
+[node name="Player" parent="Entities/Characters" groups=[
 "Player",
 ] instance=ExtResource( 2 )]
 _key = "Player"
 _displayName = "Player"
 
-[node name="Items" type="Node" parent="Entities" index="1"]
+[node name="Items" type="Node" parent="Entities"]
 
-[node name="Static Objects" type="Node" parent="." index="3"]
+[node name="Static Objects" type="Node" parent="."]
 
-[node name="Control" type="Node" parent="." index="4"]
+[node name="Control" type="Node" parent="."]
 
-[node name="Player" type="Node" parent="Control" index="0"]
+[node name="Player" type="Node" parent="Control"]
 script = ExtResource( 3 )
 ProcessMode = 1
 Active = true
 _characterPath = NodePath("../../Entities/Characters/Player")
 _cameraPath = NodePath("../../Cameras/Main Camera")
 
-[node name="Views" type="Node" parent="Control/Player" index="0"]
+[node name="Views" type="Node" parent="Control/Player"]
 
-[node name="Third Person View" type="Node" parent="Control/Player/Views" index="0"]
+[node name="Third Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 4 )
 ProcessMode = 1
 Active = true
@@ -91,12 +91,12 @@ _cameraPath = NodePath("")
 MaxFocalDistance = 3.0
 _characterPath = NodePath("")
 
-[node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View" index="0"]
+[node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="0"]
+[node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -109,7 +109,7 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation" index="1"]
+[node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -122,13 +122,13 @@ WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View" index="1"]
+[node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View"]
 editor/display_folded = true
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom" index="0"]
+[node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom"]
 script = ExtResource( 7 )
 ProcessMode = 0
 Active = true
@@ -142,7 +142,7 @@ PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
 
-[node name="First Person View" type="Node" parent="Control/Player/Views" index="1"]
+[node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )
 ProcessMode = 1
 Active = false
@@ -163,12 +163,12 @@ _maxStabilization = 0.8
 _characterPath = NodePath("")
 _cameraPath = NodePath("")
 
-[node name="Rotation" type="Node" parent="Control/Player/Views/First Person View" index="0"]
+[node name="Rotation" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="0"]
+[node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -181,7 +181,7 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation" index="1"]
+[node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -194,12 +194,12 @@ WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View" index="1"]
+[node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate" index="0"]
+[node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate"]
 script = ExtResource( 9 )
 ProcessMode = 0
 Active = true
@@ -207,7 +207,7 @@ Action = "zoom_out"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Free Camera View" type="Node" parent="Control/Player/Views" index="2"]
+[node name="Free Camera View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 10 )
 ProcessMode = 0
 Active = false
@@ -221,12 +221,12 @@ FocusSpeed = 100.0
 _characterPath = NodePath("")
 _cameraPath = NodePath("")
 
-[node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View" index="0"]
+[node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="0"]
+[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -239,7 +239,7 @@ WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
-[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation" index="1"]
+[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 ProcessMode = 0
 Active = true
@@ -252,12 +252,12 @@ WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
-[node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View" index="1"]
+[node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="0"]
+[node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
 ProcessMode = 0
 Active = true
@@ -271,7 +271,7 @@ PositiveAction = "move_right"
 NegativeAction = "move_left"
 Polling = true
 
-[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement" index="1"]
+[node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
 ProcessMode = 0
 Active = true
@@ -285,12 +285,12 @@ PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
 
-[node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View" index="2"]
+[node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle" index="0"]
+[node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle"]
 script = ExtResource( 9 )
 ProcessMode = 0
 Active = true
@@ -298,12 +298,12 @@ Action = "free_camera"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Movement" type="Node" parent="Control/Player" index="1"]
+[node name="Movement" type="Node" parent="Control/Player"]
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
 
-[node name="X" type="Node" parent="Control/Player/Movement" index="0"]
+[node name="X" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
 ProcessMode = 0
 Active = true
@@ -317,7 +317,7 @@ PositiveAction = "move_right"
 NegativeAction = "move_left"
 Polling = true
 
-[node name="Y" type="Node" parent="Control/Player/Movement" index="1"]
+[node name="Y" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
 ProcessMode = 0
 Active = true
@@ -331,17 +331,17 @@ PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
 
-[node name="Actions" type="Node" parent="Control/Player" index="2"]
+[node name="Actions" type="Node" parent="Control/Player"]
 script = ExtResource( 11 )
 ProcessMode = 0
 
-[node name="Interact" type="Node" parent="Control/Player/Actions" index="0"]
+[node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = NodePath("../../../../Entities/Characters/Player")
 
-[node name="Input" type="Node" parent="Control/Player/Actions/Interact" index="0"]
+[node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
 pause_mode = 2
 script = ExtResource( 9 )
 ProcessMode = 0
@@ -350,24 +350,24 @@ Action = "interact"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Player/Actions/Interact" index="1"]
+[node name="Action" type="Node" parent="Control/Player/Actions/Interact"]
 script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _key = "Interact"
 _displayName = null
 
-[node name="Actions" type="Node" parent="Control" index="1"]
+[node name="Actions" type="Node" parent="Control"]
 script = ExtResource( 11 )
 ProcessMode = 0
 
-[node name="Toggle Console" type="Node" parent="Control/Actions" index="0"]
+[node name="Toggle Console" type="Node" parent="Control/Actions"]
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
-[node name="Input" type="Node" parent="Control/Actions/Toggle Console" index="0"]
+[node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
 script = ExtResource( 9 )
 ProcessMode = 0
@@ -376,7 +376,7 @@ Action = "ui_console"
 UnhandledOnly = false
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Toggle Console" index="1"]
+[node name="Action" type="Node" parent="Control/Actions/Toggle Console"]
 script = ExtResource( 14 )
 ProcessMode = 0
 Active = true
@@ -385,13 +385,13 @@ _displayName = "action.ToggleCosole"
 Modal = false
 _ui = NodePath("/root/AlleyCat/UI/Console")
 
-[node name="Show Inventory" type="Node" parent="Control/Actions" index="1"]
+[node name="Show Inventory" type="Node" parent="Control/Actions"]
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
-[node name="Input" type="Node" parent="Control/Actions/Show Inventory" index="0"]
+[node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
 script = ExtResource( 9 )
 ProcessMode = 0
@@ -400,7 +400,7 @@ Action = "inventory"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Show Inventory" index="1"]
+[node name="Action" type="Node" parent="Control/Actions/Show Inventory"]
 script = ExtResource( 15 )
 ProcessMode = 0
 Active = true
@@ -410,13 +410,13 @@ Modal = true
 UI = ExtResource( 16 )
 _parent = NodePath("../../../../UI")
 
-[node name="Show Menu" type="Node" parent="Control/Actions" index="2"]
+[node name="Show Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _actor = null
 
-[node name="Input" type="Node" parent="Control/Actions/Show Menu" index="0"]
+[node name="Input" type="Node" parent="Control/Actions/Show Menu"]
 pause_mode = 2
 script = ExtResource( 9 )
 ProcessMode = 0
@@ -425,7 +425,7 @@ Action = "ui_cancel"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Show Menu" index="1"]
+[node name="Action" type="Node" parent="Control/Actions/Show Menu"]
 script = ExtResource( 15 )
 ProcessMode = 0
 Active = true
@@ -435,9 +435,9 @@ Modal = true
 UI = ExtResource( 17 )
 _parent = NodePath("../../../../UI")
 
-[node name="UI" type="Node" parent="." index="5"]
+[node name="UI" type="Node" parent="."]
 
-[node name="Crosshair" type="TextureRect" parent="UI" index="0"]
+[node name="Crosshair" type="TextureRect" parent="UI"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -456,6 +456,6 @@ texture = ExtResource( 18 )
 stretch_mode = 4
 _sections_unfolded = [ "Rect", "texture" ]
 
-[node name="Entity Label" parent="UI" index="1" instance=ExtResource( 19 )]
+[node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
 visible = false
 

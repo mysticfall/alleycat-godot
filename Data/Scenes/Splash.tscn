@@ -50,7 +50,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[node name="Splash" type="Panel" index="0"]
+[node name="Splash" type="Panel"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -64,7 +64,7 @@ size_flags_vertical = 1
 custom_styles/panel = SubResource( 1 )
 _sections_unfolded = [ "Theme", "custom_styles" ]
 
-[node name="Logo" type="TextureRect" parent="." index="0"]
+[node name="Logo" type="TextureRect" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -83,7 +83,7 @@ texture = ExtResource( 1 )
 stretch_mode = 4
 _sections_unfolded = [ "Margin", "Visibility" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Logo" index="0"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Logo"]
 root_node = NodePath("..")
 autoplay = "Show Logo"
 playback_process_mode = 1

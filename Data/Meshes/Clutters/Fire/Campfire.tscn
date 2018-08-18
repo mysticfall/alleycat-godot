@@ -30,7 +30,7 @@ flags = 4
 storage = 0
 lossy_quality = 0.7
 flags = 4
-image = SubResource( 2 )
+image = null
 size = Vector2( 2048, 1 )
 
 [sub_resource type="Curve" id=4]
@@ -111,6 +111,7 @@ params_depth_draw_mode = 0
 params_line_width = 1.0
 params_point_size = 1.0
 params_billboard_mode = 3
+params_billboard_keep_scale = false
 params_grow = false
 params_use_alpha_scissor = false
 particles_anim_h_frames = 1
@@ -172,7 +173,7 @@ tracks/0/keys = {
 "values": [ 0.80265, 0.6, 0.85, 0.7, 0.80265 ]
 }
 
-[node name="Campfire" type="OmniLight" index="0"]
+[node name="Campfire" type="OmniLight"]
 transform = Transform( -0.997692, 0, 0.0679029, 0, 1, 0, -0.0679029, 0, -0.997692, 2.72103, 0.337319, -6.21106 )
 layers = 1
 light_color = Color( 0.94902, 0.815686, 0.705882, 1 )
@@ -194,13 +195,13 @@ omni_shadow_mode = 1
 omni_shadow_detail = 1
 _sections_unfolded = [ "Light", "Omni", "Shadow" ]
 
-[node name="Fire" type="Spatial" parent="." index="0"]
+[node name="Fire" type="Spatial" parent="."]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15256e-07, -0.373477, 0 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="MeshInstance" type="MeshInstance" parent="Fire" index="0"]
+[node name="MeshInstance" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.30326, 0.636375, 0.514044 )
 layers = 1
 material_override = null
@@ -216,7 +217,7 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "mesh" ]
 
-[node name="MeshInstance3" type="MeshInstance" parent="Fire" index="1"]
+[node name="MeshInstance3" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.288514, 0.636375, 0.0460079 )
 layers = 1
 material_override = null
@@ -232,7 +233,7 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "mesh" ]
 
-[node name="MeshInstance4" type="MeshInstance" parent="Fire" index="2"]
+[node name="MeshInstance4" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.381146, 0.636375, 0.0651255 )
 layers = 1
 material_override = null
@@ -248,7 +249,7 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "mesh" ]
 
-[node name="MeshInstance2" type="MeshInstance" parent="Fire" index="3"]
+[node name="MeshInstance2" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0412853, 0.636375, -0.0263918 )
 layers = 1
 material_override = null
@@ -264,7 +265,7 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "mesh" ]
 
-[node name="MeshInstance5" type="MeshInstance" parent="Fire" index="4"]
+[node name="MeshInstance5" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.51517, 0.636375, 0.541763 )
 layers = 1
 material_override = null
@@ -280,7 +281,7 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "mesh" ]
 
-[node name="Smoke" type="Particles" parent="." index="1"]
+[node name="Smoke" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-06, 0.577897, 0 )
 layers = 1
 material_override = null
@@ -309,7 +310,7 @@ draw_passes = 1
 draw_pass_1 = SubResource( 8 )
 _sections_unfolded = [ "Draw Passes", "Process Material", "Time", "Transform", "draw_pass_1", "process_material" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("..")
 autoplay = "Flicker"
 playback_process_mode = 1
