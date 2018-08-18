@@ -19,6 +19,9 @@ namespace AlleyCat.Item
         [Export]
         public Godot.Animation Animation { get; set; }
 
+        [Export]
+        public string IKChain { get; set; } = "Right Hand IK";
+
         public IEnumerable<string> Tags => _tags.TrimToEnumerable();
 
         [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
@@ -38,10 +41,17 @@ namespace AlleyCat.Item
                 return;
             }
 
+            if (IKChain != null && character.IKChains.TryGetValue(IKChain, out var chain))
+            {
+                Item.Markers.TryGetValue(configuration.Key, out var marker);
+
+                chain.Target = marker?.GlobalTransform ?? Item.GlobalTransform;
+            }
+
             var animator = character.AnimationManager;
 
             animator.OnAnimationEvent
-                .Where(e => e.Name == "action." + Key)
+                .Where(e => e.Name == "Action" && (string) e.Argument == Key)
                 .Take(1)
                 .Subscribe(_ => character.Equip(Item, configuration))
                 .AddTo(this);

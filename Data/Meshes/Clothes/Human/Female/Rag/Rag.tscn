@@ -94,6 +94,7 @@ _key = "Pickup"
 _displayName = "action.Pickup"
 PickupDistance = 1.2
 Animation = ExtResource( 5 )
+IKChain = "Right Hand IK"
 _tags = "TagCarry,TagHand"
 
 [node name="Drop" type="Node" parent="Actions"]

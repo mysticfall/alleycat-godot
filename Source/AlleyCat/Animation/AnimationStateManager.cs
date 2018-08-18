@@ -85,7 +85,7 @@ namespace AlleyCat.Animation
         {
             base.ProcessLoop(delta);
 
-            if (!Active) return;
+            if (!Active || _blenders == null) return;
 
             foreach (var blender in _blenders)
             {

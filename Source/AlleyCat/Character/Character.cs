@@ -54,6 +54,9 @@ namespace AlleyCat.Character
         public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
             Enumerable.Empty<Marker>().ToDictionary();
 
+        public IReadOnlyDictionary<string, SkeletonIK> IKChains =>
+            _ikChains ?? Enumerable.Empty<SkeletonIK>().ToDictionary(i => i.Name);
+
         public bool Valid => NativeInstance != IntPtr.Zero && !IsQueuedForDeletion();
 
         [Service]
@@ -71,6 +74,8 @@ namespace AlleyCat.Character
 
         private Marker _labelMarker;
 
+        private IReadOnlyDictionary<string, SkeletonIK> _ikChains;
+
         public override void _Ready()
         {
             base._Ready();
@@ -87,6 +92,8 @@ namespace AlleyCat.Character
             }
 
             _labelMarker = this.GetLabelMarker();
+
+            _ikChains = Skeleton.GetChildren<SkeletonIK>().ToDictionary(i => i.Name);
         }
 
         public virtual void SaveState(IState state)

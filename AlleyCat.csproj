@@ -72,6 +72,7 @@
     <Compile Include="Source\AlleyCat\Animation\IAnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimatable.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationStateManager.cs" />
+    <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />

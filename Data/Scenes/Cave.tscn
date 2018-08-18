@@ -60,7 +60,7 @@ size = Vector2( 12, 14 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Test Area" index="0" instance=ExtResource( 1 )]
+[node name="Test Area" instance=ExtResource( 1 )]
 _key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
@@ -91,31 +91,35 @@ light_cull_mask = -1
 [node name="Player" parent="Entities/Characters" index="0" groups=[
 "Character",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, 0.24747, 1.29029 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, -0.108221, 1.06536 )
 
 [node name="Prisoner" parent="Entities/Characters" index="1" instance=ExtResource( 4 )]
 transform = Transform( 0.314428, 0, 0.949281, 0, 1, 0, -0.949281, 0, 0.314428, 3.71469, 0, -1.10818 )
+_key = "Prisoner1"
+_displayName = "Prisoner 1"
 
 [node name="Prisoner2" parent="Entities/Characters" index="2" instance=ExtResource( 4 )]
 transform = Transform( 0.333089, 0, -0.942895, 0, 1, 0, 0.942895, 0, 0.333089, -0.553927, 0, 0 )
+_key = "Prisoner2"
+_displayName = "Prisoner 2"
 
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
 editor/display_folded = true
-transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.0106896, -4.83758 )
+transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.0106896, -0.161989 )
 physics_material_override = SubResource( 2 )
 
 [node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 5 )]
 editor/display_folded = true
-transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, -0.000949442, -4.84427 )
+transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, -0.000949442, -0.168679 )
 physics_material_override = SubResource( 3 )
 
 [node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 6 )]
 editor/display_folded = true
-transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, -0.0411875, -4.76719 )
+transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, -0.0411875, -0.0915985 )
 physics_material_override = SubResource( 4 )
 
 [node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 6 )]
-transform = Transform( -0.976579, 0, 0.215161, 0, 1, 0, -0.215161, 0, -0.976579, 1.12769, -0.0411875, -4.72258 )
+transform = Transform( -0.976579, 0, 0.215161, 0, 1, 0, -0.215161, 0, -0.976579, 1.12769, -0.0411875, -0.0469885 )
 physics_material_override = SubResource( 5 )
 
 [node name="Main Chamber 02" parent="Static Objects" index="0" instance=ExtResource( 7 )]
