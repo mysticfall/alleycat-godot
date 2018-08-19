@@ -16,11 +16,15 @@ namespace AlleyCat.Item
 
         protected override void DoAdd(Equipment item)
         {
+            var transform = item.GlobalTransform;
+
             item.GetParent()?.RemoveChild(item);
 
             var parent = Slots[item.Slot].GetParent(Holder);
 
             parent.AddChild(item);
+
+            item.GlobalTransform = transform;
 
             item.SetOwner(parent.GetOwner());
             item.Equip(Holder);
@@ -28,8 +32,12 @@ namespace AlleyCat.Item
 
         protected override void DoRemove(Equipment item)
         {
+            var transform = item.GlobalTransform;
+
             item.Unequip(Holder);
             item.GetParent()?.RemoveChild(item);
+
+            item.GlobalTransform = transform;
         }
 
         public override bool AllowedFor(ISlotConfiguration context) =>
