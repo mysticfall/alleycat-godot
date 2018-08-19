@@ -32,7 +32,7 @@ namespace AlleyCat.Item
         public IReadOnlyDictionary<string, EquipmentConfiguration> Configurations { get; private set; } =
             Enumerable.Empty<EquipmentConfiguration>().ToDictionary();
 
-        public virtual bool Valid => NativeInstance != IntPtr.Zero;
+        public virtual bool Valid => IsInstanceValid(this);
 
         public bool Equipped => Configuration != null && GetParent() != null;
 

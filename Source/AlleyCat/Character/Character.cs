@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
@@ -57,7 +56,7 @@ namespace AlleyCat.Character
         public IReadOnlyDictionary<string, SkeletonIK> IKChains =>
             _ikChains ?? Enumerable.Empty<SkeletonIK>().ToDictionary(i => i.Name);
 
-        public bool Valid => NativeInstance != IntPtr.Zero && !IsQueuedForDeletion();
+        public bool Valid => IsInstanceValid(this);
 
         [Service]
         protected IRaceRegistry RaceRegistry { get; private set; }
