@@ -77,8 +77,6 @@ namespace AlleyCat.Animation
             if (!Player.HasAnimation(name))
             {
                 Player.AddAnimation(name, animation).ThrowIfNecessary();
-
-                AnimationTree.InvalidateCaches();
             }
 
             ActionNode?.SetAnimation(name);

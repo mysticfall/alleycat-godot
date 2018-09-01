@@ -40,8 +40,6 @@ namespace AlleyCat.Animation
                     if (!Player.HasAnimation(name))
                     {
                         Player.AddAnimation(name, value).ThrowIfNecessary();
-
-                        BlendNode.GetTree().InvalidateCaches();
                     }
 
                     FindTransformTracks(value).ToList().ForEach(filters.Add);
