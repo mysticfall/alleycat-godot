@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -61,6 +62,10 @@ namespace AlleyCat.Animation
 
             _blenders = CreateBlenders(output);
             _blenderMap = _blenders.ToDictionary();
+
+            OnActiveStateChange
+                .Subscribe(AnimationTree.SetActive)
+                .AddTo(this);
         }
 
         public override void Play(Godot.Animation animation)
