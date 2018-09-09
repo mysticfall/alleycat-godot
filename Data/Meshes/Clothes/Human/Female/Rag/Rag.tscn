@@ -92,7 +92,7 @@ ProcessMode = 0
 Active = true
 _key = "Pickup"
 _displayName = "action.Pickup"
-PickupDistance = 1.2
+PickupDistance = 1.1
 Animation = ExtResource( 5 )
 IKChain = "Right Hand IK"
 _tags = "TagCarry,TagHand"
@@ -127,6 +127,7 @@ AnimationTransition = 1.0
 "TagOneHand",
 ]]
 script = ExtResource( 9 )
+_sections_unfolded = [ "Animation" ]
 ProcessMode = 0
 _key = "Carry"
 _slot = "RightHand"

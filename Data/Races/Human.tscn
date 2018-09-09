@@ -6,23 +6,23 @@
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentSlot.cs" type="Script" id=5]
 
-[node name="Human" type="Node" index="0"]
+[node name="Human" type="Node"]
 script = ExtResource( 1 )
 ProcessMode = 0
 _key = "Human"
 _displayName = "race.Human"
 
-[node name="Morphs" type="Node" parent="." index="0"]
+[node name="Morphs" type="Node" parent="."]
 
-[node name="Female" type="Node" parent="Morphs" index="0"]
+[node name="Female" type="Node" parent="Morphs"]
 
-[node name="Head" type="Node" parent="Morphs/Female" index="0"]
+[node name="Head" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
 ProcessMode = 0
 _key = "morph.Head"
 _displayName = "Head"
 
-[node name="Head Size" type="Node" parent="Morphs/Female/Head" index="0"]
+[node name="Head Size" type="Node" parent="Morphs/Female/Head"]
 script = ExtResource( 3 )
 Default = 1.0
 _key = "HeadSize"
@@ -34,13 +34,13 @@ Modifier = Vector3( 1, 1, 1 )
 _bone = "head"
 _mirrored = false
 
-[node name="Body" type="Node" parent="Morphs/Female" index="1"]
+[node name="Body" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
 ProcessMode = 0
 _key = "morph.Body"
 _displayName = "Body"
 
-[node name="Legs Size" type="Node" parent="Morphs/Female/Body" index="0"]
+[node name="Legs Size" type="Node" parent="Morphs/Female/Body"]
 script = ExtResource( 3 )
 Default = 1.0
 _key = "LegsLength"
@@ -52,54 +52,54 @@ Modifier = Vector3( 0, 0, 1 )
 _bone = "thigh"
 _mirrored = true
 
-[node name="Color" type="Node" parent="Morphs/Female" index="2"]
+[node name="Color" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
 ProcessMode = 0
 _key = "morph.Color"
 _displayName = "Color"
 
-[node name="Skin Tone" type="Node" parent="Morphs/Female/Color" index="0"]
+[node name="Skin Tone" type="Node" parent="Morphs/Female/Color"]
 script = ExtResource( 4 )
 Default = Color( 1, 1, 1, 1 )
 _key = "SkinTone"
 _displayName = "morph.Color.SkinTone"
 UseAlpha = false
-Mesh = "Mesh"
+Mesh = "Body"
 _materials = "Skin"
 
-[node name="Slots" type="Node" parent="." index="1"]
+[node name="Slots" type="Node" parent="."]
 
-[node name="Equipments" type="Node" parent="Slots" index="0"]
+[node name="Equipments" type="Node" parent="Slots"]
 
-[node name="Shirt" type="Node" parent="Slots/Equipments" index="0"]
+[node name="Shirt" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Shirt"
 _displayName = "slot.Shirt"
 EquipType = 1
 
-[node name="Pants" type="Node" parent="Slots/Equipments" index="1"]
+[node name="Pants" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Pants"
 _displayName = "slot.Pants"
 EquipType = 1
 
-[node name="Left Hand" type="Node" parent="Slots/Equipments" index="2"]
+[node name="Left Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "LeftHand"
 _displayName = "slot.LeftHand"
 EquipType = 0
 
-[node name="Right Hand" type="Node" parent="Slots/Equipments" index="3"]
+[node name="Right Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "RightHand"
 _displayName = "slot.RightHand"
 EquipType = 0
 
-[node name="Necklace" type="Node" parent="Slots/Equipments" index="4"]
+[node name="Necklace" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
 ProcessMode = 0
 _key = "Necklace"

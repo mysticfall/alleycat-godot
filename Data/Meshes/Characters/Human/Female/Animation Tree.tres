@@ -13,22 +13,22 @@ animation = "Idle"
 [sub_resource type="AnimationNodeAnimation" id=3]
 
 resource_local_to_scene = true
-animation = "Walk Forward"
+animation = "WalkForward"
 
 [sub_resource type="AnimationNodeAnimation" id=4]
 
 resource_local_to_scene = true
-animation = "Walk Backward"
+animation = "WalkBackward"
 
 [sub_resource type="AnimationNodeAnimation" id=5]
 
 resource_local_to_scene = true
-animation = "Walk Right"
+animation = "WalkRight"
 
 [sub_resource type="AnimationNodeAnimation" id=6]
 
 resource_local_to_scene = true
-animation = "Walk Left"
+animation = "WalkLeft"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id=7]
 
@@ -200,7 +200,7 @@ input_0/auto_advance = true
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -567.704, 103.897 )
+graph_offset = Vector2( -533.722, 108.892 )
 "nodes/Default State/node" = SubResource( 22 )
 "nodes/Default State/position" = Vector2( -460, 160 )
 nodes/Hands/node = SubResource( 24 )

@@ -91,15 +91,15 @@ light_cull_mask = -1
 [node name="Player" parent="Entities/Characters" index="0" groups=[
 "Character",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, -0.108221, 1.06536 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, -0.243127, 2.99846 )
 
 [node name="Prisoner" parent="Entities/Characters" index="1" instance=ExtResource( 4 )]
-transform = Transform( 0.314428, 0, 0.949281, 0, 1, 0, -0.949281, 0, 0.314428, 3.71469, 0, -1.10818 )
+transform = Transform( 0.314428, 0, 0.949281, 0, 1, 0, -0.949281, 0, 0.314428, 3.71469, -0.134906, 0.824917 )
 _key = "Prisoner1"
 _displayName = "Prisoner 1"
 
 [node name="Prisoner2" parent="Entities/Characters" index="2" instance=ExtResource( 4 )]
-transform = Transform( 0.333089, 0, -0.942895, 0, 1, 0, 0.942895, 0, 0.333089, -0.553927, 0, 0 )
+transform = Transform( 0.333089, 0, -0.942895, 0, 1, 0, 0.942895, 0, 0.333089, -0.553927, -0.134906, 1.9331 )
 _key = "Prisoner2"
 _displayName = "Prisoner 2"
 
