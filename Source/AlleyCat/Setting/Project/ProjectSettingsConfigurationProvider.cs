@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
-using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Setting.Project
 {
@@ -14,7 +13,7 @@ namespace AlleyCat.Setting.Project
     {
         public IEnumerable<string> Keys { get; }
 
-        private static readonly IDictionary<string, string> Replacements = new Gen.Dictionary<string, string>
+        private static readonly IDictionary<string, string> Replacements = new Dictionary<string, string>
         {
             ["two_d"] = "2d",
             ["three_d"] = "3d"

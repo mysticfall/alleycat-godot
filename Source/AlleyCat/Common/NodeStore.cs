@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Array = Godot.Array;
-using Gen = System.Collections.Generic;
+using Array = Godot.Collections.Array;
 using Object = Godot.Object;
 
 namespace AlleyCat.Common
 {
     public class NodeStore<T> : Object
     {
-        private readonly Gen.IDictionary<int, T> _store = new Gen.Dictionary<int, T>();
+        private readonly IDictionary<int, T> _store = new Dictionary<int, T>();
 
         [CanBeNull]
         public T Get([NotNull] Node node)

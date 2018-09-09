@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Character.Morph
 {
@@ -13,7 +13,7 @@ namespace AlleyCat.Character.Morph
         [Export, UsedImplicitly]
         public string Mesh { get; private set; }
 
-        public Gen.IEnumerable<string> Materials => _materials?.Split(';') ?? Enumerable.Empty<string>();
+        public IEnumerable<string> Materials => _materials?.Split(';') ?? Enumerable.Empty<string>();
 
         [Export, UsedImplicitly] private string _materials;
 
@@ -38,7 +38,7 @@ namespace AlleyCat.Character.Morph
             }
 
             var count = arrayMesh.GetSurfaceCount();
-            var indexes = new Gen.Dictionary<string, int>(count);
+            var indexes = new Dictionary<string, int>(count);
 
             for (var i = 0; i < count; i++)
             {

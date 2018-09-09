@@ -12,7 +12,7 @@ using AlleyCat.View;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Array = Godot.Array;
+using Array = Godot.Collections.Array;
 
 namespace AlleyCat.UI.Inventory
 {

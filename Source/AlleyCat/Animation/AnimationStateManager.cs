@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
@@ -6,7 +7,6 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Animation
 {
@@ -26,7 +26,7 @@ namespace AlleyCat.Animation
             }
         }
 
-        public Gen.IReadOnlyDictionary<string, AnimationBlender> Blenders =>
+        public IReadOnlyDictionary<string, AnimationBlender> Blenders =>
             _blenderMap ?? Enumerable.Empty<AnimationBlender>().ToDictionary(i => i.Key);
 
         protected AnimationNodeBlendTree RootNode { get; private set; }
@@ -40,9 +40,9 @@ namespace AlleyCat.Animation
 
         [Export, UsedImplicitly] private string _transitionNode = "Transition";
 
-        private Gen.IEnumerable<AnimationBlender> _blenders;
+        private IEnumerable<AnimationBlender> _blenders;
 
-        private Gen.IReadOnlyDictionary<string, AnimationBlender> _blenderMap;
+        private IReadOnlyDictionary<string, AnimationBlender> _blenderMap;
 
         protected override void OnInitialize()
         {
@@ -96,9 +96,9 @@ namespace AlleyCat.Animation
             }
         }
 
-        protected virtual Gen.IEnumerable<AnimationBlender> CreateBlenders(AnimationNode output)
+        protected virtual IEnumerable<AnimationBlender> CreateBlenders(AnimationNode output)
         {
-            var sources = new Gen.List<AnimationBlender>();
+            var sources = new List<AnimationBlender>();
             var parent = (AnimationNodeBlendTree) output.GetParent();
 
             var node = output;

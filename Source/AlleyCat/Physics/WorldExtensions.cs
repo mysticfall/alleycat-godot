@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using EnsureThat;
 using Godot;
+using Godot.Collections;
 using JetBrains.Annotations;
-using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Physics
 {

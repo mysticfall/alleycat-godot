@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Common;
@@ -6,8 +7,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
-using Array = Godot.Array;
-using Gen = System.Collections.Generic;
+using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Animation
 {
@@ -139,7 +139,7 @@ namespace AlleyCat.Animation
             _amount?.Dispose();
         }
 
-        private static Gen.IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
+        private static IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)
         {
             var tracks = animation.GetTrackCount();
 

@@ -11,6 +11,7 @@ using AlleyCat.Physics;
 using AlleyCat.Sensor;
 using Godot;
 using JetBrains.Annotations;
+using Array = Godot.Collections.Array;
 
 namespace AlleyCat.View
 {
@@ -216,7 +217,7 @@ namespace AlleyCat.View
             var onRayCast = this.OnPhysicsProcess()
                 .Where(_ => Active && Valid)
                 .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
-                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new Godot.Array {Character}));
+                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new Array {Character}));
 
             onRayCast
                 .Select(hit => hit == null ? float.MaxValue : Viewpoint.DistanceTo(hit.Position))
