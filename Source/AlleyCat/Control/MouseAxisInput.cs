@@ -24,7 +24,7 @@ namespace AlleyCat.Control
 
         protected override IObservable<float> CreateRawObservable()
         {
-            return this.OnUnhandledInput()
+            return this.OnInput()
                 .Where(_ => _maximumValue > 0)
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)

@@ -29,7 +29,7 @@ namespace AlleyCat.Control
                 return this.OnProcess().Select(_ => Value);
             }
 
-            var input = this.OnUnhandledInput();
+            var input = this.OnInput();
 
             var positive = input
                 .Where(_ => PositiveAction != null)
