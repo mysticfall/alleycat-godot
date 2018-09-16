@@ -1,4 +1,6 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -9,7 +11,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
-    [Singleton(typeof(IAnimationManager))]
+    [AutowireContext, Singleton(typeof(IAnimationManager))]
     public class AnimationManager : AutowiredNode, IAnimationManager
     {
         [Export]
@@ -24,12 +26,17 @@ namespace AlleyCat.Animation
         [Service]
         public AnimationPlayer Player { get; private set; }
 
-        //FIXME A temporary workaround until godotengine/godot#17623 gets fixed.
-        public virtual IObservable<float> OnAdvance => OnLoop;
+        public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance;
+
+        public IObservable<float> OnAdvance => _onAdvance;
 
         public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+
+        private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
+
+        private readonly Subject<float> _onAdvance = new Subject<float>();
 
         private readonly Subject<AnimationEvent> _onAnimationEvent = new Subject<AnimationEvent>();
 
@@ -41,23 +48,30 @@ namespace AlleyCat.Animation
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            Player.PlaybackActive = false;
+            Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
 
-            OnActiveStateChange
-                .Subscribe(Player.SetActive)
+            OnLoop
+                .Where(_ => Active)
+                .Subscribe(Advance)
                 .AddTo(this);
         }
+
+        public virtual void Advance(float delta)
+        {
+            _onBeforeAdvance.OnNext(Unit.Default);
+
+            ProcessFrames(delta);
+
+            _onAdvance.OnNext(delta);
+        }
+
+        protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
 
         public virtual void Play(Godot.Animation animation)
         {
             Ensure.Any.IsNotNull(animation, nameof(animation));
 
-            var name = animation.GetName();
-
-            if (!Player.HasAnimation(name))
-            {
-                Player.AddAnimation(name, animation).ThrowIfNecessary();
-            }
+            var name = Player.AddAnimation(animation);
 
             Player.Play(name);
         }
@@ -74,6 +88,12 @@ namespace AlleyCat.Animation
         protected override void OnPreDestroy()
         {
             _active?.Dispose();
+
+            _onBeforeAdvance?.OnCompleted();
+            _onBeforeAdvance?.Dispose();
+
+            _onAdvance?.OnCompleted();
+            _onAdvance?.Dispose();
 
             _onAnimationEvent?.OnCompleted();
             _onAnimationEvent?.Dispose();

@@ -11,6 +11,22 @@ namespace AlleyCat.Animation
     {
         private const string NodeName = "AnimationPlayerEventTracker";
 
+        public static string AddAnimation(
+            [NotNull] this AnimationPlayer player, [NotNull] Godot.Animation animation)
+        {
+            Ensure.Any.IsNotNull(player, nameof(player));
+            Ensure.Any.IsNotNull(animation, nameof(animation));
+
+            var name = animation.GetKey();
+
+            if (!player.HasAnimation(name))
+            {
+                player.AddAnimation(name, animation).ThrowIfNecessary();
+            }
+
+            return name;
+        }
+
         [NotNull]
         public static IObservable<AnimationChangeEvent> OnAnimationChange(
             [NotNull] this AnimationPlayer player)

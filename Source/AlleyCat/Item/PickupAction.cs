@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
+using AlleyCat.Animation;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using Godot;
@@ -23,6 +24,15 @@ namespace AlleyCat.Item
         public string IKChain { get; set; } = "Right Hand IK";
 
         public IEnumerable<string> Tags => _tags.TrimToEnumerable();
+
+        [Export]
+        protected string AnimatorPath { get; private set; } = "States/Action";
+
+        [Export]
+        protected string StatesPath { get; private set; } = "States";
+
+        [Export]
+        protected string ActionState { get; private set; } = "Action";
 
         [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
 
@@ -48,15 +58,30 @@ namespace AlleyCat.Item
                 chain.Target = marker?.GlobalTransform ?? Item.GlobalTransform;
             }
 
-            var animator = character.AnimationManager;
+            var animationManager = character.AnimationManager;
 
-            animator.OnAnimationEvent
+            animationManager.OnAnimationEvent
                 .Where(e => e.Name == "Action" && (string) e.Argument == Key)
                 .Take(1)
                 .Subscribe(_ => character.Equip(Item, configuration))
                 .AddTo(this);
 
-            animator.Play(Animation);
+            if (!(animationManager is IAnimationStateManager stateManager) ||
+                string.IsNullOrEmpty(AnimatorPath) ||
+                string.IsNullOrEmpty(StatesPath))
+            {
+                animationManager.Play(Animation);
+            }
+            else
+            {
+                var animator = stateManager.GetAnimator(AnimatorPath);
+                var states = stateManager.GetStates(StatesPath);
+
+                if (animator == null || states == null) return;
+
+                animator.Animation = Animation;
+                states.Playback.Travel(ActionState);
+            }
         }
 
         public override bool AllowedFor(IActor context) =>

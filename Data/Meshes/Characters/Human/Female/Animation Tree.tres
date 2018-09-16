@@ -1,128 +1,147 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=26 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=25 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 
 resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
 animation = "Reset"
 
-[sub_resource type="AnimationNodeAnimation" id=2]
+[sub_resource type="AnimationNodeBlend2" id=2]
 
 resource_local_to_scene = true
-animation = "Idle"
+filter_enabled = false
+filters = [  ]
+sync = false
 
 [sub_resource type="AnimationNodeAnimation" id=3]
 
 resource_local_to_scene = true
-animation = "WalkForward"
+filter_enabled = false
+filters = [  ]
+animation = "Reset"
 
 [sub_resource type="AnimationNodeAnimation" id=4]
 
 resource_local_to_scene = true
-animation = "WalkBackward"
+filter_enabled = false
+filters = [  ]
+animation = "Idle"
 
 [sub_resource type="AnimationNodeAnimation" id=5]
 
 resource_local_to_scene = true
-animation = "WalkRight"
+filter_enabled = false
+filters = [  ]
+animation = "WalkForward"
 
 [sub_resource type="AnimationNodeAnimation" id=6]
 
 resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
+animation = "WalkBackward"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+
+resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
+animation = "WalkRight"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+
+resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
 animation = "WalkLeft"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=7]
+[sub_resource type="AnimationNodeBlendSpace2D" id=9]
 
 resource_local_to_scene = true
 auto_triangles = false
-blend_point_0/node = SubResource( 3 )
+blend_point_0/node = SubResource( 5 )
 blend_point_0/pos = Vector2( 0, 0.6 )
-blend_point_1/node = SubResource( 4 )
+blend_point_1/node = SubResource( 6 )
 blend_point_1/pos = Vector2( 0, -0.6 )
-blend_point_2/node = SubResource( 5 )
+blend_point_2/node = SubResource( 7 )
 blend_point_2/pos = Vector2( 0.2, 0 )
-blend_point_3/node = SubResource( 6 )
+blend_point_3/node = SubResource( 8 )
 blend_point_3/pos = Vector2( -0.2, 0 )
 triangles = PoolIntArray( 0, 2, 3, 1, 2, 3 )
 min_space = Vector2( -1, -1 )
 max_space = Vector2( 1, 1 )
 snap = Vector2( 0.1, 0.1 )
-blend_position = Vector2( 0, 0 )
 x_label = "x"
 y_label = "y"
-
-[sub_resource type="AnimationNodeAnimation" id=8]
-
-resource_local_to_scene = true
-animation = "Reset"
-
-[sub_resource type="AnimationNodeAnimation" id=9]
-
-resource_local_to_scene = true
-animation = "Reset"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 
 resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
 animation = "Reset"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+[sub_resource type="AnimationNodeAnimation" id=11]
+
+resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
+animation = "Reset"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+
+resource_local_to_scene = true
+filter_enabled = false
+filters = [  ]
+animation = "Reset"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
 
 switch_mode = 2
 auto_advance = true
+advance_condition = ""
 xfade_time = 0.0
 priority = 1
 disabled = false
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=12]
-
-switch_mode = 0
-auto_advance = false
-xfade_time = 0.0
-priority = 1
-disabled = false
-
-[sub_resource type="AnimationNodeStateMachine" id=13]
-
-resource_local_to_scene = true
-states/Idle/node = SubResource( 10 )
-states/Idle/position = Vector2( 112.757, 49.2584 )
-"states/Idle 2/node" = SubResource( 8 )
-"states/Idle 2/position" = Vector2( 271.674, 49.2584 )
-"states/Idle 3/node" = SubResource( 9 )
-"states/Idle 3/position" = Vector2( 444.584, 49.2584 )
-transitions = [ "Idle", "Idle 2", SubResource( 11 ), "Idle 2", "Idle 3", SubResource( 12 ) ]
-start_node = "Idle"
-end_node = "Idle 3"
-graph_offset = Vector2( -6.99635, -42.9573 )
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=14]
 
 switch_mode = 0
 auto_advance = false
-xfade_time = 0.2
+advance_condition = ""
+xfade_time = 0.0
 priority = 1
 disabled = false
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+[sub_resource type="AnimationNodeStateMachine" id=15]
 
-switch_mode = 0
-auto_advance = false
-xfade_time = 0.2
-priority = 1
-disabled = false
+resource_local_to_scene = true
+states/Idle/node = SubResource( 12 )
+states/Idle/position = Vector2( 112.757, 49.2584 )
+"states/Idle 2/node" = SubResource( 10 )
+"states/Idle 2/position" = Vector2( 271.674, 49.2584 )
+"states/Idle 3/node" = SubResource( 11 )
+"states/Idle 3/position" = Vector2( 444.584, 49.2584 )
+transitions = [ "Idle", "Idle 2", SubResource( 13 ), "Idle 2", "Idle 3", SubResource( 14 ) ]
+start_node = "Idle"
+end_node = "Idle 3"
+graph_offset = Vector2( -6.99635, -42.9573 )
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 
 switch_mode = 0
 auto_advance = false
+advance_condition = ""
 xfade_time = 0.2
 priority = 1
 disabled = false
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=17]
 
-switch_mode = 2
+switch_mode = 0
 auto_advance = false
+advance_condition = ""
 xfade_time = 0.2
 priority = 1
 disabled = false
@@ -131,6 +150,7 @@ disabled = false
 
 switch_mode = 0
 auto_advance = false
+advance_condition = ""
 xfade_time = 0.2
 priority = 1
 disabled = false
@@ -138,7 +158,8 @@ disabled = false
 [sub_resource type="AnimationNodeStateMachineTransition" id=19]
 
 switch_mode = 2
-auto_advance = true
+auto_advance = false
+advance_condition = ""
 xfade_time = 0.2
 priority = 1
 disabled = false
@@ -147,68 +168,64 @@ disabled = false
 
 switch_mode = 0
 auto_advance = false
-xfade_time = 0.0
+advance_condition = ""
+xfade_time = 0.2
 priority = 1
 disabled = false
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=21]
 
-switch_mode = 0
-auto_advance = false
+switch_mode = 2
+auto_advance = true
+advance_condition = ""
 xfade_time = 0.2
 priority = 1
 disabled = false
 
-[sub_resource type="AnimationNodeStateMachine" id=22]
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+switch_mode = 0
+auto_advance = false
+advance_condition = ""
+xfade_time = 0.0
+priority = 1
+disabled = false
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+switch_mode = 0
+auto_advance = false
+advance_condition = ""
+xfade_time = 0.2
+priority = 1
+disabled = false
+
+[sub_resource type="AnimationNodeStateMachine" id=24]
 
 resource_local_to_scene = true
-states/Act/node = SubResource( 1 )
-states/Act/position = Vector2( 227.697, -20.672 )
-states/Idle/node = SubResource( 2 )
+states/Action/node = SubResource( 3 )
+states/Action/position = Vector2( 227.697, -20.672 )
+states/Idle/node = SubResource( 4 )
 states/Idle/position = Vector2( 40.7945, 61.2465 )
-states/Move/node = SubResource( 7 )
+states/Move/node = SubResource( 9 )
 states/Move/position = Vector2( 397.608, 61.2465 )
-states/Sit/node = SubResource( 13 )
+states/Sit/node = SubResource( 15 )
 states/Sit/position = Vector2( 227.697, 141.167 )
-transitions = [ "Idle", "Move", SubResource( 14 ), "Move", "Idle", SubResource( 15 ), "Move", "Sit", SubResource( 16 ), "Sit", "Idle", SubResource( 17 ), "Idle", "Act", SubResource( 18 ), "Act", "Idle", SubResource( 19 ), "Move", "Act", SubResource( 20 ), "Idle", "Sit", SubResource( 21 ) ]
+transitions = [ "Idle", "Move", SubResource( 16 ), "Move", "Idle", SubResource( 17 ), "Move", "Sit", SubResource( 18 ), "Sit", "Idle", SubResource( 19 ), "Idle", "Action", SubResource( 20 ), "Action", "Idle", SubResource( 21 ), "Move", "Action", SubResource( 22 ), "Idle", "Sit", SubResource( 23 ) ]
 start_node = "Idle"
 end_node = ""
 graph_offset = Vector2( -168.017, -64.0519 )
 
-[sub_resource type="AnimationNodeAnimation" id=23]
-
-resource_local_to_scene = true
-animation = "Reset"
-
-[sub_resource type="AnimationNodeBlend2" id=24]
-
-resource_local_to_scene = true
-filter_enabled = false
-filters = [  ]
-amount = 0.0
-sync = false
-
-[sub_resource type="AnimationNodeTransition" id=25]
-
-resource_local_to_scene = true
-input_count = 1
-current = 0
-xfade_time = 0.2
-input_0/name = "default"
-input_0/auto_advance = true
-
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -533.722, 108.892 )
-"nodes/Default State/node" = SubResource( 22 )
-"nodes/Default State/position" = Vector2( -460, 160 )
-nodes/Hands/node = SubResource( 24 )
-nodes/Hands/position = Vector2( 20, 160 )
-"nodes/Hands Animation/node" = SubResource( 23 )
-"nodes/Hands Animation/position" = Vector2( -220, 280 )
-nodes/Transition/node = SubResource( 25 )
-nodes/Transition/position = Vector2( -220, 160 )
-nodes/output/position = Vector2( 220, 160 )
-node_connections = [ "output", 0, "Hands", "Transition", 0, "Default State", "Hands", 0, "Transition", "Hands", 1, "Hands Animation" ]
+graph_offset = Vector2( -501.738, 122.443 )
+nodes/Hands/node = SubResource( 2 )
+nodes/Hands/position = Vector2( 180, 140 )
+"nodes/Hands Animation/node" = SubResource( 1 )
+"nodes/Hands Animation/position" = Vector2( -40, 260 )
+nodes/States/node = SubResource( 24 )
+nodes/States/position = Vector2( -420, 160 )
+nodes/output/position = Vector2( 380, 140 )
+node_connections = [ "output", 0, "Hands", "Hands", 0, "States", "Hands", 1, "Hands Animation" ]
 

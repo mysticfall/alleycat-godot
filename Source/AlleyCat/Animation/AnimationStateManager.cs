@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using AlleyCat.Autowire;
-using AlleyCat.Common;
-using EnsureThat;
+﻿using AlleyCat.Autowire;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
@@ -16,110 +9,46 @@ namespace AlleyCat.Animation
         [Service]
         public AnimationTree AnimationTree { get; private set; }
 
-        public AnimationNodeStateMachine States
-        {
-            get
-            {
-                var current = TransitionNode.GetInputConnection(TransitionNode.Current);
+        public string Path => string.Empty;
 
-                return RootNode?.GetNode(current) as AnimationNodeStateMachine;
-            }
-        }
+        public AnimationRootNode Root => _graph?.Root;
 
-        public IReadOnlyDictionary<string, AnimationBlender> Blenders =>
-            _blenderMap ?? Enumerable.Empty<AnimationBlender>().ToDictionary(i => i.Key);
+        protected AnimationGraphContext Context { get; private set; }
 
-        protected AnimationNodeBlendTree RootNode { get; private set; }
+        [Service(false)] private IAnimationGraphFactory _graphFactory;
 
-        protected AnimationNodeTransition TransitionNode { get; private set; }
+        [Service(false)] private IAnimationControlFactory _controlFactory;
 
-        protected AnimationNodeAnimation ActionNode =>
-            _actionNode != null ? States.GetNode(_actionNode) as AnimationNodeAnimation : null;
-
-        [Export, UsedImplicitly] private string _actionNode = "Act";
-
-        [Export, UsedImplicitly] private string _transitionNode = "Transition";
-
-        private IEnumerable<AnimationBlender> _blenders;
-
-        private IReadOnlyDictionary<string, AnimationBlender> _blenderMap;
+        private AnimationGraph _graph;
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            RootNode = (AnimationNodeBlendTree) AnimationTree?.TreeRoot;
+            AnimationTree.ProcessMode = AnimationTree.AnimationProcessMode.Manual;
 
-            Debug.Assert(RootNode != null, "RootNode != null");
-
-            TransitionNode = RootNode.GetNode(_transitionNode) as AnimationNodeTransition;
-
-            Debug.Assert(TransitionNode != null, "TransitionNode != null");
-
-            var output = RootNode.GetNode("output");
-
-            Debug.Assert(output != null, "output != null");
-
-            _blenders = CreateBlenders(output);
-            _blenderMap = _blenders.ToDictionary();
-
-            OnActiveStateChange
-                .Subscribe(AnimationTree.SetActive)
-                .AddTo(this);
-        }
-
-        public override void Play(Godot.Animation animation)
-        {
-            Ensure.Any.IsNotNull(animation, nameof(animation));
-
-            var name = animation.GetName();
-
-            if (!Player.HasAnimation(name))
+            if (_graphFactory == null)
             {
-                Player.AddAnimation(name, animation).ThrowIfNecessary();
+                _graphFactory = new AnimationGraphFactory();
             }
 
-            ActionNode?.SetAnimation(name);
-
-            States.Travel(_actionNode);
-        }
-
-        protected override void ProcessLoop(float delta)
-        {
-            base.ProcessLoop(delta);
-
-            if (!Active || _blenders == null) return;
-
-            foreach (var blender in _blenders)
+            if (_controlFactory == null)
             {
-                blender.Process(delta);
-            }
-        }
-
-        protected virtual IEnumerable<AnimationBlender> CreateBlenders(AnimationNode output)
-        {
-            var sources = new List<AnimationBlender>();
-            var parent = (AnimationNodeBlendTree) output.GetParent();
-
-            var node = output;
-
-            while (true)
-            {
-                var name = node.GetInputConnection(0);
-                var input = parent.GetNode(name);
-
-                if (input is AnimationNodeBlend2 next)
-                {
-                    node = next;
-                    sources.Add(new AnimationBlender(name, next));
-                }
-                else
-                {
-                    break;
-                }
+                _controlFactory = new AnimationControlFactory();
             }
 
-            return sources;
+            Context = new AnimationGraphContext(
+                Player, AnimationTree, OnAdvance, _graphFactory, _controlFactory);
+
+            _graph = _graphFactory.Create((AnimationRootNode) AnimationTree.TreeRoot, Context);
         }
+
+        public AnimationNode GetAnimationNode(string name) => _graph?.GetAnimationNode(name);
+
+        public IAnimationGraph GetGraph(string name) => _graph?.GetGraph(name);
+
+        public IAnimationControl GetControl(string name) => _graph?.GetControl(name);
+
+        protected override void ProcessFrames(float delta) => AnimationTree.Advance(delta);
     }
 }

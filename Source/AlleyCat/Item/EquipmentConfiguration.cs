@@ -63,9 +63,10 @@ namespace AlleyCat.Item
 
             if (holder.AnimationManager is IAnimationStateManager animator &&
                 Animation != null &&
-                AnimationBlend != null)
+                AnimationBlend.TrimToNull() != null &&
+                animator.GetBlender(AnimationBlend) is Blender blender)
             {
-                animator.Blend(AnimationBlend, Animation, transition: AnimationTransition);
+                blender.Blend(Animation, transition: AnimationTransition);
             }
 
             if (Mesh == null) return;
@@ -81,9 +82,11 @@ namespace AlleyCat.Item
             Ensure.Any.IsNotNull(holder, nameof(holder));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
 
-            if (holder.AnimationManager is IAnimationStateManager animator && AnimationBlend != null)
+            if (holder.AnimationManager is IAnimationStateManager animator && 
+                AnimationBlend.TrimToNull() != null &&
+                animator.GetBlender(AnimationBlend) is Blender blender)
             {
-                animator.Unblend(AnimationBlend, AnimationTransition);
+                blender.Unblend(AnimationTransition);
             }
 
             foreach (var mesh in equipment.Meshes)

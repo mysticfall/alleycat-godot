@@ -5,6 +5,7 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
+using JetBrains.Annotations;
 using Gen = System.Collections.Generic;
 
 namespace AlleyCat.Motion
@@ -17,26 +18,38 @@ namespace AlleyCat.Motion
         [Service]
         public Skeleton Skeleton { get; private set; }
 
-        [Export]
-        public string IdleState { get; set; } = "Idle";
+        protected AnimationStates States { get; private set; }
+
+        protected Blender2D Blender { get; private set; }
 
         [Export]
-        public string MoveState { get; set; } = "Move";
+        protected string IdleState { get; private set; } = "Idle";
+
+        [Export]
+        protected string MoveState { get; private set; } = "Move";
+
+        public override bool Valid => base.Valid &&
+                                      IdleState != null &&
+                                      MoveState != null &&
+                                      States != null &&
+                                      Blender != null;
+
+        [Export, UsedImplicitly] private string _statesPath = "States";
+
+        [Export, UsedImplicitly] private string _blend2DPath = "States/Move";
 
         [PostConstruct]
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            Debug.Assert(IdleState != null, "IdleState != null");
-            Debug.Assert(MoveState != null, "MoveState != null");
+            States = AnimationManager.GetStates(_statesPath);
+            Blender = AnimationManager.GetBlender2D(_blend2DPath);
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
-
-            AnimationManager.States.Start(IdleState);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)
@@ -57,25 +70,23 @@ namespace AlleyCat.Motion
             var speed = velocity.Length();
             var direction = velocity.Normalized();
 
-            var states = AnimationManager.States;
+            var current = States.Playback.GetCurrentNode();
 
             if (speed > 0)
             {
-                if (states.GetCurrentNode() != MoveState)
+                if (current != MoveState)
                 {
-                    states.Travel(MoveState);
+                    States.Playback.Travel(MoveState);
                 }
 
-                var blender = (AnimationNodeBlendSpace2D) states.GetNode(MoveState);
-
-                blender.SetBlendPosition(new Vector2(direction.x, -direction.z));
+                Blender.Position = new Vector2(direction.x, -direction.z);
 
                 //FIXME Implement proper speed handling here.
                 //AnimationTree.TimescaleNodeSetScale(ScaleSpeed, speed);
             }
-            else
+            else if (current == MoveState)
             {
-                states.Travel(IdleState);
+                States.Playback.Travel(IdleState);
             }
 
             var t = AnimationManager.AnimationTree.GetRootMotionTransform();
@@ -86,7 +97,7 @@ namespace AlleyCat.Motion
 
         protected virtual void ResetAnimations()
         {
-            AnimationManager.States.Travel(IdleState);
+            States.Playback.Travel(IdleState);
         }
     }
 }

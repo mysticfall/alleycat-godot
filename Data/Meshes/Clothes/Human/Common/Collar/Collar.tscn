@@ -21,6 +21,7 @@ absorbent = false
 
 [sub_resource type="BoxShape" id=2]
 
+margin = 0.04
 extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
 [node name="Collar" type="RigidBody"]
@@ -30,8 +31,6 @@ collision_layer = 1
 collision_mask = 1
 mode = 0
 mass = 1.0
-friction = 1.0
-bounce = 0.0
 physics_material_override = SubResource( 1 )
 gravity_scale = 1.0
 custom_integrator = false
@@ -96,6 +95,9 @@ _displayName = "action.Pickup"
 PickupDistance = 1.2
 Animation = ExtResource( 5 )
 IKChain = "Right Hand IK"
+AnimatorPath = "States/Action"
+StatesPath = "States"
+ActionState = "Action"
 _tags = "TagCarry,TagHand"
 
 [node name="Drop" type="Node" parent="Actions"]
