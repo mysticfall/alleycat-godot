@@ -112,7 +112,7 @@ namespace AlleyCat.UI.Inventory
             Ensure.Any.IsNotNull(item, nameof(item));
             Ensure.Any.IsNotNull(parent, nameof(parent));
 
-            var node = (TreeItem) Tree.CreateItem(Tree.GetRoot());
+            var node = Tree.CreateItem(Tree.GetRoot());
 
             node.SetMeta(SlotKey, item.Slot);
 
