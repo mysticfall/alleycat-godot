@@ -204,7 +204,7 @@ script = ExtResource( 9 )
 ProcessMode = 0
 Active = true
 Action = "zoom_out"
-UnhandledOnly = true
+UnhandledOnly = false
 StopPropagation = true
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views"]
