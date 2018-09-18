@@ -76,7 +76,7 @@ namespace AlleyCat.Motion
             {
                 if (current != MoveState)
                 {
-                    States.Playback.Travel(MoveState);
+                    States.State = MoveState;
                 }
 
                 Blender.Position = new Vector2(direction.x, -direction.z);
@@ -86,7 +86,7 @@ namespace AlleyCat.Motion
             }
             else if (current == MoveState)
             {
-                States.Playback.Travel(IdleState);
+                States.State = IdleState;
             }
 
             var t = AnimationManager.AnimationTree.GetRootMotionTransform();
@@ -97,7 +97,7 @@ namespace AlleyCat.Motion
 
         protected virtual void ResetAnimations()
         {
-            States.Playback.Travel(IdleState);
+            States.State = IdleState;
         }
     }
 }
