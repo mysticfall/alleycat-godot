@@ -80,7 +80,7 @@ namespace AlleyCat.Animation
             var currentAnim = AnimationNode.Animation;
 
             _animation = new ReactiveProperty<Godot.Animation>(
-                currentAnim != null ? context.Player.GetAnimation(currentAnim) : null);
+                string.IsNullOrEmpty(currentAnim) ? null : context.Player.GetAnimation(currentAnim));
 
             _animation.Subscribe(v =>
             {
