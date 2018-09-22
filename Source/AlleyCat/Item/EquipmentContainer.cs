@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 
 namespace AlleyCat.Item
@@ -13,6 +14,15 @@ namespace AlleyCat.Item
                 .SelectMany(s => s.GetParent(Holder).GetChildren<Equipment>())
                 .Distinct()
                 .ToDictionary(e => e.Slot);
+
+        [PostConstruct(true)]
+        protected virtual void OnInitialize()
+        {
+            foreach (var equipment in Values)
+            {
+                equipment.Equip(Holder);
+            }
+        }
 
         protected override void DoAdd(Equipment item)
         {
