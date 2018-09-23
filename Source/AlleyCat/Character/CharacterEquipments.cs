@@ -20,14 +20,14 @@ namespace AlleyCat.Character
 
         protected override void OnInitialize()
         {
-            base.OnInitialize();
-
             var slots = _character.Race?.EquipmentSlots.ToDictionary(s => s.Key);
 
             if (slots != null)
             {
                 _slots = slots;
             }
+
+            base.OnInitialize();
         }
     }
 }
