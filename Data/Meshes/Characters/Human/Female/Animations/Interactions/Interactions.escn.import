@@ -2,34 +2,34 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Body.escn-b8cfec9e1a97a0097e18ad487c65c5aa.scn"
+path="res://.import/Interactions.escn-e120aef7c1b4f90dd7d4b802cf068de5.scn"
 
 [deps]
 
-source_file="res://Data/Meshes/Characters/Human/Female/Body.escn"
-dest_files=[ "res://.import/Body.escn-b8cfec9e1a97a0097e18ad487c65c5aa.scn" ]
+source_file="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/Interactions.escn"
+dest_files=[ "res://.import/Interactions.escn-e120aef7c1b4f90dd7d4b802cf068de5.scn" ]
 
 [params]
 
-nodes/root_type="KinematicBody"
-nodes/root_name="Human Female"
+nodes/root_type="Spatial"
+nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-materials/location=1
-materials/storage=1
-materials/keep_on_reimport=true
+materials/location=0
+materials/storage=0
+materials/keep_on_reimport=false
 meshes/compress=true
 meshes/ensure_tangents=true
 meshes/storage=0
 meshes/light_baking=0
 meshes/lightmap_texel_size=0.1
 external_files/store_in_subdir=false
-animation/import=false
+animation/import=true
 animation/fps=15
 animation/filter_script=""
-animation/storage=false
-animation/keep_custom_tracks=false
+animation/storage=true
+animation/keep_custom_tracks=true
 animation/optimizer/enabled=true
 animation/optimizer/max_linear_error=0.05
 animation/optimizer/max_angular_error=0.01

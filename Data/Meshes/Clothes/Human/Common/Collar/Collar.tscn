@@ -4,12 +4,12 @@
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=4]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Pick Up.anim" type="Animation" id=5]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/PickUp.anim" type="Animation" id=5]
 [ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=6]
 [ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=7]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=8]
 [ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Interactions/Hold in Right Hand.anim" type="Animation" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=10]
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=11]
 
 [sub_resource type="PhysicsMaterial" id=1]
@@ -123,6 +123,7 @@ Mesh = ExtResource( 8 )
 Animation = null
 AnimationBlend = ""
 AnimationTransition = 1.0
+_meshesToSync = null
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",

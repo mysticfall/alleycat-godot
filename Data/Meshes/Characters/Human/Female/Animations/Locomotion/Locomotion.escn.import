@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Animations - Interactions.escn-c58cb40a5402d2a726172fbcf0760863.scn"
+path="res://.import/Locomotion.escn-df5c2484b2de61940aedef1a131429f3.scn"
 
 [deps]
 
-source_file="res://Data/Meshes/Characters/Human/Female/Animations - Interactions.escn"
-dest_files=[ "res://.import/Animations - Interactions.escn-c58cb40a5402d2a726172fbcf0760863.scn" ]
+source_file="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/Locomotion.escn"
+dest_files=[ "res://.import/Locomotion.escn-df5c2484b2de61940aedef1a131429f3.scn" ]
 
 [params]
 
@@ -16,9 +16,9 @@ nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-materials/location=1
+materials/location=0
 materials/storage=0
-materials/keep_on_reimport=true
+materials/keep_on_reimport=false
 meshes/compress=true
 meshes/ensure_tangents=true
 meshes/storage=0
@@ -28,8 +28,8 @@ external_files/store_in_subdir=false
 animation/import=true
 animation/fps=15
 animation/filter_script=""
-animation/storage=false
-animation/keep_custom_tracks=false
+animation/storage=true
+animation/keep_custom_tracks=true
 animation/optimizer/enabled=true
 animation/optimizer/max_linear_error=0.05
 animation/optimizer/max_angular_error=0.01
