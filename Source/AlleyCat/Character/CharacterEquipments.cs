@@ -18,9 +18,10 @@ namespace AlleyCat.Character
 
         private IReadOnlyDictionary<string, EquipmentSlot> _slots;
 
-        [PostConstruct(true)]
-        protected virtual void OnInitialize()
+        protected override void OnInitialize()
         {
+            base.OnInitialize();
+
             var slots = _character.Race?.EquipmentSlots.ToDictionary(s => s.Key);
 
             if (slots != null)

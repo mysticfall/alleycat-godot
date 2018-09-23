@@ -68,8 +68,9 @@ lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
-skeleton = NodePath("")
+skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "blend_shapes" ]
 
 [node name="Binding" type="Node" parent="Mesh"]
 script = ExtResource( 3 )
@@ -122,6 +123,7 @@ Mesh = ExtResource( 8 )
 Animation = null
 AnimationBlend = ""
 AnimationTransition = 1.0
+_meshesToSync = "Body"
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",
