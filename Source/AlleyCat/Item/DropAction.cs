@@ -23,7 +23,7 @@ namespace AlleyCat.Item
         protected override bool AllowedFor(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
-            return equipment.Slot != null && 
+            return equipment.Slot != null &&
                    holder.HasEquipment(equipment.Slot) &&
                    equipment.Configuration.HasTag(Carry);
         }
@@ -31,12 +31,11 @@ namespace AlleyCat.Item
 
     public static class DropActionExtensions
     {
-        public static void Pickup([NotNull] this IEquipmentHolder holder, [NotNull] Equipment equipment)
+        public static void Pickup<T>([NotNull] this T actor, [NotNull] Equipment equipment)
+            where T : IActor, IEquipmentHolder
         {
-            Ensure.Any.IsNotNull(holder, nameof(holder));
+            Ensure.Any.IsNotNull(actor, nameof(actor));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
-
-            if (!(holder is IActor actor)) return;
 
             var action = actor.Actions.Values.FirstOrDefault(a => a is DropAction);
             var context = new InteractionContext(actor, equipment);
