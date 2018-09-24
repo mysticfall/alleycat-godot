@@ -95,21 +95,21 @@ y_label = "y"
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "Reset"
+animation = "GettingUp"
 
 [sub_resource type="AnimationNodeAnimation" id=14]
 
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "Reset"
+animation = "SitOnGroundStart"
 
 [sub_resource type="AnimationNodeAnimation" id=15]
 
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "Reset"
+animation = "SitOnGround"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 
@@ -132,15 +132,15 @@ disabled = false
 [sub_resource type="AnimationNodeStateMachine" id=18]
 
 resource_local_to_scene = true
-states/Idle/node = SubResource( 15 )
-states/Idle/position = Vector2( 112.757, 49.2584 )
-"states/Idle 2/node" = SubResource( 13 )
-"states/Idle 2/position" = Vector2( 271.674, 49.2584 )
-"states/Idle 3/node" = SubResource( 14 )
-"states/Idle 3/position" = Vector2( 444.584, 49.2584 )
-transitions = [ "Idle", "Idle 2", SubResource( 16 ), "Idle 2", "Idle 3", SubResource( 17 ) ]
-start_node = "Idle"
-end_node = "Idle 3"
+states/Sit/node = SubResource( 15 )
+states/Sit/position = Vector2( 271.674, 49.2584 )
+"states/Sit End/node" = SubResource( 13 )
+"states/Sit End/position" = Vector2( 444.584, 49.2584 )
+"states/Sit Start/node" = SubResource( 14 )
+"states/Sit Start/position" = Vector2( 112.757, 49.2584 )
+transitions = [ "Sit Start", "Sit", SubResource( 16 ), "Sit", "Sit End", SubResource( 17 ) ]
+start_node = "Sit Start"
+end_node = "Sit End"
 graph_offset = Vector2( -6.99635, -42.9573 )
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=19]
@@ -234,7 +234,7 @@ graph_offset = Vector2( -168.017, -64.0519 )
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -745.611, 184.816 )
+graph_offset = Vector2( -928.516, 132.868 )
 nodes/Breathing/node = SubResource( 3 )
 nodes/Breathing/position = Vector2( -220, 140 )
 "nodes/Breathing Animation/node" = SubResource( 1 )

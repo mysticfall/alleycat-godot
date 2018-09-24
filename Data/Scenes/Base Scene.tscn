@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -11,12 +11,13 @@
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=13]
-[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=14]
-[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=15]
-[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=16]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegate.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=14]
+[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=18]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
@@ -121,7 +122,6 @@ Axis = 1
 Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View"]
-editor/display_folded = true
 script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
@@ -332,7 +332,6 @@ Polling = true
 [node name="Actions" type="Node" parent="Control/Player"]
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
-editor/display_folded = true
 script = ExtResource( 11 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
@@ -349,11 +348,28 @@ Action = "interact"
 UnhandledOnly = false
 StopPropagation = true
 
+[node name="Sit" type="Node" parent="Control/Player/Actions"]
+script = ExtResource( 12 )
+_sections_unfolded = [ "Script" ]
+ProcessMode = 0
+Active = true
+_key = "Sit"
+_displayName = "action.Sit"
+Action = "Sit"
+
+[node name="Input" type="Node" parent="Control/Player/Actions/Sit"]
+pause_mode = 2
+script = ExtResource( 9 )
+ProcessMode = 0
+Active = true
+Action = "sit"
+UnhandledOnly = false
+StopPropagation = true
+
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
-editor/display_folded = true
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _key = "ToggleConsole"
@@ -371,13 +387,12 @@ UnhandledOnly = false
 StopPropagation = true
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
-editor/display_folded = true
-script = ExtResource( 13 )
+script = ExtResource( 14 )
 ProcessMode = 0
 Active = true
 _displayName = "action.ShowInventory"
 Modal = true
-UI = ExtResource( 14 )
+UI = ExtResource( 15 )
 _key = "ShowInventory"
 _parent = NodePath("../../../../UI")
 
@@ -391,13 +406,12 @@ UnhandledOnly = true
 StopPropagation = true
 
 [node name="Show Menu" type="Node" parent="Control/Actions"]
-editor/display_folded = true
-script = ExtResource( 13 )
+script = ExtResource( 14 )
 ProcessMode = 0
 Active = true
 _displayName = "action.ShowMenu"
 Modal = true
-UI = ExtResource( 15 )
+UI = ExtResource( 16 )
 _key = "ShowMenu"
 _parent = NodePath("../../../../UI")
 
@@ -427,10 +441,10 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource( 16 )
+texture = ExtResource( 17 )
 stretch_mode = 4
 _sections_unfolded = [ "Rect", "texture" ]
 
-[node name="Entity Label" parent="UI" instance=ExtResource( 17 )]
+[node name="Entity Label" parent="UI" instance=ExtResource( 18 )]
 visible = false
 

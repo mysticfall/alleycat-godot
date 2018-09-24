@@ -89,8 +89,10 @@
     <Compile Include="Source\AlleyCat\Animation\IAnimationControl.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationStateManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationGraph.cs" />
+    <Compile Include="Source\AlleyCat\Animation\SitAction.cs" />
     <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
+    <Compile Include="Source\AlleyCat\Animation\SitState.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttribute.cs" />

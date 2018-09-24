@@ -1,6 +1,7 @@
 "id","en","ko"
 "action.Drop","Drop","버리기"
 "action.Pickup","Take","줍기"
+"action.Sit","Sit / Get Up","앉기 / 서기"
 "action.ToggleCosole","Toggle Console","콘솔을 보이거나 감춥니다"
 "action.ShowInventory","Show Inventory","소지품을 보입니다"
 "action.ShowMenu","Show Menu","게임 메뉴를 보입니다"
