@@ -56,7 +56,7 @@ namespace AlleyCat.UI
             var action = ticks
                 .CombineLatest(entity, (_, e) => e)
                 .Select(i => new InteractionContext(Player, i))
-                .Select(context => Player?.FindAction(context)?.DisplayName);
+                .Select(context => Player?.FindAction(context, a => a is Interaction)?.DisplayName);
 
             var showAction = action.Select(a => a != null);
 
