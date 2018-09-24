@@ -14,7 +14,7 @@ namespace AlleyCat.Animation
 
         public string State
         {
-            get => Playback.GetCurrentNode(); 
+            get => Playback.GetCurrentNode();
             set => Playback.Travel(value);
         }
 
