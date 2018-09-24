@@ -1,6 +1,7 @@
 using System;
 using AlleyCat.Autowire;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
@@ -30,18 +31,20 @@ namespace AlleyCat.Action
 
         private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
 
-        public void Execute(IActor actor)
+        public void Execute(IActionContext context)
         {
-            if (Active && Valid && AllowedFor(actor))
+            Ensure.Any.IsNotNull(context);
+
+            if (Active && Valid && AllowedFor(context))
             {
-                DoExecute(actor);
+                DoExecute(context);
             }
         }
 
-        protected abstract void DoExecute(IActor actor);
+        protected abstract void DoExecute(IActionContext context);
 
-        public abstract bool AllowedFor([CanBeNull] IActor context);
+        public abstract bool AllowedFor([CanBeNull] IActionContext context);
 
-        public bool AllowedFor(object context) => AllowedFor(context as IActor);
+        public bool AllowedFor(object context) => AllowedFor(context as IActionContext);
     }
 }

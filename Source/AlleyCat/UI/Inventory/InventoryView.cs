@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -159,7 +160,9 @@ namespace AlleyCat.UI.Inventory
 
                 ViewControl.Reset();
 
-                var actions = item.Actions.Where(a => a.Active && a.Valid && a.AllowedFor(Character));
+                var context = new InteractionContext(Character, item);
+                var actions = Character.Actions.Values
+                    .Where(a => a.Active && a.Valid && a.AllowedFor(context));
 
                 foreach (var action in actions)
                 {
@@ -175,9 +178,9 @@ namespace AlleyCat.UI.Inventory
 
         private void OnButtonPress(string key)
         {
-            var action = _item.Value?.Actions.FirstOrDefault(a => a.Key == key);
+            var context = new InteractionContext(Character, _item.Value);
 
-            action?.Execute(Character);
+            Character.Actions[key].Execute(context);
         }
 
         public override void _Notification(int what)

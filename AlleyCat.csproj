@@ -59,9 +59,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\AlleyCat\Action\Action.cs" />
+    <Compile Include="Source\AlleyCat\Action\ActionContext.cs" />
+    <Compile Include="Source\AlleyCat\Action\ActionMap.cs" />
     <Compile Include="Source\AlleyCat\Action\IAction.cs" />
+    <Compile Include="Source\AlleyCat\Action\IActionContext.cs" />
     <Compile Include="Source\AlleyCat\Action\IActor.cs" />
-    <Compile Include="Source\AlleyCat\Action\IInteractable.cs" />
+    <Compile Include="Source\AlleyCat\Action\Interaction.cs" />
+    <Compile Include="Source\AlleyCat\Action\InteractionContext.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControl.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControlFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationEvent.cs" />
@@ -201,22 +205,21 @@
     <Compile Include="Source\AlleyCat\Condition\LogicalOperationType.cs" />
     <Compile Include="Source\AlleyCat\Condition\TypedCondition.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
-    <Compile Include="Source\AlleyCat\Control\ActionBinding.cs" />
-    <Compile Include="Source\AlleyCat\Control\ActionBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
-    <Compile Include="Source\AlleyCat\Control\IActionBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
     <Compile Include="Source\AlleyCat\Control\IInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\InputAction.cs" />
     <Compile Include="Source\AlleyCat\Control\InputBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\InputEventExtensions.cs" />
-    <Compile Include="Source\AlleyCat\Control\InteractAction.cs" />
     <Compile Include="Source\AlleyCat\Control\IPlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ITriggerInput.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerAction.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerInteraction.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />
@@ -376,6 +379,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
+    <Folder Include="Source\AlleyCat\Character\Action" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

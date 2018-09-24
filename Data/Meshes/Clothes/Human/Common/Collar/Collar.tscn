@@ -1,16 +1,13 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=4]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/PickUp.anim" type="Animation" id=5]
-[ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=6]
-[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=7]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=8]
-[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=9]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=10]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=4]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.mesh" type="ArrayMesh" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=6]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=7]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=8]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -84,42 +81,18 @@ disabled = false
 [node name="Binding" type="Node" parent="CollisionShape"]
 script = ExtResource( 3 )
 
-[node name="Actions" type="Node" parent="."]
-
-[node name="Pickup" type="Node" parent="Actions"]
-script = ExtResource( 4 )
-ProcessMode = 0
-Active = true
-_key = "Pickup"
-_displayName = "action.Pickup"
-PickupDistance = 1.2
-Animation = ExtResource( 5 )
-IKChain = "Right Hand IK"
-AnimatorPath = "States/Action"
-StatesPath = "States"
-ActionState = "Action"
-_tags = "TagCarry,TagHand"
-
-[node name="Drop" type="Node" parent="Actions"]
-script = ExtResource( 6 )
-_sections_unfolded = [ "Script" ]
-ProcessMode = 0
-Active = true
-_key = "Drop"
-_displayName = "action.Drop"
-
 [node name="Configurations" type="Node" parent="."]
 
 [node name="Wear" type="Node" parent="Configurations" groups=[
 "TagWear",
 ]]
-script = ExtResource( 7 )
+script = ExtResource( 4 )
 ProcessMode = 0
 _key = "Wear"
 _slot = "Necklace"
 _additionalSlots = ""
 Active = false
-Mesh = ExtResource( 8 )
+Mesh = ExtResource( 5 )
 Animation = null
 AnimationBlend = ""
 AnimationTransition = 1.0
@@ -130,14 +103,14 @@ _meshesToSync = null
 "TagHand",
 "TagOneHand",
 ]]
-script = ExtResource( 9 )
+script = ExtResource( 6 )
 ProcessMode = 0
 _key = "Carry"
 _slot = "RightHand"
 _additionalSlots = ""
 Active = false
 Mesh = null
-Animation = ExtResource( 10 )
+Animation = ExtResource( 7 )
 AnimationBlend = "Hands"
 AnimationTransition = 1.0
 
@@ -145,11 +118,11 @@ AnimationTransition = 1.0
 
 [node name="Label" type="Spatial" parent="Markers"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.104555, 0.0142181 )
-script = ExtResource( 11 )
+script = ExtResource( 8 )
 _key = "Label"
 
 [node name="Carry" type="Spatial" parent="Markers"]
 transform = Transform( -0.890473, -0.454006, -0.0306126, 0.403806, -0.757416, -0.51309, 0.209759, -0.469254, 0.857788, -0.00525796, 0.0126396, 0.137194 )
-script = ExtResource( 11 )
+script = ExtResource( 8 )
 _key = "Carry"
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
+using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
@@ -30,6 +31,8 @@ namespace AlleyCat.UI
         [Node("Container/Action/Action Title")]
         protected Label ActionTitle { get; private set; }
 
+        protected IHumanoid Player => PlayerControl?.Character;
+
         [Service]
         protected IPlayerControl PlayerControl { get; private set; }
 
@@ -51,9 +54,9 @@ namespace AlleyCat.UI
             var title = entity.Select(e => e.DisplayName);
 
             var action = ticks
-                .CombineLatest(entity, (_, e) => e as IInteractable)
-                .Select(i => i?.Actions.FirstOrDefault(a => a.AllowedFor(PlayerControl.Character)))
-                .Select(a => a?.DisplayName);
+                .CombineLatest(entity, (_, e) => e)
+                .Select(i => new InteractionContext(Player, i))
+                .Select(context => Player?.FindAction(context)?.DisplayName);
 
             var showAction = action.Select(a => a != null);
 

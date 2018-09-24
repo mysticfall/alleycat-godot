@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Action
 {
-    public interface IAction : INamed, IActivatable, IValidatable, IRestricted<IActor>
+    public interface IAction : INamed, IActivatable, IValidatable, IRestricted<IActionContext>
     {
-        void Execute([CanBeNull] IActor actor);
+        void Execute([NotNull] IActionContext context);
     }
 }

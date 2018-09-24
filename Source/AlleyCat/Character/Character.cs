@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
@@ -41,6 +42,9 @@ namespace AlleyCat.Character
 
         [Service]
         public IEquipmentContainer Equipments { get; private set; }
+
+        [Service]
+        public IReadOnlyDictionary<string, IAction> Actions { get; private set; }
 
         public Spatial Spatial => this;
 

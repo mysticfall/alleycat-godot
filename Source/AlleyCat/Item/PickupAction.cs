@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
-using AlleyCat.Character;
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using static AlleyCat.Item.CommonEquipmentTags;
@@ -36,34 +36,35 @@ namespace AlleyCat.Item
 
         [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
 
-        protected override void DoExecute(IActor actor)
+        protected override void DoExecute(
+            IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
-            var character = (ICharacter) actor;
-
-            var configuration = character.FindEquipConfiguration(Item, Tags.ToArray());
+            var configuration = holder.FindEquipConfiguration(equipment, Tags.ToArray());
 
             if (configuration == null) return;
 
-            if (Animation == null)
+            if (Animation == null || !(holder is IAnimatable animatable))
             {
-                character.Equip(Item, configuration);
+                holder.Equip(equipment, configuration);
 
                 return;
             }
 
-            if (IKChain != null && character.IKChains.TryGetValue(IKChain, out var chain))
+            if (IKChain != null &&
+                holder is IRigged rig &&
+                rig.IKChains.TryGetValue(IKChain, out var chain))
             {
-                Item.Markers.TryGetValue(configuration.Key, out var marker);
+                equipment.Markers.TryGetValue(configuration.Key, out var marker);
 
-                chain.Target = marker?.GlobalTransform ?? Item.GlobalTransform;
+                chain.Target = marker?.GlobalTransform ?? equipment.GlobalTransform;
             }
 
-            var animationManager = character.AnimationManager;
+            var animationManager = animatable.AnimationManager;
 
             animationManager.OnAnimationEvent
                 .Where(e => e.Name == "Action" && (string) e.Argument == Key)
                 .Take(1)
-                .Subscribe(_ => character.Equip(Item, configuration))
+                .Subscribe(_ => holder.Equip(equipment, configuration))
                 .AddTo(this);
 
             if (!(animationManager is IAnimationStateManager stateManager) ||
@@ -84,9 +85,27 @@ namespace AlleyCat.Item
             }
         }
 
-        public override bool AllowedFor(IActor context) =>
-            !Item.Equipped &&
-            context is ICharacter character &&
-            character.DistanceTo(Item) <= PickupDistance;
+        protected override bool AllowedFor(
+            IEquipmentHolder holder, Equipment equipment, InteractionContext context) =>
+            !equipment.Equipped && holder.DistanceTo(equipment) <= PickupDistance;
+    }
+
+    public static class PickupActionExtensions
+    {
+        public static void Pickup([NotNull] this IEquipmentHolder holder, [NotNull] Equipment equipment)
+        {
+            Ensure.Any.IsNotNull(holder, nameof(holder));
+            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+
+            if (!(holder is IActor actor)) return;
+
+            var action = actor.Actions.Values.FirstOrDefault(a => a is PickupAction);
+            var context = new InteractionContext(actor, equipment);
+
+            if (action != null && action.AllowedFor(context))
+            {
+                action.Execute(context);
+            }
+        }
     }
 }

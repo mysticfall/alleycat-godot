@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -10,15 +10,13 @@
 [ext_resource path="res://Source/AlleyCat/View/HeadMountedView.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Control/ActionBindings.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/Control/ActionBinding.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/Control/InteractAction.cs" type="Script" id=13]
-[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=14]
-[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=15]
-[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
-[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=17]
-[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=12]
+[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=15]
+[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=16]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=17]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
@@ -331,41 +329,17 @@ PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
 
-[node name="Actions" type="Node" parent="Control/Player"]
-script = ExtResource( 11 )
-ProcessMode = 0
-
-[node name="Interact" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 12 )
-ProcessMode = 0
-Active = true
-_actor = NodePath("../../../../Entities/Characters/Player")
-
-[node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
-pause_mode = 2
-script = ExtResource( 9 )
-ProcessMode = 0
-Active = true
-Action = "interact"
-UnhandledOnly = true
-StopPropagation = true
-
-[node name="Action" type="Node" parent="Control/Player/Actions/Interact"]
-script = ExtResource( 13 )
-ProcessMode = 0
-Active = true
-_key = "Interact"
-_displayName = null
-
 [node name="Actions" type="Node" parent="Control"]
-script = ExtResource( 11 )
-ProcessMode = 0
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
-script = ExtResource( 12 )
+editor/display_folded = true
+script = ExtResource( 11 )
 ProcessMode = 0
 Active = true
-_actor = null
+_key = "ToggleConsole"
+_displayName = "action.ToggleCosole"
+Modal = false
+_ui = NodePath("/root/AlleyCat/UI/Console")
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
@@ -376,20 +350,16 @@ Action = "ui_console"
 UnhandledOnly = false
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Toggle Console"]
-script = ExtResource( 14 )
-ProcessMode = 0
-Active = true
-_key = "ToggleConsole"
-_displayName = "action.ToggleCosole"
-Modal = false
-_ui = NodePath("/root/AlleyCat/UI/Console")
-
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
+editor/display_folded = true
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
-_actor = null
+_displayName = "action.ShowInventory"
+Modal = true
+UI = ExtResource( 13 )
+_key = "ShowInventory"
+_parent = NodePath("../../../../UI")
 
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
@@ -400,21 +370,16 @@ Action = "inventory"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Show Inventory"]
-script = ExtResource( 15 )
-ProcessMode = 0
-Active = true
-_key = "ShowInventory"
-_displayName = "action.ShowInventory"
-Modal = true
-UI = ExtResource( 16 )
-_parent = NodePath("../../../../UI")
-
 [node name="Show Menu" type="Node" parent="Control/Actions"]
+editor/display_folded = true
 script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
-_actor = null
+_displayName = "action.ShowMenu"
+Modal = true
+UI = ExtResource( 14 )
+_key = "ShowMenu"
+_parent = NodePath("../../../../UI")
 
 [node name="Input" type="Node" parent="Control/Actions/Show Menu"]
 pause_mode = 2
@@ -425,15 +390,23 @@ Action = "ui_cancel"
 UnhandledOnly = true
 StopPropagation = true
 
-[node name="Action" type="Node" parent="Control/Actions/Show Menu"]
+[node name="Interact" type="Node" parent="Control/Actions"]
+editor/display_folded = true
 script = ExtResource( 15 )
+_sections_unfolded = [ "Script" ]
 ProcessMode = 0
 Active = true
-_key = "ShowMenu"
-_displayName = "action.ShowMenu"
-Modal = true
-UI = ExtResource( 17 )
-_parent = NodePath("../../../../UI")
+_key = "Interact"
+_displayName = "action.Interaction"
+
+[node name="Input" type="Node" parent="Control/Actions/Interact"]
+pause_mode = 2
+script = ExtResource( 9 )
+ProcessMode = 0
+Active = true
+Action = "interact"
+UnhandledOnly = false
+StopPropagation = true
 
 [node name="UI" type="Node" parent="."]
 
@@ -452,10 +425,10 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource( 18 )
+texture = ExtResource( 16 )
 stretch_mode = 4
 _sections_unfolded = [ "Rect", "texture" ]
 
-[node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
+[node name="Entity Label" parent="UI" instance=ExtResource( 17 )]
 visible = false
 

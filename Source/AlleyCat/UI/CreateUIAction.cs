@@ -15,9 +15,11 @@ namespace AlleyCat.UI
 
         public override bool Valid => base.Valid && (UI?.CanInstance() ?? false);
 
+        [Export, UsedImplicitly] private string _key;
+
         [Export, UsedImplicitly] private NodePath _parent;
 
-        protected override void DoExecute(IActor actor)
+        protected override void DoExecute(IActionContext context)
         {
             var instance = UI?.Instance();
 

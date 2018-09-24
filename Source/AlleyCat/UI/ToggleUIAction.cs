@@ -13,6 +13,6 @@ namespace AlleyCat.UI
 
         [Export, UsedImplicitly] private NodePath _ui;
 
-        protected override void DoExecute(IActor actor) => UI?.Toggle();
+        protected override void DoExecute(IActionContext context) => UI?.Toggle();
     }
 }

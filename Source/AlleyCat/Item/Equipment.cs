@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.IO;
@@ -12,7 +11,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Item
 {
     [AutowireContext]
-    public class Equipment : RigidBody, IInteractable, ISlotItem, IMarkable, IEntity
+    public class Equipment : RigidBody, ISlotItem, IMarkable, IEntity
     {
         public string Key => _key ?? Name;
 
@@ -43,8 +42,6 @@ namespace AlleyCat.Item
         [Service]
         public CollisionShape Shape { get; private set; }
 
-        public IEnumerable<IAction> Actions => _actions ?? Enumerable.Empty<IAction>();
-
         public IEnumerable<MeshInstance> Meshes =>
             _mesh != null && _mesh.Visible ? new[] {_mesh} : Enumerable.Empty<MeshInstance>();
 
@@ -66,8 +63,6 @@ namespace AlleyCat.Item
         [Service] private MeshInstance _mesh;
 
         [Service] private IEnumerable<EquipmentConfiguration> _configurations;
-
-        [Service(false)] private IEnumerable<IAction> _actions;
 
         [Service(false)] private IEnumerable<Marker> _markers;
 

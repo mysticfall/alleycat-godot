@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -67,9 +66,6 @@ namespace AlleyCat.Control
             }
         }
 
-        public IReadOnlyDictionary<string, IAction> Actions =>
-            _actions?.ActionMap ?? Enumerable.Empty<IAction>().ToDictionary(i => i.Key);
-
         protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Valid);
 
         [Export, UsedImplicitly] private NodePath _characterPath;
@@ -77,8 +73,6 @@ namespace AlleyCat.Control
         [Export, UsedImplicitly] private NodePath _cameraPath;
 
         [Node("Movement")] private InputBindings _movementInput;
-
-        [Node("Actions", false)] private ActionBindings _actions;
 
         private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
 
@@ -133,7 +127,6 @@ namespace AlleyCat.Control
                 .Do(v => _movementInput.Active = v)
                 .Do(v => Character?.Locomotion.Stop())
                 .Do(v => Perspective.Active = v)
-                .Do(v => Actions.Values.ToList().ForEach(a => a.Active = v))
                 .Subscribe()
                 .AddTo(this);
 
