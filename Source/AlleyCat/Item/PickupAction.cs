@@ -93,7 +93,7 @@ namespace AlleyCat.Item
     public static class PickupActionExtensions
     {
         public static void Pickup<T>([NotNull] this T actor, [NotNull] Equipment equipment)
-            where T : IActor, IEquipmentHolder
+            where T : class, IActor, IEquipmentHolder
         {
             Ensure.Any.IsNotNull(actor, nameof(actor));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
@@ -107,12 +107,7 @@ namespace AlleyCat.Item
                     "The specified actor does not support pick up action.");
             }
 
-            var context = new InteractionContext(actor, equipment);
-
-            if (action.AllowedFor(context))
-            {
-                action.Execute(context);
-            }
+            action.Execute(new InteractionContext(actor, equipment));
         }
     }
 }
