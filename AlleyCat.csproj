@@ -217,6 +217,7 @@
     <Compile Include="Source\AlleyCat\Control\MouseAxis.cs" />
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerAction.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerActionDelegate.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerInteraction.cs" />
