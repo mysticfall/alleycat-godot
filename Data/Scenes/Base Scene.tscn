@@ -10,11 +10,11 @@
 [ext_resource path="res://Source/AlleyCat/View/HeadMountedView.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=12]
-[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=14]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=15]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=13]
+[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=16]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=17]
 
@@ -329,11 +329,31 @@ PositiveAction = "move_forward"
 NegativeAction = "move_back"
 Polling = true
 
+[node name="Actions" type="Node" parent="Control/Player"]
+
+[node name="Interact" type="Node" parent="Control/Player/Actions"]
+editor/display_folded = true
+script = ExtResource( 11 )
+_sections_unfolded = [ "Script" ]
+ProcessMode = 0
+Active = true
+_key = "Interact"
+_displayName = "action.Interaction"
+
+[node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
+pause_mode = 2
+script = ExtResource( 9 )
+ProcessMode = 0
+Active = true
+Action = "interact"
+UnhandledOnly = false
+StopPropagation = true
+
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
 editor/display_folded = true
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 ProcessMode = 0
 Active = true
 _key = "ToggleConsole"
@@ -352,12 +372,12 @@ StopPropagation = true
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
 editor/display_folded = true
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _displayName = "action.ShowInventory"
 Modal = true
-UI = ExtResource( 13 )
+UI = ExtResource( 14 )
 _key = "ShowInventory"
 _parent = NodePath("../../../../UI")
 
@@ -372,12 +392,12 @@ StopPropagation = true
 
 [node name="Show Menu" type="Node" parent="Control/Actions"]
 editor/display_folded = true
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 ProcessMode = 0
 Active = true
 _displayName = "action.ShowMenu"
 Modal = true
-UI = ExtResource( 14 )
+UI = ExtResource( 15 )
 _key = "ShowMenu"
 _parent = NodePath("../../../../UI")
 
@@ -388,24 +408,6 @@ ProcessMode = 0
 Active = true
 Action = "ui_cancel"
 UnhandledOnly = true
-StopPropagation = true
-
-[node name="Interact" type="Node" parent="Control/Actions"]
-editor/display_folded = true
-script = ExtResource( 15 )
-_sections_unfolded = [ "Script" ]
-ProcessMode = 0
-Active = true
-_key = "Interact"
-_displayName = "action.Interaction"
-
-[node name="Input" type="Node" parent="Control/Actions/Interact"]
-pause_mode = 2
-script = ExtResource( 9 )
-ProcessMode = 0
-Active = true
-Action = "interact"
-UnhandledOnly = false
 StopPropagation = true
 
 [node name="UI" type="Node" parent="."]

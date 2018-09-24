@@ -10,7 +10,7 @@ namespace AlleyCat.Control
     {
         protected IHumanoid Player => PlayerControl?.Character;
 
-        [Service]
+        [Ancestor]
         protected IPlayerControl PlayerControl { get; private set; }
 
         protected override void OnInitialize()
