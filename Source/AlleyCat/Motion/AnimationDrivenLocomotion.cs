@@ -70,11 +70,11 @@ namespace AlleyCat.Motion
             var speed = velocity.Length();
             var direction = velocity.Normalized();
 
-            var current = States.Playback.GetCurrentNode();
+            var current = States.State;
 
             if (speed > 0)
             {
-                if (current != MoveState)
+                if (current == IdleState)
                 {
                     States.State = MoveState;
                 }
