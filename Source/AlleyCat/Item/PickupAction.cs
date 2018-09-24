@@ -99,9 +99,17 @@ namespace AlleyCat.Item
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
 
             var action = actor.Actions.Values.FirstOrDefault(a => a is PickupAction);
+
+            if (action == null)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(actor),
+                    "The specified actor does not support pick up action.");
+            }
+
             var context = new InteractionContext(actor, equipment);
 
-            if (action != null && action.AllowedFor(context))
+            if (action.AllowedFor(context))
             {
                 action.Execute(context);
             }

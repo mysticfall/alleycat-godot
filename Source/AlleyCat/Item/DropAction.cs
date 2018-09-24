@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Game;
@@ -31,16 +32,24 @@ namespace AlleyCat.Item
 
     public static class DropActionExtensions
     {
-        public static void Pickup<T>([NotNull] this T actor, [NotNull] Equipment equipment)
+        public static void Drop<T>([NotNull] this T actor, [NotNull] Equipment equipment)
             where T : IActor, IEquipmentHolder
         {
             Ensure.Any.IsNotNull(actor, nameof(actor));
             Ensure.Any.IsNotNull(equipment, nameof(equipment));
 
             var action = actor.Actions.Values.FirstOrDefault(a => a is DropAction);
+
+            if (action == null)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(actor),
+                    "The specified actor does not support drop action.");
+            }
+
             var context = new InteractionContext(actor, equipment);
 
-            if (action?.AllowedFor(context) ?? false)
+            if (action.AllowedFor(context))
             {
                 action.Execute(context);
             }
