@@ -382,7 +382,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
-    <Folder Include="Source\AlleyCat\Character\Action" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
