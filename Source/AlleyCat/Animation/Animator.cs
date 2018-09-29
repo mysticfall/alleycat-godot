@@ -9,8 +9,6 @@ namespace AlleyCat.Animation
 {
     public class Animator : AnimationControl
     {
-        public AnimationNodeAnimation Node { get; }
-
         [CanBeNull]
         public Godot.Animation Animation
         {
@@ -19,6 +17,8 @@ namespace AlleyCat.Animation
         }
 
         public IObservable<Godot.Animation> OnAnimationChange => _animation;
+
+        protected AnimationNodeAnimation Node { get; }
 
         private readonly ReactiveProperty<Godot.Animation> _animation;
 

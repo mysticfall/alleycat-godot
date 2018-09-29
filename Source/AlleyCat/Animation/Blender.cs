@@ -37,9 +37,9 @@ namespace AlleyCat.Animation
 
         public IObservable<float> OnTimeScaleChange => _timeScale;
 
-        protected string ParameterBlendAmount { get; }
+        protected string BlendAmountParameter { get; }
 
-        protected string ParameterTimeScale { get; }
+        protected string TimeScaleParameter { get; }
 
         protected AnimationNodeBlend2 BlenderNode { get; }
 
@@ -52,27 +52,27 @@ namespace AlleyCat.Animation
         private readonly ReactiveProperty<float> _timeScale;
 
         public Blender(
-            [NotNull] string parameterBlendAmount,
+            [NotNull] string blendAmountParameter,
             [NotNull] AnimationNodeBlend2 blenderNode,
             [NotNull] AnimationNodeAnimation animationNode,
             AnimationGraphContext context) :
-            this(parameterBlendAmount, null, blenderNode, animationNode, context)
+            this(blendAmountParameter, null, blenderNode, animationNode, context)
         {
         }
 
         public Blender(
-            [NotNull] string parameterBlendAmount,
-            [CanBeNull] string parameterTimeScale,
+            [NotNull] string blendAmountParameter,
+            [CanBeNull] string timeScaleParameter,
             [NotNull] AnimationNodeBlend2 blenderNode,
             [NotNull] AnimationNodeAnimation animationNode,
             AnimationGraphContext context) : base(context)
         {
-            Ensure.Any.IsNotNull(parameterBlendAmount, nameof(parameterBlendAmount));
+            Ensure.Any.IsNotNull(blendAmountParameter, nameof(blendAmountParameter));
             Ensure.Any.IsNotNull(blenderNode, nameof(blenderNode));
             Ensure.Any.IsNotNull(animationNode, nameof(animationNode));
 
-            ParameterBlendAmount = parameterBlendAmount;
-            ParameterTimeScale = parameterTimeScale;
+            BlendAmountParameter = blendAmountParameter;
+            TimeScaleParameter = timeScaleParameter;
 
             BlenderNode = blenderNode;
             AnimationNode = animationNode;
@@ -101,17 +101,17 @@ namespace AlleyCat.Animation
                 BlenderNode.FilterEnabled = filters.Any();
             });
 
-            var currentAmount = (float) context.AnimationTree.Get(parameterBlendAmount);
+            var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
 
             _amount = new ReactiveProperty<float>(currentAmount);
-            _amount.Subscribe(v => context.AnimationTree.Set(parameterBlendAmount, v));
+            _amount.Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v));
 
-            var currentSpeed = parameterTimeScale != null ? (float) context.AnimationTree.Get(parameterTimeScale) : 1f;
+            var currentSpeed = timeScaleParameter != null ? (float) context.AnimationTree.Get(timeScaleParameter) : 1f;
 
             _timeScale = new ReactiveProperty<float>(currentSpeed);
             _timeScale
-                .Where(_ => parameterTimeScale != null)
-                .Subscribe(v => context.AnimationTree.Set(parameterTimeScale, v));
+                .Where(_ => timeScaleParameter != null)
+                .Subscribe(v => context.AnimationTree.Set(timeScaleParameter, v));
         }
 
         public void Blend(
