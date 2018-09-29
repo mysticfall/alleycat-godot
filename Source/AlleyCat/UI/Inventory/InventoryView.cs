@@ -162,6 +162,7 @@ namespace AlleyCat.UI.Inventory
 
                 var context = new InteractionContext(Character, item);
                 var actions = Character.Actions.Values
+                    .OfType<Interaction>()
                     .Where(a => a.Active && a.Valid && a.AllowedFor(context));
 
                 foreach (var action in actions)
