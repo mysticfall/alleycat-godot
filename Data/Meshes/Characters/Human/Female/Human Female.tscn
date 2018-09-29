@@ -239,7 +239,7 @@ ProcessMode = 0
 
 [node name="Pickup" type="Node" parent="Actions" index="0"]
 script = ExtResource( 33 )
-_sections_unfolded = [ "Script" ]
+_sections_unfolded = [ "Script", "_tags" ]
 ProcessMode = 0
 Active = true
 _key = "Pickup"
@@ -250,7 +250,7 @@ IKChain = "Right Hand IK"
 AnimatorPath = "States/Action"
 StatesPath = "States"
 ActionState = "Action"
-_tags = "TagCarry,TagHand"
+_tags = [ "TagCarry", "TagHand" ]
 
 [node name="Drop" type="Node" parent="Actions" index="1"]
 script = ExtResource( 34 )

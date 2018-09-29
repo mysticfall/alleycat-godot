@@ -87,16 +87,17 @@ script = ExtResource( 3 )
 "TagWear",
 ]]
 script = ExtResource( 4 )
+_sections_unfolded = [ "_additionalSlots", "_meshesToSync" ]
 ProcessMode = 0
 _key = "Wear"
 _slot = "Shirt"
-_additionalSlots = "Pants"
+_additionalSlots = [ "Pants" ]
 Active = false
 Mesh = ExtResource( 5 )
 Animation = null
 AnimationBlend = ""
 AnimationTransition = 1.0
-_meshesToSync = "Body"
+_meshesToSync = [ "Body" ]
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",

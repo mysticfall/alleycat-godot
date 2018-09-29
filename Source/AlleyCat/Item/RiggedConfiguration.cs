@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
@@ -19,17 +18,13 @@ namespace AlleyCat.Item
             {
                 if (_meshesToSyncSet != null) return _meshesToSyncSet;
 
-                var names = _meshesToSync.TrimToEnumerable();
-
-                Debug.Assert(names != null, nameof(names) + " != null");
-
-                _meshesToSyncSet = new HashSet<string>(names);
+                _meshesToSyncSet = new HashSet<string>(_meshesToSync);
 
                 return _meshesToSyncSet;
             }
         }
 
-        [Export, UsedImplicitly] private string _meshesToSync;
+        [Export, UsedImplicitly] private Array<string> _meshesToSync;
 
         private ISet<string> _meshesToSyncSet;
 

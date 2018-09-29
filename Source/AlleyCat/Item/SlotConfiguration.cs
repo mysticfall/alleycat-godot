@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
-using AlleyCat.Common;
 using Godot;
+using Godot.Collections;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Item
@@ -13,7 +13,7 @@ namespace AlleyCat.Item
 
         public string Slot => _slot ?? Key;
 
-        public IEnumerable<string> AdditionalSlots => _additionalSlots.TrimToEnumerable();
+        public IEnumerable<string> AdditionalSlots => _additionalSlots;
 
         public IEnumerable<string> AllSlots => new[] {Slot}.Concat(AdditionalSlots);
 
@@ -21,6 +21,6 @@ namespace AlleyCat.Item
 
         [Export, UsedImplicitly] private string _slot;
 
-        [Export, UsedImplicitly] private string _additionalSlots;
+        [Export, UsedImplicitly] private Array<string> _additionalSlots;
     }
 }

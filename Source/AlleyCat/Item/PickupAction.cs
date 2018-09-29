@@ -7,6 +7,7 @@ using AlleyCat.Animation;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using Godot.Collections;
 using JetBrains.Annotations;
 using static AlleyCat.Item.CommonEquipmentTags;
 
@@ -23,7 +24,7 @@ namespace AlleyCat.Item
         [Export]
         public string IKChain { get; set; } = "Right Hand IK";
 
-        public IEnumerable<string> Tags => _tags.TrimToEnumerable();
+        public IEnumerable<string> Tags => _tags;
 
         [Export]
         protected string AnimatorPath { get; private set; } = "States/Action";
@@ -34,7 +35,7 @@ namespace AlleyCat.Item
         [Export]
         protected string ActionState { get; private set; } = "Action";
 
-        [Export, UsedImplicitly] private string _tags = string.Join(",", Carry, Hand);
+        [Export, UsedImplicitly] private Array<string> _tags = new Array<string> {Carry, Hand};
 
         protected override void DoExecute(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -23,16 +21,5 @@ namespace AlleyCat.Common
         }
 
         public static string TrimToEmpty([CanBeNull] this string value) => TrimToNull(value) ?? "";
-
-        [CanBeNull]
-        public static IEnumerable<string> TrimToEnumerable([CanBeNull] this string value, char separator = ',')
-        {
-            if (value == null || value == NullString)
-            {
-                return Enumerable.Empty<string>();
-            }
-
-            return value.Split(separator).Select(v => v.Trim()).Where(v => v.Length > 0);
-        }
     }
 }
