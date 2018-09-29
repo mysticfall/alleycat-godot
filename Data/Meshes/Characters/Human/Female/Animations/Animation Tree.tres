@@ -95,21 +95,21 @@ y_label = "y"
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "GettingUp"
+animation = "KneelEnd"
 
 [sub_resource type="AnimationNodeAnimation" id=14]
 
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "SitOnGroundStart"
+animation = "KneelStart"
 
 [sub_resource type="AnimationNodeAnimation" id=15]
 
 resource_local_to_scene = true
 filter_enabled = false
 filters = [  ]
-animation = "SitOnGround"
+animation = "Kneel"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 
@@ -234,7 +234,7 @@ graph_offset = Vector2( -168.017, -64.0519 )
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -928.516, 132.868 )
+graph_offset = Vector2( -698.636, 128.872 )
 nodes/Breathing/node = SubResource( 3 )
 nodes/Breathing/position = Vector2( -220, 140 )
 "nodes/Breathing Animation/node" = SubResource( 1 )
