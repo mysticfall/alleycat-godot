@@ -84,7 +84,9 @@ namespace AlleyCat.Autowire
                 return;
             }
 
-            var definition = Cache.GetOrCreate(node.GetType(), _ => CreateDefinition(node));
+            var definition = node is Binding
+                ? CreateDefinition(node)
+                : Cache.GetOrCreate(node.GetType(), _ => CreateDefinition(node));
 
             Register(new DependencyNode(node, definition));
         }
