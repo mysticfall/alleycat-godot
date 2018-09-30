@@ -73,7 +73,7 @@ namespace AlleyCat.Character
 
         [Export, UsedImplicitly] private string _displayName;
 
-        [Service(false)] private IEnumerable<Marker> _markers;
+        [Service(false, false)] private IEnumerable<Marker> _markers;
 
         private Marker _labelMarker;
 

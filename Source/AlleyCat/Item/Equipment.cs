@@ -64,7 +64,7 @@ namespace AlleyCat.Item
 
         [Service] private IEnumerable<EquipmentConfiguration> _configurations;
 
-        [Service(false)] private IEnumerable<Marker> _markers;
+        [Service(false, false)] private IEnumerable<Marker> _markers;
 
         private Marker _labelMarker;
 
