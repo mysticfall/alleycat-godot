@@ -68,7 +68,7 @@ namespace AlleyCat.Autowire
                     }
                 }
 
-                current = current.Parent;
+                current = Attribute.IncludeInherited ? current.Parent : null;
             }
 
             return enumerable;
