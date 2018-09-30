@@ -207,7 +207,7 @@ parameters/States/playback = SubResource( 4 )
 parameters/States/Moving/blend_position = Vector2( 0, 0 )
 parameters/States/Seated/playback = SubResource( 5 )
 parameters/States/Seated/Seated/Sit/current = 0
-_sections_unfolded = [ "Root Motion", "parameters", "parameters/Default State", "parameters/Hands", "parameters/States", "parameters/States/Sit", "parameters/States/Sit/Sit", "parameters/States/Sit/Sit/Transition", "parameters/States/Sitting", "parameters/States/Sitting/Seated/Sit", "parameters/TimeScale", "parameters/Transition", "tree_root" ]
+_sections_unfolded = [ "Root Motion", "parameters", "parameters/Default State", "parameters/Hands", "parameters/States", "parameters/States/Seated", "parameters/States/Seated/Seated", "parameters/States/Seated/Seated/Sit", "parameters/States/Sit", "parameters/States/Sit/Sit", "parameters/States/Sit/Sit/Transition", "parameters/States/Sitting", "parameters/States/Sitting/Seated/Sit", "parameters/TimeScale", "parameters/Transition", "tree_root" ]
 
 [node name="Binding" type="Node" parent="Animations/AnimationTree" index="0"]
 script = ExtResource( 11 )
@@ -275,6 +275,25 @@ _displayName = "action.Sit"
 SittingDownAnimation = ExtResource( 23 )
 Animation = ExtResource( 22 )
 GettingUpAnimation = ExtResource( 14 )
+StatesPath = "States"
+SubStatesPath = "States/Seated"
+IdleState = "Idle"
+EnterState = "Sitting Down"
+State = "Seated"
+ExitState = "Getting Up"
+EnterAnimatorPath = "States/Seated/Sitting Down"
+AnimatorPath = "States/Seated/Seated/Sit"
+ExitAnimatorPath = "States/Seated/Getting Up"
+
+[node name="Kneel" type="Node" parent="Actions" index="3"]
+script = ExtResource( 35 )
+ProcessMode = 0
+Active = true
+_key = "Kneel"
+_displayName = "action.Kneel"
+SittingDownAnimation = ExtResource( 19 )
+Animation = ExtResource( 17 )
+GettingUpAnimation = ExtResource( 18 )
 StatesPath = "States"
 SubStatesPath = "States/Seated"
 IdleState = "Idle"

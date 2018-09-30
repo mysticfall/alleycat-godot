@@ -366,6 +366,24 @@ Action = "sit"
 UnhandledOnly = false
 StopPropagation = true
 
+[node name="Kneel" type="Node" parent="Control/Player/Actions"]
+script = ExtResource( 12 )
+_sections_unfolded = [ "Script" ]
+ProcessMode = 0
+Active = true
+_key = "Kneel"
+_displayName = "action.Kneel"
+Action = "Kneel"
+
+[node name="Input" type="Node" parent="Control/Player/Actions/Kneel"]
+pause_mode = 2
+script = ExtResource( 9 )
+ProcessMode = 0
+Active = true
+Action = "kneel"
+UnhandledOnly = false
+StopPropagation = true
+
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
