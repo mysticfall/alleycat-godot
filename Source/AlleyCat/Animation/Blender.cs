@@ -10,7 +10,7 @@ using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Animation
 {
-    public class Blender : AnimationControl
+    public class Blender : AnimationControl, IAnimator
     {
         [CanBeNull]
         public Godot.Animation Animation

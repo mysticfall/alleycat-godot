@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
-    public class Animator : AnimationControl
+    public class Animator : AnimationControl, IAnimator
     {
         [CanBeNull]
         public Godot.Animation Animation
@@ -54,19 +54,6 @@ namespace AlleyCat.Animation
             Ensure.Any.IsNotNull(context, nameof(context));
 
             return !(parent.GetAnimationNode(name) is AnimationNodeAnimation node) ? null : new Animator(node, context);
-        }
-    }
-
-    public static class AnimatorExtensions
-    {
-        [CanBeNull]
-        public static Animator GetAnimator(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
-        {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
-
-            return graph.GetDescendantControl(path) as Animator;
         }
     }
 }
