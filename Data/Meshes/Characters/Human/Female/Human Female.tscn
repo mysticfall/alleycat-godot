@@ -199,7 +199,7 @@ parameters/Breathing/blend_amount = 0.6
 "parameters/Breathing Speed/scale" = 1.0
 parameters/Hands/blend_amount = 0.0
 parameters/States/playback = SubResource( 4 )
-parameters/States/Move/blend_position = Vector2( 0, 0 )
+parameters/States/Moving/blend_position = Vector2( 0, 0 )
 parameters/States/Sit/playback = SubResource( 5 )
 _sections_unfolded = [ "Root Motion", "parameters", "parameters/Default State", "parameters/Hands", "parameters/States", "parameters/TimeScale", "parameters/Transition", "tree_root" ]
 
@@ -225,9 +225,9 @@ Active = true
 _targetPath = NodePath("..")
 ApplyGravity = true
 IdleState = "Idle"
-MoveState = "Move"
+MoveState = "Moving"
 _statesPath = "States"
-_blend2DPath = "States/Move"
+_blend2DPath = "States/Moving"
 
 [node name="Equipments" type="Node" parent="." index="5"]
 script = ExtResource( 31 )

@@ -26,7 +26,7 @@ namespace AlleyCat.Motion
         protected string IdleState { get; private set; } = "Idle";
 
         [Export]
-        protected string MoveState { get; private set; } = "Move";
+        protected string MoveState { get; private set; } = "Moving";
 
         public override bool Valid => base.Valid &&
                                       IdleState != null &&
@@ -36,7 +36,7 @@ namespace AlleyCat.Motion
 
         [Export, UsedImplicitly] private string _statesPath = "States";
 
-        [Export, UsedImplicitly] private string _blend2DPath = "States/Move";
+        [Export, UsedImplicitly] private string _blend2DPath = "States/Moving";
 
         [PostConstruct]
         protected override void OnInitialize()
