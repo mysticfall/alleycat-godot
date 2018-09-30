@@ -14,23 +14,41 @@ namespace AlleyCat.Animation
     {
         public override bool Valid => base.Valid && _valid;
 
-        [Export]
-        protected string IdleState { get; private set; } = "Idle";
+        [Export, UsedImplicitly]
+        public Godot.Animation SittingDownAnimation { get; private set; }
 
-        [Export]
-        protected string SitState { get; private set; } = "Sit";
+        [Export, UsedImplicitly]
+        public Godot.Animation Animation { get; private set; }
 
-        [Export]
-        protected string SitStartState { get; private set; } = "Sit Start";
-
-        [Export]
-        protected string SitEndState { get; private set; } = "Sit End";
+        [Export, UsedImplicitly]
+        public Godot.Animation GettingUpAnimation { get; private set; }
 
         [Export]
         protected string StatesPath { get; private set; } = "States";
 
         [Export]
-        protected string SitStatesPath { get; private set; } = "States/Sit";
+        protected string SubStatesPath { get; private set; } = "States/Seated";
+
+        [Export]
+        protected string IdleState { get; private set; } = "Idle";
+
+        [Export]
+        protected string EnterState { get; private set; } = "Sitting Down";
+
+        [Export]
+        protected string State { get; private set; } = "Seated";
+
+        [Export]
+        protected string ExitState { get; private set; } = "Getting Up";
+
+        [Export]
+        protected string EnterAnimatorPath { get; private set; } = "States/Seated/Sitting Down";
+
+        [Export]
+        protected string AnimatorPath { get; private set; } = "States/Seated/Seated/Sit";
+
+        [Export]
+        protected string ExitAnimatorPath { get; private set; } = "States/Seated/Getting Up";
 
         private bool _valid;
 
@@ -38,49 +56,65 @@ namespace AlleyCat.Animation
         protected virtual void OnInitialize()
         {
             _valid = !string.IsNullOrEmpty(IdleState) &&
-                     !string.IsNullOrEmpty(SitState) &&
-                     !string.IsNullOrEmpty(SitStartState) &&
-                     !string.IsNullOrEmpty(SitEndState) &&
+                     !string.IsNullOrEmpty(EnterState) &&
+                     !string.IsNullOrEmpty(State) &&
+                     !string.IsNullOrEmpty(ExitState) &&
                      !string.IsNullOrEmpty(StatesPath) &&
-                     !string.IsNullOrEmpty(SitStatesPath);
+                     !string.IsNullOrEmpty(SubStatesPath) &&
+                     !string.IsNullOrEmpty(EnterAnimatorPath) &&
+                     !string.IsNullOrEmpty(AnimatorPath) &&
+                     !string.IsNullOrEmpty(ExitAnimatorPath);
         }
 
         protected override void DoExecute(IActionContext context)
         {
             var animatable = (IAnimatable) context.Actor;
-            var animator = (IAnimationStateManager) animatable?.AnimationManager;
+            var manager = (IAnimationStateManager) animatable?.AnimationManager;
 
-            if (animatable == null) return;
+            if (manager == null) return;
 
-            var states = animator.GetStates(StatesPath);
-            var sitStates = animator.GetStates(SitStatesPath);
+            var states = manager.GetStates(StatesPath);
+            var subStates = manager.GetStates(SubStatesPath);
 
-            if (states == null || sitStates == null)
+            if (states == null || subStates == null)
             {
                 throw new ArgumentException("The specified actor does not support sit action.");
             }
 
-            var state = GetStateEnum(states.State);
+            var enterControl = manager.GetAnimator(EnterAnimatorPath);
+            var control = manager.GetAnimator(AnimatorPath);
+            var exitControl = manager.GetAnimator(ExitAnimatorPath);
 
-            switch (state)
+            if (enterControl == null || control == null || exitControl == null)
             {
-                case Seated:
-                case SittingDown:
-                    sitStates.State = SitEndState;
+                throw new ArgumentException("Unable to find suitable controls for sit animations.");
+            }
+
+            var current = states.State;
+
+            if (current == IdleState)
+            {
+                enterControl.Animation = SittingDownAnimation;
+                control.Animation = Animation;
+                exitControl.Animation = GettingUpAnimation;
+
+                states.State = State;
+            }
+            else if (current == State && subStates.State == State)
+            {
+                if (control.Animation == Animation)
+                {
+                    subStates.State = ExitState;
 
                     //FIXME A temporary workaround for godotengine/godot#22389
                     states.State = IdleState;
-                    break;
-                case Standing:
-                    states.State = SitState;
-                    break;
-                case GettingUp:
-                    sitStates.State = SitStartState;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(context),
-                        $"The actor is in an unknown state: '{state}'.");
+                }
+                else
+                {
+                    enterControl.Animation = SittingDownAnimation;
+                    control.Animation = Animation;
+                    exitControl.Animation = GettingUpAnimation;
+                }
             }
         }
 
@@ -89,7 +123,7 @@ namespace AlleyCat.Animation
             Ensure.Any.IsNotNull(actor, nameof(actor));
 
             var animator = actor.AnimationManager as IAnimationStateManager;
-            var states = animator?.GetStates(SitStatesPath);
+            var states = animator?.GetStates(SubStatesPath);
 
             if (states == null)
             {
@@ -107,7 +141,7 @@ namespace AlleyCat.Animation
             Ensure.Any.IsNotNull(actor, nameof(actor));
 
             var animator = actor.AnimationManager as IAnimationStateManager;
-            var states = animator?.GetStates(SitStatesPath);
+            var states = animator?.GetStates(SubStatesPath);
 
             if (states == null)
             {
@@ -125,9 +159,9 @@ namespace AlleyCat.Animation
 
         private SitState GetStateEnum(string state)
         {
-            if (state == SitStartState) return SittingDown;
-            if (state == SitState) return Seated;
-            if (state == SitEndState) return GettingUp;
+            if (state == EnterState) return SittingDown;
+            if (state == State) return Seated;
+            if (state == ExitState) return GettingUp;
 
             return Standing;
         }
