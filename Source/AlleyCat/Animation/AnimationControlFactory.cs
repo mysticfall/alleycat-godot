@@ -16,6 +16,7 @@ namespace AlleyCat.Animation
             if ((control = Animator.Create(name, parent, context)) != null) return control;
             if ((control = Blender.Create(name, parent, context)) != null) return control;
             if ((control = Blender2D.Create(name, parent, context)) != null) return control;
+            if ((control = CrossfadingAnimator.Create(name, parent, context)) != null) return control;
 
             return null;
         }

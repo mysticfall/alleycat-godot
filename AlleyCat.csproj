@@ -82,6 +82,7 @@
     <Compile Include="Source\AlleyCat\Animation\Blender2D.cs" />
     <Compile Include="Source\AlleyCat\Animation\Blender.cs" />
     <Compile Include="Source\AlleyCat\Animation\BlendTree.cs" />
+    <Compile Include="Source\AlleyCat\Animation\CrossfadingAnimator.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationControlFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationGraphFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationManager.cs" />
