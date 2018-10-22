@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -10,17 +9,16 @@ namespace AlleyCat.Item
     {
         string Slot { get; }
 
-        IEnumerable<string> AdditionalSlots { get; }
+        Set<string> AdditionalSlots { get; }
     }
 
     public static class SlotConfigurationExtensions
     {
-        [NotNull]
-        public static IEnumerable<string> GetAllSlots([NotNull] this ISlotConfiguration configuration)
+        public static Set<string> GetAllSlots(this ISlotConfiguration configuration)
         {
-            Ensure.Any.IsNotNull(configuration, nameof(configuration));
+            Ensure.That(configuration, nameof(configuration)).IsNotNull();
 
-            return new[] {configuration.Slot}.Concat(configuration.AdditionalSlots);
+            return Set(configuration.Slot).Union(configuration.AdditionalSlots);
         }
     }
 }

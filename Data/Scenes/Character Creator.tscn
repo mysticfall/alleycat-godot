@@ -1,158 +1,24 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
-[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanel.cs" type="Script" id=8]
-[ext_resource path="res://Data/UI/Character/MorphGroupPanel.tscn" type="PackedScene" id=9]
-
-[sub_resource type="SpatialMaterial" id=1]
-
-render_priority = 0
-flags_transparent = true
-flags_unshaded = true
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-flags_do_not_receive_shadows = false
-flags_disable_ambient_light = false
-flags_ensure_correct_normals = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_billboard_keep_scale = false
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 1, 1, 1, 0 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.0
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_mode = 0
-_sections_unfolded = [ "Albedo", "Flags", "Vertex Color" ]
-
-[sub_resource type="PlaneMesh" id=2]
-
-material = SubResource( 1 )
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-flip_faces = false
-size = Vector2( 2, 2 )
-subdivide_width = 0
-subdivide_depth = 0
-
-[sub_resource type="PhysicsMaterial" id=3]
-
-friction = 1.0
-rough = false
-bounce = 0.0
-absorbent = false
-
-[sub_resource type="PlaneShape" id=4]
-
-margin = 0.04
-plane = Plane( 0, 1, 0, 0 )
+[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanel.cs" type="Script" id=6]
+[ext_resource path="res://Data/UI/Character/MorphGroupPanel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/UI/Character/Character.tscn" type="PackedScene" id=8]
 
 [node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 ProcessMode = 0
-_viewport = NodePath("UI/Viewport")
-
-[node name="Character" parent="." instance=ExtResource( 2 )]
-editor/display_folded = true
-_key = "Character"
-_displayName = "Character"
-
-[node name="Binding" type="Node" parent="Character"]
-script = ExtResource( 3 )
-
-[node name="Cameras" type="Node" parent="."]
-
-[node name="Camera" type="Camera" parent="Cameras"]
-transform = Transform( -1, 0, -8.74227e-08, 0, 0.999999, 0, 8.74228e-08, 0, -0.999999, -3.38069e-07, 0.964255, -1.52218 )
-keep_aspect = 1
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = true
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 100.0
-_sections_unfolded = [ "Transform" ]
-
-[node name="Static Objects" type="Node" parent="."]
-
-[node name="Ground" type="MeshInstance" parent="Static Objects"]
-editor/display_folded = true
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
-skeleton = NodePath("..")
-material/0 = null
-
-[node name="StaticBody" type="StaticBody" parent="Static Objects/Ground"]
-input_ray_pickable = true
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-physics_material_override = SubResource( 3 )
-constant_linear_velocity = Vector3( 0, 0, 0 )
-constant_angular_velocity = Vector3( 0, 0, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Static Objects/Ground/StaticBody"]
-shape = SubResource( 4 )
-disabled = false
+_viewport = NodePath("UI/Content Panel")
 
 [node name="Control" type="Node" parent="."]
 
 [node name="View" type="Node" parent="Control"]
-script = ExtResource( 4 )
+script = ExtResource( 2 )
 ProcessMode = 2
 Active = true
 _maxYaw = 180.0
@@ -161,110 +27,97 @@ _maxPitch = 90.0
 _minPitch = -90.0
 _initialDistance = 0.8
 _initialOffset = Vector3( 0, 0, 0 )
-_cameraPath = NodePath("../../Cameras/Camera")
-_pivot = NodePath("../../Character")
+_cameraPath = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
+_pivot = NodePath("../../UI/Content Panel/Viewport/Character/Character")
 _minDistance = 0.2
 _maxDistance = 3.0
 _rotationModifier = "point"
 _panningModifier = "point2"
 
 [node name="Rotation" type="Node" parent="Control/View"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
-script = ExtResource( 6 )
+script = ExtResource( 4 )
 ProcessMode = 0
 Active = true
-Sensitivity = 0.8
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
+_sensitivity = 0.5
+_curve = null
+_deadZone = 0.0
+_windowSize = 5.0
+_windowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
-script = ExtResource( 6 )
+script = ExtResource( 4 )
 ProcessMode = 0
 Active = true
-Sensitivity = 0.0
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
+_sensitivity = 0.0
+_curve = null
+_deadZone = 0.0
+_windowSize = 5.0
+_windowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
 [node name="Pan" type="Node" parent="Control/View"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
 ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/View/Pan"]
-script = ExtResource( 6 )
+script = ExtResource( 4 )
 ProcessMode = 0
 Active = true
-Sensitivity = 0.0
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
+_sensitivity = 0.0
+_curve = null
+_deadZone = 0.0
+_windowSize = 5.0
+_windowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Pan"]
-script = ExtResource( 6 )
+script = ExtResource( 4 )
 ProcessMode = 0
 Active = true
-Sensitivity = 0.8
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
+_sensitivity = 0.5
+_curve = null
+_deadZone = 0.0
+_windowSize = 5.0
+_windowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
 ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
-script = ExtResource( 7 )
+script = ExtResource( 5 )
 ProcessMode = 0
 Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 100.0
-WindowShift = 15.0
-PositiveAction = "zoom_in"
-NegativeAction = "zoom_out"
+_sensitivity = 0.5
+_curve = null
+_deadZone = 0.0
+_windowSize = 5.0
+_windowShift = 1.0
 Polling = false
+_positiveAction = "zoom_in"
+_negativeAction = "zoom_out"
 
 [node name="UI" type="Node" parent="."]
 
-[node name="Viewport" type="Container" parent="UI"]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 6
-size_flags_horizontal = 1
-size_flags_vertical = 1
-_sections_unfolded = [ "Mouse" ]
-
-[node name="MorphsPanel" type="Panel" parent="UI/Viewport"]
+[node name="Morphs Panel" type="Panel" parent="UI"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -276,11 +129,11 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 8 )
-_sections_unfolded = [ "Mouse", "Rect" ]
-_groupPanelScene = ExtResource( 9 )
+script = ExtResource( 6 )
+_sections_unfolded = [ "Anchor", "Mouse", "Rect" ]
+_groupPanelScene = ExtResource( 7 )
 
-[node name="TabContainer" type="TabContainer" parent="UI/Viewport/MorphsPanel"]
+[node name="Tab Container" type="TabContainer" parent="UI/Morphs Panel"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -299,4 +152,49 @@ tab_align = 0
 tabs_visible = true
 drag_to_rearrange_enabled = false
 _sections_unfolded = [ "Margin", "Mouse", "Rect" ]
+
+[node name="Content Panel" type="ViewportContainer" parent="UI"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 340.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 6
+size_flags_horizontal = 1
+size_flags_vertical = 1
+stretch = true
+stretch_shrink = 1
+_sections_unfolded = [ "Mouse" ]
+
+[node name="Viewport" type="Viewport" parent="UI/Content Panel"]
+arvr = false
+size = Vector2( 683, 599 )
+own_world = false
+world = null
+transparent_bg = true
+msaa = 3
+hdr = true
+disable_3d = false
+keep_3d_linear = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 0
+render_target_update_mode = 3
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = true
+shadow_atlas_size = 0
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+_sections_unfolded = [ "Rendering" ]
+
+[node name="Character" parent="UI/Content Panel/Viewport" instance=ExtResource( 8 )]
 

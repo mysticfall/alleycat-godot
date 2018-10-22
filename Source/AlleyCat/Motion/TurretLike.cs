@@ -19,8 +19,6 @@ namespace AlleyCat.Motion
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        public virtual bool Valid => true;
-
         public abstract Vector3 Origin { get; }
 
         public abstract Vector3 Up { get; }
@@ -32,13 +30,13 @@ namespace AlleyCat.Motion
         public float Pitch
         {
             get => Rotation.y;
-            set => Rotation = new Vector2(Yaw, value);
+            set => Rotation = new Vector2(Yaw, PitchRange.Clamp(value));
         }
 
         public float Yaw
         {
             get => Rotation.x;
-            set => Rotation = new Vector2(value, Pitch);
+            set => Rotation = new Vector2(YawRange.Clamp(value), Pitch);
         }
 
         public Vector2 Rotation
@@ -67,9 +65,9 @@ namespace AlleyCat.Motion
 
         [Export, UsedImplicitly] private float _minPitch;
 
-        private readonly ReactiveProperty<Vector2> _rotation = new ReactiveProperty<Vector2>();
+        private readonly ReactiveProperty<bool> _active;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private readonly ReactiveProperty<Vector2> _rotation;
 
         protected TurretLike() : this(new Range<float>(-180f, 180f), new Range<float>(-90f, 90f))
         {
@@ -82,6 +80,9 @@ namespace AlleyCat.Motion
 
             _minPitch = pitchRange.Min;
             _maxPitch = pitchRange.Max;
+
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _rotation = new ReactiveProperty<Vector2>().AddTo(this);
         }
 
         [PostConstruct]
@@ -93,14 +94,6 @@ namespace AlleyCat.Motion
         public virtual void Reset()
         {
             Rotation = Vector2.Zero;
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-            _rotation?.Dispose();
-
-            base.OnPreDestroy();
         }
 
         private static float NormalizeAspectAngle(float angle)

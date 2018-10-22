@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
@@ -12,73 +11,96 @@ using AlleyCat.Item.Generic;
 using AlleyCat.View;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.UI.Inventory
 {
-    public class InventoryView : FullScreenModalPanel
+    public class InventoryView : FullScreenModalPanel, ICharacterAware<ICharacter>
     {
-        [Node(required: false)]
-        public virtual ICharacter Character
+        public Option<ICharacter> Character
         {
             get => _character.Value;
             set => _character.Value = value;
         }
 
-        public IObservable<IEquipmentHolder> OnHolderChange => _character;
+        public IObservable<Option<ICharacter>> OnCharacterChange => _character;
 
-        public IObservable<Equipment> OnItemChange => _item ?? Observable.Empty<Equipment>();
+        public Option<Equipment> Item
+        {
+            get => _item.Bind(i => i.Value);
+            set => _item.Iter(i => i.Value = value);
+        }
 
-        [Node("Control/View")]
-        protected InspectingView ViewControl { get; private set; }
+        public IObservable<Option<Equipment>> OnItemChange =>
+            _item.MatchObservable(identity, Observable.Empty<Option<Equipment>>);
 
-        [Node("List Panel/Layout/Tree")]
-        protected Tree Tree { get; private set; }
+        protected InspectingView ViewControl => _viewControl.Head();
+
+        protected Tree Tree => _tree.Head();
+
+        protected Container Buttons => _buttons.Head();
+
+        protected MeshInstance ItemStand => _itemStand.Head();
+
+        protected Panel InfoPanel => _infoPanel.Head();
+
+        protected Label Title => _title.Head();
+
+        protected Label Type => _type.Head();
+
+        protected RichTextLabel Description => _description.Head();
+
+        [Export] private PackedScene _actionButton;
+
+        [Node("Control/View")] private Option<InspectingView> _viewControl = None;
+
+        [Node("List Panel/Layout/Tree")] private Option<Tree> _tree = None;
 
         [Node("List Panel/Layout/Buttons Panel")]
-        protected Container Buttons { get; private set; }
+        private Option<Container> _buttons = None;
 
         [Node("Content Panel/Viewport/Item Box/Item")]
-        protected MeshInstance ItemStand { get; private set; }
+        private Option<MeshInstance> _itemStand = None;
 
-        [Node("Content Panel/Info Panel")]
-        protected Panel InfoPanel { get; private set; }
+        [Node("Content Panel/Info Panel")] private Option<Panel> _infoPanel = None;
 
         [Node("Content Panel/Info Panel/Title")]
-        protected Label Title { get; private set; }
+        private Option<Label> _title = None;
 
         [Node("Content Panel/Info Panel/Type")]
-        protected Label Type { get; private set; }
+        private Option<Label> _type = None;
 
         [Node("Content Panel/Info Panel/Description")]
-        protected RichTextLabel Description { get; private set; }
-
-        [Export, UsedImplicitly] private PackedScene _actionButton;
+        private Option<RichTextLabel> _description = None;
 
         private const string SlotKey = "Slot";
 
-        private readonly ReactiveProperty<ICharacter> _character = new ReactiveProperty<ICharacter>();
+        private readonly ReactiveProperty<Option<ICharacter>> _character;
 
-        private ReactiveProperty<Equipment> _item;
+        private Option<ReactiveProperty<Option<Equipment>>> _item = None;
+
+        public InventoryView()
+        {
+            _character = new ReactiveProperty<Option<ICharacter>>(None).AddTo(this.GetCollector());
+        }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            Debug.Assert(_actionButton != null, "_actionButton != null");
-
-            Character = Character ?? GetTree().GetNodesInGroup<ICharacter>(Tags.Player).FirstOrDefault();
+            Character |= GetTree().GetNodesInGroup<ICharacter>(Tags.Player).HeadOrNone();
 
             Tree.CreateItem();
 
-            Tree.SetColumnTitle(0, "Name");
-            Tree.SetColumnTitle(1, "Type");
-            Tree.SetColumnTitle(2, "Slot");
-            Tree.SetColumnTitle(3, "Weight");
+            Tree.SetColumnTitle(0, Tr("ui.InventoryView.name"));
+            Tree.SetColumnTitle(1, Tr("ui.InventoryView.type"));
+            Tree.SetColumnTitle(2, Tr("ui.InventoryView.slot"));
+            Tree.SetColumnTitle(3, Tr("ui.InventoryView.weight"));
             Tree.SetColumnTitlesVisible(true);
 
-            var container = OnHolderChange.Select(c => c.Equipments);
+            var container = OnCharacterChange.SelectMany(c => c.Select(v => v.Equipments));
             var items = container.SelectMany(c => c.OnItemsChange);
 
             void RemoveAllNodes()
@@ -92,26 +114,27 @@ namespace AlleyCat.UI.Inventory
                 .Do(_ => RemoveAllNodes())
                 .CombineLatest(container, (list, parent) => (list, parent))
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)))
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             _item = Tree.OnItemSelect()
                 .Select(e => e.Source.GetSelected()?.GetMeta(SlotKey))
                 .OfType<string>()
-                .Merge(items.Select(_ => (string) null))
+                .Select(Optional)
+                .Merge(items.Select(_ => Option<string>.None))
                 .CombineLatest(container, (slot, slots) => (slot, slots))
-                .Select(t => t.slot != null ? t.slots.FindItem(t.slot) : null)
-                .ToReactiveProperty();
+                .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
+                .ToReactiveProperty()
+                .AddTo(this.GetCollector());
 
             OnItemChange
                 .Subscribe(DisplayItem)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
         }
 
-        [NotNull]
-        protected TreeItem CreateNode([NotNull] Equipment item, [NotNull] IEquipmentContainer parent)
+        protected TreeItem CreateNode(Equipment item, IEquipmentContainer parent)
         {
-            Ensure.Any.IsNotNull(item, nameof(item));
-            Ensure.Any.IsNotNull(parent, nameof(parent));
+            Ensure.That(item, nameof(item)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
 
             var node = Tree.CreateItem(Tree.GetRoot());
 
@@ -132,7 +155,7 @@ namespace AlleyCat.UI.Inventory
             return node;
         }
 
-        protected virtual void DisplayItem([CanBeNull] Equipment item)
+        protected virtual void DisplayItem(Option<Equipment> item)
         {
             foreach (var button in Buttons.GetChildren().OfType<Button>())
             {
@@ -140,58 +163,53 @@ namespace AlleyCat.UI.Inventory
                 button.QueueFree();
             }
 
-            if (item == null)
-            {
-                InfoPanel.Visible = false;
-                ItemStand.Visible = false;
-
-                ItemStand.Mesh = null;
-            }
-            else
-            {
-                InfoPanel.Visible = true;
-                ItemStand.Visible = true;
-
-                ItemStand.Mesh = item.Meshes.First().Mesh;
-
-                Title.Text = item.DisplayName;
-                Type.Text = item.EquipmentType.DisplayName(this);
-                Description.Text = item.Description;
-
-                ViewControl.Reset();
-
-                var context = new InteractionContext(Character, item);
-                var actions = Character.Actions.Values
-                    .OfType<Interaction>()
-                    .Where(a => a.Active && a.Valid && a.AllowedFor(context));
-
-                foreach (var action in actions)
+            match(from i in item from c in Character select (item: i, character: c),
+                v =>
                 {
-                    var button = (Button) _actionButton.Instance();
+                    InfoPanel.Visible = true;
+                    ItemStand.Visible = true;
 
-                    button.Text = action.DisplayName;
-                    button.Connect("pressed", this, nameof(OnButtonPress), new Array {action.Key});
+                    ItemStand.Mesh = v.item.Meshes.First().Mesh;
 
-                    Buttons.AddChild(button);
+                    Title.Text = v.item.DisplayName;
+                    Type.Text = v.item.EquipmentType.DisplayName(this);
+                    Description.Text = v.item.Description.IfNone("");
+
+                    ViewControl.Reset();
+
+                    var context = new InteractionContext(v.character, v.item);
+                    var actions = v.character.Actions.Values
+                        .OfType<Interaction>()
+                        .Where(a => a.Active && a.Valid && a.AllowedFor(context));
+
+                    foreach (var action in actions)
+                    {
+                        var button = (Button) _actionButton.Instance();
+
+                        button.Text = action.DisplayName;
+                        button.Connect("pressed", this, nameof(OnButtonPress), new Array {action.Key});
+
+                        Buttons.AddChild(button);
+                    }
+                },
+                () =>
+                {
+                    InfoPanel.Visible = false;
+                    ItemStand.Visible = false;
+
+                    ItemStand.Mesh = null;
                 }
-            }
+            );
         }
 
         private void OnButtonPress(string key)
         {
-            var context = new InteractionContext(Character, _item.Value);
+            Item.SelectMany(i => Character, (i, c) => (item: i, character: c)).Iter(v =>
+            {
+                var context = new InteractionContext(v.character, v.item);
 
-            Character.Actions[key].Execute(context);
-        }
-
-        public override void _Notification(int what)
-        {
-            base._Notification(what);
-
-            if (what != NotificationPredelete) return;
-
-            _character?.Dispose();
-            _item?.Dispose();
+                v.character.Actions[key].Execute(context);
+            });
         }
     }
 }

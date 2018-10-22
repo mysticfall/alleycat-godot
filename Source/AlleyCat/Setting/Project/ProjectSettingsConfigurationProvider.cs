@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Setting.Project
 {
@@ -13,22 +16,20 @@ namespace AlleyCat.Setting.Project
     {
         public IEnumerable<string> Keys { get; }
 
-        private static readonly IDictionary<string, string> Replacements = new Dictionary<string, string>
-        {
-            ["two_d"] = "2d",
-            ["three_d"] = "3d"
-        };
+        private static readonly Map<string, string> Replacements = Map(
+            ("two_d", "2d"), ("three_d", "3d"));
 
-        public ProjectSettingsConfigurationProvider([NotNull] IEnumerable<string> keys)
+        public ProjectSettingsConfigurationProvider(IEnumerable<string> keys)
         {
-            // ReSharper disable once ConstantConditionalAccessQualifier
-            Keys = keys?.ToList();
+            Ensure.That(keys, nameof(keys)).IsNotNull();
 
-            Ensure.Enumerable.HasItems(Keys, nameof(keys));
+            Keys = keys.Freeze();
         }
 
         public bool TryGet(string key, out string value)
         {
+            Ensure.That(key, nameof(key)).IsNotNull();
+
             if (!ProjectSettings.HasSetting(NormalizeKey(key)))
             {
                 value = null;
@@ -40,7 +41,12 @@ namespace AlleyCat.Setting.Project
             return true;
         }
 
-        public void Set(string key, string value) => ProjectSettings.SetSetting(NormalizeKey(key), GD.Str2Var(value));
+        public void Set(string key, [CanBeNull] string value)
+        {
+            Ensure.That(key, nameof(key)).IsNotNull();
+
+            ProjectSettings.SetSetting(NormalizeKey(key), GD.Str2Var(value));
+        }
 
         public void Load()
         {
@@ -48,12 +54,17 @@ namespace AlleyCat.Setting.Project
 
         public IChangeToken GetReloadToken() => NullChangeToken.Singleton;
 
-        public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string parentPath) =>
-            Keys.Where(k => k.StartsWith(parentPath));
+        public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string parentPath)
+        {
+            Ensure.That(earlierKeys, nameof(earlierKeys)).IsNotNull();
+            Ensure.That(parentPath, nameof(parentPath)).IsNotNull();
+
+            return Keys.Where(k => k.StartsWith(parentPath));
+        }
 
         private static string NormalizeKey(string key)
         {
-            Ensure.Any.IsNotNull(key, nameof(key));
+            Debug.Assert(key != null, "key != null");
 
             var values = key.Split(':');
 

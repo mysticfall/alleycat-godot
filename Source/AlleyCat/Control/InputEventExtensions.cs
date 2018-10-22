@@ -1,24 +1,23 @@
-﻿using EnsureThat;
+﻿using System.Linq;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
     public static class InputEventExtensions
     {
-        [CanBeNull]
-        public static string GetKeyLabel([NotNull] this InputEvent @event)
+        public static Option<string> FindKeyLabel(this InputEvent @event)
         {
-            Ensure.Any.IsNotNull(@event, nameof(@event));
+            Ensure.That(@event, nameof(@event)).IsNotNull();
 
             // TODO Handle special keys, and other input devices like joypads.
-            switch (@event)
-            {
-                case InputEventKey key:
-                    return ((char) key.Scancode).ToString();
-                default:
-                    return null;
-            }
+            return Optional(@event)
+                .OfType<InputEventKey>()
+                .Map(e => (char) e.Scancode)
+                .Map(c => c.ToString())
+                .HeadOrNone();
         }
     }
 }

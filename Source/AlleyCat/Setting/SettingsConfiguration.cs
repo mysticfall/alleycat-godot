@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.IO;
-using JetBrains.Annotations;
+using EnsureThat;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,20 +14,17 @@ namespace AlleyCat.Setting
     {
         public IEnumerable<Type> ProvidedTypes => new[] {typeof(IConfiguration)};
 
-        [Service(false)]
-        protected IEnumerable<ISettingsProvider> Providers { get; private set; }
+        protected IEnumerable<ISettingsProvider> Providers => _providers ?? Enumerable.Empty<ISettingsProvider>();
+
+        [Service(false)] private IEnumerable<ISettingsProvider> _providers;
 
         public void AddServices(IServiceCollection collection)
         {
+            Ensure.That(collection, nameof(collection)).IsNotNull();
+
             var builder = CreateBuilder();
 
-            if (Providers != null)
-            {
-                foreach (var provider in Providers)
-                {
-                    provider.AddSettings(builder);
-                }
-            }
+            Providers.Iter(p => p.AddSettings(builder));
 
             var configuration = builder.Build();
 
@@ -34,15 +32,9 @@ namespace AlleyCat.Setting
                 .AddOptions()
                 .AddSingleton<IConfiguration>(configuration);
 
-            if (Providers == null) return;
-
-            foreach (var provider in Providers)
-            {
-                provider.BindSettings(configuration, collection);
-            }
+            Providers.Iter(p => p.BindSettings(configuration, collection));
         }
 
-        [NotNull]
         protected virtual IConfigurationBuilder CreateBuilder()
         {
             return new ConfigurationBuilder()
@@ -50,7 +42,7 @@ namespace AlleyCat.Setting
                 .SetFileLoadExceptionHandler(OnError);
         }
 
-        protected virtual void OnError([NotNull] FileLoadExceptionContext context)
+        protected virtual void OnError(FileLoadExceptionContext context)
         {
         }
     }

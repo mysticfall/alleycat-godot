@@ -5,13 +5,12 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
-using AlleyCat.IO;
 using AlleyCat.Item;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
-using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
@@ -20,64 +19,73 @@ namespace AlleyCat.Character
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
     {
-        public string Key => _key ?? Name;
+        public string Key => _key.TrimToOption().IfNone(Name);
 
-        public virtual string DisplayName => Tr(_displayName);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
 
         public abstract IRace Race { get; }
 
         public abstract Sex Sex { get; }
 
-        [Service]
-        public TVision Vision { get; private set; }
+        public TVision Vision => (TVision) _vision;
 
-        [Service]
-        public TLocomotion Locomotion { get; private set; }
+        public TLocomotion Locomotion => (TLocomotion) _locomotion;
 
-        [Service]
-        public IAnimationManager AnimationManager { get; private set; }
+        public IAnimationManager AnimationManager => _animationManager.Head();
 
-        [Service]
-        public Skeleton Skeleton { get; private set; }
+        public Skeleton Skeleton => (Skeleton) _skeleton;
 
-        [Service]
-        public IEquipmentContainer Equipments { get; private set; }
+        public IEquipmentContainer Equipments => _equipments.Head();
 
-        [Service]
-        public IReadOnlyDictionary<string, IAction> Actions { get; private set; }
+        public Map<string, IAction> Actions { get; private set; } = Map<string, IAction>();
 
         public Spatial Spatial => this;
 
-        public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildren<MeshInstance>();
+        public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildComponents<MeshInstance>();
 
         public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition => _labelMarker?.GlobalTransform.origin ?? this.Center();
+        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center());
 
-        public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
-            Enumerable.Empty<Marker>().ToDictionary();
+        public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
 
-        public IReadOnlyDictionary<string, SkeletonIK> IKChains =>
-            _ikChains ?? Enumerable.Empty<SkeletonIK>().ToDictionary(i => i.Name);
+        public Map<string, SkeletonIK> IKChains { get; private set; } = Map<string, SkeletonIK>();
 
-        public bool Valid => IsInstanceValid(this);
+        public virtual bool Valid => IsInstanceValid(this) &&
+                                     _vision.IsSome &&
+                                     _locomotion.IsSome &&
+                                     _animationManager.IsSome &&
+                                     _skeleton.IsSome &&
+                                     _equipments.IsSome &&
+                                     _raceRegistry.IsSome;
 
-        [Service]
-        protected IRaceRegistry RaceRegistry { get; private set; }
+        protected IRaceRegistry RaceRegistry => _raceRegistry.Head();
 
         IVision ISeeing.Vision => Vision;
 
         ILocomotion ILocomotive.Locomotion => Locomotion;
 
-        [Export, UsedImplicitly] private string _key;
+        [Export] private string _key;
 
-        [Export, UsedImplicitly] private string _displayName;
+        [Export] private string _displayName;
 
-        [Service(false, false)] private IEnumerable<Marker> _markers;
+        [Service] private Option<TVision> _vision = None;
 
-        private Marker _labelMarker;
+        [Service] private Option<TLocomotion> _locomotion = None;
 
-        private IReadOnlyDictionary<string, SkeletonIK> _ikChains;
+        [Service] private Option<IAnimationManager> _animationManager = None;
+
+        [Service] private Option<Skeleton> _skeleton = None;
+
+        [Service] private Option<IEquipmentContainer> _equipments = None;
+
+        [Service] private Option<IRaceRegistry> _raceRegistry = None;
+
+        [Service] private Option<IReadOnlyDictionary<string, IAction>> _actions = None;
+
+        [Service(false, false)] private IEnumerable<Marker> _markers = Enumerable.Empty<Marker>();
+
+        private Option<Marker> _labelMarker = None;
 
         public override void _Ready()
         {
@@ -89,41 +97,12 @@ namespace AlleyCat.Character
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            if (_markers != null)
-            {
-                Markers = _markers.ToDictionary(m => m.Key);
-            }
+            IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
-            _labelMarker = this.GetLabelMarker();
+            Actions = _actions.SelectMany(a => a.Values).ToMap();
+            Markers = _markers.ToMap();
 
-            _ikChains = Skeleton.GetChildren<SkeletonIK>().ToDictionary(i => i.Name);
-        }
-
-        public virtual void SaveState(IState state)
-        {
-            Ensure.Any.IsNotNull(state, nameof(state));
-
-            var transform = state.GetSection("Transform");
-
-            transform["Translation"] = Translation;
-            transform["Rotation"] = Rotation;
-        }
-
-        public virtual void RestoreState(IState state)
-        {
-            Ensure.Any.IsNotNull(state, nameof(state));
-
-            var transform = state.GetSection("Transform");
-
-            if (transform.ContainsKey("Translation"))
-            {
-                Translation = (Vector3) transform["Translation"];
-            }
-
-            if (transform.ContainsKey("Rotation"))
-            {
-                Rotation = (Vector3) transform["Rotation"];
-            }
+            _labelMarker = this.FindLabelMarker();
         }
     }
 }

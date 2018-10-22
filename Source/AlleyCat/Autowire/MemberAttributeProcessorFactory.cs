@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class MemberAttributeProcessorFactory<T> : INodeProcessorFactory
-        where T : Attribute
+    public abstract class MemberAttributeProcessorFactory<T> : INodeProcessorFactory where T : Attribute
     {
         public IEnumerable<INodeProcessor> Create(Type type)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
             var declared = type
                 .GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
@@ -27,7 +25,6 @@ namespace AlleyCat.Autowire
             return parent == null ? declared : declared.Concat(Create(parent));
         }
 
-        [NotNull]
-        protected abstract INodeProcessor CreateProcessor([NotNull] MemberInfo member, [NotNull] T attribute);
+        protected abstract INodeProcessor CreateProcessor(MemberInfo member, T attribute);
     }
 }

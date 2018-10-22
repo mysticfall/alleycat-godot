@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.UI.Console
 {
@@ -10,42 +11,35 @@ namespace AlleyCat.UI.Console
 
         public override string Key => Command;
 
-        public override string Description => SceneTree.Tr("console.command.help");
+        public override Option<string> Description => SceneTree.Tr("console.command.help");
 
         public HelpCommand(ICommandConsole console, SceneTree sceneTree) : base(console, sceneTree)
         {
         }
 
-        public override void Execute(string[] args)
+        public override void Execute(params string[] args)
         {
-            if (args == null || args.Length != 1)
-            {
-                DisplayUsage();
-            }
-            else
-            {
-                var name = args[0];
-
-                if (name == "list")
+            args.HeadOrNone().Match(name =>
                 {
-                    DisplayCommandList();
-                }
-                else
-                {
-                    var command = Console.SupportedCommands.FirstOrDefault(c => c.Key == name);
-
-                    if (command == null)
+                    if (name == "list")
                     {
-                        var message = string.Format(SceneTree.Tr("console.error.command.invalid"), name);
-
-                        Console.Warning(message).NewLine();
+                        DisplayCommandList();
                     }
                     else
                     {
-                        command.DisplayUsage();
+                        var command = Console.SupportedCommands.Find(c => c.Key == name);
+
+                        command.BiIter(
+                            c => c.DisplayUsage(),
+                            () =>
+                            {
+                                var message = string.Format(SceneTree.Tr("console.error.command.invalid"), name);
+
+                                Console.Warning(message).NewLine();
+                            });
                     }
-                }
-            }
+                },
+                DisplayUsage);
         }
 
         public override void DisplayUsage()
@@ -69,23 +63,27 @@ namespace AlleyCat.UI.Console
 
             foreach (var command in Console.SupportedCommands)
             {
-                Console
-                    .Highlight(command.Key).Text(" - ").Text(command.Description).NewLine();
+                Console.Highlight(command.Key);
+
+                command.Description.Iter(d => Console.Text(" - ").Text(d));
+
+                Console.NewLine();
             }
         }
 
-        public IEnumerable<string> SuggestCandidates(string text)
+        public IEnumerable<string> SuggestCandidates(Option<string> text)
         {
             var commands = Console.SupportedCommands.Select(c => c.Key).Where(c => c != Key).ToList();
 
-            if (string.IsNullOrWhiteSpace(text))
+            if (text.Exists(string.IsNullOrWhiteSpace))
             {
                 commands.Insert(0, "list");
 
                 return commands;
             }
 
-            return "list".StartsWith(text) ? new[] {"list"} : commands.Where(c => c.StartsWith(text));
+            return text.AsEnumerable()
+                .Bind(v => "list".StartsWith(v) ? new[] {"list"} : commands.Where(c => c.StartsWith(v)));
         }
     }
 }

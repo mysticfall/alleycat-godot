@@ -1,77 +1,73 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using System.Reflection;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
     public class NodeAttributeProcessor : InjectAttributeProcessor<NodeAttribute>
     {
-        [CanBeNull]
-        public FieldInfo NodePathField { get; }
+        public Option<FieldInfo> NodePathField { get; }
 
-        public NodeAttributeProcessor([NotNull] MemberInfo member, [NotNull] NodeAttribute attribute)
-            : base(member, attribute)
+        public NodeAttributeProcessor(MemberInfo member, NodeAttribute attribute) : base(member, attribute)
         {
         }
 
         public NodeAttributeProcessor(
-            [NotNull] MemberInfo member,
-            [CanBeNull] FieldInfo pathField,
-            [NotNull] NodeAttribute attribute) : base(member, attribute)
+            Option<FieldInfo> pathField,
+            MemberInfo member,
+            NodeAttribute attribute) : base(member, attribute)
         {
             NodePathField = pathField;
         }
 
-        protected override object GetDependency(IAutowireContext context, Node node)
+        protected override IEnumerable GetDependencies(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            Ensure.Any.IsNotNull(node, nameof(node),
-                opts => opts.WithMessage(
-                    "[Node] attribute is only supported on members of a Node type class."));
+            var path = FindNodePath(node);
 
-            var path = GetNodePath(node);
-
-            object dependency;
+            IEnumerable dependency;
 
             if (Enumerable)
             {
-                var parent = path == null ? node : node.GetNode(path);
-                var list = parent?.GetChildren().Where(DependencyType.IsInstanceOfType).ToList();
+                var parent = path.Bind(v => Optional(node.GetNode(v))).IfNone(node);
 
-                dependency = EnumerableHelper.Cast(list, DependencyType);
+                dependency = parent.GetChildren()
+                    .Where(DependencyType.IsInstanceOfType).Freeze();
             }
             else
             {
-                var targetPath = path ?? NormalizeMemberName(Member.Name);
+                var targetPath = path.IfNone(NormalizeMemberName(Member.Name));
 
-                dependency = node.HasNode(targetPath) ? node.GetNode(targetPath) : null;
+                dependency = node.FindComponent<Node>(targetPath)
+                    .Where(DependencyType.IsInstanceOfType).Freeze();
             }
 
-            return dependency;
+            return EnumerableHelper.Cast(dependency, DependencyType);
         }
 
-        [CanBeNull]
-        protected NodePath GetNodePath([NotNull] Node node)
+        protected Option<NodePath> FindNodePath(Node node)
         {
             Ensure.Any.IsNotNull(node, nameof(node));
 
-            var path = NodePathField?.GetValue(node) as NodePath;
-
-            if (path == null && !string.IsNullOrEmpty(Attribute.Path))
-            {
-                path = Attribute.Path;
-            }
-
-            return path == null || path.IsEmpty() ? null : path;
+            return NodePathField
+                .Map(f => f.GetValue(node))
+                .OfType<NodePath>()
+                .HeadOrNone()
+                .BiBind(Some,
+                    () => Attribute.Path.Where(v => !string.IsNullOrEmpty(v)).Map(v => new NodePath(v))
+                );
         }
 
-        [NotNull]
-        protected static string NormalizeMemberName([NotNull] string name)
+        protected static string NormalizeMemberName(string name)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
+            Ensure.That(name, nameof(name)).IsNotNullOrWhiteSpace();
 
             var normalized = name.StartsWith("_") ? name.Substring(1) : name;
 

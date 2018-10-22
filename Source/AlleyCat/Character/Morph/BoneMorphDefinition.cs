@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Animation;
 using EnsureThat;
 using Godot;
+using Godot.Collections;
 using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
     public class BoneMorphDefinition : RangedMorphDefinition
     {
-        public IEnumerable<string> Bones { get; private set; }
+        public IEnumerable<string> Bones => _bones ?? Enumerable.Empty<string>();
 
         [Export, UsedImplicitly]
         public BoneMorphType MorphType { get; private set; }
@@ -17,23 +19,11 @@ namespace AlleyCat.Character.Morph
         [Export, UsedImplicitly]
         public Vector3 Modifier { get; private set; }
 
-        [Export, UsedImplicitly] private string _bone;
-
-        [Export, UsedImplicitly] private bool _mirrored;
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            if (_bone != null)
-            {
-                Bones = _mirrored ? new[] {_bone + "_L", _bone + "_R"} : new[] {_bone};
-            }
-        }
+        [Export] private Array<string> _bones;
 
         public override IMorph CreateMorph(IMorphable morphable)
         {
-            Ensure.Any.IsNotNull(morphable, nameof(morphable));
+            Ensure.That(morphable, nameof(morphable)).IsNotNull();
 
             var rig = morphable as IRigged;
             var skeleton = rig?.Skeleton;

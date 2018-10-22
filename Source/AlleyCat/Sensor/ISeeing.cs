@@ -1,3 +1,5 @@
+using EnsureThat;
+
 namespace AlleyCat.Sensor
 {
     public interface ISeeing
@@ -15,6 +17,11 @@ namespace AlleyCat.Sensor
 
     public static class SeeingExtensions
     {
-        public static bool IsBlind(this ISeeing subject) => subject.Vision == null || !subject.Vision.Active;
+        public static bool IsBlind(this ISeeing subject)
+        {
+            Ensure.That(subject, nameof(subject)).IsNotNull();
+
+            return !subject.Vision.Active;
+        }
     }
 }

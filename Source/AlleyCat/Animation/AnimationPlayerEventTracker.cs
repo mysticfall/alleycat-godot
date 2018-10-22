@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -15,100 +18,112 @@ namespace AlleyCat.Animation
 
         private const string SignalOnAnimationFinish = "animation_finished";
 
-        [NotNull]
-        public IObservable<AnimationStartEvent> OnAnimationStart
+        public IObservable<AnimationStartEvent> OnAnimationStart => _onAnimationStart.Head();
+
+        public IObservable<AnimationFinishEvent> OnAnimationFinish => _onAnimationFinish.Head();
+
+        public IObservable<AnimationChangeEvent> OnAnimationChange => _onAnimationChange.Head();
+
+        private Option<Subject<AnimationChangeEvent>> _onAnimationChange = None;
+
+        private Option<Subject<AnimationStartEvent>> _onAnimationStart = None;
+
+        private Option<Subject<AnimationFinishEvent>> _onAnimationFinish = None;
+
+        public override void _EnterTree()
         {
-            get
+            base._EnterTree();
+
+            var parent = (AnimationPlayer) Parent;
+
+            _onAnimationStart = Some(_ =>
             {
-                if (_onAnimationStart == null)
-                {
-                    Parent.Connect(SignalOnAnimationStart, this, nameof(FireOnAnimationStart));
+                parent.Connect(SignalOnAnimationStart, this, nameof(FireOnAnimationStart));
 
-                    _onAnimationStart = new Subject<AnimationStartEvent>();
-                }
+                return new Subject<AnimationStartEvent>();
+            });
 
-                return _onAnimationStart;
-            }
+            _onAnimationChange = Some(_ =>
+            {
+                parent.Connect(SignalOnAnimationChange, this, nameof(FireOnAnimationChange));
+
+                return new Subject<AnimationChangeEvent>();
+            });
+
+            _onAnimationFinish = Some(_ =>
+            {
+                parent.Connect(SignalOnAnimationFinish, this, nameof(FireOnAnimationFinish));
+
+                return new Subject<AnimationFinishEvent>();
+            });
         }
 
-        [NotNull]
-        public IObservable<AnimationFinishEvent> OnAnimationFinish
+        public override void _ExitTree()
         {
-            get
-            {
-                if (_onAnimationFinish == null)
-                {
-                    Parent.Connect(SignalOnAnimationFinish, this, nameof(FireOnAnimationFinish));
+            base._ExitTree();
 
-                    _onAnimationFinish = new Subject<AnimationFinishEvent>();
-                }
-
-                return _onAnimationFinish;
-            }
+            _onAnimationStart = None;
+            _onAnimationChange = None;
+            _onAnimationFinish = None;
         }
 
-        [NotNull]
-        public IObservable<AnimationChangeEvent> OnAnimationChange
+        [UsedImplicitly]
+        private void FireOnAnimationStart(string name)
         {
-            get
-            {
-                if (_onAnimationChange == null)
-                {
-                    Parent.Connect(SignalOnAnimationChange, this, nameof(FireOnAnimationChange));
+            Debug.Assert(name != null, "name != null");
 
-                    _onAnimationChange = new Subject<AnimationChangeEvent>();
-                }
-
-                return _onAnimationChange;
-            }
+            Parent
+                .SelectMany(parent => _onAnimationStart, (parent, observable) => (parent, observable))
+                .Iter(t => { t.observable.OnNext(new AnimationStartEvent(name, t.parent)); });
         }
 
-        private Subject<AnimationChangeEvent> _onAnimationChange;
+        [UsedImplicitly]
+        private void FireOnAnimationChange(Option<string> oldName, string newName)
+        {
+            Debug.Assert(oldName != null, "oldName != null");
+            Debug.Assert(newName != null, "newName != null");
 
-        private Subject<AnimationStartEvent> _onAnimationStart;
-
-        private Subject<AnimationFinishEvent> _onAnimationFinish;
+            Parent
+                .SelectMany(parent => _onAnimationChange, (parent, subject) => (parent, subject))
+                .Iter(t => t.subject.OnNext(new AnimationChangeEvent(newName, oldName, t.parent)));
+        }
 
         [UsedImplicitly]
-        private void FireOnAnimationChange(string oldName, string newName) =>
-            _onAnimationChange?.OnNext(new AnimationChangeEvent(newName, oldName, Parent));
+        private void FireOnAnimationFinish(string name)
+        {
+            Debug.Assert(name != null, "name != null");
 
-        [UsedImplicitly]
-        private void FireOnAnimationStart(string name) =>
-            _onAnimationStart?.OnNext(new AnimationStartEvent(name, Parent));
-
-        [UsedImplicitly]
-        private void FireOnAnimationFinish(string name) =>
-            _onAnimationFinish?.OnNext(new AnimationFinishEvent(name, Parent));
+            Parent
+                .SelectMany(parent => _onAnimationFinish, (parent, observable) => (parent, observable))
+                .Iter(t => { t.observable.OnNext(new AnimationFinishEvent(name, t.parent)); });
+        }
 
         protected override void Disconnect(AnimationPlayer parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onAnimationChange != null)
+            if (_onAnimationChange)
             {
                 parent.Disconnect(SignalOnAnimationChange, this, nameof(FireOnAnimationChange));
 
-                _onAnimationChange.Dispose();
-                _onAnimationChange = null;
+                _onAnimationChange.Iter(v => v.DisposeQuietly());
+                _onAnimationChange = None;
             }
 
-            if (_onAnimationStart != null)
+            if (_onAnimationStart)
             {
                 parent.Disconnect(SignalOnAnimationStart, this, nameof(FireOnAnimationStart));
 
-                _onAnimationStart.Dispose();
-                _onAnimationStart = null;
+                _onAnimationStart.Iter(v => v.DisposeQuietly());
+                _onAnimationStart = None;
             }
 
-            if (_onAnimationFinish != null)
+            if (_onAnimationFinish)
             {
                 parent.Disconnect(SignalOnAnimationFinish, this, nameof(FireOnAnimationFinish));
 
-                _onAnimationFinish.Dispose();
-                _onAnimationFinish = null;
+                _onAnimationFinish.Iter(v => v.DisposeQuietly());
+                _onAnimationFinish = None;
             }
         }
     }

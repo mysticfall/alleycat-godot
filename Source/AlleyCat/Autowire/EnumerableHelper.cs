@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
@@ -11,17 +13,11 @@ namespace AlleyCat.Autowire
         private static readonly MethodInfo CastMethod =
             typeof(Enumerable).GetMethod("Cast", new[] {typeof(IEnumerable)});
 
-        private static readonly MethodInfo AnyMethod =
-            typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
-                .Where(m => m.Name == "Any")
-                .Where(m =>
-                {
-                    var p = m.GetParameters();
+        private static readonly MethodInfo OfTypeMethod =
+            typeof(Enumerable).GetMethod("OfType", new[] {typeof(IEnumerable)});
 
-                    return p.Length == 1 &&
-                           p[0].ParameterType.IsGenericType &&
-                           p[0].ParameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>);
-                }).Single();
+        private static readonly MethodInfo EmptyMethod =
+            typeof(Enumerable).GetMethod("Empty", new Type[0]);
 
         private static readonly MethodInfo ConcatMethod =
             typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
@@ -37,14 +33,44 @@ namespace AlleyCat.Autowire
                            p[1].ParameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>);
                 }).Single();
 
-        public static bool Any(object instance, Type type) =>
-            (bool) AnyMethod.MakeGenericMethod(type).Invoke(null, new[] {instance});
+        public static IEnumerable Empty(Type type)
+        {
+            Ensure.That(type, nameof(type)).IsNotNull();
 
+            Debug.Assert(EmptyMethod != null, "EmptyMethod != null");
 
-        public static IEnumerable Cast(object instance, Type type) =>
-            (IEnumerable) CastMethod.MakeGenericMethod(type).Invoke(null, new[] {instance});
+            return (IEnumerable) EmptyMethod.MakeGenericMethod(type).Invoke(null, new object[0]);
+        }
 
-        public static IEnumerable Concat(object source, object target, Type type) =>
-            (IEnumerable) ConcatMethod.MakeGenericMethod(type).Invoke(null, new[] {source, target});
+        public static IEnumerable Cast(IEnumerable instance, Type type)
+        {
+            Ensure.That(instance, nameof(instance)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            Debug.Assert(CastMethod != null, "CastMethod != null");
+
+            return (IEnumerable) CastMethod.MakeGenericMethod(type).Invoke(null, new object[] {instance});
+        }
+
+        public static IEnumerable Concat(object source, object target, Type type)
+        {
+            Ensure.That(source, nameof(source)).IsNotNull();
+            Ensure.That(target, nameof(target)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            Debug.Assert(ConcatMethod != null, "CastMethod != null");
+
+            return (IEnumerable) ConcatMethod.MakeGenericMethod(type).Invoke(null, new[] {source, target});
+        }
+
+        public static IEnumerable OfType(object instance, Type type)
+        {
+            Ensure.That(instance, nameof(instance)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            Debug.Assert(OfTypeMethod != null, "OfTypeMethod != null");
+
+            return (IEnumerable) OfTypeMethod.MakeGenericMethod(type).Invoke(null, new[] {instance});
+        }
     }
 }

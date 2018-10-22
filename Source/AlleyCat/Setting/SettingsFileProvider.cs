@@ -1,7 +1,7 @@
+using System.Diagnostics;
 using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,8 +20,9 @@ namespace AlleyCat.Setting
 
         public void AddSettings(IConfigurationBuilder builder)
         {
-            Ensure.Any.IsNotNull(builder, nameof(builder));
-            Ensure.String.IsNotNullOrWhiteSpace(File, nameof(File));
+            Ensure.That(builder, nameof(builder)).IsNotNull();
+
+            Debug.Assert(File != null, "File != null");
 
             AddSettings(builder, File, Optional, ReloadOnChange);
         }
@@ -31,8 +32,8 @@ namespace AlleyCat.Setting
         }
 
         protected abstract void AddSettings(
-            [NotNull] IConfigurationBuilder builder, 
-            [NotNull] string file,
+            IConfigurationBuilder builder,
+            string file,
             bool optional,
             bool reloadOnChange);
     }

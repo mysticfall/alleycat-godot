@@ -18,7 +18,12 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private readonly ReactiveProperty<bool> _active;
+
+        public InputBindings()
+        {
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+        }
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -26,13 +31,6 @@ namespace AlleyCat.Control
             OnActiveStateChange
                 .Subscribe(v => Values.ToList().ForEach(i => i.Active = v))
                 .AddTo(this);
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-
-            base.OnPreDestroy();
         }
     }
 }

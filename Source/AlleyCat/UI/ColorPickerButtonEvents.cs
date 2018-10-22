@@ -1,7 +1,6 @@
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -15,9 +14,9 @@ namespace AlleyCat.UI
 
         public ColorPickerButton Source { get; }
 
-        public ColorChangedEvent(Color color, [NotNull] ColorPickerButton source)
+        public ColorChangedEvent(Color color, ColorPickerButton source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Color = color;
             Source = source;

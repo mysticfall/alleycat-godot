@@ -1,31 +1,26 @@
-using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Item;
 using AlleyCat.Item.Generic;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
     [Singleton(typeof(IEquipmentContainer), typeof(ISlotContainer<EquipmentSlot, Equipment>))]
     public class CharacterEquipments : EquipmentContainer
     {
-        protected override IEquipmentHolder Holder => _character;
+        protected override IEquipmentHolder Holder => _character.Head();
 
-        public override IReadOnlyDictionary<string, EquipmentSlot> Slots =>
-            _slots ?? Enumerable.Empty<EquipmentSlot>().ToDictionary(s => s.Key);
+        public override Map<string, EquipmentSlot> Slots => _slots;
 
-        [Ancestor] private ICharacter _character;
+        [Ancestor] private Option<ICharacter> _character = None;
 
-        private IReadOnlyDictionary<string, EquipmentSlot> _slots;
+        private Map<string, EquipmentSlot> _slots = Map<string, EquipmentSlot>();
 
         protected override void OnInitialize()
         {
-            var slots = _character.Race?.EquipmentSlots.ToDictionary(s => s.Key);
-
-            if (slots != null)
-            {
-                _slots = slots;
-            }
+            _slots = _character.Bind(c => c.Race.EquipmentSlots).ToMap();
 
             base.OnInitialize();
         }

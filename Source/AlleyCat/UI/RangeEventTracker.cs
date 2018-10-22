@@ -1,9 +1,11 @@
 using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -11,41 +13,39 @@ namespace AlleyCat.UI
     {
         private const string SignalValueChange = "value_changed";
 
-        [NotNull]
         public IObservable<ValueChangedEvent> OnValueChange
         {
             get
             {
-                if (_onValueChange == null)
+                if (_onValueChange.IsNone)
                 {
-                    Parent.Connect(SignalValueChange, this, nameof(FireOnValueChange));
+                    Parent.Iter(p => p.Connect(SignalValueChange, this, nameof(FireOnValueChange)));
 
                     _onValueChange = new Subject<ValueChangedEvent>();
                 }
 
-                return _onValueChange;
+                return _onValueChange.Head();
             }
         }
 
-        private Subject<ValueChangedEvent> _onValueChange;
+        private Option<Subject<ValueChangedEvent>> _onValueChange = None;
 
         [UsedImplicitly]
-        private void FireOnValueChange(float value) =>
-            _onValueChange?.OnNext(new ValueChangedEvent(value, Parent));
+        private void FireOnValueChange(float value) => _onValueChange
+            .SelectMany(o => Parent, (o, p) => (o, e: new ValueChangedEvent(value, p)))
+            .Iter(t => t.o.OnNext(t.e));
 
         protected override void Disconnect(Range parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onValueChange != null)
+            _onValueChange.Iter(p =>
             {
                 parent.Disconnect(SignalValueChange, this, nameof(FireOnValueChange));
+                p.DisposeQuietly();
+            });
 
-                _onValueChange.Dispose();
-                _onValueChange = null;
-            }
+            _onValueChange = None;
         }
     }
 }

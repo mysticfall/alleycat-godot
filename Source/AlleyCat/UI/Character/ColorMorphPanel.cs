@@ -5,13 +5,16 @@ using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     public class ColorMorphPanel : MorphPanel<Color, ColorMorphDefinition>
     {
-        [Node]
-        public ColorPickerButton Button { get; private set; }
+        public ColorPickerButton Button => _button.Head();
+
+        [Node] private Option<ColorPickerButton> _button = None;
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -24,12 +27,12 @@ namespace AlleyCat.UI.Character
                 .Select(e => e.Color)
                 .Select(v => Morph.Definition.UseAlpha ? v : ToOpaqueColor(v))
                 .Subscribe(v => Morph.Value = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             Morph
                 .OnChange
                 .Subscribe(v => Button.Color = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
         }
 
         private Color ToOpaqueColor(Color color)

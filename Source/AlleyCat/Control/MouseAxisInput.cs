@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using Godot;
@@ -11,7 +12,13 @@ namespace AlleyCat.Control
         public MouseAxis Axis { get; set; }
 
         [Export(PropertyHint.ExpRange, "0, 1")]
-        public float Maximum { get; set; } = 0.1f;
+        public float Maximum
+        {
+            get => _maximum;
+            set => _maximum = Mathf.Clamp(value, 0, 1);
+        }
+
+        private float _maximum = 0.1f;
 
         private float _maximumValue;
 
@@ -28,7 +35,7 @@ namespace AlleyCat.Control
                 .Where(_ => _maximumValue > 0)
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)
-                .Select(v => GetValue(v) / _maximumValue);
+                .Select(v => _maximumValue > 0 ? GetValue(v) / _maximumValue : 0);
         }
 
         private float GetValue(Vector2 position)
@@ -40,7 +47,9 @@ namespace AlleyCat.Control
                 case MouseAxis.Y:
                     return position.y;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    Debug.Fail($"Unknown Axis value: '{Axis}'.");
+
+                    return 0f;
             }
         }
     }

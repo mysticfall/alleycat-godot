@@ -3,54 +3,45 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
+using AlleyCat.Common;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Event
 {
     /// <summary>
     /// Adapted from UniRx (https://github.com/neuecc/UniRx).
+    /// Copyright (c) 2018 Yoshifumi Kawai
     /// </summary>
     public class ReactiveProperty<T> : IReactiveProperty<T>, IDisposable
     {
         private static readonly IEqualityComparer<T> DefaultEqualityComparer = EqualityComparer<T>.Default;
 
-        private bool _isDisposed;
-
-        private Exception _lastException;
-
         private T _value;
 
-        private Subject<T> _publisher;
+        private bool _isDisposed;
 
-        private IDisposable _sourceConnection;
+        private Option<Exception> _lastException = None;
+
+        private Option<Subject<T>> _publisher = Some(_ => new Subject<T>());
+
+        private Option<IDisposable> _sourceConnection = None;
 
         public T Value
         {
             get => _value;
             set
             {
-                if (!HasValue)
-                {
-                    HasValue = true;
+                if (HasValue && EqualityComparer.Equals(_value, value)) return;
 
-                    _value = value;
+                HasValue = true;
 
-                    if (_isDisposed) return;
+                _value = value;
 
-                    _publisher?.OnNext(_value);
+                if (_isDisposed) return;
 
-                    return;
-                }
-
-                if (!EqualityComparer.Equals(_value, value))
-                {
-                    _value = value;
-
-                    if (_isDisposed) return;
-
-                    _publisher?.OnNext(_value);
-                }
+                _publisher.Iter(p => p.OnNext(_value));
             }
         }
 
@@ -61,55 +52,56 @@ namespace AlleyCat.Event
         public ReactiveProperty(T initialValue = default)
         {
             HasValue = true;
-            
+
             _value = initialValue;
         }
 
-        public ReactiveProperty([NotNull] IObservable<T> source, T initialValue = default)
+        public ReactiveProperty(IObservable<T> source, T initialValue = default)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             HasValue = false;
             Value = initialValue;
 
-            _sourceConnection = source.Subscribe(new ReactivePropertyObserver(this));
+            _sourceConnection = Some(source.Subscribe(new ReactivePropertyObserver(this)));
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
-            Ensure.Any.IsNotNull(observer, nameof(observer));
+            Ensure.That(observer, nameof(observer)).IsNotNull();
 
-            if (_lastException != null)
+            if (_lastException.IsSome)
             {
-                observer.OnError(_lastException);
+                _lastException.Iter(observer.OnError);
+
                 return Disposable.Empty;
             }
 
             if (_isDisposed)
             {
                 observer.OnCompleted();
+
                 return Disposable.Empty;
             }
 
-            _publisher = _publisher ?? new Subject<T>();
-
-            var p = _publisher;
-
-            if (p != null)
-            {
-                var subscription = p.Subscribe(observer);
-
-                if (HasValue)
+            return _publisher.Match(
+                p =>
                 {
-                    observer.OnNext(_value);
-                }
+                    var subscription = p.Subscribe(observer);
 
-                return subscription;
-            }
+                    if (HasValue)
+                    {
+                        observer.OnNext(_value);
+                    }
 
-            observer.OnCompleted();
+                    return subscription;
+                },
+                () =>
+                {
+                    observer.OnCompleted();
 
-            return Disposable.Empty;
+                    return Disposable.Empty;
+                });
         }
 
         public void Dispose()
@@ -123,18 +115,16 @@ namespace AlleyCat.Event
             if (_isDisposed) return;
 
             _isDisposed = true;
-
-            _sourceConnection?.Dispose();
-            _sourceConnection = null;
+            _sourceConnection.Iter(c => c.DisposeQuietly());
 
             try
             {
-                _publisher?.OnCompleted();
+                _publisher.Iter(p => p.OnCompleted());
             }
             finally
             {
-                _publisher?.Dispose();
-                _publisher = null;
+                _publisher.Iter(p => p.DisposeQuietly());
+                _publisher = None;
             }
         }
 
@@ -148,6 +138,8 @@ namespace AlleyCat.Event
 
             public ReactivePropertyObserver(ReactiveProperty<T> parent)
             {
+                Ensure.That(parent, nameof(parent)).IsNotNull();
+
                 _parent = parent;
             }
 
@@ -158,14 +150,14 @@ namespace AlleyCat.Event
 
             public void OnError(Exception error)
             {
-                Ensure.Any.IsNotNull(error, nameof(error));
+                Ensure.That(error, nameof(error)).IsNotNull();
 
                 if (Interlocked.Increment(ref _isStopped) != 1) return;
 
                 _parent._lastException = error;
-                _parent._publisher?.OnError(error);
+                _parent._publisher.Iter(p => p.OnError(error));
 
-                _parent.Dispose();
+                _parent.DisposeQuietly();
             }
 
             public void OnCompleted()
@@ -174,9 +166,9 @@ namespace AlleyCat.Event
 
                 var sc = _parent._sourceConnection;
 
-                _parent._sourceConnection = null;
+                _parent._sourceConnection = None;
 
-                sc?.Dispose();
+                sc.Iter(c => c.DisposeQuietly());
             }
         }
     }

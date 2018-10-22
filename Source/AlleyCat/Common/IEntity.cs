@@ -1,31 +1,25 @@
-using AlleyCat.IO;
+using AlleyCat.Game;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public interface IEntity : ILabelled, IStateHolder, IValidatable
+    public interface IEntity : ILabelled, IValidatable
     {
     }
 
     public static class EntityExtensions
     {
-        [CanBeNull]
-        public static IEntity FindEntity([NotNull] this Node node)
+        public static Option<IEntity> FindEntity(this Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            if (node is IEntity entity) return entity;
-
-            var parent = node.GetParent();
-
-            if (parent == null || parent == node.GetTree().CurrentScene)
-            {
-                return null;
-            }
-
-            return FindEntity(parent);
+            return Optional(node as IEntity) |
+                   Optional(node.GetParent())
+                       .Filter(p => !(p is IScene))
+                       .Bind(FindEntity);
         }
     }
 }

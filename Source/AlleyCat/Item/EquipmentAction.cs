@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using AlleyCat.Action;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -6,11 +9,18 @@ namespace AlleyCat.Item
     {
         protected override void DoExecute(InteractionContext context)
         {
-            if (context.Actor is IEquipmentHolder holder &&
-                context.Target is Equipment equipment)
+            var arguments = (
+                from holder in context.Actor.OfType<IEquipmentHolder>()
+                from equipment in Optional(context.Target).OfType<Equipment>()
+                select (holder, equipment)).HeadOrNone();
+
+            if (arguments.IsNone)
             {
-                DoExecute(holder, equipment, context);
+                throw new ArgumentException(
+                    "The specified context does not provide information for item interaction.");
             }
+
+            arguments.Iter(t => DoExecute(t.holder, t.equipment, context));
         }
 
         protected abstract void DoExecute(
@@ -18,10 +28,15 @@ namespace AlleyCat.Item
             Equipment equipment,
             InteractionContext context);
 
-        protected override bool AllowedFor(InteractionContext context) =>
-            context.Actor is IEquipmentHolder holder &&
-            context.Target is Equipment equipment &&
-            AllowedFor(holder, equipment, context);
+        protected override bool AllowedFor(InteractionContext context)
+        {
+            var arguments = (
+                from holder in context.Actor.OfType<IEquipmentHolder>()
+                from equipment in Optional(context.Target).OfType<Equipment>()
+                select (holder, equipment)).HeadOrNone();
+
+            return arguments.Exists(t => AllowedFor(t.holder, t.equipment, context));
+        }
 
         protected abstract bool AllowedFor(
             IEquipmentHolder holder,

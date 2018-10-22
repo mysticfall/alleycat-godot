@@ -8,12 +8,11 @@ namespace AlleyCat.Logging
 {
     public class PrintLogger : ILogger
     {
-        [NotNull]
         public string Name { get; }
 
-        public PrintLogger([NotNull] string name)
+        public PrintLogger(string name)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
+            Ensure.That(name, nameof(name)).IsNotNull();
 
             Name = name;
         }
@@ -23,10 +22,8 @@ namespace AlleyCat.Logging
             EventId eventId,
             TState state,
             [CanBeNull] Exception exception,
-            [NotNull] Func<TState, Exception, string> formatter)
+            Func<TState, Exception, string> formatter)
         {
-            Ensure.Any.IsNotNull(formatter, nameof(formatter));
-
             if (!IsEnabled(logLevel))
             {
                 return;
@@ -50,9 +47,6 @@ namespace AlleyCat.Logging
             return prefix.Length < 6 ? prefix : prefix.Left(4);
         }
 
-        public IDisposable BeginScope<TState>(TState state)
-        {
-            return null;
-        }
+        public IDisposable BeginScope<TState>(TState state) => null;
     }
 }

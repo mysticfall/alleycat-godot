@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
@@ -7,7 +6,9 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -20,7 +21,7 @@ namespace AlleyCat.Item
             get => _active.Value;
             set
             {
-                if (_initialized && (this.GetClosestAncestor<Equipment>()?.Equipped ?? false))
+                if (_initialized && this.GetClosestAncestor<Equipment>().Exists(e => e.Equipped))
                 {
                     throw new InvalidOperationException(
                         "Unable to switch configuration while an item is equipped.");
@@ -32,62 +33,84 @@ namespace AlleyCat.Item
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        [Export]
-        public Mesh Mesh { get; set; }
+        public Option<Mesh> Mesh
+        {
+            get => Optional(_mesh);
+            set => _mesh = value.ValueUnsafe();
+        }
 
-        [Export]
-        public Godot.Animation Animation { get; set; }
+        public Option<Godot.Animation> Animation
+        {
+            get => Optional(_animation);
+            set => _animation = value.ValueUnsafe();
+        }
 
-        [Export]
-        public string AnimationBlend { get; set; }
+        public Option<string> AnimationBlend
+        {
+            get => _animationBlend.TrimToOption();
+            set => _animationBlend = value.ValueUnsafe();
+        }
 
         [Export(PropertyHint.ExpRange, "0,10")]
-        public float AnimationTransition { get; set; } = 1f;
+        public float AnimationTransition
+        {
+            get => _animationTransition;
+            set => _animationTransition = Mathf.Min(value, 0);
+        }
 
-        public IEnumerable<string> Tags => GetGroups().OfType<string>();
+        public Set<string> Tags { get; private set; } = Set<string>();
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>();
+        [Export] private Mesh _mesh;
+
+        [Export] private Godot.Animation _animation;
+
+        [Export] private string _animationBlend;
+
+        private float _animationTransition = 1f;
+
+        private readonly ReactiveProperty<bool> _active;
 
         private bool _initialized;
+
+        protected EquipmentConfiguration()
+        {
+            _active = new ReactiveProperty<bool>().AddTo(this);
+        }
 
         [PostConstruct]
         protected virtual void OnInitialize()
         {
             _initialized = true;
+
+            Tags = toSet(GetGroups().OfType<string>());
         }
 
-        public virtual void OnEquip([NotNull] IEquipmentHolder holder, [NotNull] Equipment equipment)
+        public virtual void OnEquip(IEquipmentHolder holder, Equipment equipment)
         {
-            Ensure.Any.IsNotNull(holder, nameof(holder));
-            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            if (holder.AnimationManager is IAnimationStateManager animator &&
-                Animation != null &&
-                AnimationBlend.TrimToNull() != null &&
-                animator.GetBlender(AnimationBlend) is Blender blender)
-            {
-                blender.Blend(Animation, transition: AnimationTransition);
-            }
+            Optional(holder.AnimationManager)
+                .OfType<IAnimationStateManager>()
+                .SelectMany(manager => Animation, (manager, animation) => new {manager, animation})
+                .SelectMany(t => AnimationBlend.Bind(t.manager.FindBlender), 
+                    (t, blender) => (t.animation, blender))
+                .Iter(t => t.blender.Blend(t.animation, transition: AnimationTransition));
 
-            if (Mesh == null) return;
-
-            foreach (var mesh in equipment.Meshes)
-            {
-                mesh.Mesh = Mesh;
-            }
+            Mesh
+                .SelectMany(mesh => equipment.Meshes, (mesh, instance) => (mesh, instance))
+                .Iter(t => t.instance.Mesh = t.mesh);
         }
 
-        public virtual void OnUnequip([NotNull] IEquipmentHolder holder, [NotNull] Equipment equipment)
+        public virtual void OnUnequip(IEquipmentHolder holder, Equipment equipment)
         {
-            Ensure.Any.IsNotNull(holder, nameof(holder));
-            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            if (holder.AnimationManager is IAnimationStateManager animator && 
-                AnimationBlend.TrimToNull() != null &&
-                animator.GetBlender(AnimationBlend) is Blender blender)
-            {
-                blender.Unblend(AnimationTransition);
-            }
+            Optional(holder.AnimationManager)
+                .OfType<IAnimationStateManager>()
+                .Bind(manager => AnimationBlend.Bind(manager.FindBlender))
+                .Iter(v => v.Unblend(AnimationTransition));
 
             foreach (var mesh in equipment.Meshes)
             {
@@ -96,17 +119,25 @@ namespace AlleyCat.Item
             }
         }
 
-        public bool HasTag(string tag) => IsInGroup(tag);
-
-        public void AddTag(string tag) => AddToGroup(tag);
-
-        public void RemoveTag(string tag) => RemoveFromGroup(tag);
-
-        protected override void OnPreDestroy()
+        public bool HasTag(string tag)
         {
-            _active?.Dispose();
+            Ensure.That(tag, nameof(tag)).IsNotNull();
 
-            base.OnPreDestroy();
+            return IsInGroup(tag);
+        }
+
+        public void AddTag(string tag)
+        {
+            Ensure.That(tag, nameof(tag)).IsNotNull();
+
+            AddToGroup(tag);
+        }
+
+        public void RemoveTag(string tag)
+        {
+            Ensure.That(tag, nameof(tag)).IsNotNull();
+
+            RemoveFromGroup(tag);
         }
     }
 }

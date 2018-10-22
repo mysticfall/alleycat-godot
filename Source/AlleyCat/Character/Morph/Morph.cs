@@ -4,11 +4,10 @@ using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class Morph<TVal, TDef> : BaseNode, IMorph<TVal, TDef> 
+    public abstract class Morph<TVal, TDef> : BaseNode, IMorph<TVal, TDef>
         where TDef : MorphDefinition<TVal>
     {
         public string Key => Definition.Key;
@@ -37,17 +36,14 @@ namespace AlleyCat.Character.Morph
 
         private readonly ReactiveProperty<TVal> _value;
 
-        private readonly IDisposable _disposable;
-
-        protected Morph([NotNull] TDef definition)
+        protected Morph(TDef definition)
         {
-            Ensure.Any.IsNotNull(definition, nameof(definition));
+            Ensure.That(definition, nameof(definition)).IsNotNull();
+
+            _value = new ReactiveProperty<TVal>(definition.Default).AddTo(this);
 
             Definition = definition;
-
-            _value = new ReactiveProperty<TVal>(Definition.Default);
-
-            _disposable = OnChange.Skip(1).Subscribe(Apply);
+            OnChange.Skip(1).Subscribe(Apply).AddTo(this);
         }
 
         public void Apply() => Apply(Value);
@@ -55,13 +51,5 @@ namespace AlleyCat.Character.Morph
         protected abstract void Apply(TVal value);
 
         public void Reset() => Value = Definition.Default;
-
-        protected override void OnPreDestroy()
-        {
-            _value?.Dispose();
-            _disposable?.Dispose();
-
-            base.OnPreDestroy();
-        }
     }
 }

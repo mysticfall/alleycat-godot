@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
+using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -19,33 +21,32 @@ namespace AlleyCat.Animation
 
         private readonly ReactiveProperty<Vector2> _position;
 
-        public Blender2D([NotNull] string parameter, AnimationGraphContext context) : base(context)
+        public Blender2D(string parameter, AnimationGraphContext context) : base(context)
         {
-            Ensure.Any.IsNotNull(parameter, nameof(parameter));
+            Ensure.That(parameter, nameof(parameter)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             Parameter = parameter;
 
             var current = (Vector2) context.AnimationTree.Get(parameter);
 
-            _position = new ReactiveProperty<Vector2>(current);
-            _position.Subscribe(v => context.AnimationTree.Set(parameter, v));
+            _position = new ReactiveProperty<Vector2>(current).AddTo(this);
+
+            _position
+                .Subscribe(v => context.AnimationTree.Set(parameter, v))
+                .AddTo(this);
         }
 
-        public override void Dispose()
+        public static Option<Blender2D> TryCreate(
+            string name,
+            IAnimationGraph parent,
+            AnimationGraphContext context)
         {
-            _position?.Dispose();
-        }
+            Ensure.That(name, nameof(name)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-        public static Blender2D Create(
-            [NotNull] string name,
-            [NotNull] IAnimationGraph parent,
-            [NotNull] AnimationGraphContext context)
-        {
-            Ensure.Any.IsNotNull(name, nameof(name));
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-            Ensure.Any.IsNotNull(context, nameof(context));
-
-            if (!(parent.GetAnimationNode(name) is AnimationNodeBlendSpace2D)) return null;
+            if (parent.FindAnimationNode<AnimationNodeBlendSpace2D>(name).IsNone) return None;
 
             var parameter = string.Join("/",
                 new[] {"parameters", parent.Path, name, "blend_position"}.Where(v => v.Length > 0));
@@ -56,14 +57,12 @@ namespace AlleyCat.Animation
 
     public static class Blender2DExtensions
     {
-        [CanBeNull]
-        public static Blender2D GetBlender2D(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<Blender2D> FindBlender2D(this IAnimationGraph graph, string path)
         {
             Ensure.Any.IsNotNull(graph, nameof(graph));
             Ensure.Any.IsNotNull(path, nameof(path));
 
-            return graph.GetDescendantControl(path) as Blender2D;
+            return graph.FindDescendantControl<Blender2D>(path);
         }
     }
 }

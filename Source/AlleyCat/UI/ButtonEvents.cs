@@ -1,7 +1,6 @@
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -13,9 +12,9 @@ namespace AlleyCat.UI
     {
         public Button Source { get; }
 
-        public ButtonPressedEvent([NotNull] Button source)
+        public ButtonPressedEvent(Button source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Source = source;
         }

@@ -1,17 +1,18 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 
 namespace AlleyCat.Animation
 {
     public class CrossfadingAnimator : AnimationControl, IAnimator
     {
-        [CanBeNull]
-        public Godot.Animation Animation
+        public Option<Godot.Animation> Animation
         {
             get => _animation.Value;
             set => _animation.Value = value;
@@ -20,10 +21,10 @@ namespace AlleyCat.Animation
         public float Time
         {
             get => TransitionNode.XfadeTime;
-            set => TransitionNode.XfadeTime = value;
+            set => TransitionNode.XfadeTime = Mathf.Min(value, 0);
         }
 
-        public IObservable<Godot.Animation> OnAnimationChange => _animation;
+        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation;
 
         protected string Parameter { get; }
 
@@ -37,19 +38,20 @@ namespace AlleyCat.Animation
 
         protected AnimationNodeAnimation AnimationNode2 { get; }
 
-        private readonly ReactiveProperty<Godot.Animation> _animation;
+        private readonly ReactiveProperty<Option<Godot.Animation>> _animation;
 
         public CrossfadingAnimator(
-            [NotNull] string parameter,
-            [NotNull] AnimationNodeTransition transitionNode,
-            [NotNull] AnimationNodeAnimation animationNode1,
-            [NotNull] AnimationNodeAnimation animationNode2,
+            string parameter,
+            AnimationNodeTransition transitionNode,
+            AnimationNodeAnimation animationNode1,
+            AnimationNodeAnimation animationNode2,
             AnimationGraphContext context) : base(context)
         {
-            Ensure.Any.IsNotNull(parameter, nameof(parameter));
-            Ensure.Any.IsNotNull(transitionNode, nameof(transitionNode));
-            Ensure.Any.IsNotNull(animationNode1, nameof(animationNode1));
-            Ensure.Any.IsNotNull(animationNode2, nameof(animationNode2));
+            Ensure.That(parameter, nameof(parameter)).IsNotNull();
+            Ensure.That(transitionNode, nameof(transitionNode)).IsNotNull();
+            Ensure.That(animationNode1, nameof(animationNode1)).IsNotNull();
+            Ensure.That(animationNode2, nameof(animationNode2)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             Parameter = parameter;
 
@@ -57,66 +59,56 @@ namespace AlleyCat.Animation
             AnimationNode1 = animationNode1;
             AnimationNode2 = animationNode2;
 
-            var currentAnim = AnimationNode.Animation;
+            var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new ReactiveProperty<Godot.Animation>(
-                string.IsNullOrEmpty(currentAnim) ? null : context.Player.GetAnimation(currentAnim));
+            _animation = new ReactiveProperty<Option<Godot.Animation>>(current).AddTo(this);
 
             _animation
-                .Select(context.Player.AddAnimation)
-                .DistinctUntilChanged()
+                .Select(a => a.Map(context.Player.AddAnimation))
                 .Subscribe(animation =>
                 {
                     var next = Transition == 1 ? 2 : 1;
                     var node = next == 1 ? AnimationNode1 : AnimationNode2;
 
-                    node.SetAnimation(animation);
+                    node.SetAnimation(animation.ValueUnsafe());
 
                     Context.AnimationTree.Set(Parameter, next);
-                });
+                })
+                .AddTo(this);
         }
 
-        public override void Dispose()
+        public static Option<CrossfadingAnimator> TryCreate(
+            string name,
+            IAnimationGraph parent,
+            AnimationGraphContext context)
         {
-            _animation?.Dispose();
-        }
-
-        public static CrossfadingAnimator Create(
-            [NotNull] string name,
-            [NotNull] IAnimationGraph parent,
-            [NotNull] AnimationGraphContext context)
-        {
-            Ensure.Any.IsNotNull(name, nameof(name));
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-            Ensure.Any.IsNotNull(context, nameof(context));
-
-            var transitionNode = parent.GetAnimationNode(name) as AnimationNodeTransition;
-
-            if (transitionNode == null) return null;
+            Ensure.That(name, nameof(name)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             //TODO Resolve in an automatic fashion when it becomes possible to manipulate node connections from code.
-            var animationNode1 = parent.GetAnimationNode(name + " Animation 1") as AnimationNodeAnimation;
-            var animationNode2 = parent.GetAnimationNode(name + " Animation 2") as AnimationNodeAnimation;
+            return (from transition in parent.FindAnimationNode<AnimationNodeTransition>(name)
+                from animation1 in parent.FindAnimationNode<AnimationNodeAnimation>(name + " Animation 1")
+                from animation2 in parent.FindAnimationNode<AnimationNodeAnimation>(name + " Animation 2")
+                select (transition, animation1, animation2)).Map(t =>
+            {
+                var parameter = string.Join("/",
+                    new[] {"parameters", parent.Path, name, "current"}.Where(v => v.Length > 0));
 
-            if (animationNode1 == null || animationNode2 == null) return null;
-
-            var parameter = string.Join("/",
-                new[] {"parameters", parent.Path, name, "current"}.Where(v => v.Length > 0));
-
-            return new CrossfadingAnimator(parameter, transitionNode, animationNode1, animationNode2, context);
+                return new CrossfadingAnimator(parameter, t.transition, t.animation1, t.animation2, context);
+            });
         }
     }
 
     public static class CrossfadingAnimatorExtensions
     {
-        [CanBeNull]
-        public static CrossfadingAnimator GetCrossfadingAnimator(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<CrossfadingAnimator> FindCrossfadingAnimator(
+            this IAnimationGraph graph, string path)
         {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(graph, nameof(graph)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
-            return graph.GetDescendantControl(path) as CrossfadingAnimator;
+            return graph.FindDescendantControl<CrossfadingAnimator>(path);
         }
     }
 }

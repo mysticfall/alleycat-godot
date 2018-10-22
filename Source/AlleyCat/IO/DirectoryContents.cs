@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
 namespace AlleyCat.IO
@@ -11,9 +10,9 @@ namespace AlleyCat.IO
     {
         private readonly string _path;
 
-        public DirectoryContents([NotNull] string path)
+        public DirectoryContents(string path)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
+            Ensure.That(path, nameof(path)).IsNotNull();
 
             _path = path;
         }

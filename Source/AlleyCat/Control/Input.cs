@@ -6,7 +6,8 @@ using AlleyCat.Control.Generic;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -23,34 +24,32 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private readonly ReactiveProperty<bool> _active;
 
-        private IObservable<T> _observable;
+        private Option<IObservable<T>> _observable = None;
+
+        protected Input()
+        {
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+        }
 
         public override void _Ready()
         {
             base._Ready();
 
-            _observable = CreateObservable();
+            _observable = Some(CreateObservable());
 
-            Debug.Assert(_observable != null, "CreateObservable() != null");
+            Debug.Assert(_observable.IsSome, "CreateObservable() != null");
         }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             Ensure.Any.IsNotNull(observer, nameof(observer));
 
-            return _observable.Where(_ => Active).Subscribe(observer);
+            return _observable.Match(o => o.Where(_ => Valid && Active).Subscribe(observer)
+                , () => throw new InvalidOperationException("The input has not been initialized yet."));
         }
 
-        [NotNull]
         protected abstract IObservable<T> CreateObservable();
-
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-
-            base.OnPreDestroy();
-        }
     }
 }

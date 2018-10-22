@@ -58,3 +58,8 @@
 "ui.MainMenu.resume","Resume","계속하기"
 "ui.MainMenu.settings","Settings","게임 설정"
 "ui.MainMenu.quit","Quit","나가기"
+"ui.InventoryView.name","Name","이름"
+"ui.InventoryView.type","Type","유형"
+"ui.InventoryView.slot","Slot",""
+"ui.InventoryView.weight","Weight","무게"
+

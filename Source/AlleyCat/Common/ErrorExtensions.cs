@@ -1,19 +1,28 @@
 ﻿using System;
 using System.IO;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
     public static class ErrorExtensions
     {
-        public static void ThrowIfNecessary(
-            this Error error, [CanBeNull] Func<Error, string> message = null)
+        public static void ThrowOnError(this Error error) => 
+            ThrowOnError(error, None);
+
+        public static void ThrowOnError(this Error error, Func<Error, string> message) =>
+            ThrowOnError(error, Some(message));
+
+        private static void ThrowOnError(this Error error, Option<Func<Error, string>> message)
         {
             if (error == Error.Ok) return;
 
             var code = Enum.GetName(typeof(Error), error);
-            var arg = message?.Invoke(error) ?? $"Operation failed with code: '{code}(error)'";
+
+            var arg = message
+                .Map(m => m.Invoke(error))
+                .IfNone($"Operation failed with code: '{code}(error)'");
 
             Exception exception;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Physics
 {
@@ -15,13 +15,13 @@ namespace AlleyCat.Physics
 
         public int Shape => (int) Data["shape"];
 
-        public object Metadata => Data.TryGetValue("metadata", out var metadata) ? metadata : null;
+        public Option<object> Metadata => Data.TryGetValue("metadata");
 
         protected readonly IDictionary<object, object> Data;
 
-        public Collision([NotNull] IDictionary<object, object> data)
+        public Collision(IDictionary<object, object> data)
         {
-            Ensure.Any.IsNotNull(data, nameof(data));
+            Ensure.That(data, nameof(data)).IsNotNull();
 
             Data = data;
         }

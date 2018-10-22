@@ -5,15 +5,15 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Animation
 {
     public class Blender : AnimationControl, IAnimator
     {
-        [CanBeNull]
-        public Godot.Animation Animation
+        public Option<Godot.Animation> Animation
         {
             get => _animation.Value;
             set => _animation.Value = value;
@@ -22,16 +22,16 @@ namespace AlleyCat.Animation
         public float Amount
         {
             get => _amount.Value;
-            set => _amount.Value = value;
+            set => _amount.Value = Mathf.Clamp(value, 0, 1);
         }
 
         public float TimeScale
         {
             get => _timeScale.Value;
-            set => _timeScale.Value = value;
+            set => _timeScale.Value = Mathf.Clamp(value, 0, 1);
         }
 
-        public IObservable<Godot.Animation> OnAnimationChange => _animation;
+        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation;
 
         public IObservable<float> OnAmountChange => _amount;
 
@@ -39,37 +39,37 @@ namespace AlleyCat.Animation
 
         protected string BlendAmountParameter { get; }
 
-        protected string TimeScaleParameter { get; }
+        protected Option<string> TimeScaleParameter { get; }
 
         protected AnimationNodeBlend2 BlenderNode { get; }
 
         protected AnimationNodeAnimation AnimationNode { get; }
 
-        private readonly ReactiveProperty<Godot.Animation> _animation;
+        private readonly ReactiveProperty<Option<Godot.Animation>> _animation;
 
         private readonly ReactiveProperty<float> _amount;
 
         private readonly ReactiveProperty<float> _timeScale;
 
         public Blender(
-            [NotNull] string blendAmountParameter,
-            [NotNull] AnimationNodeBlend2 blenderNode,
-            [NotNull] AnimationNodeAnimation animationNode,
+            string blendAmountParameter,
+            AnimationNodeBlend2 blenderNode,
+            AnimationNodeAnimation animationNode,
             AnimationGraphContext context) :
             this(blendAmountParameter, null, blenderNode, animationNode, context)
         {
         }
 
         public Blender(
-            [NotNull] string blendAmountParameter,
-            [CanBeNull] string timeScaleParameter,
-            [NotNull] AnimationNodeBlend2 blenderNode,
-            [NotNull] AnimationNodeAnimation animationNode,
+            string blendAmountParameter,
+            Option<string> timeScaleParameter,
+            AnimationNodeBlend2 blenderNode,
+            AnimationNodeAnimation animationNode,
             AnimationGraphContext context) : base(context)
         {
-            Ensure.Any.IsNotNull(blendAmountParameter, nameof(blendAmountParameter));
-            Ensure.Any.IsNotNull(blenderNode, nameof(blenderNode));
-            Ensure.Any.IsNotNull(animationNode, nameof(animationNode));
+            Ensure.That(blendAmountParameter, nameof(blendAmountParameter)).IsNotNull();
+            Ensure.That(blenderNode, nameof(blenderNode)).IsNotNull();
+            Ensure.That(animationNode, nameof(animationNode)).IsNotNull();
 
             BlendAmountParameter = blendAmountParameter;
             TimeScaleParameter = timeScaleParameter;
@@ -77,59 +77,63 @@ namespace AlleyCat.Animation
             BlenderNode = blenderNode;
             AnimationNode = animationNode;
 
-            var currentAnim = AnimationNode.Animation;
+            var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new ReactiveProperty<Godot.Animation>(
-                string.IsNullOrEmpty(currentAnim) ? null : context.Player.GetAnimation(currentAnim));
+            _animation = new ReactiveProperty<Option<Godot.Animation>>(current).AddTo(this);
 
-            _animation.Subscribe(v =>
-            {
-                AnimationNode.Animation = v?.GetKey();
+            _animation
+                .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
+                .Subscribe(AnimationNode.SetAnimation)
+                .AddTo(this);
 
-                var filters = new Array();
-
-                if (v != null)
+            _animation
+                .Subscribe(animation =>
                 {
-                    FindTransformTracks(v).ToList().ForEach(filters.Add);
-                }
-                else
-                {
-                    Amount = 0;
-                }
+                    var filters = new Array();
 
-                BlenderNode.Filters = filters;
-                BlenderNode.FilterEnabled = filters.Any();
-            });
+                    animation.Bind(FindTransformTracks).Iter(filters.Add);
+
+                    if (animation.IsNone) Amount = 0;
+
+                    BlenderNode.Filters = filters;
+                    BlenderNode.FilterEnabled = filters.Any();
+                })
+                .AddTo(this);
 
             var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
 
-            _amount = new ReactiveProperty<float>(currentAmount);
-            _amount.Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v));
+            _amount = new ReactiveProperty<float>(currentAmount).AddTo(this);
 
-            var currentSpeed = timeScaleParameter != null ? (float) context.AnimationTree.Get(timeScaleParameter) : 1f;
+            _amount
+                .Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v))
+                .AddTo(this);
 
-            _timeScale = new ReactiveProperty<float>(currentSpeed);
-            _timeScale
-                .Where(_ => timeScaleParameter != null)
-                .Subscribe(v => context.AnimationTree.Set(timeScaleParameter, v));
+            var currentSpeed = timeScaleParameter
+                .Map(context.AnimationTree.Get).OfType<float>().HeadOrNone().IfNone(1f);
+
+            _timeScale = new ReactiveProperty<float>(currentSpeed).AddTo(this);
+
+            timeScaleParameter.Iter(param =>
+            {
+                _timeScale
+                    .Subscribe(v => context.AnimationTree.Set(param, v))
+                    .AddTo(this);
+            });
         }
 
         public void Blend(
-            [NotNull] Godot.Animation animation,
+            Godot.Animation animation,
             float timeScale = 1f,
             float amount = 1f,
             float transition = 0f)
         {
-            Ensure.Any.IsNotNull(animation, nameof(animation));
-
-            Ensure.Comparable.IsGte(timeScale, 0f, nameof(timeScale));
-            Ensure.Comparable.IsLte(timeScale, 1f, nameof(timeScale));
-            Ensure.Comparable.IsGte(amount, 0f, nameof(amount));
-            Ensure.Comparable.IsLte(amount, 1f, nameof(amount));
-            Ensure.Comparable.IsGte(transition, 0f, nameof(transition));
+            Ensure.That(animation, nameof(animation)).IsNotNull();
 
             Animation = animation;
-            TimeScale = timeScale;
+            TimeScale = Mathf.Clamp(timeScale, 0, 1);
+
+            var clampedAmount = Mathf.Clamp(amount, 0, 1);
+            var clampedTransition = Mathf.Min(transition, 0);
 
             if (transition > 0)
             {
@@ -137,24 +141,23 @@ namespace AlleyCat.Animation
                     .Scan(0f, (total, delta) => total + delta);
 
                 var done = elapsed
-                    .Where(v => v >= transition)
+                    .Where(v => v >= clampedTransition)
                     .Take(1);
 
                 elapsed
-                    .Select(v => Mathf.Min(v / transition * amount, 1f))
+                    .Select(v => clampedTransition > 0 ? v / clampedTransition : 0f)
+                    .Select(v => Mathf.Min(v * clampedAmount, 1f))
                     .TakeUntil(done)
-                    .Subscribe(v => Amount = v, () => Amount = amount);
+                    .Subscribe(v => Amount = v, () => Amount = clampedAmount);
             }
             else
             {
-                Amount = amount;
+                Amount = clampedAmount;
             }
         }
 
         public void Unblend(float transition = 0f)
         {
-            Ensure.Comparable.IsGte(transition, 0f, nameof(transition));
-
             if (transition > 0)
             {
                 var elapsed = Context.OnAdvance
@@ -175,55 +178,48 @@ namespace AlleyCat.Animation
             }
         }
 
-        public override void Dispose()
-        {
-            _animation?.Dispose();
-            _amount?.Dispose();
-            _timeScale?.Dispose();
-        }
-
-        public static Blender Create(
-            [NotNull] string name,
-            [NotNull] IAnimationGraph parent,
-            [NotNull] AnimationGraphContext context)
+        public static Option<Blender> TryCreate(
+            string name,
+            IAnimationGraph parent,
+            AnimationGraphContext context)
         {
             Ensure.Any.IsNotNull(name, nameof(name));
             Ensure.Any.IsNotNull(parent, nameof(parent));
             Ensure.Any.IsNotNull(context, nameof(context));
 
-            var blenderNode = parent.GetAnimationNode(name) as AnimationNodeBlend2;
-
             //TODO Resolve in an automatic fashion when it becomes possible to manipulate node connections from code.
             var animationNodeKey = name + " Animation";
-            var animationNode = parent.GetAnimationNode(animationNodeKey) as AnimationNodeAnimation;
 
             var timeScaleNodeKey = name + " Speed";
-            var timeScaleNode = parent.GetAnimationNode(timeScaleNodeKey) as AnimationNodeTimeScale;
+            var timeScaleNode = parent.FindAnimationNode<AnimationNodeTimeScale>(timeScaleNodeKey);
 
-            if (blenderNode == null || animationNode == null) return null;
+            return (
+                from blender in parent.FindAnimationNode<AnimationNodeBlend2>(name)
+                from animation in parent.FindAnimationNode<AnimationNodeAnimation>(animationNodeKey)
+                select (blender, animation)).Map(t =>
+            {
+                var parameterBlendAmount = string.Join("/",
+                    new[] {"parameters", parent.Path, name, "blend_amount"}.Where(v => v.Length > 0));
 
-            var parameterBlendAmount = string.Join("/",
-                new[] {"parameters", parent.Path, name, "blend_amount"}.Where(v => v.Length > 0));
+                var parameterTimeScale = timeScaleNode == null
+                    ? null
+                    : string.Join("/",
+                        new[] {"parameters", parent.Path, timeScaleNodeKey, "scale"}.Where(v => v.Length > 0));
 
-            var parameterTimeScale = timeScaleNode == null
-                ? null
-                : string.Join("/",
-                    new[] {"parameters", parent.Path, timeScaleNodeKey, "scale"}.Where(v => v.Length > 0));
-
-            return new Blender(parameterBlendAmount, parameterTimeScale, blenderNode, animationNode, context);
+                return new Blender(
+                    parameterBlendAmount, parameterTimeScale, t.blender, t.animation, context);
+            });
         }
     }
 
     public static class BlenderExtensions
     {
-        [CanBeNull]
-        public static Blender GetBlender(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<Blender> FindBlender(this IAnimationGraph graph, string path)
         {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(graph, nameof(graph)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
-            return graph.GetDescendantControl(path) as Blender;
+            return graph.FindDescendantControl<Blender>(path);
         }
     }
 }

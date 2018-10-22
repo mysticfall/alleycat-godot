@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using EnsureThat;
 using Godot;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -11,15 +12,16 @@ namespace AlleyCat.Autowire
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
             if (node is IServiceDefinitionProvider provider)
             {
-                var target = context.Node == node ? context.Parent : context;
+                var target = context.Node == node ? context.Parent : Some(context);
 
-                Debug.Assert(target != null, "context.Parent != null");
+                Debug.Assert(target.IsSome, "target.IsSome");
 
-                target.AddService(provider.AddServices);
+                target.Iter(t => t.AddService(provider.AddServices));
             }
             else
             {

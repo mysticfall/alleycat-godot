@@ -1,19 +1,29 @@
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Control;
 using Godot;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
     public class FullScreenModalPanel : Panel
     {
-        [Export]
-        public string CloseAction { get; set; } = "ui_cancel";
+        public Option<string> CloseAction
+        {
+            get => _closeAction.TrimToOption();
+            set => _closeAction = value.ValueUnsafe();
+        }
 
-        [Service]
-        protected IPlayerControl PlayerControl { get; private set; }
+        protected IPlayerControl PlayerControl => _playerControl.Head();
 
         [Export]
         public bool PauseWhenVisible { get; set; } = true;
+
+        [Export] private string _closeAction = "ui_cancel";
+
+        [Service] private Option<IPlayerControl> _playerControl = None;
 
         private bool _initialActiveState;
 
@@ -63,7 +73,7 @@ namespace AlleyCat.UI
         {
             base._UnhandledInput(@event);
 
-            if (CloseAction != null && @event.IsActionPressed(CloseAction))
+            if (CloseAction.Exists(@event.IsActionPressed))
             {
                 Resume();
                 GetTree().SetInputAsHandled();

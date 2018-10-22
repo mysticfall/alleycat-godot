@@ -1,23 +1,28 @@
+using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     [Singleton(typeof(MorphListPanel))]
     public class MorphListPanel : Panel
     {
-        [Service]
-        public IMorphableCharacter Character { get; private set; }
+        public IMorphableCharacter Character => _character.Head();
 
-        [Node]
-        protected TabContainer TabContainer { get; private set; }
+        protected TabContainer TabContainer => _tabContainer.Head();
 
-        [Export, UsedImplicitly] private PackedScene _groupPanelScene;
+        [Service] private Option<IMorphableCharacter> _character = None;
 
-        [PostConstruct]
+        [Node("Tab Container")] private Option<TabContainer> _tabContainer = None;
+
+        [Export] private PackedScene _groupPanelScene;
+
+        [PostConstruct(true)]
         protected virtual void OnInitialized()
         {
             LoadMorphs(Character.Morphs);
@@ -25,6 +30,10 @@ namespace AlleyCat.UI.Character
 
         protected virtual void LoadMorphs(IMorphSet morphSet)
         {
+            Ensure.That(morphSet, nameof(morphSet)).IsNotNull();
+
+            Debug.Assert(_tabContainer != null, "_tabContainer != null");
+
             var index = 0;
 
             foreach (var group in morphSet.Groups)

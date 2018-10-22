@@ -8,13 +8,14 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.View;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    [AutowireContext, Singleton(
-         typeof(IPlayerControl), typeof(IPerspectiveSwitcher), typeof(IFocusTracker))]
+    [AutowireContext, Singleton(typeof(IPlayerControl), typeof(IPerspectiveSwitcher), typeof(IFocusTracker))]
     public class PlayerControl : AutowiredNode, IPlayerControl
     {
         [Export]
@@ -26,65 +27,88 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        public virtual bool Valid => Character != null && Camera != null && Camera.IsCurrent();
+        public override bool Valid => base.Valid &&
+                                      _movementInput.IsSome &&
+                                      Character.IsSome &&
+                                      Perspective.IsSome &&
+                                      Camera.IsCurrent();
 
-        [Node(required: false)]
-        public virtual IHumanoid Character
+        [Node(false)]
+        public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.Value = value;
         }
 
-        public IObservable<IHumanoid> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        [Node(required: false)]
-        public Camera Camera { get; set; }
+        public Camera Camera
+        {
+            get => _camera.IfNone(GetViewport().GetCamera);
+            set
+            {
+                Ensure.That(value, nameof(value)).IsNotNull();
+
+                _camera = Some(value);
+            }
+        }
 
         [Service]
-        public IEnumerable<IPerspectiveView> Perspectives { get; private set; }
+        public IEnumerable<IPerspectiveView> Perspectives { get; private set; } =
+            Enumerable.Empty<IPerspectiveView>();
 
-        public IPerspectiveView Perspective
+        public Option<IPerspectiveView> Perspective
         {
             get => _perspective.Value;
             set => _perspective.Value = value;
         }
 
-        public IObservable<IPerspectiveView> OnPerspectiveChange => _perspective.Where(v => Active && Valid);
+        public IObservable<Option<IPerspectiveView>> OnPerspectiveChange =>
+            _perspective.Where(v => Active && Valid);
 
-        public float MaxFocalDistance { get; set; } = 5f;
-
-        public IEntity FocusedObject => (Perspective as IFocusTracker)?.FocusedObject;
-
-        public IObservable<IEntity> OnFocusChange
+        [Export(PropertyHint.ExpRange, "0, 100, 5")]
+        public float MaxFocalDistance
         {
-            get
-            {
-                var supported = OnPerspectiveChange.OfType<IFocusTracker>().SelectMany(t => t.OnFocusChange);
-                var unsupported = OnPerspectiveChange.Where(p => !(p is IFocusTracker)).Select(_ => default(IEntity));
-
-                return supported.Merge(unsupported).DistinctUntilChanged();
-            }
+            get => _maxFocalDistance;
+            set => _maxFocalDistance = Mathf.Min(value, 0);
         }
 
-        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Valid);
+        public Option<IEntity> FocusedObject =>
+            Perspective.OfType<IFocusTracker>().Bind(p => p.FocusedObject).HeadOrNone();
 
-        [Export, UsedImplicitly] private NodePath _characterPath;
+        public IObservable<Option<IEntity>> OnFocusChange =>
+            OnPerspectiveChange
+                .Select(p => p.OfType<IFocusTracker>().HeadOrNone())
+                .SelectMany(p => p.MatchObservable(f => f.OnFocusChange, () => None));
 
-        [Export, UsedImplicitly] private NodePath _cameraPath;
+        protected IObservable<Vector2> MovementInput =>
+            _movementInput.Bind(i => i.AsVector2Input()).Map(i => i.Where(_ => Valid)).Head();
 
-        [Node("Movement")] private InputBindings _movementInput;
+        [Export] private NodePath _characterPath;
 
-        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
+        [Export] private NodePath _cameraPath;
 
-        private readonly ReactiveProperty<IPerspectiveView> _perspective = new ReactiveProperty<IPerspectiveView>();
+        [Node("Movement")] private Option<InputBindings> _movementInput = None;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
-        private IPerspectiveView _lastPerspective;
+        private readonly ReactiveProperty<Option<IPerspectiveView>> _perspective;
+
+        private readonly ReactiveProperty<bool> _active;
+
+        [Node(false)] private Option<Camera> _camera = None;
+
+        private Option<IPerspectiveView> _lastPerspective = None;
+
+        private float _maxFocalDistance = 5f;
 
         public PlayerControl()
         {
             ProcessMode = ProcessMode.Idle;
+
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
+            _perspective = new ReactiveProperty<Option<IPerspectiveView>>(None).AddTo(this);
         }
 
         [PostConstruct]
@@ -92,49 +116,41 @@ namespace AlleyCat.Control
         {
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Character = Character ?? GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).FirstOrDefault();
+            Character |= GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).HeadOrNone();
 
-            IPerspectiveView active = null;
+            Option<IPerspectiveView> active = None;
 
             foreach (var perspective in Perspectives)
             {
                 perspective.Character = Character;
 
-                if (perspective.Active && active == null)
-                {
-                    active = perspective;
-                }
+                active |= Optional(perspective).Where(p => p.Active);
 
                 perspective.OnActiveStateChange
-                    .Where(s => Active && !s && perspective == Perspective)
-                    .Select(_ => FindNextValidPerspective(perspective))
-                    .Where(p => p != null)
-                    .Subscribe(p => Perspective = p)
+                    .Where(s => Active && !s && Perspective.Contains(perspective))
+                    .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)))
                     .AddTo(this);
 
                 perspective.OnActiveStateChange
-                    .Where(s => s && perspective != Perspective)
-                    .Subscribe(_ => Perspective = perspective)
+                    .Where(s => s && !Perspective.Contains(perspective))
+                    .Subscribe(_ => Perspective = Some(perspective))
                     .AddTo(this);
             }
 
-            if (active != null)
-            {
-                Perspective = active;
-            }
+            Perspective |= active;
 
             OnActiveStateChange
-                .Do(v => _movementInput.Active = v)
-                .Do(v => Character?.Locomotion.Stop())
-                .Do(v => Perspective.Active = v)
+                .Do(v => _movementInput.Iter(i => i.Active = v))
+                .Do(v => Character.Iter(c => c.Locomotion.Stop()))
+                .Do(v => Perspective.Iter(p => p.Active = v))
                 .Subscribe()
                 .AddTo(this);
 
             MovementInput
-                .Where(_ => Character?.Locomotion != null)
-                .Where(_ => Perspective.AutoActivate)
+                .Where(_ => Character.Exists(c => c.Valid))
+                .Where(_ => Perspective.Exists(p => p.AutoActivate))
                 .Select(v => new Vector3(v.x, 0, -v.y) * 2)
-                .Subscribe(v => Character?.Locomotion.Move(v))
+                .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)))
                 .AddTo(this);
 
             OnPerspectiveChange
@@ -142,81 +158,74 @@ namespace AlleyCat.Control
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2))
                 .AddTo(this);
 
-            var rotatableViews = OnPerspectiveChange.Select(p => p as ITurretLike);
-            var locomotion = _character.Where(c => c != null).Select(c => c.Locomotion);
+            var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
+            var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
 
-            var linearSpeed = locomotion.SelectMany(l => l.OnVelocityChange).Select(v => v.Length());
+            var linearSpeed = locomotion
+                .SelectMany(l => l.MatchObservable(v => v.OnVelocityChange, () => Vector3.Zero))
+                .Select(v => v.Length());
 
             // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
-            var viewRotationSpeed =
-                rotatableViews.CombineLatest(linearSpeed, OnLoop, (view, speed, delta) =>
-                {
-                    if (view == null) return 0;
+            var viewRotationSpeed = rotatableViews.CombineLatest(linearSpeed, OnLoop, (view, speed, delta) =>
+                view.Map(v => v.Yaw).Match(yaw =>
+                    {
+                        var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
+                                           Mathf.Sign(yaw) * speed;
 
-                    var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(view.Yaw) * 3) *
-                                       Mathf.Sign(view.Yaw) *
-                                       speed;
+                        return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(yaw) ? angularSpeed : yaw / delta;
+                    },
+                    () => 0
+                ));
 
-                    return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(view.Yaw) ? angularSpeed : view.Yaw / delta;
-                });
-
-            var offsetAngle =
-                viewRotationSpeed.CombineLatest(OnLoop, (speed, delta) => speed * delta);
+            var offsetAngle = viewRotationSpeed.CombineLatest(OnLoop, (speed, delta) => speed * delta);
 
             locomotion
                 .Where(_ => Active && Valid)
-                .SelectMany(l => l.OnLoop)
+                .SelectMany(l => l.MatchObservable(v => v.OnLoop, Observable.Empty<float>))
                 .Zip(
                     rotatableViews
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
                         .MostRecent((null, 0)),
                     (_, args) => args)
                 .Where(t => t.view != null)
-                .Subscribe(t => t.view.Yaw -= t.angle)
+                .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
                 .AddTo(this);
 
             OnLoop
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
-                .Select(speed => Character?.GlobalTransform().Up() * speed ?? Vector3.Zero)
+                .Select(speed => Character.Map(c => c.GlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
-                .Subscribe(t => t.loco.Rotate(t.velocity))
+                .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)))
                 .AddTo(this);
         }
 
-        protected virtual void OnPerspectiveChanged(IPerspectiveView previous, IPerspectiveView current)
+        protected virtual void OnPerspectiveChanged(
+            Option<IPerspectiveView> previous, Option<IPerspectiveView> current)
         {
-            if (previous is ITurretLike previousRotatable && current is ITurretLike currentRotatable)
+            (
+                from previousRotatable in previous.OfType<ITurretLike>()
+                from currentRotatable in current.OfType<ITurretLike>()
+                select (previousRotatable, currentRotatable)
+            ).Iter(t => t.currentRotatable.Rotation = t.previousRotatable.Rotation);
+
+            if (!current.Exists(c => c is IAutoFocusingView))
             {
-                currentRotatable.Rotation = previousRotatable.Rotation;
+                previous.OfType<IAutoFocusingView>().Iter(v => v.DisableDof());
             }
 
-            if (previous is IAutoFocusingView focusView && !(current is IAutoFocusingView))
-            {
-                focusView.DisableDof();
-            }
+            _lastPerspective = previous.Filter(p => p.AutoActivate);
 
-            _lastPerspective = previous != null && previous.AutoActivate ? previous : null;
-
-            current?.Activate();
-            previous?.Deactivate();
+            current.Iter(c => c.Activate());
+            previous.Iter(p => p.Deactivate());
         }
 
-        protected virtual IPerspectiveView FindNextValidPerspective([CanBeNull] IPerspectiveView current = null)
+        protected virtual Option<IPerspectiveView> FindNextValidPerspective(Option<IPerspectiveView> current)
         {
-            return new[] {_lastPerspective}
-                .Where(p => p != null)
+            return _lastPerspective
                 .Concat(Perspectives)
-                .FirstOrDefault(p => p != current && p.Valid && p.AutoActivate);
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-            _character?.Dispose();
-            _perspective?.Dispose();
-
-            base.OnPreDestroy();
+                .Filter(p => !current.Contains(p) && p.Valid && p.AutoActivate)
+                .HeadOrNone();
         }
     }
 }

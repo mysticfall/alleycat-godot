@@ -1,50 +1,55 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Character.Morph.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     public class MorphGroupPanel : ScrollContainer
     {
-        public IMorphGroup Group { get; private set; }
+        public IMorphGroup Group => _group.Head();
 
-        public IEnumerable<IMorph> Morphs { get; private set; }
+        public IEnumerable<IMorph> Morphs { get; private set; } = Enumerable.Empty<IMorph>();
 
         [Node]
         protected Container MorphsPanel { get; private set; }
 
-        [Export, UsedImplicitly] private PackedScene _colorMorphPanelScene;
+        [Export] private PackedScene _colorMorphPanelScene;
 
-        [Export, UsedImplicitly] private PackedScene _rangedMorphPanelScene;
+        [Export] private PackedScene _rangedMorphPanelScene;
+
+        private Option<IMorphGroup> _group = None;
 
         [PostConstruct]
         protected virtual void OnInitialize()
         {
             Morphs
-                .Select(CreateMorphPanel)
-                .Where(p => p != null)
-                .ToList()
-                .ForEach(p => MorphsPanel.AddChild(p));
+                .Bind(m => CreateMorphPanel(m).AsEnumerable())
+                .Iter(p => MorphsPanel.AddChild(p));
         }
 
-        public void LoadGroup([NotNull] IMorphGroup group, [NotNull] IEnumerable<IMorph> morphs)
+        public void LoadGroup(IMorphGroup group, IEnumerable<IMorph> morphs)
         {
-            Ensure.Any.IsNotNull(group, nameof(group));
-            Ensure.Any.IsNotNull(morphs, nameof(morphs));
+            Ensure.That(group, nameof(group)).IsNotNull();
+            Ensure.That(morphs, nameof(morphs)).IsNotNull();
 
-            Group = group;
+            _group = Some(group);
+
             Morphs = morphs;
         }
 
-        [CanBeNull]
-        protected virtual MorphPanel CreateMorphPanel([NotNull] IMorph morph)
+        protected virtual Option<MorphPanel> CreateMorphPanel(IMorph morph)
         {
-            Ensure.Any.IsNotNull(morph, nameof(morph));
+            Ensure.That(morph, nameof(morph)).IsNotNull();
+
+            Debug.Assert(_colorMorphPanelScene != null, "_colorMorphPanelScene != null");
+            Debug.Assert(_rangedMorphPanelScene != null, "_rangedMorphPanelScene != null");
 
             MorphPanel panel = null;
 

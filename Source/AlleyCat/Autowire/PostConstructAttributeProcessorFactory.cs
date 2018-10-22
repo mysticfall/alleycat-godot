@@ -10,7 +10,7 @@ namespace AlleyCat.Autowire
     {
         public IEnumerable<INodeProcessor> Create(Type type)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
             return type
                 .GetMembers(BindingFlags.Instance | BindingFlags.NonPublic)

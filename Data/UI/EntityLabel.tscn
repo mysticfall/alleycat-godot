@@ -57,8 +57,8 @@ size_flags_vertical = 1
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Custom Styles", "Mouse" ]
-InteractAction = "interact"
-DefaultKeyLabel = "?"
+_interactAction = "interact"
+_defaultKeyLabel = "?"
 
 [node name="Container" type="VBoxContainer" parent="."]
 anchor_left = 0.0

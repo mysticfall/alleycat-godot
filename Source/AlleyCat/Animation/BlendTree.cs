@@ -1,6 +1,7 @@
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -16,24 +17,22 @@ namespace AlleyCat.Animation
             Root = root;
         }
 
-        public override AnimationNode GetAnimationNode(string name)
+        public override Option<AnimationNode> FindAnimationNode(string name)
         {
-            Ensure.Any.IsNotNull(name, nameof(name));
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            return Root.HasNode(name) ? Root.GetNode(name) : null;
+            return Root.HasNode(name) ? Some(Root.GetNode(name)) : None;
         }
     }
 
     public static class BlendTreeExtensions
     {
-        [CanBeNull]
-        public static BlendTree GetBlendTree(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<BlendTree> FindBlendTree(this IAnimationGraph graph, string path)
         {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(graph, nameof(graph)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
-            return graph.GetDescendantGraph(path) as BlendTree;
+            return graph.FindDescendantGraph<BlendTree>(path);
         }
     }
 }

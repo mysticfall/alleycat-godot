@@ -1,12 +1,10 @@
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Animation
 {
     public interface IAnimationControlFactory
     {
-        IAnimationControl Create(
-            [NotNull] string name, 
-            [NotNull] IAnimationGraph parent,
-            [NotNull] AnimationGraphContext context);
+        Option<IAnimationControl> TryCreate(
+            string name, IAnimationGraph parent, AnimationGraphContext context);
     }
 }

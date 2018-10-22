@@ -1,6 +1,5 @@
 ﻿using System;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
@@ -8,6 +7,6 @@ namespace AlleyCat.Autowire
     {
         AutowirePhase ProcessPhase { get; }
 
-        void Process([NotNull] IAutowireContext context, [NotNull] Node node);
+        void Process(IAutowireContext context, Node node);
     }
 }

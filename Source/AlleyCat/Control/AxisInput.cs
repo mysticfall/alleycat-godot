@@ -3,36 +3,67 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
     public abstract class AxisInput : Input<float>, IAxisInput
     {
-        [Export(PropertyHint.ExpRange, "0, 1")]
-        public virtual float Sensitivity { get; set; } = 0.5f;
+        public virtual float Sensitivity
+        {
+            get => _sensitivity;
+            set => _sensitivity = Mathf.Clamp(value, 0, 1);
+        }
 
-        [Export]
-        public virtual Curve Curve { get; set; }
+        public virtual Option<Curve> Curve
+        {
+            get => Optional(_curve);
+            set => _curve = value.ValueUnsafe();
+        }
 
-        [Export(PropertyHint.ExpRange, "0, 1")]
-        public virtual float DeadZone { get; set; } = 0f;
+        public virtual float DeadZone
+        {
+            get => _deadZone;
+            set => _deadZone = Mathf.Clamp(value, 0, 1);
+        }
 
         [Export]
         public virtual bool Interpolate { get; set; } = false;
 
-        [Export(PropertyHint.ExpRange, "0, 1000, 1")]
-        public virtual float WindowSize { get; set; } = 5f;
+        public virtual float WindowSize
+        {
+            get => _windowSize;
+            set => _windowSize = Mathf.Min(value, 0);
+        }
+
+        public virtual float WindowShift
+        {
+            get => _windowShift;
+            set => _windowShift = Mathf.Min(value, 0);
+        }
+
+        [Export(PropertyHint.ExpRange, "0, 1, 0.5")]
+        private float _sensitivity = 0.5f;
+
+        [Export] private Curve _curve;
+
+        [Export(PropertyHint.ExpRange, "0, 1")]
+        private float _deadZone;
+
+        [Export(PropertyHint.ExpRange, "0, 1000, 5")]
+        private float _windowSize = 5f;
 
         [Export(PropertyHint.ExpRange, "0, 1000, 1")]
-        public virtual float WindowShift { get; set; } = 1f;
+        private float _windowShift = 1f;
 
         protected override IObservable<float> CreateObservable()
         {
             var input = CreateRawObservable()
                 .Where(v => Math.Abs(v) >= DeadZone)
                 .Select(v => v * Sensitivity)
-                .Select(v => Curve?.Interpolate(v) ?? v);
+                .Select(v => Curve.Map(c => c.Interpolate(v)).IfNone(v));
 
             if (Interpolate)
             {
@@ -48,7 +79,6 @@ namespace AlleyCat.Control
             return input;
         }
 
-        [NotNull]
         protected abstract IObservable<float> CreateRawObservable();
     }
 }

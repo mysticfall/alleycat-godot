@@ -1,6 +1,6 @@
+using System.Diagnostics;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -11,31 +11,40 @@ namespace AlleyCat.Common
 
     public static class TransformableExtensions
     {
-        public static Transform Transform([NotNull] this ITransformable transformable)
+        public static Transform Transform(this ITransformable transformable)
         {
-            Ensure.Any.IsNotNull(transformable, nameof(transformable));
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
 
             return transformable.Spatial.Transform;
         }
 
-        public static Transform GlobalTransform([NotNull] this ITransformable transformable)
+        public static Transform GlobalTransform(this ITransformable transformable)
         {
-            Ensure.Any.IsNotNull(transformable, nameof(transformable));
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
 
             return transformable.Spatial.GlobalTransform;
         }
 
-        public static Vector3 Origin([NotNull] this ITransformable transformable)
+        public static Vector3 Origin(this ITransformable transformable)
         {
-            Ensure.Any.IsNotNull(transformable, nameof(transformable));
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
 
             return transformable.Spatial.GlobalTransform.origin;
         }
 
-        public static float DistanceTo([NotNull] this ITransformable transformable, [NotNull] ITransformable target)
+        public static float DistanceTo(this ITransformable transformable, ITransformable target)
         {
-            Ensure.Any.IsNotNull(transformable, nameof(transformable));
-            Ensure.Any.IsNotNull(target, nameof(target));
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+            Ensure.That(target, nameof(target)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
+            Debug.Assert(target.Spatial != null, "target.Spatial != null");
 
             return Origin(transformable).DistanceTo(Origin(target));
         }

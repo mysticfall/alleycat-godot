@@ -10,7 +10,8 @@ using AlleyCat.Motion;
 using AlleyCat.Physics;
 using AlleyCat.Sensor;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.View
@@ -25,18 +26,18 @@ namespace AlleyCat.View
             Always
         }
 
-        public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
 
-        public virtual IHumanoid Character
+        [Node(false)]
+        public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.Value = value;
         }
 
-        public IObservable<IHumanoid> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        [Node(required: false)]
-        public virtual Camera Camera { get; private set; }
+        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
 
         public bool AutoActivate => true;
 
@@ -45,83 +46,138 @@ namespace AlleyCat.View
 
         public Range<float> StabilizationFactor => new Range<float>(_minStabilization, _maxStabilization);
 
-        [Export(PropertyHint.ExpRange, "0.1,5")]
-        public float TransitionTime { get; set; } = 2f;
+        public float MaxStabilization
+        {
+            get => _maxStabilization;
+            set => _maxStabilization = Mathf.Max(0, Mathf.Max(value, MinStabilization));
+        }
 
-        [Export(PropertyHint.ExpRange, "0.1,5")]
-        public float VelocityThreshold { get; set; } = 0.2f;
+        public float MinStabilization
+        {
+            get => _minStabilization;
+            set => _minStabilization = Mathf.Max(0, Mathf.Min(value, MaxStabilization));
+        }
+
+        public float TransitionTime
+        {
+            get => _transitionTime;
+            set => _transitionTime = Mathf.Min(value, 0);
+        }
+
+        public float VelocityThreshold
+        {
+            get => _velocityThreshold;
+            set => _velocityThreshold = Mathf.Min(value, 0);
+        }
 
         [Export]
         public float Offset { get; set; }
 
-        public IEntity FocusedObject => _focus?.Value;
+        public Option<IEntity> FocusedObject => _focus.Bind(f => f.Value);
 
-        public IObservable<IEntity> OnFocusChange => _focus ?? Observable.Empty<IEntity>();
+        public IObservable<Option<IEntity>> OnFocusChange =>
+            _focus.MatchObservable(identity, Observable.Empty<Option<IEntity>>);
+
+        public float MaxFocalDistance
+        {
+            get => _maxFocalDistance;
+            set => _maxFocalDistance = Mathf.Min(value, 0);
+        }
+
+        public float MaxDofDistance
+        {
+            get => _maxDofDistance;
+            set => _maxDofDistance = Mathf.Min(value, 0);
+        }
+
+        public float FocusRange
+        {
+            get => _focusRange;
+            set => _focusRange = Mathf.Min(value, 0);
+        }
+
+        public float FocusSpeed
+        {
+            get => _focusSpeed;
+            set => _focusSpeed = Mathf.Min(value, 0);
+        }
+
+        public Option<IVision> Vision => Character.Map<IVision>(c => c.Vision);
+
+        public Vector3 Viewpoint => Vision.Map(v => v.Viewpoint).IfNone(Vector3.Zero);
+
+        public Vector3 LookDirection => Vision.Map(v => v.LookDirection).IfNone(Vector3.Forward);
+
+        public override Vector3 Origin => Vision.Map(v => v.Origin).IfNone(Vector3.Zero);
+
+        public override Vector3 Up => Vision.Map(v => v.Up).IfNone(Vector3.Up);
+
+        public override Vector3 Forward => Vision.Map(v => v.Forward).IfNone(Vector3.Forward);
+
+        public override Range<float> YawRange => Vision.Map(v => v.YawRange).IfNone(base.YawRange);
+
+        public override Range<float> PitchRange => Vision.Map(v => v.PitchRange).IfNone(base.PitchRange);
+
+        protected virtual IObservable<Vector2> RotationInput => _rotationInput
+            .Bind(i => i.AsVector2Input())
+            .MatchObservable(identity, Observable.Empty<Vector2>)
+            .Where(_ => Valid);
+
+        protected virtual IObservable<bool> DeactivateInput => _deactivateInput
+            .Bind(i => i.FindTrigger())
+            .MatchObservable(identity, Observable.Empty<bool>)
+            .Where(_ => Valid);
+
+        [Export(PropertyHint.ExpRange, "0.1,5")]
+        private float _transitionTime = 2f;
+
+        [Export(PropertyHint.ExpRange, "0.1,5")]
+        private float _velocityThreshold = 0.2f;
 
         [Export(PropertyHint.ExpRange, "1,10")]
-        public float MaxFocalDistance { get; set; } = 2f;
+        private float _maxFocalDistance = 2f;
 
         [Export(PropertyHint.ExpRange, "1,10")]
-        public float MaxDofDistance { get; set; } = 5f;
+        private float _maxDofDistance = 5f;
 
         [Export(PropertyHint.ExpRange, "1,10")]
-        public float FocusRange { get; set; } = 3f;
+        private float _focusRange = 3f;
 
         [Export(PropertyHint.ExpRange, "10,1000")]
-        public float FocusSpeed { get; set; } = 100f;
-
-        [CanBeNull]
-        public IVision Vision => Character?.Vision;
-
-        public Vector3 Viewpoint => Vision?.Viewpoint ?? Vector3.Zero;
-
-        public Vector3 LookDirection => Vision?.LookDirection ?? Forward;
-
-        public override Vector3 Origin => Vision?.Origin ?? Vector3.Zero;
-
-        public override Vector3 Up => Vision?.Up ?? Vector3.Up;
-
-        public override Vector3 Forward => Vision?.Forward ?? Vector3.Forward;
-
-        public override Range<float> YawRange => Vision?.YawRange ?? base.YawRange;
-
-        public override Range<float> PitchRange => Vision?.PitchRange ?? base.PitchRange;
-
-        protected virtual IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
-
-        [CanBeNull]
-        protected virtual IObservable<bool> DeactivateInput => _deactivateInput.GetTrigger().Where(_ => Valid);
+        private float _focusSpeed = 100f;
 
         [Export(PropertyHint.ExpRange, "0,1")] private float _minStabilization = 0.2f;
 
         [Export(PropertyHint.ExpRange, "0,1")] private float _maxStabilization = 0.8f;
 
-        [Export, UsedImplicitly] private NodePath _characterPath;
+        [Export] private NodePath _characterPath;
 
-        [Export, UsedImplicitly] private NodePath _cameraPath;
+        [Export] private NodePath _cameraPath;
 
-        [Node("Rotation")] private InputBindings _rotationInput;
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
 
-        [Node("Deactivate", false)] private InputBindings _deactivateInput;
+        [Node("Deactivate", false)] private Option<InputBindings> _deactivateInput = None;
 
-        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
+        [Node(false)] private Option<Camera> _camera = None;
 
-        private ReactiveProperty<IEntity> _focus;
+        private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
-        public HeadMountedView() : base(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
+        private Option<ReactiveProperty<Option<IEntity>>> _focus = None;
+
+        public HeadMountedView() : this(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
         {
-            ProcessMode = ProcessMode.Idle;
         }
 
         public HeadMountedView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
         {
+            ProcessMode = ProcessMode.Idle;
+
+            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
-            Camera = Camera ?? GetViewport().GetCamera();
 
             InitializeInput();
             InitializeStabilization();
@@ -131,17 +187,14 @@ namespace AlleyCat.View
         private void InitializeInput()
         {
             OnActiveStateChange
-                .Subscribe(v => _rotationInput.Active = v)
-                .AddTo(this);
-
-            OnActiveStateChange
-                .Where(_ => _deactivateInput != null)
-                .Subscribe(v => _deactivateInput.Active = v)
+                .Do(v => _rotationInput.Iter(i => i.Active = v))
+                .Do(v => _deactivateInput.Iter(i => i.Active = v))
+                .Subscribe()
                 .AddTo(this);
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
-                .Do(_ => Vision?.Reset())
+                .Do(_ => Vision.Iter(v => v.Reset()))
                 .Subscribe()
                 .AddTo(this);
 
@@ -151,11 +204,11 @@ namespace AlleyCat.View
                 .AddTo(this);
 
             OnRotationChange
-                .Merge(OnActiveStateChange.Where(v => v).Select(_ => Rotation))
-                .Subscribe(v => Vision?.Rotate(v))
+                .Merge(OnActiveStateChange.Where(identity).Select(_ => Rotation))
+                .Subscribe(r => Vision.Iter(v => v.Rotate(r)))
                 .AddTo(this);
 
-            DeactivateInput?
+            DeactivateInput
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
         }
@@ -165,14 +218,14 @@ namespace AlleyCat.View
             bool IsStablizationAllowed() =>
                 Stabilization == StabilizeMode.Always || Stabilization != StabilizeMode.Never;
 
-            Basis GetCharacterRotation() => Character?.GlobalTransform().basis ?? Basis.Identity;
+            Basis GetCharacterRotation() => Character.Select(c => c.GlobalTransform().basis).IfNone(Basis.Identity);
 
             Quat GetUnstablizedQuat() => (this.GetTransform().basis * this.GetBasis()).Quat();
             Quat GetStablizedQuat() => (GetCharacterRotation() * this.GetBasis()).Quat();
 
             var movingStateChange = _character
-                .Where(c => c != null)
-                .SelectMany(c => c.Locomotion.OnVelocityChange)
+                .Where(c => c.IsSome)
+                .SelectMany(c => c.First().Locomotion.OnVelocityChange)
                 .Select(v => v.Length() >= VelocityThreshold)
                 .DistinctUntilChanged();
 
@@ -203,7 +256,7 @@ namespace AlleyCat.View
             OnLoop
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
-                .Subscribe(transform => Camera?.SetGlobalTransform(transform))
+                .Subscribe(transform => Camera.SetGlobalTransform(transform))
                 .AddTo(this);
         }
 
@@ -217,10 +270,12 @@ namespace AlleyCat.View
             var onRayCast = this.OnPhysicsProcess()
                 .Where(_ => Active && Valid)
                 .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
-                .Select(to => Camera.GetWorld().IntersectRay(Viewpoint, to, new Array {Character}));
+                .Select(to => Character
+                    .Map(c => new Array {c})
+                    .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)));
 
             onRayCast
-                .Select(hit => hit == null ? float.MaxValue : Viewpoint.DistanceTo(hit.Position))
+                .Select(hit => hit.Select(h => Viewpoint.DistanceTo(h.Position)).IfNone(float.MaxValue))
                 .Buffer(
                     TimeSpan.FromMilliseconds(FocusSpeed),
                     TimeSpan.FromMilliseconds(10),
@@ -231,18 +286,12 @@ namespace AlleyCat.View
                 .AddTo(this);
 
             _focus = onRayCast
-                .Where(hit => hit == null || Viewpoint.DistanceTo(hit.Position) <= MaxFocalDistance)
-                .Select(hit => hit?.Collider?.FindEntity())
-                .Select(e => e != null && e.Valid && e.Visible ? e : null)
-                .ToReactiveProperty();
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _focus?.Dispose();
-            _character?.Dispose();
-
-            base.OnPreDestroy();
+                .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
+                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                .Select(entity => entity.Where(e => e.Valid && e.Visible))
+                .DistinctUntilChanged()
+                .ToReactiveProperty()
+                .AddTo(this);
         }
     }
 }

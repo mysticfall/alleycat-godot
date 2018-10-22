@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 namespace AlleyCat.Setting
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class SettingsAttribute : Attribute {
-
+    public class SettingsAttribute : Attribute
+    {
         public string Key { get; }
 
         public SettingsAttribute([CanBeNull] string key = null)

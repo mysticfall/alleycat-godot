@@ -1,6 +1,6 @@
+using System.Diagnostics;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -11,9 +11,11 @@ namespace AlleyCat.Common
 
     public static class BoundedExtensions
     {
-        public static Vector3 Center([NotNull] this IBounded bounded)
+        public static Vector3 Center(this IBounded bounded)
         {
-            Ensure.Any.IsNotNull(bounded, nameof(bounded));
+            Ensure.That(bounded, nameof(bounded)).IsNotNull();
+
+            Debug.Assert(bounded.Spatial != null, "bounded.Spatial != null");
 
             var bounds = bounded.Bounds;
 

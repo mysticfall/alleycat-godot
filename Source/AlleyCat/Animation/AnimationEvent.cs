@@ -1,23 +1,26 @@
 ﻿using AlleyCat.Event;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
     public struct AnimationEvent : IEvent<IAnimationManager>
     {
-        [NotNull]
         public string Name { get; }
 
-        [CanBeNull]
-        public object Argument { get; }
+        public Option<object> Argument { get; }
 
         public IAnimationManager Source { get; }
 
-        public AnimationEvent(
-            [NotNull] string name, [CanBeNull] object argument, [NotNull] IAnimationManager source)
+        public AnimationEvent(string name, IAnimationManager source) : this(name, None, source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+        }
+
+        public AnimationEvent(string name, Option<object> argument, IAnimationManager source)
+        {
+            Ensure.That(name, nameof(name)).IsNotNull();
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Name = name;
             Argument = argument;

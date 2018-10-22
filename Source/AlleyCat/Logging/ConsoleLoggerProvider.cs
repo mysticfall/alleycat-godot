@@ -1,40 +1,41 @@
 ﻿using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.UI.Console;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
     [Singleton(typeof(ILoggerProvider))]
     public class ConsoleLoggerProvider : AutowiredNode, ILoggerProvider
     {
-        [Service]
-        public DebugConsole Console { get; private set; }
+        public DebugConsole Console => (DebugConsole) _console;
 
-        [NotNull]
         protected IMemoryCache Cache { get; }
+
+        [Service] private Option<DebugConsole> _console = None;
 
         public ConsoleLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
         {
         }
 
-        public ConsoleLoggerProvider([NotNull] IMemoryCache cache)
+        public ConsoleLoggerProvider(IMemoryCache cache)
         {
-            Ensure.Any.IsNotNull(cache, nameof(cache));
+            Ensure.That(cache, nameof(cache)).IsNotNull();
 
             Cache = cache;
         }
 
-        [NotNull]
-        public ILogger CreateLogger([NotNull] string categoryName)
+        public ILogger CreateLogger(string categoryName)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(categoryName, nameof(categoryName));
+            Ensure.That(categoryName, nameof(categoryName)).IsNotNull();
 
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName, Console));
         }
 
-        public override void _ExitTree() => Cache.Dispose();
+        public override void _ExitTree() => Cache.DisposeQuietly();
     }
 }

@@ -1,7 +1,6 @@
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -15,9 +14,9 @@ namespace AlleyCat.UI
 
         public Range Source { get; }
 
-        public ValueChangedEvent(float value, [NotNull] Range source)
+        public ValueChangedEvent(float value, Range source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Value = value;
             Source = source;

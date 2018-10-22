@@ -9,8 +9,6 @@ namespace AlleyCat.Motion
 {
     public abstract class Orbiter : TurretLike, IOrbiter
     {
-        public override bool Valid => base.Valid && Target != null;
-
         public abstract Spatial Target { get; }
 
         public float Distance
@@ -19,7 +17,6 @@ namespace AlleyCat.Motion
             set => _distance.Value = DistanceRange.Clamp(value);
         }
 
-        // ReSharper disable once ConvertToAutoProperty
         public virtual float InitialDistance
         {
             get => _initialDistance;
@@ -62,32 +59,37 @@ namespace AlleyCat.Motion
             }
         }
 
-        [Export, UsedImplicitly] private float _minDistance = 0.1f;
+        [Export, UsedImplicitly] private float _minDistance;
 
-        [Export, UsedImplicitly] private float _maxDistance = 10f;
+        [Export, UsedImplicitly] private float _maxDistance;
 
-        [Export, UsedImplicitly] private float _initialDistance = 0.8f;
+        [Export] private float _initialDistance = 0.8f;
 
-        [Export, UsedImplicitly] private Vector3 _initialOffset = Vector3.Zero;
+        [Export] private Vector3 _initialOffset = Vector3.Zero;
 
-        private readonly ReactiveProperty<float> _distance = new ReactiveProperty<float>();
+        private readonly ReactiveProperty<float> _distance;
 
-        private readonly ReactiveProperty<Vector3> _offset = new ReactiveProperty<Vector3>();
+        private readonly ReactiveProperty<Vector3> _offset;
 
-        protected Orbiter()
+        protected Orbiter() : this(
+            new Range<float>(-180f, 180f), 
+            new Range<float>(-90f, 90f), 
+            new Range<float>(0.1f, 10f))
         {
-            ProcessMode = ProcessMode.Idle;
         }
 
         protected Orbiter(
-            Range<float> yawRange, 
+            Range<float> yawRange,
             Range<float> pitchRange,
             Range<float> distanceRange) : base(yawRange, pitchRange)
         {
             ProcessMode = ProcessMode.Idle;
 
-            _minDistance = distanceRange.Min;
+            _minDistance = Mathf.Max(0, distanceRange.Min);
             _maxDistance = distanceRange.Max;
+
+            _distance = new ReactiveProperty<float>().AddTo(this);
+            _offset = new ReactiveProperty<Vector3>().AddTo(this);
         }
 
         protected override void OnInitialize()
@@ -98,14 +100,6 @@ namespace AlleyCat.Motion
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
                 .AddTo(this);
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _distance?.Dispose();
-            _offset?.Dispose();
-
-            base.OnPreDestroy();
         }
 
         public override void Reset()

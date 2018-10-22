@@ -8,12 +8,11 @@ namespace AlleyCat.Autowire
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     public abstract class InjectableAttribute : Attribute
     {
-        [NotNull]
         public Type[] Types { get; }
 
-        protected InjectableAttribute([NotNull] Type[] types)
+        protected InjectableAttribute(Type[] types)
         {
-            Ensure.Collection.HasItems(types, nameof(types));
+            Ensure.That(types, nameof(types)).HasItems();
 
             Types = types;
         }

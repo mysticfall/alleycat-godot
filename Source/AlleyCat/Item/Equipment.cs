@@ -4,69 +4,73 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.IO;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
     [AutowireContext]
     public class Equipment : RigidBody, ISlotItem, IMarkable, IEntity
     {
-        public string Key => _key ?? Name;
+        public string Key => _key.TrimToOption().IfNone(Name);
 
-        public virtual string DisplayName => Tr(_displayName);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
 
-        public virtual string Description => Tr(_description.TrimToEmpty());
+        public virtual Option<string> Description => _description.TrimToOption().Map(Tr);
 
         [Export, UsedImplicitly]
         public EquipmentType EquipmentType { get; private set; }
 
-        public string Slot => Configuration?.Slot;
+        public string Slot => Configuration.Slot;
 
-        public IEnumerable<string> AdditionalSlots => Configuration?.AdditionalSlots ?? Enumerable.Empty<string>();
+        public Set<string> AdditionalSlots => Configuration.AdditionalSlots;
 
-        public EquipmentConfiguration Configuration => Configurations.Values.FirstOrDefault(c => c.Active);
+        public EquipmentConfiguration Configuration => ActiveConfiguration.IfNone(_configurations.Head());
 
-        public IReadOnlyDictionary<string, EquipmentConfiguration> Configurations { get; private set; } =
-            Enumerable.Empty<EquipmentConfiguration>().ToDictionary();
+        public Option<EquipmentConfiguration> ActiveConfiguration => _configurations.Find(c => c.Active);
+
+        public Map<string, EquipmentConfiguration> Configurations { get; private set; } =
+            Map<string, EquipmentConfiguration>();
 
         public virtual bool Valid => IsInstanceValid(this);
 
-        public bool Equipped => Configuration != null && GetParent() != null;
+        public bool Equipped => ActiveConfiguration.IsSome && 
+                                this.GetAncestors().Exists(a => a is IEquipmentHolder);
 
-        public Spatial Spatial => _mesh;
+        public Spatial Spatial => (Spatial) _mesh;
 
-        public Mesh ItemMesh => _itemMesh;
+        public Mesh ItemMesh => Some(_itemMesh).Head();
 
-        [Service]
-        public CollisionShape Shape { get; private set; }
+        public CollisionShape Shape => (CollisionShape) _shape;
 
-        public IEnumerable<MeshInstance> Meshes =>
-            _mesh != null && _mesh.Visible ? new[] {_mesh} : Enumerable.Empty<MeshInstance>();
+        public IEnumerable<MeshInstance> Meshes => _mesh.Filter(m => m.Visible);
 
         public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
 
-        public IReadOnlyDictionary<string, Marker> Markers { get; private set; } =
-            Enumerable.Empty<Marker>().ToDictionary();
+        public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
 
-        public Vector3 LabelPosition => _labelMarker?.GlobalTransform.origin ?? this.Center();
+        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center());
 
-        [Export, UsedImplicitly] private string _key;
+        [Export] private string _key;
 
-        [Export, UsedImplicitly] private string _displayName;
-        
-        [Export, UsedImplicitly] private string _description;
+        [Export] private string _displayName;
 
-        [Export, UsedImplicitly] private Mesh _itemMesh;
+        [Export] private string _description;
 
-        [Service] private MeshInstance _mesh;
+        [Export] private Mesh _itemMesh;
 
-        [Service] private IEnumerable<EquipmentConfiguration> _configurations;
+        [Service] private Option<MeshInstance> _mesh = None;
 
-        [Service(false, false)] private IEnumerable<Marker> _markers;
+        [Service] private Option<CollisionShape> _shape = None;
 
-        private Marker _labelMarker;
+        [Service] private IEnumerable<EquipmentConfiguration> _configurations = Seq<EquipmentConfiguration>();
+
+        [Service(false, false)] private IEnumerable<Marker> _markers = Seq<Marker>();
+
+        private Option<Marker> _labelMarker = None;
 
         public override void _Ready()
         {
@@ -78,7 +82,7 @@ namespace AlleyCat.Item
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            Configurations = _configurations.ToDictionary();
+            Configurations = _configurations.ToMap();
 
             var configurations = Configurations.Values.ToList();
 
@@ -86,20 +90,22 @@ namespace AlleyCat.Item
                 .SelectMany(c => c.OnActiveStateChange.Where(s => s).Select(_ => c))
                 .SelectMany(active => configurations.Where(c => c != active && c.Active))
                 .Subscribe(c => c.Deactivate())
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             if (_markers != null)
             {
-                Markers = _markers.ToDictionary(m => m.Key);
+                Markers = toMap(_markers.Map(m => (m.Key, m)));
             }
 
-            _labelMarker = this.GetLabelMarker();
+            _labelMarker = this.FindLabelMarker();
 
             UpdateEquipState(Equipped);
         }
 
         public virtual void Equip(IEquipmentHolder holder)
         {
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+
             UpdateEquipState(true);
 
             Configuration.OnEquip(holder, this);
@@ -107,6 +113,8 @@ namespace AlleyCat.Item
 
         public virtual void Unequip(IEquipmentHolder holder)
         {
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+
             Configuration.OnUnequip(holder, this);
 
             UpdateEquipState(false);
@@ -123,13 +131,5 @@ namespace AlleyCat.Item
         public bool AllowedFor(ISlotContainer context) => true;
 
         public bool AllowedFor(object context) => true;
-
-        public virtual void SaveState(IState state)
-        {
-        }
-
-        public virtual void RestoreState(IState state)
-        {
-        }
     }
 }

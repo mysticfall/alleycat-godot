@@ -1,6 +1,7 @@
+using System.Linq;
 using AlleyCat.Control.Generic;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Control
 {
@@ -10,13 +11,12 @@ namespace AlleyCat.Control
 
     public static class TriggerInputExtensions
     {
-        [CanBeNull]
-        public static ITriggerInput GetTrigger([NotNull] this InputBindings bindings, [NotNull] string key = "Value")
+        public static Option<ITriggerInput> FindTrigger(this InputBindings bindings, string key = "Value")
         {
-            Ensure.Any.IsNotNull(bindings, nameof(bindings));
-            Ensure.Any.IsNotNull(key, nameof(key));
+            Ensure.That(bindings, nameof(bindings)).IsNotNull();
+            Ensure.That(key, nameof(key)).IsNotNull();
 
-            return bindings.ContainsKey(key) ? bindings[key] as ITriggerInput : null;
+            return bindings.TryGetValue(key).OfType<ITriggerInput>().HeadOrNone();
         }
     }
 }

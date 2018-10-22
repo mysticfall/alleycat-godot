@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -14,29 +16,20 @@ namespace AlleyCat.Autowire
     {
         public Node Node { get; }
 
-        public IAutowireContext Parent =>
-            Node.GetTree().Root != Node ? Node.GetParent().GetAutowireContext() : null;
+        public Option<IAutowireContext> Parent =>
+            Node.GetTree().Root != Node ? Some(Node.GetParent().GetAutowireContext()) : None;
 
-        public ISet<Type> Requires { get; } = new HashSet<Type>();
+        public LanguageExt.HashSet<Type> Requires { get; private set; } = HashSet<Type>();
 
-        public ISet<Type> Provides { get; } = new HashSet<Type>();
+        public LanguageExt.HashSet<Type> Provides { get; private set; } = HashSet<Type>();
 
-        [NotNull] public static readonly ICollection<INodeProcessorFactory> ProcessorFactories =
-            new List<INodeProcessorFactory>
-            {
-                new NodeAttributeProcessorFactory(),
-                new ServiceAttributeProcessorFactory(),
-                new AncestorAttributeProcessorFactory(),
-                new ServiceDefinitionProviderProcessorFactory(),
-                new SingletonAttributeProcessorFactory(),
-                new PostConstructAttributeProcessorFactory()
-            };
+        public static LanguageExt.HashSet<INodeProcessorFactory> ProcessorFactories => _processorFactories;
 
-        private IServiceCollection _services;
+        private readonly IServiceCollection _services = new ServiceCollection();
 
-        private ServiceProvider _provider;
+        private Option<ServiceProvider> _provider = None;
 
-        private ICollection<DependencyNode> _queue;
+        private readonly DependencyChain _queue = new DependencyChain();
 
         private bool _built;
 
@@ -46,39 +39,55 @@ namespace AlleyCat.Autowire
 
         private static readonly IMemoryCache Cache = new MemoryCache(new MemoryCacheOptions());
 
-        private AutowireContext([NotNull] Node node)
+        private static LanguageExt.HashSet<INodeProcessorFactory> _processorFactories =
+            HashSet<INodeProcessorFactory>(
+                new NodeAttributeProcessorFactory(),
+                new ServiceAttributeProcessorFactory(),
+                new AncestorAttributeProcessorFactory(),
+                new ServiceDefinitionProviderProcessorFactory(),
+                new SingletonAttributeProcessorFactory(),
+                new PostConstructAttributeProcessorFactory());
+
+        public static void RegisterProcessorFactory(INodeProcessorFactory factory)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(factory, nameof(factory)).IsNotNull();
+
+            _processorFactories = _processorFactories.TryAdd(factory);
+        }
+
+        private AutowireContext(Node node)
+        {
+            Debug.Assert(node != null, "node != null");
 
             Node = node;
-
-            _services = new ServiceCollection();
-            _queue = new DependencyChain();
         }
 
-        [CanBeNull]
-        public object GetService([NotNull] Type serviceType)
+        public Option<T> FindService<T>() => FindService(typeof(T)).OfType<T>().HeadOrNone();
+
+        public Option<object> FindService(Type serviceType)
         {
+            Ensure.That(serviceType, nameof(serviceType)).IsNotNull();
+
             CheckDisposed();
 
-            Ensure.Any.IsNotNull(serviceType, nameof(serviceType));
-
-            return _provider?.GetService(serviceType);
+            return _provider.Bind(p => Optional(p.GetService(serviceType)));
         }
 
-        public void AddService([NotNull] Action<IServiceCollection> provider)
+        public void AddService(Action<IServiceCollection> provider)
         {
-            CheckDisposed();
+            Ensure.That(provider, nameof(provider)).IsNotNull();
 
-            Ensure.Any.IsNotNull(provider, nameof(provider));
+            CheckDisposed();
 
             provider.Invoke(_services);
 
             _provider = _services.BuildServiceProvider();
         }
 
-        internal void Register([NotNull] Node node)
+        internal void Register(Node node)
         {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
             if (node == node.GetTree().Root)
             {
                 return;
@@ -91,7 +100,12 @@ namespace AlleyCat.Autowire
             Register(new DependencyNode(node, definition));
         }
 
-        internal void Register([NotNull] AutowireContext context) => Register(new DependencyNode(context));
+        internal void Register(AutowireContext context)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            Register(new DependencyNode(context));
+        }
 
         private void Register(DependencyNode node)
         {
@@ -111,35 +125,26 @@ namespace AlleyCat.Autowire
         {
             CheckDisposed();
 
-            var node = Node;
+            Requires = Requires.Clear();
+            Provides = Provides.Clear();
 
-            Requires.Clear();
-            Provides.Clear();
-
-            var localProvides = new HashSet<Type>();
+            var provided = HashSet<Type>();
 
             foreach (var dependency in _queue)
             {
-                Requires.UnionWith(dependency.Requires);
+                Requires = Requires.Union(dependency.Requires);
 
-                if (node == dependency.Instance)
+                if (Node == dependency.Instance)
                 {
-                    Provides.UnionWith(dependency.Provides);
+                    Provides = Provides.Union(dependency.Provides);
                 }
 
-                localProvides.UnionWith(dependency.Provides);
+                provided = provided.Union(dependency.Provides);
             }
 
-            Requires.ExceptWith(localProvides);
+            Requires = Requires.Except(provided);
 
-            if (Parent == null)
-            {
-                Build();
-            }
-            else
-            {
-                (Parent as AutowireContext)?.Register(this);
-            }
+            Parent.BiIter(p => ((AutowireContext) p).Register(this), _ => Build());
         }
 
         internal void Build()
@@ -148,51 +153,48 @@ namespace AlleyCat.Autowire
 
             _built = true;
 
-            foreach (var dependency in _queue)
-            {
-                dependency.Process(this);
-            }
-
-            foreach (var dependency in _queue)
-            {
-                dependency.ProcessDeferred(this);
-            }
+            _queue.Iter(d => d.Process(this));
+            _queue.Iter(d => d.ProcessDeferred(this));
 
             _queue.Clear();
         }
 
         private ServiceDefinition CreateDefinition(Node node)
         {
-            var processors = CreateProcessors(node);
+            Debug.Assert(node != null, "node != null");
 
-            var provides = new HashSet<Type>();
-            var requires = new HashSet<Type>();
+            var processors = CreateProcessors(node).ToSeq();
+
+            var provides = HashSet<Type>();
+            var requires = HashSet<Type>();
 
             if (node is IServiceDefinitionProvider p)
             {
-                provides.UnionWith(p.ProvidedTypes);
+                provides = provides.Union(p.ProvidedTypes);
             }
 
             foreach (var processor in processors)
             {
                 if (processor is IDependencyConsumer consumer)
                 {
-                    requires.UnionWith(consumer.Requires);
+                    requires = requires.Union(consumer.Requires);
                 }
 
                 if (processor is IDependencyProvider provider)
                 {
-                    provides.UnionWith(provider.Provides);
+                    provides = provides.Union(provider.Provides);
                 }
             }
 
             return new ServiceDefinition(node.GetType(), provides, requires, processors);
         }
 
-        private static IList<INodeProcessor> CreateProcessors(Node node)
+        private static IEnumerable<INodeProcessor> CreateProcessors(Node node)
         {
+            Debug.Assert(node != null, "node != null");
+
             var type = node.GetType();
-            var processors = ProcessorFactories.SelectMany(f => f.Create(type)).ToList();
+            var processors = ProcessorFactories.Bind(f => f.Create(type)).ToList();
 
             processors.Sort();
 
@@ -203,13 +205,11 @@ namespace AlleyCat.Autowire
         {
             CheckDisposed();
 
-            _services?.Clear();
-            _services = null;
+            _services.Clear();
+            _queue.Clear();
 
-            _queue = null;
-
-            _provider?.Dispose();
-            _provider = null;
+            _provider.Iter(p => p.DisposeQuietly());
+            _provider = None;
 
             _disposed = true;
         }
@@ -218,15 +218,19 @@ namespace AlleyCat.Autowire
         {
             if (_disposed)
             {
-                throw new InvalidOperationException($"{this} has been disposed already.");
+                throw new InvalidOperationException($"{this} is already disposed.");
             }
         }
 
         public override string ToString() => $"ApplicationContext({Node.Name})";
 
-        internal static AutowireContext GetOrCreate(Node node) =>
-            Store.GetOrCreate(node, _ => new AutowireContext(node));
+        internal static AutowireContext GetOrCreate(Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-        internal static void Shutdown() => Store.Dispose();
+            return Store.Get(node, _ => new AutowireContext(node));
+        }
+
+        internal static void Shutdown() => Store.DisposeQuietly();
     }
 }

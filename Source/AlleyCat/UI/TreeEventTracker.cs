@@ -1,9 +1,11 @@
 using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -11,40 +13,39 @@ namespace AlleyCat.UI
     {
         private const string SignalItemSelect = "item_selected";
 
-        [NotNull]
         public IObservable<TreeItemSelectedEvent> OnItemSelect
         {
             get
             {
-                if (_onItemSelect == null)
+                if (_onItemSelect.IsNone)
                 {
-                    Parent.Connect(SignalItemSelect, this, nameof(FireOnItemSelect));
+                    Parent.Iter(p => p.Connect(SignalItemSelect, this, nameof(FireOnItemSelect)));
 
                     _onItemSelect = new Subject<TreeItemSelectedEvent>();
                 }
 
-                return _onItemSelect;
+                return _onItemSelect.Head();
             }
         }
 
-        private Subject<TreeItemSelectedEvent> _onItemSelect;
+        private Option<Subject<TreeItemSelectedEvent>> _onItemSelect = None;
 
         [UsedImplicitly]
-        private void FireOnItemSelect() => _onItemSelect?.OnNext(new TreeItemSelectedEvent(Parent));
+        private void FireOnItemSelect() => _onItemSelect
+            .SelectMany(o => Parent, (o, p) => (o, e: new TreeItemSelectedEvent(p)))
+            .Iter(t => t.o.OnNext(t.e));
 
         protected override void Disconnect(Tree parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onItemSelect != null)
+            _onItemSelect.Iter(p =>
             {
                 parent.Disconnect(SignalItemSelect, this, nameof(FireOnItemSelect));
+                p.DisposeQuietly();
+            });
 
-                _onItemSelect.Dispose();
-                _onItemSelect = null;
-            }
+            _onItemSelect = None;
         }
     }
 }

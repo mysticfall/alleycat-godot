@@ -1,4 +1,6 @@
 using AlleyCat.Action;
+using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 
@@ -6,27 +8,24 @@ namespace AlleyCat.Control
 {
     public class PlayerActionDelegate : PlayerAction
     {
-        [Export, UsedImplicitly]
-        public string Action { get; private set; }
+        public string Action => _action.TrimToOption().Head();
 
-        public override bool Valid => base.Valid && !string.IsNullOrEmpty(Action);
+        public override bool Valid => base.Valid && !string.IsNullOrWhiteSpace(_action);
+
+        [Export, UsedImplicitly] private string _action;
 
         protected override void DoExecute(IActionContext context)
         {
-            IAction action = null;
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            context?.Actor?.Actions.TryGetValue(Action, out action);
-
-            action?.Execute(context);
+            context.Actor.Bind(a => a.Actions.Find(Action)).Iter(a => a.Execute(context));
         }
 
         public override bool AllowedFor(IActionContext context)
         {
-            IAction action = null;
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            context?.Actor?.Actions.TryGetValue(Action, out action);
-
-            return action?.AllowedFor(context) ?? false;
+            return context.Actor.Bind(a => a.Actions.Find(Action)).Exists(a => a.AllowedFor(context));
         }
     }
 }

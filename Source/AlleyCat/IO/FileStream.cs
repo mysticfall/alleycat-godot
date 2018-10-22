@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using AlleyCat.Common;
 using EnsureThat;
-using JetBrains.Annotations;
 using File = Godot.File;
 
 namespace AlleyCat.IO
@@ -30,16 +29,16 @@ namespace AlleyCat.IO
 
         private bool _closed;
 
-        public FileStream([NotNull] File file, FileAccess access)
+        public FileStream(File file, FileAccess access)
         {
-            Ensure.Any.IsNotNull(file, nameof(file));
+            Ensure.That(file, nameof(file)).IsNotNull();
 
             Ensure.Bool.IsTrue(
                 file.IsOpen(),
                 nameof(file),
                 opt => opt.WithMessage("File is closed."));
 
-            file.GetError().ThrowIfNecessary();
+            file.GetError().ThrowOnError();
 
             _file = file;
             _access = access;
@@ -47,6 +46,8 @@ namespace AlleyCat.IO
 
         public override long Seek(long offset, SeekOrigin origin)
         {
+            Ensure.That(offset, nameof(offset)).IsGte(0);
+
             CheckClosed();
 
             switch (origin)
@@ -71,6 +72,10 @@ namespace AlleyCat.IO
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            Ensure.That(buffer, nameof(buffer)).IsNotNull();
+            Ensure.That(offset, nameof(offset)).IsGte(0);
+            Ensure.That(count, nameof(count)).IsGte(0);
+
             CheckClosed();
 
             var remaining = (int) (Length - Position);
@@ -87,6 +92,10 @@ namespace AlleyCat.IO
 
         public override void Write(byte[] buffer, int offset, int count)
         {
+            Ensure.That(buffer, nameof(buffer)).IsNotNull();
+            Ensure.That(offset, nameof(offset)).IsGte(0);
+            Ensure.That(count, nameof(count)).IsGte(0);
+
             CheckClosed();
 
             var size = Math.Min(buffer.Length - offset, count);
@@ -118,12 +127,12 @@ namespace AlleyCat.IO
 
         protected override void Dispose(bool disposing)
         {
-            if (_file != null && _file.IsOpen())
+            if (_file.IsOpen())
             {
                 _file.Close();
             }
 
-            _file?.Dispose();
+            _file.DisposeQuietly();
 
             _closed = true;
 
@@ -138,24 +147,22 @@ namespace AlleyCat.IO
             }
         }
 
-        private void CheckErrors() => _file.GetError().ThrowIfNecessary();
+        private void CheckErrors() => _file.GetError().ThrowOnError();
 
-        [NotNull]
-        public static FileStream Open([NotNull] string path, FileAccess access = FileAccess.Read)
+        public static FileStream Open(string path, FileAccess access = FileAccess.Read)
         {
             Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
 
             var file = new File();
 
             file.Open(path, (int) ToModeFlags(access));
-            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
+            file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
 
-        [NotNull]
         public static FileStream OpenCompressed(
-            [NotNull] string path,
+            string path,
             FileAccess access = FileAccess.Read,
             File.CompressionMode mode = File.CompressionMode.Fastlz)
         {
@@ -164,13 +171,12 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenCompressed(path, (int) ToModeFlags(access), (int) mode);
-            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
+            file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
 
-        [NotNull]
-        public static FileStream OpenEncrypted([NotNull] string path, FileAccess access, byte[] key)
+        public static FileStream OpenEncrypted(string path, FileAccess access, byte[] key)
         {
             Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
             Ensure.Enumerable.HasItems(key, nameof(key));
@@ -178,13 +184,12 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenEncrypted(path, (int) ToModeFlags(access), key);
-            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
+            file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }
 
-        [NotNull]
-        public static FileStream OpenEncrypted([NotNull] string path, FileAccess access, string password)
+        public static FileStream OpenEncrypted(string path, FileAccess access, string password)
         {
             Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
             Ensure.String.IsNotNullOrWhiteSpace(password, nameof(password));
@@ -192,7 +197,7 @@ namespace AlleyCat.IO
             var file = new File();
 
             file.OpenEncryptedWithPass(path, (int) ToModeFlags(access), password);
-            file.GetError().ThrowIfNecessary(e => $"Failed to open file: '{path}' ({e}).");
+            file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
         }

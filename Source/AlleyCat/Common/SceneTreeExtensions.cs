@@ -2,19 +2,17 @@
 using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
     public static class SceneTreeExtensions
     {
-        [NotNull]
-        public static IEnumerable<T> GetNodesInGroup<T>([NotNull] this SceneTree sceneTree, [NotNull] string group)
+        public static IEnumerable<T> GetNodesInGroup<T>(this SceneTree tree, string group)
         {
-            Ensure.Any.IsNotNull(sceneTree, nameof(sceneTree));
-            Ensure.Any.IsNotNull(group, nameof(group));
+            Ensure.That(tree, nameof(tree)).IsNotNull();
+            Ensure.That(group, nameof(group)).IsNotNull();
 
-            return sceneTree.GetNodesInGroup(group).OfType<T>();
+            return tree.GetNodesInGroup(group).OfType<T>();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace AlleyCat.UI.Console
     {
         public IEnumerable<IConsoleCommand> CreateCommands(ICommandConsole console)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            Ensure.That(console, nameof(console)).IsNotNull();
 
             var sceneTree = GetTree();
 

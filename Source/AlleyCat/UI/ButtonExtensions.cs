@@ -1,9 +1,7 @@
 using System;
-using System.Diagnostics;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -11,16 +9,11 @@ namespace AlleyCat.UI
     {
         private const string NodeName = "ButtonEventTracker";
 
-        [NotNull]
-        public static IObservable<ButtonPressedEvent> OnPress([NotNull] this Button button)
+        public static IObservable<ButtonPressedEvent> OnPress(this Button button)
         {
-            Ensure.Any.IsNotNull(button, nameof(button));
+            Ensure.That(button, nameof(button)).IsNotNull();
 
-            var tracker = button.GetOrCreateNode(NodeName, _ => new ButtonEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnPressed;
+            return button.GetComponent(NodeName, _ => new ButtonEventTracker()).OnPressed;
         }
     }
 }

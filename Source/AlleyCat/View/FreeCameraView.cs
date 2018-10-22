@@ -9,72 +9,103 @@ using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
 {
     [Singleton(typeof(IPerspectiveView))]
     public class FreeCameraView : TurretLike, IPerspectiveView, IAutoFocusingView
     {
-        public override bool Valid => base.Valid && Character != null && Camera != null && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
 
-        public virtual IHumanoid Character
+        [Node(false)]
+        public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.Value = value;
         }
 
-        public IObservable<IHumanoid> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        [Node(required: false)]
-        public virtual Camera Camera { get; private set; }
+        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
 
         public bool AutoActivate => false;
 
-        [Export(PropertyHint.ExpRange, "1,10")]
-        public float MaxDofDistance { get; set; } = 5f;
+        public float MaxDofDistance
+        {
+            get => _maxDofDistance;
+            set => _maxDofDistance = Mathf.Min(value, 0);
+        }
 
-        [Export(PropertyHint.ExpRange, "1,10")]
-        public float FocusRange { get; set; } = 3f;
+        public float FocusRange
+        {
+            get => _focusRange;
+            set => _focusRange = Mathf.Min(value, 0);
+        }
 
-        [Export(PropertyHint.ExpRange, "10,1000")]
-        public float FocusSpeed { get; set; } = 100f;
+        public float FocusSpeed
+        {
+            get => _focusSpeed;
+            set => _focusSpeed = Mathf.Min(value, 0);
+        }
 
-        public override Vector3 Origin => Camera?.GlobalTransform.origin ?? Vector3.Zero;
+        public override Vector3 Origin => Camera.GlobalTransform.origin;
 
-        public override Vector3 Forward => Camera?.GlobalTransform.Forward() ?? Vector3.Forward;
+        public override Vector3 Forward => Camera.GlobalTransform.Forward();
 
         public override Vector3 Up => Vector3.Up;
 
-        protected IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
+        protected virtual IObservable<Vector2> RotationInput => _rotationInput
+            .Bind(i => i.AsVector2Input())
+            .MatchObservable(identity, Observable.Empty<Vector2>)
+            .Where(_ => Valid);
 
-        protected IObservable<Vector2> MovementInput => _movementInput.AsVector2Input().Where(_ => Valid);
+        protected virtual IObservable<Vector2> MovementInput => _movementInput
+            .Bind(i => i.AsVector2Input())
+            .MatchObservable(identity, Observable.Empty<Vector2>)
+            .Where(_ => Valid);
 
-        [CanBeNull]
-        protected virtual IObservable<bool> ToggleInput => _toggleInput.GetTrigger().Where(_ => Valid);
+        protected virtual IObservable<bool> ToggleInput =>
+            _toggleInput.Bind(i => i.FindTrigger().HeadOrNone())
+                .MatchObservable(identity, Observable.Empty<bool>)
+                .Where(_ => Valid);
 
-        [Export, UsedImplicitly] private NodePath _characterPath;
+        [Export] private NodePath _characterPath;
 
-        [Export, UsedImplicitly] private NodePath _cameraPath;
+        [Export] private NodePath _cameraPath;
 
-        [Node("Rotation")] private InputBindings _rotationInput;
+        [Export(PropertyHint.ExpRange, "1,10")]
+        private float _maxDofDistance = 5f;
 
-        [Node("Movement")] private InputBindings _movementInput;
+        [Export(PropertyHint.ExpRange, "1,10")]
+        private float _focusRange = 3f;
 
-        [Node("Toggle", false)] private InputBindings _toggleInput;
+        [Export(PropertyHint.ExpRange, "10,1000")]
+        private float _focusSpeed = 100f;
 
-        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
+
+        [Node("Movement", false)] private Option<InputBindings> _movementInput = None;
+
+        [Node("Toggle", false)] private Option<InputBindings> _toggleInput = None;
+
+        [Node(false)] private Option<Camera> _camera = None;
+
+        private readonly ReactiveProperty<Option<IHumanoid>> _character;
+
+        public FreeCameraView()
+        {
+            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
+        }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            Camera = Camera ?? GetViewport().GetCamera();
-
             OnActiveStateChange
                 .Where(_ => Valid)
-                // ReSharper disable once PossibleNullReferenceException
-                .Subscribe(v => Character.Locomotion.Active = !v)
+                .Subscribe(v => Character.Iter(c => c.Locomotion.Active = !v))
                 .AddTo(this);
 
             InitializeInput();
@@ -84,24 +115,24 @@ namespace AlleyCat.View
         private void InitializeInput()
         {
             OnActiveStateChange
-                .Do(v => _rotationInput.Active = v)
-                .Do(v => _movementInput.Active = v)
+                .Do(v => _rotationInput.Iter(i => i.Active = v))
+                .Do(v => _movementInput.Iter(i => i.Active = v))
                 .Subscribe()
                 .AddTo(this);
 
             RotationInput
                 .Select(v => v * 0.1f)
-                .Do(v => Camera?.GlobalRotate(new Vector3(0, 1, 0), -v.x))
-                .Do(v => Camera?.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
+                .Do(v => Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x))
+                .Do(v => Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
                 .Subscribe()
                 .AddTo(this);
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
-                .Subscribe(v => Camera?.TranslateObjectLocal(v))
+                .Subscribe(v => Camera.TranslateObjectLocal(v))
                 .AddTo(this);
 
-            ToggleInput?
+            ToggleInput
                 .Subscribe(_ => Active = !Active)
                 .AddTo(this);
         }
@@ -117,7 +148,7 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Select(_ => Origin + Forward * MaxDofDistance)
                 .Select(to => Camera.GetWorld().IntersectRay(Origin, to))
-                .Select(hit => hit == null ? float.MaxValue : Origin.DistanceTo(hit.Position))
+                .Select(hit => hit.Select(h => Origin.DistanceTo(h.Position)).IfNone(float.MaxValue))
                 .Buffer(
                     TimeSpan.FromMilliseconds(FocusSpeed),
                     TimeSpan.FromMilliseconds(10),
@@ -126,13 +157,6 @@ namespace AlleyCat.View
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
                 .Subscribe(this.SetFocalDistance)
                 .AddTo(this);
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _character?.Dispose();
-
-            base.OnPreDestroy();
         }
     }
 }

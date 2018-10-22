@@ -2,50 +2,45 @@
 using System.Collections.Generic;
 using AlleyCat.Autowire;
 using EnsureThat;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
     [AutowireContext]
     public class LoggingConfiguration : AutowiredNode, IServiceDefinitionProvider, IServiceFactory<ILogger>
     {
-        public IEnumerable<Type> ProvidedTypes => new[]
-        {
-            typeof(ILoggerFactory), 
-            typeof(ILogger), 
-            typeof(IOptions<LoggerFilterOptions>)
-        };
+        public IEnumerable<Type> ProvidedTypes => Seq(
+            typeof(ILoggerFactory),
+            typeof(ILogger),
+            typeof(IOptions<LoggerFilterOptions>));
 
-        [Service] private IEnumerable<ILoggerProvider> _providers;
+        [Service] private IEnumerable<ILoggerProvider> _providers = Seq<ILoggerProvider>();
 
         public void AddServices(IServiceCollection collection)
         {
-            Ensure.Any.IsNotNull(collection, nameof(collection));
+            Ensure.That(collection, nameof(collection)).IsNotNull();
 
             collection.AddLogging(ConfigureLogger);
         }
 
-        protected virtual void ConfigureLogger([NotNull] ILoggingBuilder builder)
+        protected virtual void ConfigureLogger(ILoggingBuilder builder)
         {
-            Ensure.Any.IsNotNull(builder, nameof(builder));
+            Ensure.That(builder, nameof(builder)).IsNotNull();
 
-            foreach (var provider in _providers)
-            {
-                builder.AddProvider(provider);
-            }
+            _providers.Iter(p => builder.AddProvider(p));
         }
 
         public ILogger Create(IAutowireContext context, object service)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(service, nameof(service));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(service, nameof(service)).IsNotNull();
 
-            var factory = this.GetRootContext().GetService<ILoggerFactory>();
+            var factory = this.GetRootContext().FindService<ILoggerFactory>();
 
-            return factory?.CreateLogger(service.GetType().FullName);
+            return factory.Map(f => f.CreateLogger(service.GetType().FullName)).Head();
         }
     }
 }

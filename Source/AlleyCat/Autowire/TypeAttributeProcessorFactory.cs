@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using EnsureThat;
-using JetBrains.Annotations;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -12,14 +11,11 @@ namespace AlleyCat.Autowire
     {
         public IEnumerable<INodeProcessor> Create(Type type)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
-            var attribute = type.GetCustomAttribute<T>();
-
-            return attribute == null ? Enumerable.Empty<INodeProcessor>() : new[] {CreateProcessor(type, attribute)};
+            return Optional(type.GetCustomAttribute<T>()).AsEnumerable().Map(a => CreateProcessor(type, a));
         }
 
-        [NotNull]
-        protected abstract INodeProcessor CreateProcessor([NotNull] Type type, [NotNull] T attribute);
+        protected abstract INodeProcessor CreateProcessor(Type type, T attribute);
     }
 }

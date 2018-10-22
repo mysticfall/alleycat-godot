@@ -1,6 +1,4 @@
 using AlleyCat.Common;
-using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -13,10 +11,8 @@ namespace AlleyCat.UI
 
     public static class HideableUIExtensions
     {
-        public static void Toggle([NotNull] this IHideableUI ui)
+        public static void Toggle(this IHideableUI ui)
         {
-            Ensure.Any.IsNotNull(ui, nameof(ui));
-
             if (ui.Visible)
             {
                 ui.Hide();

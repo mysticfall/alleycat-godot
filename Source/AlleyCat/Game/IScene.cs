@@ -1,9 +1,8 @@
-using AlleyCat.IO;
 using Godot;
 
 namespace AlleyCat.Game
 {
-    public interface IScene : IStateHolder
+    public interface IScene
     {
         PackedScene Pack();
 

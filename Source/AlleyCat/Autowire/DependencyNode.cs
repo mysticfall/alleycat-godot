@@ -1,75 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
-    internal struct DependencyNode : IDependencyResolver, IComparable<DependencyNode>
+    internal class DependencyNode : IDependencyResolver, IComparable<DependencyNode>
     {
-        [NotNull]
         public Node Instance { get; }
 
-        [NotNull]
-        public ISet<DependencyNode> Dependencies { get; }
+        public HashSet<DependencyNode> Dependencies { get; private set; }
 
-        public ISet<Type> Requires => _resolver.Requires;
+        public HashSet<Type> Requires => _resolver.Requires;
 
-        public ISet<Type> Provides => _resolver.Provides;
+        public HashSet<Type> Provides => _resolver.Provides;
 
         private readonly Action<IAutowireContext> _processor;
 
-        private readonly Action<IAutowireContext> _deferredProcessor;
+        private readonly Option<Action<IAutowireContext>> _deferredProcessor;
 
         private readonly IDependencyResolver _resolver;
 
-        public DependencyNode([NotNull] AutowireContext context)
+        public DependencyNode(AutowireContext context)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             Instance = context.Node;
-            Dependencies = new HashSet<DependencyNode>();
+            Dependencies = HashSet<DependencyNode>();
+
+            Debug.Assert(Instance != null, "Instance != null");
 
             _resolver = context;
+
             _processor = _ => context.Build();
-            _deferredProcessor = null;
+            _deferredProcessor = None;
         }
 
-        public DependencyNode([NotNull] Node node, ServiceDefinition definition)
+        public DependencyNode(Node node, ServiceDefinition definition)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
             Instance = node;
-            Dependencies = new HashSet<DependencyNode>();
+            Dependencies = HashSet<DependencyNode>();
 
             _resolver = definition;
 
-            _processor = context =>
-            {
-                var list = definition.Processors.Where(p => p.ProcessPhase != AutowirePhase.Deferred);
+            _processor = context => definition.Processors
+                .Where(p => p.ProcessPhase != AutowirePhase.Deferred)
+                .Iter(p => p.Process(context, node));
 
-                foreach (var processor in list)
-                {
-                    processor.Process(context, node);
-                }
-            };
+            void ProcessDeferred(IAutowireContext context) =>
+                definition.Processors
+                    .Where(p => p.ProcessPhase == AutowirePhase.Deferred)
+                    .Iter(p => p.Process(context, node));
 
-            _deferredProcessor = context =>
-            {
-                var list = definition.Processors.Where(p => p.ProcessPhase == AutowirePhase.Deferred);
-
-                foreach (var processor in list)
-                {
-                    processor.Process(context, node);
-                }
-            };
+            _deferredProcessor = Some((Action<IAutowireContext>) ProcessDeferred);
         }
 
-        public void Process(IAutowireContext context) => _processor.Invoke(context);
+        public void Process(IAutowireContext context)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-        public void ProcessDeferred(IAutowireContext context) => _deferredProcessor?.Invoke(context);
+            _processor.Invoke(context);
+        }
+
+        public void ProcessDeferred(IAutowireContext context)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            // ReSharper disable once ImpureMethodCallOnReadonlyValueField
+            _deferredProcessor.Iter(p => p.Invoke(context));
+        }
+
+        public void AddDependency(DependencyNode node)
+        {
+            Dependencies = Dependencies.TryAdd(node);
+        }
 
         public bool DependsOn(DependencyNode other) => DependsOn(other, this);
 

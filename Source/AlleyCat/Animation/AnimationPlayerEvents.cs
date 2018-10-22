@@ -1,14 +1,12 @@
 ﻿using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Animation
 {
     public interface IAnimationPlayerEvent : IEvent<AnimationPlayer>
     {
-        [NotNull]
-        string Animation { get; }
     }
 
     public struct AnimationStartEvent : IAnimationPlayerEvent
@@ -17,10 +15,10 @@ namespace AlleyCat.Animation
 
         public AnimationPlayer Source { get; }
 
-        public AnimationStartEvent([NotNull] string animation, [NotNull] AnimationPlayer source)
+        public AnimationStartEvent(string animation, AnimationPlayer source)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(animation, nameof(animation));
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(animation, nameof(animation)).IsNotNull();
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Animation = animation;
             Source = source;
@@ -33,10 +31,10 @@ namespace AlleyCat.Animation
 
         public AnimationPlayer Source { get; }
 
-        public AnimationFinishEvent([NotNull] string animation, [NotNull] AnimationPlayer source)
+        public AnimationFinishEvent(string animation, AnimationPlayer source)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(animation, nameof(animation));
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(animation, nameof(animation)).IsNotNull();
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Animation = animation;
             Source = source;
@@ -45,22 +43,16 @@ namespace AlleyCat.Animation
 
     public struct AnimationChangeEvent : IAnimationPlayerEvent
     {
-        public string Animation { get; }
+        public Option<string> Animation { get; }
 
-        [NotNull]
-        public string OldAnimation { get; }
+        public Option<string> OldAnimation { get; }
 
         public AnimationPlayer Source { get; }
 
         public AnimationChangeEvent(
-            [NotNull] string animation,
-            [NotNull] string oldAnimation,
-            [NotNull] AnimationPlayer source)
+            Option<string> animation, Option<string> oldAnimation, AnimationPlayer source)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(animation, nameof(animation));
-            Ensure.String.IsNotNullOrWhiteSpace(oldAnimation, nameof(oldAnimation));
-
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Animation = animation;
             OldAnimation = oldAnimation;

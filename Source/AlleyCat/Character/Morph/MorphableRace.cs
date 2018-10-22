@@ -1,16 +1,18 @@
 using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Common;
+using Godot;
 
 namespace AlleyCat.Character.Morph
 {
     public class MorphableRace : Race, IMorphableRace
     {
-        protected virtual string MorphGroupPath { get; } = "Morphs";
+        protected virtual string GetMorphGroupPath(Sex sex) => "Morphs/" + sex;
 
-        protected virtual string GetMorphGroupPath(Sex sex) => MorphGroupPath + "/" + sex;
+        public IEnumerable<IMorphGroup> GetMorphGroups(Sex sex)
+        {
+            var path = GetMorphGroupPath(sex);
 
-        public IEnumerable<IMorphGroup> GetMorphGroups(Sex sex) =>
-            GetNode(GetMorphGroupPath(sex))?.GetChildren<IMorphGroup>() ?? Enumerable.Empty<IMorphGroup>();
+            return this.FindComponent<Node>(path).Bind(c => c.GetChildComponents<IMorphGroup>());
+        }
     }
 }

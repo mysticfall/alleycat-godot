@@ -1,32 +1,31 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Autowire
 {
     public abstract class InjectAttributeProcessor<T> : MemberAttributeProcessor<T>
         where T : InjectAttribute
     {
-        public bool Required => Attribute.Required;
-
-        [NotNull]
         public Type TargetType { get; }
 
-        [NotNull]
         public Type DependencyType { get; }
+
+        public bool Optional { get; }
 
         public bool Enumerable { get; }
 
         public override AutowirePhase ProcessPhase => AutowirePhase.Resolve;
 
-        [NotNull]
         protected Action<object, object> TargetSetter { get; }
 
-        protected InjectAttributeProcessor([NotNull] MemberInfo member, [NotNull] T attribute)
-            : base(member, attribute)
+        protected InjectAttributeProcessor(MemberInfo member, T attribute) : base(member, attribute)
         {
             switch (member)
             {
@@ -44,16 +43,16 @@ namespace AlleyCat.Autowire
                     }
                     else
                     {
-                        var writeableProperty = property.DeclaringType?.GetProperty(
+                        var writableProperty = property.DeclaringType?.GetProperty(
                             property.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-                        if (writeableProperty == null)
+                        if (writableProperty == null)
                         {
                             throw new InvalidOperationException(
-                                $"Property '{property.DeclaringType?.Name}.{property.Name}' is not writeable.");
+                                $"Property '{property.DeclaringType?.Name}.{property.Name}' is not writable.");
                         }
 
-                        TargetSetter = writeableProperty.SetValue;
+                        TargetSetter = writableProperty.SetValue;
                     }
 
                     break;
@@ -61,49 +60,67 @@ namespace AlleyCat.Autowire
                     throw new InvalidOperationException($"Unknown member type: {member}.");
             }
 
-            if (TargetType.IsGenericType && TargetType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            DependencyType = TargetType;
+
+            if (!TargetType.IsGenericType) return;
+
+            var genType = TargetType.GetGenericTypeDefinition();
+
+            if (genType == typeof(Option<>))
             {
-                DependencyType = TargetType.GetGenericArguments()[0] ?? TargetType;
-                Enumerable = DependencyType != TargetType;
+                DependencyType = TargetType.GetGenericArguments()[0];
+
+                Debug.Assert(DependencyType != null, "DependencyType != null");
+
+                Optional = true;
             }
-            else
+            else if (genType == typeof(IEnumerable<>))
             {
-                DependencyType = TargetType;
+                DependencyType = TargetType.GetGenericArguments()[0];
+
+                Debug.Assert(DependencyType != null, "DependencyType != null");
+
+                Enumerable = true;
             }
         }
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            var dependency = GetDependency(context, node);
+            object dependency;
 
-            if (Required && !HasValue(dependency, DependencyType))
+            var enumerable = GetDependencies(context, node);
+
+            bool hasValue;
+
+            if (Enumerable)
             {
-                var type = Member.DeclaringType;
-                var prefix = type?.Namespace == null ? "" : type.Namespace + ".";
+                dependency = enumerable;
+                hasValue = enumerable.OfType<object>().Any();
+            } else if (Optional)
+            {
+                var option = OptionalHelper.HeadOrNone(enumerable, DependencyType);
 
-                var member = $"{prefix}{type?.Name}.{Member.Name}";
+                dependency = option;
+                hasValue = option.IsSome;
+            }
+            else
+            {
+                dependency = enumerable.OfType<object>().FirstOrDefault();
+                hasValue = dependency != null;
+            }
 
+            if (Attribute.Required && !hasValue)
+            {
                 throw new InvalidOperationException(
-                    $"Cannot resolve required dependency for {member}.");
+                    $"Cannot resolve required dependency for {node.GetPath()}.{Member.Name}.");
             }
 
             TargetSetter(node, dependency);
         }
 
-        private bool HasValue(object dependency, Type type)
-        {
-            if (dependency == null)
-            {
-                return false;
-            }
-
-            return !Enumerable || EnumerableHelper.Any(dependency, type);
-        }
-
-        [CanBeNull]
-        protected abstract object GetDependency([NotNull] IAutowireContext context, [NotNull] Node node);
+        protected abstract IEnumerable GetDependencies(IAutowireContext context, Node node);
     }
 }

@@ -6,7 +6,8 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Physics;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.View
@@ -14,42 +15,51 @@ namespace AlleyCat.View
     [Singleton(typeof(IPerspectiveView), typeof(IThirdPersonView))]
     public class OrbitingCharacterView : OrbitingView, IThirdPersonView
     {
-        public virtual IHumanoid Character
+        [Node(false)]
+        public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.Value = value;
         }
 
-        public IObservable<IHumanoid> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        public IEntity FocusedObject => _focus?.Value;
+        public Option<IEntity> FocusedObject => _focus.Bind(f => f.Value);
 
-        public IObservable<IEntity> OnFocusChange => _focus ?? Observable.Empty<IEntity>();
+        public IObservable<Option<IEntity>> OnFocusChange =>
+            _focus.MatchObservable(identity, Observable.Empty<Option<IEntity>>);
 
-        [Export(PropertyHint.ExpRange, "1,10")]
-        public float MaxFocalDistance { get; set; } = 2f;
+        public float MaxFocalDistance
+        {
+            get => _maxFocalDistance;
+            set => _maxFocalDistance = Mathf.Min(value, 0);
+        }
 
         public override Spatial Target => Camera;
 
-        public override bool Valid => base.Valid && Character != null;
+        public override bool Valid => base.Valid && Character.IsSome;
 
         public bool AutoActivate => true;
 
-        public override Vector3 Origin => Character?.Vision.Head.origin ?? Vector3.Zero;
+        public override Vector3 Origin => Character.Map(c => c.Vision.Head.origin).IfNone(Vector3.Zero);
 
         public override Vector3 Up => Vector3.Up;
 
-        public override Vector3 Forward => Character == null
-            ? Vector3.Forward
-            : new Plane(Vector3.Up, 0f).Project(Character.GlobalTransform().Forward());
+        public override Vector3 Forward => Character
+            .Map(c => c.GlobalTransform().Forward())
+            .Map(new Plane(Vector3.Up, 0f).Project)
+            .IfNone(Vector3.Forward);
 
-        [Export, UsedImplicitly] private NodePath _characterPath;
+        [Export(PropertyHint.ExpRange, "1,10")]
+        private float _maxFocalDistance = 2f;
 
-        private readonly ReactiveProperty<IHumanoid> _character = new ReactiveProperty<IHumanoid>();
+        [Export] private NodePath _characterPath;
 
-        private ReactiveProperty<IEntity> _focus;
+        private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
-        public OrbitingCharacterView() : base(
+        private Option<ReactiveProperty<Option<IEntity>>> _focus = None;
+
+        public OrbitingCharacterView() : this(
             new Range<float>(-180f, 180f),
             new Range<float>(-89f, 90f),
             new Range<float>(0.25f, 10f))
@@ -61,6 +71,7 @@ namespace AlleyCat.View
             Range<float> pitchRange,
             Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
         {
+            _character = new ReactiveProperty<Option<IHumanoid>>().AddTo(this);
         }
 
         protected override void OnInitialize()
@@ -77,19 +88,14 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
                 .Select(direction => Origin + direction * MaxFocalDistance)
-                .Select(to => Camera.GetWorld().IntersectRay(Origin, to, new Array {Character}))
-                .Select(hit => hit?.Collider?.FindEntity())
-                .Select(e => e != null && e.Valid && e.Visible ? e : null)
+                .Select(to => Character
+                    .Map(c => new Array {c})
+                    .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
+                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                .Select(e => e.Filter(v => v.Valid && v.Visible))
                 .DistinctUntilChanged()
-                .ToReactiveProperty();
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _focus?.Dispose();
-            _character?.Dispose();
-
-            base.OnPreDestroy();
+                .ToReactiveProperty()
+                .AddTo(this);
         }
     }
 }

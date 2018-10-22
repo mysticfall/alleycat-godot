@@ -1,35 +1,39 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Action
 {
     public interface IActor
     {
-        IReadOnlyDictionary<string, IAction> Actions { get; }
+        Map<string, IAction> Actions { get; }
     }
 
     public static class ActorExtensions
     {
-        [CanBeNull]
-        public static IAction FindAction(
-            [NotNull] this IActor actor, 
-            [NotNull] IActionContext context,
-            [CanBeNull] Func<IAction, bool> predicate = null)
+        public static Option<IAction> FindAction(this IActor actor, IActionContext context)
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            return actor.Actions.Values.FirstOrDefault(
-                a => a.AllowedFor(context) && (predicate == null || predicate(a)));
+            return actor.Actions.Values.Find(a => a.AllowedFor(context));
         }
 
+        public static Option<IAction> FindAction(
+            this IActor actor, IActionContext context, Func<IAction, bool> predicate)
+        {
+            Ensure.That(actor, nameof(actor)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(predicate, nameof(predicate)).IsNotNull();
+
+            return actor.Actions.Values.Find(a => a.AllowedFor(context) && predicate(a));
+        }
+
+        public static void Execute(this IActor actor, IActionContext context) =>
+            actor.FindAction(context).Iter(a => a.Execute(context));
+
         public static void Execute(
-            [NotNull] this IActor actor, 
-            [NotNull] IActionContext context,
-            [CanBeNull] Func<IAction, bool> predicate = null) =>
-            actor.FindAction(context, predicate)?.Execute(context);
+            this IActor actor, IActionContext context, Func<IAction, bool> predicate) =>
+            actor.FindAction(context, predicate).Iter(a => a.Execute(context));
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
@@ -9,6 +8,6 @@ namespace AlleyCat.Autowire
     {
         IEnumerable<Type> ProvidedTypes { get; }
 
-        void AddServices([NotNull] IServiceCollection collection);
+        void AddServices(IServiceCollection collection);
     }
 }

@@ -5,16 +5,20 @@ using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     public class RangedMorphPanel : MorphPanel<float, RangedMorphDefinition>
     {
-        [Node]
-        public Slider Slider { get; private set; }
+        public Slider Slider => _slider.Head();
 
-        [Node]
-        public SpinBox Spinner { get; private set; }
+        public SpinBox Spinner => _spinner.Head();
+
+        [Node] private Option<Slider> _slider = None;
+
+        [Node] private Option<SpinBox> _spinner = None;
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -36,16 +40,13 @@ namespace AlleyCat.UI.Character
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
                 .Select(e => e.Value)
                 .Subscribe(v => Morph.Value = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
-            Morph
-                .OnChange
-                .Subscribe(v =>
-                {
-                    Slider.Value = v;
-                    Spinner.Value = v;
-                })
-                .AddTo(this);
+            Morph.OnChange
+                .Do(Slider.SetValue)
+                .Do(Spinner.SetValue)
+                .Subscribe()
+                .AddTo(this.GetCollector());
         }
     }
 }

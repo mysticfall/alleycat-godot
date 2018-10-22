@@ -1,6 +1,5 @@
 ﻿using AlleyCat.Autowire;
 using EnsureThat;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -9,24 +8,22 @@ namespace AlleyCat.Logging
     [Singleton(typeof(ILoggerProvider))]
     public class PrintLoggerProvider : AutowiredNode, ILoggerProvider
     {
-        [NotNull]
         protected IMemoryCache Cache { get; }
 
         public PrintLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
         {
         }
 
-        public PrintLoggerProvider([NotNull] IMemoryCache cache)
+        public PrintLoggerProvider(IMemoryCache cache)
         {
-            Ensure.Any.IsNotNull(cache, nameof(cache));
+            Ensure.That(cache, nameof(cache)).IsNotNull();
 
             Cache = cache;
         }
 
-        [NotNull]
-        public ILogger CreateLogger([NotNull] string categoryName)
+        public ILogger CreateLogger(string categoryName)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(categoryName, nameof(categoryName));
+            Ensure.That(categoryName, nameof(categoryName)).IsNotNull();
 
             return Cache.GetOrCreate(categoryName, _ => new PrintLogger(categoryName));
         }

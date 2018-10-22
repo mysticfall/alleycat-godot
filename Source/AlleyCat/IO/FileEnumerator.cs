@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
 namespace AlleyCat.IO
@@ -29,9 +28,9 @@ namespace AlleyCat.IO
         private readonly bool _endsWithSeparator;
 
         public FileEnumerator(
-            [NotNull] string path, bool skipNavigational = false, bool skipHidden = false)
+            string path, bool skipNavigational = false, bool skipHidden = false)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
+            Ensure.That(path, nameof(path)).IsNotNull();
 
             _path = path;
             _skipNavigational = skipNavigational;
@@ -43,8 +42,7 @@ namespace AlleyCat.IO
 
             try
             {
-                _directory.Open(path).ThrowIfNecessary(
-                    e => $"Failed to open directory: '{path}' ({e}).");
+                _directory.Open(path).ThrowOnError(e => $"Failed to open directory: '{path}' ({e}).");
             }
             finally
             {

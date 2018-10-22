@@ -32,7 +32,7 @@ namespace AlleyCat.Animation
             Animatable.AnimationManager.OnAdvance
                 .Where(_ => IsRunning() && IgnoreRotation)
                 .Subscribe(_ => ResetRotation())
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             _skeleton = GetParentSkeleton();
             _tipIndex = _skeleton?.FindBone(TipBone) ?? -1;

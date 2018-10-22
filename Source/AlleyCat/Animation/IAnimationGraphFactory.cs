@@ -1,17 +1,12 @@
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Animation
 {
     public interface IAnimationGraphFactory
     {
-        AnimationGraph Create(
-            [NotNull] string name,
-            [CanBeNull] IAnimationGraph parent,
-            [NotNull] AnimationGraphContext context);
+        Option<IAnimationGraph> TryCreate(string name, IAnimationGraph parent, AnimationGraphContext context);
 
-        AnimationGraph Create(
-            [NotNull] AnimationRootNode node,
-            [NotNull] AnimationGraphContext context);
+        Option<IAnimationGraph> TryCreate(AnimationRootNode node, AnimationGraphContext context);
     }
 }

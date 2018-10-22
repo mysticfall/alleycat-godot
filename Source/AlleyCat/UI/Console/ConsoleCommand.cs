@@ -1,6 +1,6 @@
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.UI.Console
 {
@@ -8,30 +8,31 @@ namespace AlleyCat.UI.Console
     {
         public abstract string Key { get; }
 
-        public abstract string Description { get; }
+        public abstract Option<string> Description { get; }
 
         public ICommandConsole Console { get; }
 
         protected SceneTree SceneTree { get; }
 
-        protected ConsoleCommand([NotNull] ICommandConsole console, SceneTree sceneTree)
+        protected ConsoleCommand(ICommandConsole console, SceneTree sceneTree)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
-            Ensure.Any.IsNotNull(sceneTree, nameof(sceneTree));
+            Ensure.That(console, nameof(console)).IsNotNull();
+            Ensure.That(sceneTree, nameof(sceneTree)).IsNotNull();
 
             Console = console;
             SceneTree = sceneTree;
         }
 
-        public abstract void Execute(string[] args);
+        public abstract void Execute(params string[] args);
 
         public virtual void DisplayUsage()
         {
             Console
                 .Text("[").Text(SceneTree.Tr("console.usage")).Text("]").NewLine()
                 .NewLine()
-                .Text("> ").Highlight(Key).NewLine()
-                .Text(Description).NewLine();
+                .Text("> ").Highlight(Key).NewLine();
+
+            Description.Iter(d => Console.Text(d).NewLine());
         }
     }
 }

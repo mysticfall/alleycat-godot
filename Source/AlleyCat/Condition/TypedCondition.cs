@@ -1,4 +1,5 @@
 using AlleyCat.Condition.Generic;
+using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Condition
@@ -7,6 +8,8 @@ namespace AlleyCat.Condition
     {
         public bool Matches(object context)
         {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
             if (context != null && context is T type)
             {
                 return Matches(type);

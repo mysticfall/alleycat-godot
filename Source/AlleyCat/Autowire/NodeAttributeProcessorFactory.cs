@@ -2,7 +2,6 @@
 using System.Text;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
@@ -10,8 +9,8 @@ namespace AlleyCat.Autowire
     {
         protected override INodeProcessor CreateProcessor(MemberInfo member, NodeAttribute attribute)
         {
-            Ensure.Any.IsNotNull(member, nameof(member));
-            Ensure.Any.IsNotNull(attribute, nameof(attribute));
+            Ensure.That(member, nameof(member)).IsNotNull();
+            Ensure.That(attribute, nameof(attribute)).IsNotNull();
 
             var fieldName = ToPrivateFieldName(member.Name);
 
@@ -20,13 +19,14 @@ namespace AlleyCat.Autowire
 
             var field = FindField(fieldName + "Path") ?? FindField(fieldName);
 
-            return new NodeAttributeProcessor(member, field, attribute);
+            return new NodeAttributeProcessor(field, member, attribute);
         }
 
-        [NotNull]
-        protected static string ToPrivateFieldName([NotNull] string name)
+        protected static string ToPrivateFieldName(string name)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(name, nameof(name));
+            Ensure.That(name, nameof(name)).IsNotNullOrWhiteSpace();
+
+            if (name.StartsWith("_")) return name;
 
             return new StringBuilder()
                 .Append("_")

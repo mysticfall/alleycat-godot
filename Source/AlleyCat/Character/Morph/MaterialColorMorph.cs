@@ -1,32 +1,39 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
     public class MaterialColorMorph : Morph<Color, MaterialColorMorphDefinition>
     {
-        [NotNull]
         public MeshInstance Mesh { get; }
 
-        public IEnumerable<SpatialMaterial> Materials =>
-            SurfaceIndexes.Select(Mesh.GetSurfaceMaterial).OfType<SpatialMaterial>();
+        public IEnumerable<SpatialMaterial> Materials => SurfaceIndexes
+            .Bind(i => Mesh.FindSurfaceMaterial(i).AsEnumerable())
+            .OfType<SpatialMaterial>();
 
         public IEnumerable<int> SurfaceIndexes { get; }
 
-        public MaterialColorMorph([NotNull] MeshInstance mesh,
+        public MaterialColorMorph(MeshInstance mesh,
             IEnumerable<int> indexes,
-            [NotNull] MaterialColorMorphDefinition definition) : base(definition)
+            MaterialColorMorphDefinition definition) : base(definition)
         {
-            Ensure.Any.IsNotNull(mesh, nameof(mesh));
-            Ensure.Any.IsNotNull(indexes, nameof(indexes));
+            Ensure.That(mesh, nameof(mesh)).IsNotNull();
 
             Mesh = mesh;
-            SurfaceIndexes = indexes.ToList();
+            SurfaceIndexes = indexes.Freeze();
+
+            if (!SurfaceIndexes.Any())
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(definition),
+                    $"The morph '{Definition.Key}' does not have any target material defined.");
+            }
         }
 
-        protected override void Apply(Color value) => Materials.ToList().ForEach(m => m.AlbedoColor = value);
+        protected override void Apply(Color value) => Materials.Iter(m => m.AlbedoColor = value);
     }
 }

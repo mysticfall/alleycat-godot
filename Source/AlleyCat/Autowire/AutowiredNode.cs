@@ -1,4 +1,6 @@
-﻿using AlleyCat.Common;
+﻿using System;
+using AlleyCat.Common;
+using Godot;
 
 namespace AlleyCat.Autowire
 {
@@ -8,7 +10,15 @@ namespace AlleyCat.Autowire
         {
             base._Ready();
 
-            this.Autowire();
+            try
+            {
+                this.Autowire();
+            }
+            catch (Exception e)
+            {
+                GD.Print(e.ToString());
+                GD.Print(e.StackTrace);
+            }
         }
     }
 }

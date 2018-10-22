@@ -1,5 +1,6 @@
 using System;
 using AlleyCat.Common;
+using LanguageExt;
 
 namespace AlleyCat.View
 {
@@ -7,8 +8,8 @@ namespace AlleyCat.View
     {
         float MaxFocalDistance { get; set; }
 
-        IEntity FocusedObject { get; }
+        Option<IEntity> FocusedObject { get; }
 
-        IObservable<IEntity> OnFocusChange { get; }
+        IObservable<Option<IEntity>> OnFocusChange { get; }
     }
 }

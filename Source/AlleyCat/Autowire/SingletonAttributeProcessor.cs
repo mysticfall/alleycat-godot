@@ -1,34 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
     public class SingletonAttributeProcessor : InjectableAttributeProcessor<SingletonAttribute>, IDependencyProvider
     {
-        public ISet<Type> Provides => new HashSet<Type>(Attribute.Types);
+        public HashSet<Type> Provides { get; }
 
-        public SingletonAttributeProcessor([NotNull] SingletonAttribute attribute) : base(attribute)
+        public SingletonAttributeProcessor(SingletonAttribute attribute) : base(attribute)
         {
+            Provides = toHashSet(Attribute.Types);
         }
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            var target = context.Node == node ? context.Parent : context;
+            var target = context.Node == node ? context.Parent : Some(context);
 
-            Debug.Assert(target != null, "context.Parent != null");
+            Debug.Assert(target.IsSome, "target.IsSome");
 
-            foreach (var type in Attribute.Types)
-            {
-                target.AddService(c => c.AddSingleton(type, node));
-            }
+            target
+                .SelectMany(t => Provides, (t, tpe) => (t, tpe))
+                .Iter(v => v.t.AddService(c => c.AddSingleton(v.tpe, node)));
         }
     }
 }

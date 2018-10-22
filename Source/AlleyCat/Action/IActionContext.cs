@@ -1,10 +1,9 @@
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Action
 {
     public interface IActionContext
     {
-        [CanBeNull]
-        IActor Actor { get; }
+        Option<IActor> Actor { get; }
     }
 }

@@ -3,34 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 using Object = Godot.Object;
 
 namespace AlleyCat.Item
 {
     public class RiggedConfiguration : EquipmentConfiguration
     {
-        public ISet<string> MeshesToSync
-        {
-            get
-            {
-                if (_meshesToSyncSet != null) return _meshesToSyncSet;
-
-                _meshesToSyncSet = new HashSet<string>(_meshesToSync);
-
-                return _meshesToSyncSet;
-            }
-        }
+        public Set<string> MeshesToSync => toSet(_meshesToSync);
 
         [Export, UsedImplicitly] private Array<string> _meshesToSync;
 
-        private ISet<string> _meshesToSyncSet;
+        private Option<IDisposable> _blendShapeListener = None;
 
-        private IDisposable _blendShapeListener;
-
-        private IEnumerable<(string key, MeshInstance source, MeshInstance target)> _blendShapeMappings;
+        private Set<BlendShapeMapping> _blendShapeMappings = Set<BlendShapeMapping>();
 
         public override void OnEquip(IEquipmentHolder holder, Equipment equipment)
         {
@@ -45,7 +36,7 @@ namespace AlleyCat.Item
 
             UnregisterBlendShapeListeners();
 
-            if (!(holder is IMeshObject obj) || !(holder is IAnimatable animatable)) return;
+            if (!(holder is IMeshObject obj && holder is IAnimatable animatable)) return;
 
             IEnumerable<string> FindBlendShapes(Object m) =>
                 m.GetPropertyList()
@@ -67,22 +58,22 @@ namespace AlleyCat.Item
 
             var targets = GetBlendShapeMap(equipment.Meshes);
 
-            _blendShapeMappings = sources
-                .Where(i => targets.ContainsKey(i.Key))
-                .Select(i => (key: i.Key, source: i.Value, target: targets[i.Key]));
+            _blendShapeMappings = toSet(sources
+                .Filter(i => targets.ContainsKey(i.Key))
+                .Select(i => new BlendShapeMapping(i.Key, i.Value, targets[i.Key])));
 
             if (!_blendShapeMappings.Any()) return;
 
-            _blendShapeListener = animatable.AnimationManager.OnAdvance
-                .Subscribe(_ =>
+            _blendShapeListener = Some(
+                animatable.AnimationManager.OnAdvance.Subscribe(_ =>
                 {
                     foreach (var mapping in _blendShapeMappings)
                     {
-                        var value = mapping.source.Get(mapping.key);
+                        var value = mapping.Source.Get(mapping.Key);
 
-                        mapping.target.Set(mapping.key, value);
+                        mapping.Target.Set(mapping.Key, value);
                     }
-                });
+                }));
         }
 
         public override void OnUnequip(IEquipmentHolder holder, Equipment equipment)
@@ -101,10 +92,33 @@ namespace AlleyCat.Item
 
         private void UnregisterBlendShapeListeners()
         {
-            _blendShapeListener?.Dispose();
+            _blendShapeListener.Iter(l => l.DisposeQuietly());
+            _blendShapeListener = None;
 
-            _blendShapeListener = null;
-            _blendShapeMappings = null;
+            _blendShapeMappings = Set<BlendShapeMapping>();
         }
+    }
+
+    internal struct BlendShapeMapping : IComparable<BlendShapeMapping>
+    {
+        public string Key { get; }
+
+        public MeshInstance Source { get; }
+
+        public MeshInstance Target { get; }
+
+        public BlendShapeMapping(string key, MeshInstance source, MeshInstance target)
+        {
+            Ensure.That(key, nameof(key)).IsNotNull();
+            Ensure.That(source, nameof(source)).IsNotNull();
+            Ensure.That(target, nameof(target)).IsNotNull();
+
+            Key = key;
+            Source = source;
+            Target = target;
+        }
+
+        public int CompareTo(BlendShapeMapping other) => 
+            string.Compare(Key, other.Key, StringComparison.Ordinal);
     }
 }

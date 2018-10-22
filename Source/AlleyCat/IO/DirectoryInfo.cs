@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
@@ -10,10 +9,8 @@ namespace AlleyCat.IO
 {
     public class DirectoryInfo : IFileInfo
     {
-        [NotNull]
         public string Name { get; }
 
-        [NotNull]
         public string Path { get; }
 
         public bool Exists
@@ -36,10 +33,8 @@ namespace AlleyCat.IO
 
         public DateTimeOffset LastModified { get; } = new DateTimeOffset(0, TimeSpan.Zero);
 
-        public DirectoryInfo([NotNull] string path)
+        public DirectoryInfo(string path)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
-
             Path = path;
 
             var index = Path.LastIndexOf("/", StringComparison.InvariantCulture);
@@ -47,7 +42,6 @@ namespace AlleyCat.IO
             Name = index < 0 ? "" : Path.Substring(index + 1);
         }
 
-        [NotNull]
         public Stream CreateReadStream()
         {
             throw new InvalidOperationException($"The path represents  a directory: '{Path}'.");

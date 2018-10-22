@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Physics
 {
@@ -10,7 +9,7 @@ namespace AlleyCat.Physics
 
         public Vector3 Normal => (Vector3) Data["normal"];
 
-        public Intersection([NotNull] IDictionary<object, object> data) : base(data)
+        public Intersection(IDictionary<object, object> data) : base(data)
         {
         }
     }

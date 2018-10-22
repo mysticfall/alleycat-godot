@@ -1,9 +1,9 @@
 using System;
-using System.Linq;
+using System.Diagnostics;
 using AlleyCat.Action;
 using AlleyCat.Game;
 using EnsureThat;
-using JetBrains.Annotations;
+using static LanguageExt.Prelude;
 using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
@@ -13,10 +13,15 @@ namespace AlleyCat.Item
         protected override void DoExecute(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
+
             var scene = GetTree().CurrentScene;
             var path = ((IScene) scene).ItemsPath;
 
-            var parent = scene.GetNode(path) ?? scene;
+            Debug.Assert(path != null, "path != null");
+
+            var parent = Optional(scene.GetNode(path)).IfNone(scene);
 
             holder.Unequip(equipment, parent);
         }
@@ -24,30 +29,28 @@ namespace AlleyCat.Item
         protected override bool AllowedFor(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
-            return equipment.Slot != null &&
-                   holder.HasEquipment(equipment.Slot) &&
-                   equipment.Configuration.HasTag(Carry);
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
+
+            return holder.HasEquipment(equipment.Slot) && equipment.Configuration.HasTag(Carry);
         }
     }
 
     public static class DropActionExtensions
     {
-        public static void Drop<T>([NotNull] this T actor, [NotNull] Equipment equipment)
+        public static void Drop<T>(this T actor, Equipment equipment)
             where T : class, IActor, IEquipmentHolder
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
-            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is DropAction);
+            var action = actor.Actions.Values.Find(a => a is DropAction);
 
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(actor),
-                    "The specified actor does not support drop action.");
-            }
-
-            action.Execute(new InteractionContext(actor, equipment));
+            action.Match(
+                a => a.Execute(new InteractionContext(actor, equipment)),
+                () => throw new ArgumentOutOfRangeException(
+                    nameof(actor), "The specified actor does not support drop action.")
+            );
         }
     }
 }

@@ -1,22 +1,21 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=4]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.mesh" type="ArrayMesh" id=5]
-[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=6]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=7]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=5]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=6]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
 
-[sub_resource type="PhysicsMaterial" id=5]
+[sub_resource type="PhysicsMaterial" id=1]
 
 friction = 1.0
 rough = false
 bounce = 0.0
 absorbent = false
 
-[sub_resource type="BoxShape" id=6]
+[sub_resource type="BoxShape" id=2]
 
 margin = 0.04
 extents = Vector3( 0.231997, 0.0309091, 0.219546 )
@@ -28,7 +27,7 @@ collision_layer = 1
 collision_mask = 1
 mode = 0
 mass = 0.5
-physics_material_override = SubResource( 5 )
+physics_material_override = SubResource( 1 )
 gravity_scale = 1.0
 custom_integrator = false
 continuous_cd = false
@@ -75,7 +74,7 @@ script = ExtResource( 3 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0111699 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 disabled = false
 
 [node name="Binding" type="Node" parent="CollisionShape"]
@@ -93,10 +92,10 @@ _key = "Wear"
 _slot = "Shirt"
 _additionalSlots = [ "Pants" ]
 Active = false
-Mesh = ExtResource( 5 )
-Animation = null
-AnimationBlend = ""
 AnimationTransition = 1.0
+_mesh = null
+_animation = null
+_animationBlend = null
 _meshesToSync = [ "Body" ]
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
@@ -104,22 +103,22 @@ _meshesToSync = [ "Body" ]
 "TagHand",
 "TagOneHand",
 ]]
-script = ExtResource( 6 )
+script = ExtResource( 5 )
 _sections_unfolded = [ "Animation" ]
 ProcessMode = 0
 _key = "Carry"
 _slot = "RightHand"
 _additionalSlots = null
 Active = false
-Mesh = null
-Animation = ExtResource( 7 )
-AnimationBlend = "Hands"
 AnimationTransition = 1.0
+_mesh = null
+_animation = ExtResource( 6 )
+_animationBlend = "Hands"
 
 [node name="Markers" type="Spatial" parent="."]
 
 [node name="Carry" type="Spatial" parent="Markers"]
 transform = Transform( -1, -5.96046e-08, 0, 4.96565e-08, -0.833097, -0.553126, 3.29689e-08, -0.553126, 0.833097, 0, -0.0183101, 0.255009 )
-script = ExtResource( 8 )
+script = ExtResource( 7 )
 _key = "Carry"
 

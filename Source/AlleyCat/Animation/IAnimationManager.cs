@@ -1,7 +1,6 @@
 ﻿using System;
 using AlleyCat.Common;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Animation
 {
@@ -13,6 +12,8 @@ namespace AlleyCat.Animation
 
         IObservable<AnimationEvent> OnAnimationEvent { get; }
 
-        void Play([NotNull] Godot.Animation animation);
+        void Advance(float delta);
+
+        void Play(Godot.Animation animation);
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using LanguageExt;
 
 namespace AlleyCat.Common
 {
     public interface IMarkable
     {
-        IReadOnlyDictionary<string, Marker> Markers { get; }
+        Map<string, Marker> Markers { get; }
     }
 }

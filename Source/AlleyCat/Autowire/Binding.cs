@@ -3,59 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using EnsureThat;
 using Godot;
+using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AlleyCat.Autowire
 {
     public class Binding : Node, IServiceDefinitionProvider
     {
-        public IEnumerable<Type> ProvidedTypes { get; private set; }
+        public IEnumerable<Type> ProvidedTypes => _providedTypes;
+
+        private Seq<Type> _providedTypes = Seq<Type>.Empty;
 
         public override void _EnterTree()
         {
             base._EnterTree();
 
-            var types = new List<Type>();
+            var types = new Lst<Type>();
 
             var type = GetParent().GetType();
             var nodeType = typeof(Node);
 
-            var ignoredTypes = new HashSet<Type>
+            var ignoredTypes = new System.Collections.Generic.HashSet<Type>
             {
                 typeof(IDisposable)
             };
 
-            types.AddRange(type.GetInterfaces().Where(t => !ignoredTypes.Contains(t)));
+            types = types.AddRange(type.GetInterfaces().Where(t => !ignoredTypes.Contains(t)));
 
             while (type != null && type != nodeType)
             {
-                types.Add(type);
+                types += type;
 
                 type = type.BaseType;
             }
 
-            ProvidedTypes = types;
+            _providedTypes = types.ToSeq();
         }
 
         public override void _Ready()
         {
             base._Ready();
 
-            this.Autowire(GetParent()?.GetParent()?.GetAutowireContext());
+            var context = GetParent()?.GetParent()?.GetAutowireContext() as AutowireContext;
+
+            this.Autowire(context);
         }
 
         public void AddServices(IServiceCollection collection)
         {
-            Ensure.Any.IsNotNull(collection, nameof(collection));
+            Ensure.That(collection, nameof(collection)).IsNotNull();
 
             var parent = GetParent();
 
-            if (parent == null) return;
-
-            foreach (var type in ProvidedTypes)
+            if (parent == null)
             {
-                collection.AddSingleton(type, parent);
+                throw new InvalidOperationException(
+                    "Can't add service when a binding is not attached to a parent.");
             }
+
+            ProvidedTypes.Iter(t => collection.AddSingleton(t, parent));
         }
     }
 }

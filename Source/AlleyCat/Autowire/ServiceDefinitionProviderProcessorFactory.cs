@@ -11,7 +11,7 @@ namespace AlleyCat.Autowire
 
         public IEnumerable<INodeProcessor> Create(Type type)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
             return NodeType.IsAssignableFrom(type)
                 ? new[] {new ServiceDefinitionProviderProcessor()}

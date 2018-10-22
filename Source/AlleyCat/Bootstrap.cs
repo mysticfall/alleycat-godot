@@ -1,4 +1,5 @@
-﻿using AlleyCat.Autowire;
+﻿using System.Diagnostics;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 
@@ -15,7 +16,11 @@ namespace AlleyCat
         {
             base._Ready();
 
-            (this.GetRootContext() as AutowireContext)?.Initialize();
+            var context = this.GetRootContext() as AutowireContext;
+
+            Debug.Assert(context != null, "context != null");
+
+            context.Initialize();
         }
 
         protected override void Dispose(bool disposing)

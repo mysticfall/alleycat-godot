@@ -16,10 +16,8 @@ namespace AlleyCat.Common
 
         private static bool _installed;
 
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string);
-        }
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(string);
 
         public override object ConvertFrom(
             ITypeDescriptorContext context, CultureInfo culture, object value)
@@ -32,30 +30,22 @@ namespace AlleyCat.Common
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            return VariantTypes.Any(t => t == destinationType);
-        }
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) =>
+            VariantTypes.Any(t => t == destinationType);
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value,
-            Type destinationType)
-        {
-            return value == null ? null : GD.Var2Str(value);
-        }
+        public override object ConvertTo(
+            ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) =>
+            value == null ? null : GD.Var2Str(value);
 
         public static void Install()
         {
-            if (!_installed)
-            {
-                var converter = typeof(VariantTypeConverter);
-
-                foreach (var type in VariantTypes)
-                {
-                    TypeDescriptor.AddAttributes(type, new TypeConverterAttribute(converter));
-                }
-
-                _installed = true;
-            }
+//            if (_installed) return;
+//
+//            var converter = typeof(VariantTypeConverter);
+//
+//            VariantTypes.Iter(t => TypeDescriptor.AddAttributes(t, new TypeConverterAttribute(converter)));
+//
+//            _installed = true;
         }
     }
 }

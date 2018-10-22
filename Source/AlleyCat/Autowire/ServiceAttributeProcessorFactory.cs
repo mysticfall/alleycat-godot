@@ -7,8 +7,8 @@ namespace AlleyCat.Autowire
     {
         protected override INodeProcessor CreateProcessor(MemberInfo member, ServiceAttribute attribute)
         {
-            Ensure.Any.IsNotNull(member, nameof(member));
-            Ensure.Any.IsNotNull(attribute, nameof(attribute));
+            Ensure.That(member, nameof(member)).IsNotNull();
+            Ensure.That(attribute, nameof(attribute)).IsNotNull();
 
             return new ServiceAttributeProcessor(member, attribute);
         }

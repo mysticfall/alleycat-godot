@@ -2,8 +2,7 @@ using AlleyCat.Common;
 
 namespace AlleyCat.Item
 {
-    public interface IItem : INamed
+    public interface IItem : INamed, IDescribable
     {
-        string Description { get; }
     }
 }

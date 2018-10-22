@@ -1,9 +1,11 @@
 using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -11,40 +13,39 @@ namespace AlleyCat.UI
     {
         private const string SignalColorChange = "color_changed";
 
-        [NotNull]
         public IObservable<ColorChangedEvent> OnColorChange
         {
             get
             {
-                if (_onColorChange == null)
+                if (_onColorChange.IsNone)
                 {
-                    Parent.Connect(SignalColorChange, this, nameof(FireOnColorChange));
+                    Parent.Iter(p => p.Connect(SignalColorChange, this, nameof(FireOnColorChange)));
 
                     _onColorChange = new Subject<ColorChangedEvent>();
                 }
 
-                return _onColorChange;
+                return _onColorChange.Head();
             }
         }
 
-        private Subject<ColorChangedEvent> _onColorChange;
+        private Option<Subject<ColorChangedEvent>> _onColorChange = None;
 
         [UsedImplicitly]
-        private void FireOnColorChange(Color color) => _onColorChange?.OnNext(new ColorChangedEvent(color, Parent));
+        private void FireOnColorChange(Color color) => _onColorChange
+            .SelectMany(o => Parent, (o, p) => (o, e: new ColorChangedEvent(color, p)))
+            .Iter(t => t.o.OnNext(t.e));
 
         protected override void Disconnect(ColorPickerButton parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onColorChange != null)
+            _onColorChange.Iter(p =>
             {
                 parent.Disconnect(SignalColorChange, this, nameof(FireOnColorChange));
+                p.DisposeQuietly();
+            });
 
-                _onColorChange.Dispose();
-                _onColorChange = null;
-            }
+            _onColorChange = None;
         }
     }
 }

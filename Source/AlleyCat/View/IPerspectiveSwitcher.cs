@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.View
 {
@@ -10,34 +10,29 @@ namespace AlleyCat.View
     {
         IEnumerable<IPerspectiveView> Perspectives { get; }
 
-        IPerspectiveView Perspective { get; set; }
+        Option<IPerspectiveView> Perspective { get; set; }
 
-        IObservable<IPerspectiveView> OnPerspectiveChange { get; }
+        IObservable<Option<IPerspectiveView>> OnPerspectiveChange { get; }
     }
 
     public static class PerspectiveSwitcherExtensions
     {
-        [CanBeNull]
-        public static T SwitchPerspective<T>([NotNull] this IPerspectiveSwitcher control) where T : IPerspectiveView
+        public static Option<T> SwitchPerspective<T>(this IPerspectiveSwitcher control)
+            where T : IPerspectiveView
         {
-            Ensure.Any.IsNotNull(control, nameof(control));
+            Ensure.That(control, nameof(control)).IsNotNull();
 
-            var perspective = control.Perspectives.OfType<T>().FirstOrDefault(p => p.Valid && !p.Active);
+            var perspective = control.Perspectives.OfType<T>().Find(p => p.Valid && !p.Active);
 
-            if (perspective != null)
-            {
-                control.Perspective = perspective;
-            }
+            perspective.Iter(p => control.Perspective = p);
 
             return perspective;
         }
 
-        [CanBeNull]
-        public static IFirstPersonView SwitchToFirstPerson([NotNull] this IPerspectiveSwitcher control) =>
+        public static Option<IFirstPersonView> SwitchToFirstPerson(this IPerspectiveSwitcher control) =>
             SwitchPerspective<IFirstPersonView>(control);
 
-        [CanBeNull]
-        public static IThirdPersonView SwitchToThirdPerson([NotNull] this IPerspectiveSwitcher control) =>
+        public static Option<IThirdPersonView> SwitchToThirdPerson(this IPerspectiveSwitcher control) =>
             SwitchPerspective<IThirdPersonView>(control);
     }
 }

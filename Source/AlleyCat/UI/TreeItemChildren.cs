@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
-    public struct TreeItemChildren : IEnumerable<TreeItem>, IEnumerator<TreeItem>
+    internal struct TreeItemChildren : IEnumerable<TreeItem>, IEnumerator<TreeItem>
     {
         public TreeItem Current { get; private set; }
 
@@ -20,9 +19,9 @@ namespace AlleyCat.UI
 
         private bool _initial;
 
-        public TreeItemChildren([NotNull] TreeItem parent)
+        public TreeItemChildren(TreeItem parent)
         {
-            Ensure.Any.IsNotNull(parent, nameof(parent));
+            Ensure.That(parent, nameof(parent)).IsNotNull();
 
             _parent = parent;
 
@@ -51,7 +50,11 @@ namespace AlleyCat.UI
 
     public static class TreeItemExtensions
     {
-        [NotNull]
-        public static IEnumerable<TreeItem> Children([NotNull] this TreeItem parent) => new TreeItemChildren(parent);
+        public static IEnumerable<TreeItem> Children(this TreeItem parent)
+        {
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+
+            return new TreeItemChildren(parent);
+        }
     }
 }

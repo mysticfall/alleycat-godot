@@ -117,6 +117,7 @@
     <Compile Include="Source\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\NodeProcessor.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\OptionalHelper.cs" />
     <Compile Include="Source\AlleyCat\Autowire\PostConstructAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\PostConstructAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\PostConstructAttributeProcessorFactory.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IdentifiableDirectory.cs" />
+    <Compile Include="Source\AlleyCat\Common\IDescribable.cs" />
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Source\AlleyCat\Common\ITransformable.cs" />
     <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
     <Compile Include="Source\AlleyCat\Common\Marker.cs" />
+    <Compile Include="Source\AlleyCat\Common\MeshInstanceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\INodeProcessor.cs" />
@@ -238,15 +241,12 @@
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />
     <Compile Include="Source\AlleyCat\Game\ISceneManager.cs" />
     <Compile Include="Source\AlleyCat\Game\Scene.cs" />
-    <Compile Include="Source\AlleyCat\IO\DictionaryState.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryContents.cs" />
     <Compile Include="Source\AlleyCat\IO\FileEnumerator.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryInfo.cs" />
     <Compile Include="Source\AlleyCat\IO\FileInfo.cs" />
     <Compile Include="Source\AlleyCat\IO\FileProvider.cs" />
     <Compile Include="Source\AlleyCat\IO\FileStream.cs" />
-    <Compile Include="Source\AlleyCat\IO\IState.cs" />
-    <Compile Include="Source\AlleyCat\IO\IStateHolder.cs" />
     <Compile Include="Source\AlleyCat\IO\IWritableFileInfo.cs" />
     <Compile Include="Source\AlleyCat\Item\AttachedConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\CommonEquipmentTags.cs" />
@@ -371,6 +371,8 @@
     <PackageReference Include="Ensure.That" Version="8.0.0" />
     <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory" Version="4.0.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="LanguageExt.Core" Version="3.0.31" />
+    <PackageReference Include="LanguageExt.Rx" Version="3.0.31" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
@@ -381,6 +383,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.1.1" />
     <PackageReference Include="OptimizedPriorityQueue" Version="4.1.1" />
+    <PackageReference Include="System.Reactive" Version="4.1.2" />
+    <PackageReference Include="System.Reactive.Core" Version="4.1.2" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="4.1.2" />
+    <PackageReference Include="System.Reactive.Linq" Version="4.1.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />

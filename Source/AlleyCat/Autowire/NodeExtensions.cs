@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Reflection;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -11,14 +12,16 @@ namespace AlleyCat.Autowire
     {
         private static readonly IMemoryCache AttributeCache = new MemoryCache(new MemoryCacheOptions());
 
-        [NotNull]
-        public static IAutowireContext GetRootContext([NotNull] this Node node) =>
-            AutowireContext.GetOrCreate(node.GetTree().Root);
-
-        [NotNull]
-        public static IAutowireContext GetAutowireContext([NotNull] this Node node)
+        public static IAutowireContext GetRootContext(this Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return AutowireContext.GetOrCreate(node.GetTree().Root);
+        }
+
+        public static IAutowireContext GetAutowireContext(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
 
             var current = node;
 
@@ -40,15 +43,15 @@ namespace AlleyCat.Autowire
             return GetRootContext(node);
         }
 
-        public static void Autowire([NotNull] this Node node, IAutowireContext context = null)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
+        public static void Autowire(this Node node) => Autowire(node, None);
 
-            if (!((context ?? GetAutowireContext(node)) is AutowireContext target))
-            {
-                throw new InvalidOperationException(
-                    $"No AutowireContext found for node: '{node.Name}'.");
-            }
+        internal static void Autowire(this Node node, Option<AutowireContext> context)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            var target = context.IfNone((AutowireContext) GetAutowireContext(node));
+
+            Debug.Assert(target != null, "target != null");
 
             target.Register(node);
 

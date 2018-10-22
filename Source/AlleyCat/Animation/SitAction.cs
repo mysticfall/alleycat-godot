@@ -1,12 +1,17 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using static AlleyCat.Animation.SitState;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -14,148 +19,191 @@ namespace AlleyCat.Animation
     {
         public override bool Valid => base.Valid && _valid;
 
-        [Export, UsedImplicitly]
-        public Godot.Animation SittingDownAnimation { get; private set; }
+        public Option<Godot.Animation> SittingDownAnimation
+        {
+            get => Optional(_sittingDownAnimation);
+            set => _sittingDownAnimation = value.ValueUnsafe();
+        }
 
-        [Export, UsedImplicitly]
-        public Godot.Animation Animation { get; private set; }
+        public Godot.Animation Animation
+        {
+            get => Some(_animation).Head();
+            set
+            {
+                Ensure.That(value, nameof(value)).IsNotNull();
 
-        [Export, UsedImplicitly]
-        public Godot.Animation GettingUpAnimation { get; private set; }
+                _animation = value;
+            }
+        }
 
-        [Export]
-        protected string StatesPath { get; private set; } = "States";
+        public Option<Godot.Animation> GettingUpAnimation
+        {
+            get => Optional(_gettingUpAnimation);
+            set => _gettingUpAnimation = value.ValueUnsafe();
+        }
 
-        [Export]
-        protected string SubStatesPath { get; private set; } = "States/Seated";
+        protected string StatesPath => _statesPath.TrimToOption().Head();
 
-        [Export]
-        protected string IdleState { get; private set; } = "Idle";
+        protected string SubStatesPath => _subStatesPath.TrimToOption().Head();
 
-        [Export]
-        protected string EnterState { get; private set; } = "Sitting Down";
+        protected string IdleState => _idleState.TrimToOption().Head();
 
-        [Export]
-        protected string State { get; private set; } = "Seated";
+        protected string EnterState => _enterState.TrimToOption().Head();
 
-        [Export]
-        protected string ExitState { get; private set; } = "Getting Up";
+        protected string State => _state.TrimToOption().Head();
 
-        [Export]
-        protected string EnterAnimatorPath { get; private set; } = "States/Seated/Sitting Down";
+        protected string ExitState => _exitState.TrimToOption().Head();
 
-        [Export]
-        protected string AnimatorPath { get; private set; } = "States/Seated/Seated/Sit";
+        protected string EnterAnimatorPath => _enterAnimatorPath.TrimToOption().Head();
 
-        [Export]
-        protected string ExitAnimatorPath { get; private set; } = "States/Seated/Getting Up";
+        protected string AnimatorPath => _animatorPath.TrimToOption().Head();
+
+        protected string ExitAnimatorPath => _exitAnimatorPath.TrimToOption().Head();
+
+        [Export, UsedImplicitly] private Godot.Animation _sittingDownAnimation;
+
+        [Export, UsedImplicitly] private Godot.Animation _animation;
+
+        [Export, UsedImplicitly] private Godot.Animation _gettingUpAnimation;
+
+        [Export, UsedImplicitly] private string _statesPath = "States";
+
+        [Export, UsedImplicitly] private string _subStatesPath = "States/Seated";
+
+        [Export, UsedImplicitly] private string _idleState = "Idle";
+
+        [Export, UsedImplicitly] private string _enterState = "Sitting Down";
+
+        [Export, UsedImplicitly] private string _state = "Seated";
+
+        [Export, UsedImplicitly] private string _exitState = "Getting Up";
+
+        [Export, UsedImplicitly] private string _enterAnimatorPath = "States/Seated/Sitting Down";
+
+        [Export, UsedImplicitly] private string _animatorPath = "States/Seated/Seated/Sit";
+
+        [Export, UsedImplicitly] private string _exitAnimatorPath = "States/Seated/Getting Up";
 
         private bool _valid;
 
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            _valid = !string.IsNullOrEmpty(IdleState) &&
-                     !string.IsNullOrEmpty(EnterState) &&
-                     !string.IsNullOrEmpty(State) &&
-                     !string.IsNullOrEmpty(ExitState) &&
-                     !string.IsNullOrEmpty(StatesPath) &&
-                     !string.IsNullOrEmpty(SubStatesPath) &&
-                     !string.IsNullOrEmpty(EnterAnimatorPath) &&
-                     !string.IsNullOrEmpty(AnimatorPath) &&
-                     !string.IsNullOrEmpty(ExitAnimatorPath);
+            _valid = StatesPath != null &&
+                     SubStatesPath != null &&
+                     IdleState != null &&
+                     EnterState != null &&
+                     State != null &&
+                     ExitState != null &&
+                     EnterAnimatorPath != null &&
+                     AnimatorPath != null &&
+                     ExitAnimatorPath != null;
         }
 
         protected override void DoExecute(IActionContext context)
         {
-            var animatable = (IAnimatable) context.Actor;
-            var manager = (IAnimationStateManager) animatable?.AnimationManager;
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            if (manager == null) return;
+            Debug.Assert(Valid, "Valid");
 
-            var states = manager.GetStates(StatesPath);
-            var subStates = manager.GetStates(SubStatesPath);
+            var manager = context.Actor.Bind(GetAnimationStateManager);
 
-            if (states == null || subStates == null)
+            var states = manager.Bind(m => m.FindStates(StatesPath));
+            var subStates = manager.Bind(m => m.FindStates(SubStatesPath));
+
+            if (states.IsNone || subStates.IsNone)
             {
                 throw new ArgumentException("The specified actor does not support sit action.");
             }
 
-            var enterControl = manager.GetAnimator(EnterAnimatorPath);
-            var control = manager.GetAnimator(AnimatorPath);
-            var exitControl = manager.GetAnimator(ExitAnimatorPath);
+            var enterControl = manager.Bind(m => m.FindAnimator(EnterAnimatorPath));
+            var control = manager.Bind(m => m.FindAnimator(AnimatorPath));
+            var exitControl = manager.Bind(m => m.FindAnimator(ExitAnimatorPath));
 
-            if (enterControl == null || control == null || exitControl == null)
+            if (enterControl.IsNone || control.IsNone || exitControl.IsNone)
             {
                 throw new ArgumentException("Unable to find suitable controls for sit animations.");
             }
 
-            var current = states.State;
+            var current = states.Map(s => s.State);
 
-            if (current == IdleState)
+            if (current.Contains(IdleState))
             {
-                enterControl.Animation = SittingDownAnimation;
-                control.Animation = Animation;
-                exitControl.Animation = GettingUpAnimation;
+                UpdateAnimations();
 
-                states.State = State;
+                states.Iter(s => s.State = State);
             }
-            else if (current == State && subStates.State == State)
+            else if (current.Contains(State) && subStates.Exists(s => s.State == State))
             {
-                if (control.Animation == Animation)
+                if (control.Exists(c => c.Animation.Contains(Animation)))
                 {
-                    subStates.State = ExitState;
+                    subStates.Iter(s => s.State = ExitState);
 
                     //FIXME A temporary workaround for godotengine/godot#22389
-                    states.State = IdleState;
+                    states.Iter(s => s.State = IdleState);
                 }
                 else
                 {
-                    enterControl.Animation = SittingDownAnimation;
-                    control.Animation = Animation;
-                    exitControl.Animation = GettingUpAnimation;
+                    UpdateAnimations();
                 }
             }
-        }
 
-        public SitState GetSitState<T>([NotNull] T actor) where T : class, IActor, IAnimatable
-        {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
-
-            var animator = actor.AnimationManager as IAnimationStateManager;
-            var states = animator?.GetStates(SubStatesPath);
-
-            if (states == null)
+            void UpdateAnimations()
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(actor),
-                    "The specified actor does not support sit action.");
+                enterControl.Iter(c => c.Animation = SittingDownAnimation);
+                control.Iter(c => c.Animation = Animation);
+                exitControl.Iter(c => c.Animation = GettingUpAnimation);
             }
-
-            return GetStateEnum(states.State);
         }
 
-        public IObservable<SitState> OnSitStateChange<T>([NotNull] T actor)
+        private Option<IAnimationStateManager> GetAnimationStateManager(IActor actor)
+        {
+            Debug.Assert(actor != null, "actor != null");
+
+            return Optional(actor)
+                .OfType<IAnimatable>()
+                .Map(a => a.AnimationManager)
+                .OfType<IAnimationStateManager>()
+                .HeadOrNone();
+        }
+
+        public SitState GetSitState<T>(T actor) where T : class, IActor, IAnimatable
+        {
+            Ensure.That(actor, nameof(actor)).IsNotNull();
+
+            var animator = GetAnimationStateManager(actor);
+            var state = animator.Bind(a => a.FindStates(SubStatesPath)).Map(s => s.State);
+
+            return state.Map(GetStateEnum).Match(v => v,
+                () => throw new ArgumentOutOfRangeException(
+                    nameof(actor),
+                    "The specified actor does not support sit action.")
+            );
+        }
+
+        public IObservable<SitState> OnSitStateChange<T>(T actor)
             where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var animator = actor.AnimationManager as IAnimationStateManager;
-            var states = animator?.GetStates(SubStatesPath);
+            var animator = GetAnimationStateManager(actor);
+            var states = animator
+                .Bind(a => a.FindStates(SubStatesPath))
+                .Map(s => s.OnStateChange.Select(GetStateEnum));
 
-            if (states == null)
-            {
-                throw new ArgumentOutOfRangeException(
+            return states.Match(identity,
+                () => throw new ArgumentOutOfRangeException(
                     nameof(actor),
-                    "The specified actor does not support sit action.");
-            }
-
-            return states.OnStateChange.Select(GetStateEnum);
+                    "The specified actor does not support sit action.")
+            );
         }
 
-        public override bool AllowedFor(IActionContext context) =>
-            context?.Actor is IAnimatable animatable &&
-            animatable.AnimationManager is IAnimationStateManager;
+        public override bool AllowedFor(IActionContext context)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            return context.Actor.Bind(GetAnimationStateManager).IsSome;
+        }
 
         private SitState GetStateEnum(string state)
         {
@@ -171,93 +219,82 @@ namespace AlleyCat.Animation
     {
         public static SitState GetSitState<T>(this T actor) where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is SitAction);
+            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
 
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException(
+            return action.Map(a => a.GetSitState(actor)).Match(v => v,
+                () => throw new ArgumentOutOfRangeException(
                     nameof(actor),
-                    "The specified actor does not support sit action.");
-            }
-
-            return ((SitAction) action).GetSitState(actor);
+                    "The specified actor does not support sit action."));
         }
 
         public static IObservable<SitState> OnSitStateChange<T>(this T actor)
             where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is SitAction);
+            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
 
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException(
+            return action.Map(a => a.OnSitStateChange(actor)).Match(v => v,
+                () => throw new ArgumentOutOfRangeException(
                     nameof(actor),
-                    "The specified actor does not support sit action.");
-            }
-
-            return ((SitAction) action).OnSitStateChange(actor);
+                    "The specified actor does not support sit action."));
         }
 
         public static void ToggleSitState<T>(this T actor) where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is SitAction);
+            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
 
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException(
+            action.Match(
+                a => a.Execute(new ActionContext(actor)),
+                () => throw new ArgumentOutOfRangeException(
                     nameof(actor),
-                    "The specified actor does not support sit action.");
-            }
-
-            action.Execute(new ActionContext(actor));
+                    "The specified actor does not support sit action."));
         }
 
         public static void Sit<T>(this T actor) where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is SitAction);
+            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
 
-            if (action == null)
+            if (action.IsNone)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(actor),
                     "The specified actor does not support sit action.");
             }
 
-            var state = ((SitAction) action).GetSitState(actor);
+            var state = action.Map(a => a.GetSitState(actor));
 
-            if (state == Standing || state == GettingUp)
-            {
-                action.Execute(new ActionContext(actor));
-            }
+            (from a in action
+                from s in state
+                where s == Standing || s == GettingUp
+                select a).Iter(a => a.Execute(new ActionContext(actor)));
         }
 
         public static void GetUp<T>(this T actor) where T : class, IActor, IAnimatable
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is SitAction);
+            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
 
-            if (action == null)
+            if (action.IsNone)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(actor),
                     "The specified actor does not support sit action.");
             }
 
-            var state = ((SitAction) action).GetSitState(actor);
+            var state = action.Map(a => a.GetSitState(actor));
 
-            if (state == Seated || state == SittingDown)
-            {
-                action.Execute(new ActionContext(actor));
-            }
+            (from a in action
+                from s in state
+                where s == Seated || s == SittingDown
+                select a).Iter(a => a.Execute(new ActionContext(actor)));
         }
     }
 }

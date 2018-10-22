@@ -1,5 +1,4 @@
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
@@ -15,10 +14,8 @@ namespace AlleyCat.UI.Console
 
         Color ErrorColor { get; }
 
-        [NotNull]
-        IConsole Write([NotNull] string text, TextStyle style);
+        IConsole Write(string text, TextStyle style);
 
-        [NotNull]
         IConsole NewLine();
 
         void Clear();

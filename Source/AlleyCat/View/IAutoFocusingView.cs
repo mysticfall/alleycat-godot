@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.View
 {
@@ -15,9 +14,9 @@ namespace AlleyCat.View
 
     public static class ViewExtensions
     {
-        public static void EnableDof([NotNull] this IAutoFocusingView view, bool enable = true)
+        public static void EnableDof(this IAutoFocusingView view, bool enable = true)
         {
-            Ensure.Any.IsNotNull(view, nameof(view));
+            Ensure.That(view, nameof(view)).IsNotNull();
 
             var env = view.Camera.GetWorld().Environment;
 
@@ -27,23 +26,25 @@ namespace AlleyCat.View
             env.DofBlurFarEnabled = enable;
         }
 
-        public static void DisableDof([NotNull] this IAutoFocusingView view) => EnableDof(view, false);
+        public static void DisableDof(this IAutoFocusingView view) => EnableDof(view, false);
 
-        public static void SetFocalDistance([NotNull] this IAutoFocusingView view, float distance)
+        public static void SetFocalDistance(this IAutoFocusingView view, float distance)
         {
-            Ensure.Any.IsNotNull(view, nameof(view));
+            Ensure.That(view, nameof(view)).IsNotNull();
 
             var env = view.Camera.GetWorld().Environment;
 
             if (env == null) return;
 
+            var effective = Mathf.Max(0, distance);
+
             env.DofBlurNearEnabled = true;
-            env.DofBlurFarEnabled = distance <= view.MaxDofDistance;
+            env.DofBlurFarEnabled = effective <= view.MaxDofDistance;
 
             var offset = view.FocusRange / 2f;
 
-            env.DofBlurNearDistance = Mathf.Clamp(distance - offset, 0, view.MaxDofDistance);
-            env.DofBlurFarDistance = distance + offset;
+            env.DofBlurNearDistance = Mathf.Clamp(effective - offset, 0, view.MaxDofDistance);
+            env.DofBlurFarDistance = effective + offset;
         }
     }
 }

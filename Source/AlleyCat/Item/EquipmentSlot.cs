@@ -1,6 +1,6 @@
 using System;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Item
 {
@@ -9,12 +9,16 @@ namespace AlleyCat.Item
         [Export]
         public EquipType EquipType { get; set; }
 
-        public virtual Node GetParent([NotNull] IEquipmentHolder holder)
+        public virtual Node GetParent(IEquipmentHolder holder)
         {
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+
             switch (EquipType)
             {
                 case EquipType.Attachment:
-                    return holder.Markers[Key];
+                    return holder.Markers.Find(Key).Match(v => v, () =>
+                        throw new ArgumentOutOfRangeException(nameof(holder),
+                            $"The specified equipment holder does not contain slot '{Key}'."));
                 case EquipType.Rigged:
                     return holder.Skeleton;
                 default:

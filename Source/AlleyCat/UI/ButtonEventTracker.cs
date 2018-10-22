@@ -1,9 +1,11 @@
 using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -11,40 +13,39 @@ namespace AlleyCat.UI
     {
         private const string SignalItemSelect = "pressed";
 
-        [NotNull]
         public IObservable<ButtonPressedEvent> OnPressed
         {
             get
             {
-                if (_onPressed == null)
+                if (_onPressed.IsNone)
                 {
-                    Parent.Connect(SignalItemSelect, this, nameof(FireOnPress));
+                    Parent.Iter(p => p.Connect(SignalItemSelect, this, nameof(FireOnPress)));
 
                     _onPressed = new Subject<ButtonPressedEvent>();
                 }
 
-                return _onPressed;
+                return _onPressed.Head();
             }
         }
 
-        private Subject<ButtonPressedEvent> _onPressed;
+        private Option<Subject<ButtonPressedEvent>> _onPressed = None;
 
         [UsedImplicitly]
-        private void FireOnPress() => _onPressed?.OnNext(new ButtonPressedEvent(Parent));
+        private void FireOnPress() => _onPressed
+            .SelectMany(o => Parent, (o, p) => (o, e: new ButtonPressedEvent(p)))
+            .Iter(t => t.o.OnNext(t.e));
 
         protected override void Disconnect(Button parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onPressed != null)
+            _onPressed.Iter(p =>
             {
                 parent.Disconnect(SignalItemSelect, this, nameof(FireOnPress));
+                p.DisposeQuietly();
+            });
 
-                _onPressed.Dispose();
-                _onPressed = null;
-            }
+            _onPressed = None;
         }
     }
 }

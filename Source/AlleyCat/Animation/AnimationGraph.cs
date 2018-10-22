@@ -1,11 +1,13 @@
-using System.Collections.Generic;
+using System;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public abstract class AnimationGraph : IAnimationGraph
+    public abstract class AnimationGraph : IAnimationGraph, IDisposableCollector
     {
         public string Path { get; }
 
@@ -13,76 +15,75 @@ namespace AlleyCat.Animation
 
         protected AnimationGraphContext Context { get; }
 
-        private readonly IDictionary<string, IAnimationGraph> _children;
+        private Map<string, IAnimationGraph> _children = Map<string, IAnimationGraph>();
 
-        private readonly IDictionary<string, IAnimationControl> _controls;
+        private Map<string, IAnimationControl> _controls = Map<string, IAnimationControl>();
 
-        protected AnimationGraph(
-            [NotNull] string path,
-            [NotNull] AnimationRootNode root,
-            [NotNull] AnimationGraphContext context)
+        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
+
+        protected AnimationGraph(string path, AnimationRootNode root, AnimationGraphContext context)
         {
-            Ensure.Any.IsNotNull(path, nameof(path));
-            Ensure.Any.IsNotNull(root, nameof(root));
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(path, nameof(path)).IsNotNull();
+            Ensure.That(root, nameof(root)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             Path = path;
             Root = root;
             Context = context;
-
-            _children = new Dictionary<string, IAnimationGraph>();
-            _controls = new Dictionary<string, IAnimationControl>();
         }
 
-        public abstract AnimationNode GetAnimationNode(string name);
+        public abstract Option<AnimationNode> FindAnimationNode(string name);
 
-        public IAnimationGraph GetGraph(string name)
+        public Option<IAnimationGraph> FindGraph(string name)
         {
-            IAnimationGraph child;
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            if (!_children.ContainsKey(name))
-            {
-                child = Context.GraphFactory.Create(name, this, Context);
+            var result = _children.Find(name);
 
-                _children.Add(name, child);
-            }
-            else
-            {
-                _children.TryGetValue(name, out child);
-            }
+            if (result) return result;
 
-            return child;
+            result = Context.GraphFactory.TryCreate(name, this, Context);
+
+            result.Iter(c => _children = _children.Add(name, c));
+
+            return result;
         }
 
-        public IAnimationControl GetControl(string name)
+        public Option<IAnimationControl> FindControl(string name)
         {
-            IAnimationControl control;
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            if (!_controls.ContainsKey(name))
+            var result = _controls.Find(name);
+
+            if (result) return result;
+
+            result = Context.ControlFactory.TryCreate(name, this, Context);
+
+            result.Iter(c =>
             {
-                control = Context.ControlFactory.Create(name, this, Context);
+                _controls = _controls.Add(name, c);
+            });
 
-                _controls.Add(name, control);
-            }
-            else
-            {
-                _controls.TryGetValue(name, out control);
-            }
+            return result;
+        }
 
-            return control;
+        public void Collect(IDisposable disposable)
+        {
+            Ensure.That(disposable, nameof(disposable)).IsNotNull();
+
+            _disposables += disposable;
         }
 
         public virtual void Dispose()
         {
-            foreach (var child in _children.Values)
-            {
-                child?.Dispose();
-            }
+            _children.Values.Iter(c => c.DisposeQuietly());
+            _children = _children.Clear();
 
-            foreach (var control in _controls.Values)
-            {
-                control?.Dispose();
-            }
+            _controls.Values.Iter(c => c.DisposeQuietly());
+            _controls = _controls.Clear();
+
+            _disposables.Iter(d => d.DisposeQuietly());
+            _disposables = _disposables.Clear();
         }
     }
 }

@@ -1,18 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using AlleyCat.Common;
 
 namespace AlleyCat.UI.Console
 {
-    public interface IConsoleCommand
+    public interface IConsoleCommand : IIdentifiable, IDescribable
     {
-        [NotNull]
-        string Key { get; }
-
-        [NotNull]
-        string Description { get; }
-
         ICommandConsole Console { get; }
 
-        void Execute([CanBeNull] string[] args);
+        void Execute(params string[] args);
 
         void DisplayUsage();
     }

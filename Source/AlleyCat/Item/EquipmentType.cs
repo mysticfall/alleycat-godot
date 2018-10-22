@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Item
 {
@@ -14,9 +13,9 @@ namespace AlleyCat.Item
 
     public static class EquipmentTypeExtensions
     {
-        public static string DisplayName(this EquipmentType type, [NotNull] Node context)
+        public static string DisplayName(this EquipmentType type, Node context)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             return context.Tr("equipment.type." + type);
         }

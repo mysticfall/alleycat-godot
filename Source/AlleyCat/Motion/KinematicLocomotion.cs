@@ -3,7 +3,9 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Setting.Project;
 using Godot;
+using LanguageExt;
 using Microsoft.Extensions.Options;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -18,9 +20,9 @@ namespace AlleyCat.Motion
         [Export]
         public bool ApplyGravity { get; set; } = true;
 
-        public Physics3DSettings Physics3DSettings => _settings?.Value;
+        public Physics3DSettings Physics3DSettings => _settings.Map(s=> s.Value).Head();
 
-        [Service] private IOptions<Physics3DSettings> _settings;
+        [Service] private Option<IOptions<Physics3DSettings>> _settings = None;
 
         protected KinematicLocomotion()
         {

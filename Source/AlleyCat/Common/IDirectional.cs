@@ -1,6 +1,5 @@
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -17,11 +16,12 @@ namespace AlleyCat.Common
 
     public static class DirectionalExtensions
     {
-        public static Transform GetTransform([NotNull] this IDirectional directional)
+        public static Transform GetTransform(this IDirectional directional)
         {
-            Ensure.Any.IsNotNull(directional, nameof(directional));
+            Ensure.That(directional, nameof(directional)).IsNotNull();
 
-            var basis = BasisExtensions.CreateFromAxes(directional.Right, directional.Up, directional.Forward * -1);
+            var basis = BasisExtensions.CreateFromAxes(
+                directional.Right, directional.Up, directional.Forward * -1);
 
             return new Transform(basis, directional.Origin);
         }

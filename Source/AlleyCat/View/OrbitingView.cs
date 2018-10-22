@@ -5,28 +5,36 @@ using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Motion;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
 {
     public abstract class OrbitingView : Orbiter, IView
     {
-        [Node(required: false)]
-        public virtual Camera Camera { get; private set; }
+        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
 
         public override Spatial Target => Camera;
 
-        public override bool Valid => base.Valid && Camera != null && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Camera.IsCurrent();
 
-        protected virtual IObservable<Vector2> RotationInput => _rotationInput.AsVector2Input().Where(_ => Valid);
+        protected virtual IObservable<Vector2> RotationInput => _rotationInput
+            .Bind(i => i.AsVector2Input())
+            .MatchObservable(identity, Observable.Empty<Vector2>)
+            .Where(_ => Valid);
 
-        protected virtual IObservable<float> ZoomInput => _zoomInput.GetAxis().Where(_ => Valid);
+        protected virtual IObservable<float> ZoomInput => _zoomInput
+            .Bind(i => i.FindAxis())
+            .MatchObservable(identity, Observable.Empty<float>)
+            .Where(_ => Valid);
 
-        [Export, UsedImplicitly] private NodePath _cameraPath;
+        [Node(false)] private Option<Camera> _camera = None;
 
-        [Node("Rotation")] private InputBindings _rotationInput;
+        [Export] private NodePath _cameraPath;
 
-        [Node("Zoom")] private InputBindings _zoomInput;
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
+
+        [Node("Zoom", false)] private Option<InputBindings> _zoomInput = None;
 
         protected OrbitingView()
         {
@@ -43,11 +51,9 @@ namespace AlleyCat.View
         {
             base.OnInitialize();
 
-            Camera = Camera ?? GetViewport().GetCamera();
-
             OnActiveStateChange
-                .Do(v => _rotationInput.Active = v)
-                .Do(v => _zoomInput.Active = v)
+                .Do(v => _rotationInput.Iter(i => i.Active = v))
+                .Do(v => _zoomInput.Iter(i => i.Active = v))
                 .Subscribe()
                 .AddTo(this);
 

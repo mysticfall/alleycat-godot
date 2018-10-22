@@ -1,14 +1,14 @@
 ﻿using System.Text;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Console
 {
     public struct TextStyle
     {
-        [CanBeNull]
-        public Color? Color { get; }
+        public Option<Color> Color { get; }
 
         public bool Italics { get; }
 
@@ -17,7 +17,14 @@ namespace AlleyCat.UI.Console
         public bool Underline { get; }
 
         public TextStyle(
-            [CanBeNull] Color? color = null,
+            bool italics = false,
+            bool bold = false,
+            bool underline = false) : this(None, italics, bold, underline)
+        {
+        }
+
+        public TextStyle(
+            Option<Color> color,
             bool italics = false,
             bool bold = false,
             bool underline = false)
@@ -30,7 +37,7 @@ namespace AlleyCat.UI.Console
 
         public TextStyle WithColor(Color color) => new TextStyle(color, Italics, Bold, Underline);
 
-        public TextStyle WithoutColor() => new TextStyle(null, Italics, Bold, Underline);
+        public TextStyle WithoutColor() => new TextStyle(None, Italics, Bold, Underline);
 
         public TextStyle WithItalics() => new TextStyle(Color, true, Bold, Underline);
 
@@ -44,12 +51,13 @@ namespace AlleyCat.UI.Console
 
         public TextStyle WithoutUnderline() => new TextStyle(Color, Italics, Bold);
 
-        public void Write([NotNull] string text, [NotNull] RichTextLabel label)
+        public void Write(string text, RichTextLabel label)
         {
-            Ensure.Any.IsNotNull(text, nameof(text));
-            Ensure.Any.IsNotNull(label, nameof(label));
+            Ensure.That(text, nameof(text)).IsNotNull();
+            Ensure.That(label, nameof(label)).IsNotNull();
 
-            if (Color.HasValue) label.PushColor(Color.Value);
+            Color.Iter(label.PushColor);
+
             if (Underline) label.PushUnderline();
 
             if (Bold || Italics)
@@ -71,7 +79,7 @@ namespace AlleyCat.UI.Console
                 label.AddText(text);
             }
 
-            if (Color.HasValue || Underline) label.Pop();
+            if (Color.IsSome || Underline) label.Pop();
         }
     }
 }

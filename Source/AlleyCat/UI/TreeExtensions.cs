@@ -1,9 +1,7 @@
 using System;
-using System.Diagnostics;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -11,16 +9,11 @@ namespace AlleyCat.UI
     {
         private const string NodeName = "TreeEventTracker";
 
-        [NotNull]
-        public static IObservable<TreeItemSelectedEvent> OnItemSelect([NotNull] this Tree tree)
+        public static IObservable<TreeItemSelectedEvent> OnItemSelect(this Tree tree)
         {
-            Ensure.Any.IsNotNull(tree, nameof(tree));
+            Ensure.That(tree, nameof(tree)).IsNotNull();
 
-            var tracker = tree.GetOrCreateNode(NodeName, _ => new TreeEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnItemSelect;
+            return tree.GetComponent(NodeName, _ => new TreeEventTracker()).OnItemSelect;
         }
     }
 }

@@ -10,6 +10,8 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Console
 {
@@ -23,7 +25,11 @@ namespace AlleyCat.UI.Console
         public const string HideAnimation = "Hide";
 
         [Export]
-        public int BufferSize { get; set; } = 300;
+        public int BufferSize
+        {
+            get => _bufferSize;
+            set => _bufferSize = Mathf.Max(1, value);
+        }
 
         public Color TextColor => GetColor("info", ThemeType);
 
@@ -35,25 +41,26 @@ namespace AlleyCat.UI.Console
 
         public IEnumerable<IConsoleCommand> SupportedCommands => _commandMap.Values;
 
-        [Node("Container/Content")]
-        protected RichTextLabel Content { get; private set; }
+        protected RichTextLabel Content => _content.Head();
 
-        [Node("Container/InputPane/Input")]
-        protected LineEdit InputField { get; private set; }
+        protected LineEdit InputField => _inputField.Head();
 
-        [Node("AnimationPlayer")]
-        protected AnimationPlayer Player { get; private set; }
+        protected AnimationPlayer Player => _player.Head();
 
-        [Service] private IEnumerable<IConsoleCommandProvider> _providers;
+        [Service] private IEnumerable<IConsoleCommandProvider> _providers =
+            Enumerable.Empty<IConsoleCommandProvider>();
 
-        private readonly IDictionary<string, IConsoleCommand> _commandMap;
+        [Node("Container/Content")] private Option<RichTextLabel> _content = None;
+
+        [Node("Container/InputPane/Input")] private Option<LineEdit> _inputField = None;
+
+        [Node("AnimationPlayer")] private Option<AnimationPlayer> _player = None;
+
+        private Map<string, IConsoleCommand> _commandMap = Map<string, IConsoleCommand>();
+
+        private int _bufferSize = 300;
 
         private Input.MouseMode _mouseMode;
-
-        public DebugConsole()
-        {
-            _commandMap = new SortedDictionary<string, IConsoleCommand>();
-        }
 
         [PostConstruct]
         private void OnInitialize()
@@ -65,29 +72,25 @@ namespace AlleyCat.UI.Console
 
             var commands = _providers.SelectMany(p => p.CreateCommands(this));
 
-            _commandMap.Clear();
-
-            foreach (var command in commands)
-            {
-                _commandMap.Add(command.Key, command);
-            }
+            _commandMap = toMap(commands.Map(c => (c.Key, c)));
 
             InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
+                .Where(_ => Visible)
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
                 .Subscribe(AutoComplete)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
                 .Subscribe(_ => OnShown())
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
                 .Subscribe(_ => OnHidden())
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             Content.AddColorOverride("default_color", TextColor);
         }
@@ -129,7 +132,7 @@ namespace AlleyCat.UI.Console
 
         public IConsole Write(string text, TextStyle style)
         {
-            Ensure.Any.IsNotNull(text, nameof(text));
+            Ensure.That(text, nameof(text)).IsNotNull();
 
             style.Write(text, Content);
 
@@ -151,26 +154,25 @@ namespace AlleyCat.UI.Console
             Content.Clear();
         }
 
-        public void Execute(string command, string[] arguments = null)
+        public void Execute(string command, params string[] arguments)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(command, nameof(command));
+            Ensure.That(command, nameof(command)).IsNotNull();
 
-            if (_commandMap.TryGetValue(command, out var action))
-            {
-                action.Execute(arguments);
-            }
-            else
-            {
-                var message = string.Format(Tr("console.error.command.invalid"), command);
+            _commandMap.Find(command).Match(
+                action => action.Execute(arguments),
+                () =>
+                {
+                    var message = string.Format(Tr("console.error.command.invalid"), command);
 
-                this.Warning(message).NewLine();
-            }
-
-            NewLine();
+                    this.Warning(message).NewLine();
+                }
+            );
         }
 
         private void AutoComplete(string text)
         {
+            Ensure.That(text, nameof(text)).IsNotNull();
+
             var candidates = SuggestCandidates(text).ToList();
 
             if (candidates.Count == 1)
@@ -190,7 +192,7 @@ namespace AlleyCat.UI.Console
                 var lastSpace = normalized.LastIndexOf(' ');
                 var prefix = lastSpace > 0 ? normalized.Right(lastSpace) : normalized;
 
-                var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim()).ToList();
+                var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim()).Freeze();
 
                 this.Text(Tr("console.suggestions")).Text(": ");
 
@@ -217,7 +219,9 @@ namespace AlleyCat.UI.Console
 
         public IEnumerable<string> SuggestCandidates(string text)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            Ensure.That(text, nameof(text)).IsNotNull();
+
+            if (text.Empty())
             {
                 return SupportedCommands.Select(c => c.Key);
             }
@@ -227,34 +231,35 @@ namespace AlleyCat.UI.Console
                 .Select(s => s.Trim())
                 .ToList();
 
-            var command = segments.FirstOrDefault();
+            var command = segments.HeadOrNone();
 
-            if (command == null || segments.Count < 1)
+            if (command.IsNone)
             {
                 return Enumerable.Empty<string>();
             }
 
-            if (!command.EndsWith(" ") && segments.Count == 1)
+            if (!command.Exists(c => c.EndsWith(" ")) && segments.Count == 1)
             {
-                return SupportedCommands.Where(c => c.Key.StartsWith(command)).Select(c => c.Key);
+                return SupportedCommands
+                    .Where(c => command.Exists(c.Key.StartsWith))
+                    .Select(c => c.Key);
             }
 
-            var arguments = string.Join(" ", segments.Skip(1));
+            var arguments = string.Join(" ", segments.Tail());
 
             return SupportedCommands
-                .Where(c => c.Key == command)
+                .Where(c => command.Contains(c.Key))
                 .OfType<IAutoCompletionSupport>()
-                .SelectMany(c => c.SuggestCandidates(arguments))
-                .Select(s => string.Join(" ", command, s));
+                .Bind(c => c.SuggestCandidates(arguments))
+                .Map(s => string.Join(" ", command.Head(), s));
         }
 
         [UsedImplicitly]
-        protected void OnTextInput([NotNull] string line)
+        protected void OnTextInput(string line)
         {
-            if (string.IsNullOrWhiteSpace(line))
-            {
-                return;
-            }
+            Ensure.That(line, nameof(line)).IsNotNull();
+
+            if (line.Empty()) return;
 
             this.Highlight(line).NewLine().NewLine();
 

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Autowire
 {
     public interface IDependencyConsumer
     {
-        [NotNull]
-        ISet<Type> Requires { get; }
+        HashSet<Type> Requires { get; }
     }
 }

@@ -1,25 +1,24 @@
-using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
     public class SlotConfiguration : AutowiredNode, ISlotConfiguration
     {
-        public string Key => _key ?? Name;
+        public string Key => _key.TrimToOption().IfNone(Name);
 
-        public string Slot => _slot ?? Key;
+        public string Slot => _slot.TrimToOption().IfNone(Key);
 
-        public IEnumerable<string> AdditionalSlots => _additionalSlots;
+        public Set<string> AdditionalSlots => toSet(_additionalSlots);
 
-        public IEnumerable<string> AllSlots => new[] {Slot}.Concat(AdditionalSlots);
+        [Export] private string _key;
 
-        [Export, UsedImplicitly] private string _key;
-
-        [Export, UsedImplicitly] private string _slot;
+        [Export] private string _slot;
 
         [Export, UsedImplicitly] private Array<string> _additionalSlots;
     }

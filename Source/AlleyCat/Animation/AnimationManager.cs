@@ -1,5 +1,4 @@
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
@@ -8,6 +7,8 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -23,8 +24,7 @@ namespace AlleyCat.Animation
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        [Service]
-        public AnimationPlayer Player { get; private set; }
+        public AnimationPlayer Player => (AnimationPlayer) _player;
 
         public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance;
 
@@ -32,17 +32,24 @@ namespace AlleyCat.Animation
 
         public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        [Service] private Option<AnimationPlayer> _player = None;
 
-        private readonly Subject<Unit> _onBeforeAdvance = new Subject<Unit>();
+        private readonly ReactiveProperty<bool> _active;
 
-        private readonly Subject<float> _onAdvance = new Subject<float>();
+        private readonly ISubject<Unit> _onBeforeAdvance;
 
-        private readonly Subject<AnimationEvent> _onAnimationEvent = new Subject<AnimationEvent>();
+        private readonly ISubject<float> _onAdvance;
+
+        private readonly ISubject<AnimationEvent> _onAnimationEvent;
 
         public AnimationManager()
         {
             ProcessMode = ProcessMode.Idle;
+
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _onBeforeAdvance = new Subject<Unit>().AddTo(this);
+            _onAdvance = new Subject<float>().AddTo(this);
+            _onAnimationEvent = new Subject<AnimationEvent>().AddTo(this);
         }
 
         [PostConstruct]
@@ -69,36 +76,20 @@ namespace AlleyCat.Animation
 
         public virtual void Play(Godot.Animation animation)
         {
-            Ensure.Any.IsNotNull(animation, nameof(animation));
+            Ensure.That(animation, nameof(animation)).IsNotNull();
 
-            var name = Player.AddAnimation(animation);
-
-            Player.Play(name);
+            Player.Play(Player.AddAnimation(animation));
         }
 
         [UsedImplicitly]
-        public void FireEvent(string name) => FireEvent(name, null);
+        public void FireEvent(string name) => FireEvent(name, None);
 
         [UsedImplicitly]
-        public void FireEvent(string name, object argument)
+        public void FireEvent(string name, [CanBeNull] object argument)
         {
-            _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
-        }
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-
-            _onBeforeAdvance?.OnCompleted();
-            _onBeforeAdvance?.Dispose();
-
-            _onAdvance?.OnCompleted();
-            _onAdvance?.Dispose();
-
-            _onAnimationEvent?.OnCompleted();
-            _onAnimationEvent?.Dispose();
-
-            base.OnPreDestroy();
+            _onAnimationEvent.OnNext(new AnimationEvent(name, Optional(argument), this));
         }
     }
 }

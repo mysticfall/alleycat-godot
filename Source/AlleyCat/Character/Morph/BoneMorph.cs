@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
@@ -16,36 +16,41 @@ namespace AlleyCat.Character.Morph
 
         protected IEnumerable<int> BoneIndexes { get; }
 
-        private readonly IDisposable _disposable;
-
         public BoneMorph(
-            [NotNull] Skeleton skeleton,
-            [NotNull] IAnimationManager manager,
-            [NotNull] BoneMorphDefinition definition) : base(definition)
+            Skeleton skeleton,
+            IAnimationManager manager,
+            BoneMorphDefinition definition) : base(definition)
         {
-            Ensure.Any.IsNotNull(skeleton, nameof(skeleton));
-            Ensure.Any.IsNotNull(manager, nameof(manager));
+            Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
+            Ensure.That(manager, nameof(manager)).IsNotNull();
 
             Skeleton = skeleton;
             AnimationManager = manager;
 
-            BoneIndexes = definition.Bones.Select(FindBone).ToList();
-
-            _disposable = AnimationManager.OnAdvance.Subscribe(_ => Apply());
-        }
-
-        private int FindBone(string name)
-        {
-            var index = Skeleton.FindBone(name);
-
-            if (index == -1)
+            int FindBone(string name)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(name),
-                    $"The morph '{Definition.Key}' contains a non-existent bone: '{name}'.");
+                var index = Skeleton.FindBone(name);
+
+                if (index == -1)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(name),
+                        $"The morph '{Definition.Key}' contains a non-existent bone: '{name}'.");
+                }
+
+                return index;
             }
 
-            return index;
+            BoneIndexes = definition.Bones.Select(FindBone).Freeze();
+
+            if (!BoneIndexes.Any())
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(definition),
+                    $"The morph '{Definition.Key}' does not have any target bones.");
+            }
+
+            AnimationManager.OnAdvance.Subscribe(_ => Apply()).AddTo(this);
         }
 
         protected override void Apply(float value)
@@ -61,13 +66,6 @@ namespace AlleyCat.Character.Morph
 
                 Skeleton.SetBonePose(index, pose.Scaled(scale));
             }
-        }
-
-        protected override void OnPreDestroy()
-        {
-            _disposable?.Dispose();
-
-            base.OnPreDestroy();
         }
     }
 }

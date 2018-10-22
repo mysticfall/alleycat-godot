@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using EnsureThat;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +22,13 @@ namespace AlleyCat.Setting
                            p[1].ParameterType == typeof(IConfiguration);
                 }).Single();
 
-        public static void Configure(object source, object target, Type type) =>
+        public static void Configure(object source, object target, Type type)
+        {
+            Ensure.That(source, nameof(source)).IsNotNull();
+            Ensure.That(target, nameof(target)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
             ConfigureMethod.MakeGenericMethod(type).Invoke(null, new[] {source, target});
+        }
     }
 }

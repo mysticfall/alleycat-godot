@@ -1,34 +1,29 @@
 using System;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
     public static class ResourceExtensions
     {
-        [NotNull]
-        public static String GetKey([NotNull] this Resource resource)
+        public static string GetKey(this Resource resource)
         {
-            Ensure.Any.IsNotNull(resource, nameof(resource));
+            Ensure.That(resource, nameof(resource)).IsNotNull();
 
-            var name = resource.ResourceName.TrimToNull();
-
-            if (name != null) return name;
-
-            var path = resource.ResourcePath;
-
-            if (path == null)
+            return resource.ResourceName.TrimToOption().IfNone(() =>
             {
-                throw new ArgumentException("The specified resource doesn't have a name or path.");
-            }
+                var path = resource.ResourcePath;
 
-            var start = path.LastIndexOf('/') + 1;
-            var end = path.LastIndexOf('.');
+                if (path == null)
+                {
+                    throw new ArgumentException("The specified resource doesn't have a name or path.");
+                }
 
-            name = end != -1 ? path.Substring(start, end - start) : path.Substring(start);
+                var start = path.LastIndexOf('/') + 1;
+                var end = path.LastIndexOf('.');
 
-            return name;
+                return end != -1 ? path.Substring(start, end - start) : path.Substring(start);
+            });
         }
     }
 }

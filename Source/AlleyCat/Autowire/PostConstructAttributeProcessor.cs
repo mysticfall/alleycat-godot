@@ -2,31 +2,28 @@
 using System.Runtime.ExceptionServices;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
     public class PostConstructAttributeProcessor : AttributeProcessor<PostConstructAttribute>
     {
-        [NotNull]
         public MethodInfo Method { get; }
 
         public override AutowirePhase ProcessPhase =>
             Attribute.Deferred ? AutowirePhase.Deferred : AutowirePhase.PostConstruct;
 
         public PostConstructAttributeProcessor(
-            [NotNull] MethodInfo method, [NotNull] PostConstructAttribute attribute)
-            : base(attribute)
+            MethodInfo method, PostConstructAttribute attribute) : base(attribute)
         {
-            Ensure.Any.IsNotNull(method, nameof(method));
+            Ensure.That(method, nameof(method)).IsNotNull();
 
             Method = method;
         }
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
             try
             {

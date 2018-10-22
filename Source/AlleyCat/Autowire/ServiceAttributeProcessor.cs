@@ -1,77 +1,132 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
     public class ServiceAttributeProcessor : InjectAttributeProcessor<ServiceAttribute>, IDependencyConsumer
     {
-        public ISet<Type> Requires => new HashSet<Type> {DependencyType};
+        public HashSet<Type> Requires => HashSet(DependencyType);
 
         public ServiceAttributeProcessor(
-            [NotNull] MemberInfo member, [NotNull] ServiceAttribute attribute) : base(member, attribute)
+            MemberInfo member, ServiceAttribute attribute) : base(member, attribute)
         {
         }
 
-        protected override object GetDependency(IAutowireContext context, Node node)
+        protected override IEnumerable GetDependencies(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            var factoryType = typeof(IServiceFactory<>).MakeGenericType(TargetType);
+            IEnumerable enumerable = new ServiceDependencyCollector(
+                context, node, Enumerable ? TargetType : DependencyType);
 
-            IEnumerable enumerable = null;
-
-            var current = context;
-
-            while (current != null)
+            if (!Attribute.IncludeInherited)
             {
-                var dependency = current.GetService(TargetType);
+                enumerable = enumerable.Cast<object>().Take(1);
+            }
 
-                if (dependency == null)
-                {
-                    var factory = current.GetService(factoryType);
+            if (Enumerable)
+            {
+                enumerable = enumerable
+                    .OfType<IEnumerable>()
+                    .Fold(EnumerableHelper.Empty(DependencyType),
+                        (e1, e2) => EnumerableHelper.Concat(e1, e2, DependencyType));
 
-                    if (factory != null)
-                    {
-                        var method = typeof(IServiceFactory<>)
-                            .MakeGenericType(TargetType)
-                            .GetMethod("Create", new[] {typeof(IAutowireContext), typeof(object)});
-
-                        Debug.Assert(method != null, "method != null");
-
-                        dependency = method.Invoke(factory, new object[] {context, node});
-                    }
-                }
-
-                if (dependency != null)
-                {
-                    if (Enumerable)
-                    {
-                        if (enumerable == null)
-                        {
-                            enumerable = (IEnumerable) dependency;
-                        }
-                        else
-                        {
-                            enumerable = EnumerableHelper.Concat(enumerable, (IEnumerable) dependency, DependencyType);
-                        }
-                    }
-                    else
-                    {
-                        return dependency;
-                    }
-                }
-
-                current = Attribute.IncludeInherited ? current.Parent : null;
+                enumerable = EnumerableHelper.Cast(enumerable, DependencyType);
+            }
+            else
+            {
+                enumerable = EnumerableHelper.OfType(enumerable, DependencyType);
             }
 
             return enumerable;
         }
+    }
+}
+
+internal struct ServiceDependencyCollector : IEnumerable, IEnumerator
+{
+    public IEnumerator GetEnumerator() => this;
+
+    object IEnumerator.Current => _value.ValueUnsafe();
+
+    private readonly IAutowireContext _context;
+
+    private readonly Node _targetNode;
+
+    private readonly Type _targetType;
+
+    private Option<IAutowireContext> _current;
+
+    private Option<object> _value;
+
+    public ServiceDependencyCollector(
+        IAutowireContext context, Node targetNode, Type targetType)
+    {
+        Ensure.That(context, nameof(context)).IsNotNull();
+        Ensure.That(targetNode, nameof(targetNode)).IsNotNull();
+        Ensure.That(targetType, nameof(targetType)).IsNotNull();
+
+        _context = context;
+        _targetNode = targetNode;
+        _targetType = targetType;
+
+        _current = Some(context);
+        _value = None;
+    }
+
+    public bool MoveNext()
+    {
+        if (_current.IsNone) return false;
+
+        _value = _current.Bind(FindService);
+        _current = _current.Bind(c => c.Parent);
+
+        return _value.IsSome || _current.IsSome;
+    }
+
+    private Option<object> FindService(IAutowireContext context)
+    {
+        Debug.Assert(context != null, "context != null");
+
+        var targetType = _targetType;
+        var targetNode = _targetNode;
+
+        return context.FindService(targetType).BiBind(
+            Some,
+            () =>
+            {
+                var factoryType = typeof(IServiceFactory<>).MakeGenericType(targetType);
+                var factory = context.FindService(factoryType);
+
+                return factory.Bind(f =>
+                {
+                    var method = typeof(IServiceFactory<>)
+                        .MakeGenericType(targetType)
+                        .GetMethod("Create", new[] {typeof(IAutowireContext), typeof(object)});
+
+                    Debug.Assert(method != null, "method != null");
+
+                    var service = method.Invoke(f, new object[] {context, targetNode});
+
+                    return Optional(service);
+                });
+            }
+        );
+    }
+
+    public void Reset()
+    {
+        _current = Some(_context);
+        _value = None;
     }
 }

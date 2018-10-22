@@ -1,8 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Reactive.Concurrency;
 using AlleyCat.Common;
 using EnsureThat;
-using JetBrains.Annotations;
 using Priority_Queue;
 
 namespace AlleyCat.Event
@@ -18,23 +18,20 @@ namespace AlleyCat.Event
             ProcessMode = mode;
         }
 
-        [NotNull]
         public IDisposable Schedule<TState>(
-            [CanBeNull] TState state, [NotNull] Func<IScheduler, TState, IDisposable> action) =>
+            TState state, Func<IScheduler, TState, IDisposable> action) =>
             Schedule(state, Now.Ticks, action);
 
-        [NotNull]
         public IDisposable Schedule<TState>(
-            [CanBeNull] TState state,
+            TState state,
             DateTimeOffset dueTime,
-            [NotNull] Func<IScheduler, TState, IDisposable> action) =>
+            Func<IScheduler, TState, IDisposable> action) =>
             Schedule(state, dueTime.Ticks, action);
 
-        [NotNull]
         public IDisposable Schedule<TState>(
-            [CanBeNull] TState state,
+            TState state,
             TimeSpan dueTime,
-            [NotNull] Func<IScheduler, TState, IDisposable> action) =>
+            Func<IScheduler, TState, IDisposable> action) =>
             Schedule(state, Now.Ticks + dueTime.Ticks, action);
 
         private IDisposable Schedule<TState>(
@@ -42,7 +39,7 @@ namespace AlleyCat.Event
             long dueTime,
             Func<IScheduler, TState, IDisposable> action)
         {
-            Ensure.Any.IsNotNull(action, nameof(action));
+            Ensure.That(action, nameof(action)).IsNotNull();
 
             var task = new Task(dueTime, () => action(this, state));
 
@@ -89,6 +86,8 @@ namespace AlleyCat.Event
 
             public Task(long ticks, System.Action action)
             {
+                Debug.Assert(action != null, "action != null");
+
                 Ticks = ticks;
 
                 _action = action;

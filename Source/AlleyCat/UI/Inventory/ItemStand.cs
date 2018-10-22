@@ -10,6 +10,6 @@ namespace AlleyCat.UI.Inventory
 
         public AABB Bounds => this.CalculateBounds();
 
-        public IEnumerable<MeshInstance> Meshes => new MeshInstance[] {this};
+        public IEnumerable<MeshInstance> Meshes => new [] {this};
     }
 }

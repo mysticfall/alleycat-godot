@@ -1,9 +1,10 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Control.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Control
 {
@@ -11,8 +12,7 @@ namespace AlleyCat.Control
     {
         float Sensitivity { get; set; }
 
-        [CanBeNull]
-        Curve Curve { get; set; }
+        Option<Curve> Curve { get; set; }
 
         float DeadZone { get; set; }
 
@@ -25,32 +25,24 @@ namespace AlleyCat.Control
 
     public static class AxisInputExtensions
     {
-        [CanBeNull]
-        public static IAxisInput GetAxis([NotNull] this InputBindings bindings, [NotNull] string key = "Value")
+        public static Option<IAxisInput> FindAxis(this InputBindings bindings, string key = "Value")
         {
-            Ensure.Any.IsNotNull(bindings, nameof(bindings));
-            Ensure.Any.IsNotNull(key, nameof(key));
+            Ensure.That(bindings, nameof(bindings)).IsNotNull();
+            Ensure.That(key, nameof(key)).IsNotNull();
 
-            return bindings.ContainsKey(key) ? bindings[key] as IAxisInput : null;
+            return bindings.TryGetValue(key).OfType<IAxisInput>().HeadOrNone();
         }
 
-        [CanBeNull]
-        public static IObservable<Vector2> AsVector2Input(
-            [NotNull] this InputBindings bindings, [NotNull] string xKey = "X", string yKey = "Y")
+        public static Option<IObservable<Vector2>> AsVector2Input(
+            this InputBindings bindings, string xKey = "X", string yKey = "Y")
         {
-            Ensure.Any.IsNotNull(bindings, nameof(bindings));
-            Ensure.Any.IsNotNull(xKey, nameof(xKey));
-            Ensure.Any.IsNotNull(yKey, nameof(yKey));
+            Ensure.That(bindings, nameof(bindings)).IsNotNull();
+            Ensure.That(xKey, nameof(xKey)).IsNotNull();
+            Ensure.That(yKey, nameof(yKey)).IsNotNull();
 
-            var xAxis = GetAxis(bindings, xKey);
-            var yAxis = GetAxis(bindings, yKey);
-
-            if (xAxis == null || yAxis == null)
-            {
-                return null;
-            }
-
-            return xAxis.CombineLatest(yAxis, (x, y) => new Vector2(x, y));
+            return from xAxis in FindAxis(bindings, xKey)
+                from yAxis in FindAxis(bindings, yKey)
+                select xAxis.CombineLatest(yAxis, (x, y) => new Vector2(x, y));
         }
     }
 }

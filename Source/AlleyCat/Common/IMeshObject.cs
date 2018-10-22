@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -13,11 +13,13 @@ namespace AlleyCat.Common
 
     public static class MeshObjectExtensions
     {
-        public static AABB CalculateBounds([NotNull] this IMeshObject source)
+        public static AABB CalculateBounds(this IMeshObject source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
-            return source.Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
+            Debug.Assert(source.Meshes != null, "source.Meshes != null");
+
+            return source.Meshes.Map(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
         }
     }
 }

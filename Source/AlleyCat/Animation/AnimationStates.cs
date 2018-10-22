@@ -2,7 +2,8 @@ using System;
 using System.Reactive.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -15,7 +16,12 @@ namespace AlleyCat.Animation
         public string State
         {
             get => Playback.GetCurrentNode();
-            set => Playback.Travel(value);
+            set
+            {
+                Ensure.That(value, nameof(value)).IsNotNull();
+
+                Playback.Travel(value);
+            }
         }
 
         public IObservable<string> OnStateChange { get; }
@@ -36,24 +42,22 @@ namespace AlleyCat.Animation
                 .DistinctUntilChanged();
         }
 
-        public override AnimationNode GetAnimationNode(string name)
+        public override Option<AnimationNode> FindAnimationNode(string name)
         {
             Ensure.Any.IsNotNull(name, nameof(name));
 
-            return Root.HasNode(name) ? Root.GetNode(name) : null;
+            return Root.HasNode(name) ? Some(Root.GetNode(name)) : None;
         }
     }
 
     public static class AnimationStatesExtensions
     {
-        [CanBeNull]
-        public static AnimationStates GetStates(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<AnimationStates> FindStates(this IAnimationGraph graph, string path)
         {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(graph, nameof(graph)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
-            return graph.GetDescendantGraph(path) as AnimationStates;
+            return graph.FindDescendantGraph<AnimationStates>(path);
         }
     }
 }

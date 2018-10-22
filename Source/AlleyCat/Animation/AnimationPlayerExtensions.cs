@@ -3,7 +3,8 @@ using System.Diagnostics;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -11,59 +12,50 @@ namespace AlleyCat.Animation
     {
         private const string NodeName = "AnimationPlayerEventTracker";
 
-        public static string AddAnimation(
-            [NotNull] this AnimationPlayer player, [NotNull] Godot.Animation animation)
+        public static string AddAnimation(this AnimationPlayer player, Godot.Animation animation)
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
-            Ensure.Any.IsNotNull(animation, nameof(animation));
+            Ensure.That(player, nameof(player)).IsNotNull();
+            Ensure.That(animation, nameof(animation)).IsNotNull();
 
             var name = animation.GetKey();
 
+            Debug.Assert(name != null, "name != null");
+
             if (!player.HasAnimation(name))
             {
-                player.AddAnimation(name, animation).ThrowIfNecessary();
+                player.AddAnimation(name, animation).ThrowOnError();
             }
 
             return name;
         }
 
-        [NotNull]
-        public static IObservable<AnimationChangeEvent> OnAnimationChange(
-            [NotNull] this AnimationPlayer player)
+        public static Option<Godot.Animation> FindAnimation(this AnimationPlayer player, string name)
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
+            Ensure.That(player, nameof(player)).IsNotNull();
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            var tracker = player.GetOrCreateNode(NodeName, _ => new AnimationPlayerEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnAnimationChange;
+            return Optional(player.GetAnimation(name));
         }
 
-        [NotNull]
-        public static IObservable<AnimationStartEvent> OnAnimationStart(
-            [NotNull] this AnimationPlayer player)
+        public static IObservable<AnimationChangeEvent> OnAnimationChange(this AnimationPlayer player)
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
+            Ensure.That(player, nameof(player)).IsNotNull();
 
-            var tracker = player.GetOrCreateNode(NodeName, _ => new AnimationPlayerEventTracker());
-
-            Debug.Assert(tracker != null, "tracker != null");
-
-            return tracker.OnAnimationStart;
+            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationChange;
         }
 
-        [NotNull]
-        public static IObservable<AnimationFinishEvent> OnAnimationFinish(
-            [NotNull] this AnimationPlayer player)
+        public static IObservable<AnimationStartEvent> OnAnimationStart(this AnimationPlayer player)
         {
-            Ensure.Any.IsNotNull(player, nameof(player));
+            Ensure.That(player, nameof(player)).IsNotNull();
 
-            var tracker = player.GetOrCreateNode(NodeName, _ => new AnimationPlayerEventTracker());
+            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationStart;
+        }
 
-            Debug.Assert(tracker != null, "tracker != null");
+        public static IObservable<AnimationFinishEvent> OnAnimationFinish(this AnimationPlayer player)
+        {
+            Ensure.That(player, nameof(player)).IsNotNull();
 
-            return tracker.OnAnimationFinish;
+            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationFinish;
         }
     }
 }

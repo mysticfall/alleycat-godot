@@ -1,25 +1,22 @@
 using System.Collections.Generic;
-using System.Linq;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
     public interface IIdentifiable
     {
-        [NotNull]
         string Key { get; }
     }
 
     public static class IdentifiableExtensions
     {
-        [NotNull]
-        public static Dictionary<string, T> ToDictionary<T>([NotNull] this IEnumerable<T> items)
-            where T : IIdentifiable
+        public static Map<string, T> ToMap<T>(this IEnumerable<T> items) where T : IIdentifiable
         {
-            Ensure.Any.IsNotNull(items, nameof(items));
+            Ensure.That(items, nameof(items)).IsNotNull();
 
-            return items.ToDictionary(i => i.Key);
+            return toMap(items.Map(i => (i.Key, i)));
         }
     }
 }

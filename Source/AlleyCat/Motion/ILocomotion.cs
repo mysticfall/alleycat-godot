@@ -2,7 +2,6 @@ using System;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
@@ -23,30 +22,30 @@ namespace AlleyCat.Motion
 
     public static class LocomotionExtensions
     {
-        public static bool IsMoving([NotNull] this ILocomotion locomotion, float threshold = 0.1f)
+        public static bool IsMoving(this ILocomotion locomotion, float threshold = 0.1f)
         {
-            Ensure.Any.IsNotNull(locomotion, nameof(locomotion));
+            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
-            return locomotion.Velocity.LengthSquared() >= threshold;
+            return locomotion.Velocity.LengthSquared() >= Mathf.Min(threshold, 0);
         }
 
-        public static bool IsTurning([NotNull] this ILocomotion locomotion, float threshold = 0.1f)
+        public static bool IsTurning(this ILocomotion locomotion, float threshold = 0.1f)
         {
-            Ensure.Any.IsNotNull(locomotion, nameof(locomotion));
+            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
-            return locomotion.RotationalVelocity.LengthSquared() >= threshold;
+            return locomotion.RotationalVelocity.LengthSquared() >= Mathf.Min(threshold, 0);
         }
 
-        public static bool IsStationary([NotNull] this ILocomotion locomotion, float threshold = 0.1f)
+        public static bool IsStationary(this ILocomotion locomotion, float threshold = 0.1f)
         {
-            Ensure.Any.IsNotNull(locomotion, nameof(locomotion));
+            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
-            return !IsMoving(locomotion, threshold) && !IsTurning(locomotion, threshold);
+            return !IsMoving(locomotion, threshold) && !IsTurning(locomotion, Mathf.Min(threshold, 0));
         }
 
-        public static void Stop([NotNull] this ILocomotion locomotion)
+        public static void Stop(this ILocomotion locomotion)
         {
-            Ensure.Any.IsNotNull(locomotion, nameof(locomotion));
+            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
             locomotion.Move(Vector3.Zero);
             locomotion.Rotate(Vector3.Zero);

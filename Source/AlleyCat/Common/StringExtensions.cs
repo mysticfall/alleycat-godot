@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
@@ -7,19 +8,9 @@ namespace AlleyCat.Common
         // TODO Workaround for https://github.com/godotengine/godot/issues/17579
         private const string NullString = "Null";
 
-        [CanBeNull]
-        public static string TrimToNull([CanBeNull] this string value)
-        {
-            if (value == null || value == NullString)
-            {
-                return null;
-            }
+        public static Option<string> TrimToOption(this string value) =>
+            Optional(value).Map(v => v.Trim()).Filter(v => v.Length > 0 && v != NullString);
 
-            var trimmed = value.Trim();
-
-            return trimmed.Length == 0 ? null : trimmed;
-        }
-
-        public static string TrimToEmpty([CanBeNull] this string value) => TrimToNull(value) ?? "";
+        public static string TrimToEmpty(this string value) => TrimToOption(value).IfNone("");
     }
 }

@@ -8,33 +8,43 @@ using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using Godot;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
     public class EntityLabel : Panel
     {
-        [Export]
-        public string InteractAction { get; private set; } = "interact";
+        public string InteractAction => _interactAction.TrimToOption().Head();
 
-        [Export]
-        public string DefaultKeyLabel { get; private set; } = "?";
+        public string DefaultKeyLabel => _defaultKeyLabel.TrimToOption().Head();
 
-        [Node("Container/Title")]
-        protected Label Title { get; private set; }
+        protected Label Title => _title.Head();
 
-        [Node("Container/Action")]
-        protected Container ActionPanel { get; private set; }
+        protected Container ActionPanel => _actionPanel.Head();
 
-        [Node("Container/Action/Shortcut")]
-        protected Label Shortcut { get; private set; }
+        protected Label Shortcut => _shortcut.Head();
+
+        protected Label ActionTitle => _actionTitle.Head();
+
+        protected Option<IHumanoid> Player => _playerControl.Bind(p => p.Character);
+
+        protected IPlayerControl PlayerControl => _playerControl.Head();
+
+        [Export] private string _interactAction = "interact";
+
+        [Export] private string _defaultKeyLabel = "?";
+
+        [Node("Container/Title")] private Option<Label> _title = None;
+
+        [Node("Container/Action")] private Option<Container> _actionPanel = None;
+
+        [Node("Container/Action/Shortcut")] private Option<Label> _shortcut = None;
 
         [Node("Container/Action/Action Title")]
-        protected Label ActionTitle { get; private set; }
+        private Option<Label> _actionTitle = None;
 
-        protected IHumanoid Player => PlayerControl?.Character;
-
-        [Service]
-        protected IPlayerControl PlayerControl { get; private set; }
+        [Service] private Option<IPlayerControl> _playerControl = None;
 
         public override void _Ready()
         {
@@ -49,46 +59,48 @@ namespace AlleyCat.UI
             var onFocus = PlayerControl.OnFocusChange;
             var ticks = this.OnProcess();
 
-            var showTitle = onFocus.Select(e => e != null);
-            var entity = onFocus.Where(e => e != null);
+            var showTitle = onFocus.Select(e => e.IsSome);
+            var entity = onFocus.Where(e => e.IsSome).Select(e => e.First());
             var title = entity.Select(e => e.DisplayName);
 
             var action = ticks
                 .CombineLatest(entity, (_, e) => e)
-                .Select(i => new InteractionContext(Player, i))
-                .Select(context => Player?.FindAction(context, a => a is Interaction)?.DisplayName);
+                .Select(target => Player
+                    .SelectMany(p => p.FindAction(new InteractionContext(p, target), a => a is Interaction))
+                    .Select(a => a.DisplayName)
+                    .HeadOrNone());
 
-            var showAction = action.Select(a => a != null);
+            var showAction = action.Select(a => a.IsSome);
 
             var position = ticks
-                .CombineLatest(onFocus, (_, e) => e)
-                .Where(e => e != null)
+                .CombineLatest(entity, (_, e) => e)
                 .Select(e => PlayerControl.Camera.UnprojectPosition(e.LabelPosition))
                 .Select(pos => new Vector2(pos.x - RectSize.x / 2f, pos.y - RectSize.y / 2f));
 
             showTitle
                 .Subscribe(v => Visible = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
             showAction
                 .Subscribe(v => ActionPanel.Visible = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             title
                 .Subscribe(v => Title.Text = v)
-                .AddTo(this);
+                .AddTo(this.GetCollector());
             action
-                .Subscribe(v => ActionTitle.Text = v)
-                .AddTo(this);
+                .Subscribe(a => a.Iter(ActionTitle.SetText))
+                .AddTo(this.GetCollector());
 
             position
                 .Subscribe(pos => RectPosition = pos.Round())
-                .AddTo(this);
+                .AddTo(this.GetCollector());
 
             var shortcut = InputMap
-                               .GetActionList(InteractAction)
-                               .OfType<InputEvent>()
-                               .Select(e => e.GetKeyLabel())
-                               .FirstOrDefault() ?? DefaultKeyLabel;
+                .GetActionList(InteractAction)
+                .OfType<InputEvent>()
+                .Bind(e => e.FindKeyLabel())
+                .HeadOrNone()
+                .IfNone(DefaultKeyLabel);
 
             //TODO Handle key mapping changes.
             Shortcut.Text = shortcut;

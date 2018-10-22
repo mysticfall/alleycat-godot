@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+using EnsureThat;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 
@@ -6,14 +6,20 @@ namespace AlleyCat.IO
 {
     public class FileProvider : IFileProvider
     {
-        [NotNull]
-        public IFileInfo GetFileInfo([NotNull] string subPath) => new FileInfo(subPath);
+        public IFileInfo GetFileInfo(string subPath)
+        {
+            Ensure.That(subPath, nameof(subPath)).IsNotNull();
 
-        [NotNull]
-        public IDirectoryContents GetDirectoryContents([NotNull] string subPath) =>
-            new DirectoryContents(subPath);
+            return new FileInfo(subPath);
+        }
 
-        [NotNull]
-        public IChangeToken Watch([NotNull] string filter) => NullChangeToken.Singleton;
+        public IDirectoryContents GetDirectoryContents(string subPath)
+        {
+            Ensure.That(subPath, nameof(subPath)).IsNotNull();
+           
+            return new DirectoryContents(subPath);
+        }
+
+        public IChangeToken Watch(string filter) => NullChangeToken.Singleton;
     }
 }

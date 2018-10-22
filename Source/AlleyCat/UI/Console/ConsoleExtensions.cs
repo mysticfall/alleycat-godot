@@ -1,38 +1,37 @@
 ﻿using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI.Console
 {
     public static class ConsoleExtensions
     {
-        [NotNull]
-        public static IConsole Text([NotNull] this IConsole console, [NotNull] string text)
+        public static IConsole Text(this IConsole console, string text)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            Ensure.That(console, nameof(console)).IsNotNull();
+            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.TextColor));
         }
 
-        [NotNull]
-        public static IConsole Highlight([NotNull] this IConsole console, [NotNull] string text)
+        public static IConsole Highlight(this IConsole console, string text)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            Ensure.That(console, nameof(console)).IsNotNull();
+            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.HighlightColor));
         }
 
-        [NotNull]
-        public static IConsole Warning([NotNull] this IConsole console, [NotNull] string text)
+        public static IConsole Warning(this IConsole console, string text)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            Ensure.That(console, nameof(console)).IsNotNull();
+            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.WarningColor));
         }
 
-        [NotNull]
-        public static IConsole Error([NotNull] this IConsole console, [NotNull] string text)
+        public static IConsole Error(this IConsole console, string text)
         {
-            Ensure.Any.IsNotNull(console, nameof(console));
+            Ensure.That(console, nameof(console)).IsNotNull();
+            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.ErrorColor));
         }

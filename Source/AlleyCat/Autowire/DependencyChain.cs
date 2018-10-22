@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
@@ -59,7 +60,13 @@ namespace AlleyCat.Autowire
             _dirty = false;
         }
 
-        public void CopyTo(DependencyNode[] array, int arrayIndex) => _nodes.CopyTo(array, arrayIndex);
+        public void CopyTo(DependencyNode[] array, int arrayIndex)
+        {
+            Ensure.That(array, nameof(array)).HasItems();
+            Ensure.That(arrayIndex, nameof(arrayIndex)).IsGt(-1);
+
+            _nodes.CopyTo(array, arrayIndex);
+        }
 
         private void UpdateDependencies()
         {
@@ -70,10 +77,7 @@ namespace AlleyCat.Autowire
                 where source.Provides.Any(target.Requires.Contains)
                 select (source, target);
 
-            foreach (var i in tuples)
-            {
-                i.target.Dependencies.Add(i.source);
-            }
+            tuples.Iter(t => t.target.AddDependency(t.source));
 
             _nodes.Sort();
 

@@ -22,8 +22,8 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 2 )
 _sections_unfolded = [ "Margin", "Material", "Mouse", "Pause", "custom_styles/panel" ]
-CloseAction = "ui_cancel"
 PauseWhenVisible = true
+_closeAction = "ui_cancel"
 
 [node name="Panel" type="Panel" parent="."]
 anchor_left = 0.0

@@ -5,18 +5,17 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Motion;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Sensor
 {
     [Singleton(typeof(IVision), typeof(IEyeSight), typeof(IPairedEyeSight))]
     public class PairedEyeSight : TurretLike, IPairedEyeSight
     {
-        [Service]
-        public Skeleton Skeleton { get; private set; }
+        public Skeleton Skeleton => (Skeleton) _skeleton;
 
-        [Service]
-        public IAnimationManager AnimationManager { get; private set; }
+        public IAnimationManager AnimationManager => _animationManager.Head();
 
         public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(HeadBone);
 
@@ -59,11 +58,15 @@ namespace AlleyCat.Sensor
 
         protected Basis NeckOrientation { get; private set; }
 
-        [Export, NotNull] private string _headBone = "head";
+        [Service] private Option<Skeleton> _skeleton = None;
 
-        [Export, NotNull] private string _eyeBoneLeft = "eye_L";
+        [Service] private Option<IAnimationManager> _animationManager = None;
 
-        [Export, NotNull] private string _eyeBoneRight = "eye_R";
+        [Export] private string _headBone = "head";
+
+        [Export] private string _eyeBoneLeft = "eye_L";
+
+        [Export] private string _eyeBoneRight = "eye_R";
 
         protected override void OnInitialize()
         {

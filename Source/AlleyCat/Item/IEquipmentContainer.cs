@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -13,40 +15,29 @@ namespace AlleyCat.Item
 
     public static class EquipmentContainerExtensions
     {
-        [CanBeNull]
-        public static EquipmentConfiguration FindConfiguration(
-            [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment item,
-            params string[] tags)
+        public static Option<EquipmentConfiguration> FindConfiguration(
+            this IEquipmentContainer container, Equipment item, params string[] tags)
         {
-            Ensure.Any.IsNotNull(container, nameof(container));
-            Ensure.Any.IsNotNull(item, nameof(item));
+            Ensure.That(container, nameof(container)).IsNotNull();
+            Ensure.That(item, nameof(item)).IsNotNull();
 
             var allConfigs = item.Configurations.Values;
 
-            return (tags.Any() ? allConfigs.TaggedAny(tags) : allConfigs).FirstOrDefault(container.AllowedFor);
+            return (tags.Any() ? allConfigs.TaggedAny(tags) : allConfigs).Find(container.AllowedFor);
         }
 
-        [CanBeNull]
-        public static Equipment Equip(
-            [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment item,
-            params string[] tags)
+        public static Option<Equipment> Equip(
+            this IEquipmentContainer container, Equipment item, params string[] tags)
         {
-            var configuration = FindConfiguration(container, item, tags);
-
-            return configuration == null ? null : Equip(container, item, configuration);
+            return FindConfiguration(container, item, tags).Map(c => Equip(container, item, c));
         }
 
-        [NotNull]
         public static Equipment Equip(
-            [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment item,
-            [NotNull] EquipmentConfiguration configuration)
+            this IEquipmentContainer container, Equipment item, EquipmentConfiguration configuration)
         {
-            Ensure.Any.IsNotNull(container, nameof(container));
-            Ensure.Any.IsNotNull(item, nameof(item));
-            Ensure.Any.IsNotNull(configuration, nameof(configuration));
+            Ensure.That(container, nameof(container)).IsNotNull();
+            Ensure.That(item, nameof(item)).IsNotNull();
+            Ensure.That(configuration, nameof(configuration)).IsNotNull();
 
             configuration.Activate();
             container.Add(item);
@@ -54,16 +45,19 @@ namespace AlleyCat.Item
             return item;
         }
 
-        [NotNull]
-        public static Equipment Unequip(
-            [NotNull] this IEquipmentContainer container,
-            [NotNull] Equipment item,
-            [CanBeNull] Node dropTo)
-        {
-            Ensure.Any.IsNotNull(container, nameof(container));
-            Ensure.Any.IsNotNull(item, nameof(item));
+        public static Equipment Unequip(this IEquipmentContainer container, Equipment item) =>
+            Unequip(container, item, None);
 
-            var parent = dropTo ?? item.GetTree().CurrentScene;
+        public static Equipment Unequip(
+            this IEquipmentContainer container, Equipment item, Option<Node> dropTo)
+        {
+            Ensure.That(container, nameof(container)).IsNotNull();
+            Ensure.That(item, nameof(item)).IsNotNull();
+
+            var parent = dropTo.IfNone(item.GetTree().CurrentScene);
+
+            Debug.Assert(parent != null, "parent != null");
+
             var transform = item.GlobalTransform;
 
             container.Remove(item);
@@ -77,18 +71,16 @@ namespace AlleyCat.Item
             return item;
         }
 
-        [CanBeNull]
-        public static Equipment Unequip(
-            [NotNull] this IEquipmentContainer container,
-            [NotNull] string slot,
-            [CanBeNull] Node dropTo)
+        public static Option<Equipment> Unequip(this IEquipmentContainer container, string slot) =>
+            Unequip(container, slot, None);
+
+        public static Option<Equipment> Unequip(
+            this IEquipmentContainer container, string slot, Option<Node> dropTo)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
             Ensure.Any.IsNotNull(slot, nameof(slot));
 
-            var item = container.FindItem(slot);
-
-            return item != null ? Unequip(container, item, dropTo) : null;
+            return container.FindItem(slot).Map(i => Unequip(container, i, dropTo));
         }
     }
 }

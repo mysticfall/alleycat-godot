@@ -5,51 +5,62 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
-using JetBrains.Annotations;
-using Gen = System.Collections.Generic;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
     public class AnimationDrivenLocomotion : KinematicLocomotion
     {
-        [Service]
-        public IAnimationStateManager AnimationManager { get; private set; }
+        public IAnimationStateManager AnimationManager => _animationManager.Head();
 
-        [Service]
-        public Skeleton Skeleton { get; private set; }
+        public Skeleton Skeleton => _skeleton.Head();
 
-        protected AnimationStates States { get; private set; }
+        protected AnimationStates States => _states.Head();
 
-        protected Blender2D Blender { get; private set; }
+        protected Blender2D Blender => _blender.Head();
 
-        [Export]
-        protected string IdleState { get; private set; } = "Idle";
+        protected string IdleState => _idleState.TrimToOption().Head();
 
-        [Export]
-        protected string MoveState { get; private set; } = "Moving";
+        protected string MoveState => _moveState.TrimToOption().Head();
 
-        public override bool Valid => base.Valid &&
-                                      IdleState != null &&
-                                      MoveState != null &&
-                                      States != null &&
-                                      Blender != null;
+        public override bool Valid => base.Valid && _valid;
 
-        [Export, UsedImplicitly] private string _statesPath = "States";
+        [Service] private Option<IAnimationStateManager> _animationManager = None;
 
-        [Export, UsedImplicitly] private string _blend2DPath = "States/Moving";
+        [Service] private Option<Skeleton> _skeleton = None;
+
+        [Export] private string _idleState = "Idle";
+
+        [Export] private string _moveState = "Moving";
+
+        [Export] private string _statesPath = "States";
+
+        [Export] private string _blend2DPath = "States/Moving";
+
+        private Option<AnimationStates> _states = None;
+
+        private Option<Blender2D> _blender = None;
+
+        private bool _valid;
 
         [PostConstruct]
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            States = AnimationManager.GetStates(_statesPath);
-            Blender = AnimationManager.GetBlender2D(_blend2DPath);
+            _states = _statesPath.TrimToOption().Bind(AnimationManager.FindStates);
+            _blender = _blend2DPath.TrimToOption().Bind(AnimationManager.FindBlender2D);
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
+
+            _valid = _states.IsSome &&
+                     _blender.IsSome &&
+                     !string.IsNullOrWhiteSpace(_idleState) &&
+                     !string.IsNullOrWhiteSpace(_moveState);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)

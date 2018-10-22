@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Autowire
 {
     public interface IDependencyProvider
     {
-        [NotNull]
-        ISet<Type> Provides { get; }
+        HashSet<Type> Provides { get; }
     }
 }

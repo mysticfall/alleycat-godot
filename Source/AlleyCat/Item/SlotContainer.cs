@@ -7,6 +7,8 @@ using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
 using Godot;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -14,34 +16,39 @@ namespace AlleyCat.Item
         where TSlot : ISlot
         where TItem : Node, ISlotItem
     {
-        public abstract IReadOnlyDictionary<string, TSlot> Slots { get; }
+        public abstract Map<string, TSlot> Slots { get; }
 
         public IObservable<TItem> OnAdd => _onAdd;
 
         public IObservable<TItem> OnRemove => _onRemove;
 
-        public IObservable<IEnumerable<TItem>> OnItemsChange => 
+        public IObservable<IEnumerable<TItem>> OnItemsChange =>
             OnAdd.Merge(OnRemove).Select(_ => Values).StartWith(Values);
 
-        private readonly Subject<TItem> _onAdd = new Subject<TItem>();
+        private readonly ISubject<TItem> _onAdd;
 
-        private readonly Subject<TItem> _onRemove = new Subject<TItem>();
+        private readonly ISubject<TItem> _onRemove;
+
+        protected SlotContainer()
+        {
+            _onAdd = new Subject<TItem>().AddTo(this);
+            _onRemove = new Subject<TItem>().AddTo(this);
+        }
 
         public virtual void Add(TItem item)
         {
-            Ensure.Any.IsNotNull(item, nameof(item));
-
-            Ensure.Bool.IsTrue(
-                AllowedFor(item) &&
-                item.AllowedFor(this) &&
-                Slots.TryGetValue(item.Slot, out var slot) &&
-                slot.AllowedFor(item),
-                nameof(item),
-                opt => opt.WithMessage($"'{item}' is not allowed in this container: '{this}'."));
+            Ensure.That(item, nameof(item)).IsNotNull();
+            Ensure.That(
+                    AllowedFor(item) &&
+                    item.AllowedFor(this) &&
+                    Slots.Find(item.Slot).Exists(s => s.AllowedFor(item)),
+                    nameof(item),
+                    opt => opt.WithMessage($"'{item}' is not allowed in this container: '{this}'."))
+                .IsTrue();
 
             DoAdd(item);
 
-            Cache[item.Slot] = item;
+            ClearCache();
 
             _onAdd.OnNext(item);
         }
@@ -50,55 +57,52 @@ namespace AlleyCat.Item
 
         public virtual void Remove(TItem item)
         {
-            Ensure.Any.IsNotNull(item, nameof(item));
+            Ensure.That(item, nameof(item)).IsNotNull();
 
-            var key = this.Where(t => t.Value == item).Select(t => t.Key).FirstOrDefault();
-
-            if (key == null) return;
+            if (this.All(t => t.Value != item))
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(item),
+                    $"The item is not added to this container: '{item.Name}'.");
+            }
 
             DoRemove(item);
 
-            Cache.Remove(item.Slot);
+            ClearCache();
 
             _onRemove.OnNext(item);
         }
 
         protected abstract void DoRemove(TItem item);
 
-        public TItem Clear(string slot)
+        public Option<TItem> Clear(string slot)
         {
-            Ensure.Any.IsNotNull(slot, nameof(slot));
+            Ensure.That(slot, nameof(slot)).IsNotNull();
 
-            if (!ContainsKey(slot)) return default;
+            var item = this.TryGetValue(slot);
 
-            var item = this[slot];
-
-            Remove(item);
+            item.Iter(Remove);
 
             return item;
         }
 
         public virtual bool AllowedFor(ISlotConfiguration context)
         {
-            if (context == null) return false;
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            var allSlots = new HashSet<string>(context.GetAllSlots());
+            var allSlots = context.GetAllSlots();
 
-            if (!allSlots.All(Slots.ContainsKey)) return false;
-
-            return !new HashSet<string>(this.OccupiedSlots()).Intersect(allSlots).Any();
+            return allSlots.All(Slots.ContainsKey) && allSlots.Except(this.OccupiedSlots()).Any();
         }
 
-        public bool AllowedFor(object context) => AllowedFor(context as ISlotConfiguration);
+        public bool AllowedFor(object context) => 
+            Optional(context).OfType<ISlotConfiguration>().Exists(AllowedFor);
 
-        protected override string GetKey(TItem item) => item.Slot;
-
-        protected override void OnPreDestroy()
+        protected override string GetKey(TItem item)
         {
-            _onAdd?.Dispose();
-            _onRemove?.Dispose();
+            Ensure.That(item, nameof(item)).IsNotNull();
 
-            base.OnPreDestroy();
+            return item.Slot;
         }
     }
 }

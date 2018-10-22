@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using System.Diagnostics;
+using EnsureThat;
 
 namespace AlleyCat.Common
 {
@@ -6,7 +7,9 @@ namespace AlleyCat.Common
     {
         protected override string GetKey(T item)
         {
-            Ensure.Any.IsNotNull(item, nameof(item));
+            Ensure.That(item, nameof(item)).IsNotNull();
+
+            Debug.Assert(item.Key != null, "item.Key != null");
 
             return item.Key;
         }

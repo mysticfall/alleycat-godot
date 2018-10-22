@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using AlleyCat.Autowire;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Setting.Project
 {
@@ -22,105 +24,105 @@ namespace AlleyCat.Setting.Project
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
+            Ensure.That(builder, nameof(builder)).IsNotNull();
+
             var keys = SettingsTypes.SelectMany(t => FindKeys(t));
 
             return new ProjectSettingsConfigurationProvider(keys);
         }
 
-        public void AddSettings(IConfigurationBuilder builder) => builder.Add(this);
+        public void AddSettings(IConfigurationBuilder builder)
+        {
+            Ensure.That(builder, nameof(builder)).IsNotNull();
+
+            builder.Add(this);
+        }
 
         public void BindSettings(IConfigurationRoot root, IServiceCollection collection)
         {
-            Ensure.Any.IsNotNull(root, nameof(root));
-            Ensure.Any.IsNotNull(collection, nameof(collection));
+            Ensure.That(root, nameof(root)).IsNotNull();
+            Ensure.That(collection, nameof(collection)).IsNotNull();
 
             var parent = root.GetSection(Prefix);
 
-            SettingsTypes.ToList().ForEach(t => BindSettings(t, parent, collection));
+            SettingsTypes.Iter(t => BindSettings(t, parent, collection));
         }
 
         protected void BindSettings<T>(
-            [NotNull] IConfigurationSection section,
-            [NotNull] IServiceCollection collection) => BindSettings(typeof(T), section, collection);
+            IConfigurationSection section,
+            IServiceCollection collection) => BindSettings(typeof(T), section, collection);
 
         protected void BindSettings(
-            [NotNull] Type type,
-            [NotNull] IConfigurationSection parent,
-            [NotNull] IServiceCollection collection)
+            Type type,
+            IConfigurationSection parent,
+            IServiceCollection collection)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-            Ensure.Any.IsNotNull(collection, nameof(collection));
+            Ensure.That(type, nameof(type)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+            Ensure.That(collection, nameof(collection)).IsNotNull();
 
-            var key = FindKey(type);
+            FindKey(type).Select(parent.GetSection).Iter(section =>
+            {
+                ConfigurationHelper.Configure(collection, section, type);
 
-            if (key == null) return;
-
-            var section = parent.GetSection(key);
-
-            ConfigurationHelper.Configure(collection, section, type);
-
-            GetMembers(type)
-                .Select(t => (member: t.Item1, type: t.Item2))
-                .Where(m => m.type.GetCustomAttribute<SettingsAttribute>() != null)
-                .Select(m => m.type)
-                .ToList()
-                .ForEach(t => BindSettings(t, section, collection));
+                GetMembers(type)
+                    .Select(t => (member: t.Item1, type: t.Item2))
+                    .Where(m => m.type.GetCustomAttribute<SettingsAttribute>() != null)
+                    .Select(m => m.type)
+                    .Iter(t => BindSettings(t, section, collection));
+            });
         }
 
-        [CanBeNull]
-        protected string FindKey<T>() => FindKey(typeof(T));
+        protected Option<string> FindKey<T>() => FindKey(typeof(T));
 
-        [CanBeNull]
-        protected string FindKey([NotNull] Type type)
+        protected Option<string> FindKey(Type type)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
             var attribute = type.GetCustomAttribute<SettingsAttribute>();
 
-            if (attribute == null) return null;
+            if (attribute == null) return None;
 
-            return attribute.Key ??
-                   new[] {type.Name.Replace("Settings", "")}.FirstOrDefault(v => v.Length > 0);
+            return attribute.Key ?? Optional(type.Name.Replace("Settings", "")).Filter(v => v.Length > 0);
         }
 
-        [NotNull]
-        protected IEnumerable<string> FindKeys<T>([NotNull] string prefix = Prefix) => FindKeys(typeof(T), prefix);
+        protected IEnumerable<string> FindKeys<T>(string prefix = Prefix) => FindKeys(typeof(T), prefix);
 
-        [NotNull]
-        protected IEnumerable<string> FindKeys([NotNull] Type type, [NotNull] string prefix = Prefix)
+        protected IEnumerable<string> FindKeys(Type type, string prefix = Prefix)
         {
-            Ensure.Any.IsNotNull(type, nameof(type));
-            Ensure.Any.IsNotNull(prefix, nameof(prefix));
+            Ensure.That(type, nameof(type)).IsNotNull();
 
-            var key = FindKey(type);
+            return match(FindKey(type),
+                key =>
+                {
+                    var path = string.Join(":", prefix, key);
 
-            if (key == null) return Enumerable.Empty<string>();
+                    var groups = GetMembers(type)
+                        .Select(g => (member: g.Item1, type: g.Item2))
+                        .GroupBy(m => m.type.GetCustomAttribute<SettingsAttribute>())
+                        .ToList();
 
-            var path = string.Join(":", prefix, key);
+                    var keys = groups
+                        .Where(g => g.Key == null)
+                        .SelectMany(g => g.AsEnumerable())
+                        .Select(m => string.Join(":", string.Join(":", prefix, key), m.member.Name));
 
-            var groups = GetMembers(type)
-                .Select(g => (member: g.Item1, type: g.Item2))
-                .GroupBy(m => m.type.GetCustomAttribute<SettingsAttribute>())
-                .ToList();
+                    var childKeys = groups
+                        .Where(g => g.Key != null)
+                        .SelectMany(g => g.AsEnumerable())
+                        .SelectMany(g => FindKeys(g.type, path));
 
-            var keys = groups
-                .Where(g => g.Key == null)
-                .SelectMany(g => g.AsEnumerable())
-                .Select(m => string.Join(":", string.Join(":", prefix, key), m.member.Name));
+                    var children = keys.Concat(childKeys);
 
-            var childKeys = groups
-                .Where(g => g.Key != null)
-                .SelectMany(g => g.AsEnumerable())
-                .SelectMany(g => FindKeys(g.type, path));
-
-            var children = keys.Concat(childKeys);
-
-            return new[] {path}.Concat(children);
+                    return new[] {path}.Concat(children);
+                },
+                Enumerable.Empty<string>);
         }
 
         private static IEnumerable<(MemberInfo, Type)> GetMembers(Type type)
         {
+            Debug.Assert(type != null, "type != null");
+
             return Cache.GetOrCreate(type, _ =>
             {
                 var members = type

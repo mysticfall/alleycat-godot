@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.UI.Console
 {
     public interface IAutoCompletionSupport
     {
-        [NotNull]
-        IEnumerable<string> SuggestCandidates([CanBeNull] string text);
+        IEnumerable<string> SuggestCandidates(Option<string> text);
     }
 }

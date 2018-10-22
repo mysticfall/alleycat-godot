@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
 using Array = Godot.Collections.Array;
 using Object = Godot.Object;
 
@@ -12,52 +15,49 @@ namespace AlleyCat.Common
     {
         private readonly IDictionary<int, T> _store = new Dictionary<int, T>();
 
-        [CanBeNull]
-        public T Get([NotNull] Node node)
+        public Option<T> Find(Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            return !_store.TryGetValue(node.GetInstanceId(), out var data) ? default : data;
+            return _store.TryGetValue(node.GetInstanceId());
         }
 
-        [CanBeNull]
-        public T GetOrCreate([NotNull] Node node, [NotNull] Func<Node, T> factory)
+        public T Get(Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(factory, nameof(factory));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            if (_store.TryGetValue(node.GetInstanceId(), out var data))
-            {
-                return data;
-            }
+            return _store[node.GetInstanceId()];
+        }
 
-            data = factory(node);
+        public T Get(Node node, Func<Node, T> factory) => Find(node).IfNone(() =>
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(factory, nameof(factory)).IsNotNull();
+
+            var data = factory(node);
+
+            Debug.Assert(data != null, "data != null");
 
             node.Connect("tree_exited", this, nameof(OnNodeExited), new Array {node});
 
             _store.Add(node.GetInstanceId(), data);
 
             return data;
-        }
+        });
 
         [UsedImplicitly]
-        protected virtual void OnNodeExited([NotNull] Node node)
+        protected virtual void OnNodeExited(Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Debug.Assert(node != null, "node != null");
 
-            if (!_store.TryGetValue(node.GetInstanceId(), out var data))
-            {
-                return;
-            }
-
-            (data as IDisposable)?.Dispose();
+            Find(node).OfType<IDisposable>().Iter(d => d.Dispose());
 
             _store.Remove(node.GetInstanceId());
         }
 
         protected override void Dispose(bool disposing)
         {
-            _store?.Clear();
+            _store.Clear();
 
             base.Dispose(disposing);
         }

@@ -1,8 +1,10 @@
 using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -12,69 +14,69 @@ namespace AlleyCat.UI
 
         private const string SignalMouseExit = "mouse_exited";
 
-        [NotNull]
         public IObservable<MouseEnteredEvent> OnMouseEnter
         {
             get
             {
-                if (_onMouseEnter == null)
+                if (_onMouseEnter.IsNone)
                 {
-                    Parent.Connect(SignalMouseEnter, this, nameof(FireOnMouseEnter));
+                    Parent.Iter(p => p.Connect(SignalMouseEnter, this, nameof(FireOnMouseEnter)));
 
                     _onMouseEnter = new Subject<MouseEnteredEvent>();
                 }
 
-                return _onMouseEnter;
+                return _onMouseEnter.Head();
             }
         }
 
-        [NotNull]
         public IObservable<MouseExitedEvent> OnMouseExit
         {
             get
             {
-                if (_onMouseExit == null)
+                if (_onMouseExit.IsNone)
                 {
-                    Parent.Connect(SignalMouseExit, this, nameof(FireOnMouseExit));
+                    Parent.Iter(p => p.Connect(SignalMouseExit, this, nameof(FireOnMouseExit)));
 
                     _onMouseExit = new Subject<MouseExitedEvent>();
                 }
 
-                return _onMouseExit;
+                return _onMouseExit.Head();
             }
         }
 
-        private Subject<MouseEnteredEvent> _onMouseEnter;
+        private Option<Subject<MouseEnteredEvent>> _onMouseEnter = None;
 
-        private Subject<MouseExitedEvent> _onMouseExit;
-
-        [UsedImplicitly]
-        private void FireOnMouseEnter() => _onMouseEnter?.OnNext(new MouseEnteredEvent(Parent));
+        private Option<Subject<MouseExitedEvent>> _onMouseExit = None;
 
         [UsedImplicitly]
-        private void FireOnMouseExit() => _onMouseExit?.OnNext(new MouseExitedEvent(Parent));
+        private void FireOnMouseEnter() => _onMouseEnter
+            .SelectMany(o => Parent, (o, p) => (o, e: new MouseEnteredEvent(p)))
+            .Iter(t => t.o.OnNext(t.e));
+
+        [UsedImplicitly]
+        private void FireOnMouseExit() => _onMouseExit
+            .SelectMany(o => Parent, (o, p) => (o, e: new MouseExitedEvent(p)))
+            .Iter(t => t.o.OnNext(t.e));
 
         protected override void Disconnect(Godot.Control parent)
         {
             base.Disconnect(parent);
 
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-
-            if (_onMouseEnter != null)
+            _onMouseEnter.Iter(p =>
             {
                 parent.Disconnect(SignalMouseEnter, this, nameof(FireOnMouseEnter));
+                p.DisposeQuietly();
+            });
 
-                _onMouseEnter.Dispose();
-                _onMouseEnter = null;
-            }
+            _onMouseEnter = None;
 
-            if (_onMouseExit != null)
+            _onMouseExit.Iter(p =>
             {
                 parent.Disconnect(SignalMouseExit, this, nameof(FireOnMouseExit));
+                p.DisposeQuietly();
+            });
 
-                _onMouseExit.Dispose();
-                _onMouseExit = null;
-            }
+            _onMouseExit = None;
         }
     }
 }

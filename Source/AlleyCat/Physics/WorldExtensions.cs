@@ -3,7 +3,9 @@ using System.Linq;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Physics
 {
@@ -11,30 +13,48 @@ namespace AlleyCat.Physics
     {
         public const int NoCollisionLayer = 2147483647;
 
-        [CanBeNull]
-        public static Intersection IntersectRay(
-            [NotNull] this World world,
+        public static Option<Intersection> IntersectRay(
+            this World world,
             Vector3 from,
             Vector3 to,
-            Array exclude = null,
             int collisionLayer = NoCollisionLayer)
         {
-            Ensure.Any.IsNotNull(world, nameof(world));
-
-            var state = world.DirectSpaceState;
-            var result = state.IntersectRay(from, to, exclude, collisionLayer);
-
-            return result.ContainsKey("collider") ? new Intersection(result) : null;
+            return IntersectRay(world, from, to, None, collisionLayer);
         }
 
-        [NotNull]
+        public static Option<Intersection> IntersectRay(
+            this World world,
+            Vector3 from,
+            Vector3 to,
+            Array exclude,
+            int collisionLayer = NoCollisionLayer)
+        {
+            return IntersectRay(world, from, to, Some(exclude), collisionLayer);
+        }
+
+        private static Option<Intersection> IntersectRay(
+            this World world,
+            Vector3 from,
+            Vector3 to,
+            Option<Array> exclude,
+            int collisionLayer = NoCollisionLayer)
+        {
+            Ensure.That(world, nameof(world)).IsNotNull();
+
+            var state = world.DirectSpaceState;
+            var result = state.IntersectRay(from, to, exclude.ValueUnsafe(), collisionLayer);
+
+            return result.ContainsKey("collider") ? Some(new Intersection(result)) : None;
+        }
+
         public static IEnumerable<Collision> IntersectShape(
-            [NotNull] this World world,
-            [NotNull] PhysicsShapeQueryParameters shape,
+            this World world,
+            PhysicsShapeQueryParameters shape,
             int maxResults = 32)
         {
-            Ensure.Any.IsNotNull(world, nameof(world));
-            Ensure.Any.IsNotNull(shape, nameof(shape));
+            Ensure.That(world, nameof(world)).IsNotNull();
+            Ensure.That(shape, nameof(shape)).IsNotNull();
+            Ensure.That(maxResults, nameof(maxResults)).IsGt(0);
 
             return world.DirectSpaceState
                 .IntersectShape(shape, maxResults)
@@ -43,14 +63,14 @@ namespace AlleyCat.Physics
                 .Select(d => new Collision(d));
         }
 
-        [NotNull]
         public static IEnumerable<Collision> CollideShape(
-            [NotNull] this World world,
-            [NotNull] PhysicsShapeQueryParameters shape,
+            this World world,
+            PhysicsShapeQueryParameters shape,
             int maxResults = 32)
         {
-            Ensure.Any.IsNotNull(world, nameof(world));
-            Ensure.Any.IsNotNull(shape, nameof(shape));
+            Ensure.That(world, nameof(world)).IsNotNull();
+            Ensure.That(shape, nameof(shape)).IsNotNull();
+            Ensure.That(maxResults, nameof(maxResults)).IsGt(0);
 
             return world.DirectSpaceState
                 .CollideShape(shape, maxResults)
@@ -59,18 +79,17 @@ namespace AlleyCat.Physics
                 .Select(d => new Collision(d));
         }
 
-        [CanBeNull]
-        public static RestInfo GetRestInfo(
-            [NotNull] this World world,
-            [NotNull] PhysicsShapeQueryParameters shape)
+        public static Option<RestInfo> GetRestInfo(
+            this World world,
+            PhysicsShapeQueryParameters shape)
         {
-            Ensure.Any.IsNotNull(world, nameof(world));
-            Ensure.Any.IsNotNull(shape, nameof(shape));
-            
+            Ensure.That(world, nameof(world)).IsNotNull();
+            Ensure.That(shape, nameof(shape)).IsNotNull();
+
             var state = world.DirectSpaceState;
             var result = state.GetRestInfo(shape);
 
-            return result.ContainsKey("collider") ? new RestInfo(result) : null;
+            return result.ContainsKey("collider") ? Some(new RestInfo(result)) : None;
         }
     }
 }

@@ -2,15 +2,14 @@
 using System.Text;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
     public static class VectorExtensions
     {
-        public static string ToFormatString(this Vector2 vector, [NotNull] string format = "###,##0.00")
+        public static string ToFormatString(this Vector2 vector, string format = "###,##0.00")
         {
-            Ensure.Any.IsNotNull(format, nameof(format));
+            Ensure.That(format, nameof(format)).IsNotNull();
 
             return new StringBuilder()
                 .Append("Vector2(")
@@ -21,9 +20,9 @@ namespace AlleyCat.Common
                 .ToString();
         }
 
-        public static string ToFormatString(this Vector3 vector, [NotNull] string format = "###,##0.00")
+        public static string ToFormatString(this Vector3 vector, string format = "###,##0.00")
         {
-            Ensure.Any.IsNotNull(format, nameof(format));
+            Ensure.That(format, nameof(format)).IsNotNull();
 
             return new StringBuilder()
                 .Append("Vector3(")

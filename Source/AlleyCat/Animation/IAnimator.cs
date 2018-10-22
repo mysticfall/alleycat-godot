@@ -1,26 +1,24 @@
 using System;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Animation
 {
     public interface IAnimator : IAnimationControl
     {
-        Godot.Animation Animation { get; set; }
+        Option<Godot.Animation> Animation { get; set; }
 
-        IObservable<Godot.Animation> OnAnimationChange { get; }
+        IObservable<Option<Godot.Animation>> OnAnimationChange { get; }
     }
 
     public static class AnimatorExtensions
     {
-        [CanBeNull]
-        public static IAnimator GetAnimator(
-            [NotNull] this IAnimationGraph graph, [NotNull] string path)
+        public static Option<IAnimator> FindAnimator(this IAnimationGraph graph, string path)
         {
-            Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(graph, nameof(graph)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
-            return graph.GetDescendantControl(path) as IAnimator;
+            return graph.FindDescendantControl<IAnimator>(path);
         }
     }
 }

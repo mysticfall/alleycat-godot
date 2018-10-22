@@ -11,10 +11,8 @@ namespace AlleyCat.IO
     {
         public const string Separator = "/";
 
-        [NotNull]
         public string Name { get; }
 
-        [NotNull]
         public string Path { get; }
 
         public bool Exists
@@ -57,9 +55,9 @@ namespace AlleyCat.IO
             }
         }
 
-        public FileInfo([NotNull] string path)
+        public FileInfo(string path)
         {
-            Ensure.String.IsNotNullOrWhiteSpace(path, nameof(path));
+            Ensure.That(path, nameof(path)).IsNotNull();
 
             Path = path;
 
@@ -68,13 +66,10 @@ namespace AlleyCat.IO
             Name = index < 0 ? "" : Path.Substring(index + 1);
         }
 
-        [NotNull]
         public Stream CreateReadStream() => FileStream.Open(Path);
 
-        [NotNull]
         public Stream CreateWriteStream() => FileStream.Open(Path, FileAccess.Write);
 
-        [NotNull]
         public Stream CreateReadWriteStream() => FileStream.Open(Path, FileAccess.ReadWrite);
 
         public override string ToString() => $"FileInfo({Path})";

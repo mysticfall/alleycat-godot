@@ -1,19 +1,36 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
     public static class NodeExtensions
     {
-        [NotNull]
-        public static T GetNode<T>([NotNull] this Node node, [NotNull] NodePath path) where T : class
+        public static Option<T> FindComponent<T>(this Node node, NodePath path) where T : class
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(path, nameof(path));
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
+
+            return node.HasNode(path) ? Optional(node.GetNode(path) as T) : None;
+        }
+
+        public static Option<T> FindComponent<T>(this Node node) where T : class
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return node.GetChildren().Find(n => n is T).OfType<T>().HeadOrNone();
+        }
+
+        public static T GetComponent<T>(this Node node, NodePath path) where T : class
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
 
             if (!(node.GetNode(path) is T result))
             {
@@ -23,151 +40,125 @@ namespace AlleyCat.Common
             return result;
         }
 
-        [CanBeNull]
-        public static T GetNodeOrDefault<T>(
-            [NotNull] this Node node,
-            [NotNull] NodePath path,
-            [CanBeNull] T defaultValue = default) where T : class
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(path, nameof(path));
-
-            return (node.HasNode(path) ? node.GetNode(path) as T : null) ?? defaultValue;
-        }
-
-        [NotNull]
-        public static TChild GetOrCreateNode<TParent, TChild>(
-            [NotNull] this TParent node,
-            [NotNull] NodePath path,
-            [NotNull] Func<Node, TChild> factory)
+        public static TChild GetComponent<TParent, TChild>(
+            this TParent node,
+            NodePath path,
+            Func<Node, TChild> factory)
             where TParent : Node
             where TChild : Node
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(path, nameof(path));
-            Ensure.Any.IsNotNull(factory, nameof(factory));
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(path, nameof(path)).IsNotNull();
+            Ensure.That(factory, nameof(factory)).IsNotNull();
 
-            var child = GetNodeOrDefault<TChild>(node, path);
+            return node.FindComponent<TChild>(path).IfNone(CreateAndAdd(node, factory));
+        }
+
+        public static TChild GetComponent<TParent, TChild>(
+            this TParent node,
+            Func<TParent, TChild> factory)
+            where TParent : Node
+            where TChild : Node
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(factory, nameof(factory)).IsNotNull();
+
+            return node.FindComponent<TChild>().IfNone(CreateAndAdd(node, factory));
+        }
+
+        private static TChild CreateAndAdd<TParent, TChild>(TParent node, Func<TParent, TChild> factory)
+            where TParent : Node
+            where TChild : Node
+        {
+            Debug.Assert(node != null, "node != null");
+            Debug.Assert(factory != null, "factory != null");
+
+            var child = factory(node);
 
             if (child == null)
             {
-                var segments = path.GetConcatenatedSubnames().Split('/');
-
-                Node parent;
-
-                if (segments.Length <= 1)
-                {
-                    parent = node;
-                }
-                else
-                {
-                    var parentSegments = segments.Take(segments.Length - 1);
-                    var parentPath = string.Join("/", parentSegments);
-
-                    parent = node.GetNode(parentPath);
-                }
-
-                Ensure.Any.IsNotNull(parent, nameof(parent),
-                    opt => opt.WithMessage($"Unable to determine parent node: '{path}'."));
-
-                child = factory(parent);
-
-                Ensure.Any.IsNotNull(child, nameof(child),
-                    opt => opt.WithMessage("The specified node factory returned null."));
-
-                node.AddChild(child);
+                throw new ArgumentOutOfRangeException(
+                    nameof(factory),
+                    "The factory returned a null instance.");
             }
+
+            node.AddChild(child);
 
             return child;
         }
 
-        [NotNull]
-        public static T GetChild<T>([NotNull] this Node node) where T : class
+        public static IEnumerable<T> GetChildComponents<T>(this Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            switch (node.GetChildren().FirstOrDefault(n => n is T))
-            {
-                case T result:
-                    return result;
-                default:
-                    throw new InvalidOperationException(
-                        $"Unable to find node of type '{typeof(T)}' in '{node.Name}'.");
-            }
-        }
-
-        [CanBeNull]
-        public static T GetChildOrDefault<T>(
-            [NotNull] this Node node,
-            [CanBeNull] T defaultValue = default) where T : class
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
-            switch (node.GetChildren().FirstOrDefault(n => n is T))
-            {
-                case T result:
-                    return result;
-                default:
-                    return defaultValue;
-            }
-        }
-
-        [NotNull]
-        public static TChild GetOrCreateChild<TParent, TChild>(
-            [NotNull] this TParent node,
-            [NotNull] Func<TParent, TChild> factory)
-            where TParent : Node
-            where TChild : Node
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(factory, nameof(factory));
-
-            switch (node.GetChildren().FirstOrDefault(n => n is TChild))
-            {
-                case TChild result:
-                    return result;
-                default:
-                    var child = factory(node);
-
-                    Ensure.Any.IsNotNull(child, nameof(child),
-                        opt => opt.WithMessage("The specified node factory returned null."));
-
-                    node.AddChild(child);
-
-                    return child;
-            }
-        }
-
-        [NotNull]
-        public static IEnumerable<T> GetChildren<T>([NotNull] this Node node)
-        {
-            Ensure.Any.IsNotNull(node, nameof(node));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
             return node.GetChildren().OfType<T>();
         }
 
-        [CanBeNull]
-        public static Node GetClosestAncestor(
-            [NotNull] this Node node, [NotNull] Func<Node, bool> predicate)
+        public static Option<T> FindParent<T>(this Node node) where T : class
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-            Ensure.Any.IsNotNull(predicate, nameof(predicate));
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            var ancestor = node;
-
-            while ((ancestor = ancestor.GetParent()) != null)
-            {
-                if (predicate(ancestor))
-                {
-                    return ancestor;
-                }
-            }
-
-            return null;
+            return Optional(node.GetParent()).OfType<T>().HeadOrNone();
         }
 
-        [CanBeNull]
-        public static T GetClosestAncestor<T>([NotNull] this Node node) where T : class =>
-            GetClosestAncestor(node, a => a is T) as T;
+        public static IEnumerable<Node> GetAncestors(this Node node) => new NodeAncestors(node);
+
+        public static Option<T> GetClosestAncestor<T>(this Node node) where T : class
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return GetAncestors(node).Find(a => a is T).OfType<T>().HeadOrNone();
+        }
+
+        public static Option<Node> GetClosestAncestor(this Node node, Func<Node, bool> predicate)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(predicate, nameof(predicate)).IsNotNull();
+
+            return GetAncestors(node).Find(predicate);
+        }
+    }
+}
+
+internal struct NodeAncestors : IEnumerable<Node>, IEnumerator<Node>
+{
+    public Node Current { get; private set; }
+
+    object IEnumerator.Current => Current;
+
+    public IEnumerator<Node> GetEnumerator() => this;
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    private readonly Node _node;
+
+    private bool _initial;
+
+    public NodeAncestors(Node node)
+    {
+        Ensure.That(node, nameof(node)).IsNotNull();
+
+        _node = node;
+        _initial = true;
+
+        Current = null;
+    }
+
+    public bool MoveNext()
+    {
+        Current = _initial ? _node.GetParent() : Current?.GetParent();
+        _initial = false;
+
+        return Current != null;
+    }
+
+    public void Reset()
+    {
+        Current = null;
+        _initial = true;
+    }
+
+    public void Dispose()
+    {
     }
 }

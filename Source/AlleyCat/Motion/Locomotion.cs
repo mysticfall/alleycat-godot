@@ -4,7 +4,8 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -20,10 +21,9 @@ namespace AlleyCat.Motion
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        public virtual bool Valid => Target != null;
+        public override bool Valid => base.Valid && _target.IsSome;
 
-        [Node(required: false)]
-        public T Target { get; set; }
+        public T Target => _target.Head();
 
         public Vector3 Velocity => _velocity.Value;
 
@@ -33,17 +33,26 @@ namespace AlleyCat.Motion
 
         public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity;
 
-        [Export, UsedImplicitly] private NodePath _targetPath;
+        [Export] private NodePath _targetPath;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        [Node] private Option<T> _target = None;
 
-        private readonly ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
+        private readonly ReactiveProperty<bool> _active;
 
-        private readonly ReactiveProperty<Vector3> _rotationalVelocity = new ReactiveProperty<Vector3>();
+        private readonly ReactiveProperty<Vector3> _velocity;
+
+        private readonly ReactiveProperty<Vector3> _rotationalVelocity;
 
         private Vector3 _requestedMovement;
 
         private Vector3 _requestedRotation;
+
+        protected Locomotion()
+        {
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _velocity = new ReactiveProperty<Vector3>().AddTo(this);
+            _rotationalVelocity = new ReactiveProperty<Vector3>().AddTo(this);
+        }
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -75,18 +84,10 @@ namespace AlleyCat.Motion
 
             var after = Target.GlobalTransform;
 
-            if (delta > 0)
-            {
-                _velocity.Value = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
-                _rotationalVelocity.Value = (before.basis.Inverse() * after.basis).GetEuler() / delta;
-            }
-        }
+            if (delta <= 0) return;
 
-        protected override void OnPreDestroy()
-        {
-            _active?.Dispose();
-
-            base.OnPreDestroy();
+            _velocity.Value = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
+            _rotationalVelocity.Value = (before.basis.Inverse() * after.basis).GetEuler() / delta;
         }
     }
 }

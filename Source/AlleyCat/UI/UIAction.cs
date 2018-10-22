@@ -1,6 +1,8 @@
 using AlleyCat.Action;
 using AlleyCat.Control;
+using EnsureThat;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.UI
 {
@@ -11,14 +13,13 @@ namespace AlleyCat.UI
         [Export]
         public bool Modal { get; set; }
 
-        protected override IActionContext CreateActionContext() => new ActionContext();
+        protected override Option<IActionContext> CreateActionContext() => new ActionContext();
 
-        protected override void DoExecute(IActionContext context)
+        public override bool AllowedFor(IActionContext context)
         {
-            throw new System.NotImplementedException();
-        }
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-        public override bool AllowedFor(IActionContext context) =>
-            !Modal || GetTree().GetNodesInGroup(TagModal).Count == 0;
+            return !Modal || GetTree().GetNodesInGroup(TagModal).Count == 0;
+        }
     }
 }

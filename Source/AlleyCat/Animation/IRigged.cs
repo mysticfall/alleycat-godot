@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+using System;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Animation
 {
@@ -10,42 +10,44 @@ namespace AlleyCat.Animation
     {
         Skeleton Skeleton { get; }
 
-        IReadOnlyDictionary<string, SkeletonIK> IKChains { get; }
+        Map<string, SkeletonIK> IKChains { get; }
     }
 
     public static class RiggedExtensions
     {
         public static SkeletonIK StartIK(
-            [NotNull] this IRigged rig,
-            [NotNull] string name,
+            this IRigged rig,
+            string name,
             Transform target,
             float amount = 1f)
         {
-            Ensure.Any.IsNotNull(rig, nameof(rig));
-            Ensure.Any.IsNotNull(name, nameof(name));
-
-            Ensure.Comparable.IsGte(amount, 0f, nameof(amount));
-            Ensure.Comparable.IsLte(amount, 1f, nameof(amount));
+            Ensure.That(rig, nameof(rig)).IsNotNull();
+            Ensure.That(name, nameof(name)).IsNotNull();
 
             var chain = rig.IKChains[name];
 
             chain.Target = target;
-            chain.Interpolation = amount;
+            chain.Interpolation = Mathf.Clamp(amount, 0, 1);
 
             chain.Start();
 
             return chain;
         }
 
-        public static void StopIK([NotNull] this IRigged rig, [NotNull] string name)
+        public static void StopIK(this IRigged rig, string name)
         {
-            Ensure.Any.IsNotNull(rig, nameof(rig));
-            Ensure.Any.IsNotNull(name, nameof(name));
+            Ensure.That(rig, nameof(rig)).IsNotNull();
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            rig.IKChains.TryGetValue(name, out var chain);
-
-            chain?.SetInterpolation(0f);
-            chain?.Stop();
+            rig.IKChains.Find(name).Match(
+                chain =>
+                {
+                    chain.SetInterpolation(0f);
+                    chain.Stop();
+                },
+                () => throw new ArgumentOutOfRangeException(
+                    nameof(name), $"No IKChain exists with the name: '{name}'.")
+            );
         }
     }
 }

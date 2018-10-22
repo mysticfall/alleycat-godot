@@ -1,18 +1,19 @@
 using System;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Action
 {
     [Singleton(typeof(IAction))]
     public abstract class Action : AutowiredNode, IAction
     {
-        public string Key => _key ?? Name;
+        public string Key => _key.TrimToOption().IfNone(Name);
 
-        public virtual string DisplayName => Tr(_displayName);
+        public virtual string DisplayName => Optional(_displayName).Map(Tr).IfNone(Key);
 
         [Export]
         public bool Active
@@ -23,17 +24,20 @@ namespace AlleyCat.Action
 
         public IObservable<bool> OnActiveStateChange => _active;
 
-        public virtual bool Valid => true;
+        [Export] private string _key;
 
-        [Export, UsedImplicitly] private string _key;
+        [Export] private string _displayName;
 
-        [Export, UsedImplicitly] private string _displayName;
+        private readonly ReactiveProperty<bool> _active;
 
-        private readonly ReactiveProperty<bool> _active = new ReactiveProperty<bool>(true);
+        protected Action()
+        {
+            _active = new ReactiveProperty<bool>(true).AddTo(this);
+        }
 
         public void Execute(IActionContext context)
         {
-            Ensure.Any.IsNotNull(context);
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             if (Active && Valid && AllowedFor(context))
             {
@@ -43,8 +47,13 @@ namespace AlleyCat.Action
 
         protected abstract void DoExecute(IActionContext context);
 
-        public abstract bool AllowedFor([CanBeNull] IActionContext context);
+        public abstract bool AllowedFor(IActionContext context);
 
-        public bool AllowedFor(object context) => AllowedFor(context as IActionContext);
+        public bool AllowedFor(object context)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            return context is IActionContext ac && AllowedFor(ac);
+        }
     }
 }

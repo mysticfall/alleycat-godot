@@ -1,4 +1,5 @@
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.UI.Console
 {
@@ -8,12 +9,12 @@ namespace AlleyCat.UI.Console
 
         public override string Key => Command;
 
-        public override string Description => SceneTree.Tr("console.command.clear");
+        public override Option<string> Description => SceneTree.Tr("console.command.clear");
 
         public ClearCommand(ICommandConsole console, SceneTree sceneTree) : base(console, sceneTree)
         {
         }
 
-        public override void Execute(string[] args) => Console.Clear();
+        public override void Execute(params string[] args) => Console.Clear();
     }
 }

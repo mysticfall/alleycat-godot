@@ -17,7 +17,7 @@ namespace AlleyCat.Condition
 
         public bool Matches(object context)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
 
             switch (Type)
             {

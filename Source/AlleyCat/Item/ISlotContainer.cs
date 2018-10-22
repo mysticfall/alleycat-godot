@@ -5,7 +5,8 @@ using System.Linq;
 using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -20,94 +21,85 @@ namespace AlleyCat.Item
             where TSlot : ISlot
             where TItem : Node, ISlotItem
         {
-            [NotNull]
             IObservable<TItem> OnAdd { get; }
 
-            [NotNull]
             IObservable<TItem> OnRemove { get; }
 
-            [NotNull]
             IObservable<IEnumerable<TItem>> OnItemsChange { get; }
 
-            [NotNull]
-            IReadOnlyDictionary<string, TSlot> Slots { get; }
+            Map<string, TSlot> Slots { get; }
 
-            void Add([NotNull] TItem item);
+            void Add(TItem item);
 
-            void Remove([NotNull] TItem item);
+            void Remove(TItem item);
 
-            [CanBeNull]
-            TItem Clear([NotNull] string slot);
+            Option<TItem> Clear(string slot);
         }
 
         public static class SlotContainerExtensions
         {
-            [CanBeNull]
-            public static string FindSlot<TSlot, TItem>(
-                [NotNull] this ISlotContainer<TSlot, TItem> container,
-                [NotNull] TItem item)
+            public static Option<string> FindSlot<TSlot, TItem>(
+                this ISlotContainer<TSlot, TItem> container,
+                TItem item)
                 where TSlot : ISlot
                 where TItem : Node, ISlotItem
             {
-                Ensure.Any.IsNotNull(container, nameof(container));
-                Ensure.Any.IsNotNull(item, nameof(item));
+                Ensure.That(container, nameof(container)).IsNotNull();
+                Ensure.That(item, nameof(item)).IsNotNull();
 
-                return container.Where(t => t.Value == item).Select(t => t.Key).FirstOrDefault();
+                return container.Filter(t => t.Value == item).Map(t => t.Key).HeadOrNone();
             }
 
-            [CanBeNull]
-            public static TItem FindItem<TSlot, TItem>(
-                [NotNull] this ISlotContainer<TSlot, TItem> container,
-                [NotNull] string slot)
+            public static Option<TItem> FindItem<TSlot, TItem>(
+                this ISlotContainer<TSlot, TItem> container,
+                string slot)
                 where TSlot : ISlot
                 where TItem : Node, ISlotItem
             {
-                Ensure.Any.IsNotNull(container, nameof(container));
-                Ensure.Any.IsNotNull(slot, nameof(slot));
+                Ensure.That(container, nameof(container)).IsNotNull();
+                Ensure.That(slot, nameof(slot)).IsNotNull();
 
-                return container.Values.FirstOrDefault(i => i.Slot == slot || i.AdditionalSlots.Contains(slot));
+                return container.Values.Find(i => i.Slot == slot || i.AdditionalSlots.Contains(slot));
             }
 
-            [NotNull]
-            public static IEnumerable<string> OccupiedSlots<TSlot, TItem>(
-                [NotNull] this ISlotContainer<TSlot, TItem> container)
+            public static Set<string> OccupiedSlots<TSlot, TItem>(
+                this ISlotContainer<TSlot, TItem> container)
                 where TSlot : ISlot
                 where TItem : Node, ISlotItem
             {
                 Ensure.Any.IsNotNull(container, nameof(container));
 
-                return container.Values.SelectMany(t => t.GetAllSlots()).Distinct();
+                return toSet(container.Values.Bind(t => t.GetAllSlots()).Distinct());
             }
 
             public static bool IsSlotAvailable<TSlot, TItem>(
-                [NotNull] this ISlotContainer<TSlot, TItem> container,
-                [NotNull] string slot)
+                this ISlotContainer<TSlot, TItem> container,
+                string slot)
                 where TSlot : ISlot
                 where TItem : Node, ISlotItem
             {
-                return OccupiedSlots(container).FirstOrDefault(s => s == slot) == null;
+                Ensure.Any.IsNotNull(container, nameof(container));
+
+                return OccupiedSlots(container).Exists(s => s == slot);
             }
 
-            [NotNull]
             public static IEnumerable<TItem> Replace<TSlot, TItem>(
-                [NotNull] this ISlotContainer<TSlot, TItem> container,
-                [NotNull] TItem item)
+                this ISlotContainer<TSlot, TItem> container,
+                TItem item)
                 where TSlot : ISlot
                 where TItem : Node, ISlotItem
             {
+                Ensure.Any.IsNotNull(container, nameof(container));
                 Ensure.Any.IsNotNull(item, nameof(item));
 
-                var allSlots = new HashSet<string>(item.GetAllSlots());
-                var occupiedSlots = new HashSet<string>(OccupiedSlots(container));
+                var allSlots = item.GetAllSlots();
+                var occupiedSlots = OccupiedSlots(container);
                 var slotsToFree = allSlots.Intersect(occupiedSlots);
 
-                var itemsToFree = slotsToFree
-                    .Select(s => FindItem(container, s))
-                    .Where(i => i != null)
-                    .Distinct()
-                    .ToList();
+                var itemsToFree = toSet(
+                    slotsToFree.Bind(s => FindItem(container, s)).Distinct());
 
-                itemsToFree.ForEach(container.Remove);
+                itemsToFree.Iter(container.Remove);
 
                 container.Add(item);
 

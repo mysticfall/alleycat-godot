@@ -1,15 +1,23 @@
-﻿using JetBrains.Annotations;
+﻿using EnsureThat;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
     public class NodeAttribute : InjectAttribute
     {
-        [CanBeNull]
-        public string Path { get; }
+        public Option<string> Path { get; }
 
-        public NodeAttribute([CanBeNull] string path = null, bool required = true) : base(required)
+        public NodeAttribute(bool required = true) : base(required)
         {
-            Path = path;
+            Path = None;
+        }
+
+        public NodeAttribute(string path, bool required = true) : base(required)
+        {
+            Ensure.That(path, nameof(path)).IsNotNull();
+
+            Path = Some(path);
         }
     }
 }

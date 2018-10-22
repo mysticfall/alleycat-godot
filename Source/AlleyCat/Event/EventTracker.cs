@@ -1,23 +1,31 @@
 ﻿using System.Diagnostics;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Event
 {
     public abstract class EventTracker<T> : Node where T : Node
     {
-        [NotNull]
-        protected T Parent
-        {
-            get
-            {
-                Debug.Assert(_parent != null, "Node is not attached to parent yet.");
+        protected Option<T> Parent { get; private set; } = None;
 
-                return _parent;
-            }
+        public override void _EnterTree()
+        {
+            base._EnterTree();
+
+            Parent = Some(GetParent() as T);
+
+            Debug.Assert(Parent.IsSome, "_parent.IsSome");
         }
 
-        private T _parent;
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+
+            Parent = None;
+
+            Debug.Assert(Parent.IsNone, "_parent.IsNone");
+        }
 
         public override void _Ready()
         {
@@ -26,26 +34,19 @@ namespace AlleyCat.Event
             SetProcess(false);
             SetPhysicsProcess(false);
             SetProcessInput(false);
-
-            var parent = GetParent() as T;
-
-            Debug.Assert(parent != null,
-                $"Invalid parent type: '{GetParent()?.GetType()}', expected '{typeof(T)}'.");
-
-            _parent = parent;
         }
 
         public override void _Notification(int what)
         {
             base._Notification(what);
 
-            if (what == NotificationPredelete && _parent != null)
+            if (what == NotificationPredelete)
             {
-                Disconnect(_parent);
+                Parent.Iter(Disconnect);
             }
         }
 
-        protected virtual void Disconnect([NotNull] T parent)
+        protected virtual void Disconnect(T parent)
         {
         }
     }

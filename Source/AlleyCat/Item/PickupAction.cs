@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
@@ -9,6 +8,9 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
@@ -16,99 +18,138 @@ namespace AlleyCat.Item
     public class PickupAction : EquipmentAction
     {
         [Export(PropertyHint.ExpRange, "0.1, 5")]
-        public float PickupDistance { get; set; } = 1.2f;
+        public float PickupDistance
+        {
+            get => _pickupDistance;
+            set
+            {
+                Ensure.That(value, nameof(value)).IsGt(0);
 
-        [Export]
-        public Godot.Animation Animation { get; set; }
+                _pickupDistance = value;
+            }
+        }
 
-        [Export]
-        public string IKChain { get; set; } = "Right Hand IK";
+        public Option<Godot.Animation> Animation
+        {
+            get => Optional(_animation);
+            set => _animation = value.ValueUnsafe();
+        }
 
-        public IEnumerable<string> Tags => _tags;
+        public Option<string> IKChain
+        {
+            get => _ikChain.TrimToOption();
+            set => _ikChain = value.ValueUnsafe();
+        }
 
-        [Export]
-        protected string AnimatorPath { get; private set; } = "States/Action";
+        public Set<string> Tags => toSet(_tags);
 
-        [Export]
-        protected string StatesPath { get; private set; } = "States";
+        protected Option<string> AnimatorPath => _animatorPath.TrimToOption();
 
-        [Export]
-        protected string ActionState { get; private set; } = "Action";
+        protected Option<string> StatesPath => _statesPath.TrimToOption();
+
+        protected Option<string> ActionState => _actionState.TrimToOption();
+
+        [Export, UsedImplicitly] private Godot.Animation _animation;
+
+        [Export, UsedImplicitly] private string _animatorPath = "States/Action";
+
+        [Export, UsedImplicitly] private string _statesPath = "States";
+
+        [Export, UsedImplicitly] private string _actionState = "Action";
+
+        [Export, UsedImplicitly] private string _ikChain = "Right Hand IK";
 
         [Export, UsedImplicitly] private Array<string> _tags = new Array<string> {Carry, Hand};
+
+        private float _pickupDistance = 1.2f;
 
         protected override void DoExecute(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
-            var configuration = holder.FindEquipConfiguration(equipment, Tags.ToArray());
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            if (configuration == null) return;
+            holder.FindEquipConfiguration(equipment, Tags.ToArray()).Iter(ExecuteWithConfiguration);
 
-            if (Animation == null || !(holder is IAnimatable animatable))
+            void ExecuteWithConfiguration(EquipmentConfiguration configuration)
             {
-                holder.Equip(equipment, configuration);
+                var animationArguments = Optional(holder)
+                    .OfType<IAnimatable>()
+                    .Map(a => a.AnimationManager)
+                    .SelectMany(manager => Animation, 
+                        (manager, animation) => (animation, manager))
+                    .HeadOrNone();
 
-                return;
+                animationArguments.Match(
+                    t => ExecuteWithAnimation(configuration, t.animation, t.manager),
+                    () => holder.Equip(equipment, configuration)
+                );
             }
 
-            if (IKChain != null &&
-                holder is IRigged rig &&
-                rig.IKChains.TryGetValue(IKChain, out var chain))
+            void ExecuteWithAnimation(
+                EquipmentConfiguration configuration,
+                Godot.Animation animation,
+                IAnimationManager manager)
             {
-                equipment.Markers.TryGetValue(configuration.Key, out var marker);
+                if (holder is IRigged rig)
+                {
+                    var chain = IKChain.Bind(c => rig.IKChains.Find(c));
+                    var marker = equipment.Markers.Find(configuration.Key);
 
-                chain.Target = marker?.GlobalTransform ?? equipment.GlobalTransform;
-            }
+                    var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GlobalTransform);
 
-            var animationManager = animatable.AnimationManager;
+                    chain.Iter(c => c.Target = target);
+                }
 
-            animationManager.OnAnimationEvent
-                .Where(e => e.Name == "Action" && (string) e.Argument == Key)
-                .Take(1)
-                .Subscribe(_ => holder.Equip(equipment, configuration))
-                .AddTo(this);
+                manager.OnAnimationEvent
+                    .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
+                    .Take(1)
+                    .Subscribe(_ => holder.Equip(equipment, configuration))
+                    .AddTo(this);
 
-            if (!(animationManager is IAnimationStateManager stateManager) ||
-                string.IsNullOrEmpty(AnimatorPath) ||
-                string.IsNullOrEmpty(StatesPath))
-            {
-                animationManager.Play(Animation);
-            }
-            else
-            {
-                var animator = stateManager.GetAnimator(AnimatorPath);
-                var states = stateManager.GetStates(StatesPath);
-
-                if (animator == null || states == null) return;
-
-                animator.Animation = Animation;
-                states.Playback.Travel(ActionState);
+                if (manager is IAnimationStateManager stateManager &&
+                    AnimatorPath.IsSome && StatesPath.IsSome)
+                {
+                    (
+                        from animator in AnimatorPath.Bind(stateManager.FindAnimator)
+                        from states in StatesPath.Bind(stateManager.FindStates)
+                        select (animator, states)).Iter(t =>
+                    {
+                        t.animator.Animation = animation;
+                        ActionState.Iter(t.states.Playback.Travel);
+                    });
+                }
+                else
+                {
+                    manager.Play(animation);
+                }
             }
         }
 
         protected override bool AllowedFor(
-            IEquipmentHolder holder, Equipment equipment, InteractionContext context) =>
-            !equipment.Equipped && holder.DistanceTo(equipment) <= PickupDistance;
+            IEquipmentHolder holder, Equipment equipment, InteractionContext context)
+        {
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
+
+            return !equipment.Equipped && holder.DistanceTo(equipment) <= PickupDistance;
+        }
     }
 
     public static class PickupActionExtensions
     {
-        public static void Pickup<T>([NotNull] this T actor, [NotNull] Equipment equipment)
+        public static void Pickup<T>(this T actor, Equipment equipment)
             where T : class, IActor, IEquipmentHolder
         {
-            Ensure.Any.IsNotNull(actor, nameof(actor));
-            Ensure.Any.IsNotNull(equipment, nameof(equipment));
+            Ensure.That(actor, nameof(actor)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            var action = actor.Actions.Values.FirstOrDefault(a => a is PickupAction);
+            var action = actor.Actions.Values.Find(a => a is PickupAction);
 
-            if (action == null)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(actor),
-                    "The specified actor does not support pick up action.");
-            }
-
-            action.Execute(new InteractionContext(actor, equipment));
+            action.Match(
+                a => a.Execute(new InteractionContext(actor, equipment)),
+                () => throw new ArgumentOutOfRangeException(
+                    nameof(actor), "The specified actor does not support pick up action."));
         }
     }
 }

@@ -1,6 +1,5 @@
 using AlleyCat.Event;
 using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.UI
 {
@@ -12,9 +11,9 @@ namespace AlleyCat.UI
     {
         public Godot.Control Source { get; }
 
-        public MouseEnteredEvent([NotNull] Godot.Control source)
+        public MouseEnteredEvent(Godot.Control source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Source = source;
         }
@@ -24,9 +23,9 @@ namespace AlleyCat.UI
     {
         public Godot.Control Source { get; }
 
-        public MouseExitedEvent([NotNull] Godot.Control source)
+        public MouseExitedEvent(Godot.Control source)
         {
-            Ensure.Any.IsNotNull(source, nameof(source));
+            Ensure.That(source, nameof(source)).IsNotNull();
 
             Source = source;
         }

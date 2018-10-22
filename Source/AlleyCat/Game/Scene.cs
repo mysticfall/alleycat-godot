@@ -1,42 +1,45 @@
 using System;
 using AlleyCat.Autowire;
-using AlleyCat.IO;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
 {
     [AutowireContext]
     public class Scene : AutowiredNode, IScene
     {
-        public string Key => _key ?? Name;
+        public string Key => _key.TrimToOption().IfNone(Name);
 
-        [Export]
-        public NodePath CharactersPath { get; set; }
-
-        [Export]
-        public NodePath ItemsPath { get; set; }
-
-        [Export, UsedImplicitly] private string _key;
-
-        public PackedScene Pack()
+        public NodePath CharactersPath
         {
-            throw new NotImplementedException();
+            get => Optional(_charactersPath).IfNone(GetPath);
+            set
+            {
+                Ensure.That(value, nameof(value)).IsNotNull();
+
+                _charactersPath = value == GetPath() ? null : value;
+            }
         }
 
-        public void SaveState(IState state)
+        public NodePath ItemsPath
         {
-            Ensure.Any.IsNotNull(state, nameof(state));
+            get => Optional(_itemsPath).IfNone(GetPath);
+            set
+            {
+                Ensure.That(value, nameof(value)).IsNotNull();
 
-            throw new NotImplementedException();
+                _itemsPath = value == GetPath() ? null : value;
+            }
         }
 
-        public void RestoreState(IState state)
-        {
-            Ensure.Any.IsNotNull(state, nameof(state));
+        [Export] private string _key;
 
-            throw new NotImplementedException();
-        }
+        [Export] private NodePath _charactersPath;
+
+        [Export] private NodePath _itemsPath;
+
+        public PackedScene Pack() => throw new NotImplementedException();
     }
 }

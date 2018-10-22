@@ -1,39 +1,24 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Autowire
 {
     public class AncestorAttributeProcessor : InjectAttributeProcessor<AncestorAttribute>
     {
-        public AncestorAttributeProcessor([NotNull] MemberInfo member, [NotNull] AncestorAttribute attribute)
+        public AncestorAttributeProcessor(MemberInfo member, AncestorAttribute attribute)
             : base(member, attribute)
         {
         }
 
-        protected override object GetDependency(IAutowireContext context, Node node)
+        protected override IEnumerable GetDependencies(IAutowireContext context, Node node)
         {
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            Ensure.Any.IsNotNull(node, nameof(node),
-                opts => opts.WithMessage(
-                    "[Ancestor] attribute is only supported on members of a Node type class."));
-
-            Ensure.Bool.IsFalse(Enumerable, nameof(node),
-                opts => opts.WithMessage(
-                    "[Ancestor] attribute can't be used on an IEnumerable<T> type field or property."));
-
-            var ancestor = node;
-
-            while ((ancestor = ancestor.GetParent()) != null)
-            {
-                if (!DependencyType.IsInstanceOfType(ancestor)) continue;
-
-                return ancestor;
-            }
-
-            return null;
+            return EnumerableHelper.OfType(node.GetAncestors(), DependencyType);
         }
     }
 }

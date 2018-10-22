@@ -1,6 +1,7 @@
+using System.Diagnostics;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 
 namespace AlleyCat.Common
 {
@@ -13,14 +14,13 @@ namespace AlleyCat.Common
     {
         public const string LabelMarker = "Label";
 
-        [CanBeNull]
-        public static Marker GetLabelMarker([NotNull] this IMarkable markable)
+        public static Option<Marker> FindLabelMarker(this IMarkable markable)
         {
-            Ensure.Any.IsNotNull(markable, nameof(markable));
+            Ensure.That(markable, nameof(markable)).IsNotNull();
 
-            markable.Markers.TryGetValue(LabelMarker, out var marker);
+            Debug.Assert(markable.Markers != null, "markable.Markers != null");
 
-            return marker;
+            return markable.Markers.Find(LabelMarker);
         }
     }
 }

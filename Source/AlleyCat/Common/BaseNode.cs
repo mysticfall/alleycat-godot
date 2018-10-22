@@ -1,31 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Subjects;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public class BaseNode : Node, IDisposableCollector, IGameLoopAware
+    public class BaseNode : Node, IDisposableCollector, IGameLoopAware, IValidatable
     {
-        [Export, UsedImplicitly]
-        public ProcessMode ProcessMode { get; protected set; } = ProcessMode.Disable;
+        [Export]
+        public ProcessMode ProcessMode
+        {
+            get => _processMode;
+            protected set
+            {
+                _processMode = value;
 
-        public virtual IObservable<float> OnLoop => _onLoop;
+                SetProcess(value == ProcessMode.Idle);
+                SetPhysicsProcess(value == ProcessMode.Physics);
+            }
+        }
 
-        private readonly Subject<float> _onLoop = new Subject<float>();
+        public virtual bool Valid => true;
 
-        private IList<IDisposable> _disposables;
+        public virtual IObservable<float> OnLoop => _onLoop.Head();
+
+        private Option<Subject<float>> _onLoop = Some(_ => new Subject<float>());
+
+        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
+
+        private ProcessMode _processMode = ProcessMode.Disable;
 
         public BaseNode()
         {
         }
 
-        public BaseNode([NotNull] string name)
+        public BaseNode(string name)
         {
-            Ensure.Any.IsNotNull(name, nameof(name));
+            Ensure.That(name, nameof(name)).IsNotNullOrEmpty();
 
             Name = name;
         }
@@ -58,22 +72,13 @@ namespace AlleyCat.Common
             }
         }
 
-        protected virtual void ProcessLoop(float delta) => _onLoop.OnNext(delta);
+        protected virtual void ProcessLoop(float delta) => _onLoop.Iter(l => l.OnNext(delta));
 
         public void Collect(IDisposable disposable)
         {
-            Ensure.Any.IsNotNull(disposable, nameof(disposable));
+            Ensure.That(disposable, nameof(disposable)).IsNotNull();
 
-            if (_disposables == null)
-            {
-                _disposables = new List<IDisposable>();
-            }
-            else if (_disposables.Contains(disposable))
-            {
-                return;
-            }
-
-            _disposables.Add(disposable);
+            _disposables += disposable;
         }
 
         public override void _Notification(int what)
@@ -88,11 +93,10 @@ namespace AlleyCat.Common
 
         protected virtual void OnPreDestroy()
         {
-            _onLoop?.OnCompleted();
-            _onLoop?.Dispose();
+            _onLoop.Iter(l => l.CompleteAndDispose());
 
-            _disposables?.Where(d => d != null).Reverse().ToList().ForEach(d => d.Dispose());
-            _disposables = null;
+            _disposables.Iter(d => d.DisposeQuietly());
+            _disposables = _disposables.Clear();
         }
     }
 }

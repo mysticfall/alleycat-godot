@@ -11,10 +11,7 @@ namespace AlleyCat.Common
 
         public Range(T min, T max)
         {
-            Ensure.Bool.IsTrue(
-                max.CompareTo(min) > 0,
-                nameof(min),
-                opt => opt.WithMessage($"Argument '{nameof(max)}' must be greater than '{nameof(max)}'."));
+            Ensure.That(max, nameof(max)).IsGte(min);
 
             Min = min;
             Max = max;

@@ -5,22 +5,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.IO;
 using EnsureThat;
-using JetBrains.Annotations;
+using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 
 namespace AlleyCat.Character.Morph
 {
     [Singleton(typeof(IMorphSet))]
     public class MorphSet : BaseNode, IMorphSet
     {
-        public string Key => "Morphs";
-
         public IEnumerable<IMorphGroup> Groups { get; }
 
         public IObservable<IMorph> OnMorph { get; }
-
-        private readonly IDictionary<string, IMorph> _morphs;
 
         public int Count => _morphs.Count;
 
@@ -28,77 +24,53 @@ namespace AlleyCat.Character.Morph
 
         public IEnumerable<IMorph> Values => _morphs.Values;
 
-        public IEnumerator<KeyValuePair<string, IMorph>> GetEnumerator() => _morphs.GetEnumerator();
+        public IEnumerator<KeyValuePair<string, IMorph>> GetEnumerator() =>
+            _morphs.Values.Map(m => new KeyValuePair<string, IMorph>(m.Key, m)).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _morphs.GetEnumerator();
 
-        public MorphSet([NotNull] IEnumerable<IMorph> morphs)
+        private Map<string, IMorph> _morphs;
+
+        public MorphSet(IEnumerable<IMorph> morphs)
         {
-            Ensure.Any.IsNotNull(morphs, nameof(morphs));
+            Ensure.That(morphs, nameof(morphs)).IsNotNull();
 
-            var list = morphs.ToList();
+            var items = morphs.Freeze();
 
-            list.ForEach(m => m.Apply());
+            items.Iter(m => m.AddTo(this).Apply());
 
-            _morphs = list.ToDictionary();
+            _morphs = items.ToMap();
 
-            Groups = list.Select(m => m.Definition.Group).Distinct().ToList();
-            OnMorph = list.Select(m => m.OnChange.Select(_ => m)).Merge();
+            Groups = items.Map(m => m.Definition.Group).Distinct().ToList();
+            OnMorph = items.Map(m => m.OnChange.Select(_ => m)).Merge();
         }
 
         public bool ContainsKey(string key)
         {
-            Ensure.Any.IsNotNull(key, nameof(key));
+            Ensure.That(key, nameof(key)).IsNotNull();
 
             return _morphs.ContainsKey(key);
         }
 
-        public bool TryGetValue(string key, out IMorph value) => _morphs.TryGetValue(key, out value);
+        public bool TryGetValue(string key, out IMorph value)
+        {
+            Ensure.That(key, nameof(key)).IsNotNull();
+
+            var result = _morphs.Find(key);
+
+            value = result.ValueUnsafe();
+
+            return result.IsSome;
+        }
 
         public IMorph this[string key]
         {
             get
             {
-                Ensure.Any.IsNotNull(key, nameof(key));
+                Ensure.That(key, nameof(key)).IsNotNull();
 
                 return _morphs[key];
             }
-        }
-
-        public virtual void SaveState(IState state)
-        {
-            Ensure.Any.IsNotNull(state, nameof(state));
-
-            this.ToList().ForEach(m => state[m.Key] = m.Value);
-        }
-
-        public virtual void RestoreState(IState state)
-        {
-            Ensure.Any.IsNotNull(state, nameof(state));
-
-            foreach (var morph in Values)
-            {
-                if (state.ContainsKey(morph.Key))
-                {
-                    morph.Value = state[morph.Key];
-                }
-                else
-                {
-                    morph.Reset();
-                }
-            }
-        }
-
-        protected override void OnPreDestroy()
-        {
-            if (_morphs == null) return;
-
-            foreach (var morph in _morphs.Values)
-            {
-                morph?.Dispose();
-            }
-
-            base.OnPreDestroy();
         }
     }
 }

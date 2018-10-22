@@ -1,24 +1,23 @@
 using EnsureThat;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
     public class AnimationControlFactory : IAnimationControlFactory
     {
-        public virtual IAnimationControl Create(
+        public virtual Option<IAnimationControl> TryCreate(
             string name, IAnimationGraph parent, AnimationGraphContext context)
         {
-            Ensure.Any.IsNotNull(name, nameof(name));
-            Ensure.Any.IsNotNull(parent, nameof(parent));
-            Ensure.Any.IsNotNull(context, nameof(context));
+            Ensure.That(name, nameof(name)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+            Ensure.That(context, nameof(context)).IsNotNull();
 
-            IAnimationControl control;
-
-            if ((control = Animator.Create(name, parent, context)) != null) return control;
-            if ((control = Blender.Create(name, parent, context)) != null) return control;
-            if ((control = Blender2D.Create(name, parent, context)) != null) return control;
-            if ((control = CrossfadingAnimator.Create(name, parent, context)) != null) return control;
-
-            return null;
+            return Animator.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
+                   Blender.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
+                   Blender2D.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
+                   CrossfadingAnimator.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
+                   None;
         }
     }
 }

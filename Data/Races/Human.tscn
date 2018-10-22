@@ -24,6 +24,7 @@ _displayName = "Head"
 
 [node name="Head Size" type="Node" parent="Morphs/Female/Head"]
 script = ExtResource( 3 )
+_sections_unfolded = [ "_bones" ]
 Default = 1.0
 _key = "HeadSize"
 _displayName = "morph.Head.HeadSize"
@@ -31,8 +32,7 @@ MinValue = 0.94
 MaxValue = 1.4
 MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
-_bone = "head"
-_mirrored = false
+_bones = [ "head" ]
 
 [node name="Body" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
@@ -42,6 +42,7 @@ _displayName = "Body"
 
 [node name="Legs Size" type="Node" parent="Morphs/Female/Body"]
 script = ExtResource( 3 )
+_sections_unfolded = [ "_bones" ]
 Default = 1.0
 _key = "LegsLength"
 _displayName = "morph.Body.LegsLength"
@@ -49,8 +50,7 @@ MinValue = 0.85
 MaxValue = 1.1
 MorphType = 0
 Modifier = Vector3( 0, 0, 1 )
-_bone = "thigh"
-_mirrored = true
+_bones = [ "thigh_L", "thigh_R" ]
 
 [node name="Color" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
@@ -60,12 +60,13 @@ _displayName = "Color"
 
 [node name="Skin Tone" type="Node" parent="Morphs/Female/Color"]
 script = ExtResource( 4 )
+_sections_unfolded = [ "_materials" ]
 Default = Color( 1, 1, 1, 1 )
 _key = "SkinTone"
 _displayName = "morph.Color.SkinTone"
 UseAlpha = false
-Mesh = "Body"
-_materials = "Skin"
+_mesh = "Body"
+_materials = [ "Skin" ]
 
 [node name="Slots" type="Node" parent="."]
 

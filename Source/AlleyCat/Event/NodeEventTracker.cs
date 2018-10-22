@@ -1,63 +1,60 @@
 ﻿using System;
 using System.Reactive.Subjects;
+using AlleyCat.Common;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Event
 {
     public class NodeEventTracker : EventTracker<Node>
     {
-        [NotNull]
-        public IObservable<float> OnProcess => _onProcess ?? (_onProcess = new Subject<float>());
+        public IObservable<float> OnProcess => _onProcess.Head();
 
-        [NotNull]
-        public IObservable<float> OnPhysicsProcess => _onPhysicsProcess ?? (_onPhysicsProcess = new Subject<float>());
+        public IObservable<float> OnPhysicsProcess => _onPhysicsProcess.Head();
 
-        [NotNull]
-        public IObservable<InputEvent> OnInput => _onInput ?? (_onInput = new Subject<InputEvent>());
+        public IObservable<InputEvent> OnInput => _onInput.Head();
 
-        [NotNull]
-        public IObservable<InputEvent> OnUnhandledInput =>
-            _onUnhandledInput ?? (_onUnhandledInput = new Subject<InputEvent>());
+        public IObservable<InputEvent> OnUnhandledInput => _onUnhandledInput.Head();
 
-        private Subject<float> _onProcess;
+        private Option<Subject<float>> _onProcess = Some(_ => new Subject<float>());
 
-        private Subject<float> _onPhysicsProcess;
+        private Option<Subject<float>> _onPhysicsProcess = Some(_ => new Subject<float>());
 
-        private Subject<InputEvent> _onInput;
+        private Option<Subject<InputEvent>> _onInput = Some(_ => new Subject<InputEvent>());
 
-        private Subject<InputEvent> _onUnhandledInput;
+        private Option<Subject<InputEvent>> _onUnhandledInput = Some(_ => new Subject<InputEvent>());
 
         public override void _Ready()
         {
             base._Ready();
 
-            SetProcess(_onProcess != null);
-            SetPhysicsProcess(_onPhysicsProcess != null);
-            SetProcessInput(_onInput != null);
-            SetProcessUnhandledInput(_onUnhandledInput != null);
-            SetProcessUnhandledKeyInput(_onUnhandledInput != null);
+            SetProcess(_onProcess.IsSome);
+            SetPhysicsProcess(_onPhysicsProcess.IsSome);
+            SetProcessInput(_onInput.IsSome);
+            SetProcessUnhandledInput(_onUnhandledInput.IsSome);
+            SetProcessUnhandledKeyInput(_onUnhandledInput.IsSome);
         }
 
         public override void _Process(float delta)
         {
             base._Process(delta);
 
-            _onProcess?.OnNext(delta);
+            _onProcess.Iter(p => p.OnNext(delta));
         }
 
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
 
-            _onPhysicsProcess?.OnNext(delta);
+            _onPhysicsProcess.Iter(p => p.OnNext(delta));
         }
 
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);
 
-            _onInput?.OnNext(@event);
+            _onInput.Iter(i => i.OnNext(@event));
         }
 
         public override void _UnhandledInput(InputEvent @event)
@@ -66,29 +63,23 @@ namespace AlleyCat.Event
 
             if (@event is InputEventKey) return;
 
-            _onUnhandledInput?.OnNext(@event);
+            _onUnhandledInput.Iter(i => i.OnNext(@event));
         }
 
         public override void _UnhandledKeyInput(InputEventKey @event)
         {
             base._UnhandledKeyInput(@event);
 
-            _onUnhandledInput?.OnNext(@event);
+            _onUnhandledInput.Iter(i => i.OnNext(@event));
         }
 
         protected override void Disconnect(Node parent)
         {
-            _onProcess?.Dispose();
-            _onProcess = null;
+            _onProcess.Iter(p => p.DisposeQuietly());
+            _onPhysicsProcess.Iter(p => p.DisposeQuietly());
 
-            _onPhysicsProcess?.Dispose();
-            _onPhysicsProcess = null;
-
-            _onInput?.Dispose();
-            _onInput = null;
-
-            _onUnhandledInput?.Dispose();
-            _onUnhandledInput = null;
+            _onInput.Iter(i => i.DisposeQuietly());
+            _onUnhandledInput.Iter(i => i.DisposeQuietly());
         }
     }
 }

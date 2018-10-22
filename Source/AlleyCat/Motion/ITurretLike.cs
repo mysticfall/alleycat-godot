@@ -2,7 +2,6 @@ using System;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
@@ -25,21 +24,21 @@ namespace AlleyCat.Motion
 
     public static class TurretLikeExtensions
     {
-        public static void Rotate([NotNull] this ITurretLike turret, Vector2 rotation)
+        public static void Rotate(this ITurretLike turret, Vector2 rotation)
         {
-            Ensure.Any.IsNotNull(turret, nameof(turret));
+            Ensure.That(turret, nameof(turret)).IsNotNull();
 
             turret.Rotation = rotation;
         }
 
-        public static Basis GetBasis([NotNull] this ITurretLike rotatable)
+        public static Basis GetBasis(this ITurretLike turret)
         {
-            Ensure.Any.IsNotNull(rotatable, nameof(rotatable));
+            Ensure.That(turret, nameof(turret)).IsNotNull();
 
-            var basis = Basis.Identity.Rotated(Vector3.Up, rotatable.Yaw);
+            var basis = Basis.Identity.Rotated(Vector3.Up, turret.Yaw);
             var right = basis.Xform(Vector3.Right);
 
-            return basis.Rotated(right, rotatable.Pitch);
+            return basis.Rotated(right, turret.Pitch);
         }
     }
 }

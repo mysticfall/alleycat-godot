@@ -1,6 +1,5 @@
 using System;
 using EnsureThat;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Common
 {
@@ -13,16 +12,16 @@ namespace AlleyCat.Common
 
     public static class ActivatableExtensions
     {
-        public static void Activate([NotNull] this IActivatable activatable) 
+        public static void Activate(this IActivatable activatable)
         {
-            Ensure.Any.IsNotNull(activatable, nameof(activatable));
+            Ensure.That(activatable, nameof(activatable)).IsNotNull();
 
             activatable.Active = true;
         }
 
-        public static void Deactivate([NotNull] this IActivatable activatable) 
+        public static void Deactivate(this IActivatable activatable)
         {
-            Ensure.Any.IsNotNull(activatable, nameof(activatable));
+            Ensure.That(activatable, nameof(activatable)).IsNotNull();
 
             activatable.Active = false;
         }
