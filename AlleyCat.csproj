@@ -175,7 +175,6 @@
     <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
     <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
-    <Compile Include="Source\AlleyCat\Common\IGameLoopAware.cs" />
     <Compile Include="Source\AlleyCat\Common\IHideable.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\ILabelled.cs" />
@@ -232,6 +231,7 @@
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\IReadOnlyReactiveProperty.cs" />
+    <Compile Include="Source\AlleyCat\Event\ITimeSource.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeScheduler.cs" />

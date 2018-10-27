@@ -1,11 +1,12 @@
 using System;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Motion
 {
-    public interface ILocomotion : IActivatable, IValidatable, IGameLoopAware
+    public interface ILocomotion : IActivatable, IValidatable, ITimeSource
     {
         Vector3 Velocity { get; }
 

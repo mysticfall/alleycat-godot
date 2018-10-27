@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using AlleyCat.Event;
 using EnsureThat;
@@ -8,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public class BaseNode : Node, IDisposableCollector, IGameLoopAware, IValidatable
+    public class BaseNode : Node, IDisposableCollector, ITimeSource, IValidatable
     {
         [Export]
         public ProcessMode ProcessMode
@@ -27,11 +28,15 @@ namespace AlleyCat.Common
 
         public virtual IObservable<float> OnLoop => _onLoop.Head();
 
+        public IScheduler Scheduler => this.GetComponent(SchedulerName, _ => new NodeScheduler(ProcessMode));
+
         private Option<Subject<float>> _onLoop = Some(_ => new Subject<float>());
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
         private ProcessMode _processMode = ProcessMode.Disable;
+
+        private const string SchedulerName = "NodeScheduler";
 
         public BaseNode()
         {
