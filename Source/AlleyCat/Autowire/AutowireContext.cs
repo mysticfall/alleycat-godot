@@ -27,7 +27,7 @@ namespace AlleyCat.Autowire
 
         private readonly IServiceCollection _services = new ServiceCollection();
 
-        private Option<ServiceProvider> _provider = None;
+        private Option<ServiceProvider> _provider;
 
         private readonly DependencyChain _queue = new DependencyChain();
 

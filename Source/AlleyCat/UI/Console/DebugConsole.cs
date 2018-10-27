@@ -50,11 +50,11 @@ namespace AlleyCat.UI.Console
         [Service] private IEnumerable<IConsoleCommandProvider> _providers =
             Enumerable.Empty<IConsoleCommandProvider>();
 
-        [Node("Container/Content")] private Option<RichTextLabel> _content = None;
+        [Node("Container/Content")] private Option<RichTextLabel> _content;
 
-        [Node("Container/InputPane/Input")] private Option<LineEdit> _inputField = None;
+        [Node("Container/InputPane/Input")] private Option<LineEdit> _inputField;
 
-        [Node("AnimationPlayer")] private Option<AnimationPlayer> _player = None;
+        [Node("AnimationPlayer")] private Option<AnimationPlayer> _player;
 
         private Map<string, IConsoleCommand> _commandMap = Map<string, IConsoleCommand>();
 

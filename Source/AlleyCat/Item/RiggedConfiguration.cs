@@ -19,7 +19,7 @@ namespace AlleyCat.Item
 
         [Export, UsedImplicitly] private Array<string> _meshesToSync;
 
-        private Option<IDisposable> _blendShapeListener = None;
+        private Option<IDisposable> _blendShapeListener;
 
         private Set<BlendShapeMapping> _blendShapeMappings = Set<BlendShapeMapping>();
 

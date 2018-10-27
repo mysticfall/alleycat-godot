@@ -5,7 +5,6 @@ using AlleyCat.Character.Morph;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
@@ -16,9 +15,9 @@ namespace AlleyCat.UI.Character
 
         protected TabContainer TabContainer => _tabContainer.Head();
 
-        [Service] private Option<IMorphableCharacter> _character = None;
+        [Service] private Option<IMorphableCharacter> _character;
 
-        [Node("Tab Container")] private Option<TabContainer> _tabContainer = None;
+        [Node("Tab Container")] private Option<TabContainer> _tabContainer;
 
         [Export] private PackedScene _groupPanelScene;
 

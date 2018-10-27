@@ -28,13 +28,13 @@ namespace AlleyCat.View
             .MatchObservable(identity, Observable.Empty<float>)
             .Where(_ => Valid);
 
-        [Node(false)] private Option<Camera> _camera = None;
+        [Node(false)] private Option<Camera> _camera;
 
         [Export] private NodePath _cameraPath;
 
-        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput;
 
-        [Node("Zoom", false)] private Option<InputBindings> _zoomInput = None;
+        [Node("Zoom", false)] private Option<InputBindings> _zoomInput;
 
         protected OrbitingView()
         {

@@ -13,7 +13,7 @@ namespace AlleyCat.UI
         public PackedScene UI => Some(_ui).Head();
 
         [Node]
-        public Option<Node> Parent { get; private set; } = None;
+        public Option<Node> Parent { get; private set; }
 
         public override bool Valid => base.Valid && (_ui?.CanInstance() ?? false);
 

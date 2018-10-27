@@ -5,7 +5,6 @@ using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
@@ -21,7 +20,7 @@ namespace AlleyCat.Character
 
         public override bool Valid => base.Valid && _morphSet.IsSome && !string.IsNullOrWhiteSpace(_race);
 
-        private Option<IMorphSet> _morphSet = None;
+        private Option<IMorphSet> _morphSet;
 
         [Export] private string _race;
 

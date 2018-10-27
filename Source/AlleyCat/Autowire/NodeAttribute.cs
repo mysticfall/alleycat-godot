@@ -10,7 +10,6 @@ namespace AlleyCat.Autowire
 
         public NodeAttribute(bool required = true) : base(required)
         {
-            Path = None;
         }
 
         public NodeAttribute(string path, bool required = true) : base(required)

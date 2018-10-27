@@ -13,7 +13,7 @@ namespace AlleyCat.UI.Character
     {
         protected Label Label => _label.Head();
 
-        [Node] private Option<Label> _label = None;
+        [Node] private Option<Label> _label;
 
         public abstract void LoadMorph(IMorph morph);
 
@@ -31,7 +31,7 @@ namespace AlleyCat.UI.Character
         {
             public IMorph<TVal, TDef> Morph => _morph.Head();
 
-            private Option<IMorph<TVal, TDef>> _morph = None;
+            private Option<IMorph<TVal, TDef>> _morph;
 
             public override void LoadMorph(IMorph morph)
             {

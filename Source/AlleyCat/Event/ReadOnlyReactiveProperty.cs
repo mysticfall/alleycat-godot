@@ -23,7 +23,7 @@ namespace AlleyCat.Event
 
         private bool _isDisposed;
 
-        private Option<Exception> _lastException = None;
+        private Option<Exception> _lastException;
 
         private T _value;
 

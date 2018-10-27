@@ -28,7 +28,7 @@ namespace AlleyCat.UI
             }
         }
 
-        private Option<Subject<ButtonPressedEvent>> _onPressed = None;
+        private Option<Subject<ButtonPressedEvent>> _onPressed;
 
         [UsedImplicitly]
         private void FireOnPress() => _onPressed

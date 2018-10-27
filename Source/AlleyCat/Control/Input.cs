@@ -26,7 +26,7 @@ namespace AlleyCat.Control
 
         private readonly ReactiveProperty<bool> _active;
 
-        private Option<IObservable<T>> _observable = None;
+        private Option<IObservable<T>> _observable;
 
         protected Input()
         {

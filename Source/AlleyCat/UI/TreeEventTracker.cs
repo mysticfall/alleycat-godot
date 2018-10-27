@@ -28,7 +28,7 @@ namespace AlleyCat.UI
             }
         }
 
-        private Option<Subject<TreeItemSelectedEvent>> _onItemSelect = None;
+        private Option<Subject<TreeItemSelectedEvent>> _onItemSelect;
 
         [UsedImplicitly]
         private void FireOnItemSelect() => _onItemSelect

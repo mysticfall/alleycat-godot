@@ -17,7 +17,7 @@ namespace AlleyCat.Control
 
         protected IPlayerControl PlayerControl => _playerControl.Head();
 
-        [Ancestor] private Option<IPlayerControl> _playerControl = None;
+        [Ancestor] private Option<IPlayerControl> _playerControl;
 
         protected override void OnInitialize()
         {

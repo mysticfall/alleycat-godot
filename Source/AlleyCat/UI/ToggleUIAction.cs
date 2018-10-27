@@ -15,7 +15,7 @@ namespace AlleyCat.UI
 
         [Export] private NodePath _ui;
 
-        private Option<IHideableUI> _uiNode = None;
+        private Option<IHideableUI> _uiNode;
 
         protected override void DoExecute(IActionContext context)
         {

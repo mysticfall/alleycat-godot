@@ -44,9 +44,9 @@ namespace AlleyCat.UI
             }
         }
 
-        private Option<Subject<MouseEnteredEvent>> _onMouseEnter = None;
+        private Option<Subject<MouseEnteredEvent>> _onMouseEnter;
 
-        private Option<Subject<MouseExitedEvent>> _onMouseExit = None;
+        private Option<Subject<MouseExitedEvent>> _onMouseExit;
 
         [UsedImplicitly]
         private void FireOnMouseEnter() => _onMouseEnter

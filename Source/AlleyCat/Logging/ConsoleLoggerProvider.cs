@@ -5,7 +5,6 @@ using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
@@ -16,7 +15,7 @@ namespace AlleyCat.Logging
 
         protected IMemoryCache Cache { get; }
 
-        [Service] private Option<DebugConsole> _console = None;
+        [Service] private Option<DebugConsole> _console;
 
         public ConsoleLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
         {

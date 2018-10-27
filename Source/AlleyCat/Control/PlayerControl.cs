@@ -88,7 +88,7 @@ namespace AlleyCat.Control
 
         [Export] private NodePath _cameraPath;
 
-        [Node("Movement")] private Option<InputBindings> _movementInput = None;
+        [Node("Movement")] private Option<InputBindings> _movementInput;
 
         private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
@@ -96,9 +96,9 @@ namespace AlleyCat.Control
 
         private readonly ReactiveProperty<bool> _active;
 
-        [Node(false)] private Option<Camera> _camera = None;
+        [Node(false)] private Option<Camera> _camera;
 
-        private Option<IPerspectiveView> _lastPerspective = None;
+        private Option<IPerspectiveView> _lastPerspective;
 
         private float _maxFocalDistance = 5f;
 

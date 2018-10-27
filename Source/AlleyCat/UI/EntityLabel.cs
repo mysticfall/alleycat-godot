@@ -9,7 +9,6 @@ using AlleyCat.Control;
 using AlleyCat.Event;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -35,16 +34,16 @@ namespace AlleyCat.UI
 
         [Export] private string _defaultKeyLabel = "?";
 
-        [Node("Container/Title")] private Option<Label> _title = None;
+        [Node("Container/Title")] private Option<Label> _title;
 
-        [Node("Container/Action")] private Option<Container> _actionPanel = None;
+        [Node("Container/Action")] private Option<Container> _actionPanel;
 
-        [Node("Container/Action/Shortcut")] private Option<Label> _shortcut = None;
+        [Node("Container/Action/Shortcut")] private Option<Label> _shortcut;
 
         [Node("Container/Action/Action Title")]
-        private Option<Label> _actionTitle = None;
+        private Option<Label> _actionTitle;
 
-        [Service] private Option<IPlayerControl> _playerControl = None;
+        [Service] private Option<IPlayerControl> _playerControl;
 
         public override void _Ready()
         {

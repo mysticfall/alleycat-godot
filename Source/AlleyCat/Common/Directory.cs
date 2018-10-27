@@ -28,7 +28,7 @@ namespace AlleyCat.Common
             return _cache.Head();
         });
 
-        private Option<Map<string, T>> _cache = None;
+        private Option<Map<string, T>> _cache;
 
         protected virtual Map<string, T> CreateCache() =>
             toMap(this.GetChildComponents<T>().Map(c => (GetKey(c), c)));

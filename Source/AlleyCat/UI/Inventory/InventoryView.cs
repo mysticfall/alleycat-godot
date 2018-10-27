@@ -54,32 +54,32 @@ namespace AlleyCat.UI.Inventory
 
         [Export] private PackedScene _actionButton;
 
-        [Node("Control/View")] private Option<InspectingView> _viewControl = None;
+        [Node("Control/View")] private Option<InspectingView> _viewControl;
 
-        [Node("List Panel/Layout/Tree")] private Option<Tree> _tree = None;
+        [Node("List Panel/Layout/Tree")] private Option<Tree> _tree;
 
         [Node("List Panel/Layout/Buttons Panel")]
-        private Option<Container> _buttons = None;
+        private Option<Container> _buttons;
 
         [Node("Content Panel/Viewport/Item Box/Item")]
-        private Option<MeshInstance> _itemStand = None;
+        private Option<MeshInstance> _itemStand;
 
-        [Node("Content Panel/Info Panel")] private Option<Panel> _infoPanel = None;
+        [Node("Content Panel/Info Panel")] private Option<Panel> _infoPanel;
 
         [Node("Content Panel/Info Panel/Title")]
-        private Option<Label> _title = None;
+        private Option<Label> _title;
 
         [Node("Content Panel/Info Panel/Type")]
-        private Option<Label> _type = None;
+        private Option<Label> _type;
 
         [Node("Content Panel/Info Panel/Description")]
-        private Option<RichTextLabel> _description = None;
+        private Option<RichTextLabel> _description;
 
         private const string SlotKey = "Slot";
 
         private readonly ReactiveProperty<Option<ICharacter>> _character;
 
-        private Option<ReactiveProperty<Option<Equipment>>> _item = None;
+        private Option<ReactiveProperty<Option<Equipment>>> _item;
 
         public InventoryView()
         {

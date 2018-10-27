@@ -154,15 +154,15 @@ namespace AlleyCat.View
 
         [Export] private NodePath _cameraPath;
 
-        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput;
 
-        [Node("Deactivate", false)] private Option<InputBindings> _deactivateInput = None;
+        [Node("Deactivate", false)] private Option<InputBindings> _deactivateInput;
 
-        [Node(false)] private Option<Camera> _camera = None;
+        [Node(false)] private Option<Camera> _camera;
 
         private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
-        private Option<ReactiveProperty<Option<IEntity>>> _focus = None;
+        private Option<ReactiveProperty<Option<IEntity>>> _focus;
 
         public HeadMountedView() : this(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
         {

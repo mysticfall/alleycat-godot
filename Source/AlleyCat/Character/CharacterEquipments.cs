@@ -14,7 +14,7 @@ namespace AlleyCat.Character
 
         public override Map<string, EquipmentSlot> Slots => _slots;
 
-        [Ancestor] private Option<ICharacter> _character = None;
+        [Ancestor] private Option<ICharacter> _character;
 
         private Map<string, EquipmentSlot> _slots = Map<string, EquipmentSlot>();
 

@@ -62,15 +62,15 @@ namespace AlleyCat.Item
 
         [Export] private Mesh _itemMesh;
 
-        [Service] private Option<MeshInstance> _mesh = None;
+        [Service] private Option<MeshInstance> _mesh;
 
-        [Service] private Option<CollisionShape> _shape = None;
+        [Service] private Option<CollisionShape> _shape;
 
         [Service] private IEnumerable<EquipmentConfiguration> _configurations = Seq<EquipmentConfiguration>();
 
         [Service(false, false)] private IEnumerable<Marker> _markers = Seq<Marker>();
 
-        private Option<Marker> _labelMarker = None;
+        private Option<Marker> _labelMarker;
 
         public override void _Ready()
         {

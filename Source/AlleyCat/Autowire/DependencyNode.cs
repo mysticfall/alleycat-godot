@@ -36,7 +36,6 @@ namespace AlleyCat.Autowire
             _resolver = context;
 
             _processor = _ => context.Build();
-            _deferredProcessor = None;
         }
 
         public DependencyNode(Node node, ServiceDefinition definition)

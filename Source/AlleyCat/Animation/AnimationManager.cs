@@ -32,7 +32,7 @@ namespace AlleyCat.Animation
 
         public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
 
-        [Service] private Option<AnimationPlayer> _player = None;
+        [Service] private Option<AnimationPlayer> _player;
 
         private readonly ReactiveProperty<bool> _active;
 

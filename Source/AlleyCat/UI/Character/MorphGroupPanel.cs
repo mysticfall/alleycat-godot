@@ -24,7 +24,7 @@ namespace AlleyCat.UI.Character
 
         [Export] private PackedScene _rangedMorphPanelScene;
 
-        private Option<IMorphGroup> _group = None;
+        private Option<IMorphGroup> _group;
 
         [PostConstruct]
         protected virtual void OnInitialize()

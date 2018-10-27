@@ -28,7 +28,7 @@ namespace AlleyCat.UI
             }
         }
 
-        private Option<Subject<ValueChangedEvent>> _onValueChange = None;
+        private Option<Subject<ValueChangedEvent>> _onValueChange;
 
         [UsedImplicitly]
         private void FireOnValueChange(float value) => _onValueChange

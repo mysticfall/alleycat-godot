@@ -6,7 +6,6 @@ using AlleyCat.Common;
 using AlleyCat.Motion;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Sensor
 {
@@ -58,9 +57,9 @@ namespace AlleyCat.Sensor
 
         protected Basis NeckOrientation { get; private set; }
 
-        [Service] private Option<Skeleton> _skeleton = None;
+        [Service] private Option<Skeleton> _skeleton;
 
-        [Service] private Option<IAnimationManager> _animationManager = None;
+        [Service] private Option<IAnimationManager> _animationManager;
 
         [Export] private string _headBone = "head";
 

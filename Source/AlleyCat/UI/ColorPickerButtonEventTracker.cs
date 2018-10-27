@@ -28,7 +28,7 @@ namespace AlleyCat.UI
             }
         }
 
-        private Option<Subject<ColorChangedEvent>> _onColorChange = None;
+        private Option<Subject<ColorChangedEvent>> _onColorChange;
 
         [UsedImplicitly]
         private void FireOnColorChange(Color color) => _onColorChange

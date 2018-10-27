@@ -69,23 +69,23 @@ namespace AlleyCat.Character
 
         [Export] private string _displayName;
 
-        [Service] private Option<TVision> _vision = None;
+        [Service] private Option<TVision> _vision;
 
-        [Service] private Option<TLocomotion> _locomotion = None;
+        [Service] private Option<TLocomotion> _locomotion;
 
-        [Service] private Option<IAnimationManager> _animationManager = None;
+        [Service] private Option<IAnimationManager> _animationManager;
 
-        [Service] private Option<Skeleton> _skeleton = None;
+        [Service] private Option<Skeleton> _skeleton;
 
-        [Service] private Option<IEquipmentContainer> _equipments = None;
+        [Service] private Option<IEquipmentContainer> _equipments;
 
-        [Service] private Option<IRaceRegistry> _raceRegistry = None;
+        [Service] private Option<IRaceRegistry> _raceRegistry;
 
-        [Service] private Option<IReadOnlyDictionary<string, IAction>> _actions = None;
+        [Service] private Option<IReadOnlyDictionary<string, IAction>> _actions;
 
         [Service(false, false)] private IEnumerable<Marker> _markers = Enumerable.Empty<Marker>();
 
-        private Option<Marker> _labelMarker = None;
+        private Option<Marker> _labelMarker;
 
         public override void _Ready()
         {

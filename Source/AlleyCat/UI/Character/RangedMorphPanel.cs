@@ -6,7 +6,6 @@ using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
@@ -16,9 +15,9 @@ namespace AlleyCat.UI.Character
 
         public SpinBox Spinner => _spinner.Head();
 
-        [Node] private Option<Slider> _slider = None;
+        [Node] private Option<Slider> _slider;
 
-        [Node] private Option<SpinBox> _spinner = None;
+        [Node] private Option<SpinBox> _spinner;
 
         [PostConstruct]
         protected virtual void OnInitialize()

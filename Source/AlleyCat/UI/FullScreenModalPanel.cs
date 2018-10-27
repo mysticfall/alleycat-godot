@@ -4,7 +4,6 @@ using AlleyCat.Control;
 using Godot;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -23,7 +22,7 @@ namespace AlleyCat.UI
 
         [Export] private string _closeAction = "ui_cancel";
 
-        [Service] private Option<IPlayerControl> _playerControl = None;
+        [Service] private Option<IPlayerControl> _playerControl;
 
         private bool _initialActiveState;
 

@@ -29,15 +29,15 @@ namespace AlleyCat.UI.Character
 
         protected Viewport Viewport => _viewportNode.Head();
 
-        [Service] private Option<MorphListPanel> _morphListPanel = None;
+        [Service] private Option<MorphListPanel> _morphListPanel;
 
-        [Node("Control/View")] private Option<InspectingView> _view = None;
+        [Node("Control/View")] private Option<InspectingView> _view;
 
         [Export, UsedImplicitly] private NodePath _viewport = "UI/Content Panel/Viewport";
 
         private readonly ReactiveProperty<Option<IMorphableCharacter>> _character;
 
-        private Option<Viewport> _viewportNode = None;
+        private Option<Viewport> _viewportNode;
 
         public CharacterCreator()
         {

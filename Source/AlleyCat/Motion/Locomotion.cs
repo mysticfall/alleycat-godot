@@ -5,7 +5,6 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -35,7 +34,7 @@ namespace AlleyCat.Motion
 
         [Export] private NodePath _targetPath;
 
-        [Node] private Option<T> _target = None;
+        [Node] private Option<T> _target;
 
         private readonly ReactiveProperty<bool> _active;
 

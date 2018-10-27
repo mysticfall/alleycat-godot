@@ -4,7 +4,6 @@ using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
@@ -14,7 +13,7 @@ namespace AlleyCat.Item
 
         public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
 
-        [Node(false)] private Option<ICondition<ISlotItem>> _allowedFor = None;
+        [Node(false)] private Option<ICondition<ISlotItem>> _allowedFor;
 
         [Export] private string _key;
 

@@ -5,7 +5,6 @@ using AlleyCat.Setting.Project;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Options;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -22,7 +21,7 @@ namespace AlleyCat.Motion
 
         public Physics3DSettings Physics3DSettings => _settings.Map(s=> s.Value).Head();
 
-        [Service] private Option<IOptions<Physics3DSettings>> _settings = None;
+        [Service] private Option<IOptions<Physics3DSettings>> _settings;
 
         protected KinematicLocomotion()
         {

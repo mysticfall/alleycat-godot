@@ -2,7 +2,6 @@
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -17,15 +16,15 @@ namespace AlleyCat.Animation
 
         protected AnimationGraphContext Context => (AnimationGraphContext) _context;
 
-        [Service] private Option<AnimationTree> _animationTree = None;
+        [Service] private Option<AnimationTree> _animationTree;
 
-        [Service(false)] private Option<IAnimationGraphFactory> _graphFactory = None;
+        [Service(false)] private Option<IAnimationGraphFactory> _graphFactory;
 
-        [Service(false)] private Option<IAnimationControlFactory> _controlFactory = None;
+        [Service(false)] private Option<IAnimationControlFactory> _controlFactory;
 
-        private Option<AnimationGraphContext> _context = None;
+        private Option<AnimationGraphContext> _context;
 
-        private Option<IAnimationGraph> _graph = None;
+        private Option<IAnimationGraph> _graph;
 
         protected override void OnInitialize()
         {

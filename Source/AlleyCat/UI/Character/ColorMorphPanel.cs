@@ -6,7 +6,6 @@ using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
@@ -14,7 +13,7 @@ namespace AlleyCat.UI.Character
     {
         public ColorPickerButton Button => _button.Head();
 
-        [Node] private Option<ColorPickerButton> _button = None;
+        [Node] private Option<ColorPickerButton> _button;
 
         [PostConstruct]
         protected virtual void OnInitialize()

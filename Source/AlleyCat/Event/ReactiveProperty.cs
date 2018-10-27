@@ -22,11 +22,11 @@ namespace AlleyCat.Event
 
         private bool _isDisposed;
 
-        private Option<Exception> _lastException = None;
+        private Option<Exception> _lastException;
 
         private Option<Subject<T>> _publisher = Some(_ => new Subject<T>());
 
-        private Option<IDisposable> _sourceConnection = None;
+        private Option<IDisposable> _sourceConnection;
 
         public T Value
         {

@@ -57,7 +57,7 @@ namespace AlleyCat.View
 
         private readonly ReactiveProperty<Option<IHumanoid>> _character;
 
-        private Option<ReactiveProperty<Option<IEntity>>> _focus = None;
+        private Option<ReactiveProperty<Option<IEntity>>> _focus;
 
         public OrbitingCharacterView() : this(
             new Range<float>(-180f, 180f),

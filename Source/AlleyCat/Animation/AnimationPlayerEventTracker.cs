@@ -24,11 +24,11 @@ namespace AlleyCat.Animation
 
         public IObservable<AnimationChangeEvent> OnAnimationChange => _onAnimationChange.Head();
 
-        private Option<Subject<AnimationChangeEvent>> _onAnimationChange = None;
+        private Option<Subject<AnimationChangeEvent>> _onAnimationChange;
 
-        private Option<Subject<AnimationStartEvent>> _onAnimationStart = None;
+        private Option<Subject<AnimationStartEvent>> _onAnimationStart;
 
-        private Option<Subject<AnimationFinishEvent>> _onAnimationFinish = None;
+        private Option<Subject<AnimationFinishEvent>> _onAnimationFinish;
 
         public override void _EnterTree()
         {

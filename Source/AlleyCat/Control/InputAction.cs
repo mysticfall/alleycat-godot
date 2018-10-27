@@ -4,7 +4,6 @@ using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -14,7 +13,7 @@ namespace AlleyCat.Control
 
         protected abstract Option<IActionContext> CreateActionContext();
 
-        [Node] private Option<ITriggerInput> _input = None;
+        [Node] private Option<ITriggerInput> _input;
 
         [PostConstruct]
         protected virtual void OnInitialize()

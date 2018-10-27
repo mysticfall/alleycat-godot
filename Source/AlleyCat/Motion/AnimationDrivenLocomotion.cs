@@ -6,7 +6,6 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -26,9 +25,9 @@ namespace AlleyCat.Motion
 
         public override bool Valid => base.Valid && _valid;
 
-        [Service] private Option<IAnimationStateManager> _animationManager = None;
+        [Service] private Option<IAnimationStateManager> _animationManager;
 
-        [Service] private Option<Skeleton> _skeleton = None;
+        [Service] private Option<Skeleton> _skeleton;
 
         [Export] private string _idleState = "Idle";
 
@@ -38,9 +37,9 @@ namespace AlleyCat.Motion
 
         [Export] private string _blend2DPath = "States/Moving";
 
-        private Option<AnimationStates> _states = None;
+        private Option<AnimationStates> _states;
 
-        private Option<Blender2D> _blender = None;
+        private Option<Blender2D> _blender;
 
         private bool _valid;
 

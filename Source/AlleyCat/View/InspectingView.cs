@@ -77,13 +77,13 @@ namespace AlleyCat.View
 
         [Node("Pan", false)] private Option<InputBindings> _panInput;
 
-        private Option<ITransformable> _pivotNode = None;
+        private Option<ITransformable> _pivotNode;
 
-        private Option<ReactiveProperty<bool>> _rotating = None;
+        private Option<ReactiveProperty<bool>> _rotating;
 
-        private Option<ReactiveProperty<bool>> _panning = None;
+        private Option<ReactiveProperty<bool>> _panning;
 
-        private Option<IObservable<Vector2>> _panObserver = None;
+        private Option<IObservable<Vector2>> _panObserver;
 
         public InspectingView()
         {

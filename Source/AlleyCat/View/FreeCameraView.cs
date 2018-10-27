@@ -84,13 +84,13 @@ namespace AlleyCat.View
         [Export(PropertyHint.ExpRange, "10,1000")]
         private float _focusSpeed = 100f;
 
-        [Node("Rotation", false)] private Option<InputBindings> _rotationInput = None;
+        [Node("Rotation", false)] private Option<InputBindings> _rotationInput;
 
-        [Node("Movement", false)] private Option<InputBindings> _movementInput = None;
+        [Node("Movement", false)] private Option<InputBindings> _movementInput;
 
-        [Node("Toggle", false)] private Option<InputBindings> _toggleInput = None;
+        [Node("Toggle", false)] private Option<InputBindings> _toggleInput;
 
-        [Node(false)] private Option<Camera> _camera = None;
+        [Node(false)] private Option<Camera> _camera;
 
         private readonly ReactiveProperty<Option<IHumanoid>> _character;
 

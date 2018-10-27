@@ -7,7 +7,7 @@ namespace AlleyCat.Event
 {
     public abstract class EventTracker<T> : Node where T : Node
     {
-        protected Option<T> Parent { get; private set; } = None;
+        protected Option<T> Parent { get; private set; }
 
         public override void _EnterTree()
         {
