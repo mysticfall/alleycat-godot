@@ -90,7 +90,7 @@ namespace AlleyCat.UI.Inventory
         {
             base.OnInitialize();
 
-            Character |= GetTree().GetNodesInGroup<ICharacter>(Tags.Player).HeadOrNone();
+            Character |= this.FindPlayer<ICharacter>();
 
             Tree.CreateItem();
 

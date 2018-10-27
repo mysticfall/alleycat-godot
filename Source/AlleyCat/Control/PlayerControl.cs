@@ -116,7 +116,7 @@ namespace AlleyCat.Control
         {
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Character |= GetTree().GetNodesInGroup<IHumanoid>(Tags.Player).HeadOrNone();
+            Character |= this.FindPlayer<IHumanoid>();
 
             Option<IPerspectiveView> active = None;
 
