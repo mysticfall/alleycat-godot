@@ -24,6 +24,9 @@ namespace AlleyCat.Animation
 
         public IObservable<bool> OnActiveStateChange => _active;
 
+        [Export]
+        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+
         public AnimationPlayer Player => (AnimationPlayer) _player;
 
         public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance;
@@ -44,8 +47,6 @@ namespace AlleyCat.Animation
 
         public AnimationManager()
         {
-            ProcessMode = ProcessMode.Idle;
-
             _active = new ReactiveProperty<bool>(true).AddTo(this);
             _onBeforeAdvance = new Subject<Unit>().AddTo(this);
             _onAdvance = new Subject<float>().AddTo(this);
@@ -57,7 +58,7 @@ namespace AlleyCat.Animation
         {
             Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
 
-            OnLoop
+            this.OnLoop(ProcessMode)
                 .Where(_ => Active)
                 .Subscribe(Advance)
                 .AddTo(this);

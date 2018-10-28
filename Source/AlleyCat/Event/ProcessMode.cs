@@ -1,4 +1,4 @@
-﻿namespace AlleyCat.Common
+﻿namespace AlleyCat.Event
 {
     public enum ProcessMode
     {

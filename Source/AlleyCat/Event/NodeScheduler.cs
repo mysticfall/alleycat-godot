@@ -15,7 +15,9 @@ namespace AlleyCat.Event
 
         public NodeScheduler(ProcessMode mode)
         {
-            ProcessMode = mode;
+            this.OnLoop(mode)
+                .Subscribe(ProcessLoop)
+                .AddTo(this);
         }
 
         public IDisposable Schedule<TState>(
@@ -51,7 +53,7 @@ namespace AlleyCat.Event
             return task;
         }
 
-        protected override void ProcessLoop(float delta)
+        protected void ProcessLoop(float delta)
         {
             lock (_tasks)
             {
@@ -62,8 +64,6 @@ namespace AlleyCat.Event
                     _tasks.Dequeue().Execute();
                 }
             }
-
-            base.ProcessLoop(delta);
         }
 
         protected override void OnPreDestroy()

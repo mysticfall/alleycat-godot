@@ -8,7 +8,6 @@
 
 [node name="Human" type="Node"]
 script = ExtResource( 1 )
-ProcessMode = 0
 _key = "Human"
 _displayName = "race.Human"
 
@@ -18,7 +17,6 @@ _displayName = "race.Human"
 
 [node name="Head" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-ProcessMode = 0
 _key = "morph.Head"
 _displayName = "Head"
 
@@ -36,7 +34,6 @@ _bones = [ "head" ]
 
 [node name="Body" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-ProcessMode = 0
 _key = "morph.Body"
 _displayName = "Body"
 
@@ -54,7 +51,6 @@ _bones = [ "thigh_L", "thigh_R" ]
 
 [node name="Color" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-ProcessMode = 0
 _key = "morph.Color"
 _displayName = "Color"
 
@@ -74,35 +70,30 @@ _materials = [ "Skin" ]
 
 [node name="Shirt" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-ProcessMode = 0
 _key = "Shirt"
 _displayName = "slot.Shirt"
 EquipType = 1
 
 [node name="Pants" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-ProcessMode = 0
 _key = "Pants"
 _displayName = "slot.Pants"
 EquipType = 1
 
 [node name="Left Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-ProcessMode = 0
 _key = "LeftHand"
 _displayName = "slot.LeftHand"
 EquipType = 0
 
 [node name="Right Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-ProcessMode = 0
 _key = "RightHand"
 _displayName = "slot.RightHand"
 EquipType = 0
 
 [node name="Necklace" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-ProcessMode = 0
 _key = "Necklace"
 _displayName = "slot.Necklace"
 EquipType = 1

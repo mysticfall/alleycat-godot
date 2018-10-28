@@ -42,6 +42,9 @@ namespace AlleyCat.Motion
 
         public IObservable<Vector3> OnOffsetChange => _offset.Where(v => Active && Valid);
 
+        [Export]
+        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+
         protected virtual Transform TargetTransform
         {
             get
@@ -83,8 +86,6 @@ namespace AlleyCat.Motion
             Range<float> pitchRange,
             Range<float> distanceRange) : base(yawRange, pitchRange)
         {
-            ProcessMode = ProcessMode.Idle;
-
             _minDistance = Mathf.Max(0, distanceRange.Min);
             _maxDistance = distanceRange.Max;
 
@@ -96,7 +97,7 @@ namespace AlleyCat.Motion
         {
             base.OnInitialize();
 
-            OnLoop
+            this.OnLoop(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
                 .AddTo(this);

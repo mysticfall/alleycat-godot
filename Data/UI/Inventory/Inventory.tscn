@@ -287,12 +287,12 @@ _sections_unfolded = [ "Script" ]
 
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 8 )
-ProcessMode = 2
 Active = true
 _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 89.5
 _minPitch = -89.5
+ProcessMode = 2
 _initialDistance = 0.8
 _initialOffset = Vector3( 0, -0.02, 0 )
 _cameraPath = NodePath("../../Content Panel/Viewport/Item Box/Camera")
@@ -304,12 +304,10 @@ _panningModifier = "point2"
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 9 )
-ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 1.0
@@ -322,7 +320,6 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 1.0
@@ -335,12 +332,10 @@ Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 9 )
-ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 11 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.5

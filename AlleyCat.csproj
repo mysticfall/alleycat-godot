@@ -197,7 +197,6 @@
     <Compile Include="Source\AlleyCat\Autowire\IServiceDefinitionProvider.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeStore.cs" />
-    <Compile Include="Source\AlleyCat\Common\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Common\Range.cs" />
     <Compile Include="Source\AlleyCat\Common\ResourceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />
@@ -228,6 +227,7 @@
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerInteraction.cs" />
+    <Compile Include="Source\AlleyCat\Event\DummyScheduler.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />
@@ -237,6 +237,7 @@
     <Compile Include="Source\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeScheduler.cs" />
     <Compile Include="Source\AlleyCat\Event\ObservableExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Event\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />

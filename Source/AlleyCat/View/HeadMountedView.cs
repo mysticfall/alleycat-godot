@@ -28,6 +28,9 @@ namespace AlleyCat.View
 
         public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
 
+        [Export]
+        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+
         [Node(false)]
         public virtual Option<IHumanoid> Character
         {
@@ -170,8 +173,6 @@ namespace AlleyCat.View
 
         public HeadMountedView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
         {
-            ProcessMode = ProcessMode.Idle;
-
             _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
         }
 
@@ -232,7 +233,7 @@ namespace AlleyCat.View
             var shouldStablize = movingStateChange
                 .Select(v => v && IsStablizationAllowed());
 
-            var transition = OnLoop
+            var transition = this.OnLoop(ProcessMode)
                 .Zip(
                     shouldStablize.MostRecent(false),
                     (delta, stablizing) => stablizing ? delta : -delta)
@@ -253,7 +254,7 @@ namespace AlleyCat.View
             var cameraTransform = rotation
                 .Select(basis => new Transform(basis, Viewpoint + LookDirection * Offset));
 
-            OnLoop
+            this.OnLoop(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
                 .Subscribe(transform => Camera.SetGlobalTransform(transform))

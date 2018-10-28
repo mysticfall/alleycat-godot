@@ -5,79 +5,63 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
     public class BaseNode : Node, IDisposableCollector, ITimeSource, IValidatable
     {
-        [Export]
-        public ProcessMode ProcessMode
-        {
-            get => _processMode;
-            protected set
-            {
-                _processMode = value;
-
-                SetProcess(value == ProcessMode.Idle);
-                SetPhysicsProcess(value == ProcessMode.Physics);
-            }
-        }
-
         public virtual bool Valid => true;
 
-        public virtual IObservable<float> OnLoop => _onLoop.Head();
+        public IObservable<float> OnIdleLoop => _onIdleLoop.IfNone(() =>
+        {
+            SetProcess(true);
 
-        public IScheduler Scheduler => this.GetComponent(SchedulerName, _ => new NodeScheduler(ProcessMode));
+            return (_onIdleLoop = new Subject<float>()).Head();
+        });
 
-        private Option<Subject<float>> _onLoop = Some(_ => new Subject<float>());
+        public IObservable<float> OnPhysicsLoop => _onPhysicsLoop.IfNone(() =>
+        {
+            SetPhysicsProcess(true);
+
+            return (_onPhysicsLoop = new Subject<float>()).Head();
+        });
+
+        public IScheduler IdleScheduler => this.GetIdleScheduler();
+
+        public IScheduler PhysicsScheduler => this.GetPhysicsScheduler();
+
+        private Option<Subject<float>> _onIdleLoop;
+
+        private Option<Subject<float>> _onPhysicsLoop;
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
-        private ProcessMode _processMode = ProcessMode.Disable;
-
-        private const string SchedulerName = "NodeScheduler";
-
-        public BaseNode()
+        protected BaseNode()
         {
+            SetProcess(false);
+            SetPhysicsProcess(false);
         }
 
-        public BaseNode(string name)
+        public BaseNode(string name) : this()
         {
             Ensure.That(name, nameof(name)).IsNotNullOrEmpty();
 
             Name = name;
         }
 
-        public override void _Ready()
-        {
-            base._Ready();
-
-            SetProcess(ProcessMode == ProcessMode.Idle);
-            SetPhysicsProcess(ProcessMode == ProcessMode.Physics);
-        }
-
         public override void _Process(float delta)
         {
             base._Process(delta);
 
-            if (ProcessMode == ProcessMode.Idle)
-            {
-                ProcessLoop(delta);
-            }
+            _onIdleLoop.Iter(l => l.OnNext(delta));
         }
 
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
 
-            if (ProcessMode == ProcessMode.Physics)
-            {
-                ProcessLoop(delta);
-            }
+            _onPhysicsLoop.Iter(l => l.OnNext(delta));
         }
-
-        protected virtual void ProcessLoop(float delta) => _onLoop.Iter(l => l.OnNext(delta));
 
         public void Collect(IDisposable disposable)
         {
@@ -98,7 +82,8 @@ namespace AlleyCat.Common
 
         protected virtual void OnPreDestroy()
         {
-            _onLoop.Iter(l => l.CompleteAndDispose());
+            _onIdleLoop.Iter(l => l.CompleteAndDispose());
+            _onPhysicsLoop.Iter(l => l.CompleteAndDispose());
 
             _disposables.Iter(d => d.DisposeQuietly());
             _disposables = _disposables.Clear();

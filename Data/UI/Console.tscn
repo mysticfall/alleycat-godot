@@ -279,7 +279,6 @@ blend_times = [  ]
 
 [node name="Basic Commands" type="Node" parent="Commands"]
 script = ExtResource( 3 )
-ProcessMode = 0
 
 [connection signal="text_entered" from="Container/InputPane/Input" to="." method="OnTextInput"]
 [connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="Clear"]

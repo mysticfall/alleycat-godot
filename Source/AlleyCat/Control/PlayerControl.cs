@@ -27,6 +27,9 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active;
 
+        [Export]
+        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+
         public override bool Valid => base.Valid &&
                                       _movementInput.IsSome &&
                                       Character.IsSome &&
@@ -104,8 +107,6 @@ namespace AlleyCat.Control
 
         public PlayerControl()
         {
-            ProcessMode = ProcessMode.Idle;
-
             _active = new ReactiveProperty<bool>(true).AddTo(this);
             _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
             _perspective = new ReactiveProperty<Option<IPerspectiveView>>(None).AddTo(this);
@@ -166,22 +167,24 @@ namespace AlleyCat.Control
                 .Select(v => v.Length());
 
             // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
-            var viewRotationSpeed = rotatableViews.CombineLatest(linearSpeed, OnLoop, (view, speed, delta) =>
-                view.Map(v => v.Yaw).Match(yaw =>
-                    {
-                        var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
-                                           Mathf.Sign(yaw) * speed;
+            var viewRotationSpeed = rotatableViews
+                .CombineLatest(linearSpeed, this.OnLoop(ProcessMode), (view, speed, delta) =>
+                    view.Map(v => v.Yaw).Match(yaw =>
+                        {
+                            var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
+                                               Mathf.Sign(yaw) * speed;
 
-                        return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(yaw) ? angularSpeed : yaw / delta;
-                    },
-                    () => 0
-                ));
+                            return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(yaw) ? angularSpeed : yaw / delta;
+                        },
+                        () => 0
+                    ));
 
-            var offsetAngle = viewRotationSpeed.CombineLatest(OnLoop, (speed, delta) => speed * delta);
+            var offsetAngle = viewRotationSpeed
+                .CombineLatest(this.OnLoop(ProcessMode), (speed, delta) => speed * delta);
 
             locomotion
                 .Where(_ => Active && Valid)
-                .SelectMany(l => l.MatchObservable(v => v.OnLoop, Observable.Empty<float>))
+                .SelectMany(l => l.MatchObservable(v => v.OnLoop(ProcessMode), Observable.Empty<float>))
                 .Zip(
                     rotatableViews
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
@@ -191,7 +194,7 @@ namespace AlleyCat.Control
                 .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
                 .AddTo(this);
 
-            OnLoop
+            this.OnLoop(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GlobalTransform().Up() * speed).IfNone(Vector3.Zero))

@@ -12,19 +12,18 @@
 [node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
-ProcessMode = 0
 _viewport = NodePath("UI/Content Panel")
 
 [node name="Control" type="Node" parent="."]
 
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 2 )
-ProcessMode = 2
 Active = true
 _maxYaw = 180.0
 _minYaw = -180.0
 _maxPitch = 90.0
 _minPitch = -90.0
+ProcessMode = 2
 _initialDistance = 0.8
 _initialOffset = Vector3( 0, 0, 0 )
 _cameraPath = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
@@ -36,12 +35,10 @@ _panningModifier = "point2"
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
-ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.5
@@ -54,7 +51,6 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.0
@@ -67,12 +63,10 @@ Maximum = 0.1
 
 [node name="Pan" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
-ProcessMode = 0
 Active = true
 
 [node name="X" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.0
@@ -85,7 +79,6 @@ Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.5
@@ -98,12 +91,10 @@ Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
-ProcessMode = 0
 Active = true
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 5 )
-ProcessMode = 0
 Active = true
 Interpolate = true
 _sensitivity = 0.5

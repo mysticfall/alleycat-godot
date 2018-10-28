@@ -18,6 +18,9 @@ namespace AlleyCat.Motion
             set => _active.Value = value;
         }
 
+        [Export]
+        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+
         public IObservable<bool> OnActiveStateChange => _active;
 
         public override bool Valid => base.Valid && _target.IsSome;
@@ -63,6 +66,10 @@ namespace AlleyCat.Motion
                 .Where(v => !v && Valid)
                 .Subscribe(_ => this.Stop())
                 .AddTo(this);
+
+            this.OnLoop(ProcessMode)
+                .Subscribe(ProcessLoop)
+                .AddTo(this);
         }
 
         public void Move(Vector3 velocity) => _requestedMovement = velocity;
@@ -71,10 +78,8 @@ namespace AlleyCat.Motion
 
         protected abstract void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity);
 
-        protected override void ProcessLoop(float delta)
+        protected virtual void ProcessLoop(float delta)
         {
-            base.ProcessLoop(delta);
-
             if (!Active || !Valid) return;
 
             var before = Target.GlobalTransform;

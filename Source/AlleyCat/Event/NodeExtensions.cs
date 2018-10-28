@@ -59,27 +59,6 @@ namespace AlleyCat.Event
             return tracker.OnUnhandledInput;
         }
 
-        public static IScheduler GetScheduler(this Node node, ProcessMode mode)
-        {
-            Ensure.That(node, nameof(node)).IsNotNull();
-
-            IScheduler scheduler;
-
-            switch (mode)
-            {
-                case ProcessMode.Physics:
-                    scheduler = GetPhysicsScheduler(node);
-                    break;
-                case ProcessMode.Idle:
-                    scheduler = GetIdleScheduler(node);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-            }
-
-            return scheduler;
-        }
-
         public static IScheduler GetIdleScheduler(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
