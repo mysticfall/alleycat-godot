@@ -4,6 +4,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using AlleyCat.Physics;
 using Godot;
 using LanguageExt;

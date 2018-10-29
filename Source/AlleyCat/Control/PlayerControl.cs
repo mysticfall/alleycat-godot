@@ -6,6 +6,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using AlleyCat.Motion;
 using AlleyCat.View;
 using EnsureThat;

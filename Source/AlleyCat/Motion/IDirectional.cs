@@ -1,7 +1,8 @@
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Motion
 {
     public interface IDirectional
     {

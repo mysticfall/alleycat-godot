@@ -1,5 +1,5 @@
 using AlleyCat.Action;
-using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Item;
 using AlleyCat.Motion;
 using AlleyCat.Motion.Generic;

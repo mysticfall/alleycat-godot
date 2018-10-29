@@ -1,7 +1,7 @@
 using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Character;
-using AlleyCat.Common;
+using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
 

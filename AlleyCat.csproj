@@ -173,9 +173,7 @@
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IdentifiableDirectory.cs" />
     <Compile Include="Source\AlleyCat\Common\IDescribable.cs" />
-    <Compile Include="Source\AlleyCat\Common\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Common\IDisposableCollector.cs" />
-    <Compile Include="Source\AlleyCat\Common\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Common\IHideable.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\ILabelled.cs" />
@@ -201,7 +199,6 @@
     <Compile Include="Source\AlleyCat\Common\ResourceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\StringExtensions.cs" />
-    <Compile Include="Source\AlleyCat\Common\Tags.cs" />
     <Compile Include="Source\AlleyCat\Common\TransformExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Source\AlleyCat\Common\VectorExtensions.cs" />
@@ -239,6 +236,7 @@
     <Compile Include="Source\AlleyCat\Event\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
+    <Compile Include="Source\AlleyCat\Game\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />
     <Compile Include="Source\AlleyCat\Game\ISceneManager.cs" />
     <Compile Include="Source\AlleyCat\Game\Scene.cs" />
@@ -273,6 +271,7 @@
     <Compile Include="Source\AlleyCat\Item\SlotContainer.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\Billboard.cs" />
+    <Compile Include="Source\AlleyCat\Motion\IDirectional.cs" />
     <Compile Include="Source\AlleyCat\Motion\ILocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\ILocomotive.cs" />
     <Compile Include="Source\AlleyCat\Motion\ImmediateLocomotion.cs" />

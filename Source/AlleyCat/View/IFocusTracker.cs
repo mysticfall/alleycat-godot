@@ -1,5 +1,6 @@
 using System;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using LanguageExt;
 
 namespace AlleyCat.View

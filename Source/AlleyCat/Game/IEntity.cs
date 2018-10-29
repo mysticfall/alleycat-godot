@@ -1,10 +1,10 @@
-using AlleyCat.Game;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Game
 {
     public interface IEntity : ILabelled, IValidatable
     {

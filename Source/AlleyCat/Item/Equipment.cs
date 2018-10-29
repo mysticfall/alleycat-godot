@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;

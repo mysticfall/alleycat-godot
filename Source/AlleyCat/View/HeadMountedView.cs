@@ -6,6 +6,7 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
 using AlleyCat.Sensor;
