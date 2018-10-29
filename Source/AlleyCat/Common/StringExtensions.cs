@@ -11,6 +11,6 @@ namespace AlleyCat.Common
         public static Option<string> TrimToOption(this string value) =>
             Optional(value).Map(v => v.Trim()).Filter(v => v.Length > 0 && v != NullString);
 
-        public static string TrimToEmpty(this string value) => TrimToOption(value).IfNone("");
+        public static string TrimToEmpty(this string value) => TrimToOption(value).IfNone(string.Empty);
     }
 }

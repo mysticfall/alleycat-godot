@@ -10,7 +10,7 @@ namespace AlleyCat.Game
     [AutowireContext]
     public class Scene : AutowiredNode, IScene
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
         public NodePath CharactersPath
         {

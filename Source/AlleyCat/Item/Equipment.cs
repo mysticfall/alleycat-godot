@@ -15,9 +15,9 @@ namespace AlleyCat.Item
     [AutowireContext]
     public class Equipment : RigidBody, ISlotItem, IMarkable, IEntity
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
 
         public virtual Option<string> Description => _description.TrimToOption().Map(Tr);
 
@@ -28,7 +28,7 @@ namespace AlleyCat.Item
 
         public Set<string> AdditionalSlots => Configuration.AdditionalSlots;
 
-        public EquipmentConfiguration Configuration => ActiveConfiguration.IfNone(_configurations.Head());
+        public EquipmentConfiguration Configuration => ActiveConfiguration.IfNone(_configurations.Head);
 
         public Option<EquipmentConfiguration> ActiveConfiguration => _configurations.Find(c => c.Active);
 
@@ -52,7 +52,7 @@ namespace AlleyCat.Item
 
         public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
 
-        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center());
+        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
 
         [Export] private string _key;
 

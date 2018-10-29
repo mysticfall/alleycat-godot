@@ -10,9 +10,9 @@ namespace AlleyCat.Item
 {
     public class SlotConfiguration : AutowiredNode, ISlotConfiguration
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public string Slot => _slot.TrimToOption().IfNone(Key);
+        public string Slot => _slot.TrimToOption().IfNone(() => Key);
 
         public Set<string> AdditionalSlots => toSet(_additionalSlots);
 

@@ -54,7 +54,7 @@ namespace AlleyCat.Item
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(item, nameof(item)).IsNotNull();
 
-            var parent = dropTo.IfNone(item.GetTree().CurrentScene);
+            var parent = dropTo.IfNone(() => item.GetTree().CurrentScene);
 
             Debug.Assert(parent != null, "parent != null");
 

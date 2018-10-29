@@ -47,7 +47,7 @@ namespace AlleyCat.View
                 var height = bounds.Map(b => b.GetLongestAxisSize());
                 var distance = height.Map(h => h / 2f / Math.Tan(Mathf.Deg2Rad(fov / 2f)));
 
-                return distance.Map(d => (float) d + 0.2f).IfNone(base.InitialDistance);
+                return distance.Map(d => (float) d + 0.2f).IfNone(() => base.InitialDistance);
             }
             set => base.InitialDistance = Mathf.Max(0, value);
         }

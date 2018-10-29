@@ -173,7 +173,7 @@ namespace AlleyCat.UI.Inventory
 
                     Title.Text = v.item.DisplayName;
                     Type.Text = v.item.EquipmentType.DisplayName(this);
-                    Description.Text = v.item.Description.IfNone("");
+                    Description.Text = v.item.Description.IfNone(string.Empty);
 
                     ViewControl.Reset();
 

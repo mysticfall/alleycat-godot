@@ -22,7 +22,7 @@ namespace AlleyCat.Common
 
             var arg = message
                 .Map(m => m.Invoke(error))
-                .IfNone($"Operation failed with code: '{code}(error)'");
+                .IfNone(() => $"Operation failed with code: '{code}(error)'");
 
             Exception exception;
 

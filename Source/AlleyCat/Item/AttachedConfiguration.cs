@@ -9,7 +9,7 @@ namespace AlleyCat.Item
             base.OnEquip(holder, equipment);
 
             var transform = equipment.Markers.Find(Key).Map(m => m.Transform.Inverse())
-                .IfNone(new Transform(Basis.Identity, Vector3.Zero));
+                .IfNone(() => new Transform(Basis.Identity, Vector3.Zero));
 
             foreach (var mesh in equipment.Meshes)
             {

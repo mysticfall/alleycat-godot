@@ -40,7 +40,7 @@ namespace AlleyCat.View
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
+        public virtual Camera Camera => _camera.IfNone(() => GetViewport().GetCamera());
 
         public bool AutoActivate => true;
 
@@ -117,9 +117,9 @@ namespace AlleyCat.View
 
         public override Vector3 Forward => Vision.Map(v => v.Forward).IfNone(Vector3.Forward);
 
-        public override Range<float> YawRange => Vision.Map(v => v.YawRange).IfNone(base.YawRange);
+        public override Range<float> YawRange => Vision.Map(v => v.YawRange).IfNone(() => base.YawRange);
 
-        public override Range<float> PitchRange => Vision.Map(v => v.PitchRange).IfNone(base.PitchRange);
+        public override Range<float> PitchRange => Vision.Map(v => v.PitchRange).IfNone(() => base.PitchRange);
 
         protected virtual IObservable<Vector2> RotationInput => _rotationInput
             .Bind(i => i.AsVector2Input())

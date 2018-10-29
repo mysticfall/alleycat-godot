@@ -9,9 +9,9 @@ namespace AlleyCat.Item
 {
     public abstract class Slot : AutowiredNode, ISlot
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
 
         [Node(false)] private Option<ICondition<ISlotItem>> _allowedFor;
 

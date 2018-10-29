@@ -9,9 +9,9 @@ namespace AlleyCat.Character
 {
     public class Race : AutowiredNode, IRace
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
 
         [Node("Slots/Equipments")]
         public IEnumerable<EquipmentSlot> EquipmentSlots { get; private set; } = Enumerable.Empty<EquipmentSlot>();

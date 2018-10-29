@@ -51,7 +51,7 @@ namespace AlleyCat.Common
             Ensure.That(path, nameof(path)).IsNotNull();
             Ensure.That(factory, nameof(factory)).IsNotNull();
 
-            return node.FindComponent<TChild>(path).IfNone(CreateAndAdd(node, factory));
+            return node.FindComponent<TChild>(path).IfNone(() => CreateAndAdd(node, factory));
         }
 
         public static TChild GetComponent<TParent, TChild>(
@@ -63,7 +63,7 @@ namespace AlleyCat.Common
             Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(factory, nameof(factory)).IsNotNull();
 
-            return node.FindComponent<TChild>().IfNone(CreateAndAdd(node, factory));
+            return node.FindComponent<TChild>().IfNone(() => CreateAndAdd(node, factory));
         }
 
         private static TChild CreateAndAdd<TParent, TChild>(TParent node, Func<TParent, TChild> factory)

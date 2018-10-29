@@ -19,9 +19,9 @@ namespace AlleyCat.Character
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
 
         public abstract IRace Race { get; }
 
@@ -45,7 +45,8 @@ namespace AlleyCat.Character
 
         public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center());
+        public Vector3 LabelPosition => 
+            _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
 
         public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
 

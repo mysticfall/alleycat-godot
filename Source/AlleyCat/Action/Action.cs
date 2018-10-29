@@ -11,9 +11,9 @@ namespace AlleyCat.Action
     [Singleton(typeof(IAction))]
     public abstract class Action : AutowiredNode, IAction
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => Optional(_displayName).Map(Tr).IfNone(Key);
+        public virtual string DisplayName => Optional(_displayName).Map(Tr).IfNone(() => Key);
 
         [Export]
         public bool Active

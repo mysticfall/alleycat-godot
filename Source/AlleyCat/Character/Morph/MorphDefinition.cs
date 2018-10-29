@@ -6,9 +6,9 @@ namespace AlleyCat.Character.Morph
 {
     public abstract class MorphDefinition<T> : Node, IMorphDefinition
     {
-        public string Key => _key.TrimToOption().IfNone(Name);
+        public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(Key);
+        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
 
         [Export, UsedImplicitly]
         public T Default { get; private set; }

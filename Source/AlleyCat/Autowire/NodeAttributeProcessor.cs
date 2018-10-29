@@ -43,7 +43,7 @@ namespace AlleyCat.Autowire
             }
             else
             {
-                var targetPath = path.IfNone(NormalizeMemberName(Member.Name));
+                var targetPath = path.IfNone(() => NormalizeMemberName(Member.Name));
 
                 dependency = node.FindComponent<Node>(targetPath)
                     .Where(DependencyType.IsInstanceOfType).Freeze();

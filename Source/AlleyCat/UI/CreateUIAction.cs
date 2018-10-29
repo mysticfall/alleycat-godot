@@ -25,7 +25,7 @@ namespace AlleyCat.UI
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            Parent.IfNone(GetTree().CurrentScene).AddChild(UI.Instance());
+            Parent.IfNone(() => GetTree().CurrentScene).AddChild(UI.Instance());
         }
     }
 }

@@ -28,7 +28,7 @@ namespace AlleyCat.View
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
 
-        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
+        public virtual Camera Camera => _camera.IfNone(() => GetViewport().GetCamera());
 
         public bool AutoActivate => false;
 

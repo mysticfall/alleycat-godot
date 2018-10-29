@@ -96,7 +96,7 @@ namespace AlleyCat.Item
                     var chain = IKChain.Bind(c => rig.IKChains.Find(c));
                     var marker = equipment.Markers.Find(configuration.Key);
 
-                    var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GlobalTransform);
+                    var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GetGlobalTransform);
 
                     chain.Iter(c => c.Target = target);
                 }

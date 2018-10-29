@@ -12,7 +12,7 @@ namespace AlleyCat.View
 {
     public abstract class OrbitingView : Orbiter, IView
     {
-        public virtual Camera Camera => _camera.IfNone(GetViewport().GetCamera());
+        public virtual Camera Camera => _camera.IfNone(() => GetViewport().GetCamera());
 
         public override Spatial Target => Camera;
 
