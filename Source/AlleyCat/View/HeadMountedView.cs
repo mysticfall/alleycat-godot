@@ -233,7 +233,7 @@ namespace AlleyCat.View
             var shouldStablize = movingStateChange
                 .Select(v => v && IsStablizationAllowed());
 
-            var transition = this.OnLoop(ProcessMode)
+            var transition = this.OnProcess(ProcessMode)
                 .Zip(
                     shouldStablize.MostRecent(false),
                     (delta, stablizing) => stablizing ? delta : -delta)
@@ -254,7 +254,7 @@ namespace AlleyCat.View
             var cameraTransform = rotation
                 .Select(basis => new Transform(basis, Viewpoint + LookDirection * Offset));
 
-            this.OnLoop(ProcessMode)
+            this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
                 .Subscribe(transform => Camera.SetGlobalTransform(transform))

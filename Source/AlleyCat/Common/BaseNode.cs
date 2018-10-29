@@ -1,38 +1,64 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public class BaseNode : Node, IDisposableCollector, ITimeSource, IValidatable
+    public class BaseNode : Node, IDisposableCollector, ITimeSource, IInputSource, IValidatable
     {
         public virtual bool Valid => true;
 
-        public IObservable<float> OnIdleLoop => _onIdleLoop.IfNone(() =>
+        public IObservable<float> OnProcess => _onProcess.IfNone(() =>
         {
             SetProcess(true);
 
-            return (_onIdleLoop = new Subject<float>()).Head();
+            return (_onProcess = new Subject<float>()).Head();
         });
 
-        public IObservable<float> OnPhysicsLoop => _onPhysicsLoop.IfNone(() =>
+        public IObservable<float> OnPhysicsProcess => _onPhysicsProcess.IfNone(() =>
         {
             SetPhysicsProcess(true);
 
-            return (_onPhysicsLoop = new Subject<float>()).Head();
+            return (_onPhysicsProcess = new Subject<float>()).Head();
         });
 
-        public IScheduler IdleScheduler => this.GetIdleScheduler();
+        public IScheduler Scheduler => _scheduler.IfNone(
+            () => (_scheduler = new ProcessScheduler(OnProcess)).Head());
 
-        public IScheduler PhysicsScheduler => this.GetPhysicsScheduler();
+        public IScheduler PhysicsScheduler => _physicsScheduler.IfNone(
+            () => (_physicsScheduler = new ProcessScheduler(OnPhysicsProcess)).Head());
 
-        private Option<Subject<float>> _onIdleLoop;
+        public IObservable<InputEvent> OnInput => _onInput.IfNone(() =>
+        {
+            SetProcessInput(true);
 
-        private Option<Subject<float>> _onPhysicsLoop;
+            return (_onInput = new Subject<InputEvent>()).Head();
+        });
+
+        public IObservable<InputEvent> OnUnhandledInput => _onUnhandledInput.IfNone(() =>
+        {
+            SetProcessUnhandledInput(true);
+
+            return (_onUnhandledInput = new Subject<InputEvent>()).Head();
+        });
+
+        private Option<Subject<float>> _onProcess;
+
+        private Option<Subject<float>> _onPhysicsProcess;
+
+        private Option<Subject<InputEvent>> _onInput;
+
+        private Option<Subject<InputEvent>> _onUnhandledInput;
+
+        private Option<IScheduler> _scheduler;
+
+        private Option<IScheduler> _physicsScheduler;
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
@@ -40,6 +66,8 @@ namespace AlleyCat.Common
         {
             SetProcess(false);
             SetPhysicsProcess(false);
+            SetProcessInput(false);
+            SetProcessUnhandledInput(false);
         }
 
         public BaseNode(string name) : this()
@@ -53,14 +81,37 @@ namespace AlleyCat.Common
         {
             base._Process(delta);
 
-            _onIdleLoop.Iter(l => l.OnNext(delta));
+            _onProcess.Iter(l => l.OnNext(delta));
         }
 
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
 
-            _onPhysicsLoop.Iter(l => l.OnNext(delta));
+            _onPhysicsProcess.Iter(l => l.OnNext(delta));
+        }
+
+        public override void _Input(InputEvent @event)
+        {
+            base._Input(@event);
+
+            _onInput.Iter(i => i.OnNext(@event));
+        }
+
+        public override void _UnhandledInput(InputEvent @event)
+        {
+            base._UnhandledInput(@event);
+
+            if (@event is InputEventKey) return;
+
+            _onUnhandledInput.Iter(i => i.OnNext(@event));
+        }
+
+        public override void _UnhandledKeyInput(InputEventKey @event)
+        {
+            base._UnhandledKeyInput(@event);
+
+            _onUnhandledInput.Iter(i => i.OnNext(@event));
         }
 
         public void Collect(IDisposable disposable)
@@ -82,8 +133,23 @@ namespace AlleyCat.Common
 
         protected virtual void OnPreDestroy()
         {
-            _onIdleLoop.Iter(l => l.CompleteAndDispose());
-            _onPhysicsLoop.Iter(l => l.CompleteAndDispose());
+            _onProcess.Iter(l => l.CompleteAndDispose());
+            _onProcess = None;
+
+            _onPhysicsProcess.Iter(l => l.CompleteAndDispose());
+            _onPhysicsProcess = None;
+
+            _onInput.Iter(l => l.CompleteAndDispose());
+            _onInput = None;
+
+            _onUnhandledInput.Iter(l => l.CompleteAndDispose());
+            _onUnhandledInput = None;
+
+            _scheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
+            _scheduler = None;
+
+            _physicsScheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
+            _physicsScheduler = None;
 
             _disposables.Iter(d => d.DisposeQuietly());
             _disposables = _disposables.Clear();

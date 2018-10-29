@@ -168,7 +168,7 @@ namespace AlleyCat.Control
 
             // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
             var viewRotationSpeed = rotatableViews
-                .CombineLatest(linearSpeed, this.OnLoop(ProcessMode), (view, speed, delta) =>
+                .CombineLatest(linearSpeed, this.OnProcess(ProcessMode), (view, speed, delta) =>
                     view.Map(v => v.Yaw).Match(yaw =>
                         {
                             var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
@@ -180,11 +180,11 @@ namespace AlleyCat.Control
                     ));
 
             var offsetAngle = viewRotationSpeed
-                .CombineLatest(this.OnLoop(ProcessMode), (speed, delta) => speed * delta);
+                .CombineLatest(this.OnProcess(ProcessMode), (speed, delta) => speed * delta);
 
             locomotion
                 .Where(_ => Active && Valid)
-                .SelectMany(l => l.MatchObservable(v => v.OnLoop(ProcessMode), Observable.Empty<float>))
+                .SelectMany(l => l.MatchObservable(v => v.OnProcess(ProcessMode), Observable.Empty<float>))
                 .Zip(
                     rotatableViews
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
@@ -194,7 +194,7 @@ namespace AlleyCat.Control
                 .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
                 .AddTo(this);
 
-            this.OnLoop(ProcessMode)
+            this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GlobalTransform().Up() * speed).IfNone(Vector3.Zero))

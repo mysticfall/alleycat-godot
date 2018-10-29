@@ -58,7 +58,7 @@ namespace AlleyCat.Animation
         {
             Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
 
-            this.OnLoop(ProcessMode)
+            this.OnProcess(ProcessMode)
                 .Where(_ => Active)
                 .Subscribe(Advance)
                 .AddTo(this);

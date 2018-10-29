@@ -1,23 +1,24 @@
 using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
-using AlleyCat.Common;
 using EnsureThat;
 using Priority_Queue;
 
 namespace AlleyCat.Event
 {
-    public class NodeScheduler : BaseNode, IScheduler
+    public class ProcessScheduler : IScheduler, IDisposable
     {
         public DateTimeOffset Now => DateTimeOffset.Now;
 
         private readonly IPriorityQueue<Task, double> _tasks = new SimplePriorityQueue<Task, double>();
 
-        public NodeScheduler(ProcessMode mode)
+        private readonly IDisposable _listener;
+
+        public ProcessScheduler(IObservable<float> tick)
         {
-            this.OnLoop(mode)
-                .Subscribe(ProcessLoop)
-                .AddTo(this);
+            Ensure.That(tick, nameof(tick)).IsNotNull();
+
+            _listener = tick.Subscribe(ProcessLoop);
         }
 
         public IDisposable Schedule<TState>(
@@ -66,14 +67,14 @@ namespace AlleyCat.Event
             }
         }
 
-        protected override void OnPreDestroy()
+        public void Dispose()
         {
             lock (_tasks)
             {
                 _tasks.Clear();
             }
 
-            base.OnPreDestroy();
+            _listener.Dispose();
         }
 
         private class Task : IDisposable

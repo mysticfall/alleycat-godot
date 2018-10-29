@@ -97,7 +97,7 @@ namespace AlleyCat.Motion
         {
             base.OnInitialize();
 
-            this.OnLoop(ProcessMode)
+            this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
                 .AddTo(this);

@@ -67,7 +67,7 @@ namespace AlleyCat.Motion
                 .Subscribe(_ => this.Stop())
                 .AddTo(this);
 
-            this.OnLoop(ProcessMode)
+            this.OnProcess(ProcessMode)
                 .Subscribe(ProcessLoop)
                 .AddTo(this);
         }

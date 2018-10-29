@@ -71,7 +71,7 @@ namespace AlleyCat.Control
                     .Buffer(
                         TimeSpan.FromMilliseconds(WindowSize),
                         TimeSpan.FromMilliseconds(WindowShift),
-                        this.GetIdleScheduler())
+                        this.GetScheduler())
                     .Where(v => v.Any())
                     .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count);
             }
