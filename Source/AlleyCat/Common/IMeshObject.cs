@@ -19,7 +19,9 @@ namespace AlleyCat.Common
 
             Debug.Assert(source.Meshes != null, "source.Meshes != null");
 
-            return source.Meshes.Map(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
+            return source.Meshes.Any()
+                ? source.Meshes.Map(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2))
+                : new AABB(source.Origin(), Vector3.Zero);
         }
     }
 }

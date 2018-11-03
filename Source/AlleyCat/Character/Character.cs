@@ -41,7 +41,7 @@ namespace AlleyCat.Character
 
         public Spatial Spatial => this;
 
-        public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildComponents<MeshInstance>();
+        public IEnumerable<MeshInstance> Meshes => _skeleton.SelectMany(s => s.GetChildComponents<MeshInstance>());
 
         public AABB Bounds => this.CalculateBounds();
 
