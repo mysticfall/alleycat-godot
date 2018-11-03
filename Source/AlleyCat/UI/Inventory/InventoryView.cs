@@ -25,7 +25,7 @@ namespace AlleyCat.UI.Inventory
             set => _character.Value = value;
         }
 
-        public IObservable<Option<ICharacter>> OnCharacterChange => _character;
+        public IObservable<Option<ICharacter>> OnCharacterChange => _character.AsObservable();
 
         public Option<Equipment> Item
         {

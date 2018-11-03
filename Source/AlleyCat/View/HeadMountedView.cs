@@ -39,7 +39,7 @@ namespace AlleyCat.View
             set => _character.Value = value;
         }
 
-        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
         public virtual Camera Camera => _camera.IfNone(() => GetViewport().GetCamera());
 

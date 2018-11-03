@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -31,7 +32,7 @@ namespace AlleyCat.Item
             }
         }
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         public Option<Mesh> Mesh
         {

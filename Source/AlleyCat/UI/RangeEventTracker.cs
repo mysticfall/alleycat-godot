@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -24,7 +25,7 @@ namespace AlleyCat.UI
                     _onValueChange = new Subject<ValueChangedEvent>();
                 }
 
-                return _onValueChange.Head();
+                return _onValueChange.Head().AsObservable();
             }
         }
 

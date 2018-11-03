@@ -17,7 +17,7 @@ namespace AlleyCat.Motion
             set => _active.Value = value;
         }
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         public abstract Vector3 Origin { get; }
 

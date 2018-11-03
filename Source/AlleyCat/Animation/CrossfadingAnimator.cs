@@ -24,7 +24,7 @@ namespace AlleyCat.Animation
             set => TransitionNode.XfadeTime = Mathf.Min(value, 0);
         }
 
-        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation;
+        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();
 
         protected string Parameter { get; }
 

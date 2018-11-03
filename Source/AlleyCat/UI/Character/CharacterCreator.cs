@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Character.Morph;
@@ -21,7 +22,7 @@ namespace AlleyCat.UI.Character
             set => _character.Value = value;
         }
 
-        public IObservable<Option<IMorphableCharacter>> OnCharacterChange => _character;
+        public IObservable<Option<IMorphableCharacter>> OnCharacterChange => _character.AsObservable();
 
         protected MorphListPanel MorphListPanel => _morphListPanel.Head();
 

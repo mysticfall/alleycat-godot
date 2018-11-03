@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -25,7 +26,7 @@ namespace AlleyCat.UI
                     _onMouseEnter = new Subject<MouseEnteredEvent>();
                 }
 
-                return _onMouseEnter.Head();
+                return _onMouseEnter.Head().AsObservable();
             }
         }
 
@@ -40,7 +41,7 @@ namespace AlleyCat.UI
                     _onMouseExit = new Subject<MouseExitedEvent>();
                 }
 
-                return _onMouseExit.Head();
+                return _onMouseExit.Head().AsObservable();
             }
         }
 

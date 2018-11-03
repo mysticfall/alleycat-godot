@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -18,11 +19,11 @@ namespace AlleyCat.Animation
 
         private const string SignalOnAnimationFinish = "animation_finished";
 
-        public IObservable<AnimationStartEvent> OnAnimationStart => _onAnimationStart.Head();
+        public IObservable<AnimationStartEvent> OnAnimationStart => _onAnimationStart.Head().AsObservable();
 
-        public IObservable<AnimationFinishEvent> OnAnimationFinish => _onAnimationFinish.Head();
+        public IObservable<AnimationFinishEvent> OnAnimationFinish => _onAnimationFinish.Head().AsObservable();
 
-        public IObservable<AnimationChangeEvent> OnAnimationChange => _onAnimationChange.Head();
+        public IObservable<AnimationChangeEvent> OnAnimationChange => _onAnimationChange.Head().AsObservable();
 
         private Option<Subject<AnimationChangeEvent>> _onAnimationChange;
 

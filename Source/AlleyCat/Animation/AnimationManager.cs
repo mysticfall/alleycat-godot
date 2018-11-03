@@ -22,18 +22,18 @@ namespace AlleyCat.Animation
             set => _active.Value = value;
         }
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
         public AnimationPlayer Player => (AnimationPlayer) _player;
 
-        public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance;
+        public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance.AsObservable();
 
-        public IObservable<float> OnAdvance => _onAdvance;
+        public IObservable<float> OnAdvance => _onAdvance.AsObservable();
 
-        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent;
+        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent.AsObservable();
 
         [Service] private Option<AnimationPlayer> _player;
 

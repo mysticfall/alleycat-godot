@@ -23,7 +23,7 @@ namespace AlleyCat.View
             set => _character.Value = value;
         }
 
-        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
         public Option<IEntity> FocusedObject => _focus.Bind(f => f.Value);
 

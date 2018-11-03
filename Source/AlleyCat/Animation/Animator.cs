@@ -17,7 +17,7 @@ namespace AlleyCat.Animation
             set => _animation.Value = value;
         }
 
-        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation;
+        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();
 
         protected AnimationNodeAnimation Node { get; }
 

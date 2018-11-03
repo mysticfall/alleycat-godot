@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Event;
 using EnsureThat;
@@ -19,14 +20,14 @@ namespace AlleyCat.Common
             SetProcess(true);
 
             return (_onProcess = new Subject<float>()).Head();
-        });
+        }).AsObservable();
 
         public IObservable<float> OnPhysicsProcess => _onPhysicsProcess.IfNone(() =>
         {
             SetPhysicsProcess(true);
 
             return (_onPhysicsProcess = new Subject<float>()).Head();
-        });
+        }).AsObservable();
 
         public IScheduler Scheduler => _scheduler.IfNone(
             () => (_scheduler = new ProcessScheduler(OnProcess)).Head());
@@ -39,14 +40,14 @@ namespace AlleyCat.Common
             SetProcessInput(true);
 
             return (_onInput = new Subject<InputEvent>()).Head();
-        });
+        }).AsObservable();
 
         public IObservable<InputEvent> OnUnhandledInput => _onUnhandledInput.IfNone(() =>
         {
             SetProcessUnhandledInput(true);
 
             return (_onUnhandledInput = new Subject<InputEvent>()).Head();
-        });
+        }).AsObservable();
 
         private Option<Subject<float>> _onProcess;
 

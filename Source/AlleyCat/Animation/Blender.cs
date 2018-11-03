@@ -31,11 +31,11 @@ namespace AlleyCat.Animation
             set => _timeScale.Value = Mathf.Clamp(value, 0, 1);
         }
 
-        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation;
+        public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();
 
-        public IObservable<float> OnAmountChange => _amount;
+        public IObservable<float> OnAmountChange => _amount.AsObservable();
 
-        public IObservable<float> OnTimeScaleChange => _timeScale;
+        public IObservable<float> OnTimeScaleChange => _timeScale.AsObservable();
 
         protected string BlendAmountParameter { get; }
 

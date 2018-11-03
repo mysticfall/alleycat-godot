@@ -21,7 +21,7 @@ namespace AlleyCat.Motion
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         public override bool Valid => base.Valid && _target.IsSome;
 
@@ -31,9 +31,9 @@ namespace AlleyCat.Motion
 
         public Vector3 RotationalVelocity => _rotationalVelocity.Value;
 
-        public IObservable<Vector3> OnVelocityChange => _velocity;
+        public IObservable<Vector3> OnVelocityChange => _velocity.AsObservable();
 
-        public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity;
+        public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity.AsObservable();
 
         [Export] private NodePath _targetPath;
 

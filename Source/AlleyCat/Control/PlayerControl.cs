@@ -26,7 +26,7 @@ namespace AlleyCat.Control
             set => _active.Value = value;
         }
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
@@ -44,7 +44,7 @@ namespace AlleyCat.Control
             set => _character.Value = value;
         }
 
-        public IObservable<Option<IHumanoid>> OnCharacterChange => _character;
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
         public Camera Camera
         {

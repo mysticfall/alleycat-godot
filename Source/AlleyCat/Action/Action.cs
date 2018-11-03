@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -22,7 +23,7 @@ namespace AlleyCat.Action
             set => _active.Value = value;
         }
 
-        public IObservable<bool> OnActiveStateChange => _active;
+        public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
         [Export] private string _key;
 

@@ -18,9 +18,9 @@ namespace AlleyCat.Item
     {
         public abstract Map<string, TSlot> Slots { get; }
 
-        public IObservable<TItem> OnAdd => _onAdd;
+        public IObservable<TItem> OnAdd => _onAdd.AsObservable();
 
-        public IObservable<TItem> OnRemove => _onRemove;
+        public IObservable<TItem> OnRemove => _onRemove.AsObservable();
 
         public IObservable<IEnumerable<TItem>> OnItemsChange =>
             OnAdd.Merge(OnRemove).Select(_ => Values).StartWith(Values);

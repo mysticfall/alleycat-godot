@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -24,7 +25,7 @@ namespace AlleyCat.UI
                     _onPressed = new Subject<ButtonPressedEvent>();
                 }
 
-                return _onPressed.Head();
+                return _onPressed.Head().AsObservable();
             }
         }
 
