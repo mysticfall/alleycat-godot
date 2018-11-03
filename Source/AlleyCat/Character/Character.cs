@@ -45,7 +45,7 @@ namespace AlleyCat.Character
 
         public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition => 
+        public Vector3 LabelPosition =>
             _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
 
         public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
