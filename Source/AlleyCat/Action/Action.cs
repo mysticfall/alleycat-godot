@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using static LanguageExt.Prelude;
@@ -20,7 +20,7 @@ namespace AlleyCat.Action
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
@@ -29,11 +29,11 @@ namespace AlleyCat.Action
 
         [Export] private string _displayName;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
         protected Action()
         {
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
         }
 
         public void Execute(IActionContext context)

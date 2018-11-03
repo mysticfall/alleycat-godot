@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 
 namespace AlleyCat.Character.Morph
@@ -21,26 +21,26 @@ namespace AlleyCat.Character.Morph
         public TVal Value
         {
             get => _value.Value;
-            set => _value.Value = value;
+            set => _value.OnNext(value);
         }
 
         object IMorph.Value
         {
             get => _value.Value;
-            set => _value.Value = (TVal) value;
+            set => _value.OnNext((TVal) value);
         }
 
-        public IObservable<TVal> OnChange => _value;
+        public IObservable<TVal> OnChange => _value.AsObservable();
 
         IObservable<object> IMorph.OnChange => _value.Select(v => (object) v);
 
-        private readonly ReactiveProperty<TVal> _value;
+        private readonly BehaviorSubject<TVal> _value;
 
         protected Morph(TDef definition)
         {
             Ensure.That(definition, nameof(definition)).IsNotNull();
 
-            _value = new ReactiveProperty<TVal>(definition.Default).AddTo(this);
+            _value = new BehaviorSubject<TVal>(definition.Default).AddTo(this);
 
             Definition = definition;
             OnChange.Skip(1).Subscribe(Apply).AddTo(this);

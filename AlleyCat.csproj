@@ -227,15 +227,12 @@
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IInputSource.cs" />
-    <Compile Include="Source\AlleyCat\Event\IReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\IReadOnlyReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ITimeSource.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ProcessScheduler.cs" />
     <Compile Include="Source\AlleyCat\Event\ObservableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ProcessMode.cs" />
-    <Compile Include="Source\AlleyCat\Event\ReactiveProperty.cs" />
-    <Compile Include="Source\AlleyCat\Event\ReadOnlyReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Game\IEntity.cs" />
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />
     <Compile Include="Source\AlleyCat\Game\ISceneManager.cs" />

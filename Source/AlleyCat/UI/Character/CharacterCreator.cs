@@ -1,10 +1,10 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Character.Morph;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.View;
 using Godot;
 using JetBrains.Annotations;
@@ -19,7 +19,7 @@ namespace AlleyCat.UI.Character
         public Option<IMorphableCharacter> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<IMorphableCharacter>> OnCharacterChange => _character.AsObservable();
@@ -36,13 +36,13 @@ namespace AlleyCat.UI.Character
 
         [Export, UsedImplicitly] private NodePath _viewport = "UI/Content Panel/Viewport";
 
-        private readonly ReactiveProperty<Option<IMorphableCharacter>> _character;
+        private readonly BehaviorSubject<Option<IMorphableCharacter>> _character;
 
         private Option<Viewport> _viewportNode;
 
         public CharacterCreator()
         {
-            _character = new ReactiveProperty<Option<IMorphableCharacter>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IMorphableCharacter>>(None).AddTo(this);
         }
 
         [PostConstruct]

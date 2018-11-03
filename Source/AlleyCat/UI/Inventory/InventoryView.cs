@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Item;
 using AlleyCat.Item.Generic;
 using AlleyCat.View;
@@ -22,16 +22,12 @@ namespace AlleyCat.UI.Inventory
         public Option<ICharacter> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<ICharacter>> OnCharacterChange => _character.AsObservable();
 
-        public Option<Equipment> Item
-        {
-            get => _item.Bind(i => i.Value);
-            set => _item.Iter(i => i.Value = value);
-        }
+        public Option<Equipment> Item { get; private set; }
 
         public IObservable<Option<Equipment>> OnItemChange =>
             _item.MatchObservable(identity, Observable.Empty<Option<Equipment>>);
@@ -77,13 +73,13 @@ namespace AlleyCat.UI.Inventory
 
         private const string SlotKey = "Slot";
 
-        private readonly ReactiveProperty<Option<ICharacter>> _character;
+        private readonly BehaviorSubject<Option<ICharacter>> _character;
 
-        private Option<ReactiveProperty<Option<Equipment>>> _item;
+        private Option<IObservable<Option<Equipment>>> _item;
 
         public InventoryView()
         {
-            _character = new ReactiveProperty<Option<ICharacter>>(None).AddTo(this.GetCollector());
+            _character = new BehaviorSubject<Option<ICharacter>>(None).AddTo(this.GetCollector());
         }
 
         protected override void OnInitialize()
@@ -116,15 +112,15 @@ namespace AlleyCat.UI.Inventory
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)))
                 .AddTo(this.GetCollector());
 
-            _item = Tree.OnItemSelect()
-                .Select(e => e.Source.GetSelected()?.GetMeta(SlotKey))
-                .OfType<string>()
-                .Select(Optional)
-                .Merge(items.Select(_ => Option<string>.None))
-                .CombineLatest(container, (slot, slots) => (slot, slots))
-                .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
-                .ToReactiveProperty()
-                .AddTo(this.GetCollector());
+            _item = Some(
+                Tree.OnItemSelect()
+                    .Select(e => e.Source.GetSelected()?.GetMeta(SlotKey))
+                    .OfType<string>()
+                    .Select(Optional)
+                    .Merge(items.Select(_ => Option<string>.None))
+                    .CombineLatest(container, (slot, slots) => (slot, slots))
+                    .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
+                    .Do(current=> Item = current));
 
             OnItemChange
                 .Subscribe(DisplayItem)

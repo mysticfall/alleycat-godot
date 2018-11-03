@@ -24,35 +24,6 @@ namespace AlleyCat.Event
                 (agg, current) => Tuple.Create(agg.Item2, current));
         }
 
-        public static ReactiveProperty<T> ToReactiveProperty<T>(this IObservable<T> source)
-        {
-            Ensure.That(source, nameof(source)).IsNotNull();
-
-            return new ReactiveProperty<T>(source);
-        }
-
-        public static ReactiveProperty<T> ToReactiveProperty<T>(this IObservable<T> source, T initialValue)
-        {
-            Ensure.That(source, nameof(source)).IsNotNull();
-
-            return new ReactiveProperty<T>(source, initialValue);
-        }
-
-        public static ReadOnlyReactiveProperty<T> ToReadOnlyReactiveProperty<T>(this IObservable<T> source)
-        {
-            Ensure.That(source, nameof(source)).IsNotNull();
-
-            return new ReadOnlyReactiveProperty<T>(source);
-        }
-
-        public static ReadOnlyReactiveProperty<T> ToReadOnlyReactiveProperty<T>(
-            this IObservable<T> source, T initialValue)
-        {
-            Ensure.That(source, nameof(source)).IsNotNull();
-
-            return new ReadOnlyReactiveProperty<T>(source, initialValue);
-        }
-
         public static void CompleteAndDispose<T>(this IObserver<T> subject)
         {
             Ensure.That(subject, nameof(subject)).IsNotNull();

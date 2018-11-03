@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -15,7 +15,7 @@ namespace AlleyCat.Animation
         public Option<Godot.Animation> Animation
         {
             get => _animation.Value;
-            set => _animation.Value = value;
+            set => _animation.OnNext(value);
         }
 
         public float Time
@@ -38,7 +38,7 @@ namespace AlleyCat.Animation
 
         protected AnimationNodeAnimation AnimationNode2 { get; }
 
-        private readonly ReactiveProperty<Option<Godot.Animation>> _animation;
+        private readonly BehaviorSubject<Option<Godot.Animation>> _animation;
 
         public CrossfadingAnimator(
             string parameter,
@@ -61,7 +61,7 @@ namespace AlleyCat.Animation
 
             var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new ReactiveProperty<Option<Godot.Animation>>(current).AddTo(this);
+            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).AddTo(this);
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation))

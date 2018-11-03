@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -14,14 +14,14 @@ namespace AlleyCat.Animation
         public Option<Godot.Animation> Animation
         {
             get => _animation.Value;
-            set => _animation.Value = value;
+            set => _animation.OnNext(value);
         }
 
         public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();
 
         protected AnimationNodeAnimation Node { get; }
 
-        private readonly ReactiveProperty<Option<Godot.Animation>> _animation;
+        private readonly BehaviorSubject<Option<Godot.Animation>> _animation;
 
         public Animator(AnimationNodeAnimation node, AnimationGraphContext context) : base(context)
         {
@@ -32,7 +32,7 @@ namespace AlleyCat.Animation
 
             var current = Node.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new ReactiveProperty<Option<Godot.Animation>>(current).AddTo(this);
+            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).AddTo(this);
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())

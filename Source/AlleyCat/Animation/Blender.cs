@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -16,19 +16,19 @@ namespace AlleyCat.Animation
         public Option<Godot.Animation> Animation
         {
             get => _animation.Value;
-            set => _animation.Value = value;
+            set => _animation.OnNext(value);
         }
 
         public float Amount
         {
             get => _amount.Value;
-            set => _amount.Value = Mathf.Clamp(value, 0, 1);
+            set => _amount.OnNext(Mathf.Clamp(value, 0, 1));
         }
 
         public float TimeScale
         {
             get => _timeScale.Value;
-            set => _timeScale.Value = Mathf.Clamp(value, 0, 1);
+            set => _timeScale.OnNext(Mathf.Clamp(value, 0, 1));
         }
 
         public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();
@@ -45,11 +45,11 @@ namespace AlleyCat.Animation
 
         protected AnimationNodeAnimation AnimationNode { get; }
 
-        private readonly ReactiveProperty<Option<Godot.Animation>> _animation;
+        private readonly BehaviorSubject<Option<Godot.Animation>> _animation;
 
-        private readonly ReactiveProperty<float> _amount;
+        private readonly BehaviorSubject<float> _amount;
 
-        private readonly ReactiveProperty<float> _timeScale;
+        private readonly BehaviorSubject<float> _timeScale;
 
         public Blender(
             string blendAmountParameter,
@@ -79,7 +79,7 @@ namespace AlleyCat.Animation
 
             var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new ReactiveProperty<Option<Godot.Animation>>(current).AddTo(this);
+            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).AddTo(this);
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
@@ -102,7 +102,7 @@ namespace AlleyCat.Animation
 
             var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
 
-            _amount = new ReactiveProperty<float>(currentAmount).AddTo(this);
+            _amount = new BehaviorSubject<float>(currentAmount).AddTo(this);
 
             _amount
                 .Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v))
@@ -111,7 +111,7 @@ namespace AlleyCat.Animation
             var currentSpeed = timeScaleParameter
                 .Map(context.AnimationTree.Get).OfType<float>().HeadOrNone().IfNone(1f);
 
-            _timeScale = new ReactiveProperty<float>(currentSpeed).AddTo(this);
+            _timeScale = new BehaviorSubject<float>(currentSpeed).AddTo(this);
 
             timeScaleParameter.Iter(param =>
             {

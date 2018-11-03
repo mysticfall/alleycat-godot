@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -23,7 +24,7 @@ namespace AlleyCat.Control
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
@@ -41,7 +42,7 @@ namespace AlleyCat.Control
         public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
@@ -64,7 +65,7 @@ namespace AlleyCat.Control
         public Option<IPerspectiveView> Perspective
         {
             get => _perspective.Value;
-            set => _perspective.Value = value;
+            set => _perspective.OnNext(value);
         }
 
         public IObservable<Option<IPerspectiveView>> OnPerspectiveChange =>
@@ -94,11 +95,11 @@ namespace AlleyCat.Control
 
         [Node("Movement")] private Option<InputBindings> _movementInput;
 
-        private readonly ReactiveProperty<Option<IHumanoid>> _character;
+        private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private readonly ReactiveProperty<Option<IPerspectiveView>> _perspective;
+        private readonly BehaviorSubject<Option<IPerspectiveView>> _perspective;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
         [Node(false)] private Option<Camera> _camera;
 
@@ -108,9 +109,9 @@ namespace AlleyCat.Control
 
         public PlayerControl()
         {
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
-            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
-            _perspective = new ReactiveProperty<Option<IPerspectiveView>>(None).AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
+            _perspective = new BehaviorSubject<Option<IPerspectiveView>>(None).AddTo(this);
         }
 
         [PostConstruct]

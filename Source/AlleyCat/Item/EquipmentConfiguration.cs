@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -28,7 +28,7 @@ namespace AlleyCat.Item
                         "Unable to switch configuration while an item is equipped.");
                 }
 
-                _active.Value = value;
+                _active.OnNext(value);
             }
         }
 
@@ -69,13 +69,13 @@ namespace AlleyCat.Item
 
         private float _animationTransition = 1f;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
         private bool _initialized;
 
         protected EquipmentConfiguration()
         {
-            _active = new ReactiveProperty<bool>().AddTo(this);
+            _active = new BehaviorSubject<bool>(false).AddTo(this);
         }
 
         [PostConstruct]

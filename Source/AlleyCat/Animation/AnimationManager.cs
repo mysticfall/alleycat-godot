@@ -19,7 +19,7 @@ namespace AlleyCat.Animation
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
@@ -37,7 +37,7 @@ namespace AlleyCat.Animation
 
         [Service] private Option<AnimationPlayer> _player;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
         private readonly ISubject<Unit> _onBeforeAdvance;
 
@@ -47,7 +47,7 @@ namespace AlleyCat.Animation
 
         public AnimationManager()
         {
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
             _onBeforeAdvance = new Subject<Unit>().AddTo(this);
             _onAdvance = new Subject<float>().AddTo(this);
             _onAnimationEvent = new Subject<AnimationEvent>().AddTo(this);

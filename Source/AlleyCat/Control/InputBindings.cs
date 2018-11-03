@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using Godot;
 
 namespace AlleyCat.Control
@@ -14,16 +14,16 @@ namespace AlleyCat.Control
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
         public InputBindings()
         {
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
         }
 
         [PostConstruct]

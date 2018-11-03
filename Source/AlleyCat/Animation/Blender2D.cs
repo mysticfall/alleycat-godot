@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -14,12 +14,12 @@ namespace AlleyCat.Animation
         public Vector2 Position
         {
             get => _position.Value;
-            set => _position.Value = value;
+            set => _position.OnNext(value);
         }
 
         protected string Parameter { get; }
 
-        private readonly ReactiveProperty<Vector2> _position;
+        private readonly BehaviorSubject<Vector2> _position;
 
         public Blender2D(string parameter, AnimationGraphContext context) : base(context)
         {
@@ -30,7 +30,7 @@ namespace AlleyCat.Animation
 
             var current = (Vector2) context.AnimationTree.Get(parameter);
 
-            _position = new ReactiveProperty<Vector2>(current).AddTo(this);
+            _position = new BehaviorSubject<Vector2>(current).AddTo(this);
 
             _position
                 .Subscribe(v => context.AnimationTree.Set(parameter, v))

@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -20,12 +21,12 @@ namespace AlleyCat.View
         public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        public Option<IEntity> FocusedObject => _focus.Bind(f => f.Value);
+        public Option<IEntity> FocusedObject { get; private set; }
 
         public IObservable<Option<IEntity>> OnFocusChange =>
             _focus.MatchObservable(identity, Observable.Empty<Option<IEntity>>);
@@ -56,9 +57,9 @@ namespace AlleyCat.View
 
         [Export] private NodePath _characterPath;
 
-        private readonly ReactiveProperty<Option<IHumanoid>> _character;
+        private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private Option<ReactiveProperty<Option<IEntity>>> _focus;
+        private Option<IObservable<Option<IEntity>>> _focus;
 
         public OrbitingCharacterView() : this(
             new Range<float>(-180f, 180f),
@@ -72,7 +73,7 @@ namespace AlleyCat.View
             Range<float> pitchRange,
             Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
         {
-            _character = new ReactiveProperty<Option<IHumanoid>>().AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
         }
 
         protected override void OnInitialize()
@@ -85,18 +86,18 @@ namespace AlleyCat.View
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
 
-            _focus = this.OnPhysicsProcess()
-                .Where(_ => Active && Valid)
-                .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
-                .Select(direction => Origin + direction * MaxFocalDistance)
-                .Select(to => Character
-                    .Map(c => new Array {c})
-                    .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
-                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
-                .Select(e => e.Filter(v => v.Valid && v.Visible))
-                .DistinctUntilChanged()
-                .ToReactiveProperty()
-                .AddTo(this);
+            _focus = Some(
+                this.OnPhysicsProcess()
+                    .Where(_ => Active && Valid)
+                    .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
+                    .Select(direction => Origin + direction * MaxFocalDistance)
+                    .Select(to => Character
+                        .Map(c => new Array {c})
+                        .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
+                    .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                    .Select(e => e.Filter(v => v.Valid && v.Visible))
+                    .DistinctUntilChanged()
+                    .Do(current => FocusedObject = current));
         }
     }
 }

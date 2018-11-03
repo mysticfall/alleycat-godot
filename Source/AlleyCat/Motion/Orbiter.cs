@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
@@ -14,7 +15,7 @@ namespace AlleyCat.Motion
         public float Distance
         {
             get => _distance.Value;
-            set => _distance.Value = DistanceRange.Clamp(value);
+            set => _distance.OnNext(DistanceRange.Clamp(value));
         }
 
         public virtual float InitialDistance
@@ -30,7 +31,7 @@ namespace AlleyCat.Motion
         public Vector3 Offset
         {
             get => _offset.Value;
-            set => _offset.Value = value;
+            set => _offset.OnNext(value);
         }
 
         // ReSharper disable once ConvertToAutoProperty
@@ -70,9 +71,9 @@ namespace AlleyCat.Motion
 
         [Export] private Vector3 _initialOffset = Vector3.Zero;
 
-        private readonly ReactiveProperty<float> _distance;
+        private readonly BehaviorSubject<float> _distance;
 
-        private readonly ReactiveProperty<Vector3> _offset;
+        private readonly BehaviorSubject<Vector3> _offset;
 
         protected Orbiter() : this(
             new Range<float>(-180f, 180f), 
@@ -89,8 +90,8 @@ namespace AlleyCat.Motion
             _minDistance = Mathf.Max(0, distanceRange.Min);
             _maxDistance = distanceRange.Max;
 
-            _distance = new ReactiveProperty<float>().AddTo(this);
-            _offset = new ReactiveProperty<Vector3>().AddTo(this);
+            _distance = new BehaviorSubject<float>(_initialDistance).AddTo(this);
+            _offset = new BehaviorSubject<Vector3>(_initialOffset).AddTo(this);
         }
 
         protected override void OnInitialize()

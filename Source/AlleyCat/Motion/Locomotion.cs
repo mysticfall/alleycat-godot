@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -15,7 +16,7 @@ namespace AlleyCat.Motion
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         [Export]
@@ -39,11 +40,11 @@ namespace AlleyCat.Motion
 
         [Node] private Option<T> _target;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
-        private readonly ReactiveProperty<Vector3> _velocity;
+        private readonly BehaviorSubject<Vector3> _velocity;
 
-        private readonly ReactiveProperty<Vector3> _rotationalVelocity;
+        private readonly BehaviorSubject<Vector3> _rotationalVelocity;
 
         private Vector3 _requestedMovement;
 
@@ -51,9 +52,9 @@ namespace AlleyCat.Motion
 
         protected Locomotion()
         {
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
-            _velocity = new ReactiveProperty<Vector3>().AddTo(this);
-            _rotationalVelocity = new ReactiveProperty<Vector3>().AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            _velocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
+            _rotationalVelocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
         }
 
         [PostConstruct]
@@ -90,8 +91,8 @@ namespace AlleyCat.Motion
 
             if (delta <= 0) return;
 
-            _velocity.Value = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
-            _rotationalVelocity.Value = (before.basis.Inverse() * after.basis).GetEuler() / delta;
+            _velocity.OnNext((Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta);
+            _rotationalVelocity.OnNext((before.basis.Inverse() * after.basis).GetEuler() / delta);
         }
     }
 }

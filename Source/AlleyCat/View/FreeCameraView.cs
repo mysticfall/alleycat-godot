@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -23,7 +24,7 @@ namespace AlleyCat.View
         public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
@@ -92,11 +93,11 @@ namespace AlleyCat.View
 
         [Node(false)] private Option<Camera> _camera;
 
-        private readonly ReactiveProperty<Option<IHumanoid>> _character;
+        private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
         public FreeCameraView()
         {
-            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
         }
 
         protected override void OnInitialize()

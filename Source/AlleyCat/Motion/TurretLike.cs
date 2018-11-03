@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using Godot;
 using JetBrains.Annotations;
 
@@ -14,7 +14,7 @@ namespace AlleyCat.Motion
         public bool Active
         {
             get => _active.Value;
-            set => _active.Value = value;
+            set => _active.OnNext(value);
         }
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
@@ -47,7 +47,7 @@ namespace AlleyCat.Motion
                 var yaw = YawRange.Clamp(NormalizeAspectAngle(value.x));
                 var pitch = PitchRange.Clamp(NormalizeAspectAngle(value.y));
 
-                _rotation.Value = new Vector2(yaw, pitch);
+                _rotation.OnNext(new Vector2(yaw, pitch));
             }
         }
 
@@ -65,9 +65,9 @@ namespace AlleyCat.Motion
 
         [Export, UsedImplicitly] private float _minPitch;
 
-        private readonly ReactiveProperty<bool> _active;
+        private readonly BehaviorSubject<bool> _active;
 
-        private readonly ReactiveProperty<Vector2> _rotation;
+        private readonly BehaviorSubject<Vector2> _rotation;
 
         protected TurretLike() : this(new Range<float>(-180f, 180f), new Range<float>(-90f, 90f))
         {
@@ -81,8 +81,8 @@ namespace AlleyCat.Motion
             _minPitch = pitchRange.Min;
             _maxPitch = pitchRange.Max;
 
-            _active = new ReactiveProperty<bool>(true).AddTo(this);
-            _rotation = new ReactiveProperty<Vector2>().AddTo(this);
+            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).AddTo(this);
         }
 
         [PostConstruct]

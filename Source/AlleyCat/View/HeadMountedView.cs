@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -36,7 +37,7 @@ namespace AlleyCat.View
         public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
-            set => _character.Value = value;
+            set => _character.OnNext(value);
         }
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
@@ -77,7 +78,7 @@ namespace AlleyCat.View
         [Export]
         public float Offset { get; set; }
 
-        public Option<IEntity> FocusedObject => _focus.Bind(f => f.Value);
+        public Option<IEntity> FocusedObject { get; private set; }
 
         public IObservable<Option<IEntity>> OnFocusChange =>
             _focus.MatchObservable(identity, Observable.Empty<Option<IEntity>>);
@@ -164,9 +165,9 @@ namespace AlleyCat.View
 
         [Node(false)] private Option<Camera> _camera;
 
-        private readonly ReactiveProperty<Option<IHumanoid>> _character;
+        private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private Option<ReactiveProperty<Option<IEntity>>> _focus;
+        private Option<IObservable<Option<IEntity>>> _focus;
 
         public HeadMountedView() : this(new Range<float>(-90f, 90f), new Range<float>(-80f, 70f))
         {
@@ -174,7 +175,7 @@ namespace AlleyCat.View
 
         public HeadMountedView(Range<float> yawRange, Range<float> pitchRange) : base(yawRange, pitchRange)
         {
-            _character = new ReactiveProperty<Option<IHumanoid>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
         }
 
         protected override void OnInitialize()
@@ -287,13 +288,13 @@ namespace AlleyCat.View
                 .Subscribe(this.SetFocalDistance)
                 .AddTo(this);
 
-            _focus = onRayCast
-                .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
-                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
-                .Select(entity => entity.Where(e => e.Valid && e.Visible))
-                .DistinctUntilChanged()
-                .ToReactiveProperty()
-                .AddTo(this);
+            _focus = Some(
+                onRayCast
+                    .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
+                    .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                    .Select(entity => entity.Where(e => e.Valid && e.Visible))
+                    .DistinctUntilChanged()
+                    .Do(current => FocusedObject = current));
         }
     }
 }
