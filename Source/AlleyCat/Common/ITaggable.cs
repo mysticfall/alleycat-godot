@@ -8,22 +8,24 @@ namespace AlleyCat.Common
     public interface ITaggable
     {
         Set<string> Tags { get; }
-
-        bool HasTag(string tag);
-
-        void AddTag(string tag);
-
-        void RemoveTag(string tag);
     }
 
     public static class TaggableExtensions
     {
+        public static bool HasTag(this ITaggable taggable, string tag)
+        {
+            Ensure.That(taggable, nameof(taggable)).IsNotNull();
+            Ensure.That(tag, nameof(tag)).IsNotNull();
+
+            return taggable.Tags.Contains(tag);
+        }
+
         public static IEnumerable<T> TaggedAll<T>(
             this IEnumerable<T> items, params string[] tags) where T : ITaggable
         {
             Ensure.That(items, nameof(items)).IsNotNull();
 
-            return items.Filter(i => tags.All(i.HasTag));
+            return items.Filter(i => tags.All(i.Tags.Contains));
         }
 
         public static IEnumerable<T> TaggedAny<T>(
@@ -31,7 +33,7 @@ namespace AlleyCat.Common
         {
             Ensure.That(items, nameof(items)).IsNotNull();
 
-            return items.Filter(i => tags.Any(i.HasTag));
+            return items.Filter(i => tags.Any(i.Tags.Contains));
         }
 
         public static IEnumerable<T> TaggedMost<T>(
@@ -40,7 +42,7 @@ namespace AlleyCat.Common
             Ensure.That(items, nameof(items)).IsNotNull();
 
             return items
-                .Map(item => (item, count: tags.Count(item.HasTag)))
+                .Map(item => (item, count: tags.Count(item.Tags.Contains)))
                 .Filter(t => t.count > 0)
                 .OrderByDescending(t => t.count)
                 .Map(t => t.item);

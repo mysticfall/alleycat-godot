@@ -126,19 +126,5 @@ namespace AlleyCat.Item
 
             return IsInGroup(tag);
         }
-
-        public void AddTag(string tag)
-        {
-            Ensure.That(tag, nameof(tag)).IsNotNull();
-
-            AddToGroup(tag);
-        }
-
-        public void RemoveTag(string tag)
-        {
-            Ensure.That(tag, nameof(tag)).IsNotNull();
-
-            RemoveFromGroup(tag);
-        }
     }
 }
