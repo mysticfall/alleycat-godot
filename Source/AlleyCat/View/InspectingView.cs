@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
@@ -14,125 +13,123 @@ namespace AlleyCat.View
 {
     public class InspectingView : OrbitingView
     {
-        public override bool Valid => base.Valid && _pivotNode.IsSome;
-
-        public ITransformable Pivot => _pivotNode.Head();
+        public ITransformable Pivot { get; }
 
         public override Vector3 Origin
         {
             get
             {
-                var center = _pivotNode
+                var center = Optional(Pivot)
                     .OfType<IBounded>()
                     .Map(b => b.Bounds)
                     .Map(b => (b.Position + b.End) / 2f)
                     .HeadOrNone();
 
-                var origin = _pivotNode
-                    .Map(p => p.Spatial.GlobalTransform.origin)
-                    .HeadOrNone();
-
-                return (center | origin).IfNone(Vector3.Zero);
+                return center.IfNone(() => Pivot.Spatial.GlobalTransform.origin);
             }
-        }
-
-        public override Range<float> DistanceRange => new Range<float>(_minDistance, _maxDistance);
-
-        public override float InitialDistance
-        {
-            get
-            {
-                var bounds = _pivotNode.OfType<IBounded>().Map(b => b.Bounds).HeadOrNone();
-                var fov = Optional(Target).OfType<Camera>().Map(c => c.Fov).HeadOrNone().IfNone(70f);
-                var height = bounds.Map(b => b.GetLongestAxisSize());
-                var distance = height.Map(h => h / 2f / Math.Tan(Mathf.Deg2Rad(fov / 2f)));
-
-                return distance.Map(d => (float) d + 0.2f).IfNone(() => base.InitialDistance);
-            }
-            set => base.InitialDistance = Mathf.Max(0, value);
         }
 
         public override Vector3 Up => Vector3.Up;
 
-        public override Vector3 Forward => _pivotNode
-            .Map(p => p.GlobalTransform().Backward())
-            .Map(new Plane(Vector3.Up, 0f).Project)
-            .IfNone(Vector3.Back);
+        public override Vector3 Forward => new Plane(Vector3.Up, 0f).Project(Pivot.GlobalTransform().Backward());
+
+        public IInputSource InputSource { get; }
 
         protected override IObservable<Vector2> RotationInput =>
             _rotating.MatchObservable(
                 rotating => rotating.Select(v => v ? base.RotationInput : Observable.Never<Vector2>()).Switch(),
                 Observable.Empty<Vector2>);
 
-        protected virtual IObservable<Vector2> PanInput => _panObserver
-            .MatchObservable(identity, Observable.Empty<Vector2>);
+        protected virtual IObservable<Vector2> PanInput { get; }
 
-        [Export, UsedImplicitly] private NodePath _pivot = "../..";
+        protected Option<string> RotationModifier { get; }
 
-        [Export] private float _minDistance = 0.2f;
+        protected Option<string> PanningModifier { get; }
 
-        [Export] private float _maxDistance = 3f;
+        private Option<InputBindings> _panInput;
 
-        [Export] private string _rotationModifier = "point";
+        private readonly Option<IObservable<bool>> _rotating;
 
-        [Export] private string _panningModifier = "point2";
-
-        [Node("Pan", false)] private Option<InputBindings> _panInput;
-
-        private Option<ITransformable> _pivotNode;
-
-        private Option<IObservable<bool>> _rotating;
-
-        private Option<IObservable<bool>> _panning;
-
-        private Option<IObservable<Vector2>> _panObserver;
-
-        public InspectingView()
-        {
-        }
+        private readonly Option<IObservable<bool>> _panning;
 
         public InspectingView(
+            ITransformable pivot,
+            Camera camera,
+            Option<InputBindings> rotationInput,
+            Option<InputBindings> zoomInput,
+            Option<InputBindings> panInput,
+            Option<string> rotationModifier,
+            Option<string> panningModifier,
             Range<float> yawRange,
             Range<float> pitchRange,
-            Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
+            Range<float> distanceRange,
+            float initialDistance,
+            Vector3 initialOffset,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            IInputSource inputSource,
+            bool active = true) : base(
+            camera,
+            rotationInput,
+            zoomInput,
+            yawRange,
+            pitchRange,
+            distanceRange,
+            CalculateInitialDistance(pivot, camera, initialDistance),
+            initialOffset,
+            processMode,
+            timeSource,
+            active)
         {
-        }
+            Ensure.That(pivot, nameof(pivot)).IsNotNull();
+            Ensure.That(inputSource, nameof(inputSource)).IsNotNull();
 
-        protected override void OnInitialize()
-        {
-            Input.SetMouseMode(Input.MouseMode.Visible);
+            Pivot = pivot;
+            InputSource = inputSource;
 
-            _pivotNode = Optional(_pivot).Bind(this.FindComponent<ITransformable>);
+            RotationModifier = rotationModifier;
+            PanningModifier = panningModifier;
 
-            var input = this.OnUnhandledInput().Where(e => Active && !e.IsEcho());
+            var input = InputSource.OnUnhandledInput.Where(e => Active && !e.IsEcho());
 
-            IObservable<bool> CreateModifierObserver(string name)
+            IObservable<bool> IsModifierPressed(string name)
             {
                 var pressed = input.Select(e => e.IsActionPressed(name)).Where(identity);
                 var released = input.Select(e => e.IsActionReleased(name)).Where(identity).Select(v => !v);
 
-                return pressed.Merge(released);
+                return pressed.Merge(released).StartWith(false);
             }
 
-            _rotating = _rotationModifier.TrimToOption().Map(CreateModifierObserver);
-            _panning = _panningModifier.TrimToOption().Map(CreateModifierObserver);
+            _rotating = RotationModifier.Map(IsModifierPressed);
+            _panning = PanningModifier.Map(IsModifierPressed);
 
-            _panObserver = _panInput.Bind(p => p.AsVector2Input()).Bind(pan =>
-                _panning.Map(p => p.Select(v => v ? pan.Where(_ => Valid) : Observable.Never<Vector2>()).Switch())
-            );
+            _panInput = panInput;
 
-            PanInput.Select(v => v * 0.05f)
+            PanInput = (
+                    from pan in _panInput.Bind(i => i.AsVector2Input())
+                    from modifier in _panning
+                    select modifier.Select(v => v ? pan : Observable.Never<Vector2>()).Switch())
+                .MatchObservable(identity, Observable.Empty<Vector2>)
+                .Where(_ => Valid)
+                .Select(v => v * 0.05f);
+        }
+
+        protected override void PostConstruct()
+        {
+            Input.SetMouseMode(Input.MouseMode.Visible);
+
+            PanInput
                 .Subscribe(v => Offset += new Vector3(-v.x, v.y, 0))
                 .AddTo(this);
 
             OnActiveStateChange
-                .Subscribe(v => _panInput.Iter(p => p.Active = v))
+                .Subscribe(v => _panInput.Exists(p => p.Active = v))
                 .AddTo(this);
 
             var interacting =
-                from r in _rotating.Map(r => r.StartWith(false))
-                from p in _panning.Map(p => p.StartWith(false))
-                select r.CombineLatest(p, (o1, o2) => o1 || o2);
+                from a in _rotating
+                from p in _panning
+                select a.CombineLatest(p, (o1, o2) => o1 || o2);
 
             interacting
                 .MatchObservable(identity, Observable.Empty<bool>)
@@ -140,7 +137,20 @@ namespace AlleyCat.View
                 .Subscribe(Input.SetMouseMode)
                 .AddTo(this);
 
-            base.OnInitialize();
+            base.PostConstruct();
+        }
+
+        private static float CalculateInitialDistance(
+            ITransformable pivot, Camera camera, float defaultValue)
+        {
+            Ensure.That(pivot, nameof(pivot)).IsNotNull();
+            Ensure.That(camera, nameof(camera)).IsNotNull();
+
+            var bounds = Optional(pivot).OfType<IBounded>().Map(b => b.Bounds).HeadOrNone();
+            var height = bounds.Map(b => b.GetLongestAxisSize());
+            var distance = height.Map(h => h / 2f / Math.Tan(Mathf.Deg2Rad(camera.Fov / 2f)));
+
+            return distance.Map(d => (float) d + 0.2f).IfNone(defaultValue);
         }
     }
 }

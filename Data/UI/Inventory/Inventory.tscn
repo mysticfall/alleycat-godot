@@ -7,7 +7,7 @@
 [ext_resource path="res://Data/UI/Inventory/Item Box.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Data/Fonts/Inspected Item Title.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Data/Fonts/Inspected Item Type.tres" type="DynamicFont" id=7]
-[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/View/InspectingViewFactory.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=11]
@@ -287,20 +287,21 @@ _sections_unfolded = [ "Script" ]
 
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 8 )
+_sections_unfolded = [ "Script" ]
 Active = true
-_maxYaw = 180.0
-_minYaw = -180.0
-_maxPitch = 89.5
-_minPitch = -89.5
+MaxYaw = 180.0
+MinYaw = -180.0
+MaxPitch = 89.5
+MinPitch = -89.5
+MinDistance = 0.2
+MaxDistance = 3.0
+InitialDistance = 0.8
+InitialOffset = Vector3( 0, 0, 0 )
 ProcessMode = 2
-_initialDistance = 0.8
-_initialOffset = Vector3( 0, -0.02, 0 )
-_cameraPath = NodePath("../../Content Panel/Viewport/Item Box/Camera")
-_pivot = NodePath("../../Content Panel/Viewport/Item Box/Item")
-_minDistance = 0.2
-_maxDistance = 3.0
-_rotationModifier = "point"
-_panningModifier = "point2"
+_camera = NodePath("../../Content Panel/Viewport/Item Box/Camera")
+Pivot = NodePath("../../Content Panel/Viewport/Item Box/Item")
+RotationModifier = "point"
+PanningModifier = "point2"
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 9 )

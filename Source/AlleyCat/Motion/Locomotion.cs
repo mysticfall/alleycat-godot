@@ -1,32 +1,25 @@
 using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.Motion
 {
-    [Singleton(typeof(ILocomotion))]
-    public abstract class Locomotion<T> : AutowiredNode, ILocomotion where T : Spatial
+    public abstract class Locomotion<T> : GameObject, ILocomotion where T : Spatial
     {
-        [Export]
         public bool Active
         {
             get => _active.Value;
             set => _active.OnNext(value);
         }
 
-        [Export]
-        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
-
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        public override bool Valid => base.Valid && _target.IsSome;
-
-        public T Target => _target.Head();
+        public T Target { get; }
 
         public Vector3 Velocity => _velocity.Value;
 
@@ -36,9 +29,17 @@ namespace AlleyCat.Motion
 
         public IObservable<Vector3> OnRotationalVelocityChange => _rotationalVelocity.AsObservable();
 
-        [Export] private NodePath _targetPath;
+        public abstract ProcessMode ProcessMode { get; }
 
-        [Node] private Option<T> _target;
+        public IObservable<float> OnProcess => TimeSource.OnProcess;
+
+        public IObservable<float> OnPhysicsProcess => TimeSource.OnPhysicsProcess;
+
+        public IScheduler Scheduler => TimeSource.Scheduler;
+
+        public IScheduler PhysicsScheduler => TimeSource.PhysicsScheduler;
+
+        protected ITimeSource TimeSource { get; }
 
         private readonly BehaviorSubject<bool> _active;
 
@@ -50,18 +51,25 @@ namespace AlleyCat.Motion
 
         private Vector3 _requestedRotation;
 
-        protected Locomotion()
+        protected Locomotion(
+            T target,
+            ITimeSource timeSource,
+            bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            Ensure.That(target, nameof(target)).IsNotNull();
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+
+            Target = target;
+            TimeSource = timeSource;
+
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
             _velocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
             _rotationalVelocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void PostConstruct()
         {
-            _requestedMovement = new Vector3();
-            _requestedRotation = new Vector3();
+            base.PostConstruct();
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
@@ -69,6 +77,7 @@ namespace AlleyCat.Motion
                 .AddTo(this);
 
             this.OnProcess(ProcessMode)
+                .Where(_ => Active && Valid)
                 .Subscribe(ProcessLoop)
                 .AddTo(this);
         }
@@ -81,8 +90,6 @@ namespace AlleyCat.Motion
 
         protected virtual void ProcessLoop(float delta)
         {
-            if (!Active || !Valid) return;
-
             var before = Target.GlobalTransform;
 
             Process(delta, _requestedMovement, _requestedRotation);

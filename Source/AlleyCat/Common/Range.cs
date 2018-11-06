@@ -1,5 +1,4 @@
 using System;
-using EnsureThat;
 
 namespace AlleyCat.Common
 {
@@ -11,10 +10,8 @@ namespace AlleyCat.Common
 
         public Range(T min, T max)
         {
-            Ensure.That(max, nameof(max)).IsGte(min);
-
             Min = min;
-            Max = max;
+            Max = max.CompareTo(min) > 0 ? max : min;
         }
 
         public T Clamp(T value)

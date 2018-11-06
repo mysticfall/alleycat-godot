@@ -1,20 +1,17 @@
 using System;
-using System.Diagnostics;
 using AlleyCat.Animation;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Motion;
+using EnsureThat;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.Sensor
 {
-    [Singleton(typeof(IVision), typeof(IEyeSight), typeof(IPairedEyeSight))]
     public class PairedEyeSight : TurretLike, IPairedEyeSight
     {
-        public Skeleton Skeleton => (Skeleton) _skeleton;
+        public Skeleton Skeleton { get; }
 
-        public IAnimationManager AnimationManager => _animationManager.Head();
+        public IAnimationManager AnimationManager { get; }
 
         public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(HeadBone);
 
@@ -43,52 +40,59 @@ namespace AlleyCat.Sensor
             }
         }
 
-        protected int HeadBone { get; private set; }
+        protected int HeadBone { get; }
 
-        protected int NeckBone { get; private set; }
+        protected int NeckBone { get; }
 
-        protected int LeftEyeBone { get; private set; }
+        protected int LeftEyeBone { get; }
 
-        protected int RightEyeBone { get; private set; }
+        protected int RightEyeBone { get; }
 
-        protected Transform RestPose { get; private set; }
+        protected Transform RestPose { get; }
 
-        protected Basis HeadOrientation { get; private set; }
+        protected Basis HeadOrientation { get; }
 
-        protected Basis NeckOrientation { get; private set; }
+        protected Basis NeckOrientation { get; }
 
-        [Service] private Option<Skeleton> _skeleton;
-
-        [Service] private Option<IAnimationManager> _animationManager;
-
-        [Export] private string _headBone = "head";
-
-        [Export] private string _eyeBoneLeft = "eye_L";
-
-        [Export] private string _eyeBoneRight = "eye_R";
-
-        protected override void OnInitialize()
+        public PairedEyeSight(
+            Skeleton skeleton,
+            IAnimationManager animationManager,
+            int headBone,
+            int neckBone,
+            int rightEyeBone,
+            int leftEyeBone,
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            bool active = true) : base(yawRange, pitchRange, active)
         {
-            base.OnInitialize();
+            Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
+            Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
+            Ensure.That(headBone, nameof(headBone)).IsGte(0);
+            Ensure.That(neckBone, nameof(neckBone)).IsGte(0);
+            Ensure.That(rightEyeBone, nameof(rightEyeBone)).IsGte(0);
+            Ensure.That(leftEyeBone, nameof(leftEyeBone)).IsGte(0);
 
-            HeadBone = Skeleton.FindBone(_headBone);
-
-            LeftEyeBone = Skeleton.FindBone(_eyeBoneLeft);
-            RightEyeBone = Skeleton.FindBone(_eyeBoneRight);
-
-            Debug.Assert(HeadBone != -1, "Failed to find the head bone");
-            Debug.Assert(LeftEyeBone != -1 || RightEyeBone != -1, "Failed to find the eye bones");
-
-            NeckBone = Skeleton.GetBoneParent(HeadBone);
-
-            Debug.Assert(HeadBone != -1, "Failed to find the neck bone");
+            Skeleton = skeleton;
+            AnimationManager = animationManager;
+            HeadBone = headBone;
+            NeckBone = neckBone;
+            LeftEyeBone = leftEyeBone;
+            RightEyeBone = rightEyeBone;
 
             RestPose = Skeleton.GetBoneRest(HeadBone);
 
-            AnimationManager.OnAdvance.Subscribe(OnAnimation).AddTo(this);
-
             HeadOrientation = DetectOrientation(HeadBone);
             NeckOrientation = DetectOrientation(NeckBone);
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            AnimationManager
+                .OnAdvance
+                .Subscribe(OnAnimation)
+                .AddTo(this);
         }
 
         private Basis DetectOrientation(int bone)

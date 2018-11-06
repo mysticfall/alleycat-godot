@@ -3,8 +3,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
@@ -18,33 +18,21 @@ namespace AlleyCat.Motion
             set => _distance.OnNext(DistanceRange.Clamp(value));
         }
 
-        public virtual float InitialDistance
-        {
-            get => _initialDistance;
-            set => _initialDistance = DistanceRange.Clamp(value);
-        }
+        public virtual Range<float> DistanceRange { get; }
 
-        public IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
+        public float InitialDistance { get; }
 
-        public virtual Range<float> DistanceRange => new Range<float>(_minDistance, _maxDistance);
+        public virtual IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
 
-        public Vector3 Offset
-        {
-            get => _offset.Value;
-            set => _offset.OnNext(value);
-        }
+        public Vector3 Offset { get; set; }
 
-        // ReSharper disable once ConvertToAutoProperty
-        public virtual Vector3 InitialOffset
-        {
-            get => _initialOffset;
-            set => _initialOffset = value;
-        }
+        public Vector3 InitialOffset { get; set; }
 
-        public IObservable<Vector3> OnOffsetChange => _offset.Where(v => Active && Valid);
+        public virtual IObservable<Vector3> OnOffsetChange => _offset.Where(v => Active && Valid);
 
-        [Export]
-        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+        public ProcessMode ProcessMode { get; }
+
+        protected ITimeSource TimeSource { get; }
 
         protected virtual Transform TargetTransform
         {
@@ -63,42 +51,37 @@ namespace AlleyCat.Motion
             }
         }
 
-        [Export, UsedImplicitly] private float _minDistance;
-
-        [Export, UsedImplicitly] private float _maxDistance;
-
-        [Export] private float _initialDistance = 0.8f;
-
-        [Export] private Vector3 _initialOffset = Vector3.Zero;
-
         private readonly BehaviorSubject<float> _distance;
 
         private readonly BehaviorSubject<Vector3> _offset;
 
-        protected Orbiter() : this(
-            new Range<float>(-180f, 180f), 
-            new Range<float>(-90f, 90f), 
-            new Range<float>(0.1f, 10f))
-        {
-        }
-
         protected Orbiter(
             Range<float> yawRange,
             Range<float> pitchRange,
-            Range<float> distanceRange) : base(yawRange, pitchRange)
+            Range<float> distanceRange,
+            float initialDistance,
+            Vector3 initialOffset,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active = true) : base(yawRange, pitchRange, active)
         {
-            _minDistance = Mathf.Max(0, distanceRange.Min);
-            _maxDistance = distanceRange.Max;
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 
-            _distance = new BehaviorSubject<float>(_initialDistance).AddTo(this);
-            _offset = new BehaviorSubject<Vector3>(_initialOffset).AddTo(this);
+            DistanceRange = distanceRange;
+
+            InitialDistance = distanceRange.Clamp(initialDistance);
+            InitialOffset = initialOffset;
+
+            ProcessMode = processMode;
+            TimeSource = timeSource;
+
+            _distance = new BehaviorSubject<float>(InitialDistance).AddTo(this);
+            _offset = new BehaviorSubject<Vector3>(InitialOffset).AddTo(this);
         }
 
-        protected override void OnInitialize()
+        protected override void PostConstruct()
         {
-            base.OnInitialize();
-
-            this.OnProcess(ProcessMode)
+            TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
                 .AddTo(this);

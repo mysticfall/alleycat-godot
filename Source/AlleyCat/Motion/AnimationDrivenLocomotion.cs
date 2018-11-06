@@ -2,64 +2,63 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Animation;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Event;
+using AlleyCat.Setting.Project;
+using EnsureThat;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.Motion
 {
     public class AnimationDrivenLocomotion : KinematicLocomotion
     {
-        public IAnimationStateManager AnimationManager => _animationManager.Head();
+        protected AnimationTree AnimationTree { get; }
 
-        public Skeleton Skeleton => _skeleton.Head();
+        protected Skeleton Skeleton { get; }
 
-        protected AnimationStates States => _states.Head();
+        protected AnimationStates States { get; }
 
-        protected Blender2D Blender => _blender.Head();
+        protected Blender2D Blender { get; }
 
-        protected string IdleState => _idleState.TrimToOption().Head();
+        protected string IdleState { get; }
 
-        protected string MoveState => _moveState.TrimToOption().Head();
+        protected string MoveState { get; }
 
-        public override bool Valid => base.Valid && _valid;
-
-        [Service] private Option<IAnimationStateManager> _animationManager;
-
-        [Service] private Option<Skeleton> _skeleton;
-
-        [Export] private string _idleState = "Idle";
-
-        [Export] private string _moveState = "Moving";
-
-        [Export] private string _statesPath = "States";
-
-        [Export] private string _blend2DPath = "States/Moving";
-
-        private Option<AnimationStates> _states;
-
-        private Option<Blender2D> _blender;
-
-        private bool _valid;
-
-        [PostConstruct]
-        protected override void OnInitialize()
+        public AnimationDrivenLocomotion(
+            AnimationTree animationTree,
+            Skeleton skeleton,
+            AnimationStates states,
+            Blender2D blender,
+            string idleState,
+            string moveState,
+            KinematicBody target,
+            Physics3DSettings physicsSettings,
+            ITimeSource timeSource,
+            bool active = true) : base(target, physicsSettings, timeSource, active)
         {
-            base.OnInitialize();
+            Ensure.That(animationTree, nameof(animationTree)).IsNotNull();
+            Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
+            Ensure.That(states, nameof(states)).IsNotNull();
+            Ensure.That(blender, nameof(blender)).IsNotNull();
+            Ensure.That(idleState, nameof(idleState)).IsNotNullOrEmpty();
+            Ensure.That(moveState, nameof(moveState)).IsNotNullOrEmpty();
 
-            _states = _statesPath.TrimToOption().Bind(AnimationManager.FindStates);
-            _blender = _blend2DPath.TrimToOption().Bind(AnimationManager.FindBlender2D);
+            AnimationTree = animationTree;
+            Skeleton = skeleton;
+            States = states;
+            Blender = blender;
+            IdleState = idleState;
+            MoveState = moveState;
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => ResetAnimations())
                 .AddTo(this);
-
-            _valid = _states.IsSome &&
-                     _blender.IsSome &&
-                     !string.IsNullOrWhiteSpace(_idleState) &&
-                     !string.IsNullOrWhiteSpace(_moveState);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)
@@ -69,8 +68,7 @@ namespace AlleyCat.Motion
             Debug.Assert(Target != null, "Target != null");
 
             var transform = Target.GlobalTransform;
-            var basis = transform.basis *
-                        Basis.Identity.Rotated(Vector3.Up, rotationalVelocity.y * delta);
+            var basis = transform.basis * Basis.Identity.Rotated(Vector3.Up, rotationalVelocity.y * delta);
 
             Target.GlobalTransform = new Transform(basis, transform.origin);
         }
@@ -99,7 +97,7 @@ namespace AlleyCat.Motion
                 States.State = IdleState;
             }
 
-            var t = AnimationManager.AnimationTree.GetRootMotionTransform();
+            var t = AnimationTree.GetRootMotionTransform();
             var offset = Skeleton.GlobalTransform.Xform(t.origin) - Skeleton.GlobalTransform.origin;
 
             return offset / delta;

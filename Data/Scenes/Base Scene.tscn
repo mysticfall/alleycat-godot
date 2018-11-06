@@ -3,13 +3,13 @@
 [ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterView.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
-[ext_resource path="res://Source/AlleyCat/View/HeadMountedView.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/View/HeadMountedViewFactory.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
-[ext_resource path="res://Source/AlleyCat/View/FreeCameraView.cs" type="Script" id=10]
+[ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegate.cs" type="Script" id=12]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=13]
@@ -77,18 +77,18 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 [node name="Third Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 4 )
 Active = true
-_maxYaw = 180.0
-_minYaw = -180.0
-_maxPitch = 90.0
-_minPitch = -89.0
+MaxYaw = 180.0
+MinYaw = -180.0
+MaxPitch = 90.0
+MinPitch = -89.0
+MinDistance = 0.25
+MaxDistance = 10.0
+InitialDistance = 0.8
+InitialOffset = Vector3( 0, 0, 0 )
 ProcessMode = 1
-_minDistance = 0.25
-_maxDistance = 10.0
-_initialDistance = 0.8
-_initialOffset = Vector3( 0, 0, 0 )
-_cameraPath = NodePath("")
-_maxFocalDistance = 2.0
-_characterPath = NodePath("")
+_camera = null
+MaxFocalDistance = 2.0
+_character = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
@@ -138,23 +138,22 @@ _negativeAction = "zoom_out"
 [node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )
 Active = false
-_maxYaw = 90.0
-_minYaw = -90.0
-_maxPitch = 70.0
-_minPitch = -80.0
+MaxYaw = 80.0
+MinYaw = -80.0
+MaxPitch = 80.0
+MinPitch = -70.0
 ProcessMode = 1
 Stabilization = 1
-Offset = 0.01
-_transitionTime = 2.0
-_velocityThreshold = 0.2
-_maxFocalDistance = 2.0
-_maxDofDistance = 5.0
-_focusRange = 3.0
-_focusSpeed = 100.0
-_minStabilization = 0.2
-_maxStabilization = 0.8
-_characterPath = NodePath("")
-_cameraPath = NodePath("")
+MinStabilization = 0.2
+MaxStabilization = 0.8
+TransitionTime = 2.0
+VelocityThreshold = 0.2
+MaxDofDistance = 5.0
+MaxFocalDistance = 2.0
+FocusRange = 3.0
+FocusSpeed = 100.0
+_camera = null
+_character = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
@@ -198,15 +197,15 @@ _action = "zoom_out"
 [node name="Free Camera View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 10 )
 Active = false
-_maxYaw = 180.0
-_minYaw = -180.0
-_maxPitch = 90.0
-_minPitch = -90.0
-_characterPath = NodePath("")
-_cameraPath = NodePath("")
-_maxDofDistance = 5.0
-_focusRange = 3.0
-_focusSpeed = 100.0
+MaxYaw = 180.0
+MinYaw = -180.0
+MaxPitch = 90.0
+MinPitch = -90.0
+MaxDofDistance = 5.0
+FocusRange = 3.0
+FocusSpeed = 100.0
+_character = null
+_camera = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
@@ -264,7 +263,7 @@ _windowSize = 5.0
 _windowShift = 1.0
 Polling = true
 _positiveAction = "move_forward"
-_negativeAction = "move_left"
+_negativeAction = "move_back"
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )

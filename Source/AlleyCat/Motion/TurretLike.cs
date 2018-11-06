@@ -1,16 +1,13 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Motion
 {
-    public abstract class TurretLike : AutowiredNode, ITurretLike
+    public abstract class TurretLike : GameObject, ITurretLike
     {
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -53,42 +50,21 @@ namespace AlleyCat.Motion
 
         public IObservable<Vector2> OnRotationChange => _rotation.Where(v => Active && Valid);
 
-        public virtual Range<float> YawRange => new Range<float>(Mathf.Deg2Rad(_minYaw), Mathf.Deg2Rad(_maxYaw));
+        public virtual Range<float> YawRange { get; }
 
-        public virtual Range<float> PitchRange => new Range<float>(Mathf.Deg2Rad(_minPitch), Mathf.Deg2Rad(_maxPitch));
-
-        [Export, UsedImplicitly] private float _maxYaw;
-
-        [Export, UsedImplicitly] private float _minYaw;
-
-        [Export, UsedImplicitly] private float _maxPitch;
-
-        [Export, UsedImplicitly] private float _minPitch;
+        public virtual Range<float> PitchRange { get; }
 
         private readonly BehaviorSubject<bool> _active;
 
         private readonly BehaviorSubject<Vector2> _rotation;
 
-        protected TurretLike() : this(new Range<float>(-180f, 180f), new Range<float>(-90f, 90f))
+        protected TurretLike(Range<float> yawRange, Range<float> pitchRange, bool active = true)
         {
-        }
+            YawRange = yawRange;
+            PitchRange = pitchRange;
 
-        protected TurretLike(Range<float> yawRange, Range<float> pitchRange)
-        {
-            _minYaw = yawRange.Min;
-            _maxYaw = yawRange.Max;
-
-            _minPitch = pitchRange.Min;
-            _maxPitch = pitchRange.Max;
-
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
             _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).AddTo(this);
-        }
-
-        [PostConstruct]
-        protected virtual void OnInitialize()
-        {
-            Reset();
         }
 
         public virtual void Reset()

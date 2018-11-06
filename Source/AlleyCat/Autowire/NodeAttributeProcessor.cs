@@ -38,15 +38,21 @@ namespace AlleyCat.Autowire
             {
                 var parent = path.Bind(v => Optional(node.GetNode(v))).IfNone(node);
 
-                dependency = parent.GetChildren()
-                    .Where(DependencyType.IsInstanceOfType).Freeze();
+                dependency = parent.GetChildren().Bind(c =>
+                    DependencyType.IsInstanceOfType(c)
+                        ? Some(c)
+                        : Some(c).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption())).Freeze();
             }
             else
             {
                 var targetPath = path.IfNone(() => NormalizeMemberName(Member.Name));
 
-                dependency = node.FindComponent<Node>(targetPath)
-                    .Where(DependencyType.IsInstanceOfType).Freeze();
+                var component = node.FindComponent<object>(targetPath);
+
+                var matchingType = component.Filter(DependencyType.IsInstanceOfType);
+                var fromFactory = component.OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption());
+
+                dependency = (matchingType | fromFactory.HeadOrNone()).Freeze();
             }
 
             return EnumerableHelper.Cast(dependency, DependencyType);

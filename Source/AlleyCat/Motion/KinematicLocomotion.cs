@@ -1,49 +1,37 @@
-﻿using System.Diagnostics;
-using AlleyCat.Autowire;
-using AlleyCat.Event;
+﻿using AlleyCat.Event;
 using AlleyCat.Setting.Project;
+using EnsureThat;
 using Godot;
-using LanguageExt;
-using Microsoft.Extensions.Options;
 
 namespace AlleyCat.Motion
 {
     public abstract class KinematicLocomotion : Locomotion<KinematicBody>
     {
-        public float Gravity { get; private set; }
+        public float Gravity { get; }
 
-        public Vector3 GravityVector { get; private set; }
+        public Vector3 GravityVector { get; }
 
-        public float FallDuration { get; private set; }
-
-        [Export]
         public bool ApplyGravity { get; set; } = true;
 
-        public Physics3DSettings Physics3DSettings => _settings.Map(s=> s.Value).Head();
+        public override ProcessMode ProcessMode => ProcessMode.Physics;
 
-        [Service] private Option<IOptions<Physics3DSettings>> _settings;
+        protected float FallDuration { get; private set; }
 
-        protected KinematicLocomotion()
+        protected KinematicLocomotion(
+            KinematicBody target, 
+            Physics3DSettings physicsSettings,
+            ITimeSource timeSource, 
+            bool active = true) : base(target, timeSource, active)
         {
-            ProcessMode = ProcessMode.Physics;
-        }
+            Ensure.That(physicsSettings, nameof(physicsSettings)).IsNotNull();
 
-        [PostConstruct]
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-
-            Gravity = Physics3DSettings.DefaultGravity;
-            GravityVector = Physics3DSettings.DefaultGravityVector;
-
-            FallDuration = 0;
+            Gravity = physicsSettings.DefaultGravity;
+            GravityVector = physicsSettings.DefaultGravityVector;
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)
         {
             var effective = KinematicProcess(delta, velocity, rotationalVelocity);
-
-            Debug.Assert(Target != null, "Target != null");
 
             if (Target.IsOnFloor() || !ApplyGravity)
             {

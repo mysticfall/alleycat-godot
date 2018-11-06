@@ -2,26 +2,24 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
+using EnsureThat;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
 {
-    [Singleton(typeof(IPerspectiveView))]
     public class FreeCameraView : TurretLike, IPerspectiveView, IAutoFocusingView
     {
         public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
 
-        [Node(false)]
-        public virtual Option<IHumanoid> Character
+        public Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.OnNext(value);
@@ -29,26 +27,26 @@ namespace AlleyCat.View
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        public virtual Camera Camera => _camera.IfNone(() => GetViewport().GetCamera());
+        public Camera Camera { get; }
 
         public bool AutoActivate => false;
 
         public float MaxDofDistance
         {
             get => _maxDofDistance;
-            set => _maxDofDistance = Mathf.Min(value, 0);
+            set => _maxDofDistance = Mathf.Max(value, 0);
         }
 
         public float FocusRange
         {
             get => _focusRange;
-            set => _focusRange = Mathf.Min(value, 0);
+            set => _focusRange = Mathf.Max(value, 0);
         }
 
         public float FocusSpeed
         {
             get => _focusSpeed;
-            set => _focusSpeed = Mathf.Min(value, 0);
+            set => _focusSpeed = Mathf.Max(value, 0);
         }
 
         public override Vector3 Origin => Camera.GlobalTransform.origin;
@@ -57,52 +55,65 @@ namespace AlleyCat.View
 
         public override Vector3 Up => Vector3.Up;
 
-        protected virtual IObservable<Vector2> RotationInput => _rotationInput
-            .Bind(i => i.AsVector2Input())
-            .MatchObservable(identity, Observable.Empty<Vector2>)
-            .Where(_ => Valid);
+        protected virtual IObservable<Vector2> RotationInput { get; }
 
-        protected virtual IObservable<Vector2> MovementInput => _movementInput
-            .Bind(i => i.AsVector2Input())
-            .MatchObservable(identity, Observable.Empty<Vector2>)
-            .Where(_ => Valid);
+        protected virtual IObservable<Vector2> MovementInput { get; }
 
-        protected virtual IObservable<bool> ToggleInput =>
-            _toggleInput.Bind(i => i.FindTrigger().HeadOrNone())
-                .MatchObservable(identity, Observable.Empty<bool>)
-                .Where(_ => Valid);
+        protected virtual IObservable<bool> ToggleInput { get; }
 
-        [Export] private NodePath _characterPath;
-
-        [Export] private NodePath _cameraPath;
-
-        [Export(PropertyHint.ExpRange, "1,10")]
-        private float _maxDofDistance = 5f;
-
-        [Export(PropertyHint.ExpRange, "1,10")]
-        private float _focusRange = 3f;
-
-        [Export(PropertyHint.ExpRange, "10,1000")]
-        private float _focusSpeed = 100f;
-
-        [Node("Rotation", false)] private Option<InputBindings> _rotationInput;
-
-        [Node("Movement", false)] private Option<InputBindings> _movementInput;
-
-        [Node("Toggle", false)] private Option<InputBindings> _toggleInput;
-
-        [Node(false)] private Option<Camera> _camera;
+        protected ITimeSource TimeSource { get; }
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        public FreeCameraView()
+        private Option<InputBindings> _rotationInput;
+
+        private Option<InputBindings> _movementInput;
+
+        private float _maxDofDistance = 5f;
+
+        private float _focusRange = 3f;
+
+        private float _focusSpeed = 100f;
+
+        public FreeCameraView(
+            Camera camera,
+            Option<IHumanoid> character,
+            Option<InputBindings> rotationInput,
+            Option<InputBindings> movementInput,
+            Option<InputBindings> toggleInput,
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            ITimeSource timeSource,
+            bool active = true) : base(yawRange, pitchRange, active)
         {
-            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
+            Ensure.That(camera, nameof(camera)).IsNotNull();
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+
+            Camera = camera;
+
+            RotationInput = rotationInput
+                .Bind(i => i.AsVector2Input())
+                .MatchObservable(identity, Observable.Empty<Vector2>)
+                .Where(_ => Valid);
+            MovementInput = movementInput
+                .Bind(i => i.AsVector2Input())
+                .MatchObservable(identity, Observable.Empty<Vector2>)
+                .Where(_ => Valid);
+            ToggleInput = toggleInput.Bind(i => i.FindTrigger().HeadOrNone())
+                .MatchObservable(identity, Observable.Empty<bool>)
+                .Where(_ => Valid);
+
+            TimeSource = timeSource;
+
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
+
+            _rotationInput = rotationInput;
+            _movementInput = movementInput;
         }
 
-        protected override void OnInitialize()
+        protected override void PostConstruct()
         {
-            base.OnInitialize();
+            base.PostConstruct();
 
             OnActiveStateChange
                 .Where(_ => Valid)
@@ -130,7 +141,7 @@ namespace AlleyCat.View
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
-                .Subscribe(v => Camera.TranslateObjectLocal(v))
+                .Subscribe(Camera.TranslateObjectLocal)
                 .AddTo(this);
 
             ToggleInput
@@ -145,7 +156,7 @@ namespace AlleyCat.View
                 .Subscribe(_ => this.EnableDof())
                 .AddTo(this);
 
-            this.OnPhysicsProcess()
+            TimeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)
                 .Select(_ => Origin + Forward * MaxDofDistance)
                 .Select(to => Camera.GetWorld().IntersectRay(Origin, to))
@@ -153,7 +164,7 @@ namespace AlleyCat.View
                 .Buffer(
                     TimeSpan.FromMilliseconds(FocusSpeed),
                     TimeSpan.FromMilliseconds(10),
-                    this.GetPhysicsScheduler())
+                    TimeSource.PhysicsScheduler)
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
                 .Subscribe(this.SetFocalDistance)

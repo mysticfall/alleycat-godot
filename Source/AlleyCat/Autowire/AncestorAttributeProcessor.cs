@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Reflection;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -18,7 +20,12 @@ namespace AlleyCat.Autowire
             Ensure.That(context, nameof(context)).IsNotNull();
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return EnumerableHelper.OfType(node.GetAncestors(), DependencyType);
+            var ancestors = node.GetAncestors().Bind(c =>
+                DependencyType.IsInstanceOfType(c)
+                    ? Some(c)
+                    : Some(c).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption())).Freeze();
+
+            return EnumerableHelper.OfType(ancestors, DependencyType);
         }
     }
 }

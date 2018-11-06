@@ -1,23 +1,20 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Physics;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.View
 {
-    [Singleton(typeof(IPerspectiveView), typeof(IThirdPersonView))]
     public class OrbitingCharacterView : OrbitingView, IThirdPersonView
     {
-        [Node(false)]
         public virtual Option<IHumanoid> Character
         {
             get => _character.Value;
@@ -28,13 +25,12 @@ namespace AlleyCat.View
 
         public Option<IEntity> FocusedObject { get; private set; }
 
-        public IObservable<Option<IEntity>> OnFocusChange =>
-            _focus.MatchObservable(identity, Observable.Empty<Option<IEntity>>);
+        public IObservable<Option<IEntity>> OnFocusChange { get; }
 
         public float MaxFocalDistance
         {
             get => _maxFocalDistance;
-            set => _maxFocalDistance = Mathf.Min(value, 0);
+            set => _maxFocalDistance = Mathf.Max(value, 0);
         }
 
         public override Spatial Target => Camera;
@@ -52,52 +48,59 @@ namespace AlleyCat.View
             .Map(new Plane(Vector3.Up, 0f).Project)
             .IfNone(Vector3.Forward);
 
-        [Export(PropertyHint.ExpRange, "1,10")]
         private float _maxFocalDistance = 2f;
-
-        [Export] private NodePath _characterPath;
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private Option<IObservable<Option<IEntity>>> _focus;
-
-        public OrbitingCharacterView() : this(
-            new Range<float>(-180f, 180f),
-            new Range<float>(-89f, 90f),
-            new Range<float>(0.25f, 10f))
-        {
-        }
-
         public OrbitingCharacterView(
+            Camera camera,
+            Option<IHumanoid> character,
+            Option<InputBindings> rotationInput,
+            Option<InputBindings> zoomInput,
             Range<float> yawRange,
             Range<float> pitchRange,
-            Range<float> distanceRange) : base(yawRange, pitchRange, distanceRange)
+            Range<float> distanceRange,
+            float initialDistance,
+            Vector3 initialOffset,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active = true) : base(
+            camera,
+            rotationInput,
+            zoomInput,
+            yawRange,
+            pitchRange,
+            distanceRange,
+            initialDistance,
+            initialOffset,
+            processMode,
+            timeSource,
+            active)
         {
-            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
+            OnFocusChange = timeSource.OnPhysicsProcess
+                .Where(_ => Active && Valid)
+                .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
+                .Select(direction => Origin + direction * MaxFocalDistance)
+                .Select(to => Character
+                    .Map(c => new Array {c})
+                    .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
+                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                .Select(e => e.Filter(v => v.Valid && v.Visible))
+                .DistinctUntilChanged()
+                .Do(current => FocusedObject = current);
+
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
         }
 
-        protected override void OnInitialize()
+        protected override void PostConstruct()
         {
-            base.OnInitialize();
+            base.PostConstruct();
 
             ZoomInput
                 .Where(_ => Distance <= DistanceRange.Min)
                 .Where(v => v > 0)
                 .Subscribe(_ => this.Deactivate())
                 .AddTo(this);
-
-            _focus = Some(
-                this.OnPhysicsProcess()
-                    .Where(_ => Active && Valid)
-                    .Select(_ => (Origin - Camera.GlobalTransform.origin).Normalized())
-                    .Select(direction => Origin + direction * MaxFocalDistance)
-                    .Select(to => Character
-                        .Map(c => new Array {c})
-                        .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
-                    .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
-                    .Select(e => e.Filter(v => v.Valid && v.Visible))
-                    .DistinctUntilChanged()
-                    .Do(current => FocusedObject = current));
         }
     }
 }

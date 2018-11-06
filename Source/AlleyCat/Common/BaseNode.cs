@@ -13,7 +13,7 @@ namespace AlleyCat.Common
 {
     public class BaseNode : Node, IDisposableCollector, ITimeSource, IInputSource, IValidatable
     {
-        public virtual bool Valid => true;
+        public virtual bool Valid => _valid;
 
         public IObservable<float> OnProcess => _onProcess.IfNone(() =>
         {
@@ -62,6 +62,8 @@ namespace AlleyCat.Common
         private Option<IScheduler> _physicsScheduler;
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
+
+        private bool _valid = true;
 
         protected BaseNode()
         {
@@ -128,12 +130,14 @@ namespace AlleyCat.Common
 
             if (what == NotificationPredelete)
             {
-                OnPreDestroy();
+                PreDestroy();
             }
         }
 
-        protected virtual void OnPreDestroy()
+        protected virtual void PreDestroy()
         {
+            _valid = false;
+
             _onProcess.Iter(l => l.CompleteAndDispose());
             _onProcess = None;
 

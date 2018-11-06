@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Event;
 using Godot;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
@@ -71,7 +70,7 @@ namespace AlleyCat.Control
                     .Buffer(
                         TimeSpan.FromMilliseconds(WindowSize),
                         TimeSpan.FromMilliseconds(WindowShift),
-                        this.GetScheduler())
+                        Scheduler)
                     .Where(v => v.Any())
                     .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count);
             }

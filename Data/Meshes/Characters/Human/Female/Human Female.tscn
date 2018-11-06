@@ -28,8 +28,8 @@
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkLeft.anim" type="Animation" id=26]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkRight.anim" type="Animation" id=27]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Animation Tree.tres" type="AnimationNodeBlendTree" id=28]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSight.cs" type="Script" id=29]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotion.cs" type="Script" id=30]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSightFactory.cs" type="Script" id=29]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotionFactory.cs" type="Script" id=30]
 [ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=31]
 [ext_resource path="res://Source/AlleyCat/Action/ActionMap.cs" type="Script" id=32]
 [ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=33]
@@ -65,7 +65,7 @@ resource_local_to_scene = true
 
 resource_local_to_scene = true
 
-[node name="Human Female" instance=ExtResource( 1 )]
+[node name="Human Female" index="0" instance=ExtResource( 1 )]
 transform = Transform( 1, 1.39698e-09, -2.44472e-09, -1.39698e-09, 1, 2.23518e-08, 2.44472e-09, -2.23518e-08, 1, -1.49012e-08, 1.19209e-07, -2.98023e-08 )
 script = ExtResource( 2 )
 _sections_unfolded = [ "Script" ]
@@ -73,6 +73,11 @@ _key = "Female"
 _displayName = "Female"
 _race = "Human"
 _sex = 1
+
+[node name="Rig" parent="." index="0"]
+bones/16/bound_children = [ NodePath("Chest") ]
+bones/21/bound_children = [ NodePath("Left Hand") ]
+bones/46/bound_children = [ NodePath("Right Hand") ]
 
 [node name="Body" parent="Rig" index="0"]
 extra_cull_margin = 0.5
@@ -156,8 +161,8 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Animations" type="Spatial" parent="." index="2"]
 script = ExtResource( 12 )
-ProcessMode = 1
 Active = true
+ProcessMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations" index="0"]
 editor/display_folded = true
@@ -208,39 +213,34 @@ script = ExtResource( 11 )
 
 [node name="Vision" type="Node" parent="." index="3"]
 script = ExtResource( 29 )
-ProcessMode = 0
 Active = true
-_maxYaw = 80.0
-_minYaw = -80.0
-_maxPitch = 80.0
-_minPitch = -70.0
-_headBone = "head"
-_eyeBoneLeft = "eye_L"
-_eyeBoneRight = "eye_R"
+MaxYaw = 80.0
+MinYaw = -80.0
+MaxPitch = 80.0
+MinPitch = -70.0
+HeadBone = "head"
+EyeBoneLeft = "eye_L"
+EyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="4"]
 script = ExtResource( 30 )
-ProcessMode = 1
 Active = true
 _targetPath = NodePath("..")
 ApplyGravity = true
-_idleState = "Idle"
-_moveState = "Moving"
-_statesPath = "States"
-_blend2DPath = "States/Moving"
+IdleState = "Idle"
+MoveState = "Moving"
+StatesPath = "States"
+Blend2DPath = "States/Moving"
 
 [node name="Equipments" type="Node" parent="." index="5"]
 script = ExtResource( 31 )
-ProcessMode = 0
 
 [node name="Actions" type="Node" parent="." index="6"]
 script = ExtResource( 32 )
-ProcessMode = 0
 
 [node name="Pickup" type="Node" parent="Actions" index="0"]
 script = ExtResource( 33 )
 _sections_unfolded = [ "Script", "_tags" ]
-ProcessMode = 0
 Active = true
 _key = "Pickup"
 _displayName = "action.Pickup"
@@ -255,14 +255,12 @@ _tags = [ "TagCarry", "TagHand" ]
 [node name="Drop" type="Node" parent="Actions" index="1"]
 script = ExtResource( 34 )
 _sections_unfolded = [ "Script" ]
-ProcessMode = 0
 Active = true
 _key = "Drop"
 _displayName = "action.Drop"
 
 [node name="Sit" type="Node" parent="Actions" index="2"]
 script = ExtResource( 35 )
-ProcessMode = 0
 Active = true
 _key = "Sit"
 _displayName = "action.Sit"
@@ -281,7 +279,6 @@ _exitAnimatorPath = "States/Seated/Getting Up"
 
 [node name="Kneel" type="Node" parent="Actions" index="3"]
 script = ExtResource( 35 )
-ProcessMode = 0
 Active = true
 _key = "Kneel"
 _displayName = "action.Kneel"
