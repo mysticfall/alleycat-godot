@@ -16,10 +16,7 @@ namespace AlleyCat.Game
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return Optional(node as IEntity) |
-                   Optional(node.GetParent())
-                       .Filter(p => !(p is IScene))
-                       .Bind(FindEntity);
+            return node.OfType<IEntity>() | Optional(node.GetParent()).Bind(FindEntity);
         }
     }
 }
