@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -101,7 +101,17 @@ namespace AlleyCat.Common
             return Optional(node.GetParent()).OfType<T>().HeadOrNone();
         }
 
-        public static IEnumerable<Node> GetAncestors(this Node node) => new NodeAncestors(node);
+        public static IEnumerable<Node> GetAncestors(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            Node parent;
+
+            while ((parent = node.GetParent()) != null)
+            {
+                yield return parent;
+            }
+        }
 
         public static Option<T> GetClosestAncestor<T>(this Node node) where T : class
         {
@@ -117,48 +127,5 @@ namespace AlleyCat.Common
 
             return GetAncestors(node).Find(predicate);
         }
-    }
-}
-
-internal struct NodeAncestors : IEnumerable<Node>, IEnumerator<Node>
-{
-    public Node Current { get; private set; }
-
-    object IEnumerator.Current => Current;
-
-    public IEnumerator<Node> GetEnumerator() => this;
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-    private readonly Node _node;
-
-    private bool _initial;
-
-    public NodeAncestors(Node node)
-    {
-        Ensure.That(node, nameof(node)).IsNotNull();
-
-        _node = node;
-        _initial = true;
-
-        Current = null;
-    }
-
-    public bool MoveNext()
-    {
-        Current = _initial ? _node.GetParent() : Current?.GetParent();
-        _initial = false;
-
-        return Current != null;
-    }
-
-    public void Reset()
-    {
-        Current = null;
-        _initial = true;
-    }
-
-    public void Dispose()
-    {
     }
 }
