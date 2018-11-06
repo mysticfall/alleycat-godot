@@ -133,6 +133,7 @@
     <Compile Include="Source\AlleyCat\Autowire\SingletonAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\SingletonAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\TypeAttributeProcessorFactory.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\TypeUtils.cs" />
     <Compile Include="Source\AlleyCat\Bootstrap.cs" />
     <Compile Include="Source\AlleyCat\Character\Character.cs" />
     <Compile Include="Source\AlleyCat\Character\CharacterEquipments.cs" />
