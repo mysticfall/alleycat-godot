@@ -199,7 +199,7 @@ namespace AlleyCat.Control
             this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
-                .Select(speed => Character.Map(c => c.GlobalTransform().Up() * speed).IfNone(Vector3.Zero))
+                .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
                 .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)))
                 .AddTo(this);

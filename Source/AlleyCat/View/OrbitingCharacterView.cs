@@ -44,7 +44,7 @@ namespace AlleyCat.View
         public override Vector3 Up => Vector3.Up;
 
         public override Vector3 Forward => Character
-            .Map(c => c.GlobalTransform().Forward())
+            .Map(c => c.GetGlobalTransform().Forward())
             .Map(new Plane(Vector3.Up, 0f).Project)
             .IfNone(Vector3.Forward);
 

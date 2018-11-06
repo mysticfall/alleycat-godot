@@ -31,7 +31,7 @@ namespace AlleyCat.View
 
         public override Vector3 Up => Vector3.Up;
 
-        public override Vector3 Forward => new Plane(Vector3.Up, 0f).Project(Pivot.GlobalTransform().Backward());
+        public override Vector3 Forward => new Plane(Vector3.Up, 0f).Project(Pivot.GetGlobalTransform().Backward());
 
         public IInputSource InputSource { get; }
 

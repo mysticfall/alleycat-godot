@@ -252,7 +252,7 @@ namespace AlleyCat.View
             bool IsStablizationAllowed() =>
                 Stabilization == StabilizeMode.Always || Stabilization != StabilizeMode.Never;
 
-            Basis GetCharacterRotation() => Character.Select(c => c.GlobalTransform().basis).IfNone(Basis.Identity);
+            Basis GetCharacterRotation() => Character.Select(c => c.GetGlobalTransform().basis).IfNone(Basis.Identity);
 
             Quat GetUnstablizedQuat() => (this.GetTransform().basis * this.GetBasis()).Quat();
             Quat GetStablizedQuat() => (GetCharacterRotation() * this.GetBasis()).Quat();

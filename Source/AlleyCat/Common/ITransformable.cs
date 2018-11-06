@@ -11,7 +11,7 @@ namespace AlleyCat.Common
 
     public static class TransformableExtensions
     {
-        public static Transform Transform(this ITransformable transformable)
+        public static Transform GetTransform(this ITransformable transformable)
         {
             Ensure.That(transformable, nameof(transformable)).IsNotNull();
 
@@ -20,13 +20,31 @@ namespace AlleyCat.Common
             return transformable.Spatial.Transform;
         }
 
-        public static Transform GlobalTransform(this ITransformable transformable)
+        public static void SetTransform(this ITransformable transformable, Transform transform)
+        {
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
+
+            transformable.Spatial.Transform = transform;
+        }
+
+        public static Transform GetGlobalTransform(this ITransformable transformable)
         {
             Ensure.That(transformable, nameof(transformable)).IsNotNull();
 
             Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
 
             return transformable.Spatial.GlobalTransform;
+        }
+
+        public static void SetGlobalTransform(this ITransformable transformable, Transform transform)
+        {
+            Ensure.That(transformable, nameof(transformable)).IsNotNull();
+
+            Debug.Assert(transformable.Spatial != null, "transformable.Spatial != null");
+
+            transformable.Spatial.GlobalTransform = transform;
         }
 
         public static Vector3 Origin(this ITransformable transformable)
