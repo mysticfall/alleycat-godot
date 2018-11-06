@@ -22,7 +22,7 @@ namespace AlleyCat.Item
             get => _active.Value;
             set
             {
-                if (_initialized && this.GetClosestAncestor<Equipment>().Exists(e => e.Equipped))
+                if (_initialized && this.FindClosestAncestor<Equipment>().Exists(e => e.Equipped))
                 {
                     throw new InvalidOperationException(
                         "Unable to switch configuration while an item is equipped.");

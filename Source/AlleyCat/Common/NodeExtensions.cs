@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,14 +16,14 @@ namespace AlleyCat.Common
             Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(path, nameof(path)).IsNotNull();
 
-            return node.HasNode(path) ? Optional(node.GetNode(path) as T) : None;
+            return node.HasNode(path) ? Optional(node.GetNode(path)).Bind(OfType<T>) : None;
         }
 
         public static Option<T> FindComponent<T>(this Node node) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return node.GetChildren().Find(n => n is T).OfType<T>().HeadOrNone();
+            return node.GetChildren().Bind(n => OfType<T>((Node) n)).HeadOrNone();
         }
 
         public static T GetComponent<T>(this Node node, NodePath path) where T : class
@@ -32,12 +31,8 @@ namespace AlleyCat.Common
             Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(path, nameof(path)).IsNotNull();
 
-            if (!(node.GetNode(path) is T result))
-            {
-                throw new InvalidOperationException($"Unable to find node '{path}' in '{node.Name}'.");
-            }
-
-            return result;
+            return Optional(node.GetNode(path)).Bind(OfType<T>).IfNone(() =>
+                throw new InvalidOperationException($"Unable to find node '{path}' in '{node.Name}'."));
         }
 
         public static TChild GetComponent<TParent, TChild>(
@@ -87,45 +82,60 @@ namespace AlleyCat.Common
             return child;
         }
 
-        public static IEnumerable<T> GetChildComponents<T>(this Node node)
+        public static IEnumerable<T> GetChildComponents<T>(this Node node) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return node.GetChildren().OfType<T>();
+            return node.GetChildren().Bind(n => OfType<T>((Node) n));
         }
 
         public static Option<T> FindParent<T>(this Node node) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return Optional(node.GetParent()).OfType<T>().HeadOrNone();
+            return Optional(node.GetParent()).Bind(OfType<T>);
         }
 
         public static IEnumerable<Node> GetAncestors(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            Node parent;
+            var parent = node;
 
-            while ((parent = node.GetParent()) != null)
+            while ((parent = parent.GetParent()) != null)
             {
                 yield return parent;
             }
         }
 
-        public static Option<T> GetClosestAncestor<T>(this Node node) where T : class
+        public static Option<T> FindClosestAncestor<T>(this Node node) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return GetAncestors(node).Find(a => a is T).OfType<T>().HeadOrNone();
+            return GetAncestors(node).Bind(n => OfType<T>(n)).HeadOrNone();
         }
 
-        public static Option<Node> GetClosestAncestor(this Node node, Func<Node, bool> predicate)
+        public static Option<Node> FindClosestAncestor(this Node node, Func<Node, bool> predicate)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(predicate, nameof(predicate)).IsNotNull();
 
             return GetAncestors(node).Find(predicate);
+        }
+
+        public static Option<T> OfType<T>(this Node node) where T : class
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            switch (node)
+            {
+                case T result:
+                    return result;
+                case IGameObjectFactory factory:
+                    return factory.Service.ToOption().OfType<T>().HeadOrNone();
+                default:
+                    return None;
+            }
         }
     }
 }

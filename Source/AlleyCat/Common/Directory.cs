@@ -8,7 +8,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public abstract class Directory<T> : AutowiredNode, IReadOnlyDictionary<string, T>
+    public abstract class Directory<T> : AutowiredNode, IReadOnlyDictionary<string, T> where T : class
     {
         public int Count => Cache.Count;
 
