@@ -1,25 +1,25 @@
-using AlleyCat.Autowire;
 using AlleyCat.Common;
-using Godot;
-using Godot.Collections;
-using JetBrains.Annotations;
+using EnsureThat;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public class SlotConfiguration : AutowiredNode, ISlotConfiguration
+    public abstract class SlotConfiguration : GameObject, ISlotConfiguration
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public string Slot => _slot.TrimToOption().IfNone(() => Key);
+        public string Slot { get; }
 
-        public Set<string> AdditionalSlots => toSet(_additionalSlots);
+        public Set<string> AdditionalSlots { get; }
 
-        [Export] private string _key;
+        protected SlotConfiguration(string key, string slot, Set<string> additionalSlots)
+        {
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(slot, nameof(slot)).IsNotNullOrEmpty();
 
-        [Export] private string _slot;
-
-        [Export, UsedImplicitly] private Array<string> _additionalSlots;
+            Key = key;
+            Slot = slot;
+            AdditionalSlots = additionalSlots;
+        }
     }
 }

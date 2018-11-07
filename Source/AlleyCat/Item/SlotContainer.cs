@@ -6,24 +6,27 @@ using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
-using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public abstract class SlotContainer<TSlot, TItem> : Directory<TItem>, ISlotContainer<TSlot, TItem>
+    public abstract class SlotContainer<TSlot, TItem> : GameObject, ISlotContainer<TSlot, TItem>
         where TSlot : ISlot
-        where TItem : Node, ISlotItem
+        where TItem : class, ISlotItem
     {
         public abstract Map<string, TSlot> Slots { get; }
+
+        public Map<string, TItem> Items { get; private set; }
 
         public IObservable<TItem> OnAdd => _onAdd.AsObservable();
 
         public IObservable<TItem> OnRemove => _onRemove.AsObservable();
 
         public IObservable<IEnumerable<TItem>> OnItemsChange =>
-            OnAdd.Merge(OnRemove).Select(_ => Values).StartWith(Values);
+            OnAdd.Merge(OnRemove).Select(_ => Items.Values).StartWith(Items.Values);
+
+        protected abstract IEnumerable<TItem> InitialItems { get; }
 
         private readonly ISubject<TItem> _onAdd;
 
@@ -33,6 +36,13 @@ namespace AlleyCat.Item
         {
             _onAdd = new Subject<TItem>().AddTo(this);
             _onRemove = new Subject<TItem>().AddTo(this);
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            Items = InitialItems.Filter(v => Slots.Keys.Contains(v.Slot)).ToMap();
         }
 
         public virtual void Add(TItem item)
@@ -48,7 +58,7 @@ namespace AlleyCat.Item
 
             DoAdd(item);
 
-            ClearCache();
+            Items = Items.Add(item.Slot, item);
 
             _onAdd.OnNext(item);
         }
@@ -59,16 +69,16 @@ namespace AlleyCat.Item
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
-            if (this.All(t => t.Value != item))
+            if (!Items.Keys.Contains(item.Slot))
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(item),
-                    $"The item is not added to this container: '{item.Name}'.");
+                    $"The item is not added to this container: '{item.Key}'.");
             }
 
             DoRemove(item);
 
-            ClearCache();
+            Items = Items.Remove(item.Slot);
 
             _onRemove.OnNext(item);
         }
@@ -79,7 +89,7 @@ namespace AlleyCat.Item
         {
             Ensure.That(slot, nameof(slot)).IsNotNull();
 
-            var item = this.TryGetValue(slot);
+            var item = Items.Find(slot);
 
             item.Iter(Remove);
 
@@ -97,12 +107,5 @@ namespace AlleyCat.Item
 
         public bool AllowedFor(object context) => 
             Optional(context).OfType<ISlotConfiguration>().Exists(AllowedFor);
-
-        protected override string GetKey(TItem item)
-        {
-            Ensure.That(item, nameof(item)).IsNotNull();
-
-            return item.Slot;
-        }
     }
 }

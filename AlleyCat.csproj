@@ -136,7 +136,6 @@
     <Compile Include="Source\AlleyCat\Autowire\TypeUtils.cs" />
     <Compile Include="Source\AlleyCat\Bootstrap.cs" />
     <Compile Include="Source\AlleyCat\Character\Character.cs" />
-    <Compile Include="Source\AlleyCat\Character\CharacterEquipments.cs" />
     <Compile Include="Source\AlleyCat\Character\Humanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\ICharacter.cs" />
     <Compile Include="Source\AlleyCat\Character\ICharacterAware.cs" />
@@ -250,11 +249,15 @@
     <Compile Include="Source\AlleyCat\IO\FileStream.cs" />
     <Compile Include="Source\AlleyCat\IO\IWritableFileInfo.cs" />
     <Compile Include="Source\AlleyCat\Item\AttachedConfiguration.cs" />
+    <Compile Include="Source\AlleyCat\Item\AttachedConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\CommonEquipmentTags.cs" />
     <Compile Include="Source\AlleyCat\Item\DropAction.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\Equipment.cs" />
+    <Compile Include="Source\AlleyCat\Item\EquipmentConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentContainer.cs" />
+    <Compile Include="Source\AlleyCat\Item\EquipmentFactory.cs" />
+    <Compile Include="Source\AlleyCat\Item\EquipmentSlotFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentType.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipType.cs" />
     <Compile Include="Source\AlleyCat\Item\IEquipmentContainer.cs" />
@@ -268,9 +271,12 @@
     <Compile Include="Source\AlleyCat\Item\EquipmentAction.cs" />
     <Compile Include="Source\AlleyCat\Item\PickupAction.cs" />
     <Compile Include="Source\AlleyCat\Item\RiggedConfiguration.cs" />
+    <Compile Include="Source\AlleyCat\Item\RiggedConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\Slot.cs" />
     <Compile Include="Source\AlleyCat\Item\SlotConfiguration.cs" />
+    <Compile Include="Source\AlleyCat\Item\SlotConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\SlotContainer.cs" />
+    <Compile Include="Source\AlleyCat\Item\SlotFactory.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotionFactory.cs" />
     <Compile Include="Source\AlleyCat\Motion\Billboard.cs" />

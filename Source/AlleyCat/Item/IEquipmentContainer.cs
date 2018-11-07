@@ -54,19 +54,19 @@ namespace AlleyCat.Item
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(item, nameof(item)).IsNotNull();
 
-            var parent = dropTo.IfNone(() => item.GetTree().CurrentScene);
+            var parent = dropTo.IfNone(() => item.Node.GetTree().CurrentScene);
 
             Debug.Assert(parent != null, "parent != null");
 
-            var transform = item.GlobalTransform;
+            var transform = item.GetGlobalTransform();
 
             container.Remove(item);
 
             item.Configuration?.Deactivate();
 
-            parent.AddChild(item);
+            parent.AddChild(item.Node);
 
-            item.GlobalTransform = transform;
+            item.SetGlobalTransform(transform);
 
             return item;
         }

@@ -4,7 +4,7 @@
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlot.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlotFactory.cs" type="Script" id=5]
 
 [node name="Human" type="Node"]
 script = ExtResource( 1 )
@@ -70,31 +70,31 @@ _materials = [ "Skin" ]
 
 [node name="Shirt" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-_key = "Shirt"
-_displayName = "slot.Shirt"
+Key = "Shirt"
+DisplayName = "slot.Shirt"
 EquipType = 1
 
 [node name="Pants" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-_key = "Pants"
-_displayName = "slot.Pants"
+Key = "Pants"
+DisplayName = "slot.Pants"
 EquipType = 1
 
 [node name="Left Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-_key = "LeftHand"
-_displayName = "slot.LeftHand"
+Key = "LeftHand"
+DisplayName = "slot.LeftHand"
 EquipType = 0
 
 [node name="Right Hand" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-_key = "RightHand"
-_displayName = "slot.RightHand"
+Key = "RightHand"
+DisplayName = "slot.RightHand"
 EquipType = 0
 
 [node name="Necklace" type="Node" parent="Slots/Equipments"]
 script = ExtResource( 5 )
-_key = "Necklace"
-_displayName = "slot.Necklace"
+Key = "Necklace"
+DisplayName = "slot.Necklace"
 EquipType = 1
 

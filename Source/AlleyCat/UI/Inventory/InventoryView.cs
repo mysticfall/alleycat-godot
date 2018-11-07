@@ -146,7 +146,7 @@ namespace AlleyCat.UI.Inventory
             node.SetText(2, parent.Slots[item.Slot].DisplayName);
 
             node.SetCellMode(3, TreeItem.TreeCellMode.String);
-            node.SetText(3, $"{item.Weight:F1}kg");
+            node.SetText(3, $"{item.Node.Weight:F1}kg");
 
             return node;
         }

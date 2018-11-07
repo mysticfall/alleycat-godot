@@ -61,7 +61,6 @@ subdivide_width = 0
 subdivide_depth = 0
 
 [node name="Test Area" instance=ExtResource( 1 )]
-_key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93835, 8.22498, 1.25068 )
@@ -79,7 +78,6 @@ data = SubResource( 1 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" index="0"]
 environment = ExtResource( 2 )
-_sections_unfolded = [ "Pause", "environment" ]
 
 [node name="Campfire" parent="Environment" index="1" instance=ExtResource( 3 )]
 light_cull_mask = -1
@@ -95,13 +93,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, -0.243127, 2.99846 )
 
 [node name="Prisoner" parent="Entities/Characters" index="1" instance=ExtResource( 4 )]
 transform = Transform( 0.314428, 0, 0.949281, 0, 1, 0, -0.949281, 0, 0.314428, 3.71469, -0.134906, 0.824917 )
-_key = "Prisoner1"
-_displayName = "Prisoner 1"
 
 [node name="Prisoner2" parent="Entities/Characters" index="2" instance=ExtResource( 4 )]
 transform = Transform( 0.333089, 0, -0.942895, 0, 1, 0, 0.942895, 0, 0.333089, -0.553927, -0.134906, 1.9331 )
-_key = "Prisoner2"
-_displayName = "Prisoner 2"
 
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
 editor/display_folded = true
@@ -138,7 +132,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 6 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "mesh" ]
 
 [node name="Wall2" type="MeshInstance" parent="Static Objects" index="2"]
 transform = Transform( -0.998898, -0.0362105, -0.0298203, 0.032774, -0.0839237, -0.995933, 0.0335607, -0.995813, 0.0850181, 0.922312, 7.02629, 23.1986 )
@@ -154,7 +147,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 6 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "mesh" ]
 
 [node name="Node" type="Spatial" parent="Static Objects" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.90084, 0, -3.07329 )

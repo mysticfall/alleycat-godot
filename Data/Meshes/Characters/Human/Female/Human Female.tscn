@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/Humanoid.cs" type="Script" id=2]
@@ -30,11 +30,10 @@
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Animation Tree.tres" type="AnimationNodeBlendTree" id=28]
 [ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSightFactory.cs" type="Script" id=29]
 [ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotionFactory.cs" type="Script" id=30]
-[ext_resource path="res://Source/AlleyCat/Character/CharacterEquipments.cs" type="Script" id=31]
-[ext_resource path="res://Source/AlleyCat/Action/ActionMap.cs" type="Script" id=32]
-[ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=33]
-[ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=34]
-[ext_resource path="res://Source/AlleyCat/Animation/SitAction.cs" type="Script" id=35]
+[ext_resource path="res://Source/AlleyCat/Action/ActionMap.cs" type="Script" id=31]
+[ext_resource path="res://Source/AlleyCat/Item/PickupAction.cs" type="Script" id=32]
+[ext_resource path="res://Source/AlleyCat/Item/DropAction.cs" type="Script" id=33]
+[ext_resource path="res://Source/AlleyCat/Animation/SitAction.cs" type="Script" id=34]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -232,14 +231,11 @@ MoveState = "Moving"
 StatesPath = "States"
 Blend2DPath = "States/Moving"
 
-[node name="Equipments" type="Node" parent="." index="5"]
+[node name="Actions" type="Node" parent="." index="5"]
 script = ExtResource( 31 )
 
-[node name="Actions" type="Node" parent="." index="6"]
-script = ExtResource( 32 )
-
 [node name="Pickup" type="Node" parent="Actions" index="0"]
-script = ExtResource( 33 )
+script = ExtResource( 32 )
 _sections_unfolded = [ "Script", "_tags" ]
 Active = true
 _key = "Pickup"
@@ -253,14 +249,14 @@ _ikChain = "Right Hand IK"
 _tags = [ "TagCarry", "TagHand" ]
 
 [node name="Drop" type="Node" parent="Actions" index="1"]
-script = ExtResource( 34 )
+script = ExtResource( 33 )
 _sections_unfolded = [ "Script" ]
 Active = true
 _key = "Drop"
 _displayName = "action.Drop"
 
 [node name="Sit" type="Node" parent="Actions" index="2"]
-script = ExtResource( 35 )
+script = ExtResource( 34 )
 Active = true
 _key = "Sit"
 _displayName = "action.Sit"
@@ -278,7 +274,7 @@ _animatorPath = "States/Seated/Seated/Sit"
 _exitAnimatorPath = "States/Seated/Getting Up"
 
 [node name="Kneel" type="Node" parent="Actions" index="3"]
-script = ExtResource( 35 )
+script = ExtResource( 34 )
 Active = true
 _key = "Kneel"
 _displayName = "action.Kneel"

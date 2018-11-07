@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using System.Linq;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
@@ -7,37 +7,49 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public abstract class EquipmentContainer : SlotContainer<EquipmentSlot, Equipment>, IEquipmentContainer
+    public class EquipmentContainer : SlotContainer<EquipmentSlot, Equipment>, IEquipmentContainer
     {
-        protected abstract IEquipmentHolder Holder { get; }
+        public IEquipmentHolder Holder { get; }
 
-        protected override Map<string, Equipment> CreateCache() =>
-            toMap(Slots.Values
-                .Bind(s => s.GetParent(Holder).GetChildComponents<Equipment>())
+        public override Map<string, EquipmentSlot> Slots { get; }
+
+        protected override IEnumerable<Equipment> InitialItems =>
+            Slots.Values
+                .Map(s => s.GetParent(Holder))
                 .Distinct()
-                .Map(v => (v.Slot, v)));
+                .Bind(p => p.GetChildComponents<Equipment>());
 
-        [PostConstruct(true)]
-        protected virtual void OnInitialize()
+        public EquipmentContainer(IEnumerable<EquipmentSlot> slots, IEquipmentHolder holder)
         {
-            Values.Iter(v => v.Equip(Holder));
+            Ensure.That(slots, nameof(slots)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+
+            Holder = holder;
+            Slots = slots.ToMap();
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            Items.Values.Iter(v => v.Equip(Holder));
         }
 
         protected override void DoAdd(Equipment item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
-            var transform = item.GlobalTransform;
+            var transform = item.GetGlobalTransform();
 
-            Optional(item.GetParent()).Iter(p => p.RemoveChild(item));
+            Optional(item.Node.GetParent()).Iter(p => p.RemoveChild(item.Node));
 
             var parent = Slots[item.Slot].GetParent(Holder);
 
-            parent.AddChild(item);
+            parent.AddChild(item.Node);
 
-            item.GlobalTransform = transform;
+            item.SetGlobalTransform(transform);
 
-            item.SetOwner(parent.GetOwner());
+            item.Node.SetOwner(parent.GetOwner());
             item.Equip(Holder);
         }
 
@@ -45,13 +57,13 @@ namespace AlleyCat.Item
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
-            var transform = item.GlobalTransform;
+            var transform = item.GetGlobalTransform();
 
             item.Unequip(Holder);
 
-            Optional(item.GetParent()).Iter(p => p.RemoveChild(item));
+            Optional(item.Node.GetParent()).Iter(p => p.RemoveChild(item.Node));
 
-            item.GlobalTransform = transform;
+            item.SetGlobalTransform(transform);
         }
 
         public override bool AllowedFor(ISlotConfiguration context)

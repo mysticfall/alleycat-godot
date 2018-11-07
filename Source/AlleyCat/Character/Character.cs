@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
@@ -78,13 +79,13 @@ namespace AlleyCat.Character
 
         [Service] private Option<Skeleton> _skeleton;
 
-        [Service] private Option<IEquipmentContainer> _equipments;
-
         [Service] private Option<IRaceRegistry> _raceRegistry;
 
         [Service] private Option<IReadOnlyDictionary<string, IAction>> _actions;
 
         [Service(false, false)] private IEnumerable<Marker> _markers = Enumerable.Empty<Marker>();
+
+        private Option<IEquipmentContainer> _equipments;
 
         private Option<Marker> _labelMarker;
 
@@ -103,7 +104,19 @@ namespace AlleyCat.Character
             Actions = _actions.SelectMany(a => a.Values).ToMap();
             Markers = _markers.ToMap();
 
+            var slots = Race.EquipmentSlots.Freeze();
+
+            _equipments = new EquipmentContainer(slots, this);
+            _equipments.OfType<IInitializable>().Iter(e => e.Initialize());
+
             _labelMarker = this.FindLabelMarker();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _equipments.OfType<IDisposable>().Iter(e => e.DisposeQuietly());
+
+            base.Dispose(disposing);
         }
     }
 }

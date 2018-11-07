@@ -22,7 +22,7 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(slot, nameof(slot)).IsNotNull();
 
-            return holder.Equipments.TryGetValue(slot);
+            return holder.Equipments.Items.Find(slot);
         }
 
         public static Option<EquipmentConfiguration> FindEquipConfiguration(

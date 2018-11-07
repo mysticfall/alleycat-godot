@@ -1,13 +1,23 @@
 using System;
+using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.Item
 {
     public class EquipmentSlot : Slot
     {
-        [Export]
-        public EquipType EquipType { get; set; }
+        public EquipType EquipType { get; }
+
+        public EquipmentSlot(
+            string key,
+            string displayName,
+            EquipType equipType,
+            Option<ICondition<ISlotItem>> allowedCondition) : base(key, displayName, allowedCondition)
+        {
+            EquipType = equipType;
+        }
 
         public virtual Node GetParent(IEquipmentHolder holder)
         {

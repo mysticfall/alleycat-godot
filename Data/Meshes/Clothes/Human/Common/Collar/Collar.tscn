@@ -1,10 +1,10 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Source/AlleyCat/Item/Equipment.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Item.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Item/RiggedConfiguration.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Item/AttachedConfiguration.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/RiggedConfigurationFactory.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Item/AttachedConfigurationFactory.cs" type="Script" id=5]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=6]
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
 
@@ -46,11 +46,11 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
+Key = "Collar"
+DisplayName = "item.Collar"
+Description = "item.Collar.Description"
 EquipmentType = 1
-_key = "Collar"
-_displayName = "item.Collar"
-_description = "item.Collar.Description"
-_itemMesh = ExtResource( 2 )
+ItemMesh = ExtResource( 2 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
 editor/display_folded = true
@@ -86,16 +86,15 @@ script = ExtResource( 3 )
 "TagWear",
 ]]
 script = ExtResource( 4 )
-ProcessMode = 0
-_key = "Wear"
-_slot = "Necklace"
-_additionalSlots = null
+Key = "Wear"
+Slot = "Necklace"
+AdditionalSlots = null
 Active = false
+Mesh = null
+Animation = null
+AnimationBlend = null
 AnimationTransition = 1.0
-_mesh = null
-_animation = null
-_animationBlend = null
-_meshesToSync = null
+MeshesToSync = null
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",
@@ -103,15 +102,14 @@ _meshesToSync = null
 "TagOneHand",
 ]]
 script = ExtResource( 5 )
-ProcessMode = 0
-_key = "Carry"
-_slot = "RightHand"
-_additionalSlots = null
+Key = "Carry"
+Slot = "RightHand"
+AdditionalSlots = null
 Active = false
+Mesh = null
+Animation = ExtResource( 6 )
+AnimationBlend = "Hands"
 AnimationTransition = 1.0
-_mesh = null
-_animation = ExtResource( 6 )
-_animationBlend = "Hands"
 
 [node name="Markers" type="Spatial" parent="."]
 

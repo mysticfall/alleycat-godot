@@ -6,7 +6,6 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
-using JetBrains.Annotations;
 using LanguageExt;
 using static LanguageExt.Prelude;
 using Object = Godot.Object;
@@ -15,13 +14,22 @@ namespace AlleyCat.Item
 {
     public class RiggedConfiguration : EquipmentConfiguration
     {
-        public Set<string> MeshesToSync => toSet(_meshesToSync);
-
-        [Export, UsedImplicitly] private Array<string> _meshesToSync;
+        public Set<string> MeshesToSync { get; }
 
         private Option<IDisposable> _blendShapeListener;
 
         private Set<BlendShapeMapping> _blendShapeMappings = Set<BlendShapeMapping>();
+
+        public RiggedConfiguration(
+            string key,
+            string slot,
+            Set<string> additionalSlots,
+            Set<string> tags,
+            Set<string> meshesToSync,
+            bool active = false) : base(key, slot, additionalSlots, tags, active)
+        {
+            MeshesToSync = meshesToSync;
+        }
 
         public override void OnEquip(IEquipmentHolder holder, Equipment equipment)
         {
@@ -29,7 +37,7 @@ namespace AlleyCat.Item
 
             foreach (var mesh in equipment.Meshes)
             {
-                equipment.Transform = new Transform(Basis.Identity, Vector3.Zero);
+                equipment.Spatial.Transform = new Transform(Basis.Identity, Vector3.Zero);
 
                 mesh.Skeleton = mesh.GetPathTo(holder.Skeleton);
             }
@@ -83,11 +91,11 @@ namespace AlleyCat.Item
             UnregisterBlendShapeListeners();
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void PreDestroy()
         {
-            UnregisterBlendShapeListeners();
+            base.PreDestroy();
 
-            base.Dispose(disposing);
+            UnregisterBlendShapeListeners();
         }
 
         private void UnregisterBlendShapeListeners()
@@ -118,7 +126,7 @@ namespace AlleyCat.Item
             Target = target;
         }
 
-        public int CompareTo(BlendShapeMapping other) => 
+        public int CompareTo(BlendShapeMapping other) =>
             string.Compare(Key, other.Key, StringComparison.Ordinal);
     }
 }

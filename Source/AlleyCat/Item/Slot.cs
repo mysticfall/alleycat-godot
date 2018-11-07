@@ -1,29 +1,33 @@
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Condition.Generic;
 using EnsureThat;
-using Godot;
 using LanguageExt;
 
 namespace AlleyCat.Item
 {
-    public abstract class Slot : AutowiredNode, ISlot
+    public abstract class Slot : GameObject, ISlot
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        [Node(false)] private Option<ICondition<ISlotItem>> _allowedFor;
+        public Option<ICondition<ISlotItem>> AllowedCondition { get; }
 
-        [Export] private string _key;
+        protected Slot(string key, string displayName, Option<ICondition<ISlotItem>> allowedCondition)
+        {
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
 
-        [Export] private string _displayName;
+            Key = key;
+            DisplayName = displayName;
+            AllowedCondition = allowedCondition;
+        }
 
         public virtual bool AllowedFor(ISlotItem context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            return !_allowedFor.Exists(c => !c.Matches(context));
+            return !AllowedCondition.Exists(c => !c.Matches(context));
         }
 
         public bool AllowedFor(object context) => context is ISlotItem item && AllowedFor(item);

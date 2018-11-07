@@ -2,28 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
+using AlleyCat.Item.Generic;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
 using static LanguageExt.Prelude;
+using Object = Godot.Object;
 
 namespace AlleyCat.Item
 {
-    [AutowireContext]
-    public class Equipment : RigidBody, ISlotItem, IMarkable, IEntity
+    public class Equipment : GameObject, ISlotItem<RigidBody>, IMarkable, IEntity
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        public virtual Option<string> Description => _description.TrimToOption().Map(Tr);
+        public virtual Option<string> Description { get; }
 
-        [Export, UsedImplicitly]
-        public EquipmentType EquipmentType { get; private set; }
+        public EquipmentType EquipmentType { get; }
 
         public string Slot => Configuration.Slot;
 
@@ -33,72 +31,91 @@ namespace AlleyCat.Item
 
         public Option<EquipmentConfiguration> ActiveConfiguration => _configurations.Find(c => c.Active);
 
-        public Map<string, EquipmentConfiguration> Configurations { get; private set; } =
-            Map<string, EquipmentConfiguration>();
+        public Map<string, EquipmentConfiguration> Configurations { get; }
 
-        public virtual bool Valid => IsInstanceValid(this);
+        public RigidBody Node { get; }
 
-        public bool Equipped => ActiveConfiguration.IsSome && 
-                                this.GetAncestors().Exists(a => a is IEquipmentHolder);
+        public override bool Valid => base.Valid && Object.IsInstanceValid(Node);
 
-        public Spatial Spatial => (Spatial) _mesh;
+        public bool Visible
+        {
+            get => Node.Visible;
+            set => Node.Visible = value;
+        }
 
-        public Mesh ItemMesh => Some(_itemMesh).Head();
+        public bool Equipped => ActiveConfiguration.IsSome && Node.FindClosestAncestor<IEquipmentHolder>().IsSome;
 
-        public CollisionShape Shape => (CollisionShape) _shape;
+        public Spatial Spatial => Node;
 
-        public IEnumerable<MeshInstance> Meshes => _mesh.Filter(m => m.Visible);
+        public Mesh ItemMesh { get; }
+
+        public MeshInstance Mesh { get; }
+
+        public CollisionShape Shape { get; }
+
+        public IEnumerable<MeshInstance> Meshes => Seq1(Mesh).Filter(m => m.Visible);
 
         public AABB Bounds => Meshes.Select(m => m.GetAabb()).Aggregate((b1, b2) => b1.Merge(b2));
 
-        public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
+        public Map<string, Marker> Markers { get; }
 
         public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
 
-        [Export] private string _key;
+        Node ISlotItem.Node => Node;
 
-        [Export] private string _displayName;
-
-        [Export] private string _description;
-
-        [Export] private Mesh _itemMesh;
-
-        [Service] private Option<MeshInstance> _mesh;
-
-        [Service] private Option<CollisionShape> _shape;
-
-        [Service] private IEnumerable<EquipmentConfiguration> _configurations = Seq<EquipmentConfiguration>();
-
-        [Service(false, false)] private IEnumerable<Marker> _markers = Seq<Marker>();
+        private readonly IEnumerable<EquipmentConfiguration> _configurations;
 
         private Option<Marker> _labelMarker;
 
-        public override void _Ready()
+        public Equipment(
+            string key,
+            string displayName,
+            Option<string> description,
+            EquipmentType equipmentType,
+            IEnumerable<EquipmentConfiguration> configurations,
+            RigidBody node,
+            CollisionShape shape,
+            MeshInstance mesh,
+            Mesh itemMesh,
+            IEnumerable<Marker> markers)
         {
-            base._Ready();
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(configurations, nameof(configurations)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(shape, nameof(shape)).IsNotNull();
+            Ensure.That(mesh, nameof(mesh)).IsNotNull();
+            Ensure.That(itemMesh, nameof(itemMesh)).IsNotNull();
 
-            this.Autowire();
-        }
+            Key = key;
+            DisplayName = displayName;
+            Description = description;
+            EquipmentType = equipmentType;
+            Node = node;
+            Mesh = mesh;
+            Shape = shape;
+            ItemMesh = itemMesh;
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
-        {
+            Markers = markers.ToMap();
+
+            _configurations = configurations.Freeze();
+
+            Ensure.Enumerable.HasItems(_configurations, nameof(configurations));
+
             Configurations = _configurations.ToMap();
 
-            var configurations = Configurations.Values.ToList();
-
-            configurations.ToObservable()
-                .SelectMany(c => c.OnActiveStateChange.Where(s => s).Select(_ => c))
-                .SelectMany(active => configurations.Where(c => c != active && c.Active))
+            _configurations.ToObservable()
+                .SelectMany(c => c.OnActiveStateChange.Where(identity).Select(_ => c))
+                .SelectMany(active => _configurations.Where(c => c != active && c.Active))
                 .Subscribe(c => c.Deactivate())
-                .AddTo(this.GetCollector());
-
-            if (_markers != null)
-            {
-                Markers = toMap(_markers.Map(m => (m.Key, m)));
-            }
+                .AddTo(this);
 
             _labelMarker = this.FindLabelMarker();
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
 
             UpdateEquipState(Equipped);
         }
@@ -123,10 +140,11 @@ namespace AlleyCat.Item
 
         private void UpdateEquipState(bool equipped)
         {
-            Mode = equipped ? ModeEnum.Kinematic : ModeEnum.Rigid;
-            Sleeping = equipped;
+            Node.Mode = equipped ? RigidBody.ModeEnum.Kinematic : RigidBody.ModeEnum.Rigid;
+            Node.Sleeping = equipped;
+            Node.InputRayPickable = !equipped;
+
             Shape.Disabled = equipped;
-            InputRayPickable = !equipped;
         }
 
         public bool AllowedFor(ISlotContainer context) => true;
