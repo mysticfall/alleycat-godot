@@ -9,7 +9,7 @@ namespace AlleyCat.Character
     {
         public const string PlayerTag = "Player";
 
-        public static Option<T> FindPlayer<T>(this Node node) where T : ICharacter
+        public static Option<T> FindPlayer<T>(this Node node) where T : class, ICharacter
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
