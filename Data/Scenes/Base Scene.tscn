@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerControl.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerControlFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
@@ -68,7 +68,6 @@ _displayName = "Player"
 script = ExtResource( 3 )
 Active = true
 ProcessMode = 1
-MaxFocalDistance = 5.0
 _characterPath = NodePath("../../Entities/Characters/Player")
 _cameraPath = NodePath("../../Cameras/Main Camera")
 

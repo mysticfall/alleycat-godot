@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -17,10 +16,8 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    [AutowireContext, Singleton(typeof(IPlayerControl), typeof(IPerspectiveSwitcher), typeof(IFocusTracker))]
-    public class PlayerControl : AutowiredNode, IPlayerControl
+    public class PlayerControl : GameObject, IPlayerControl
     {
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -29,17 +26,9 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        [Export]
-        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
+        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
 
-        public override bool Valid => base.Valid &&
-                                      _movementInput.IsSome &&
-                                      Character.IsSome &&
-                                      Perspective.IsSome &&
-                                      Camera.IsCurrent();
-
-        [Node(false)]
-        public virtual Option<IHumanoid> Character
+        public Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.OnNext(value);
@@ -47,20 +36,9 @@ namespace AlleyCat.Control
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        public Camera Camera
-        {
-            get => _camera.IfNone(GetViewport().GetCamera);
-            set
-            {
-                Ensure.That(value, nameof(value)).IsNotNull();
+        public Camera Camera { get; }
 
-                _camera = Some(value);
-            }
-        }
-
-        [Service]
-        public IEnumerable<IPerspectiveView> Perspectives { get; private set; } =
-            Enumerable.Empty<IPerspectiveView>();
+        public IEnumerable<IPerspectiveView> Perspectives { get; }
 
         public Option<IPerspectiveView> Perspective
         {
@@ -68,14 +46,12 @@ namespace AlleyCat.Control
             set => _perspective.OnNext(value);
         }
 
-        public IObservable<Option<IPerspectiveView>> OnPerspectiveChange =>
-            _perspective.Where(v => Active && Valid);
+        public IObservable<Option<IPerspectiveView>> OnPerspectiveChange => _perspective.AsObservable();
 
-        [Export(PropertyHint.ExpRange, "0, 100, 5")]
         public float MaxFocalDistance
         {
-            get => _maxFocalDistance;
-            set => _maxFocalDistance = Mathf.Min(value, 0);
+            get => Perspective.OfType<IFocusTracker>().Map(p => p.MaxFocalDistance).HeadOrNone().IfNone(0f);
+            set => Perspective.OfType<IFocusTracker>().Iter(p => p.MaxFocalDistance = value);
         }
 
         public Option<IEntity> FocusedObject =>
@@ -86,14 +62,13 @@ namespace AlleyCat.Control
                 .Select(p => p.OfType<IFocusTracker>().HeadOrNone())
                 .SelectMany(p => p.MatchObservable(f => f.OnFocusChange, () => None));
 
-        protected IObservable<Vector2> MovementInput =>
-            _movementInput.Bind(i => i.AsVector2Input()).Map(i => i.Where(_ => Valid)).Head();
+        public ProcessMode ProcessMode { get; }
 
-        [Export] private NodePath _characterPath;
+        protected ITimeSource TimeSource { get; }
 
-        [Export] private NodePath _cameraPath;
+        protected IObservable<Vector2> MovementInput { get; }
 
-        [Node("Movement")] private Option<InputBindings> _movementInput;
+        private Option<InputBindings> _movementInput;
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
@@ -101,25 +76,43 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<bool> _active;
 
-        [Node(false)] private Option<Camera> _camera;
-
         private Option<IPerspectiveView> _lastPerspective;
 
-        private float _maxFocalDistance = 5f;
-
-        public PlayerControl()
+        public PlayerControl(
+            Camera camera,
+            Option<IHumanoid> character,
+            IEnumerable<IPerspectiveView> perspectives,
+            Option<InputBindings> movementInput,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
-            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
+            Ensure.That(camera, nameof(camera)).IsNotNull();
+            Ensure.That(perspectives, nameof(perspectives)).IsNotNull();
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+
+            Camera = camera;
+            Perspectives = perspectives.Freeze();
+            ProcessMode = processMode;
+            TimeSource = timeSource;
+
+            MovementInput = movementInput
+                .Bind(i => i.AsVector2Input())
+                .MatchObservable(identity, Observable.Empty<Vector2>)
+                .Where(_ => Valid);
+
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
             _perspective = new BehaviorSubject<Option<IPerspectiveView>>(None).AddTo(this);
+
+            _movementInput = movementInput;
         }
 
-        [PostConstruct]
-        protected void OnInitialize()
+        protected override void PostConstruct()
         {
-            Input.SetMouseMode(Input.MouseMode.Captured);
+            base.PostConstruct();
 
-            Character |= this.FindPlayer<IHumanoid>();
+            Input.SetMouseMode(Input.MouseMode.Captured);
 
             Option<IPerspectiveView> active = None;
 
@@ -168,9 +161,11 @@ namespace AlleyCat.Control
                 .SelectMany(l => l.MatchObservable(v => v.OnVelocityChange, () => Vector3.Zero))
                 .Select(v => v.Length());
 
+            var tick = TimeSource.OnProcess(ProcessMode);
+
             // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
             var viewRotationSpeed = rotatableViews
-                .CombineLatest(linearSpeed, this.OnProcess(ProcessMode), (view, speed, delta) =>
+                .CombineLatest(linearSpeed, tick, (view, speed, delta) =>
                     view.Map(v => v.Yaw).Match(yaw =>
                         {
                             var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
@@ -181,22 +176,20 @@ namespace AlleyCat.Control
                         () => 0
                     ));
 
-            var offsetAngle = viewRotationSpeed
-                .CombineLatest(this.OnProcess(ProcessMode), (speed, delta) => speed * delta);
+            var offsetAngle = viewRotationSpeed.CombineLatest(tick, (speed, delta) => speed * delta);
 
             locomotion
-                .Where(_ => Active && Valid)
                 .SelectMany(l => l.MatchObservable(v => v.OnProcess(ProcessMode), Observable.Empty<float>))
                 .Zip(
                     rotatableViews
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
                         .MostRecent((null, 0)),
                     (_, args) => args)
-                .Where(t => t.view != null)
+                .Where(_ => Active && Valid)
                 .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
                 .AddTo(this);
 
-            this.OnProcess(ProcessMode)
+            tick
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))

@@ -227,6 +227,7 @@
     <Compile Include="Source\AlleyCat\Control\PlayerActionDelegate.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerControlFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerInteraction.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />

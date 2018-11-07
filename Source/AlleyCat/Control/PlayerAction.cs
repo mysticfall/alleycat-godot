@@ -13,11 +13,11 @@ namespace AlleyCat.Control
     {
         public override bool Valid => base.Valid && Player.IsSome;
 
-        protected Option<IHumanoid> Player => PlayerControl.Character;
+        protected Option<IHumanoid> Player => _playerControl.Bind(c => c.Character);
 
         protected IPlayerControl PlayerControl => _playerControl.Head();
 
-        [Ancestor] private Option<IPlayerControl> _playerControl;
+        [Service] private Option<IPlayerControl> _playerControl;
 
         protected override void OnInitialize()
         {
