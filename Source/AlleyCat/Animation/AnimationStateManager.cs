@@ -1,68 +1,72 @@
-﻿using AlleyCat.Autowire;
+﻿using System;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 
 namespace AlleyCat.Animation
 {
-    [Singleton(typeof(IAnimationManager), typeof(IAnimationStateManager))]
     public class AnimationStateManager : AnimationManager, IAnimationStateManager
     {
-        public AnimationTree AnimationTree => (AnimationTree) _animationTree;
+        public AnimationTree AnimationTree { get; }
 
         public string Path => string.Empty;
 
-        public AnimationRootNode Root => (AnimationRootNode) _graph.Map(g => g.Root);
+        public AnimationRootNode Root => _graph.Root;
 
-        protected AnimationGraphContext Context => (AnimationGraphContext) _context;
+        protected AnimationGraphContext Context { get; }
 
-        [Service] private Option<AnimationTree> _animationTree;
+        protected IAnimationGraphFactory GraphFactory { get; }
 
-        [Service(false)] private Option<IAnimationGraphFactory> _graphFactory;
+        protected IAnimationControlFactory ControlFactory { get; }
 
-        [Service(false)] private Option<IAnimationControlFactory> _controlFactory;
+        private readonly IAnimationGraph _graph;
 
-        private Option<AnimationGraphContext> _context;
-
-        private Option<IAnimationGraph> _graph;
-
-        protected override void OnInitialize()
+        public AnimationStateManager(
+            AnimationPlayer player,
+            AnimationTree animationTree,
+            Option<IAnimationGraphFactory> graphFactory,
+            Option<IAnimationControlFactory> controlFactory,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active = true) : base(player, processMode, timeSource, active)
         {
-            base.OnInitialize();
+            Ensure.That(animationTree, nameof(animationTree)).IsNotNull();
+
+            AnimationTree = animationTree;
+
+            GraphFactory = graphFactory.IfNone(() => new AnimationGraphFactory());
+            ControlFactory = controlFactory.IfNone(() => new AnimationControlFactory());
+
+            Context = new AnimationGraphContext(Player, AnimationTree, OnAdvance, GraphFactory, ControlFactory);
+
+            _graph = GraphFactory.TryCreate((AnimationRootNode) AnimationTree.TreeRoot, Context).IfNone(() =>
+                throw new ArgumentException(
+                    "Failed to create animation graph from the specified animation tree.", 
+                    nameof(animationTree)));
 
             AnimationTree.ProcessMode = AnimationTree.AnimationProcessMode.Manual;
-
-            _graphFactory |= new AnimationGraphFactory();
-            _controlFactory |= new AnimationControlFactory();
-
-            _context = from graphFactory in _graphFactory
-                from controlFactory in _controlFactory
-                select new AnimationGraphContext(
-                    Player, AnimationTree, OnAdvance, graphFactory, controlFactory);
-
-            _graph = _graphFactory.Bind(
-                f => f.TryCreate((AnimationRootNode) AnimationTree.TreeRoot, Context));
         }
 
         public Option<AnimationNode> FindAnimationNode(string name)
         {
             Ensure.That(name, nameof(name)).IsNotNull();
 
-            return _graph.Bind(g => g.FindAnimationNode(name));
+            return _graph.FindAnimationNode(name);
         }
 
         public Option<IAnimationGraph> FindGraph(string name)
         {
             Ensure.That(name, nameof(name)).IsNotNull();
 
-            return _graph.Bind(g => g.FindGraph(name));
+            return _graph.FindGraph(name);
         }
 
         public Option<IAnimationControl> FindControl(string name)
         {
             Ensure.That(name, nameof(name)).IsNotNull();
 
-            return _graph.Bind(g => g.FindControl(name));
+            return _graph.FindControl(name);
         }
 
         protected override void ProcessFrames(float delta) => AnimationTree.Advance(delta);

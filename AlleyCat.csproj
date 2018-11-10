@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,12 +73,15 @@
     <Compile Include="Source\AlleyCat\Animation\AnimationGraphContext.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraphFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationManager.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationManagerFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationStateManager.cs" />
+    <Compile Include="Source\AlleyCat\Animation\AnimationStateManagerFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationStates.cs" />
     <Compile Include="Source\AlleyCat\Animation\Animator.cs" />
+    <Compile Include="Source\AlleyCat\Animation\BaseAnimationFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\Blender2D.cs" />
     <Compile Include="Source\AlleyCat\Animation\Blender.cs" />
     <Compile Include="Source\AlleyCat\Animation\BlendTree.cs" />

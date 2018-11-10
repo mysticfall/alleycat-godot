@@ -1,21 +1,16 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    [AutowireContext, Singleton(typeof(IAnimationManager))]
-    public class AnimationManager : AutowiredNode, IAnimationManager
+    public class AnimationManager : GameObject, IAnimationManager
     {
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -24,18 +19,17 @@ namespace AlleyCat.Animation
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        [Export]
-        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
-
-        public AnimationPlayer Player => (AnimationPlayer) _player;
+        public AnimationPlayer Player { get; }
 
         public IObservable<Unit> OnBeforeAdvance => _onBeforeAdvance.AsObservable();
 
         public IObservable<float> OnAdvance => _onAdvance.AsObservable();
 
-        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent.AsObservable();
+        public ProcessMode ProcessMode { get; }
 
-        [Service] private Option<AnimationPlayer> _player;
+        protected ITimeSource TimeSource { get; }
+
+        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent.AsObservable();
 
         private readonly BehaviorSubject<bool> _active;
 
@@ -45,20 +39,32 @@ namespace AlleyCat.Animation
 
         private readonly ISubject<AnimationEvent> _onAnimationEvent;
 
-        public AnimationManager()
+        public AnimationManager(
+            AnimationPlayer player,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            Ensure.That(player, nameof(player)).IsNotNull();
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+
+            Player = player;
+            ProcessMode = processMode;
+            TimeSource = timeSource;
+
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
             _onBeforeAdvance = new Subject<Unit>().AddTo(this);
             _onAdvance = new Subject<float>().AddTo(this);
             _onAnimationEvent = new Subject<AnimationEvent>().AddTo(this);
+
+            Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void PostConstruct()
         {
-            Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
+            base.PostConstruct();
 
-            this.OnProcess(ProcessMode)
+            TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active)
                 .Subscribe(Advance)
                 .AddTo(this);
@@ -82,15 +88,11 @@ namespace AlleyCat.Animation
             Player.Play(Player.AddAnimation(animation));
         }
 
-        [UsedImplicitly]
-        public void FireEvent(string name) => FireEvent(name, None);
-
-        [UsedImplicitly]
-        public void FireEvent(string name, [CanBeNull] object argument)
+        public void FireEvent(string name, Option<object> argument)
         {
             Ensure.That(name, nameof(name)).IsNotNull();
 
-            _onAnimationEvent.OnNext(new AnimationEvent(name, Optional(argument), this));
+            _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
         }
     }
 }
