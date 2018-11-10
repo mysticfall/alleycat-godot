@@ -81,7 +81,6 @@ namespace AlleyCat.Item
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(configurations, nameof(configurations)).IsNotNull();
             Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(shape, nameof(shape)).IsNotNull();
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
@@ -95,16 +94,15 @@ namespace AlleyCat.Item
             Mesh = mesh;
             Shape = shape;
             ItemMesh = itemMesh;
-
             Markers = markers.ToMap();
 
-            _configurations = configurations.Freeze();
+            _configurations = configurations?.Freeze();
 
             Ensure.Enumerable.HasItems(_configurations, nameof(configurations));
 
             Configurations = _configurations.ToMap();
 
-            _configurations.ToObservable()
+            _configurations?.ToObservable()
                 .SelectMany(c => c.OnActiveStateChange.Where(identity).Select(_ => c))
                 .SelectMany(active => _configurations.Where(c => c != active && c.Active))
                 .Subscribe(c => c.Deactivate())
