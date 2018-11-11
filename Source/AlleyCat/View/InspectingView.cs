@@ -147,7 +147,7 @@ namespace AlleyCat.View
             Ensure.That(camera, nameof(camera)).IsNotNull();
 
             var bounds = Optional(pivot).OfType<IBounded>().Map(b => b.Bounds).HeadOrNone();
-            var height = bounds.Map(b => b.GetLongestAxisSize());
+            var height = bounds.Map(b => b.GetLongestAxisSize()).Filter(h => h > 0);
             var distance = height.Map(h => h / 2f / Math.Tan(Mathf.Deg2Rad(camera.Fov / 2f)));
 
             return distance.Map(d => (float) d + 0.2f).IfNone(defaultValue);
