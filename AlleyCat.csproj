@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -171,6 +171,7 @@
     <Compile Include="Source\AlleyCat\Common\BaseNode.cs" />
     <Compile Include="Source\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\Directory.cs" />
+    <Compile Include="Source\AlleyCat\Common\EnumerableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\GameObject.cs" />
     <Compile Include="Source\AlleyCat\Common\GameObjectFactory.cs" />
