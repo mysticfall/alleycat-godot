@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -12,32 +11,15 @@ namespace AlleyCat.Autowire
     {
         public IEnumerable<Type> ProvidedTypes => _providedTypes;
 
-        private Seq<Type> _providedTypes = Seq<Type>.Empty;
+        private IEnumerable<Type> _providedTypes = Seq<Type>.Empty;
 
         public override void _EnterTree()
         {
             base._EnterTree();
 
-            var types = new Lst<Type>();
-
             var type = GetParent().GetType();
-            var nodeType = typeof(Node);
 
-            var ignoredTypes = new System.Collections.Generic.HashSet<Type>
-            {
-                typeof(IDisposable)
-            };
-
-            types = types.AddRange(type.GetInterfaces().Where(t => !ignoredTypes.Contains(t)));
-
-            while (type != null && type != nodeType)
-            {
-                types += type;
-
-                type = type.BaseType;
-            }
-
-            _providedTypes = types.ToSeq();
+            _providedTypes = TypeUtils.FindInjectableTypes(type).Freeze();
         }
 
         public override void _Ready()
