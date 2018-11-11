@@ -20,7 +20,11 @@ namespace AlleyCat.Motion
 
         public virtual Range<float> DistanceRange { get; }
 
-        public float InitialDistance { get; }
+        public float InitialDistance
+        {
+            get => _initialDistance;
+            set => _initialDistance = DistanceRange.Clamp(value);
+        }
 
         public virtual IObservable<float> OnDistanceChange => _distance.Where(v => Active && Valid);
 
@@ -55,6 +59,8 @@ namespace AlleyCat.Motion
 
         private readonly BehaviorSubject<Vector3> _offset;
 
+        private float _initialDistance;
+
         protected Orbiter(
             Range<float> yawRange,
             Range<float> pitchRange,
@@ -69,7 +75,7 @@ namespace AlleyCat.Motion
 
             DistanceRange = distanceRange;
 
-            InitialDistance = distanceRange.Clamp(initialDistance);
+            InitialDistance = initialDistance;
             InitialOffset = initialOffset;
 
             ProcessMode = processMode;
