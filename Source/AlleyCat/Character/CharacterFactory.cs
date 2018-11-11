@@ -107,7 +107,7 @@ namespace AlleyCat.Character
             }
 
             (Service = CreateService()).BiIter(
-                vision => ProvidedTypes.Iter(type => collection.AddSingleton(type, vision)),
+                service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
                 error => GD.Print(error) // TODO Need a better way to handle errors (i.e. using a logger)
             );
         }
