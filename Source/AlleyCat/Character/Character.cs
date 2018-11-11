@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Character.Generic;
@@ -103,10 +102,12 @@ namespace AlleyCat.Character
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
             var slots = Race.EquipmentSlots.Freeze();
+            var equipments = new EquipmentContainer(slots, this);
 
-            Equipments = new EquipmentContainer(slots, this).AddTo(this);
+            equipments.Initialize();
+            equipments.AddTo(this);
 
-            Optional(Equipments).OfType<IInitializable>().Iter(e => e.Initialize());
+            Equipments = equipments;
 
             _labelMarker = this.FindLabelMarker();
         }
