@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Item;
-using Godot;
+using EnsureThat;
 
 namespace AlleyCat.Character
 {
-    public class Race : AutowiredNode, IRace
+    public class Race : GameObject, INamed
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        [Node("Slots/Equipments")]
-        public IEnumerable<EquipmentSlot> EquipmentSlots { get; private set; } = Enumerable.Empty<EquipmentSlot>();
+        public IEnumerable<EquipmentSlot> EquipmentSlots { get; }
 
-        [Export] private string _key;
+        public Race(string key, string displayName, IEnumerable<EquipmentSlot> equipmentSlots)
+        {
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(equipmentSlots, nameof(equipmentSlots)).IsNotNull();
 
-        [Export] private string _displayName;
+            Key = key;
+            DisplayName = displayName;
+            EquipmentSlots = equipmentSlots.Freeze();
+        }
     }
 }

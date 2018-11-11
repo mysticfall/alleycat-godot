@@ -5,7 +5,7 @@ using AlleyCat.Sensor;
 
 namespace AlleyCat.Character
 {
-    public interface IHumanoid : ICharacter<IPairedEyeSight, ILocomotion>, IMorphableCharacter
+    public interface IHumanoid : ICharacter<MorphableRace, IPairedEyeSight, ILocomotion>, IMorphable
     {
     }
 }

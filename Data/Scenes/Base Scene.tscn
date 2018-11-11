@@ -55,8 +55,8 @@ _sections_unfolded = [ "Transform" ]
 [node name="Player" parent="Entities/Characters" groups=[
 "Player",
 ] instance=ExtResource( 2 )]
-_key = "Player"
-_displayName = "Player"
+Key = "Player"
+DisplayName = "Player"
 
 [node name="Items" type="Node" parent="Entities"]
 

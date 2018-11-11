@@ -10,18 +10,20 @@ namespace AlleyCat.Character
 {
     public interface ICharacter : IEntity, IActor, ILocomotive, ISeeing, IEquipmentHolder
     {
-        IRace Race { get; }
+        Race Race { get; }
 
         Sex Sex { get; }
     }
 
     namespace Generic
     {
-        public interface ICharacter<out TVision, out TLocomotion> : ICharacter,
-            ISeeing<TVision>, ILocomotive<TLocomotion>
+        public interface ICharacter<out TRace, out TVision, out TLocomotion> :
+            ICharacter, ISeeing<TVision>, ILocomotive<TLocomotion>
+            where TRace : Race
             where TVision : IVision
             where TLocomotion : ILocomotion
         {
+            new TRace Race { get; }
         }
     }
 }

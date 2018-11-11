@@ -1,11 +1,18 @@
 using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Character.Morph
 {
     public abstract class ColorMorphDefinition : MorphDefinition<Color>
     {
-        [Export, UsedImplicitly]
-        public bool UseAlpha { get; private set; }
+        public bool UseAlpha { get; }
+
+        protected ColorMorphDefinition(
+            string key, 
+            string displayName, 
+            Color defaultValue,
+            bool useAlpha) : base(key, displayName, defaultValue)
+        {
+            UseAlpha = useAlpha;
+        }
     }
 }

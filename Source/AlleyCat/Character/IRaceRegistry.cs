@@ -1,8 +1,9 @@
-using System.Collections.Generic;
+using LanguageExt;
 
 namespace AlleyCat.Character
 {
-    public interface IRaceRegistry : IReadOnlyDictionary<string, IRace>
+    public interface IRaceRegistry
     {
+        Map<string, Race> Races { get; }
     }
 }

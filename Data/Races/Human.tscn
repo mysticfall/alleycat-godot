@@ -1,15 +1,15 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRace.cs" type="Script" id=1]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroup.cs" type="Script" id=2]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinition.cs" type="Script" id=3]
-[ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinition.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRaceFactory.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroupFactory.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinitionFactory.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinitionFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentSlotFactory.cs" type="Script" id=5]
 
 [node name="Human" type="Node"]
 script = ExtResource( 1 )
-_key = "Human"
-_displayName = "race.Human"
+Key = "Human"
+DisplayName = "race.Human"
 
 [node name="Morphs" type="Node" parent="."]
 
@@ -17,52 +17,49 @@ _displayName = "race.Human"
 
 [node name="Head" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-_key = "morph.Head"
-_displayName = "Head"
+Key = "morph.Head"
+DisplayName = "Head"
 
 [node name="Head Size" type="Node" parent="Morphs/Female/Head"]
 script = ExtResource( 3 )
-_sections_unfolded = [ "_bones" ]
+Key = "HeadSize"
+DisplayName = "morph.Head.HeadSize"
 Default = 1.0
-_key = "HeadSize"
-_displayName = "morph.Head.HeadSize"
 MinValue = 0.94
 MaxValue = 1.4
 MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
-_bones = [ "head" ]
+Bones = [ "head" ]
 
 [node name="Body" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-_key = "morph.Body"
-_displayName = "Body"
+Key = "morph.Body"
+DisplayName = "Body"
 
 [node name="Legs Size" type="Node" parent="Morphs/Female/Body"]
 script = ExtResource( 3 )
-_sections_unfolded = [ "_bones" ]
+Key = "LegsLength"
+DisplayName = "morph.Body.LegsLength"
 Default = 1.0
-_key = "LegsLength"
-_displayName = "morph.Body.LegsLength"
 MinValue = 0.85
 MaxValue = 1.1
 MorphType = 0
 Modifier = Vector3( 0, 0, 1 )
-_bones = [ "thigh_L", "thigh_R" ]
+Bones = [ "thigh_L", "thigh_R" ]
 
 [node name="Color" type="Node" parent="Morphs/Female"]
 script = ExtResource( 2 )
-_key = "morph.Color"
-_displayName = "Color"
+Key = "morph.Color"
+DisplayName = "Color"
 
 [node name="Skin Tone" type="Node" parent="Morphs/Female/Color"]
 script = ExtResource( 4 )
-_sections_unfolded = [ "_materials" ]
+Key = "SkinTone"
+DisplayName = "morph.Color.SkinTone"
 Default = Color( 1, 1, 1, 1 )
-_key = "SkinTone"
-_displayName = "morph.Color.SkinTone"
 UseAlpha = false
-_mesh = "Body"
-_materials = [ "Skin" ]
+Mesh = "Body"
+Materials = [ "Skin" ]
 
 [node name="Slots" type="Node" parent="."]
 

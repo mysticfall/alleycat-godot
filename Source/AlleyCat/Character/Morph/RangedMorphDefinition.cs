@@ -1,14 +1,18 @@
-using Godot;
-using JetBrains.Annotations;
+using AlleyCat.Common;
 
 namespace AlleyCat.Character.Morph
 {
     public abstract class RangedMorphDefinition : MorphDefinition<float>
     {
-        [Export, UsedImplicitly]
-        public float MinValue { get; private set; }
+        public Range<float> Range { get; }
 
-        [Export, UsedImplicitly]
-        public float MaxValue { get; private set; } = 1.0f;
+        protected RangedMorphDefinition(
+            string key, 
+            string displayName, 
+            Range<float> range,
+            float defaultValue) : base(key, displayName, defaultValue)
+        {
+            Range = range;
+        }
     }
 }

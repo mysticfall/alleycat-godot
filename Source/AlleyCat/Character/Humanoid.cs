@@ -1,40 +1,48 @@
-using System.Linq;
-using AlleyCat.Autowire;
+using System.Collections.Generic;
+using AlleyCat.Action;
+using AlleyCat.Animation;
 using AlleyCat.Character.Morph;
+using AlleyCat.Common;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.Character
 {
-    public class Humanoid : Character<IPairedEyeSight, ILocomotion>, IHumanoid
+    public class Humanoid : Character<MorphableRace, IPairedEyeSight, ILocomotion>, IHumanoid
     {
-        public override IRace Race => RaceRegistry[_race];
+        public IMorphSet Morphs { get; }
 
-        IMorphableRace IMorphableCharacter.Race => (IMorphableRace) Race;
-
-        public override Sex Sex => _sex;
-
-        public IMorphSet Morphs => _morphSet.Head();
-
-        public override bool Valid => base.Valid && _morphSet.IsSome && !string.IsNullOrWhiteSpace(_race);
-
-        private Option<IMorphSet> _morphSet;
-
-        [Export] private string _race;
-
-        [Export] private Sex _sex;
-
-        [PostConstruct]
-        protected override void OnInitialize()
+        public Humanoid(
+            string key,
+            string displayName,
+            MorphableRace race,
+            Sex sex,
+            IPairedEyeSight vision,
+            ILocomotion locomotion,
+            Skeleton skeleton,
+            IAnimationManager animationManager,
+            IEnumerable<IAction> actions,
+            IEnumerable<Marker> markers,
+            Spatial node) : base(
+            key,
+            displayName,
+            race,
+            sex,
+            vision,
+            locomotion,
+            skeleton,
+            animationManager,
+            actions,
+            markers,
+            node)
         {
-            base.OnInitialize();
+            var groups = Race.MorphGroups.Find(Sex).Flatten().Freeze();
+            var definitions = groups.Bind(g => g.Definitions);
 
-            var groups = ((IMorphableRace) Race).GetMorphGroups(Sex);
-            var morphs = groups.SelectMany(g => g.Values).Select(d => d.CreateMorph(this));
+            var morphs = definitions.Map(d => d.CreateMorph(this));
 
-            _morphSet = new MorphSet(morphs);
+            Morphs = new MorphSet(groups, morphs).AddTo(this);
         }
     }
 }

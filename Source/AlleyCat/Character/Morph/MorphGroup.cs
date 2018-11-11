@@ -1,16 +1,28 @@
-using AlleyCat.Common;
-using Godot;
+using System.Collections.Generic;
+using EnsureThat;
 
 namespace AlleyCat.Character.Morph
 {
-    public class MorphGroup : IdentifiableDirectory<IMorphDefinition>, IMorphGroup
+    public class MorphGroup : IMorphGroup
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        [Export] private string _key;
+        public IEnumerable<IMorphDefinition> Definitions { get; }
 
-        [Export] private string _displayName;
+        public MorphGroup(
+            string key, 
+            string displayName,
+            IEnumerable<IMorphDefinition> definitions)
+        {
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(definitions, nameof(definitions)).IsNotNull();
+
+            Key = key;
+            DisplayName = displayName;
+            Definitions = definitions.Freeze();
+        }
     }
 }

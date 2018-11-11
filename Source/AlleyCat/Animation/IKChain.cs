@@ -3,6 +3,8 @@ using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -12,12 +14,9 @@ namespace AlleyCat.Animation
         [Export]
         public bool IgnoreRotation { get; set; } = true;
 
-        [Ancestor]
-        protected IAnimatable Animatable { get; private set; }
-
         private Skeleton _skeleton;
 
-        private int _tipIndex;
+        private Option<int> _tipIndex;
 
         public override void _Ready()
         {
@@ -29,23 +28,25 @@ namespace AlleyCat.Animation
         [PostConstruct(true)]
         protected virtual void OnInitialize()
         {
-            Animatable.AnimationManager.OnAdvance
+            var tick = this.FindClosestAncestor<IAnimatable>()
+                .Map(a => a.AnimationManager.OnAdvance)
+                .MatchObservable(identity, Observable.Empty<float>);
+
+            tick
                 .Where(_ => IsRunning() && IgnoreRotation)
                 .Subscribe(_ => ResetRotation())
                 .AddTo(this.GetCollector());
 
             _skeleton = GetParentSkeleton();
-            _tipIndex = _skeleton?.FindBone(TipBone) ?? -1;
+            _tipIndex = _skeleton.FindBone(TipBone);
         }
 
         protected virtual void ResetRotation()
         {
-            if (_tipIndex < 0) return;
+            var rotation = _tipIndex.Map(_skeleton.GetBoneGlobalPose).Map(p => p.basis);
+            var transform = rotation.Map(r => new Transform(r, Target.origin));
 
-            var rotation = _skeleton.GetBoneGlobalPose(_tipIndex).basis;
-            var transform = Target;
-
-            Target = new Transform(rotation, transform.origin);
+            transform.Iter(t => Target = t);
         }
     }
 }

@@ -34,14 +34,14 @@ namespace AlleyCat.UI.Character
                 .Iter(p => MorphsPanel.AddChild(p));
         }
 
-        public void LoadGroup(IMorphGroup group, IEnumerable<IMorph> morphs)
+        public void LoadGroup(IMorphGroup group, IMorphSet morphSet)
         {
             Ensure.That(group, nameof(group)).IsNotNull();
-            Ensure.That(morphs, nameof(morphs)).IsNotNull();
+            Ensure.That(morphSet, nameof(morphSet)).IsNotNull();
 
             _group = Some(group);
 
-            Morphs = morphs;
+            Morphs = morphSet.GetMorphs(group);
         }
 
         protected virtual Option<MorphPanel> CreateMorphPanel(IMorph morph)

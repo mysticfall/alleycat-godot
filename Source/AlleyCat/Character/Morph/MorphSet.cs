@@ -1,76 +1,55 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
-    [Singleton(typeof(IMorphSet))]
-    public class MorphSet : BaseNode, IMorphSet
+    public class MorphSet : IMorphSet
     {
+        public Map<string, IMorph> Morphs { get; }
+
         public IEnumerable<IMorphGroup> Groups { get; }
 
         public IObservable<IMorph> OnMorph { get; }
 
-        public int Count => _morphs.Count;
+        private Map<string, IEnumerable<IMorph>> _morphsByGroup;
 
-        public IEnumerable<string> Keys => _morphs.Keys;
-
-        public IEnumerable<IMorph> Values => _morphs.Values;
-
-        public IEnumerator<KeyValuePair<string, IMorph>> GetEnumerator() =>
-            _morphs.Values.Map(m => new KeyValuePair<string, IMorph>(m.Key, m)).GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => _morphs.GetEnumerator();
-
-        private Map<string, IMorph> _morphs;
-
-        public MorphSet(IEnumerable<IMorph> morphs)
+        public MorphSet(IEnumerable<IMorphGroup> groups, IEnumerable<IMorph> morphs)
         {
+            Ensure.That(groups, nameof(groups)).IsNotNull();
             Ensure.That(morphs, nameof(morphs)).IsNotNull();
 
-            var items = morphs.Freeze();
+            Groups = groups.Freeze();
+            Morphs = morphs.ToMap();
 
-            items.Iter(m => m.AddTo(this).Apply());
+            OnMorph = Morphs.Values.Map(m => m.OnChange.Select(_ => m)).Merge();
 
-            _morphs = items.ToMap();
+            Morphs.Values.Iter(m => m.Apply());
 
-            Groups = items.Map(m => m.Definition.Group).Distinct().ToList();
-            OnMorph = items.Map(m => m.OnChange.Select(_ => m)).Merge();
+            var groupsByMorph = toMap(Groups.Bind(g => g.Definitions.Map(d => (d.Key, g))));
+
+            _morphsByGroup = toMap(
+                Morphs.Values
+                    .Bind(m => groupsByMorph.Find(m.Key).Map(g => (group: g.Key, morphs: m)))
+                    .GroupBy(v => v.group, v => v.morphs)
+                    .Map(v => (v.Key, v.AsEnumerable())));
         }
 
-        public bool ContainsKey(string key)
+        public IEnumerable<IMorph> GetMorphs(IMorphGroup group)
         {
-            Ensure.That(key, nameof(key)).IsNotNull();
+            Ensure.That(group, nameof(group)).IsNotNull();
 
-            return _morphs.ContainsKey(key);
+            return _morphsByGroup.Find(group.Key).Flatten();
         }
 
-        public bool TryGetValue(string key, out IMorph value)
+        public virtual void Dispose()
         {
-            Ensure.That(key, nameof(key)).IsNotNull();
-
-            var result = _morphs.Find(key);
-
-            value = result.ValueUnsafe();
-
-            return result.IsSome;
-        }
-
-        public IMorph this[string key]
-        {
-            get
-            {
-                Ensure.That(key, nameof(key)).IsNotNull();
-
-                return _morphs[key];
-            }
+            Morphs.Values.Iter(m => m.DisposeQuietly());
         }
     }
 }

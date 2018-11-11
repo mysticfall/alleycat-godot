@@ -2,40 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using Godot.Collections;
-using JetBrains.Annotations;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
     public class BoneMorphDefinition : RangedMorphDefinition
     {
-        public IEnumerable<string> Bones => _bones ?? Enumerable.Empty<string>();
+        public IEnumerable<string> Bones { get; }
 
-        [Export, UsedImplicitly]
-        public BoneMorphType MorphType { get; private set; }
+        public BoneMorphType MorphType { get; }
 
-        [Export, UsedImplicitly]
-        public Vector3 Modifier { get; private set; }
+        public Vector3 Modifier { get; }
 
-        [Export] private Array<string> _bones;
+        public BoneMorphDefinition(
+            string key,
+            string displayName,
+            IEnumerable<string> bones,
+            BoneMorphType morphType,
+            Vector3 modifier,
+            Range<float> range,
+            float defaultValue) : base(key, displayName, range, defaultValue)
+        {
+            Bones = bones?.Freeze();
+
+            Ensure.Enumerable.HasItems(Bones, nameof(bones));
+
+            MorphType = morphType;
+            Modifier = modifier;
+        }
 
         public override IMorph CreateMorph(IMorphable morphable)
         {
             Ensure.That(morphable, nameof(morphable)).IsNotNull();
 
-            var rig = morphable as IRigged;
-            var skeleton = rig?.Skeleton;
+            var morph = Optional(morphable)
+                .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this))
+                .HeadOrNone();
 
-            if (skeleton == null)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(morphable),
-                    "The specified morphable does not implement IRigged interface.");
-            }
-
-            return new BoneMorph(skeleton, rig.AnimationManager, this);
+            return morph.IfNone(() => throw new ArgumentOutOfRangeException(nameof(morphable),
+                "The specified morphable does not implement IRigged interface."));
         }
     }
 }

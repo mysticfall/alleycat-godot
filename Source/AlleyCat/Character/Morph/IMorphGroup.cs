@@ -3,7 +3,8 @@ using AlleyCat.Common;
 
 namespace AlleyCat.Character.Morph
 {
-    public interface IMorphGroup : INamed, IReadOnlyDictionary<string, IMorphDefinition>
+    public interface IMorphGroup : INamed
     {
+        IEnumerable<IMorphDefinition> Definitions { get; }
     }
 }

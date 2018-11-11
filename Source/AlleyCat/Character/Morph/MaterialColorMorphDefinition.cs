@@ -4,20 +4,31 @@ using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using Godot.Collections;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
     public class MaterialColorMorphDefinition : ColorMorphDefinition
     {
-        public string Mesh => _mesh.TrimToOption().Head();
+        public string Mesh { get; }
 
-        public IEnumerable<string> Materials => _materials ?? Enumerable.Empty<string>();
+        public IEnumerable<string> Materials { get; }
 
-        [Export] private string _mesh;
+        public MaterialColorMorphDefinition(
+            string key,
+            string displayName,
+            string mesh,
+            IEnumerable<string> materials,
+            Color defaultValue,
+            bool useAlpha) : base(key, displayName, defaultValue, useAlpha)
+        {
+            Ensure.That(mesh, nameof(mesh)).IsNotNullOrEmpty();
 
-        [Export] private Array<string> _materials;
+            Mesh = mesh;
+            Materials = materials?.Freeze();
+
+            Ensure.Enumerable.HasItems(Materials, nameof(materials));
+        }
 
         public override IMorph CreateMorph(IMorphable morphable)
         {

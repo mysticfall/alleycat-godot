@@ -8,7 +8,7 @@ using Godot;
 
 namespace AlleyCat.Character.Morph
 {
-    public class BoneMorph : Morph<float, BoneMorphDefinition>
+    public class BoneMorph : RangedMorph<BoneMorphDefinition>
     {
         public Skeleton Skeleton { get; }
 

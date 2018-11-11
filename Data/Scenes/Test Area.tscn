@@ -79,36 +79,36 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, 0.24747, 1.29029 )
 "Character",
 ] instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.951801, 0.235441, 0 )
-_key = "Prisoner1"
-_displayName = "Prisoner 1"
+Key = "Prisoner1"
+DisplayName = "Prisoner 1"
 
 [node name="Prisoner 2" parent="Entities/Characters" index="2" groups=[
 "Character",
 ] instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93415, 0.235441, -0.00697374 )
-_key = "Prisoner2"
-_displayName = "Prisoner 2"
+Key = "Prisoner2"
+DisplayName = "Prisoner 2"
 
 [node name="Prisoner 3" parent="Entities/Characters" index="3" groups=[
 "Character",
 ] instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0112, 0.235441, -0.00697374 )
-_key = "Prisoner3"
-_displayName = "Prisoner 3"
+Key = "Prisoner3"
+DisplayName = "Prisoner 3"
 
 [node name="Prisoner 4" parent="Entities/Characters" index="4" groups=[
 "Character",
 ] instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0112, 0.235441, 1.29246 )
-_key = "Prisoner4"
-_displayName = "Prisoner 4"
+Key = "Prisoner4"
+DisplayName = "Prisoner 4"
 
 [node name="Prisoner 5" parent="Entities/Characters" index="5" groups=[
 "Character",
 ] instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92334, 0.235441, 1.29246 )
-_key = "Prisoner5"
-_displayName = "Prisoner 5"
+Key = "Prisoner5"
+DisplayName = "Prisoner 5"
 
 [node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 4 )]
 editor/display_folded = true

@@ -24,8 +24,8 @@ namespace AlleyCat.UI.Character
         {
             Label.Text = Morph.DisplayName;
 
-            var max = Morph.Definition.MaxValue;
-            var min = Morph.Definition.MinValue;
+            var max = Morph.Definition.Range.Max;
+            var min = Morph.Definition.Range.Min;
             var value = Morph.Definition.Default;
 
             Slider.MinValue = min;

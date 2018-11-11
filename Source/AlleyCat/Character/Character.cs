@@ -1,122 +1,114 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
-using AlleyCat.Autowire;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
 using AlleyCat.Item;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
+using EnsureThat;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
-    [AutowireContext]
-    public abstract class Character<TVision, TLocomotion> : KinematicBody, ICharacter<TVision, TLocomotion>
+    public abstract class Character<TRace, TVision, TLocomotion> : GameObject, ICharacter<TRace, TVision, TLocomotion>
+        where TRace : Race
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        public abstract IRace Race { get; }
+        public TRace Race { get; }
 
-        public abstract Sex Sex { get; }
+        Race ICharacter.Race => Race;
 
-        public TVision Vision => (TVision) _vision;
+        public Sex Sex { get; }
 
-        public TLocomotion Locomotion => (TLocomotion) _locomotion;
+        public TVision Vision { get; }
 
-        public IAnimationManager AnimationManager => _animationManager.Head();
+        public TLocomotion Locomotion { get; }
 
-        public Skeleton Skeleton => (Skeleton) _skeleton;
+        public IAnimationManager AnimationManager { get; }
 
-        public IEquipmentContainer Equipments => _equipments.Head();
+        public Skeleton Skeleton { get; }
 
-        public Map<string, IAction> Actions { get; private set; } = Map<string, IAction>();
+        public IEquipmentContainer Equipments { get; }
 
-        public Spatial Spatial => this;
+        public Map<string, IAction> Actions { get; }
 
-        public IEnumerable<MeshInstance> Meshes => _skeleton.SelectMany(s => s.GetChildComponents<MeshInstance>());
+        public Spatial Spatial { get; }
+
+        public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildComponents<MeshInstance>();
 
         public AABB Bounds => this.CalculateBounds();
 
-        public Vector3 LabelPosition =>
-            _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
+        public Vector3 LabelPosition => _labelMarker.Map(m => m.GlobalTransform.origin).IfNone(this.Center);
 
-        public Map<string, Marker> Markers { get; private set; } = Map<string, Marker>();
+        public Map<string, Marker> Markers { get; }
 
-        public Map<string, SkeletonIK> IKChains { get; private set; } = Map<string, SkeletonIK>();
+        public Map<string, SkeletonIK> IKChains { get; }
 
-        public virtual bool Valid => IsInstanceValid(this) &&
-                                     _vision.IsSome &&
-                                     _locomotion.IsSome &&
-                                     _animationManager.IsSome &&
-                                     _skeleton.IsSome &&
-                                     _equipments.IsSome &&
-                                     _raceRegistry.IsSome;
-
-        protected IRaceRegistry RaceRegistry => _raceRegistry.Head();
+        public bool Visible
+        {
+            get => Spatial.Visible;
+            set => Spatial.Visible = value;
+        }
 
         IVision ISeeing.Vision => Vision;
 
         ILocomotion ILocomotive.Locomotion => Locomotion;
 
-        [Export] private string _key;
-
-        [Export] private string _displayName;
-
-        [Service] private Option<TVision> _vision;
-
-        [Service] private Option<TLocomotion> _locomotion;
-
-        [Service] private Option<IAnimationManager> _animationManager;
-
-        [Service] private Option<Skeleton> _skeleton;
-
-        [Service] private Option<IRaceRegistry> _raceRegistry;
-
-        [Service] private Option<IReadOnlyDictionary<string, IAction>> _actions;
-
-        [Service(false, false)] private IEnumerable<Marker> _markers = Enumerable.Empty<Marker>();
-
-        private Option<IEquipmentContainer> _equipments;
-
         private Option<Marker> _labelMarker;
 
-        public override void _Ready()
+        protected Character(
+            string key,
+            string displayName,
+            TRace race,
+            Sex sex,
+            TVision vision,
+            TLocomotion locomotion,
+            Skeleton skeleton,
+            IAnimationManager animationManager,
+            IEnumerable<IAction> actions,
+            IEnumerable<Marker> markers,
+            Spatial node)
         {
-            base._Ready();
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(race, nameof(race)).IsNotNull();
+            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
+            Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
+            Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
+            Ensure.That(actions, nameof(actions)).IsNotNull();
+            Ensure.That(markers, nameof(markers)).IsNotNull();
+            Ensure.That(node, nameof(node)).IsNotNull();
 
-            this.Autowire();
-        }
+            Key = key;
+            DisplayName = displayName;
+            Race = race;
+            Sex = sex;
+            Vision = vision;
+            Locomotion = locomotion;
+            Skeleton = skeleton;
+            AnimationManager = animationManager;
+            Actions = actions.ToMap();
+            Markers = markers.ToMap();
+            Spatial = node;
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
-        {
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
-
-            Actions = _actions.SelectMany(a => a.Values).ToMap();
-            Markers = _markers.ToMap();
 
             var slots = Race.EquipmentSlots.Freeze();
 
-            _equipments = new EquipmentContainer(slots, this);
-            _equipments.OfType<IInitializable>().Iter(e => e.Initialize());
+            Equipments = new EquipmentContainer(slots, this).AddTo(this);
+
+            Optional(Equipments).OfType<IInitializable>().Iter(e => e.Initialize());
 
             _labelMarker = this.FindLabelMarker();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _equipments.OfType<IDisposable>().Iter(e => e.DisposeQuietly());
-
-            base.Dispose(disposing);
         }
     }
 }

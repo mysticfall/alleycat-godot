@@ -4,10 +4,11 @@ using System.Reactive.Subjects;
 using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Common;
 using EnsureThat;
+using LanguageExt;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class Morph<TVal, TDef> : BaseNode, IMorph<TVal, TDef>
+    public abstract class Morph<TVal, TDef> : IMorph<TVal, TDef>, IDisposableCollector
         where TDef : MorphDefinition<TVal>
     {
         public string Key => Definition.Key;
@@ -18,7 +19,7 @@ namespace AlleyCat.Character.Morph
 
         IMorphDefinition IMorph.Definition => Definition;
 
-        public TVal Value
+        public virtual TVal Value
         {
             get => _value.Value;
             set => _value.OnNext(value);
@@ -26,8 +27,8 @@ namespace AlleyCat.Character.Morph
 
         object IMorph.Value
         {
-            get => _value.Value;
-            set => _value.OnNext((TVal) value);
+            get => Value;
+            set => Value = (TVal) value;
         }
 
         public IObservable<TVal> OnChange => _value.AsObservable();
@@ -35,6 +36,8 @@ namespace AlleyCat.Character.Morph
         IObservable<object> IMorph.OnChange => _value.Select(v => (object) v);
 
         private readonly BehaviorSubject<TVal> _value;
+
+        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
         protected Morph(TDef definition)
         {
@@ -51,5 +54,18 @@ namespace AlleyCat.Character.Morph
         protected abstract void Apply(TVal value);
 
         public void Reset() => Value = Definition.Default;
+
+        public void Collect(IDisposable disposable)
+        {
+            Ensure.That(disposable, nameof(disposable)).IsNotNull();
+
+            _disposables += disposable;
+        }
+
+        public virtual void Dispose()
+        {
+            _disposables.Iter(d => d.DisposeQuietly());
+            _disposables = _disposables.Clear();
+        }
     }
 }

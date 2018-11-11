@@ -1,23 +1,28 @@
 using AlleyCat.Common;
-using Godot;
-using JetBrains.Annotations;
+using EnsureThat;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class MorphDefinition<T> : Node, IMorphDefinition
+    public abstract class MorphDefinition<T> : GameObject, IMorphDefinition
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => _displayName.TrimToOption().Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        [Export, UsedImplicitly]
-        public T Default { get; private set; }
+        public T Default { get; }
 
-        public IMorphGroup Group => (IMorphGroup) GetParent();
+        protected MorphDefinition(
+            string key,
+            string displayName,
+            T defaultValue)
+        {
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
 
-        [Export] private string _key;
-
-        [Export] private string _displayName;
+            Key = key;
+            DisplayName = displayName;
+            Default = defaultValue;
+        }
 
         public abstract IMorph CreateMorph(IMorphable morphable);
     }

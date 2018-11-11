@@ -2,7 +2,6 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.View;
@@ -14,16 +13,16 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.UI.Character
 {
     [AutowireContext]
-    public class CharacterCreator : AutowiredNode, ICharacterAware<IMorphableCharacter>
+    public class CharacterCreator : AutowiredNode
     {
         [Service]
-        public Option<IMorphableCharacter> Character
+        public Option<IMorphable> Character
         {
             get => _character.Value;
             set => _character.OnNext(value);
         }
 
-        public IObservable<Option<IMorphableCharacter>> OnCharacterChange => _character.AsObservable();
+        public IObservable<Option<IMorphable>> OnCharacterChange => _character.AsObservable();
 
         protected MorphListPanel MorphListPanel => _morphListPanel.Head();
 
@@ -37,13 +36,13 @@ namespace AlleyCat.UI.Character
 
         [Export, UsedImplicitly] private NodePath _viewport = "UI/Content Panel/Viewport";
 
-        private readonly BehaviorSubject<Option<IMorphableCharacter>> _character;
+        private readonly BehaviorSubject<Option<IMorphable>> _character;
 
         private Option<Viewport> _viewportNode;
 
         public CharacterCreator()
         {
-            _character = new BehaviorSubject<Option<IMorphableCharacter>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IMorphable>>(None).AddTo(this);
         }
 
         [PostConstruct]
