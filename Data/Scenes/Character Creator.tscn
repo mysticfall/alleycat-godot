@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
-[ext_resource path="res://Source/AlleyCat/View/InspectingView.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/View/InspectingViewFactory.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=5]
@@ -19,19 +19,19 @@ _viewport = NodePath("UI/Content Panel")
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 2 )
 Active = true
-_maxYaw = 180.0
-_minYaw = -180.0
-_maxPitch = 90.0
-_minPitch = -90.0
+MaxYaw = 180.0
+MinYaw = -180.0
+MaxPitch = 90.0
+MinPitch = -90.0
+MinDistance = 0.2
+MaxDistance = 3.0
+InitialDistance = 1.5
+InitialOffset = Vector3( 0, 0, 0 )
 ProcessMode = 2
-_initialDistance = 0.8
-_initialOffset = Vector3( 0, 0, 0 )
-_cameraPath = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
-_pivot = NodePath("../../UI/Content Panel/Viewport/Character/Character")
-_minDistance = 0.2
-_maxDistance = 3.0
-_rotationModifier = "point"
-_panningModifier = "point2"
+_camera = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
+Pivot = NodePath("../../UI/Content Panel/Viewport/Character/Character")
+RotationModifier = "point"
+PanningModifier = "point2"
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 3 )

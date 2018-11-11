@@ -16,6 +16,7 @@ namespace AlleyCat.UI.Character
     [AutowireContext]
     public class CharacterCreator : AutowiredNode, ICharacterAware<IMorphableCharacter>
     {
+        [Service]
         public Option<IMorphableCharacter> Character
         {
             get => _character.Value;
@@ -26,7 +27,7 @@ namespace AlleyCat.UI.Character
 
         protected MorphListPanel MorphListPanel => _morphListPanel.Head();
 
-        protected InspectingView View=> _view.Head();
+        protected InspectingView View => _view.Head();
 
         protected Viewport Viewport => _viewportNode.Head();
 
@@ -50,7 +51,9 @@ namespace AlleyCat.UI.Character
         {
             _viewportNode = Optional(_viewport).Bind(this.FindComponent<Viewport>);
 
-            View.Reset();
+            OnCharacterChange
+                .Subscribe(_ => View.Reset())
+                .AddTo(this);
         }
     }
 }
