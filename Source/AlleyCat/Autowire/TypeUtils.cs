@@ -31,7 +31,7 @@ namespace AlleyCat.Autowire
                 yield return i;
             }
 
-            var current = type.BaseType;
+            var current = type;
 
             while (current != null)
             {
