@@ -72,5 +72,12 @@ namespace AlleyCat.Item
 
             return (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
         }
+
+        protected override void PreDestroy()
+        {
+            Items.Values.Iter(v => v.DisposeQuietly());
+
+            base.PreDestroy();
+        }
     }
 }
