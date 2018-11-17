@@ -176,8 +176,8 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
                 .Select(to => Character
-                    .Map(c => new Array {c})
-                    .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)));
+                    .Map(c => new Array {c.Spatial})
+                    .Bind(filter => Camera.GetWorld().IntersectRay(Origin, to, filter)));
 
             onRayCast
                 .Select(hit => hit.Select(h => Viewpoint.DistanceTo(h.Position)).IfNone(float.MaxValue))
