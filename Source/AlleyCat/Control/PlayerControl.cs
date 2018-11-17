@@ -71,8 +71,6 @@ namespace AlleyCat.Control
 
         protected IObservable<Vector2> MovementInput { get; }
 
-        private Option<InputBindings> _movementInput;
-
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
         private readonly BehaviorSubject<Option<IPerspectiveView>> _perspective;
@@ -109,8 +107,6 @@ namespace AlleyCat.Control
             _active = new BehaviorSubject<bool>(active).AddTo(this);
             _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
             _perspective = new BehaviorSubject<Option<IPerspectiveView>>(None).AddTo(this);
-
-            _movementInput = movementInput;
         }
 
         protected override void PostConstruct()
@@ -141,8 +137,7 @@ namespace AlleyCat.Control
             Perspective |= active;
 
             OnActiveStateChange
-                .Do(v => _movementInput.Iter(i => i.Active = v))
-                .Do(v => Character.Iter(c => c.Locomotion.Stop()))
+                .Do(v => Character.Iter(c => c.Locomotion.Active = v))
                 .Do(v => Perspective.Iter(p => p.Active = v))
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
                 .Subscribe()
