@@ -9,6 +9,15 @@ namespace AlleyCat.Control
 {
     public class PlayerInteraction : PlayerAction
     {
+        public PlayerInteraction(
+            string key,
+            string displayName,
+            ITriggerInput input,
+            IPlayerControl playerControl,
+            bool active = true) : base(key, displayName, input, playerControl, active)
+        {
+        }
+
         protected override Option<IActionContext> CreateActionContext(IHumanoid player)
         {
             Ensure.That(player, nameof(player)).IsNotNull();

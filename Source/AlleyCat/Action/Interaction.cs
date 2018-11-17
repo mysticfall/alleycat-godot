@@ -4,6 +4,13 @@ namespace AlleyCat.Action
 {
     public abstract class Interaction : Action
     {
+        protected Interaction(
+            string key, 
+            string displayName, 
+            bool active = true) : base(key, displayName, active)
+        {
+        }
+
         protected override void DoExecute(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();

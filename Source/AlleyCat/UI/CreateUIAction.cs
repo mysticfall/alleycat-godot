@@ -1,32 +1,40 @@
 using AlleyCat.Action;
-using AlleyCat.Autowire;
-using AlleyCat.Game;
+using AlleyCat.Control;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
     public class CreateUIAction : UIAction
     {
-        public PackedScene UI => Some(_ui).Head();
+        public PackedScene UI { get; }
 
-        [Node]
-        public Option<Node> Parent { get; private set; }
+        public Option<Node> Parent { get; }
 
-        public override bool Valid => base.Valid && (_ui?.CanInstance() ?? false);
+        public override bool Valid => base.Valid && UI.CanInstance();
 
-        [Export, UsedImplicitly] private PackedScene _ui;
+        public CreateUIAction(
+            string key,
+            string displayName,
+            PackedScene ui,
+            Option<Node> parent,
+            ITriggerInput input,
+            Node node,
+            bool modal,
+            bool active = true) : base(key, displayName, input, node, modal, active)
+        {
+            Ensure.That(ui, nameof(ui)).IsNotNull();
 
-        [Export] private NodePath _parent;
+            UI = ui;
+            Parent = parent;
+        }
 
         protected override void DoExecute(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            Parent.IfNone(() => this.GetCurrentScene().UIRoot).AddChild(UI.Instance());
+            Parent.IfNone(() => Scene.UIRoot).AddChild(UI.Instance());
         }
     }
 }

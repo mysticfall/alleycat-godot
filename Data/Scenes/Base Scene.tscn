@@ -10,10 +10,10 @@
 [ext_resource path="res://Source/AlleyCat/View/HeadMountedViewFactory.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerInteraction.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegate.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/UI/ToggleUIAction.cs" type="Script" id=13]
-[ext_resource path="res://Source/AlleyCat/UI/CreateUIAction.cs" type="Script" id=14]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegateFactory.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=14]
 [ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
@@ -310,10 +310,6 @@ _negativeAction = "move_back"
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 11 )
-_sections_unfolded = [ "Script" ]
-Active = true
-_key = "Interact"
-_displayName = "action.Interaction"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
 pause_mode = 2
@@ -325,11 +321,10 @@ _action = "interact"
 
 [node name="Sit" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
-_sections_unfolded = [ "Script" ]
 Active = true
-_key = "Sit"
-_displayName = "action.Sit"
-_action = "Sit"
+Key = "Sit"
+DisplayName = "action.Sit"
+Action = "Sit"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Sit"]
 pause_mode = 2
@@ -341,11 +336,10 @@ _action = "sit"
 
 [node name="Kneel" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
-_sections_unfolded = [ "Script" ]
 Active = true
-_key = "Kneel"
-_displayName = "action.Kneel"
-_action = "Kneel"
+Key = "Kneel"
+DisplayName = "action.Kneel"
+Action = "Kneel"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Kneel"]
 pause_mode = 2
@@ -360,10 +354,10 @@ _action = "kneel"
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
 script = ExtResource( 13 )
 Active = true
-_key = "ToggleConsole"
-_displayName = "action.ToggleConsole"
+Key = "ToggleConsole"
+DisplayName = "action.ToggleConsole"
 Modal = false
-_ui = NodePath("/root/AlleyCat/UI/Console")
+UI = NodePath("/root/AlleyCat/UI/Console")
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
@@ -376,11 +370,11 @@ _action = "ui_console"
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
 Active = true
-_key = "ShowInventory"
-_displayName = "action.ShowInventory"
+Key = "ShowInventory"
+DisplayName = "action.ShowInventory"
 Modal = true
-_ui = ExtResource( 15 )
-_parent = NodePath("../../../UI")
+UI = ExtResource( 15 )
+Parent = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
@@ -393,11 +387,11 @@ _action = "inventory"
 [node name="Show Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
 Active = true
-_key = "ShowMenu"
-_displayName = "action.ShowMenu"
+Key = "ShowMenu"
+DisplayName = "action.ShowMenu"
 Modal = true
-_ui = ExtResource( 16 )
-_parent = NodePath("../../../UI")
+UI = ExtResource( 16 )
+Parent = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Menu"]
 pause_mode = 2

@@ -7,6 +7,13 @@ namespace AlleyCat.Item
 {
     public abstract class EquipmentAction : Interaction
     {
+        protected EquipmentAction(
+            string key, 
+            string displayName, 
+            bool active = true) : base(key, displayName, active)
+        {
+        }
+
         protected override void DoExecute(InteractionContext context)
         {
             var arguments = (

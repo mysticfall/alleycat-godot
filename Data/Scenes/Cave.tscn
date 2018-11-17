@@ -157,16 +157,7 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.90084, 0, -3.07329 )
 visible = false
 
-[node name="Control" parent="." index="5"]
-editor/display_folded = true
-
 [node name="Player" parent="Control" index="0"]
 _characterPath = NodePath("../../../Cave/Entities/Characters/Player")
 _cameraPath = NodePath("../../../Cave/Cameras/Main Camera")
-
-[node name="Show Inventory" parent="Control/Actions" index="1"]
-_parent = NodePath("../../../../Cave/UI")
-
-[node name="Show Menu" parent="Control/Actions" index="2"]
-_parent = NodePath("../../../../Cave/UI")
 

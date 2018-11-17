@@ -1,6 +1,5 @@
 using System;
 using AlleyCat.Action;
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using EnsureThat;
@@ -13,15 +12,25 @@ namespace AlleyCat.Control
     {
         public override bool Valid => base.Valid && Player.IsSome;
 
-        protected Option<IHumanoid> Player => _playerControl.Bind(c => c.Character);
+        protected Option<IHumanoid> Player => PlayerControl.Character;
 
-        protected IPlayerControl PlayerControl => _playerControl.Head();
+        protected IPlayerControl PlayerControl { get; }
 
-        [Service] private Option<IPlayerControl> _playerControl;
-
-        protected override void OnInitialize()
+        protected PlayerAction(
+            string key,
+            string displayName,
+            ITriggerInput input,
+            IPlayerControl playerControl,
+            bool active = true) : base(key, displayName, input, active)
         {
-            base.OnInitialize();
+            Ensure.That(playerControl, nameof(playerControl)).IsNotNull();
+
+            PlayerControl = playerControl;
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
 
             PlayerControl.OnActiveStateChange
                 .Subscribe(v => Active = v)

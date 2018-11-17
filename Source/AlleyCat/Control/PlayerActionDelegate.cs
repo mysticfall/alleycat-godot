@@ -1,18 +1,24 @@
 using AlleyCat.Action;
-using AlleyCat.Common;
 using EnsureThat;
-using Godot;
-using JetBrains.Annotations;
 
 namespace AlleyCat.Control
 {
     public class PlayerActionDelegate : PlayerAction
     {
-        public string Action => _action.TrimToOption().Head();
+        public string Action { get; }
 
-        public override bool Valid => base.Valid && !string.IsNullOrWhiteSpace(_action);
+        public PlayerActionDelegate(
+            string key,
+            string displayName,
+            string action,
+            ITriggerInput input,
+            IPlayerControl playerControl,
+            bool active = true) : base(key, displayName, input, playerControl, active)
+        {
+            Ensure.That(action, nameof(action)).IsNotNull();
 
-        [Export, UsedImplicitly] private string _action;
+            Action = action;
+        }
 
         protected override void DoExecute(IActionContext context)
         {

@@ -3,13 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
-using AlleyCat.Autowire;
-using AlleyCat.Common;
 using EnsureThat;
-using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
 using static AlleyCat.Animation.SitState;
 using static LanguageExt.Prelude;
 
@@ -17,13 +12,7 @@ namespace AlleyCat.Animation
 {
     public class SitAction : Action.Action
     {
-        public override bool Valid => base.Valid && _valid;
-
-        public Option<Godot.Animation> SittingDownAnimation
-        {
-            get => Optional(_sittingDownAnimation);
-            set => _sittingDownAnimation = value.ValueUnsafe();
-        }
+        public Option<Godot.Animation> SittingDownAnimation { get; set; }
 
         public Godot.Animation Animation
         {
@@ -36,75 +25,71 @@ namespace AlleyCat.Animation
             }
         }
 
-        public Option<Godot.Animation> GettingUpAnimation
+        public Option<Godot.Animation> GettingUpAnimation { get; set; }
+
+        protected string StatesPath { get; }
+
+        protected string SubStatesPath { get; }
+
+        protected string IdleState { get; }
+
+        protected string EnterState { get; }
+
+        protected string State { get; }
+
+        protected string ExitState { get; }
+
+        protected string EnterAnimatorPath { get; }
+
+        protected string AnimatorPath { get; }
+
+        protected string ExitAnimatorPath { get; }
+
+        private Godot.Animation _animation;
+
+        public SitAction(
+            string key,
+            string displayName,
+            Godot.Animation animation,
+            string statesPath,
+            string subStatesPath,
+            string idleState,
+            string enterState,
+            string state,
+            string exitState,
+            string enterAnimatorPath,
+            string animatorPath,
+            string exitAnimatorPath,
+            bool active = true) : base(key, displayName, active)
         {
-            get => Optional(_gettingUpAnimation);
-            set => _gettingUpAnimation = value.ValueUnsafe();
+            Ensure.That(animation, nameof(animation)).IsNotNull();
+            Ensure.That(statesPath, nameof(statesPath)).IsNotNull();
+            Ensure.That(subStatesPath, nameof(subStatesPath)).IsNotNull();
+            Ensure.That(idleState, nameof(idleState)).IsNotNull();
+            Ensure.That(enterState, nameof(enterState)).IsNotNull();
+            Ensure.That(state, nameof(state)).IsNotNull();
+            Ensure.That(exitState, nameof(exitState)).IsNotNull();
+            Ensure.That(enterAnimatorPath, nameof(enterAnimatorPath)).IsNotNull();
+            Ensure.That(animatorPath, nameof(animatorPath)).IsNotNull();
+            Ensure.That(exitAnimatorPath, nameof(exitAnimatorPath)).IsNotNull();
+
+            Animation = animation;
+
+            StatesPath = statesPath;
+            SubStatesPath = subStatesPath;
+            IdleState = idleState;
+            EnterState = enterState;
+            State = state;
+            ExitState = exitState;
+            EnterAnimatorPath = enterAnimatorPath;
+            AnimatorPath = animatorPath;
+            ExitAnimatorPath = exitAnimatorPath;
         }
 
-        protected string StatesPath => _statesPath.TrimToOption().Head();
-
-        protected string SubStatesPath => _subStatesPath.TrimToOption().Head();
-
-        protected string IdleState => _idleState.TrimToOption().Head();
-
-        protected string EnterState => _enterState.TrimToOption().Head();
-
-        protected string State => _state.TrimToOption().Head();
-
-        protected string ExitState => _exitState.TrimToOption().Head();
-
-        protected string EnterAnimatorPath => _enterAnimatorPath.TrimToOption().Head();
-
-        protected string AnimatorPath => _animatorPath.TrimToOption().Head();
-
-        protected string ExitAnimatorPath => _exitAnimatorPath.TrimToOption().Head();
-
-        [Export, UsedImplicitly] private Godot.Animation _sittingDownAnimation;
-
-        [Export, UsedImplicitly] private Godot.Animation _animation;
-
-        [Export, UsedImplicitly] private Godot.Animation _gettingUpAnimation;
-
-        [Export, UsedImplicitly] private string _statesPath = "States";
-
-        [Export, UsedImplicitly] private string _subStatesPath = "States/Seated";
-
-        [Export, UsedImplicitly] private string _idleState = "Idle";
-
-        [Export, UsedImplicitly] private string _enterState = "Sitting Down";
-
-        [Export, UsedImplicitly] private string _state = "Seated";
-
-        [Export, UsedImplicitly] private string _exitState = "Getting Up";
-
-        [Export, UsedImplicitly] private string _enterAnimatorPath = "States/Seated/Sitting Down";
-
-        [Export, UsedImplicitly] private string _animatorPath = "States/Seated/Seated/Sit";
-
-        [Export, UsedImplicitly] private string _exitAnimatorPath = "States/Seated/Getting Up";
-
-        private bool _valid;
-
-        [PostConstruct]
-        protected virtual void OnInitialize()
-        {
-            _valid = StatesPath != null &&
-                     SubStatesPath != null &&
-                     IdleState != null &&
-                     EnterState != null &&
-                     State != null &&
-                     ExitState != null &&
-                     EnterAnimatorPath != null &&
-                     AnimatorPath != null &&
-                     ExitAnimatorPath != null;
-        }
 
         protected override void DoExecute(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
-
-            Debug.Assert(Valid, "Valid");
 
             var manager = context.Actor.Bind(GetAnimationStateManager);
 

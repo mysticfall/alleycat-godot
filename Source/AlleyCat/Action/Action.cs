@@ -1,22 +1,17 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using EnsureThat;
-using Godot;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Action
 {
-    [Singleton(typeof(IAction))]
-    public abstract class Action : AutowiredNode, IAction
+    public abstract class Action : GameObject, IAction
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key { get; }
 
-        public virtual string DisplayName => Optional(_displayName).Map(Tr).IfNone(() => Key);
+        public virtual string DisplayName { get; }
 
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -25,15 +20,17 @@ namespace AlleyCat.Action
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        [Export] private string _key;
-
-        [Export] private string _displayName;
-
         private readonly BehaviorSubject<bool> _active;
 
-        protected Action()
+        protected Action(string key, string displayName, bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+
+            Key = key;
+            DisplayName = displayName;
+         
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
         }
 
         public void Execute(IActionContext context)

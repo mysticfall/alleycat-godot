@@ -9,6 +9,13 @@ namespace AlleyCat.Item
 {
     public class DropAction : EquipmentAction
     {
+        public DropAction(
+            string key,
+            string displayName,
+            bool active = true) : base(key, displayName, active)
+        {
+        }
+
         protected override void DoExecute(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {

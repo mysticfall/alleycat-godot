@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Source\AlleyCat\Action\Action.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionContext.cs" />
+    <Compile Include="Source\AlleyCat\Action\ActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionMap.cs" />
     <Compile Include="Source\AlleyCat\Action\IAction.cs" />
     <Compile Include="Source\AlleyCat\Action\IActionContext.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Source\AlleyCat\Animation\SitAction.cs" />
     <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
+    <Compile Include="Source\AlleyCat\Animation\SitActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\SitState.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
     <Compile Include="Source\AlleyCat\Control\IInput.cs" />
     <Compile Include="Source\AlleyCat\Control\InputAction.cs" />
+    <Compile Include="Source\AlleyCat\Control\InputActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\InputBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\InputEventExtensions.cs" />
     <Compile Include="Source\AlleyCat\Control\IPlayerControl.cs" />
@@ -242,10 +245,13 @@
     <Compile Include="Source\AlleyCat\Control\MouseAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerAction.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerActionDelegate.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerActionDelegateFactory.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControl.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInput.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerControlFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\PlayerInteraction.cs" />
+    <Compile Include="Source\AlleyCat\Control\PlayerInteractionFactory.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IInputSource.cs" />
@@ -270,6 +276,8 @@
     <Compile Include="Source\AlleyCat\Item\AttachedConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\CommonEquipmentTags.cs" />
     <Compile Include="Source\AlleyCat\Item\DropAction.cs" />
+    <Compile Include="Source\AlleyCat\Item\DropActionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Item\PickupActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\Equipment.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentConfigurationFactory.cs" />
@@ -357,6 +365,7 @@
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\CreateUIAction.cs" />
+    <Compile Include="Source\AlleyCat\UI\CreateUIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\EntityLabel.cs" />
     <Compile Include="Source\AlleyCat\UI\FullScreenModalPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\GameMenu.cs" />
@@ -382,11 +391,13 @@
     <Compile Include="Source\AlleyCat\UI\Console\TextStyle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\AlleyCat\UI\ToggleUIAction.cs" />
+    <Compile Include="Source\AlleyCat\UI\ToggleUIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeEvents.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeItemChildren.cs" />
     <Compile Include="Source\AlleyCat\UI\UIAction.cs" />
+    <Compile Include="Source\AlleyCat\UI\UIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\View\FreeCameraView.cs" />
     <Compile Include="Source\AlleyCat\View\FreeCameraViewFactory.cs" />
     <Compile Include="Source\AlleyCat\View\HeadMountedView.cs" />

@@ -1,34 +1,39 @@
 using AlleyCat.Action;
 using AlleyCat.Common;
+using AlleyCat.Control;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
     public class ToggleUIAction : UIAction
     {
-        public IHideableUI UI => _uiNode.Head();
+        public Option<IHideableUI> UI => Scene.Root.FindComponent<IHideableUI>(_ui);
 
-        public override bool Valid => base.Valid && _uiNode.IsSome;
+        public override bool Valid => base.Valid && UI.IsSome;
 
-        [Export] private NodePath _ui;
+        private readonly NodePath _ui;
 
-        private Option<IHideableUI> _uiNode;
+        public ToggleUIAction(
+            string key,
+            string displayName,
+            NodePath ui,
+            ITriggerInput input,
+            Node node,
+            bool modal,
+            bool active = true) : base(key, displayName, input, node, modal, active)
+        {
+            Ensure.That(ui, nameof(ui)).IsNotNull();
+
+            _ui = ui;
+        }
 
         protected override void DoExecute(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            UI.Toggle();
-        }
-
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-
-            _uiNode = Optional(_ui).Bind(this.FindComponent<IHideableUI>);
+            UI.Iter(ui => ui.Toggle());
         }
     }
 }

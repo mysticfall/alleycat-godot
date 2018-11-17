@@ -6,62 +6,49 @@ using AlleyCat.Animation;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
-using Godot.Collections;
-using JetBrains.Annotations;
 using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
 using static LanguageExt.Prelude;
-using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
 {
     public class PickupAction : EquipmentAction
     {
-        [Export(PropertyHint.ExpRange, "0.1, 5")]
         public float PickupDistance
         {
             get => _pickupDistance;
-            set
-            {
-                Ensure.That(value, nameof(value)).IsGt(0);
-
-                _pickupDistance = value;
-            }
+            set => _pickupDistance = Mathf.Max(value, 0);
         }
 
-        public Option<Godot.Animation> Animation
-        {
-            get => Optional(_animation);
-            set => _animation = value.ValueUnsafe();
-        }
+        public Option<Godot.Animation> Animation { get; set; }
 
-        public Option<string> IKChain
-        {
-            get => _ikChain.TrimToOption();
-            set => _ikChain = value.ValueUnsafe();
-        }
+        public Option<string> IKChain { get; }
 
-        public Set<string> Tags => toSet(_tags);
+        public Set<string> Tags { get; }
 
-        protected Option<string> AnimatorPath => _animatorPath.TrimToOption();
+        protected Option<string> AnimatorPath { get; }
 
-        protected Option<string> StatesPath => _statesPath.TrimToOption();
+        protected Option<string> StatesPath { get; }
 
-        protected Option<string> ActionState => _actionState.TrimToOption();
-
-        [Export, UsedImplicitly] private Godot.Animation _animation;
-
-        [Export, UsedImplicitly] private string _animatorPath = "States/Action";
-
-        [Export, UsedImplicitly] private string _statesPath = "States";
-
-        [Export, UsedImplicitly] private string _actionState = "Action";
-
-        [Export, UsedImplicitly] private string _ikChain = "Right Hand IK";
-
-        [Export, UsedImplicitly] private Array<string> _tags = new Array<string> {Carry, Hand};
+        protected Option<string> ActionState { get; }
 
         private float _pickupDistance = 1.2f;
+
+        public PickupAction(
+            string key,
+            string displayName, 
+            Set<string> tags, 
+            Option<string> ikChain, 
+            Option<string> animatorPath, 
+            Option<string> statesPath, 
+            Option<string> actionState, 
+            bool active = true) : base(key, displayName, active)
+        {
+            Tags = tags;
+            IKChain = ikChain;
+            AnimatorPath = animatorPath;
+            StatesPath = statesPath;
+            ActionState = actionState;
+        }
 
         protected override void DoExecute(
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
@@ -76,7 +63,7 @@ namespace AlleyCat.Item
                 var animationArguments = Optional(holder)
                     .OfType<IAnimatable>()
                     .Map(a => a.AnimationManager)
-                    .SelectMany(manager => Animation, 
+                    .SelectMany(manager => Animation,
                         (manager, animation) => (animation, manager))
                     .HeadOrNone();
 
