@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics;
 using AlleyCat.Action;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using EnsureThat;
-using static LanguageExt.Prelude;
 using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
@@ -17,14 +15,9 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            var scene = GetTree().CurrentScene;
-            var path = ((IScene) scene).ItemsPath;
+            var scene = holder.Spatial.GetCurrentScene();
 
-            Debug.Assert(path != null, "path != null");
-
-            var parent = Optional(scene.GetNode(path)).IfNone(scene);
-
-            holder.Unequip(equipment, parent);
+            holder.Unequip(equipment, scene.ItemsRoot);
         }
 
         protected override bool AllowedFor(

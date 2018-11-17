@@ -25,6 +25,7 @@ _sections_unfolded = [ "Script" ]
 _key = null
 _charactersPath = NodePath("Entities/Characters")
 _itemsPath = NodePath("Entities/Items")
+_uiPath = NodePath("UI")
 
 [node name="Environment" type="Node" parent="."]
 

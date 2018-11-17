@@ -1,5 +1,6 @@
 using AlleyCat.Action;
 using AlleyCat.Autowire;
+using AlleyCat.Game;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
@@ -25,7 +26,7 @@ namespace AlleyCat.UI
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            Parent.IfNone(() => GetTree().CurrentScene).AddChild(UI.Instance());
+            Parent.IfNone(() => this.GetCurrentScene().UIRoot).AddChild(UI.Instance());
         }
     }
 }

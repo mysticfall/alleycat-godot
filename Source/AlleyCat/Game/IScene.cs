@@ -1,3 +1,4 @@
+using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Game
@@ -6,8 +7,22 @@ namespace AlleyCat.Game
     {
         PackedScene Pack();
 
-        NodePath CharactersPath { get; }
+        Node Root { get; }
 
-        NodePath ItemsPath { get; }
+        Node CharactersRoot { get; }
+
+        Node ItemsRoot { get; }
+
+        Node UIRoot { get; }
+    }
+
+    public static class SceneExtensions
+    {
+        public static IScene GetCurrentScene(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return (IScene) node.GetTree().CurrentScene;
+        }
     }
 }

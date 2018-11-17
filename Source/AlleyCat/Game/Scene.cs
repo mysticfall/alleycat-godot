@@ -1,7 +1,6 @@
 using System;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using static LanguageExt.Prelude;
 
@@ -12,33 +11,21 @@ namespace AlleyCat.Game
     {
         public string Key => _key.TrimToOption().IfNone(GetName);
 
-        public NodePath CharactersPath
-        {
-            get => Optional(_charactersPath).IfNone(GetPath);
-            set
-            {
-                Ensure.That(value, nameof(value)).IsNotNull();
+        public Node Root => this;
 
-                _charactersPath = value == GetPath() ? null : value;
-            }
-        }
+        public Node CharactersRoot => Optional(_charactersPath).Bind(Root.FindComponent<Node>).IfNone(Root);
 
-        public NodePath ItemsPath
-        {
-            get => Optional(_itemsPath).IfNone(GetPath);
-            set
-            {
-                Ensure.That(value, nameof(value)).IsNotNull();
+        public Node ItemsRoot => Optional(_itemsPath).Bind(Root.FindComponent<Node>).IfNone(Root);
 
-                _itemsPath = value == GetPath() ? null : value;
-            }
-        }
+        public Node UIRoot => Optional(_uiPath).Bind(Root.FindComponent<Node>).IfNone(Root);
 
         [Export] private string _key;
 
-        [Export] private NodePath _charactersPath;
+        [Export] private NodePath _charactersPath = "Characters";
 
-        [Export] private NodePath _itemsPath;
+        [Export] private NodePath _itemsPath = "Items";
+
+        [Export] private NodePath _uiPath = "UI";
 
         public PackedScene Pack() => throw new NotImplementedException();
     }
