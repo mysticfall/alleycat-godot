@@ -36,7 +36,7 @@ namespace AlleyCat.Character
                 locomotion,
                 skeleton,
                 animationManager,
-                Actions.Bind(a => a.Values),
+                Actions,
                 Markers,
                 this);
         }

@@ -64,7 +64,6 @@
     <Compile Include="Source\AlleyCat\Action\Action.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionContext.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Action\ActionMap.cs" />
     <Compile Include="Source\AlleyCat\Action\IAction.cs" />
     <Compile Include="Source\AlleyCat\Action\IActionContext.cs" />
     <Compile Include="Source\AlleyCat\Action\IActor.cs" />
