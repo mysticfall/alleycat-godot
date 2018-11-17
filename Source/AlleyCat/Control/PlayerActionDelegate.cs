@@ -1,5 +1,6 @@
 using AlleyCat.Action;
 using EnsureThat;
+using LanguageExt;
 
 namespace AlleyCat.Control
 {
@@ -11,9 +12,9 @@ namespace AlleyCat.Control
             string key,
             string displayName,
             string action,
+            Option<IPlayerControl> playerControl,
             ITriggerInput input,
-            IPlayerControl playerControl,
-            bool active = true) : base(key, displayName, input, playerControl, active)
+            bool active = true) : base(key, displayName, playerControl, input, active)
         {
             Ensure.That(action, nameof(action)).IsNotNull();
 

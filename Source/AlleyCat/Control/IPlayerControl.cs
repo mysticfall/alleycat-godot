@@ -1,9 +1,10 @@
+using AlleyCat.Action;
 using AlleyCat.Character;
 using AlleyCat.View;
 
 namespace AlleyCat.Control
 {
-    public interface IPlayerControl : ICharacterAware<IHumanoid>, IPerspectiveSwitcher
+    public interface IPlayerControl : ICharacterAware<IHumanoid>, IPerspectiveSwitcher, IActor
     {
     }
 }

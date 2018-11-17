@@ -12,9 +12,9 @@ namespace AlleyCat.Control
         public PlayerInteraction(
             string key,
             string displayName,
+            Option<IPlayerControl> playerControl,
             ITriggerInput input,
-            IPlayerControl playerControl,
-            bool active = true) : base(key, displayName, input, playerControl, active)
+            bool active = true) : base(key, displayName, playerControl, input, active)
         {
         }
 
@@ -22,7 +22,8 @@ namespace AlleyCat.Control
         {
             Ensure.That(player, nameof(player)).IsNotNull();
 
-            return PlayerControl.FocusedObject
+            return PlayerControl
+                .Bind(c => c.FocusedObject)
                 .Map<IEntity, IActionContext>(entity => new InteractionContext(player, entity))
                 .HeadOrNone();
         }
@@ -42,7 +43,7 @@ namespace AlleyCat.Control
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            return Player.SequenceEqual(context.Actor) && PlayerControl.FocusedObject.IsSome;
+            return Player.SequenceEqual(context.Actor) && PlayerControl.Bind(c => c.FocusedObject).IsSome;
         }
     }
 }

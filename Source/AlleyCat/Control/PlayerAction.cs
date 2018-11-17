@@ -1,7 +1,5 @@
-using System;
 using AlleyCat.Action;
 using AlleyCat.Character;
-using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
 using static LanguageExt.Prelude;
@@ -12,29 +10,18 @@ namespace AlleyCat.Control
     {
         public override bool Valid => base.Valid && Player.IsSome;
 
-        protected Option<IHumanoid> Player => PlayerControl.Character;
+        public Option<IHumanoid> Player => PlayerControl.Bind(c => c.Character);
 
-        protected IPlayerControl PlayerControl { get; }
+        public Option<IPlayerControl> PlayerControl { get; }
 
         protected PlayerAction(
             string key,
             string displayName,
+            Option<IPlayerControl> playerControl,
             ITriggerInput input,
-            IPlayerControl playerControl,
             bool active = true) : base(key, displayName, input, active)
         {
-            Ensure.That(playerControl, nameof(playerControl)).IsNotNull();
-
             PlayerControl = playerControl;
-        }
-
-        protected override void PostConstruct()
-        {
-            base.PostConstruct();
-
-            PlayerControl.OnActiveStateChange
-                .Subscribe(v => Active = v)
-                .AddTo(this);
         }
 
         protected override Option<IActionContext> CreateActionContext() => Player.Bind(CreateActionContext);
@@ -43,7 +30,7 @@ namespace AlleyCat.Control
         {
             Ensure.That(player, nameof(player)).IsNotNull();
 
-            return new ActionContext(Some((IActor) player));
+            return new ActionContext(Some<IActor>(player));
         }
     }
 }

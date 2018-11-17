@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AlleyCat.Action;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
@@ -48,6 +49,8 @@ namespace AlleyCat.Control
 
         public IObservable<Option<IPerspectiveView>> OnPerspectiveChange => _perspective.AsObservable();
 
+        public Map<string, IAction> Actions { get; }
+
         public float MaxFocalDistance
         {
             get => Perspective.OfType<IFocusTracker>().Map(p => p.MaxFocalDistance).HeadOrNone().IfNone(0f);
@@ -82,6 +85,7 @@ namespace AlleyCat.Control
             Camera camera,
             Option<IHumanoid> character,
             IEnumerable<IPerspectiveView> perspectives,
+            IEnumerable<IAction> actions,
             Option<InputBindings> movementInput,
             ProcessMode processMode,
             ITimeSource timeSource,
@@ -93,6 +97,7 @@ namespace AlleyCat.Control
 
             Camera = camera;
             Perspectives = perspectives.Freeze();
+            Actions = actions.ToMap();
             ProcessMode = processMode;
             TimeSource = timeSource;
 
@@ -139,6 +144,7 @@ namespace AlleyCat.Control
                 .Do(v => _movementInput.Iter(i => i.Active = v))
                 .Do(v => Character.Iter(c => c.Locomotion.Stop()))
                 .Do(v => Perspective.Iter(p => p.Active = v))
+                .Do(v => Actions.Values.Iter(p => p.Active = v))
                 .Subscribe()
                 .AddTo(this);
 

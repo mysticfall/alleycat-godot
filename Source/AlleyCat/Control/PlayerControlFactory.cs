@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -25,8 +26,11 @@ namespace AlleyCat.Control
         [Node(false)]
         public Option<Camera> Camera { get; set; }
 
-        [Service]
+        [Service(false, false)]
         public IEnumerable<IPerspectiveView> Perspectives { get; set; } = Seq<IPerspectiveView>();
+
+        [Service(false, false)]
+        public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
 
         [Node("Movement")]
         public Option<InputBindings> MovementInput { get; set; }
@@ -41,6 +45,7 @@ namespace AlleyCat.Control
                 Camera.IfNone(() => GetViewport().GetCamera()),
                 Character | this.FindPlayer<IHumanoid>(),
                 Perspectives,
+                Actions,
                 MovementInput,
                 ProcessMode,
                 this,
