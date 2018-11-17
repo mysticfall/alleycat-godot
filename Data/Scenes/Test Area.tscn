@@ -23,6 +23,7 @@ interior = false
 compress = false
 
 [node name="Test Area" index="0" instance=ExtResource( 1 )]
+_key = "TestArea"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 0.104347, 0, 0, 0, 0.402325, 0, 0, 0, 1.10287, 2.24059, 0.930508, 0.993336 )
