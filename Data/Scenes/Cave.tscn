@@ -161,3 +161,6 @@ visible = false
 _characterPath = NodePath("../../../Cave/Entities/Characters/Player")
 _cameraPath = NodePath("../../../Cave/Cameras/Main Camera")
 
+[node name="UI" parent="." index="6"]
+editor/display_folded = true
+

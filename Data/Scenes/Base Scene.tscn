@@ -310,6 +310,9 @@ _negativeAction = "move_back"
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 11 )
+Active = true
+Key = "Interact"
+DisplayName = "action.Interact"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
 pause_mode = 2
