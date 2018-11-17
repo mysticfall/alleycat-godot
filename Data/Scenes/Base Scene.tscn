@@ -361,7 +361,7 @@ _action = "kneel"
 script = ExtResource( 13 )
 Active = true
 _key = "ToggleConsole"
-_displayName = "action.ToggleCosole"
+_displayName = "action.ToggleConsole"
 Modal = false
 _ui = NodePath("/root/AlleyCat/UI/Console")
 
