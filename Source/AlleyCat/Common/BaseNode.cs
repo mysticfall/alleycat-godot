@@ -117,6 +117,8 @@ namespace AlleyCat.Common
             _onUnhandledInput.Iter(i => i.OnNext(@event));
         }
 
+        public void SetInputAsHandled() => GetTree().SetInputAsHandled();
+
         public void Collect(IDisposable disposable)
         {
             Ensure.That(disposable, nameof(disposable)).IsNotNull();

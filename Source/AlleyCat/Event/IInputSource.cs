@@ -8,5 +8,7 @@ namespace AlleyCat.Event
         IObservable<InputEvent> OnInput { get; }
 
         IObservable<InputEvent> OnUnhandledInput { get; }
+
+        void SetInputAsHandled();
     }
 }
