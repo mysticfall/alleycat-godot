@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using AlleyCat.Autowire;
 using AlleyCat.Control;
 using AlleyCat.Motion;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
 {
@@ -21,7 +18,5 @@ namespace AlleyCat.View
 
         [Node("Zoom", false)]
         public Option<IInputBindings> ZoomInput { get; set; }
-
-        public override IEnumerable<Type> ProvidedTypes => Seq(typeof(IPerspectiveView), typeof(IOrbiter));
     }
 }
