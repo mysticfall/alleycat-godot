@@ -8,11 +8,11 @@ namespace AlleyCat.Autowire
     {
         public Option<string> Path { get; }
 
-        public NodeAttribute(bool required = true) : base(required)
+        public NodeAttribute(bool required = false) : base(required)
         {
         }
 
-        public NodeAttribute(string path, bool required = true) : base(required)
+        public NodeAttribute(string path, bool required = false) : base(required)
         {
             Ensure.That(path, nameof(path)).IsNotNull();
 

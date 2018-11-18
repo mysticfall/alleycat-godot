@@ -41,13 +41,13 @@ namespace AlleyCat.UI.Console
 
         public IEnumerable<IConsoleCommand> SupportedCommands => _commands.Values;
 
-        [Node("AnimationPlayer")]
+        [Node("AnimationPlayer", true)]
         protected AnimationPlayer Player { get; private set; }
 
-        [Node("Container/Content")]
+        [Node("Container/Content", true)]
         protected RichTextLabel Content { get; private set; }
 
-        [Node("Container/InputPane/Input")]
+        [Node("Container/InputPane/Input", true)]
         protected LineEdit InputField { get; private set; }
 
         [Service] private IEnumerable<IConsoleCommandProvider> _providers = Seq<IConsoleCommandProvider>();

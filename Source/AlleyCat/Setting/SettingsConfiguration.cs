@@ -14,7 +14,7 @@ namespace AlleyCat.Setting
     {
         public IEnumerable<Type> ProvidedTypes => new[] {typeof(IConfiguration)};
 
-        [Service(false)]
+        [Service]
         protected IEnumerable<ISettingsProvider> Providers { get; private set; } = Seq<ISettingsProvider>(); 
 
         public void AddServices(IServiceCollection collection)

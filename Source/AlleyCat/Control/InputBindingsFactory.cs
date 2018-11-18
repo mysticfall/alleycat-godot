@@ -12,7 +12,7 @@ namespace AlleyCat.Control
         [Export]
         public bool Active { get; set; } = true;
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<IInput> Inputs { get; set; }
 
         protected override Validation<string, InputBindings> CreateService() => new InputBindings(Inputs, Active);

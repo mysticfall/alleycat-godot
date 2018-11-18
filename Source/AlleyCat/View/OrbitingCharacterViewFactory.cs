@@ -9,7 +9,7 @@ namespace AlleyCat.View
 {
     public class OrbitingCharacterViewFactory : OrbitingViewFactory<OrbitingCharacterView>
     {
-        [Node(false)]
+        [Node]
         public Option<IHumanoid> Character { get; set; }
 
         [Export(PropertyHint.ExpRange, "1,10")]

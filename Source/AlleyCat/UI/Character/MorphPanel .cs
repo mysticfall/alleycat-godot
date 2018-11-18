@@ -11,7 +11,7 @@ namespace AlleyCat.UI.Character
 {
     public abstract class MorphPanel : Container
     {
-        [Node]
+        [Node(true)]
         protected Label Label { get; private set; }
 
         public abstract void LoadMorph(IMorph morph);

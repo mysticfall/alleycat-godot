@@ -17,7 +17,7 @@ namespace AlleyCat.Character
         [Export]
         public string DisplayName { get; set; }
 
-        [Service(false)]
+        [Service]
         public IEnumerable<EquipmentSlot> EquipmentSlots { get; set; } = Seq<EquipmentSlot>();
 
         protected override Validation<string, T> CreateService()

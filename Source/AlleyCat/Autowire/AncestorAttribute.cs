@@ -2,7 +2,7 @@
 {
     public class AncestorAttribute : InjectAttribute
     {
-        public AncestorAttribute(bool required = true) : base(required)
+        public AncestorAttribute(bool required = false) : base(required)
         {
         }
     }

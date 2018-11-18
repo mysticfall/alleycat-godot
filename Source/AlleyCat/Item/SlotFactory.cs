@@ -14,7 +14,7 @@ namespace AlleyCat.Item
         [Export]
         public string DisplayName { get; set; }
 
-        [Node(false)]
+        [Node]
         public Option<ICondition<ISlotItem>> AllowedFor { get; set; }
 
         protected override Validation<string, T> CreateService()

@@ -51,10 +51,10 @@ namespace AlleyCat.Character
         [Service]
         public Option<IRaceRegistry> RaceRegistry { get; set; }
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<Marker> Markers { get; set; } = Seq<Marker>();
 
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<TCharacter>();

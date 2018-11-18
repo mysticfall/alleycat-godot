@@ -12,7 +12,7 @@ namespace AlleyCat.UI.Character
     [Singleton(typeof(MorphListPanel))]
     public class MorphListPanel : Panel
     {
-        [Node("Tab Container")]
+        [Node("Tab Container", true)]
         protected TabContainer TabContainer { get; private set; }
 
         [Export] private PackedScene _groupPanelScene;

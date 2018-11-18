@@ -10,7 +10,7 @@ namespace AlleyCat.UI.Character
 {
     public class ColorMorphPanel : MorphPanel<Color, ColorMorphDefinition>
     {
-        [Node]
+        [Node(true)]
         protected ColorPickerButton Button { get; private set; }
 
         [PostConstruct]

@@ -32,28 +32,28 @@ namespace AlleyCat.UI.Inventory
         public IObservable<Option<Equipment>> OnItemChange =>
             _item.MatchObservable(identity, Observable.Empty<Option<Equipment>>);
 
-        [Node("Control/View")] 
+        [Node("Control/View", true)]
         protected InspectingView ViewControl { get; private set; }
 
-        [Node("List Panel/Layout/Tree")]
+        [Node("List Panel/Layout/Tree", true)]
         protected Tree Tree { get; private set; }
 
-        [Node("List Panel/Layout/Buttons Panel")]
+        [Node("List Panel/Layout/Buttons Panel", true)]
         protected Container Buttons { get; private set; }
 
-        [Node("Content Panel/Viewport/Item Box/Item")]
+        [Node("Content Panel/Viewport/Item Box/Item", true)]
         protected MeshInstance ItemStand { get; private set; }
 
-        [Node("Content Panel/Info Panel")]
+        [Node("Content Panel/Info Panel", true)]
         protected Panel InfoPanel { get; private set; }
 
-        [Node("Content Panel/Info Panel/Title")]
+        [Node("Content Panel/Info Panel/Title", true)]
         protected Label Title { get; private set; }
 
-        [Node("Content Panel/Info Panel/Type")]
+        [Node("Content Panel/Info Panel/Type", true)]
         protected Label Type { get; private set; }
 
-        [Node("Content Panel/Info Panel/Description")]
+        [Node("Content Panel/Info Panel/Description", true)]
         protected RichTextLabel Description { get; private set; }
 
         [Export] private PackedScene _actionButton;
@@ -107,7 +107,7 @@ namespace AlleyCat.UI.Inventory
                     .Merge(items.Select(_ => Option<string>.None))
                     .CombineLatest(container, (slot, slots) => (slot, slots))
                     .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
-                    .Do(current=> Item = current));
+                    .Do(current => Item = current));
 
             OnItemChange
                 .Subscribe(DisplayItem)

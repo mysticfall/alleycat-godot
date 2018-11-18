@@ -10,10 +10,10 @@ namespace AlleyCat.UI.Character
 {
     public class RangedMorphPanel : MorphPanel<float, RangedMorphDefinition>
     {
-        [Node] 
+        [Node(true)] 
         protected Slider Slider { get; private set; }
 
-        [Node] 
+        [Node(true)] 
         protected SpinBox Spinner { get; private set; }
 
         [PostConstruct]

@@ -20,16 +20,16 @@ namespace AlleyCat.Control
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
-        [Node(false)]
+        [Node]
         public Option<IHumanoid> Character { get; set; }
 
-        [Node(false)]
+        [Node]
         public Option<Camera> Camera { get; set; }
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<IPerspectiveView> Perspectives { get; set; } = Seq<IPerspectiveView>();
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
 
         [Node("Movement")]

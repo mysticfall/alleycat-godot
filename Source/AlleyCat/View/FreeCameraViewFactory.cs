@@ -10,10 +10,10 @@ namespace AlleyCat.View
 {
     public class FreeCameraViewFactory : TurretLikeFactory<FreeCameraView>
     {
-        [Node(false)]
+        [Node]
         public Option<IHumanoid> Character { get; set; }
 
-        [Node(false)]
+        [Node]
         public Option<Camera> Camera { get; set; }
 
         [Export(PropertyHint.ExpRange, "1,10")]

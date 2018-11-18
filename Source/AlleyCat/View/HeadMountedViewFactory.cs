@@ -11,10 +11,10 @@ namespace AlleyCat.View
 {
     public class HeadMountedViewFactory : TurretLikeFactory<HeadMountedView>
     {
-        [Node(false)]
+        [Node]
         public Option<Camera> Camera { get; set; }
 
-        [Node(false)]
+        [Node]
         public Option<IHumanoid> Character { get; set; }
 
         public float Offset { get; set; } = 0.01f;

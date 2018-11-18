@@ -10,10 +10,10 @@ namespace AlleyCat.Animation
         [Service]
         public Option<AnimationTree> AnimationTree { get; set; }
 
-        [Service(false)]
+        [Service]
         public Option<IAnimationGraphFactory> GraphFactory { get; set; }
 
-        [Service(false)]
+        [Service]
         public Option<IAnimationControlFactory> ControlFactory { get; set; }
 
         protected override Validation<string, AnimationStateManager> CreateService(AnimationPlayer player)

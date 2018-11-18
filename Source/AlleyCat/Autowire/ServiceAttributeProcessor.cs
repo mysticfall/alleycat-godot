@@ -29,7 +29,7 @@ namespace AlleyCat.Autowire
             IEnumerable enumerable = new ServiceDependencyCollector(
                 context, node, Enumerable ? TargetType : DependencyType);
 
-            if (!Attribute.IncludeInherited)
+            if (Attribute.Local)
             {
                 enumerable = enumerable.Cast<object>().Take(1);
             }

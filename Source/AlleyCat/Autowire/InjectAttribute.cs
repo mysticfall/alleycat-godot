@@ -9,7 +9,7 @@ namespace AlleyCat.Autowire
     {
         public bool Required { get; }
 
-        protected InjectAttribute(bool required = true)
+        protected InjectAttribute(bool required = false)
         {
             Required = required;
         }

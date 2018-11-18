@@ -39,7 +39,7 @@ namespace AlleyCat.Item
         [Service]
         public IEnumerable<EquipmentConfiguration> Configurations { get; set; } = Seq<EquipmentConfiguration>();
 
-        [Service(false, false)]
+        [Service(local: true)]
         public IEnumerable<Marker> Markers { get; set; } = Seq<Marker>();
 
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<Equipment>();

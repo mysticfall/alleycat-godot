@@ -14,7 +14,7 @@ namespace AlleyCat.UI.Character
     [AutowireContext]
     public class CharacterCreator : AutowiredNode, ICharacterAware<IHumanoid>
     {
-        [Service(false)]
+        [Service]
         public Option<IHumanoid> Character
         {
             get => _character.Value;
@@ -23,10 +23,10 @@ namespace AlleyCat.UI.Character
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        [Service]
+        [Service(true)]
         protected MorphListPanel MorphListPanel { get; private set; }
 
-        [Service(includeInherited: false)]
+        [Service(local: true)]
         protected InspectingView View { get; private set; }
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
@@ -40,7 +40,7 @@ namespace AlleyCat.UI.Character
         protected virtual void OnInitialize()
         {
             OnCharacterChange
-                .Do(character=> View.Pivot = character.OfType<ITransformable>().HeadOrNone())
+                .Do(character => View.Pivot = character.OfType<ITransformable>().HeadOrNone())
                 .Subscribe(MorphListPanel.Load)
                 .AddTo(this);
         }

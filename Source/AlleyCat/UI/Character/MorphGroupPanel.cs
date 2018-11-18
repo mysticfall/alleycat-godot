@@ -16,7 +16,7 @@ namespace AlleyCat.UI.Character
 
         public IEnumerable<IMorph> Morphs { get; private set; } = Seq<IMorph>();
 
-        [Node]
+        [Node(true)]
         protected Container MorphsPanel { get; private set; }
 
         [Export] private PackedScene _colorMorphPanelScene;

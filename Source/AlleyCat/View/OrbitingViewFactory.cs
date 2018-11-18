@@ -8,7 +8,7 @@ namespace AlleyCat.View
 {
     public abstract class OrbitingViewFactory<T> : OrbiterFactory<T> where T : OrbitingView
     {
-        [Node(false)]
+        [Node]
         public Option<Camera> Camera { get; set; }
 
         [Export] private NodePath _camera;

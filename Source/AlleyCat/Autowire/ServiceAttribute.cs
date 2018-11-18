@@ -2,11 +2,11 @@
 {
     public class ServiceAttribute : InjectAttribute
     {
-        public bool IncludeInherited { get; }
+        public bool Local { get; }
 
-        public ServiceAttribute(bool required = true, bool includeInherited = true) : base(required)
+        public ServiceAttribute(bool required = false, bool local = false) : base(required)
         {
-            IncludeInherited = includeInherited;
+            Local = local;
         }
     }
 }
