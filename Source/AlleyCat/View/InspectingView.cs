@@ -46,7 +46,7 @@ namespace AlleyCat.View
 
         protected Option<string> PanningModifier { get; }
 
-        private Option<InputBindings> _panInput;
+        private Option<IInputBindings> _panInput;
 
         private readonly Option<IObservable<bool>> _rotating;
 
@@ -55,9 +55,9 @@ namespace AlleyCat.View
         public InspectingView(
             ITransformable pivot,
             Camera camera,
-            Option<InputBindings> rotationInput,
-            Option<InputBindings> zoomInput,
-            Option<InputBindings> panInput,
+            Option<IInputBindings> rotationInput,
+            Option<IInputBindings> zoomInput,
+            Option<IInputBindings> panInput,
             Option<string> rotationModifier,
             Option<string> panningModifier,
             Range<float> yawRange,

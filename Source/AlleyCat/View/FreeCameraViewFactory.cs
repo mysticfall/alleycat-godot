@@ -30,13 +30,13 @@ namespace AlleyCat.View
         [Export] private NodePath _camera;
 
         [Node("Rotation", false)]
-        public Option<InputBindings> RotationInput { get; set; }
+        public Option<IInputBindings> RotationInput { get; set; }
 
         [Node("Movement", false)]
-        public Option<InputBindings> MovementInput { get; set; }
+        public Option<IInputBindings> MovementInput { get; set; }
 
         [Node("Toggle", false)]
-        public Option<InputBindings> ToggleInput { get; set; }
+        public Option<IInputBindings> ToggleInput { get; set; }
 
         public FreeCameraViewFactory()
         {

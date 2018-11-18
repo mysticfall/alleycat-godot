@@ -1,21 +1,17 @@
 using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Control.Generic;
+using AlleyCat.Event;
 using EnsureThat;
-using Godot;
-using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    public abstract class Input<T> : BaseNode, IInput<T>
+    public abstract class Input<T> : GameObject, IInput<T>
     {
-        public virtual string Key => Name;
+        public virtual string Key { get; }
 
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -24,30 +20,26 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
+        public IInputSource Source { get; }
+
         private readonly BehaviorSubject<bool> _active;
 
-        private Option<IObservable<T>> _observable;
-
-        protected Input()
+        protected Input(string key, IInputSource source, bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
-        }
+            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
+            Ensure.That(source, nameof(source)).IsNotNull();
 
-        public override void _Ready()
-        {
-            base._Ready();
+            Key = key;
+            Source = source;
 
-            _observable = Some(CreateObservable());
-
-            Debug.Assert(_observable.IsSome, "CreateObservable() != null");
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
         }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             Ensure.Any.IsNotNull(observer, nameof(observer));
 
-            return _observable.Match(o => o.Where(_ => Valid && Active).Subscribe(observer)
-                , () => throw new InvalidOperationException("The input has not been initialized yet."));
+            return CreateObservable().Where(_ => Valid && Active).Subscribe(observer);
         }
 
         protected abstract IObservable<T> CreateObservable();

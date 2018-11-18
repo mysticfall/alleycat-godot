@@ -123,9 +123,9 @@ namespace AlleyCat.View
 
         protected virtual IObservable<bool> DeactivateInput { get; }
 
-        private Option<InputBindings> _rotationInput;
+        private Option<IInputBindings> _rotationInput;
 
-        private Option<InputBindings> _deactivateInput;
+        private Option<IInputBindings> _deactivateInput;
 
         private float _transitionTime = 2f;
 
@@ -148,8 +148,8 @@ namespace AlleyCat.View
         public HeadMountedView(
             Camera camera,
             Option<IHumanoid> character,
-            Option<InputBindings> rotationInput,
-            Option<InputBindings> deactivateInput,
+            Option<IInputBindings> rotationInput,
+            Option<IInputBindings> deactivateInput,
             Range<float> yawRange,
             Range<float> pitchRange,
             ProcessMode processMode,

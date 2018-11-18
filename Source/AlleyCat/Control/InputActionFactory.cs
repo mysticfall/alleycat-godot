@@ -5,6 +5,7 @@ using LanguageExt;
 
 namespace AlleyCat.Control
 {
+    [AutowireContext]
     public abstract class InputActionFactory<T> : ActionFactory<T> where T : InputAction
     {
         [Node]

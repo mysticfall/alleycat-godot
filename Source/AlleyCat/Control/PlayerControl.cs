@@ -84,7 +84,7 @@ namespace AlleyCat.Control
             Option<IHumanoid> character,
             IEnumerable<IPerspectiveView> perspectives,
             IEnumerable<IAction> actions,
-            Option<InputBindings> movementInput,
+            Option<IInputBindings> movementInput,
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active = true)

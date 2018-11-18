@@ -1,9 +1,7 @@
 using System;
 using System.Reactive.Linq;
-using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
-using Godot;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -12,7 +10,7 @@ namespace AlleyCat.Control
     {
         public string Action
         {
-            get => _action.TrimToOption().Head();
+            get => _action;
             set
             {
                 Ensure.That(value, nameof(value)).IsNotNullOrWhiteSpace();
@@ -21,26 +19,31 @@ namespace AlleyCat.Control
             }
         }
 
-        public override bool Valid => base.Valid && !string.IsNullOrWhiteSpace(_action);
-
-        [Export]
         public bool UnhandledOnly { get; set; } = true;
 
-        [Export]
         public bool StopPropagation { get; set; } = true;
 
-        [Export] private string _action;
+        private string _action;
+
+        public ActionTriggerInput(
+            string key,
+            string action,
+            IInputSource source,
+            bool active = true) : base(key, source, active)
+        {
+            Action = action;
+        }
 
         protected override IObservable<bool> CreateObservable()
         {
-            var input = UnhandledOnly ? this.OnUnhandledInput() : this.OnInput();
+            var input = UnhandledOnly ? Source.OnUnhandledInput : Source.OnInput;
 
             return input
                 .Select(e => e.IsActionPressed(Action))
                 .Where(identity)
                 .Do(_ =>
                 {
-                    if (Active && StopPropagation) GetTree().SetInputAsHandled();
+                    if (Active && StopPropagation) Source.SetInputAsHandled();
                 });
         }
     }

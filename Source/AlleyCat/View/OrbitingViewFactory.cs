@@ -17,10 +17,10 @@ namespace AlleyCat.View
         [Export] private NodePath _camera;
 
         [Node("Rotation", false)]
-        public Option<InputBindings> RotationInput { get; set; }
+        public Option<IInputBindings> RotationInput { get; set; }
 
         [Node("Zoom", false)]
-        public Option<InputBindings> ZoomInput { get; set; }
+        public Option<IInputBindings> ZoomInput { get; set; }
 
         public override IEnumerable<Type> ProvidedTypes => Seq(typeof(IPerspectiveView), typeof(IOrbiter));
     }

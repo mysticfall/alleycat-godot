@@ -55,8 +55,8 @@ namespace AlleyCat.View
         public OrbitingCharacterView(
             Camera camera,
             Option<IHumanoid> character,
-            Option<InputBindings> rotationInput,
-            Option<InputBindings> zoomInput,
+            Option<IInputBindings> rotationInput,
+            Option<IInputBindings> zoomInput,
             Range<float> yawRange,
             Range<float> pitchRange,
             Range<float> distanceRange,

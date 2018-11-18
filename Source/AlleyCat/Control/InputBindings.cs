@@ -1,16 +1,15 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
-using Godot;
+using EnsureThat;
+using LanguageExt;
 
 namespace AlleyCat.Control
 {
-    public class InputBindings : IdentifiableDirectory<IInput>, IActivatable
+    public class InputBindings : GameObject, IInputBindings
     {
-        [Export]
         public bool Active
         {
             get => _active.Value;
@@ -19,18 +18,25 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
+        public Map<string, IInput> Inputs { get; }
+
         private readonly BehaviorSubject<bool> _active;
 
-        public InputBindings()
+        public InputBindings(IEnumerable<IInput> inputs, bool active = true)
         {
-            _active = new BehaviorSubject<bool>(true).AddTo(this);
+            Ensure.That(inputs, nameof(inputs)).IsNotNull();
+
+            Inputs = inputs.ToMap();
+
+            _active = new BehaviorSubject<bool>(active).AddTo(this);
         }
 
-        [PostConstruct]
-        protected virtual void OnInitialize()
+        protected override void PostConstruct()
         {
+            base.PostConstruct();
+
             OnActiveStateChange
-                .Subscribe(v => Values.ToList().ForEach(i => i.Active = v))
+                .Subscribe(v => Inputs.Values.Iter(i => i.Active = v))
                 .AddTo(this);
         }
     }

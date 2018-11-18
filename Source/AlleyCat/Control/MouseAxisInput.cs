@@ -2,16 +2,15 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Event;
+using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Control
 {
     public class MouseAxisInput : AxisInput
     {
-        [Export]
         public MouseAxis Axis { get; set; }
 
-        [Export(PropertyHint.ExpRange, "0, 1")]
         public float Maximum
         {
             get => _maximum;
@@ -20,18 +19,26 @@ namespace AlleyCat.Control
 
         private float _maximum = 0.1f;
 
-        private float _maximumValue;
+        private readonly float _maximumValue;
 
-        public override void _Ready()
+        public MouseAxisInput(
+            string key, 
+            MouseAxis axis,
+            Viewport viewport,
+            IInputSource source,
+            ITimeSource timeSource,
+            bool active = true) : base(key, source, timeSource, active)
         {
-            base._Ready();
+            Ensure.That(viewport, nameof(viewport)).IsNotNull();
 
-            _maximumValue = GetValue(GetViewport().Size) * Maximum;
+            Axis = axis;
+
+            _maximumValue = GetValue(viewport.Size) * Maximum;
         }
 
         protected override IObservable<float> CreateRawObservable()
         {
-            return this.OnInput()
+            return Source.OnInput
                 .Where(_ => _maximumValue > 0)
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)

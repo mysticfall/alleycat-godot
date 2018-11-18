@@ -4,11 +4,11 @@
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControlFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=5]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=6]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=7]
 [ext_resource path="res://Source/AlleyCat/View/HeadMountedViewFactory.cs" type="Script" id=8]
-[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInput.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInputFactory.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegateFactory.cs" type="Script" id=12]
@@ -79,7 +79,7 @@ script = ExtResource( 4 )
 Active = true
 MaxYaw = 180.0
 MinYaw = -180.0
-MaxPitch = 90.0
+MaxPitch = 89.0
 MinPitch = -89.0
 MinDistance = 0.25
 MaxDistance = 10.0
@@ -97,24 +97,24 @@ Active = true
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -125,15 +125,15 @@ Active = true
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom"]
 script = ExtResource( 7 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
 Polling = false
-_positiveAction = "zoom_in"
-_negativeAction = "zoom_out"
 
 [node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )
@@ -162,24 +162,24 @@ Active = true
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -190,9 +190,9 @@ Active = true
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate"]
 script = ExtResource( 9 )
 Active = true
+Action = "zoom_out"
 UnhandledOnly = false
 StopPropagation = true
-_action = "zoom_out"
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 10 )
@@ -214,24 +214,24 @@ Active = true
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -242,28 +242,28 @@ Active = true
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
 Polling = true
-_positiveAction = "move_right"
-_negativeAction = "move_left"
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
 Polling = true
-_positiveAction = "move_forward"
-_negativeAction = "move_back"
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
@@ -272,9 +272,9 @@ Active = true
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle"]
 script = ExtResource( 9 )
 Active = true
+Action = "free_camera"
 UnhandledOnly = true
 StopPropagation = true
-_action = "free_camera"
 
 [node name="Movement" type="Node" parent="Control/Player"]
 script = ExtResource( 5 )
@@ -283,28 +283,28 @@ Active = true
 [node name="X" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
+PositiveAction = "move_right"
+NegativeAction = "move_left"
 Polling = true
-_positiveAction = "move_right"
-_negativeAction = "move_left"
 
 [node name="Y" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
 Active = true
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+WindowSize = 5.0
+WindowShift = 1.0
+PositiveAction = "move_forward"
+NegativeAction = "move_back"
 Polling = true
-_positiveAction = "move_forward"
-_negativeAction = "move_back"
 
 [node name="Actions" type="Node" parent="Control/Player"]
 
@@ -318,9 +318,9 @@ DisplayName = "action.Interact"
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "interact"
 UnhandledOnly = true
 StopPropagation = true
-_action = "interact"
 
 [node name="Sit" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
@@ -333,9 +333,9 @@ Action = "Sit"
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "sit"
 UnhandledOnly = true
 StopPropagation = true
-_action = "sit"
 
 [node name="Kneel" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
@@ -348,9 +348,9 @@ Action = "Kneel"
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "kneel"
 UnhandledOnly = true
 StopPropagation = true
-_action = "kneel"
 
 [node name="Actions" type="Node" parent="Control"]
 
@@ -366,9 +366,9 @@ UI = NodePath("/root/AlleyCat/UI/Console")
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "ui_console"
 UnhandledOnly = false
 StopPropagation = true
-_action = "ui_console"
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
@@ -383,9 +383,9 @@ Parent = null
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "inventory"
 UnhandledOnly = true
 StopPropagation = true
-_action = "inventory"
 
 [node name="Show Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
@@ -400,9 +400,9 @@ Parent = null
 pause_mode = 2
 script = ExtResource( 9 )
 Active = true
+Action = "ui_cancel"
 UnhandledOnly = true
 StopPropagation = true
-_action = "ui_cancel"
 
 [node name="UI" type="Node" parent="."]
 

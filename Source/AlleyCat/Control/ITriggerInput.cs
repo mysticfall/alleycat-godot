@@ -11,12 +11,12 @@ namespace AlleyCat.Control
 
     public static class TriggerInputExtensions
     {
-        public static Option<ITriggerInput> FindTrigger(this InputBindings bindings, string key = "Value")
+        public static Option<ITriggerInput> FindTrigger(this IInputBindings bindings, string key = "Value")
         {
             Ensure.That(bindings, nameof(bindings)).IsNotNull();
             Ensure.That(key, nameof(key)).IsNotNull();
 
-            return bindings.TryGetValue(key).OfType<ITriggerInput>().HeadOrNone();
+            return bindings.Inputs.Find(key).OfType<ITriggerInput>().HeadOrNone();
         }
     }
 }

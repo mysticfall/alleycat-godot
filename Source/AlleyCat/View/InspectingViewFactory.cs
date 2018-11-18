@@ -19,7 +19,7 @@ namespace AlleyCat.View
         public string PanningModifier { get; set; } = "point2";
 
         [Node("Pan", false)]
-        public Option<InputBindings> PanInput { get; set; }
+        public Option<IInputBindings> PanInput { get; set; }
 
         public InspectingViewFactory()
         {

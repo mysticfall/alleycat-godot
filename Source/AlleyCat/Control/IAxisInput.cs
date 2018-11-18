@@ -25,22 +25,23 @@ namespace AlleyCat.Control
 
     public static class AxisInputExtensions
     {
-        public static Option<IAxisInput> FindAxis(this InputBindings bindings, string key = "Value")
+        public static Option<IAxisInput> FindAxis(this IInputBindings bindings, string key = "Value")
         {
             Ensure.That(bindings, nameof(bindings)).IsNotNull();
             Ensure.That(key, nameof(key)).IsNotNull();
 
-            return bindings.TryGetValue(key).OfType<IAxisInput>().HeadOrNone();
+            return bindings.Inputs.Find(key).OfType<IAxisInput>().HeadOrNone();
         }
 
         public static Option<IObservable<Vector2>> AsVector2Input(
-            this InputBindings bindings, string xKey = "X", string yKey = "Y")
+            this IInputBindings bindings, string xKey = "X", string yKey = "Y")
         {
             Ensure.That(bindings, nameof(bindings)).IsNotNull();
             Ensure.That(xKey, nameof(xKey)).IsNotNull();
             Ensure.That(yKey, nameof(yKey)).IsNotNull();
 
-            return from xAxis in FindAxis(bindings, xKey)
+            return
+                from xAxis in FindAxis(bindings, xKey)
                 from yAxis in FindAxis(bindings, yKey)
                 select xAxis.CombineLatest(yAxis, (x, y) => new Vector2(x, y));
         }

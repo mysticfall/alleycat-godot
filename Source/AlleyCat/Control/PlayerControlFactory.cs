@@ -33,7 +33,7 @@ namespace AlleyCat.Control
         public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
 
         [Node("Movement")]
-        public Option<InputBindings> MovementInput { get; set; }
+        public Option<IInputBindings> MovementInput { get; set; }
 
         [Export] private NodePath _characterPath;
 

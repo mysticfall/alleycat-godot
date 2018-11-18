@@ -1,26 +1,22 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using AlleyCat.Event;
+using EnsureThat;
 using Godot;
 using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
     public abstract class AxisInput : Input<float>, IAxisInput
     {
-        public virtual float Sensitivity
+        public float Sensitivity
         {
             get => _sensitivity;
             set => _sensitivity = Mathf.Clamp(value, 0, 1);
         }
 
-        public virtual Option<Curve> Curve
-        {
-            get => Optional(_curve);
-            set => _curve = value.ValueUnsafe();
-        }
+        public Option<Curve> Curve { get; set; }
 
         public virtual float DeadZone
         {
@@ -28,34 +24,40 @@ namespace AlleyCat.Control
             set => _deadZone = Mathf.Clamp(value, 0, 1);
         }
 
-        [Export]
-        public virtual bool Interpolate { get; set; } = false;
+        public bool Interpolate { get; set; }
 
-        public virtual float WindowSize
+        public float WindowSize
         {
             get => _windowSize;
-            set => _windowSize = Mathf.Min(value, 0);
+            set => _windowSize = Mathf.Max(value, 0);
         }
 
-        public virtual float WindowShift
+        public float WindowShift
         {
             get => _windowShift;
-            set => _windowShift = Mathf.Min(value, 0);
+            set => _windowShift = Mathf.Max(value, 0);
         }
 
-        [Export(PropertyHint.ExpRange, "0, 1, 0.5")]
+        protected ITimeSource TimeSource { get; }
+
         private float _sensitivity = 0.5f;
 
-        [Export] private Curve _curve;
-
-        [Export(PropertyHint.ExpRange, "0, 1")]
         private float _deadZone;
 
-        [Export(PropertyHint.ExpRange, "0, 1000, 5")]
         private float _windowSize = 5f;
 
-        [Export(PropertyHint.ExpRange, "0, 1000, 1")]
         private float _windowShift = 1f;
+
+        protected AxisInput(
+            string key,
+            IInputSource source,
+            ITimeSource timeSource,
+            bool active = true) : base(key, source, active)
+        {
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+
+            TimeSource = timeSource;
+        }
 
         protected override IObservable<float> CreateObservable()
         {
@@ -70,7 +72,7 @@ namespace AlleyCat.Control
                     .Buffer(
                         TimeSpan.FromMilliseconds(WindowSize),
                         TimeSpan.FromMilliseconds(WindowShift),
-                        Scheduler)
+                        TimeSource.Scheduler)
                     .Where(v => v.Any())
                     .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count);
             }

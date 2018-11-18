@@ -65,9 +65,9 @@ namespace AlleyCat.View
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private Option<InputBindings> _rotationInput;
+        private Option<IInputBindings> _rotationInput;
 
-        private Option<InputBindings> _movementInput;
+        private Option<IInputBindings> _movementInput;
 
         private float _maxDofDistance = 5f;
 
@@ -78,9 +78,9 @@ namespace AlleyCat.View
         public FreeCameraView(
             Camera camera,
             Option<IHumanoid> character,
-            Option<InputBindings> rotationInput,
-            Option<InputBindings> movementInput,
-            Option<InputBindings> toggleInput,
+            Option<IInputBindings> rotationInput,
+            Option<IInputBindings> movementInput,
+            Option<IInputBindings> toggleInput,
             Range<float> yawRange,
             Range<float> pitchRange,
             ITimeSource timeSource,

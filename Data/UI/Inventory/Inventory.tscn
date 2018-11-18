@@ -8,9 +8,9 @@
 [ext_resource path="res://Data/Fonts/Inspected Item Title.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Data/Fonts/Inspected Item Type.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Source/AlleyCat/View/InspectingViewFactory.cs" type="Script" id=8]
-[ext_resource path="res://Source/AlleyCat/Control/InputBindings.cs" type="Script" id=9]
-[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInput.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInput.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=10]
+[ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -311,11 +311,11 @@ Active = true
 script = ExtResource( 10 )
 Active = true
 Interpolate = true
-_sensitivity = 1.0
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+Sensitivity = 1.0
+Curve = null
+DeadZone = 0.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 0
 Maximum = 0.1
 
@@ -323,11 +323,11 @@ Maximum = 0.1
 script = ExtResource( 10 )
 Active = true
 Interpolate = true
-_sensitivity = 1.0
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+Sensitivity = 1.0
+Curve = null
+DeadZone = 0.0
+WindowSize = 5.0
+WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
@@ -339,12 +339,12 @@ Active = true
 script = ExtResource( 11 )
 Active = true
 Interpolate = true
-_sensitivity = 0.5
-_curve = null
-_deadZone = 0.0
-_windowSize = 5.0
-_windowShift = 1.0
+Sensitivity = 0.5
+Curve = null
+DeadZone = 0.0
+WindowSize = 5.0
+WindowShift = 1.0
 Polling = false
-_positiveAction = "zoom_in"
-_negativeAction = "zoom_out"
+PositiveAction = "zoom_in"
+NegativeAction = "zoom_out"
 

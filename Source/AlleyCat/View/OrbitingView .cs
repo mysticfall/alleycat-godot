@@ -23,14 +23,14 @@ namespace AlleyCat.View
 
         protected virtual IObservable<float> ZoomInput { get; }
 
-        private Option<InputBindings> _rotationInput;
+        private Option<IInputBindings> _rotationInput;
 
-        private Option<InputBindings> _zoomInput;
+        private Option<IInputBindings> _zoomInput;
 
         protected OrbitingView(
             Camera camera,
-            Option<InputBindings> rotationInput,
-            Option<InputBindings> zoomInput,
+            Option<IInputBindings> rotationInput,
+            Option<IInputBindings> zoomInput,
             Range<float> yawRange,
             Range<float> pitchRange,
             Range<float> distanceRange,
