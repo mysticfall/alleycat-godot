@@ -6,7 +6,7 @@ namespace AlleyCat.Setting
 {
     public class IniSettingsProvider : SettingsFileProvider
     {
-        [Export(PropertyHint.File, "INI")]
+        [Export(PropertyHint.File, "*.ini")]
         public override string File { get; set; }
 
         protected override void AddSettings(

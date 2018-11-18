@@ -5,7 +5,7 @@ namespace AlleyCat.Setting
 {
     public class JsonSettingsProvider : SettingsFileProvider
     {
-        [Export(PropertyHint.File, "JSON")]
+        [Export(PropertyHint.File, "*.json")]
         public override string File { get; set; }
 
         protected override void AddSettings(
