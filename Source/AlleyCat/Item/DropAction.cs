@@ -22,9 +22,9 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            var scene = holder.Spatial.GetCurrentScene();
+            var dropTo = holder.Spatial.GetCurrentScene().Map(s => s.ItemsRoot);
 
-            holder.Unequip(equipment, scene.ItemsRoot);
+            holder.Unequip(equipment, dropTo);
         }
 
         protected override bool AllowedFor(

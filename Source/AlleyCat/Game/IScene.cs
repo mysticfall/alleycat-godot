@@ -1,5 +1,7 @@
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.Game
 {
@@ -18,11 +20,11 @@ namespace AlleyCat.Game
 
     public static class SceneExtensions
     {
-        public static IScene GetCurrentScene(this Node node)
+        public static Option<IScene> GetCurrentScene(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return (IScene) node.GetTree().CurrentScene;
+            return node.GetTree().CurrentScene.OfType<IScene>();
         }
     }
 }

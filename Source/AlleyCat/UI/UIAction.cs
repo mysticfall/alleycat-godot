@@ -13,7 +13,7 @@ namespace AlleyCat.UI
 
         public bool Modal { get; }
 
-        public IScene Scene => _node.GetCurrentScene();
+        public Option<IScene> Scene => _node.GetCurrentScene();
 
         private readonly Node _node;
 

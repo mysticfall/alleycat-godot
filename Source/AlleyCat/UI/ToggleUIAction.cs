@@ -9,7 +9,7 @@ namespace AlleyCat.UI
 {
     public class ToggleUIAction : UIAction
     {
-        public Option<IHideableUI> UI => Scene.Root.FindComponent<IHideableUI>(_ui);
+        public Option<IHideableUI> UI => Scene.Bind(s => s.Root.FindComponent<IHideableUI>(_ui));
 
         public override bool Valid => base.Valid && UI.IsSome;
 

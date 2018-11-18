@@ -270,6 +270,7 @@
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />
     <Compile Include="Source\AlleyCat\Game\ISceneManager.cs" />
     <Compile Include="Source\AlleyCat\Game\Scene.cs" />
+    <Compile Include="Source\AlleyCat\Game\SceneFactory.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryContents.cs" />
     <Compile Include="Source\AlleyCat\IO\FileEnumerator.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryInfo.cs" />

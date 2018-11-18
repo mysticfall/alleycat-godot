@@ -60,8 +60,8 @@ size = Vector2( 12, 14 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Cave" instance=ExtResource( 1 )]
-_key = "Cave"
+[node name="Cave" index="0" instance=ExtResource( 1 )]
+Key = "Cave"
 
 [node name="GIProbe" type="GIProbe" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.93835, 8.22498, 1.25068 )

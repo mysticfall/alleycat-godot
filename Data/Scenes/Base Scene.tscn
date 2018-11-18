@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://Source/AlleyCat/Game/Scene.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControlFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
@@ -21,11 +21,10 @@
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
-_sections_unfolded = [ "Script" ]
-_key = null
-_charactersPath = NodePath("Entities/Characters")
-_itemsPath = NodePath("Entities/Items")
-_uiPath = NodePath("UI")
+Key = null
+CharactersPath = NodePath("Entities/Characters")
+ItemsPath = NodePath("Entities/Items")
+UIPath = NodePath("UI")
 
 [node name="Environment" type="Node" parent="."]
 

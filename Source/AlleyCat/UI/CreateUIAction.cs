@@ -34,7 +34,9 @@ namespace AlleyCat.UI
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            Parent.IfNone(() => Scene.UIRoot).AddChild(UI.Instance());
+            var parent = Parent | Scene.Map(s => s.UIRoot);
+
+            parent.Iter(p => p.AddChild(UI.Instance()));
         }
     }
 }
