@@ -31,25 +31,25 @@ namespace AlleyCat.View
         protected override Validation<string, InspectingView> CreateService(
             Range<float> yawRange, Range<float> pitchRange, Range<float> distanceRange)
         {
-            return Optional(Pivot).Bind(this.FindComponent<ITransformable>)
-                .ToValidation($"Unable to find pivot node: '{Pivot}'.")
-                .Map(pivot => new InspectingView(
-                    pivot,
-                    Camera.IfNone(() => GetViewport().GetCamera()),
-                    RotationInput,
-                    ZoomInput,
-                    PanInput,
-                    RotationModifier.TrimToOption(),
-                    PanningModifier.TrimToOption(),
-                    yawRange,
-                    pitchRange,
-                    distanceRange,
-                    InitialDistance,
-                    InitialOffset,
-                    ProcessMode,
-                    this,
-                    this,
-                    Active));
+            var pivot = Optional(Pivot).Bind(this.FindComponent<ITransformable>);
+
+            return new InspectingView(
+                pivot,
+                Camera.IfNone(() => GetViewport().GetCamera()),
+                RotationInput,
+                ZoomInput,
+                PanInput,
+                RotationModifier.TrimToOption(),
+                PanningModifier.TrimToOption(),
+                yawRange,
+                pitchRange,
+                distanceRange,
+                InitialDistance,
+                InitialOffset,
+                ProcessMode,
+                this,
+                this,
+                Active);
         }
     }
 }

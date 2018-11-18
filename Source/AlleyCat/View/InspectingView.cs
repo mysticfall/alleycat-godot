@@ -13,27 +13,49 @@ namespace AlleyCat.View
 {
     public class InspectingView : OrbitingView
     {
-        public ITransformable Pivot { get; }
+        public Option<ITransformable> Pivot
+        {
+            get => _pivot;
+            set
+            {
+                _pivot = value;
+
+                Reset();
+            }
+        }
 
         public override Vector3 Origin
         {
             get
             {
-                var center = Optional(Pivot)
+                var center = Pivot
                     .OfType<IBounded>()
                     .Map(b => b.Bounds)
                     .Map(b => (b.Position + b.End) / 2f)
                     .HeadOrNone();
 
-                return center.IfNone(() => Pivot.Spatial.GlobalTransform.origin);
+                var origin = Pivot.Map(p => p.Spatial.GlobalTransform.origin);
+
+                return (center | origin).IfNone(Vector3.Zero);
             }
         }
 
         public override Vector3 Up => Vector3.Up;
 
-        public override Vector3 Forward => new Plane(Vector3.Up, 0f).Project(Pivot.GetGlobalTransform().Backward());
+        public override Vector3 Forward
+        {
+            get
+            {
+                var backward = Pivot.Map(p => p.GetGlobalTransform().Backward());
+                var forward = backward.Map(new Plane(Vector3.Up, 0f).Project);
+
+                return forward.IfNone(Vector3.Forward);
+            }
+        }
 
         public IInputSource InputSource { get; }
+
+        public override bool Valid => base.Valid && Pivot.IsSome;
 
         protected override IObservable<Vector2> RotationInput =>
             _rotating.MatchObservable(
@@ -46,6 +68,8 @@ namespace AlleyCat.View
 
         protected Option<string> PanningModifier { get; }
 
+        private Option<ITransformable> _pivot;
+
         private Option<IInputBindings> _panInput;
 
         private readonly Option<IObservable<bool>> _rotating;
@@ -53,7 +77,7 @@ namespace AlleyCat.View
         private readonly Option<IObservable<bool>> _panning;
 
         public InspectingView(
-            ITransformable pivot,
+            Option<ITransformable> pivot,
             Camera camera,
             Option<IInputBindings> rotationInput,
             Option<IInputBindings> zoomInput,
@@ -81,7 +105,6 @@ namespace AlleyCat.View
             timeSource,
             active)
         {
-            Ensure.That(pivot, nameof(pivot)).IsNotNull();
             Ensure.That(inputSource, nameof(inputSource)).IsNotNull();
 
             Pivot = pivot;
@@ -141,12 +164,11 @@ namespace AlleyCat.View
         }
 
         private static float CalculateInitialDistance(
-            ITransformable pivot, Camera camera, float defaultValue)
+            Option<ITransformable> pivot, Camera camera, float defaultValue)
         {
-            Ensure.That(pivot, nameof(pivot)).IsNotNull();
             Ensure.That(camera, nameof(camera)).IsNotNull();
 
-            var bounds = Optional(pivot).OfType<IBounded>().Map(b => b.Bounds).HeadOrNone();
+            var bounds = pivot.OfType<IBounded>().Map(b => b.Bounds).HeadOrNone();
             var height = bounds.Map(b => b.GetLongestAxisSize()).Filter(h => h > 0);
             var distance = height.Map(h => h / 2f / Math.Tan(Mathf.Deg2Rad(camera.Fov / 2f)));
 
