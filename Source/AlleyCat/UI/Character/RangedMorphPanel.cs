@@ -5,19 +5,16 @@ using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.UI.Character
 {
     public class RangedMorphPanel : MorphPanel<float, RangedMorphDefinition>
     {
-        public Slider Slider => _slider.Head();
+        [Node] 
+        protected Slider Slider { get; private set; }
 
-        public SpinBox Spinner => _spinner.Head();
-
-        [Node] private Option<Slider> _slider;
-
-        [Node] private Option<SpinBox> _spinner;
+        [Node] 
+        protected SpinBox Spinner { get; private set; }
 
         [PostConstruct]
         protected virtual void OnInitialize()

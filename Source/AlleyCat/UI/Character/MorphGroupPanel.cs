@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Character.Morph.Generic;
@@ -13,9 +12,9 @@ namespace AlleyCat.UI.Character
 {
     public class MorphGroupPanel : ScrollContainer
     {
-        public IMorphGroup Group => _group.Head();
+        public IMorphGroup Group { get; private set; }
 
-        public IEnumerable<IMorph> Morphs { get; private set; } = Enumerable.Empty<IMorph>();
+        public IEnumerable<IMorph> Morphs { get; private set; } = Seq<IMorph>();
 
         [Node]
         protected Container MorphsPanel { get; private set; }
@@ -23,8 +22,6 @@ namespace AlleyCat.UI.Character
         [Export] private PackedScene _colorMorphPanelScene;
 
         [Export] private PackedScene _rangedMorphPanelScene;
-
-        private Option<IMorphGroup> _group;
 
         [PostConstruct]
         protected virtual void OnInitialize()
@@ -39,8 +36,7 @@ namespace AlleyCat.UI.Character
             Ensure.That(group, nameof(group)).IsNotNull();
             Ensure.That(morphSet, nameof(morphSet)).IsNotNull();
 
-            _group = Some(group);
-
+            Group = group;
             Morphs = morphSet.GetMorphs(group);
         }
 

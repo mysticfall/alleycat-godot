@@ -5,15 +5,13 @@ using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.UI.Character.Generic;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.UI.Character
 {
     public class ColorMorphPanel : MorphPanel<Color, ColorMorphDefinition>
     {
-        public ColorPickerButton Button => _button.Head();
-
-        [Node] private Option<ColorPickerButton> _button;
+        [Node]
+        protected ColorPickerButton Button { get; private set; }
 
         [PostConstruct]
         protected virtual void OnInitialize()

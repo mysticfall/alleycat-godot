@@ -1,4 +1,5 @@
 ﻿using AlleyCat.Autowire;
+using AlleyCat.Common;
 using EnsureThat;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,11 @@ namespace AlleyCat.Logging
             return Cache.GetOrCreate(categoryName, _ => new PrintLogger(categoryName));
         }
 
-        public override void _ExitTree() => Cache.Dispose();
+        protected override void PreDestroy()
+        {
+            Cache.DisposeQuietly();
+
+            base.PreDestroy();
+        }
     }
 }

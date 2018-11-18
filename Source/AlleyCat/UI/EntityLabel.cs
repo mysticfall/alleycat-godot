@@ -3,47 +3,35 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using Godot;
-using LanguageExt;
 
 namespace AlleyCat.UI
 {
     public class EntityLabel : Panel
     {
-        public string InteractAction => _interactAction.TrimToOption().Head();
+        [Export]
+        public string InteractAction { get; set; } = "interact";
 
-        public string DefaultKeyLabel => _defaultKeyLabel.TrimToOption().Head();
+        [Export]
+        public string DefaultKeyLabel { get; set; } = "?";
 
-        protected Label Title => _title.Head();
+        [Node("Container/Title")]
+        protected Label Title { get; private set; }
 
-        protected Container ActionPanel => _actionPanel.Head();
+        [Node("Container/Action")]
+        protected Container ActionPanel { get; private set; }
 
-        protected Label Shortcut => _shortcut.Head();
-
-        protected Label ActionTitle => _actionTitle.Head();
-
-        protected Option<IHumanoid> Player => _playerControl.Bind(p => p.Character);
-
-        protected IPlayerControl PlayerControl => _playerControl.Head();
-
-        [Export] private string _interactAction = "interact";
-
-        [Export] private string _defaultKeyLabel = "?";
-
-        [Node("Container/Title")] private Option<Label> _title;
-
-        [Node("Container/Action")] private Option<Container> _actionPanel;
-
-        [Node("Container/Action/Shortcut")] private Option<Label> _shortcut;
+        [Node("Container/Action/Shortcut")]
+        protected Label Shortcut { get; private set; }
 
         [Node("Container/Action/Action Title")]
-        private Option<Label> _actionTitle;
+        protected Label ActionTitle { get; private set; }
 
-        [Service] private Option<IPlayerControl> _playerControl;
+        [Service]
+        protected IPlayerControl PlayerControl { get; private set; }
 
         public override void _Ready()
         {
@@ -64,9 +52,9 @@ namespace AlleyCat.UI
 
             var action = ticks
                 .CombineLatest(entity, (_, e) => e)
-                .Select(target => Player
-                    .SelectMany(p => p.FindAction(new InteractionContext(p, target), a => a is Interaction))
-                    .Select(a => a.DisplayName)
+                .Select(target => PlayerControl.Character
+                    .Bind(p => p.FindAction(new InteractionContext(p, target), a => a is Interaction))
+                    .Map(a => a.DisplayName)
                     .HeadOrNone());
 
             var showAction = action.Select(a => a.IsSome);

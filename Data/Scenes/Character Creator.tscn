@@ -12,7 +12,6 @@
 [node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
-_viewport = NodePath("UI/Content Panel")
 
 [node name="Control" type="Node" parent="."]
 
@@ -29,7 +28,7 @@ InitialDistance = 1.5
 InitialOffset = Vector3( 0, 0, 0 )
 ProcessMode = 2
 _camera = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
-Pivot = NodePath("../../UI/Content Panel/Viewport/Character/Character")
+Pivot = NodePath("")
 RotationModifier = "point"
 PanningModifier = "point2"
 
@@ -40,10 +39,10 @@ Active = true
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
 Active = true
-Interpolate = true
 Sensitivity = 0.5
 Curve = null
 DeadZone = 0.0
+Interpolate = true
 WindowSize = 5.0
 WindowShift = 1.0
 Axis = 0
@@ -52,10 +51,10 @@ Maximum = 0.1
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
 Active = true
-Interpolate = true
 Sensitivity = 0.0
 Curve = null
 DeadZone = 0.0
+Interpolate = true
 WindowSize = 5.0
 WindowShift = 1.0
 Axis = 1
@@ -68,10 +67,10 @@ Active = true
 [node name="X" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
 Active = true
-Interpolate = true
 Sensitivity = 0.0
 Curve = null
 DeadZone = 0.0
+Interpolate = true
 WindowSize = 5.0
 WindowShift = 1.0
 Axis = 0
@@ -80,10 +79,10 @@ Maximum = 0.1
 [node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
 Active = true
-Interpolate = true
 Sensitivity = 0.5
 Curve = null
 DeadZone = 0.0
+Interpolate = true
 WindowSize = 5.0
 WindowShift = 1.0
 Axis = 1
@@ -96,15 +95,15 @@ Active = true
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 5 )
 Active = true
-Interpolate = true
 Sensitivity = 0.5
 Curve = null
 DeadZone = 0.0
+Interpolate = true
 WindowSize = 5.0
 WindowShift = 1.0
-Polling = false
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
+Polling = false
 
 [node name="UI" type="Node" parent="."]
 

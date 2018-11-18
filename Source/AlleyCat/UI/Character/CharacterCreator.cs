@@ -1,57 +1,47 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
-using AlleyCat.Character.Morph;
+using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.View;
-using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     [AutowireContext]
-    public class CharacterCreator : AutowiredNode
+    public class CharacterCreator : AutowiredNode, ICharacterAware<IHumanoid>
     {
-        [Service]
-        public Option<IMorphable> Character
+        [Service(false)]
+        public Option<IHumanoid> Character
         {
             get => _character.Value;
             set => _character.OnNext(value);
         }
 
-        public IObservable<Option<IMorphable>> OnCharacterChange => _character.AsObservable();
+        public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        protected MorphListPanel MorphListPanel => _morphListPanel.Head();
+        [Service]
+        protected MorphListPanel MorphListPanel { get; private set; }
 
-        protected InspectingView View => _view.Head();
+        [Service(includeInherited: false)]
+        protected InspectingView View { get; private set; }
 
-        protected Viewport Viewport => _viewportNode.Head();
-
-        [Service] private Option<MorphListPanel> _morphListPanel;
-
-        [Node("Control/View")] private Option<InspectingView> _view;
-
-        [Export, UsedImplicitly] private NodePath _viewport = "UI/Content Panel/Viewport";
-
-        private readonly BehaviorSubject<Option<IMorphable>> _character;
-
-        private Option<Viewport> _viewportNode;
+        private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
         public CharacterCreator()
         {
-            _character = new BehaviorSubject<Option<IMorphable>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
         }
 
         [PostConstruct]
         protected virtual void OnInitialize()
         {
-            _viewportNode = Optional(_viewport).Bind(this.FindComponent<Viewport>);
-
             OnCharacterChange
-                .Subscribe(_ => View.Reset())
+                .Do(character=> View.Pivot = character.OfType<ITransformable>().HeadOrNone())
+                .Subscribe(MorphListPanel.Load)
                 .AddTo(this);
         }
     }

@@ -1,8 +1,8 @@
-﻿using AlleyCat.Autowire;
+﻿using System.Diagnostics;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.UI.Console;
 using EnsureThat;
-using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -11,11 +11,10 @@ namespace AlleyCat.Logging
     [Singleton(typeof(ILoggerProvider))]
     public class ConsoleLoggerProvider : AutowiredNode, ILoggerProvider
     {
-        public DebugConsole Console => (DebugConsole) _console;
+        [Service]
+        public DebugConsole Console { get; private set; }
 
         protected IMemoryCache Cache { get; }
-
-        [Service] private Option<DebugConsole> _console;
 
         public ConsoleLoggerProvider() : this(new MemoryCache(new MemoryCacheOptions()))
         {
@@ -32,9 +31,16 @@ namespace AlleyCat.Logging
         {
             Ensure.That(categoryName, nameof(categoryName)).IsNotNull();
 
+            Debug.Assert(Console != null, "Console != null");
+
             return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName, Console));
         }
 
-        public override void _ExitTree() => Cache.DisposeQuietly();
+        protected override void PreDestroy()
+        {
+            Cache.DisposeQuietly();
+
+            base.PreDestroy();
+        }
     }
 }

@@ -39,24 +39,20 @@ namespace AlleyCat.UI.Console
 
         public Color ErrorColor => GetColor("error", ThemeType);
 
-        public IEnumerable<IConsoleCommand> SupportedCommands => _commandMap.Values;
+        public IEnumerable<IConsoleCommand> SupportedCommands => _commands.Values;
 
-        protected RichTextLabel Content => _content.Head();
+        [Node("AnimationPlayer")]
+        protected AnimationPlayer Player { get; private set; }
 
-        protected LineEdit InputField => _inputField.Head();
+        [Node("Container/Content")]
+        protected RichTextLabel Content { get; private set; }
 
-        protected AnimationPlayer Player => _player.Head();
+        [Node("Container/InputPane/Input")]
+        protected LineEdit InputField { get; private set; }
 
-        [Service] private IEnumerable<IConsoleCommandProvider> _providers =
-            Enumerable.Empty<IConsoleCommandProvider>();
+        [Service] private IEnumerable<IConsoleCommandProvider> _providers = Seq<IConsoleCommandProvider>();
 
-        [Node("Container/Content")] private Option<RichTextLabel> _content;
-
-        [Node("Container/InputPane/Input")] private Option<LineEdit> _inputField;
-
-        [Node("AnimationPlayer")] private Option<AnimationPlayer> _player;
-
-        private Map<string, IConsoleCommand> _commandMap = Map<string, IConsoleCommand>();
+        private Map<string, IConsoleCommand> _commands = Map<string, IConsoleCommand>();
 
         private int _bufferSize = 300;
 
@@ -70,9 +66,7 @@ namespace AlleyCat.UI.Console
             SetProcess(false);
             SetPhysicsProcess(false);
 
-            var commands = _providers.SelectMany(p => p.CreateCommands(this));
-
-            _commandMap = toMap(commands.Map(c => (c.Key, c)));
+            _commands = _providers.Bind(p => p.CreateCommands(this)).ToMap();
 
             InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
@@ -158,7 +152,7 @@ namespace AlleyCat.UI.Console
         {
             Ensure.That(command, nameof(command)).IsNotNull();
 
-            _commandMap.Find(command).Match(
+            _commands.Find(command).Match(
                 action => action.Execute(arguments),
                 () =>
                 {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.IO;
 using EnsureThat;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Setting
 {
@@ -14,9 +14,8 @@ namespace AlleyCat.Setting
     {
         public IEnumerable<Type> ProvidedTypes => new[] {typeof(IConfiguration)};
 
-        protected IEnumerable<ISettingsProvider> Providers => _providers ?? Enumerable.Empty<ISettingsProvider>();
-
-        [Service(false)] private IEnumerable<ISettingsProvider> _providers;
+        [Service(false)]
+        protected IEnumerable<ISettingsProvider> Providers { get; private set; } = Seq<ISettingsProvider>(); 
 
         public void AddServices(IServiceCollection collection)
         {

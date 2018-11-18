@@ -32,44 +32,31 @@ namespace AlleyCat.UI.Inventory
         public IObservable<Option<Equipment>> OnItemChange =>
             _item.MatchObservable(identity, Observable.Empty<Option<Equipment>>);
 
-        protected InspectingView ViewControl => _viewControl.Head();
+        [Node("Control/View")] 
+        protected InspectingView ViewControl { get; private set; }
 
-        protected Tree Tree => _tree.Head();
-
-        protected Container Buttons => _buttons.Head();
-
-        protected MeshInstance ItemStand => _itemStand.Head();
-
-        protected Panel InfoPanel => _infoPanel.Head();
-
-        protected Label Title => _title.Head();
-
-        protected Label Type => _type.Head();
-
-        protected RichTextLabel Description => _description.Head();
-
-        [Export] private PackedScene _actionButton;
-
-        [Node("Control/View")] private Option<InspectingView> _viewControl;
-
-        [Node("List Panel/Layout/Tree")] private Option<Tree> _tree;
+        [Node("List Panel/Layout/Tree")]
+        protected Tree Tree { get; private set; }
 
         [Node("List Panel/Layout/Buttons Panel")]
-        private Option<Container> _buttons;
+        protected Container Buttons { get; private set; }
 
         [Node("Content Panel/Viewport/Item Box/Item")]
-        private Option<MeshInstance> _itemStand;
+        protected MeshInstance ItemStand { get; private set; }
 
-        [Node("Content Panel/Info Panel")] private Option<Panel> _infoPanel;
+        [Node("Content Panel/Info Panel")]
+        protected Panel InfoPanel { get; private set; }
 
         [Node("Content Panel/Info Panel/Title")]
-        private Option<Label> _title;
+        protected Label Title { get; private set; }
 
         [Node("Content Panel/Info Panel/Type")]
-        private Option<Label> _type;
+        protected Label Type { get; private set; }
 
         [Node("Content Panel/Info Panel/Description")]
-        private Option<RichTextLabel> _description;
+        protected RichTextLabel Description { get; private set; }
+
+        [Export] private PackedScene _actionButton;
 
         private const string SlotKey = "Slot";
 
