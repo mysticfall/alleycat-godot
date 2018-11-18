@@ -59,7 +59,7 @@ namespace AlleyCat.Setting.Project
             Ensure.That(earlierKeys, nameof(earlierKeys)).IsNotNull();
             Ensure.That(parentPath, nameof(parentPath)).IsNotNull();
 
-            return Keys.Where(k => k.StartsWith(parentPath));
+            return earlierKeys.Concat(Keys.Where(k => k.StartsWith(parentPath)));
         }
 
         private static string NormalizeKey(string key)
