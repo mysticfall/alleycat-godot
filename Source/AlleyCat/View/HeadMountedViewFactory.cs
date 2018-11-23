@@ -50,10 +50,10 @@ namespace AlleyCat.View
         [Export(PropertyHint.ExpRange, "10,1000")]
         public float FocusSpeed { get; set; } = 100f;
 
-        [Node("Rotation", false)]
+        [Node("Rotation")]
         public Option<IInputBindings> RotationInput { get; set; }
 
-        [Node("Deactivate", false)]
+        [Node("Deactivate")]
         public Option<IInputBindings> DeactivateInput { get; set; }
 
         [Export] private NodePath _camera;

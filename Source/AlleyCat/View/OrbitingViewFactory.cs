@@ -13,10 +13,10 @@ namespace AlleyCat.View
 
         [Export] private NodePath _camera;
 
-        [Node("Rotation", false)]
+        [Node("Rotation")]
         public Option<IInputBindings> RotationInput { get; set; }
 
-        [Node("Zoom", false)]
+        [Node("Zoom")]
         public Option<IInputBindings> ZoomInput { get; set; }
     }
 }
