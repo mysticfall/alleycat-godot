@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
+    [ProviderAlias("Console")]
     public class ConsoleLogger : ILogger
     {
         public string Name { get; }

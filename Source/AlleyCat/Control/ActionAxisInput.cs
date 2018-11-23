@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -48,7 +49,8 @@ namespace AlleyCat.Control
             string negativeAction,
             IInputSource source,
             ITimeSource timeSource,
-            bool active = true) : base(key, source, timeSource, active)
+            bool active,
+            ILogger logger) : base(key, source, timeSource, active, logger)
         {
             PositiveAction = positiveAction;
             NegativeAction = negativeAction;

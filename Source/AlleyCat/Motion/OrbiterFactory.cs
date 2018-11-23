@@ -2,6 +2,7 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -22,10 +23,18 @@ namespace AlleyCat.Motion
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
-        protected override Validation<string, T> CreateService(Range<float> yawRange, Range<float> pitchRange) =>
-            CreateService(yawRange, pitchRange, new Range<float>(MinDistance, MaxDistance));
+        protected override Validation<string, T> CreateService(
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            ILogger logger)
+        {
+            return CreateService(yawRange, pitchRange, new Range<float>(MinDistance, MaxDistance), logger);
+        }
 
         protected abstract Validation<string, T> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, Range<float> distanceRange);
+            Range<float> yawRange, 
+            Range<float> pitchRange, 
+            Range<float> distanceRange, 
+            ILogger logger);
     }
 }

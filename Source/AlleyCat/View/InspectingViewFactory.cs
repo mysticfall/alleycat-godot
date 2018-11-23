@@ -1,8 +1,10 @@
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Control;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
@@ -29,8 +31,10 @@ namespace AlleyCat.View
         }
 
         protected override Validation<string, InspectingView> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, Range<float> distanceRange)
+            Range<float> yawRange, Range<float> pitchRange, Range<float> distanceRange, ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             var pivot = Optional(Pivot).Bind(this.FindComponent<ITransformable>);
 
             return new InspectingView(
@@ -49,7 +53,8 @@ namespace AlleyCat.View
                 ProcessMode,
                 this,
                 this,
-                Active);
+                Active,
+                logger);
         }
     }
 }

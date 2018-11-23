@@ -1,17 +1,19 @@
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
     public class AttachedConfiguration : EquipmentConfiguration
     {
         public AttachedConfiguration(
-            string key, 
-            string slot, 
-            Set<string> additionalSlots, 
+            string key,
+            string slot,
+            Set<string> additionalSlots,
             Set<string> tags,
-            bool active = false) : base(key, slot, additionalSlots, tags, active)
+            bool active,
+            ILogger logger) : base(key, slot, additionalSlots, tags, active, logger)
         {
         }
 

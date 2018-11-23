@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -58,7 +59,7 @@ namespace AlleyCat.Motion
 
         private readonly BehaviorSubject<Vector2> _rotation;
 
-        protected TurretLike(Range<float> yawRange, Range<float> pitchRange, bool active = true)
+        protected TurretLike(Range<float> yawRange, Range<float> pitchRange, bool active, ILogger logger) : base(logger)
         {
             YawRange = yawRange;
             PitchRange = pitchRange;

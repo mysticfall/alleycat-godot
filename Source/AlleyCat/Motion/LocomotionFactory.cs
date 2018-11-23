@@ -1,7 +1,9 @@
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -17,9 +19,15 @@ namespace AlleyCat.Motion
 
         [Export] private NodePath _targetPath;
 
-        protected override Validation<string, TLocomotion> CreateService() =>
-            Target.ToValidation("Missing locomotion target.").Bind(CreateService);
+        protected override Validation<string, TLocomotion> CreateService(ILogger logger)
+        {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
-        protected abstract Validation<string, TLocomotion> CreateService(TTarget target);
+            return Target
+                .ToValidation("Missing locomotion target.")
+                .Bind(target => CreateService(target, logger));
+        }
+
+        protected abstract Validation<string, TLocomotion> CreateService(TTarget target, ILogger logger);
     }
 }

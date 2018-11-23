@@ -2,6 +2,7 @@
 using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -18,10 +19,11 @@ namespace AlleyCat.Motion
         protected float FallDuration { get; private set; }
 
         protected KinematicLocomotion(
-            KinematicBody target, 
+            KinematicBody target,
             Physics3DSettings physicsSettings,
-            ITimeSource timeSource, 
-            bool active = true) : base(target, timeSource, active)
+            ITimeSource timeSource,
+            bool active,
+            ILogger logger) : base(target, timeSource, active, logger)
         {
             Ensure.That(physicsSettings, nameof(physicsSettings)).IsNotNull();
 

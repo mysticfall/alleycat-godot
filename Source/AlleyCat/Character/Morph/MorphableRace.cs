@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AlleyCat.Item;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -9,10 +10,11 @@ namespace AlleyCat.Character.Morph
         public Map<Sex, IEnumerable<IMorphGroup>> MorphGroups { get; }
 
         public MorphableRace(
-            string key, 
-            string displayName, 
+            string key,
+            string displayName,
             IEnumerable<EquipmentSlot> equipmentSlots,
-            Map<Sex, IEnumerable<IMorphGroup>> morphGroups) : base(key, displayName, equipmentSlots)
+            Map<Sex, IEnumerable<IMorphGroup>> morphGroups,
+            ILogger logger) : base(key, displayName, equipmentSlots, logger)
         {
             MorphGroups = morphGroups;
         }

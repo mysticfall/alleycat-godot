@@ -4,6 +4,7 @@ using AlleyCat.Character;
 using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -14,7 +15,8 @@ namespace AlleyCat.Control
             string displayName,
             Option<IPlayerControl> playerControl,
             ITriggerInput input,
-            bool active = true) : base(key, displayName, playerControl, input, active)
+            bool active,
+            ILogger logger) : base(key, displayName, playerControl, input, active, logger)
         {
         }
 

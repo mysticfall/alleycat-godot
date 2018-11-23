@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
@@ -9,7 +10,7 @@ namespace AlleyCat.Character
     {
         public Map<string, Race> Races { get; }
 
-        public RaceRegistry(IEnumerable<Race> races)
+        public RaceRegistry(IEnumerable<Race> races, ILogger logger) : base(logger)
         {
             Ensure.That(races, nameof(races)).IsNotNull();
 

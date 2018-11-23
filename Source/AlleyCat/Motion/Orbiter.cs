@@ -5,6 +5,7 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -69,7 +70,8 @@ namespace AlleyCat.Motion
             Vector3 initialOffset,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true) : base(yawRange, pitchRange, active)
+            bool active,
+            ILogger logger) : base(yawRange, pitchRange, active, logger)
         {
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 

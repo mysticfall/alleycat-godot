@@ -1,5 +1,6 @@
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -12,7 +13,7 @@ namespace AlleyCat.Control
         [Export(PropertyHint.ExpRange, "0, 1")]
         public float Maximum { get; set; }
 
-        protected override Validation<string, MouseAxisInput> CreateService()
+        protected override Validation<string, MouseAxisInput> CreateService(ILogger logger)
         {
             return new MouseAxisInput(
                 GetName(),
@@ -20,7 +21,8 @@ namespace AlleyCat.Control
                 GetViewport(),
                 this,
                 this,
-                Active)
+                Active,
+                logger)
             {
                 Maximum = Maximum,
                 Sensitivity = Sensitivity,

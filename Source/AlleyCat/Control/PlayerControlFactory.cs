@@ -7,6 +7,7 @@ using AlleyCat.Event;
 using AlleyCat.View;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -39,7 +40,7 @@ namespace AlleyCat.Control
 
         [Export] private NodePath _cameraPath;
 
-        protected override Validation<string, PlayerControl> CreateService()
+        protected override Validation<string, PlayerControl> CreateService(ILogger logger)
         {
             return new PlayerControl(
                 Camera.IfNone(() => GetViewport().GetCamera()),
@@ -49,7 +50,8 @@ namespace AlleyCat.Control
                 MovementInput,
                 ProcessMode,
                 this,
-                Active);
+                Active,
+                logger);
         }
     }
 }

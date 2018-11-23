@@ -7,6 +7,7 @@ using AlleyCat.Motion;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
@@ -38,8 +39,17 @@ namespace AlleyCat.View
             Vector3 initialOffset,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true) : base(
-            yawRange, pitchRange, distanceRange, initialDistance, initialOffset, processMode, timeSource, active)
+            bool active,
+            ILogger logger) : base(
+            yawRange, 
+            pitchRange, 
+            distanceRange, 
+            initialDistance, 
+            initialOffset, 
+            processMode, 
+            timeSource, 
+            active,
+            logger)
         {
             Ensure.That(camera, nameof(camera)).IsNotNull();
 

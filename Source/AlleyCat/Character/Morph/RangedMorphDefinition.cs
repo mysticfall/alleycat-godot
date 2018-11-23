@@ -1,4 +1,5 @@
 using AlleyCat.Common;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -7,10 +8,11 @@ namespace AlleyCat.Character.Morph
         public Range<float> Range { get; }
 
         protected RangedMorphDefinition(
-            string key, 
-            string displayName, 
+            string key,
+            string displayName,
             Range<float> range,
-            float defaultValue) : base(key, displayName, defaultValue)
+            float defaultValue,
+            ILogger logger) : base(key, displayName, defaultValue, logger)
         {
             Range = range;
         }

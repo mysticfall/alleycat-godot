@@ -5,6 +5,7 @@ using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
@@ -21,14 +22,14 @@ namespace AlleyCat.Animation
         [Service]
         public Option<AnimationPlayer> Player { get; set; }
 
-        protected override Validation<string, T> CreateService()
+        protected override Validation<string, T> CreateService(ILogger logger)
         {
             return Player
                 .ToValidation("Missing the animation player.")
-                .Bind(CreateService);
+                .Bind(player => CreateService(player, logger));
         }
 
-        protected abstract Validation<string, T> CreateService(AnimationPlayer player);
+        protected abstract Validation<string, T> CreateService(AnimationPlayer player, ILogger logger);
 
         [UsedImplicitly]
         private void FireEvent(string name) => FireEvent(name, null);

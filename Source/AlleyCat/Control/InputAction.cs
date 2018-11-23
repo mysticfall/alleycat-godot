@@ -4,6 +4,7 @@ using AlleyCat.Action;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -17,7 +18,8 @@ namespace AlleyCat.Control
             string key,
             string displayName,
             ITriggerInput input,
-            bool active = true) : base(key, displayName, active)
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
             Ensure.That(input, nameof(input)).IsNotNull();
 

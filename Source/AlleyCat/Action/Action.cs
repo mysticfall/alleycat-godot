@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
 {
@@ -22,7 +23,7 @@ namespace AlleyCat.Action
 
         private readonly BehaviorSubject<bool> _active;
 
-        protected Action(string key, string displayName, bool active = true)
+        protected Action(string key, string displayName, bool active, ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

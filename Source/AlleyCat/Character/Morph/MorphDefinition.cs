@@ -1,5 +1,6 @@
 using AlleyCat.Common;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -14,7 +15,8 @@ namespace AlleyCat.Character.Morph
         protected MorphDefinition(
             string key,
             string displayName,
-            T defaultValue)
+            T defaultValue,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

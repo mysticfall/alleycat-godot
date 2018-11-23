@@ -1,6 +1,7 @@
 using AlleyCat.Action;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -14,7 +15,8 @@ namespace AlleyCat.Control
             string action,
             Option<IPlayerControl> playerControl,
             ITriggerInput input,
-            bool active = true) : base(key, displayName, playerControl, input, active)
+            bool active,
+            ILogger logger) : base(key, displayName, playerControl, input, active, logger)
         {
             Ensure.That(action, nameof(action)).IsNotNull();
 

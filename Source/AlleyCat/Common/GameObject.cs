@@ -1,11 +1,14 @@
 using System;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Common
 {
     public abstract class GameObject : IValidatable, IInitializable, IDisposableCollector, IDisposable
     {
+        protected ILogger Logger { get; }
+
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
         public virtual bool Valid => _initialized && !_disposed;
@@ -13,6 +16,13 @@ namespace AlleyCat.Common
         private bool _initialized;
 
         private bool _disposed;
+
+        protected GameObject(ILogger logger)
+        {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
+            Logger = logger;
+        }
 
         public void Collect(IDisposable disposable)
         {

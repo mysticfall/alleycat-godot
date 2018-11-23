@@ -3,6 +3,7 @@ using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using static LanguageExt.Prelude;
 
@@ -17,16 +18,19 @@ namespace AlleyCat.Motion
         [Service]
         public Option<IOptions<Physics3DSettings>> PhysicsSettings { get; set; }
 
-        protected override Validation<string, TLocomotion> CreateService(KinematicBody target)
+        protected override Validation<string, TLocomotion> CreateService(KinematicBody target, ILogger logger)
         {
             Ensure.That(target, nameof(target)).IsNotNull();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return PhysicsSettings.Bind(v => Optional(v.Value))
                 .ToValidation("Failed to read physics 3D settings.")
-                .Bind(settings => CreateService(target, settings));
+                .Bind(settings => CreateService(target, settings, logger));
         }
 
-        protected abstract Validation<string, TLocomotion> CreateService(KinematicBody target,
-            Physics3DSettings physicsSettings);
+        protected abstract Validation<string, TLocomotion> CreateService(
+            KinematicBody target,
+            Physics3DSettings physicsSettings,
+            ILogger logger);
     }
 }

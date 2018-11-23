@@ -5,6 +5,7 @@ using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -29,10 +30,11 @@ namespace AlleyCat.Motion
         public string Blend2DPath { get; set; } = "States/Moving";
 
         protected override Validation<string, AnimationDrivenLocomotion> CreateService(
-            KinematicBody target, Physics3DSettings physicsSettings)
+            KinematicBody target, Physics3DSettings physicsSettings, ILogger logger)
         {
             Ensure.That(target, nameof(target)).IsNotNull();
             Ensure.That(physicsSettings, nameof(physicsSettings)).IsNotNull();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return
                 from manager in AnimationManager
@@ -57,7 +59,8 @@ namespace AlleyCat.Motion
                     target,
                     physicsSettings,
                     this,
-                    Active);
+                    Active,
+                    logger);
         }
     }
 }

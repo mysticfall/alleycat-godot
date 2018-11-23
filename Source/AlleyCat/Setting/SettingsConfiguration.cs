@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AlleyCat.Autowire;
 using AlleyCat.IO;
 using EnsureThat;
+using Godot;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using static LanguageExt.Prelude;
@@ -43,6 +44,12 @@ namespace AlleyCat.Setting
 
         protected virtual void OnError(FileLoadExceptionContext context)
         {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            if (context.Exception == null || context.Ignore) return;
+
+            GD.Print("Failed to load configuration file: " + context.Exception);
+            GD.Print(context.Exception.StackTrace);
         }
     }
 }

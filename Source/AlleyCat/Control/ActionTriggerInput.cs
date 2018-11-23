@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -29,7 +30,8 @@ namespace AlleyCat.Control
             string key,
             string action,
             IInputSource source,
-            bool active = true) : base(key, source, active)
+            bool active,
+            ILogger logger) : base(key, source, active, logger)
         {
             Action = action;
         }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
@@ -19,12 +21,14 @@ namespace AlleyCat.Character.Morph
         [Service]
         public IEnumerable<IMorphDefinition> Definitions { get; set; } = Seq<IMorphDefinition>();
 
-        protected override Validation<string, MorphGroup> CreateService()
+        protected override Validation<string, MorphGroup> CreateService(ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return new MorphGroup(key, displayName, Definitions);
+            return new MorphGroup(key, displayName, Definitions, logger);
         }
     }
 }

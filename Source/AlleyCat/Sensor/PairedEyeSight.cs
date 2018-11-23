@@ -4,6 +4,7 @@ using AlleyCat.Common;
 using AlleyCat.Motion;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Sensor
 {
@@ -63,7 +64,8 @@ namespace AlleyCat.Sensor
             int leftEyeBone,
             Range<float> yawRange,
             Range<float> pitchRange,
-            bool active = true) : base(yawRange, pitchRange, active)
+            bool active,
+            ILogger logger) : base(yawRange, pitchRange, active, logger)
         {
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(animationManager, nameof(animationManager)).IsNotNull();

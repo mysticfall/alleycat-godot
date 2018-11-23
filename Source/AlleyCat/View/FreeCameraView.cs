@@ -11,6 +11,7 @@ using AlleyCat.Physics;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
@@ -84,7 +85,8 @@ namespace AlleyCat.View
             Range<float> yawRange,
             Range<float> pitchRange,
             ITimeSource timeSource,
-            bool active = true) : base(yawRange, pitchRange, active)
+            bool active,
+            ILogger logger) : base(yawRange, pitchRange, active, logger)
         {
             Ensure.That(camera, nameof(camera)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();

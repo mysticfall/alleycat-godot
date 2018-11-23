@@ -3,6 +3,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Animation
 {
@@ -29,7 +30,8 @@ namespace AlleyCat.Animation
             Option<IAnimationControlFactory> controlFactory,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true) : base(player, processMode, timeSource, active)
+            bool active,
+            ILogger logger) : base(player, processMode, timeSource, active, logger)
         {
             Ensure.That(animationTree, nameof(animationTree)).IsNotNull();
 
@@ -42,7 +44,7 @@ namespace AlleyCat.Animation
 
             _graph = GraphFactory.TryCreate((AnimationRootNode) AnimationTree.TreeRoot, Context).IfNone(() =>
                 throw new ArgumentException(
-                    "Failed to create animation graph from the specified animation tree.", 
+                    "Failed to create animation graph from the specified animation tree.",
                     nameof(animationTree)));
 
             AnimationTree.ProcessMode = AnimationTree.AnimationProcessMode.Manual;

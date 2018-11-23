@@ -3,6 +3,7 @@ using AlleyCat.Action;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
@@ -12,7 +13,8 @@ namespace AlleyCat.Item
         public DropAction(
             string key,
             string displayName,
-            bool active = true) : base(key, displayName, active)
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
         }
 

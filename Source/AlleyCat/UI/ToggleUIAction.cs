@@ -4,6 +4,7 @@ using AlleyCat.Control;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
@@ -22,7 +23,8 @@ namespace AlleyCat.UI
             ITriggerInput input,
             Node node,
             bool modal,
-            bool active = true) : base(key, displayName, input, node, modal, active)
+            bool active,
+            ILogger logger) : base(key, displayName, input, node, modal, active, logger)
         {
             Ensure.That(ui, nameof(ui)).IsNotNull();
 

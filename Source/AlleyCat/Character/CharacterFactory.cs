@@ -6,12 +6,14 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Common.Generic;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
@@ -64,7 +66,14 @@ namespace AlleyCat.Character
 
         Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
 
-        protected Validation<string, TCharacter> CreateService()
+        [Service]
+        protected Option<ILoggerFactory> LoggerFactory { get; set; }
+
+        protected virtual Option<ILogger> Logger => LoggerFactory.Map(p => p.CreateLogger(LogCategory));
+
+        protected virtual string LogCategory => typeof(TCharacter).FullName;
+
+        protected Validation<string, TCharacter> CreateService(ILogger logger)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
@@ -84,7 +93,8 @@ namespace AlleyCat.Character
                     .ToValidation($"Unknown race was specified: '{raceName}'.")
                 from animationManager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")
-                from character in CreateService(key, displayName, race, vision, locomotion, skeleton, animationManager)
+                from character in CreateService(
+                    key, displayName, race, vision, locomotion, skeleton, animationManager, logger)
                 select character;
         }
 
@@ -95,7 +105,8 @@ namespace AlleyCat.Character
             TVision vision,
             TLocomotion locomotion,
             Skeleton skeleton,
-            IAnimationManager animationManager);
+            IAnimationManager animationManager,
+            ILogger logger);
 
         public void AddServices(IServiceCollection collection)
         {
@@ -106,9 +117,11 @@ namespace AlleyCat.Character
                 throw new InvalidOperationException("The service has been already created.");
             }
 
-            (Service = CreateService()).BiIter(
+            var logger = Logger.IfNone(() => new PrintLogger(LogCategory));
+
+            (Service = CreateService(logger)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => GD.Print(error) // TODO Need a better way to handle errors (i.e. using a logger)
+                error => logger.LogError("Failed to create a service: {}.", error)
             );
         }
 

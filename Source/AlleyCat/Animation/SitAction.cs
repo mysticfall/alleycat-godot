@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using AlleyCat.Action;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static AlleyCat.Animation.SitState;
 using static LanguageExt.Prelude;
 
@@ -60,7 +61,8 @@ namespace AlleyCat.Animation
             string enterAnimatorPath,
             string animatorPath,
             string exitAnimatorPath,
-            bool active = true) : base(key, displayName, active)
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
             Ensure.That(animation, nameof(animation)).IsNotNull();
             Ensure.That(statesPath, nameof(statesPath)).IsNotNull();

@@ -6,6 +6,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Animation
 {
@@ -43,7 +44,8 @@ namespace AlleyCat.Animation
             AnimationPlayer player,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true)
+            bool active,
+            ILogger logger) : base(logger)
         {
             Ensure.That(player, nameof(player)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();

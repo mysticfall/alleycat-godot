@@ -1,5 +1,6 @@
 using AlleyCat.Event;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -8,10 +9,11 @@ namespace AlleyCat.Motion
         public override ProcessMode ProcessMode { get; }
 
         public ImmediateLocomotion(
-            Spatial target, 
-            ProcessMode processMode, 
-            ITimeSource timeSource, 
-            bool active = true) : base(target, timeSource, active)
+            Spatial target,
+            ProcessMode processMode,
+            ITimeSource timeSource,
+            bool active,
+            ILogger logger) : base(target, timeSource, active, logger)
         {
             ProcessMode = processMode;
         }

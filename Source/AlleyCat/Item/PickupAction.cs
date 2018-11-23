@@ -7,6 +7,7 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -35,13 +36,14 @@ namespace AlleyCat.Item
 
         public PickupAction(
             string key,
-            string displayName, 
-            Set<string> tags, 
-            Option<string> ikChain, 
-            Option<string> animatorPath, 
-            Option<string> statesPath, 
-            Option<string> actionState, 
-            bool active = true) : base(key, displayName, active)
+            string displayName,
+            Set<string> tags,
+            Option<string> ikChain,
+            Option<string> animatorPath,
+            Option<string> statesPath,
+            Option<string> actionState,
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
             Tags = tags;
             IKChain = ikChain;

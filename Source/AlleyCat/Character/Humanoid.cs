@@ -6,6 +6,7 @@ using AlleyCat.Common;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
@@ -24,7 +25,8 @@ namespace AlleyCat.Character
             IAnimationManager animationManager,
             IEnumerable<IAction> actions,
             IEnumerable<Marker> markers,
-            Spatial node) : base(
+            Spatial node,
+            ILogger logger) : base(
             key,
             displayName,
             race,
@@ -35,7 +37,8 @@ namespace AlleyCat.Character
             animationManager,
             actions,
             markers,
-            node)
+            node,
+            logger)
         {
             var groups = Race.MorphGroups.Find(Sex).Flatten().Freeze();
             var definitions = groups.Bind(g => g.Definitions);

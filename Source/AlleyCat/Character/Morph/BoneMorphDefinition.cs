@@ -5,6 +5,7 @@ using AlleyCat.Animation;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
@@ -24,7 +25,8 @@ namespace AlleyCat.Character.Morph
             BoneMorphType morphType,
             Vector3 modifier,
             Range<float> range,
-            float defaultValue) : base(key, displayName, range, defaultValue)
+            float defaultValue,
+            ILogger logger) : base(key, displayName, range, defaultValue, logger)
         {
             Bones = bones?.Freeze();
 

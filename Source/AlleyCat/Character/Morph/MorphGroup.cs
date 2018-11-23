@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using AlleyCat.Common;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
-    public class MorphGroup : IMorphGroup
+    public class MorphGroup : GameObject, IMorphGroup
     {
         public string Key { get; }
 
@@ -12,9 +14,10 @@ namespace AlleyCat.Character.Morph
         public IEnumerable<IMorphDefinition> Definitions { get; }
 
         public MorphGroup(
-            string key, 
+            string key,
             string displayName,
-            IEnumerable<IMorphDefinition> definitions)
+            IEnumerable<IMorphDefinition> definitions,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

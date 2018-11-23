@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -205,6 +205,7 @@
     <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
     <Compile Include="Source\AlleyCat\Common\Marker.cs" />
     <Compile Include="Source\AlleyCat\Common\MeshInstanceExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\NodeException.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\INodeProcessor.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\StringExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\TransformExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\ValidationException.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Source\AlleyCat\Common\VectorExtensions.cs" />
     <Compile Include="Source\AlleyCat\Condition\ICondition.cs" />

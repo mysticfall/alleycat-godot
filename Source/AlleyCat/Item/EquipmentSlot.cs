@@ -3,6 +3,7 @@ using AlleyCat.Condition.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
@@ -14,7 +15,8 @@ namespace AlleyCat.Item
             string key,
             string displayName,
             EquipType equipType,
-            Option<ICondition<ISlotItem>> allowedCondition) : base(key, displayName, allowedCondition)
+            Option<ICondition<ISlotItem>> allowedCondition,
+            ILogger logger) : base(key, displayName, allowedCondition, logger)
         {
             EquipType = equipType;
         }

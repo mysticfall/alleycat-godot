@@ -13,6 +13,7 @@ using AlleyCat.View;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -87,7 +88,8 @@ namespace AlleyCat.Control
             Option<IInputBindings> movementInput,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true)
+            bool active,
+            ILogger logger) : base(logger)
         {
             Ensure.That(camera, nameof(camera)).IsNotNull();
             Ensure.That(perspectives, nameof(perspectives)).IsNotNull();

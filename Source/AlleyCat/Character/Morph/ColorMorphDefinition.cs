@@ -1,4 +1,5 @@
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -7,10 +8,11 @@ namespace AlleyCat.Character.Morph
         public bool UseAlpha { get; }
 
         protected ColorMorphDefinition(
-            string key, 
-            string displayName, 
+            string key,
+            string displayName,
             Color defaultValue,
-            bool useAlpha) : base(key, displayName, defaultValue)
+            bool useAlpha,
+            ILogger logger) : base(key, displayName, defaultValue, logger)
         {
             UseAlpha = useAlpha;
         }

@@ -3,6 +3,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -15,6 +16,7 @@ namespace AlleyCat.Control
         [Service(local: true)]
         public IEnumerable<IInput> Inputs { get; set; }
 
-        protected override Validation<string, InputBindings> CreateService() => new InputBindings(Inputs, Active);
+        protected override Validation<string, InputBindings> CreateService(ILogger logger) =>
+            new InputBindings(Inputs, Active, logger);
     }
 }

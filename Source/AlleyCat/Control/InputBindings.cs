@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -22,7 +23,7 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<bool> _active;
 
-        public InputBindings(IEnumerable<IInput> inputs, bool active = true)
+        public InputBindings(IEnumerable<IInput> inputs, bool active, ILogger logger) : base(logger)
         {
             Ensure.That(inputs, nameof(inputs)).IsNotNull();
 

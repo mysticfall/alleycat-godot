@@ -5,6 +5,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -52,7 +53,8 @@ namespace AlleyCat.Control
             string key,
             IInputSource source,
             ITimeSource timeSource,
-            bool active = true) : base(key, source, active)
+            bool active,
+            ILogger logger) : base(key, source, active, logger)
         {
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 

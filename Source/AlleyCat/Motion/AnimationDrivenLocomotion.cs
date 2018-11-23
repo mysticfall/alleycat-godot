@@ -7,6 +7,7 @@ using AlleyCat.Event;
 using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -34,7 +35,8 @@ namespace AlleyCat.Motion
             KinematicBody target,
             Physics3DSettings physicsSettings,
             ITimeSource timeSource,
-            bool active = true) : base(target, physicsSettings, timeSource, active)
+            bool active,
+            ILogger logger) : base(target, physicsSettings, timeSource, active, logger)
         {
             Ensure.That(animationTree, nameof(animationTree)).IsNotNull();
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();

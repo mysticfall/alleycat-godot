@@ -5,6 +5,7 @@ using AlleyCat.Common;
 using AlleyCat.Control.Generic;
 using AlleyCat.Event;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -24,7 +25,7 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<bool> _active;
 
-        protected Input(string key, IInputSource source, bool active = true)
+        protected Input(string key, IInputSource source, bool active, ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(source, nameof(source)).IsNotNull();

@@ -3,6 +3,7 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Game
 {
@@ -29,7 +30,8 @@ namespace AlleyCat.Game
             Node root,
             Option<NodePath> charactersPath,
             Option<NodePath> itemsPath,
-            Option<NodePath> uiPath)
+            Option<NodePath> uiPath,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(root, nameof(root)).IsNotNull();

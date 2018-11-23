@@ -3,6 +3,7 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
@@ -46,10 +47,11 @@ namespace AlleyCat.Animation
         public string ExitAnimatorPath { get; set; } = "States/Seated/Getting Up";
 
         protected override Validation<string, SitAction> CreateService(
-            string key, string displayName)
+            string key, string displayName, ILogger logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return
                 from animation in Optional(Animation)
@@ -85,7 +87,8 @@ namespace AlleyCat.Animation
                     enterAnimatorPath,
                     animatorPath,
                     exitAnimatorPath,
-                    Active)
+                    Active,
+                    logger)
                 {
                     SittingDownAnimation = SittingDownAnimation,
                     GettingUpAnimation = GettingUpAnimation

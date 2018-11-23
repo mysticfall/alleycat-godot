@@ -2,6 +2,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
@@ -21,14 +22,15 @@ namespace AlleyCat.Game
         [Export]
         public NodePath UIPath { get; set; } = "UI";
 
-        protected override Validation<string, Scene> CreateService()
+        protected override Validation<string, Scene> CreateService(ILogger logger)
         {
             return new Scene(
                 Key.TrimToOption().IfNone(GetName),
                 this,
                 Optional(CharactersPath),
                 Optional(ItemsPath),
-                Optional(UIPath));
+                Optional(UIPath),
+                logger);
         }
     }
 }

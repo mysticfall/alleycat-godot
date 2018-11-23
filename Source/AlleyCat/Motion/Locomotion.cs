@@ -6,6 +6,7 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -54,7 +55,8 @@ namespace AlleyCat.Motion
         protected Locomotion(
             T target,
             ITimeSource timeSource,
-            bool active = true)
+            bool active,
+            ILogger logger) : base(logger)
         {
             Ensure.That(target, nameof(target)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();

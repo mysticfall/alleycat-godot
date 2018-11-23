@@ -2,6 +2,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
@@ -10,11 +11,12 @@ namespace AlleyCat.Motion
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
-        protected override Validation<string, ImmediateLocomotion> CreateService(Spatial target)
+        protected override Validation<string, ImmediateLocomotion> CreateService(Spatial target, ILogger logger)
         {
             Ensure.That(target, nameof(target)).IsNotNull();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
-            return new ImmediateLocomotion(target, ProcessMode, this, Active);
+            return new ImmediateLocomotion(target, ProcessMode, this, Active, logger);
         }
     }
 }

@@ -4,10 +4,12 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Common.Generic;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -49,8 +51,17 @@ namespace AlleyCat.Item
 
         Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
 
-        protected Validation<string, Equipment> CreateService()
+        [Service]
+        protected Option<ILoggerFactory> LoggerFactory { get; set; }
+
+        protected virtual Option<ILogger> Logger => LoggerFactory.Map(p => p.CreateLogger(LogCategory));
+
+        protected virtual string LogCategory => typeof(Equipment).FullName;
+
+        protected Validation<string, Equipment> CreateService(ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
             var description = Description.TrimToOption().Map(Tr);
@@ -74,7 +85,8 @@ namespace AlleyCat.Item
                     shape,
                     mesh,
                     itemMesh,
-                    Markers);
+                    Markers,
+                    logger);
         }
 
         public void AddServices(IServiceCollection collection)
@@ -86,9 +98,11 @@ namespace AlleyCat.Item
                 throw new InvalidOperationException("The service has been already created.");
             }
 
-            (Service = CreateService()).BiIter(
+            var logger = Logger.IfNone(() => new PrintLogger(LogCategory));
+
+            (Service = CreateService(logger)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => GD.Print(error) // TODO Need a better way to handle errors (i.e. using a logger)
+                error => logger.LogError("Failed to create a service: {}.", error)
             );
         }
 

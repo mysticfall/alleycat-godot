@@ -7,6 +7,7 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 using Object = Godot.Object;
 
@@ -26,7 +27,8 @@ namespace AlleyCat.Item
             Set<string> additionalSlots,
             Set<string> tags,
             Set<string> meshesToSync,
-            bool active = false) : base(key, slot, additionalSlots, tags, active)
+            bool active,
+            ILogger logger) : base(key, slot, additionalSlots, tags, active, logger)
         {
             MeshesToSync = meshesToSync;
         }

@@ -7,6 +7,7 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -44,7 +45,8 @@ namespace AlleyCat.Item
             string slot,
             Set<string> additionalSlots,
             Set<string> tags,
-            bool active = false) : base(key, slot, additionalSlots)
+            bool active,
+            ILogger logger) : base(key, slot, additionalSlots, logger)
         {
             Tags = tags;
 

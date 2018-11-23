@@ -7,6 +7,7 @@ using AlleyCat.Common;
 using AlleyCat.Item.Generic;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -32,7 +33,7 @@ namespace AlleyCat.Item
 
         private readonly ISubject<TItem> _onRemove;
 
-        protected SlotContainer()
+        protected SlotContainer(ILogger logger) : base(logger)
         {
             _onAdd = new Subject<TItem>().AddTo(this);
             _onRemove = new Subject<TItem>().AddTo(this);
@@ -105,7 +106,7 @@ namespace AlleyCat.Item
             return allSlots.All(Slots.ContainsKey) && allSlots.Except(this.OccupiedSlots()).Any();
         }
 
-        public bool AllowedFor(object context) => 
+        public bool AllowedFor(object context) =>
             Optional(context).OfType<ISlotConfiguration>().Exists(AllowedFor);
     }
 }

@@ -9,6 +9,7 @@ using AlleyCat.Game;
 using AlleyCat.Physics;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.View
@@ -64,7 +65,8 @@ namespace AlleyCat.View
             Vector3 initialOffset,
             ProcessMode processMode,
             ITimeSource timeSource,
-            bool active = true) : base(
+            bool active,
+            ILogger logger) : base(
             camera,
             rotationInput,
             zoomInput,
@@ -75,7 +77,8 @@ namespace AlleyCat.View
             initialOffset,
             processMode,
             timeSource,
-            active)
+            active,
+            logger)
         {
             OnFocusChange = timeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)

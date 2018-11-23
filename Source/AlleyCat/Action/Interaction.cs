@@ -1,13 +1,15 @@
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
 {
     public abstract class Interaction : Action
     {
         protected Interaction(
-            string key, 
-            string displayName, 
-            bool active = true) : base(key, displayName, active)
+            string key,
+            string displayName,
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
         }
 

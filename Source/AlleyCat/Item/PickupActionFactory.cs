@@ -4,6 +4,7 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 using static AlleyCat.Item.CommonEquipmentTags;
 
@@ -32,10 +33,12 @@ namespace AlleyCat.Item
         [Export]
         public Array<string> Tags { get; set; } = new Array<string> {Carry, Hand};
 
-        protected override Validation<string, PickupAction> CreateService(string key, string displayName)
+        protected override Validation<string, PickupAction> CreateService(
+            string key, string displayName, ILogger logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return new PickupAction(
                 key,
@@ -45,7 +48,8 @@ namespace AlleyCat.Item
                 AnimatorPath.TrimToOption(),
                 StatesPath.TrimToOption(),
                 ActionState.TrimToOption(),
-                Active)
+                Active,
+                logger)
             {
                 PickupDistance = PickupDistance,
                 Animation = Animation

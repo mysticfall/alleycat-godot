@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -22,12 +23,13 @@ namespace AlleyCat.Control
         private readonly float _maximumValue;
 
         public MouseAxisInput(
-            string key, 
+            string key,
             MouseAxis axis,
             Viewport viewport,
             IInputSource source,
             ITimeSource timeSource,
-            bool active = true) : base(key, source, timeSource, active)
+            bool active,
+            ILogger logger) : base(key, source, timeSource, active, logger)
         {
             Ensure.That(viewport, nameof(viewport)).IsNotNull();
 

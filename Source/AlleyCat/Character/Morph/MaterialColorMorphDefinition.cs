@@ -4,6 +4,7 @@ using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
@@ -20,7 +21,8 @@ namespace AlleyCat.Character.Morph
             string mesh,
             IEnumerable<string> materials,
             Color defaultValue,
-            bool useAlpha) : base(key, displayName, defaultValue, useAlpha)
+            bool useAlpha,
+            ILogger logger) : base(key, displayName, defaultValue, useAlpha, logger)
         {
             Ensure.That(mesh, nameof(mesh)).IsNotNullOrEmpty();
 

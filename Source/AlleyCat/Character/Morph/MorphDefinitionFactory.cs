@@ -1,6 +1,8 @@
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -16,14 +18,16 @@ namespace AlleyCat.Character.Morph
         [Export]
         public TVal Default { get; set; }
 
-        protected override Validation<string, TDef> CreateService()
+        protected override Validation<string, TDef> CreateService(ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return CreateService(key, displayName);
+            return CreateService(key, displayName, logger);
         }
 
-        protected abstract Validation<string, TDef> CreateService(string key, string displayName);
+        protected abstract Validation<string, TDef> CreateService(string key, string displayName, ILogger logger);
     }
 }

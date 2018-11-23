@@ -5,6 +5,7 @@ using AlleyCat.Sensor;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
@@ -17,7 +18,8 @@ namespace AlleyCat.Character
             IPairedEyeSight vision,
             ILocomotion locomotion,
             Skeleton skeleton,
-            IAnimationManager animationManager)
+            IAnimationManager animationManager,
+            ILogger logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
@@ -26,6 +28,7 @@ namespace AlleyCat.Character
             Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return new Humanoid(
                 key,
@@ -38,7 +41,8 @@ namespace AlleyCat.Character
                 animationManager,
                 Actions,
                 Markers,
-                this);
+                this,
+                logger);
         }
     }
 }

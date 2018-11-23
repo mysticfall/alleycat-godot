@@ -2,6 +2,7 @@ using AlleyCat.Common;
 using AlleyCat.Condition.Generic;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
@@ -13,7 +14,11 @@ namespace AlleyCat.Item
 
         public Option<ICondition<ISlotItem>> AllowedCondition { get; }
 
-        protected Slot(string key, string displayName, Option<ICondition<ISlotItem>> allowedCondition)
+        protected Slot(
+            string key,
+            string displayName,
+            Option<ICondition<ISlotItem>> allowedCondition,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

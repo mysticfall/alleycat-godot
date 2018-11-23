@@ -1,8 +1,10 @@
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -18,14 +20,17 @@ namespace AlleyCat.Item
         [Export, UsedImplicitly]
         public Array<string> AdditionalSlots { get; set; }
 
-        protected override Validation<string, T> CreateService()
+        protected override Validation<string, T> CreateService(ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             var key = Key.TrimToOption().IfNone(GetName);
             var slot = Slot.TrimToOption().IfNone(key);
 
-            return CreateService(key, slot, toSet(AdditionalSlots));
+            return CreateService(key, slot, toSet(AdditionalSlots), logger);
         }
 
-        protected abstract Validation<string, T> CreateService(string key, string slot, Set<string> additionalSlots);
+        protected abstract Validation<string, T> CreateService(
+            string key, string slot, Set<string> additionalSlots, ILogger logger);
     }
 }

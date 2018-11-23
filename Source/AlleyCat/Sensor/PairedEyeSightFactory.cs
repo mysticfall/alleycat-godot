@@ -2,8 +2,10 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Motion;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Sensor
@@ -34,8 +36,10 @@ namespace AlleyCat.Sensor
         }
 
         protected override Validation<string, PairedEyeSight> CreateService(
-            Range<float> yawRange, Range<float> pitchRange)
+            Range<float> yawRange, Range<float> pitchRange, ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             return from skeleton in Skeleton
                     .ToValidation("Failed to find the skeleton.")
                 from animationManager in AnimationManager
@@ -60,7 +64,8 @@ namespace AlleyCat.Sensor
                     leftEyeBone,
                     yawRange,
                     pitchRange,
-                    Active);
+                    Active,
+                    logger);
         }
     }
 }

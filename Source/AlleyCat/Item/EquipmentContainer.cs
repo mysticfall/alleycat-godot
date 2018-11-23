@@ -3,6 +3,7 @@ using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -19,7 +20,10 @@ namespace AlleyCat.Item
                 .Distinct()
                 .Bind(p => p.GetChildComponents<Equipment>());
 
-        public EquipmentContainer(IEnumerable<EquipmentSlot> slots, IEquipmentHolder holder)
+        public EquipmentContainer(
+            IEnumerable<EquipmentSlot> slots,
+            IEquipmentHolder holder,
+            ILogger logger) : base(logger)
         {
             Ensure.That(slots, nameof(slots)).IsNotNull();
             Ensure.That(holder, nameof(holder)).IsNotNull();

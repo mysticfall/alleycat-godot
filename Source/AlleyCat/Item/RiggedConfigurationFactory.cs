@@ -3,6 +3,7 @@ using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -13,10 +14,11 @@ namespace AlleyCat.Item
         public Array<string> MeshesToSync { get; set; }
 
         protected override Validation<string, RiggedConfiguration> CreateService(
-            string key, string slot, Set<string> additionalSlots)
+            string key, string slot, Set<string> additionalSlots, ILogger logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(slot, nameof(slot)).IsNotNullOrEmpty();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             return new RiggedConfiguration(
                 key,
@@ -24,7 +26,8 @@ namespace AlleyCat.Item
                 additionalSlots,
                 Tags,
                 toSet(MeshesToSync),
-                Active)
+                Active,
+                logger)
             {
                 Mesh = Mesh,
                 Animation = Animation,

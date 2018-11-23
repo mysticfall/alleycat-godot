@@ -9,6 +9,7 @@ using AlleyCat.Sensor;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
@@ -75,7 +76,8 @@ namespace AlleyCat.Character
             IAnimationManager animationManager,
             IEnumerable<IAction> actions,
             IEnumerable<Marker> markers,
-            Spatial node)
+            Spatial node,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
@@ -102,7 +104,7 @@ namespace AlleyCat.Character
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
             var slots = Race.EquipmentSlots.Freeze();
-            var equipments = new EquipmentContainer(slots, this);
+            var equipments = new EquipmentContainer(slots, this, logger);
 
             equipments.Initialize();
             equipments.AddTo(this);

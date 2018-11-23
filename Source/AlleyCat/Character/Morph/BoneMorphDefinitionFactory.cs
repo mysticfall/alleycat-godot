@@ -4,6 +4,7 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
@@ -19,16 +20,19 @@ namespace AlleyCat.Character.Morph
         [Export]
         public Array<string> Bones { get; set; }
 
-        protected override Validation<string, BoneMorphDefinition> CreateService(string key, string displayName)
+        protected override Validation<string, BoneMorphDefinition> CreateService(
+            string key, string displayName, ILogger logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
+            Ensure.That(logger, nameof(logger)).IsNotNull();
 
             var range = new Range<float>(MinValue, MaxValue);
 
             return Optional(Bones).Filter(Enumerable.Any)
                 .ToValidation("Missing the target material list.")
-                .Map(bones => new BoneMorphDefinition(key, displayName, bones, MorphType, Modifier, range, Default));
+                .Map(bones => new BoneMorphDefinition(
+                    key, displayName, bones, MorphType, Modifier, range, Default, logger));
         }
     }
 }

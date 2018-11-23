@@ -2,6 +2,7 @@
 using AlleyCat.Common;
 using AlleyCat.Item;
 using EnsureThat;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
@@ -13,7 +14,11 @@ namespace AlleyCat.Character
 
         public IEnumerable<EquipmentSlot> EquipmentSlots { get; }
 
-        public Race(string key, string displayName, IEnumerable<EquipmentSlot> equipmentSlots)
+        public Race(
+            string key,
+            string displayName,
+            IEnumerable<EquipmentSlot> equipmentSlots,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

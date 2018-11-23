@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AlleyCat.Action;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -8,9 +9,10 @@ namespace AlleyCat.Item
     public abstract class EquipmentAction : Interaction
     {
         protected EquipmentAction(
-            string key, 
-            string displayName, 
-            bool active = true) : base(key, displayName, active)
+            string key,
+            string displayName,
+            bool active,
+            ILogger logger) : base(key, displayName, active, logger)
         {
         }
 

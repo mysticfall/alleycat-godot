@@ -1,6 +1,8 @@
 using AlleyCat.Common;
+using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
@@ -15,8 +17,10 @@ namespace AlleyCat.Control
         [Export]
         public bool StopPropagation { get; set; } = true;
 
-        protected override Validation<string, ActionTriggerInput> CreateService()
+        protected override Validation<string, ActionTriggerInput> CreateService(ILogger logger)
         {
+            Ensure.That(logger, nameof(logger)).IsNotNull();
+
             return
                 from action in Action.TrimToOption()
                     .ToValidation("Action was not specified.")
@@ -24,7 +28,8 @@ namespace AlleyCat.Control
                     GetName(),
                     action,
                     this,
-                    Active)
+                    Active,
+                    logger)
                 {
                     UnhandledOnly = UnhandledOnly,
                     StopPropagation = StopPropagation

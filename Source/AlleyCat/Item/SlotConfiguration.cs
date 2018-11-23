@@ -1,6 +1,7 @@
 using AlleyCat.Common;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
@@ -12,7 +13,7 @@ namespace AlleyCat.Item
 
         public Set<string> AdditionalSlots { get; }
 
-        protected SlotConfiguration(string key, string slot, Set<string> additionalSlots)
+        protected SlotConfiguration(string key, string slot, Set<string> additionalSlots, ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(slot, nameof(slot)).IsNotNullOrEmpty();

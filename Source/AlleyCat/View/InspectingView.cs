@@ -7,6 +7,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
@@ -92,7 +93,8 @@ namespace AlleyCat.View
             ProcessMode processMode,
             ITimeSource timeSource,
             IInputSource inputSource,
-            bool active = true) : base(
+            bool active,
+            ILogger logger) : base(
             camera,
             rotationInput,
             zoomInput,
@@ -103,7 +105,8 @@ namespace AlleyCat.View
             initialOffset,
             processMode,
             timeSource,
-            active)
+            active,
+            logger)
         {
             Ensure.That(inputSource, nameof(inputSource)).IsNotNull();
 

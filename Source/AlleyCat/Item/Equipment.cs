@@ -8,6 +8,7 @@ using AlleyCat.Item.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 using Object = Godot.Object;
 
@@ -77,7 +78,8 @@ namespace AlleyCat.Item
             CollisionShape shape,
             MeshInstance mesh,
             Mesh itemMesh,
-            IEnumerable<Marker> markers)
+            IEnumerable<Marker> markers,
+            ILogger logger) : base(logger)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
