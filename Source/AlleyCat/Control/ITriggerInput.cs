@@ -14,7 +14,6 @@ namespace AlleyCat.Control
         public static Option<ITriggerInput> FindTrigger(this IInputBindings bindings, string key = "Value")
         {
             Ensure.That(bindings, nameof(bindings)).IsNotNull();
-            Ensure.That(key, nameof(key)).IsNotNull();
 
             return bindings.Inputs.Find(key).OfType<ITriggerInput>().HeadOrNone();
         }

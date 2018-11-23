@@ -1,6 +1,5 @@
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -21,8 +20,6 @@ namespace AlleyCat.Motion
 
         protected override Validation<string, TLocomotion> CreateService(ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return Target
                 .ToValidation("Missing locomotion target.")
                 .Bind(target => CreateService(target, logger));

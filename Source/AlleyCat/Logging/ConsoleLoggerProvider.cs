@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using AlleyCat.Autowire;
+﻿using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.UI.Console;
 using EnsureThat;
@@ -27,14 +26,8 @@ namespace AlleyCat.Logging
             Cache = cache;
         }
 
-        public ILogger CreateLogger(string categoryName)
-        {
-            Ensure.That(categoryName, nameof(categoryName)).IsNotNull();
-
-            Debug.Assert(Console != null, "Console != null");
-
-            return Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName, Console));
-        }
+        public ILogger CreateLogger(string categoryName) =>
+            Cache.GetOrCreate(categoryName, _ => new ConsoleLogger(categoryName, Console));
 
         protected override void PreDestroy()
         {

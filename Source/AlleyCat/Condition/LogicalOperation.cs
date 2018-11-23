@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using AlleyCat.Autowire;
-using EnsureThat;
 
 namespace AlleyCat.Condition
 {
@@ -17,8 +16,6 @@ namespace AlleyCat.Condition
 
         public bool Matches(object context)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
             switch (Type)
             {
                 case LogicalOperationType.All:

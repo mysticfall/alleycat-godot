@@ -23,9 +23,6 @@ namespace AlleyCat.Autowire
 
         protected override IEnumerable GetDependencies(IAutowireContext context, Node node)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             IEnumerable enumerable = new ServiceDependencyCollector(
                 context, node, Enumerable ? TargetType : DependencyType);
 

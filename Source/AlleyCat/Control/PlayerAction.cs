@@ -1,6 +1,5 @@
 using AlleyCat.Action;
 using AlleyCat.Character;
-using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
@@ -28,11 +27,7 @@ namespace AlleyCat.Control
 
         protected override Option<IActionContext> CreateActionContext() => Player.Bind(CreateActionContext);
 
-        protected virtual Option<IActionContext> CreateActionContext(IHumanoid player)
-        {
-            Ensure.That(player, nameof(player)).IsNotNull();
-
-            return new ActionContext(Some<IActor>(player));
-        }
+        protected virtual Option<IActionContext> CreateActionContext(IHumanoid player) =>
+            new ActionContext(Some<IActor>(player));
     }
 }

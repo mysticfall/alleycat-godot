@@ -50,11 +50,6 @@ namespace AlleyCat.UI
 
     public static class TreeItemExtensions
     {
-        public static IEnumerable<TreeItem> Children(this TreeItem parent)
-        {
-            Ensure.That(parent, nameof(parent)).IsNotNull();
-
-            return new TreeItemChildren(parent);
-        }
+        public static IEnumerable<TreeItem> Children(this TreeItem parent) => new TreeItemChildren(parent);
     }
 }

@@ -22,12 +22,8 @@ namespace AlleyCat.Logging
             Cache = cache;
         }
 
-        public ILogger CreateLogger(string categoryName)
-        {
-            Ensure.That(categoryName, nameof(categoryName)).IsNotNull();
-
-            return Cache.GetOrCreate(categoryName, _ => new PrintLogger(categoryName));
-        }
+        public ILogger CreateLogger(string categoryName) =>
+            Cache.GetOrCreate(categoryName, _ => new PrintLogger(categoryName));
 
         protected override void PreDestroy()
         {

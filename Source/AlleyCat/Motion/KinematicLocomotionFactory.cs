@@ -1,6 +1,5 @@
 using AlleyCat.Autowire;
 using AlleyCat.Setting.Project;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -20,9 +19,6 @@ namespace AlleyCat.Motion
 
         protected override Validation<string, TLocomotion> CreateService(KinematicBody target, ILogger logger)
         {
-            Ensure.That(target, nameof(target)).IsNotNull();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return PhysicsSettings.Bind(v => Optional(v.Value))
                 .ToValidation("Failed to read physics 3D settings.")
                 .Bind(settings => CreateService(target, settings, logger));

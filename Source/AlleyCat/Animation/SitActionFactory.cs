@@ -1,6 +1,5 @@
 using AlleyCat.Action;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -49,10 +48,6 @@ namespace AlleyCat.Animation
         protected override Validation<string, SitAction> CreateService(
             string key, string displayName, ILogger logger)
         {
-            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
-            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return
                 from animation in Optional(Animation)
                     .ToValidation("Animation was not specified.")

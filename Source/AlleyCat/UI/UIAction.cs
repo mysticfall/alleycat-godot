@@ -36,11 +36,7 @@ namespace AlleyCat.UI
 
         protected override Option<IActionContext> CreateActionContext() => new ActionContext();
 
-        public override bool AllowedFor(IActionContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            return !Modal || _node.GetTree().GetNodesInGroup(TagModal).Count == 0;
-        }
+        public override bool AllowedFor(IActionContext context) =>
+            !Modal || _node.GetTree().GetNodesInGroup(TagModal).Count == 0;
     }
 }

@@ -83,17 +83,10 @@ namespace AlleyCat.Animation
 
         protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
 
-        public virtual void Play(Godot.Animation animation)
-        {
-            Ensure.That(animation, nameof(animation)).IsNotNull();
-
-            Player.Play(Player.AddAnimation(animation));
-        }
+        public virtual void Play(Godot.Animation animation) => Player.Play(Player.AddAnimation(animation));
 
         public void FireEvent(string name, Option<object> argument)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
             _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
         }
     }

@@ -25,7 +25,6 @@ namespace AlleyCat.Autowire
         public static IOptional HeadOrNone(object instance, Type type)
         {
             Ensure.That(instance, nameof(instance)).IsNotNull();
-            Ensure.That(type, nameof(type)).IsNotNull();
 
             Debug.Assert(HeadOrNoneMethod != null, "HeadOrNoneMethod != null");
 

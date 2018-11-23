@@ -88,8 +88,6 @@ namespace AlleyCat.Item
 
         public Option<TItem> Clear(string slot)
         {
-            Ensure.That(slot, nameof(slot)).IsNotNull();
-
             var item = Items.Find(slot);
 
             item.Iter(Remove);

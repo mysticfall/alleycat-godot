@@ -20,7 +20,6 @@ namespace AlleyCat.Common
         public static T DisposeWith<T>(this T disposable, IDisposableCollector collector)
             where T : class, IDisposable
         {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
             Ensure.That(collector, nameof(collector)).IsNotNull();
 
             collector.Collect(disposable);
@@ -31,7 +30,6 @@ namespace AlleyCat.Common
         public static T DisposeWith<T>(this T disposable, Node node)
             where T : class, IDisposable
         {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
             Ensure.That(node, nameof(node)).IsNotNull();
 
             if (node is IDisposableCollector collector)

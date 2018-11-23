@@ -53,8 +53,6 @@ namespace AlleyCat.Physics
             int maxResults = 32)
         {
             Ensure.That(world, nameof(world)).IsNotNull();
-            Ensure.That(shape, nameof(shape)).IsNotNull();
-            Ensure.That(maxResults, nameof(maxResults)).IsGt(0);
 
             return world.DirectSpaceState
                 .IntersectShape(shape, maxResults)
@@ -69,8 +67,6 @@ namespace AlleyCat.Physics
             int maxResults = 32)
         {
             Ensure.That(world, nameof(world)).IsNotNull();
-            Ensure.That(shape, nameof(shape)).IsNotNull();
-            Ensure.That(maxResults, nameof(maxResults)).IsGt(0);
 
             return world.DirectSpaceState
                 .CollideShape(shape, maxResults)
@@ -84,7 +80,6 @@ namespace AlleyCat.Physics
             PhysicsShapeQueryParameters shape)
         {
             Ensure.That(world, nameof(world)).IsNotNull();
-            Ensure.That(shape, nameof(shape)).IsNotNull();
 
             var state = world.DirectSpaceState;
             var result = state.GetRestInfo(shape);

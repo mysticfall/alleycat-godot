@@ -15,7 +15,6 @@ namespace AlleyCat.UI.Console
         public static IConsole Highlight(this IConsole console, string text)
         {
             Ensure.That(console, nameof(console)).IsNotNull();
-            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.HighlightColor));
         }
@@ -23,7 +22,6 @@ namespace AlleyCat.UI.Console
         public static IConsole Warning(this IConsole console, string text)
         {
             Ensure.That(console, nameof(console)).IsNotNull();
-            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.WarningColor));
         }
@@ -31,7 +29,6 @@ namespace AlleyCat.UI.Console
         public static IConsole Error(this IConsole console, string text)
         {
             Ensure.That(console, nameof(console)).IsNotNull();
-            Ensure.That(text, nameof(text)).IsNotNull();
 
             return console.Write(text, new TextStyle(console.ErrorColor));
         }

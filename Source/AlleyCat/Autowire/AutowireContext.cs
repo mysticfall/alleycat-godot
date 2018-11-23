@@ -50,8 +50,6 @@ namespace AlleyCat.Autowire
 
         public static void RegisterProcessorFactory(INodeProcessorFactory factory)
         {
-            Ensure.That(factory, nameof(factory)).IsNotNull();
-
             _processorFactories = _processorFactories.TryAdd(factory);
         }
 
@@ -66,8 +64,6 @@ namespace AlleyCat.Autowire
 
         public Option<object> FindService(Type serviceType)
         {
-            Ensure.That(serviceType, nameof(serviceType)).IsNotNull();
-
             CheckDisposed();
 
             return _provider.Bind(p => Optional(p.GetService(serviceType)));
@@ -100,12 +96,7 @@ namespace AlleyCat.Autowire
             Register(new DependencyNode(node, definition));
         }
 
-        internal void Register(AutowireContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            Register(new DependencyNode(context));
-        }
+        internal void Register(AutowireContext context) => Register(new DependencyNode(context));
 
         private void Register(DependencyNode node)
         {
@@ -224,12 +215,7 @@ namespace AlleyCat.Autowire
 
         public override string ToString() => $"ApplicationContext({Node.Name})";
 
-        internal static AutowireContext GetOrCreate(Node node)
-        {
-            Ensure.That(node, nameof(node)).IsNotNull();
-
-            return Store.Get(node, _ => new AutowireContext(node));
-        }
+        internal static AutowireContext GetOrCreate(Node node) => Store.Get(node, _ => new AutowireContext(node));
 
         internal static void Shutdown() => Store.DisposeQuietly();
     }

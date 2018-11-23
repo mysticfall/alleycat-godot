@@ -13,7 +13,6 @@ namespace AlleyCat.Setting
             IConfigurationBuilder builder, string file, bool optional, bool reloadOnChange)
         {
             Ensure.That(builder, nameof(builder)).IsNotNull();
-            Ensure.That(file, nameof(file)).IsNotNull();
 
             builder.AddIniFile(file, optional, reloadOnChange);
         }

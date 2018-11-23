@@ -3,7 +3,6 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Motion;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -48,8 +47,6 @@ namespace AlleyCat.View
         protected override Validation<string, FreeCameraView> CreateService(
             Range<float> yawRange, Range<float> pitchRange, ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return new FreeCameraView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
                 Character | this.FindPlayer<IHumanoid>(),

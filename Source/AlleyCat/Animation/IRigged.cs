@@ -37,7 +37,6 @@ namespace AlleyCat.Animation
         public static void StopIK(this IRigged rig, string name)
         {
             Ensure.That(rig, nameof(rig)).IsNotNull();
-            Ensure.That(name, nameof(name)).IsNotNull();
 
             rig.IKChains.Find(name).Match(
                 chain =>

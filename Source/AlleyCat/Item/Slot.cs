@@ -28,12 +28,7 @@ namespace AlleyCat.Item
             AllowedCondition = allowedCondition;
         }
 
-        public virtual bool AllowedFor(ISlotItem context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            return !AllowedCondition.Exists(c => !c.Matches(context));
-        }
+        public virtual bool AllowedFor(ISlotItem context) => !AllowedCondition.Exists(c => !c.Matches(context));
 
         public bool AllowedFor(object context) => context is ISlotItem item && AllowedFor(item);
     }

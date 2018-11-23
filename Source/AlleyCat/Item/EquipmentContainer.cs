@@ -70,12 +70,8 @@ namespace AlleyCat.Item
             item.SetGlobalTransform(transform);
         }
 
-        public override bool AllowedFor(ISlotConfiguration context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            return (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
-        }
+        public override bool AllowedFor(ISlotConfiguration context) =>
+            (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
 
         protected override void PreDestroy()
         {

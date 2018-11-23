@@ -32,7 +32,6 @@ namespace AlleyCat.Animation
         public static Option<Godot.Animation> FindAnimation(this AnimationPlayer player, string name)
         {
             Ensure.That(player, nameof(player)).IsNotNull();
-            Ensure.That(name, nameof(name)).IsNotNull();
 
             return Optional(player.GetAnimation(name));
         }

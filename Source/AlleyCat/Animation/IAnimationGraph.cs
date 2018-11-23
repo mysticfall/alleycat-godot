@@ -35,7 +35,6 @@ namespace AlleyCat.Animation
             where T : AnimationNode
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(name, nameof(name)).IsNotNull();
 
             return graph.FindAnimationNode(name).OfType<T>().HeadOrNone();
         }
@@ -44,7 +43,6 @@ namespace AlleyCat.Animation
             where T : IAnimationGraph
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(name, nameof(name)).IsNotNull();
 
             return graph.FindGraph(name).OfType<T>().HeadOrNone();
         }
@@ -53,7 +51,6 @@ namespace AlleyCat.Animation
             where T : IAnimationControl
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(name, nameof(name)).IsNotNull();
 
             return graph.FindControl(name).OfType<T>().HeadOrNone();
         }

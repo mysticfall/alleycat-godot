@@ -20,9 +20,9 @@ namespace AlleyCat.Autowire
 
         private readonly Action<IAutowireContext> _processor;
 
-        private readonly Option<Action<IAutowireContext>> _deferredProcessor;
-
         private readonly IDependencyResolver _resolver;
+
+        private Option<Action<IAutowireContext>> _deferredProcessor;
 
         public DependencyNode(AutowireContext context)
         {
@@ -59,20 +59,9 @@ namespace AlleyCat.Autowire
             _deferredProcessor = Some((Action<IAutowireContext>) ProcessDeferred);
         }
 
-        public void Process(IAutowireContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
+        public void Process(IAutowireContext context) => _processor.Invoke(context);
 
-            _processor.Invoke(context);
-        }
-
-        public void ProcessDeferred(IAutowireContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            // ReSharper disable once ImpureMethodCallOnReadonlyValueField
-            _deferredProcessor.Iter(p => p.Invoke(context));
-        }
+        public void ProcessDeferred(IAutowireContext context) => _deferredProcessor.Iter(p => p.Invoke(context));
 
         public void AddDependency(DependencyNode node)
         {

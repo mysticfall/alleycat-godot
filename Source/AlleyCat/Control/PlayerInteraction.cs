@@ -22,8 +22,6 @@ namespace AlleyCat.Control
 
         protected override Option<IActionContext> CreateActionContext(IHumanoid player)
         {
-            Ensure.That(player, nameof(player)).IsNotNull();
-
             return PlayerControl
                 .Bind(c => c.FocusedObject)
                 .Map<IEntity, IActionContext>(entity => new InteractionContext(player, entity))
@@ -32,8 +30,6 @@ namespace AlleyCat.Control
 
         protected override void DoExecute(IActionContext context)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
             Player
                 .Bind(p => p.Actions.Values)
                 .OfType<Interaction>()

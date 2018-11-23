@@ -15,7 +15,6 @@ namespace AlleyCat.Common
         public static bool HasTag(this ITaggable taggable, string tag)
         {
             Ensure.That(taggable, nameof(taggable)).IsNotNull();
-            Ensure.That(tag, nameof(tag)).IsNotNull();
 
             return taggable.Tags.Contains(tag);
         }

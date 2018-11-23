@@ -43,9 +43,7 @@ namespace AlleyCat.Animation
         public static Option<Animator> TryCreate(
             string name, IAnimationGraph parent, AnimationGraphContext context)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             return parent
                 .FindAnimationNode<AnimationNodeAnimation>(name)

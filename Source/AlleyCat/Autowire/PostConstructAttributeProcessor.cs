@@ -22,9 +22,6 @@ namespace AlleyCat.Autowire
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             try
             {
                 Method.Invoke(node, new object[0]);

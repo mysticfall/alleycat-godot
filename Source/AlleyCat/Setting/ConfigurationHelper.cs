@@ -26,7 +26,6 @@ namespace AlleyCat.Setting
         {
             Ensure.That(source, nameof(source)).IsNotNull();
             Ensure.That(target, nameof(target)).IsNotNull();
-            Ensure.That(type, nameof(type)).IsNotNull();
 
             ConfigureMethod.MakeGenericMethod(type).Invoke(null, new[] {source, target});
         }

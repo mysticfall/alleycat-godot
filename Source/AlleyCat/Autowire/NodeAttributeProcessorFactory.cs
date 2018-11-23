@@ -10,7 +10,6 @@ namespace AlleyCat.Autowire
         protected override INodeProcessor CreateProcessor(MemberInfo member, NodeAttribute attribute)
         {
             Ensure.That(member, nameof(member)).IsNotNull();
-            Ensure.That(attribute, nameof(attribute)).IsNotNull();
 
             var fieldName = ToPrivateFieldName(member.Name);
 

@@ -35,8 +35,6 @@ namespace AlleyCat.Autowire
 
         public static IEnumerable Empty(Type type)
         {
-            Ensure.That(type, nameof(type)).IsNotNull();
-
             Debug.Assert(EmptyMethod != null, "EmptyMethod != null");
 
             return (IEnumerable) EmptyMethod.MakeGenericMethod(type).Invoke(null, new object[0]);
@@ -45,7 +43,6 @@ namespace AlleyCat.Autowire
         public static IEnumerable Cast(IEnumerable instance, Type type)
         {
             Ensure.That(instance, nameof(instance)).IsNotNull();
-            Ensure.That(type, nameof(type)).IsNotNull();
 
             Debug.Assert(CastMethod != null, "CastMethod != null");
 
@@ -56,7 +53,6 @@ namespace AlleyCat.Autowire
         {
             Ensure.That(source, nameof(source)).IsNotNull();
             Ensure.That(target, nameof(target)).IsNotNull();
-            Ensure.That(type, nameof(type)).IsNotNull();
 
             Debug.Assert(ConcatMethod != null, "CastMethod != null");
 
@@ -66,7 +62,6 @@ namespace AlleyCat.Autowire
         public static IEnumerable OfType(object instance, Type type)
         {
             Ensure.That(instance, nameof(instance)).IsNotNull();
-            Ensure.That(type, nameof(type)).IsNotNull();
 
             Debug.Assert(OfTypeMethod != null, "OfTypeMethod != null");
 

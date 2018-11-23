@@ -50,26 +50,11 @@ namespace AlleyCat.Animation
             AnimationTree.ProcessMode = AnimationTree.AnimationProcessMode.Manual;
         }
 
-        public Option<AnimationNode> FindAnimationNode(string name)
-        {
-            Ensure.That(name, nameof(name)).IsNotNull();
+        public Option<AnimationNode> FindAnimationNode(string name) => _graph.FindAnimationNode(name);
 
-            return _graph.FindAnimationNode(name);
-        }
+        public Option<IAnimationGraph> FindGraph(string name) => _graph.FindGraph(name);
 
-        public Option<IAnimationGraph> FindGraph(string name)
-        {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
-            return _graph.FindGraph(name);
-        }
-
-        public Option<IAnimationControl> FindControl(string name)
-        {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
-            return _graph.FindControl(name);
-        }
+        public Option<IAnimationControl> FindControl(string name) => _graph.FindControl(name);
 
         protected override void ProcessFrames(float delta) => AnimationTree.Advance(delta);
     }

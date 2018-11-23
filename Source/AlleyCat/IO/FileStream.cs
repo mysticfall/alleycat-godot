@@ -46,8 +46,6 @@ namespace AlleyCat.IO
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            Ensure.That(offset, nameof(offset)).IsGte(0);
-
             CheckClosed();
 
             switch (origin)
@@ -73,8 +71,6 @@ namespace AlleyCat.IO
         public override int Read(byte[] buffer, int offset, int count)
         {
             Ensure.That(buffer, nameof(buffer)).IsNotNull();
-            Ensure.That(offset, nameof(offset)).IsGte(0);
-            Ensure.That(count, nameof(count)).IsGte(0);
 
             CheckClosed();
 

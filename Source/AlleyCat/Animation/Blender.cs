@@ -185,7 +185,6 @@ namespace AlleyCat.Animation
         {
             Ensure.Any.IsNotNull(name, nameof(name));
             Ensure.Any.IsNotNull(parent, nameof(parent));
-            Ensure.Any.IsNotNull(context, nameof(context));
 
             //TODO Resolve in an automatic fashion when it becomes possible to manipulate node connections from code.
             var animationNodeKey = name + " Animation";
@@ -217,7 +216,6 @@ namespace AlleyCat.Animation
         public static Option<Blender> FindBlender(this IAnimationGraph graph, string path)
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return graph.FindDescendantControl<Blender>(path);
         }

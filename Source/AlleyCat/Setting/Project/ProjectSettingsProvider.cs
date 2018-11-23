@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using AlleyCat.Autowire;
@@ -24,8 +23,6 @@ namespace AlleyCat.Setting.Project
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            Ensure.That(builder, nameof(builder)).IsNotNull();
-
             var keys = SettingsTypes.SelectMany(t => FindKeys(t));
 
             return new ProjectSettingsConfigurationProvider(keys);
@@ -41,7 +38,6 @@ namespace AlleyCat.Setting.Project
         public void BindSettings(IConfigurationRoot root, IServiceCollection collection)
         {
             Ensure.That(root, nameof(root)).IsNotNull();
-            Ensure.That(collection, nameof(collection)).IsNotNull();
 
             var parent = root.GetSection(Prefix);
 
@@ -57,9 +53,7 @@ namespace AlleyCat.Setting.Project
             IConfigurationSection parent,
             IServiceCollection collection)
         {
-            Ensure.That(type, nameof(type)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
-            Ensure.That(collection, nameof(collection)).IsNotNull();
 
             FindKey(type).Select(parent.GetSection).Iter(section =>
             {
@@ -90,8 +84,6 @@ namespace AlleyCat.Setting.Project
 
         protected IEnumerable<string> FindKeys(Type type, string prefix = Prefix)
         {
-            Ensure.That(type, nameof(type)).IsNotNull();
-
             return match(FindKey(type),
                 key =>
                 {
@@ -121,8 +113,6 @@ namespace AlleyCat.Setting.Project
 
         private static IEnumerable<(MemberInfo, Type)> GetMembers(Type type)
         {
-            Debug.Assert(type != null, "type != null");
-
             return Cache.GetOrCreate(type, _ =>
             {
                 var members = type

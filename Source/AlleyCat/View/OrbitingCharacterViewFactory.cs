@@ -2,7 +2,6 @@ using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -33,10 +32,11 @@ namespace AlleyCat.View
         }
 
         protected override Validation<string, OrbitingCharacterView> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, Range<float> distanceRange, ILogger logger)
+            Range<float> yawRange, 
+            Range<float> pitchRange, 
+            Range<float> distanceRange, 
+            ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return new OrbitingCharacterView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
                 Character | this.FindPlayer<IHumanoid>(),

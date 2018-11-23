@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using EnsureThat;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AlleyCat.Autowire
@@ -12,12 +11,8 @@ namespace AlleyCat.Autowire
 
         public static IEnumerable<Type> FindInjectableTypes<T>() => FindInjectableTypes(typeof(T));
 
-        public static IEnumerable<Type> FindInjectableTypes(Type type)
-        {
-            Ensure.That(type, nameof(type)).IsNotNull();
-
-            return Cache.GetOrCreate(type, _ => EnumerateInjectableTypes(type));
-        }
+        public static IEnumerable<Type> FindInjectableTypes(Type type) =>
+            Cache.GetOrCreate(type, _ => EnumerateInjectableTypes(type));
 
         private static IEnumerable<Type> EnumerateInjectableTypes(Type type)
         {

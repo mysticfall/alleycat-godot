@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
@@ -14,7 +13,6 @@ namespace AlleyCat.Common
         public static Option<T> FindComponent<T>(this Node node, NodePath path) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return node.HasNode(path) ? Optional(node.GetNode(path)).Bind(OfType<T>) : None;
         }
@@ -29,7 +27,6 @@ namespace AlleyCat.Common
         public static T GetComponent<T>(this Node node, NodePath path) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return Optional(node.GetNode(path)).Bind(OfType<T>).IfNone(() =>
                 throw new InvalidOperationException($"Unable to find node '{path}' in '{node.Name}'."));
@@ -43,8 +40,6 @@ namespace AlleyCat.Common
             where TChild : Node
         {
             Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
-            Ensure.That(factory, nameof(factory)).IsNotNull();
 
             return node.FindComponent<TChild>(path).IfNone(() => CreateAndAdd(node, factory));
         }
@@ -56,7 +51,6 @@ namespace AlleyCat.Common
             where TChild : Node
         {
             Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(factory, nameof(factory)).IsNotNull();
 
             return node.FindComponent<TChild>().IfNone(() => CreateAndAdd(node, factory));
         }
@@ -65,8 +59,8 @@ namespace AlleyCat.Common
             where TParent : Node
             where TChild : Node
         {
-            Debug.Assert(node != null, "node != null");
-            Debug.Assert(factory != null, "factory != null");
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(factory, nameof(factory)).IsNotNull();
 
             var child = factory(node);
 
@@ -108,20 +102,11 @@ namespace AlleyCat.Common
             }
         }
 
-        public static Option<T> FindClosestAncestor<T>(this Node node) where T : class
-        {
-            Ensure.That(node, nameof(node)).IsNotNull();
+        public static Option<T> FindClosestAncestor<T>(this Node node) where T : class =>
+            GetAncestors(node).Bind(n => OfType<T>(n)).HeadOrNone();
 
-            return GetAncestors(node).Bind(n => OfType<T>(n)).HeadOrNone();
-        }
-
-        public static Option<Node> FindClosestAncestor(this Node node, Func<Node, bool> predicate)
-        {
-            Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(predicate, nameof(predicate)).IsNotNull();
-
-            return GetAncestors(node).Find(predicate);
-        }
+        public static Option<Node> FindClosestAncestor(this Node node, Func<Node, bool> predicate) =>
+            GetAncestors(node).Find(predicate);
 
         public static Option<T> OfType<T>(this Node node) where T : class
         {

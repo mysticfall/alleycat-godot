@@ -31,7 +31,6 @@ namespace AlleyCat.Common
 
         public T Get(Node node, Func<Node, T> factory) => Find(node).IfNone(() =>
         {
-            Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(factory, nameof(factory)).IsNotNull();
 
             var data = factory(node);
@@ -48,8 +47,6 @@ namespace AlleyCat.Common
         [UsedImplicitly]
         protected virtual void OnNodeExited(Node node)
         {
-            Debug.Assert(node != null, "node != null");
-
             Find(node).OfType<IDisposable>().Iter(d => d.Dispose());
 
             _store.Remove(node.GetInstanceId());

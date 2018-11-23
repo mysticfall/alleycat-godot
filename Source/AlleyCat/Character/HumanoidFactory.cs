@@ -2,7 +2,6 @@ using AlleyCat.Animation;
 using AlleyCat.Character.Morph;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -21,15 +20,6 @@ namespace AlleyCat.Character
             IAnimationManager animationManager,
             ILogger logger)
         {
-            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
-            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(race, nameof(race)).IsNotNull();
-            Ensure.That(vision, nameof(vision)).IsNotNull();
-            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
-            Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
-            Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return new Humanoid(
                 key,
                 displayName,

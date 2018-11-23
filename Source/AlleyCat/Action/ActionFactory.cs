@@ -1,5 +1,4 @@
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -19,8 +18,6 @@ namespace AlleyCat.Action
 
         protected override Validation<string, T> CreateService(ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 

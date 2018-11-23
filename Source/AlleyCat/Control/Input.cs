@@ -36,12 +36,8 @@ namespace AlleyCat.Control
             _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
-        public virtual IDisposable Subscribe(IObserver<T> observer)
-        {
-            Ensure.Any.IsNotNull(observer, nameof(observer));
-
-            return CreateObservable().Where(_ => Valid && Active).Subscribe(observer);
-        }
+        public virtual IDisposable Subscribe(IObserver<T> observer) =>
+            CreateObservable().Where(_ => Valid && Active).Subscribe(observer);
 
         protected abstract IObservable<T> CreateObservable();
     }

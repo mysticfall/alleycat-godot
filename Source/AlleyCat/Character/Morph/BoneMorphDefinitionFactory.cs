@@ -1,6 +1,5 @@
 using System.Linq;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
@@ -23,10 +22,6 @@ namespace AlleyCat.Character.Morph
         protected override Validation<string, BoneMorphDefinition> CreateService(
             string key, string displayName, ILogger logger)
         {
-            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
-            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             var range = new Range<float>(MinValue, MaxValue);
 
             return Optional(Bones).Filter(Enumerable.Any)

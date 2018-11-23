@@ -56,7 +56,6 @@ namespace AlleyCat.Item
             IEquipmentHolder holder, Equipment equipment, InteractionContext context)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
             holder.FindEquipConfiguration(equipment, Tags.ToArray()).Iter(ExecuteWithConfiguration);
 
@@ -131,7 +130,6 @@ namespace AlleyCat.Item
             where T : class, IActor, IEquipmentHolder
         {
             Ensure.That(actor, nameof(actor)).IsNotNull();
-            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
             var action = actor.Actions.Values.Find(a => a is PickupAction);
 

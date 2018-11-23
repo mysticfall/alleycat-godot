@@ -1,7 +1,6 @@
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
-using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;
@@ -35,11 +34,7 @@ namespace AlleyCat.Animation
         private void FireEvent(string name) => FireEvent(name, null);
 
         [UsedImplicitly]
-        private void FireEvent(string name, [CanBeNull] object argument)
-        {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
+        private void FireEvent(string name, [CanBeNull] object argument) =>
             Service.Iter(s => s.FireEvent(name, Optional(argument)));
-        }
     }
 }

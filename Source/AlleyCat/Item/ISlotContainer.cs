@@ -45,7 +45,6 @@ namespace AlleyCat.Item
                 where TItem : class, ISlotItem
             {
                 Ensure.That(container, nameof(container)).IsNotNull();
-                Ensure.That(item, nameof(item)).IsNotNull();
 
                 return container.Items.Filter(t => t.Item2 == item).Map(t => t.Item1).HeadOrNone();
             }
@@ -57,7 +56,6 @@ namespace AlleyCat.Item
                 where TItem : class, ISlotItem
             {
                 Ensure.That(container, nameof(container)).IsNotNull();
-                Ensure.That(slot, nameof(slot)).IsNotNull();
 
                 return container.Items.Values.Find(i => i.Slot == slot || i.AdditionalSlots.Contains(slot));
             }
@@ -78,8 +76,6 @@ namespace AlleyCat.Item
                 where TSlot : ISlot
                 where TItem : class, ISlotItem
             {
-                Ensure.Any.IsNotNull(container, nameof(container));
-
                 return OccupiedSlots(container).Exists(s => s == slot);
             }
 
@@ -89,7 +85,6 @@ namespace AlleyCat.Item
                 where TSlot : ISlot
                 where TItem : class, ISlotItem
             {
-                Ensure.Any.IsNotNull(container, nameof(container));
                 Ensure.Any.IsNotNull(item, nameof(item));
 
                 var allSlots = item.GetAllSlots();

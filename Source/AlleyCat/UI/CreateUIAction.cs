@@ -34,8 +34,6 @@ namespace AlleyCat.UI
 
         protected override void DoExecute(IActionContext context)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
             var parent = Parent | Scene.Map(s => s.UIRoot);
 
             parent.Iter(p => p.AddChild(UI.Instance()));

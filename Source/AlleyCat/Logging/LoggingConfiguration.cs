@@ -54,7 +54,6 @@ namespace AlleyCat.Logging
 
         public ILogger Create(IAutowireContext context, object service)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
             Ensure.That(service, nameof(service)).IsNotNull();
 
             var factory = this.GetRootContext().FindService<ILoggerFactory>();

@@ -84,7 +84,6 @@ namespace AlleyCat.Animation
         {
             Ensure.That(name, nameof(name)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             //TODO Resolve in an automatic fashion when it becomes possible to manipulate node connections from code.
             return (from transition in parent.FindAnimationNode<AnimationNodeTransition>(name)
@@ -106,7 +105,6 @@ namespace AlleyCat.Animation
             this IAnimationGraph graph, string path)
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return graph.FindDescendantControl<CrossfadingAnimator>(path);
         }

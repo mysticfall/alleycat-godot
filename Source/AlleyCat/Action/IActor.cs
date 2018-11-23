@@ -14,7 +14,6 @@ namespace AlleyCat.Action
         public static Option<IAction> FindAction(this IActor actor, IActionContext context)
         {
             Ensure.That(actor, nameof(actor)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             return actor.Actions.Values.Find(a => a.AllowedFor(context));
         }
@@ -23,7 +22,6 @@ namespace AlleyCat.Action
             this IActor actor, IActionContext context, Func<IAction, bool> predicate)
         {
             Ensure.That(actor, nameof(actor)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
             Ensure.That(predicate, nameof(predicate)).IsNotNull();
 
             return actor.Actions.Values.Find(a => a.AllowedFor(context) && predicate(a));

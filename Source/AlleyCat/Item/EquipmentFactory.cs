@@ -60,8 +60,6 @@ namespace AlleyCat.Item
 
         protected Validation<string, Equipment> CreateService(ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
             var description = Description.TrimToOption().Map(Tr);

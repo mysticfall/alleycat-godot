@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 
@@ -86,9 +85,6 @@ namespace AlleyCat.Autowire
 
         public override void Process(IAutowireContext context, Node node)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             object dependency;
 
             var enumerable = GetDependencies(context, node);

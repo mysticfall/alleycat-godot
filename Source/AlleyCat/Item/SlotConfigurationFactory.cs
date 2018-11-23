@@ -1,5 +1,4 @@
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
@@ -22,8 +21,6 @@ namespace AlleyCat.Item
 
         protected override Validation<string, T> CreateService(ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             var key = Key.TrimToOption().IfNone(GetName);
             var slot = Slot.TrimToOption().IfNone(key);
 

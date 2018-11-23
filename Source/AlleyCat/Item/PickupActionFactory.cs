@@ -1,6 +1,5 @@
 using AlleyCat.Action;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
@@ -36,10 +35,6 @@ namespace AlleyCat.Item
         protected override Validation<string, PickupAction> CreateService(
             string key, string displayName, ILogger logger)
         {
-            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
-            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return new PickupAction(
                 key,
                 displayName,

@@ -122,8 +122,6 @@ namespace AlleyCat.Item
 
         public virtual void Equip(IEquipmentHolder holder)
         {
-            Ensure.That(holder, nameof(holder)).IsNotNull();
-
             UpdateEquipState(true);
 
             Configuration.OnEquip(holder, this);
@@ -131,8 +129,6 @@ namespace AlleyCat.Item
 
         public virtual void Unequip(IEquipmentHolder holder)
         {
-            Ensure.That(holder, nameof(holder)).IsNotNull();
-
             Configuration.OnUnequip(holder, this);
 
             UpdateEquipState(false);

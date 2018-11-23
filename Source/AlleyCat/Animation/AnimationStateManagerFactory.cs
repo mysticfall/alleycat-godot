@@ -1,5 +1,4 @@
 using AlleyCat.Autowire;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -18,11 +17,9 @@ namespace AlleyCat.Animation
         public Option<IAnimationControlFactory> ControlFactory { get; set; }
 
         protected override Validation<string, AnimationStateManager> CreateService(
-            AnimationPlayer player, ILogger logger)
+            AnimationPlayer player,
+            ILogger logger)
         {
-            Ensure.That(player, nameof(player)).IsNotNull();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return AnimationTree
                 .ToValidation("Missing the animation tree.")
                 .Map(animationTree =>

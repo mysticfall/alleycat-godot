@@ -1,4 +1,3 @@
-using EnsureThat;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
@@ -15,8 +14,6 @@ namespace AlleyCat.Action
 
         protected override void DoExecute(IActionContext context)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
             if (context is InteractionContext iContext)
             {
                 DoExecute(iContext);
@@ -25,12 +22,8 @@ namespace AlleyCat.Action
 
         protected abstract void DoExecute(InteractionContext context);
 
-        public override bool AllowedFor(IActionContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            return context is InteractionContext iContext && AllowedFor(iContext);
-        }
+        public override bool AllowedFor(IActionContext context) =>
+            context is InteractionContext iContext && AllowedFor(iContext);
 
         protected abstract bool AllowedFor(InteractionContext context);
     }

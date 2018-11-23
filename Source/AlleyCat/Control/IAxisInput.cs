@@ -28,7 +28,6 @@ namespace AlleyCat.Control
         public static Option<IAxisInput> FindAxis(this IInputBindings bindings, string key = "Value")
         {
             Ensure.That(bindings, nameof(bindings)).IsNotNull();
-            Ensure.That(key, nameof(key)).IsNotNull();
 
             return bindings.Inputs.Find(key).OfType<IAxisInput>().HeadOrNone();
         }
@@ -36,10 +35,6 @@ namespace AlleyCat.Control
         public static Option<IObservable<Vector2>> AsVector2Input(
             this IInputBindings bindings, string xKey = "X", string yKey = "Y")
         {
-            Ensure.That(bindings, nameof(bindings)).IsNotNull();
-            Ensure.That(xKey, nameof(xKey)).IsNotNull();
-            Ensure.That(yKey, nameof(yKey)).IsNotNull();
-
             return
                 from xAxis in FindAxis(bindings, xKey)
                 from yAxis in FindAxis(bindings, yKey)

@@ -27,9 +27,6 @@ namespace AlleyCat.Autowire
 
         protected override IEnumerable GetDependencies(IAutowireContext context, Node node)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             var path = FindNodePath(node);
 
             IEnumerable dependency;
@@ -60,15 +57,12 @@ namespace AlleyCat.Autowire
 
         protected Option<NodePath> FindNodePath(Node node)
         {
-            Ensure.Any.IsNotNull(node, nameof(node));
-
             return NodePathField
                 .Map(f => f.GetValue(node))
                 .OfType<NodePath>()
                 .HeadOrNone()
                 .BiBind(Some,
-                    () => Attribute.Path.Where(v => !string.IsNullOrEmpty(v)).Map(v => new NodePath(v))
-                );
+                    () => Attribute.Path.Where(v => !string.IsNullOrEmpty(v)).Map(v => new NodePath(v)));
         }
 
         protected static string NormalizeMemberName(string name)

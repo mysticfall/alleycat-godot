@@ -21,8 +21,6 @@ namespace AlleyCat.Autowire
 
         public static IAutowireContext GetAutowireContext(this Node node)
         {
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             var current = node;
 
             while (current != null)
@@ -47,8 +45,6 @@ namespace AlleyCat.Autowire
 
         internal static void Autowire(this Node node, Option<AutowireContext> context)
         {
-            Ensure.That(node, nameof(node)).IsNotNull();
-
             var target = context.IfNone((AutowireContext) GetAutowireContext(node));
 
             Debug.Assert(target != null, "target != null");

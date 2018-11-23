@@ -36,7 +36,6 @@ namespace AlleyCat.Item
             this IEquipmentContainer container, Equipment item, EquipmentConfiguration configuration)
         {
             Ensure.That(container, nameof(container)).IsNotNull();
-            Ensure.That(item, nameof(item)).IsNotNull();
             Ensure.That(configuration, nameof(configuration)).IsNotNull();
 
             configuration.Activate();
@@ -78,7 +77,6 @@ namespace AlleyCat.Item
             this IEquipmentContainer container, string slot, Option<Node> dropTo)
         {
             Ensure.Any.IsNotNull(container, nameof(container));
-            Ensure.Any.IsNotNull(slot, nameof(slot));
 
             return container.FindItem(slot).Map(i => Unequip(container, i, dropTo));
         }

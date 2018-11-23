@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AlleyCat.Autowire;
-using EnsureThat;
 
 namespace AlleyCat.UI.Console
 {
@@ -9,8 +8,6 @@ namespace AlleyCat.UI.Console
     {
         public IEnumerable<IConsoleCommand> CreateCommands(ICommandConsole console)
         {
-            Ensure.That(console, nameof(console)).IsNotNull();
-
             var sceneTree = GetTree();
 
             return new IConsoleCommand[]

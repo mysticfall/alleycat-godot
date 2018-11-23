@@ -126,8 +126,6 @@ namespace AlleyCat.UI.Console
 
         public IConsole Write(string text, TextStyle style)
         {
-            Ensure.That(text, nameof(text)).IsNotNull();
-
             style.Write(text, Content);
 
             return this;
@@ -150,8 +148,6 @@ namespace AlleyCat.UI.Console
 
         public void Execute(string command, params string[] arguments)
         {
-            Ensure.That(command, nameof(command)).IsNotNull();
-
             _commands.Find(command).Match(
                 action => action.Execute(arguments),
                 () =>
@@ -165,8 +161,6 @@ namespace AlleyCat.UI.Console
 
         private void AutoComplete(string text)
         {
-            Ensure.That(text, nameof(text)).IsNotNull();
-
             var candidates = SuggestCandidates(text).ToList();
 
             if (candidates.Count == 1)

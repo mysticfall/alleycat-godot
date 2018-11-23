@@ -31,11 +31,6 @@ namespace AlleyCat.UI
             _ui = ui;
         }
 
-        protected override void DoExecute(IActionContext context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            UI.Iter(ui => ui.Toggle());
-        }
+        protected override void DoExecute(IActionContext context) => UI.Iter(ui => ui.Toggle());
     }
 }

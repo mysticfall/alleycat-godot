@@ -16,7 +16,6 @@ namespace AlleyCat.Animation
         public static Option<IAnimator> FindAnimator(this IAnimationGraph graph, string path)
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return graph.FindDescendantControl<IAnimator>(path);
         }

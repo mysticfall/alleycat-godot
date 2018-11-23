@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Text;
-using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Common
@@ -9,8 +8,6 @@ namespace AlleyCat.Common
     {
         public static string ToFormatString(this Vector2 vector, string format = "###,##0.00")
         {
-            Ensure.That(format, nameof(format)).IsNotNull();
-
             return new StringBuilder()
                 .Append("Vector2(")
                 .Append(vector.x.ToString(format))
@@ -22,8 +19,6 @@ namespace AlleyCat.Common
 
         public static string ToFormatString(this Vector3 vector, string format = "###,##0.00")
         {
-            Ensure.That(format, nameof(format)).IsNotNull();
-
             return new StringBuilder()
                 .Append("Vector3(")
                 .Append(vector.x.ToString(format))

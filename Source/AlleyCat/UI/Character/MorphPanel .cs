@@ -2,7 +2,6 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Character.Morph.Generic;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
@@ -34,8 +33,6 @@ namespace AlleyCat.UI.Character
 
             public override void LoadMorph(IMorph morph)
             {
-                Ensure.That(morph, nameof(morph)).IsNotNull();
-
                 _morph = Some(morph).Cast<IMorph<TVal, TDef>>().HeadOrNone();
             }
         }

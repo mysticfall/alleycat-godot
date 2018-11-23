@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using EnsureThat;
 using Godot;
@@ -28,8 +27,6 @@ namespace AlleyCat.Setting.Project
 
         public bool TryGet(string key, out string value)
         {
-            Ensure.That(key, nameof(key)).IsNotNull();
-
             if (!ProjectSettings.HasSetting(NormalizeKey(key)))
             {
                 value = null;
@@ -41,12 +38,8 @@ namespace AlleyCat.Setting.Project
             return true;
         }
 
-        public void Set(string key, [CanBeNull] string value)
-        {
-            Ensure.That(key, nameof(key)).IsNotNull();
-
+        public void Set(string key, [CanBeNull] string value) =>
             ProjectSettings.SetSetting(NormalizeKey(key), GD.Str2Var(value));
-        }
 
         public void Load()
         {
@@ -57,14 +50,13 @@ namespace AlleyCat.Setting.Project
         public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string parentPath)
         {
             Ensure.That(earlierKeys, nameof(earlierKeys)).IsNotNull();
-            Ensure.That(parentPath, nameof(parentPath)).IsNotNull();
 
             return earlierKeys.Concat(Keys.Where(k => k.StartsWith(parentPath)));
         }
 
         private static string NormalizeKey(string key)
         {
-            Debug.Assert(key != null, "key != null");
+            Ensure.That(key, nameof(key)).IsNotNull();
 
             var values = key.Split(':');
 

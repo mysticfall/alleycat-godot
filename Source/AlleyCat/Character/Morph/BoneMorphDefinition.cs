@@ -38,8 +38,6 @@ namespace AlleyCat.Character.Morph
 
         public override IMorph CreateMorph(IMorphable morphable)
         {
-            Ensure.That(morphable, nameof(morphable)).IsNotNull();
-
             var morph = Optional(morphable)
                 .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this))
                 .HeadOrNone();

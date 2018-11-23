@@ -30,14 +30,12 @@ namespace AlleyCat.Action
 
             Key = key;
             DisplayName = displayName;
-         
+
             _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
         public void Execute(IActionContext context)
         {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
             if (Active && Valid && AllowedFor(context))
             {
                 DoExecute(context);
@@ -48,11 +46,6 @@ namespace AlleyCat.Action
 
         public abstract bool AllowedFor(IActionContext context);
 
-        public bool AllowedFor(object context)
-        {
-            Ensure.That(context, nameof(context)).IsNotNull();
-
-            return context is IActionContext ac && AllowedFor(ac);
-        }
+        public bool AllowedFor(object context) => context is IActionContext ac && AllowedFor(ac);
     }
 }

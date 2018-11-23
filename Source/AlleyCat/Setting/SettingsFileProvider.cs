@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using AlleyCat.Autowire;
-using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,14 +16,7 @@ namespace AlleyCat.Setting
         [Export(hintString: "Reload this settings file if it has changed.")]
         public bool ReloadOnChange { get; set; } = false;
 
-        public void AddSettings(IConfigurationBuilder builder)
-        {
-            Ensure.That(builder, nameof(builder)).IsNotNull();
-
-            Debug.Assert(File != null, "File != null");
-
-            AddSettings(builder, File, Optional, ReloadOnChange);
-        }
+        public void AddSettings(IConfigurationBuilder builder) => AddSettings(builder, File, Optional, ReloadOnChange);
 
         public virtual void BindSettings(IConfigurationRoot root, IServiceCollection collection)
         {

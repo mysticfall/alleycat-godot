@@ -55,7 +55,6 @@ namespace AlleyCat.Animation
         public static Option<AnimationStates> FindStates(this IAnimationGraph graph, string path)
         {
             Ensure.That(graph, nameof(graph)).IsNotNull();
-            Ensure.That(path, nameof(path)).IsNotNull();
 
             return graph.FindDescendantGraph<AnimationStates>(path);
         }

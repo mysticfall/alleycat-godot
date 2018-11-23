@@ -2,7 +2,6 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Setting.Project;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -30,12 +29,10 @@ namespace AlleyCat.Motion
         public string Blend2DPath { get; set; } = "States/Moving";
 
         protected override Validation<string, AnimationDrivenLocomotion> CreateService(
-            KinematicBody target, Physics3DSettings physicsSettings, ILogger logger)
+            KinematicBody target, 
+            Physics3DSettings physicsSettings, 
+            ILogger logger)
         {
-            Ensure.That(target, nameof(target)).IsNotNull();
-            Ensure.That(physicsSettings, nameof(physicsSettings)).IsNotNull();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return
                 from manager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")

@@ -156,8 +156,6 @@ namespace AlleyCat.Animation
 
         public SitState GetSitState<T>(T actor) where T : class, IActor, IAnimatable
         {
-            Ensure.That(actor, nameof(actor)).IsNotNull();
-
             var animator = GetAnimationStateManager(actor);
             var state = animator.Bind(a => a.FindStates(SubStatesPath)).Map(s => s.State);
 
@@ -171,8 +169,6 @@ namespace AlleyCat.Animation
         public IObservable<SitState> OnSitStateChange<T>(T actor)
             where T : class, IActor, IAnimatable
         {
-            Ensure.That(actor, nameof(actor)).IsNotNull();
-
             var animator = GetAnimationStateManager(actor);
             var states = animator
                 .Bind(a => a.FindStates(SubStatesPath))

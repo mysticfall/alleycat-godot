@@ -20,7 +20,6 @@ namespace AlleyCat.Item
         public static Option<Equipment> FindEquipment(this IEquipmentHolder holder, string slot)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(slot, nameof(slot)).IsNotNull();
 
             return holder.Equipments.Items.Find(slot);
         }
@@ -29,7 +28,6 @@ namespace AlleyCat.Item
             this IEquipmentHolder holder, Equipment item, params string[] tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(item, nameof(item)).IsNotNull();
 
             return holder.Equipments.FindConfiguration(item, tags);
         }
@@ -38,7 +36,6 @@ namespace AlleyCat.Item
             this IEquipmentHolder holder, Equipment item, params string[] tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(item, nameof(item)).IsNotNull();
 
             return holder.Equipments.Equip(item, tags);
         }
@@ -47,8 +44,6 @@ namespace AlleyCat.Item
             this IEquipmentHolder holder, Equipment item, EquipmentConfiguration configuration)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(item, nameof(item)).IsNotNull();
-            Ensure.That(configuration, nameof(configuration)).IsNotNull();
 
             return holder.Equipments.Equip(item, configuration);
         }
@@ -60,7 +55,6 @@ namespace AlleyCat.Item
             this IEquipmentHolder holder, Equipment item, Option<Node> dropTo)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(item, nameof(item)).IsNotNull();
 
             return holder.Equipments.Unequip(item, dropTo);
         }
@@ -72,7 +66,6 @@ namespace AlleyCat.Item
             this IEquipmentHolder holder, string slot, Option<Node> dropTo)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
-            Ensure.That(slot, nameof(slot)).IsNotNull();
 
             return holder.Equipments.Unequip(slot, dropTo);
         }

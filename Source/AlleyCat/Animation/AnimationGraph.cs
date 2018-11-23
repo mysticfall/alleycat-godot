@@ -36,8 +36,6 @@ namespace AlleyCat.Animation
 
         public Option<IAnimationGraph> FindGraph(string name)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
             var result = _children.Find(name);
 
             if (result) return result;
@@ -51,8 +49,6 @@ namespace AlleyCat.Animation
 
         public Option<IAnimationControl> FindControl(string name)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
             var result = _controls.Find(name);
 
             if (result) return result;

@@ -1,5 +1,4 @@
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -20,8 +19,6 @@ namespace AlleyCat.Control
 
         protected override Validation<string, ActionAxisInput> CreateService(ILogger logger)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return
                 from positiveAction in PositiveAction.TrimToOption()
                     .ToValidation("Positive action was not specified.")

@@ -37,12 +37,8 @@ namespace AlleyCat.Motion
             return locomotion.RotationalVelocity.LengthSquared() >= Mathf.Min(threshold, 0);
         }
 
-        public static bool IsStationary(this ILocomotion locomotion, float threshold = 0.1f)
-        {
-            Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
-
-            return !IsMoving(locomotion, threshold) && !IsTurning(locomotion, Mathf.Min(threshold, 0));
-        }
+        public static bool IsStationary(this ILocomotion locomotion, float threshold = 0.1f) =>
+            !IsMoving(locomotion, threshold) && !IsTurning(locomotion, Mathf.Min(threshold, 0));
 
         public static void Stop(this ILocomotion locomotion)
         {

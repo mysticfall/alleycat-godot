@@ -1,6 +1,5 @@
 using System.Linq;
 using AlleyCat.Common;
-using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
@@ -20,10 +19,6 @@ namespace AlleyCat.Character.Morph
         protected override Validation<string, MaterialColorMorphDefinition> CreateService(
             string key, string displayName, ILogger logger)
         {
-            Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
-            Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(logger, nameof(logger)).IsNotNull();
-
             return
                 from mesh in Mesh.TrimToOption()
                     .ToValidation("Missing the target mesh's name.")

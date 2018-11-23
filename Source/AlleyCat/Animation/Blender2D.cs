@@ -44,7 +44,6 @@ namespace AlleyCat.Animation
         {
             Ensure.That(name, nameof(name)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             if (parent.FindAnimationNode<AnimationNodeBlendSpace2D>(name).IsNone) return None;
 
@@ -60,7 +59,6 @@ namespace AlleyCat.Animation
         public static Option<Blender2D> FindBlender2D(this IAnimationGraph graph, string path)
         {
             Ensure.Any.IsNotNull(graph, nameof(graph));
-            Ensure.Any.IsNotNull(path, nameof(path));
 
             return graph.FindDescendantControl<Blender2D>(path);
         }
