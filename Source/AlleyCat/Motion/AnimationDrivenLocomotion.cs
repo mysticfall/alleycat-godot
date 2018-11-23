@@ -60,7 +60,7 @@ namespace AlleyCat.Motion
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => ResetAnimations())
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)

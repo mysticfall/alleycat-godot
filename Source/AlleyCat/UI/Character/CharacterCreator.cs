@@ -33,7 +33,8 @@ namespace AlleyCat.UI.Character
 
         public CharacterCreator()
         {
-            _character = new BehaviorSubject<Option<IHumanoid>>(None).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(None);
+            _character.DisposeWith((IDisposableCollector) this);
         }
 
         [PostConstruct]
@@ -42,7 +43,7 @@ namespace AlleyCat.UI.Character
             OnCharacterChange
                 .Do(character => View.Pivot = character.OfType<ITransformable>().HeadOrNone())
                 .Subscribe(MorphListPanel.Load)
-                .AddTo(this);
+                .DisposeWith((IDisposableCollector) this);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace AlleyCat.UI.Inventory
 
         public InventoryView()
         {
-            _character = new BehaviorSubject<Option<ICharacter>>(None).AddTo(this.GetCollector());
+            _character = new BehaviorSubject<Option<ICharacter>>(None).DisposeWith(this);
         }
 
         protected override void OnInitialize()
@@ -97,7 +97,7 @@ namespace AlleyCat.UI.Inventory
                 .Do(_ => RemoveAllNodes())
                 .CombineLatest(container, (list, parent) => (list, parent))
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)))
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             _item = Some(
                 Tree.OnItemSelect()
@@ -111,7 +111,7 @@ namespace AlleyCat.UI.Inventory
 
             OnItemChange
                 .Subscribe(DisplayItem)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
         }
 
         protected TreeItem CreateNode(Equipment item, IEquipmentContainer parent)

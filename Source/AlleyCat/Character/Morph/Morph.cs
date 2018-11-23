@@ -43,10 +43,10 @@ namespace AlleyCat.Character.Morph
         {
             Ensure.That(definition, nameof(definition)).IsNotNull();
 
-            _value = new BehaviorSubject<TVal>(definition.Default).AddTo(this);
+            _value = new BehaviorSubject<TVal>(definition.Default).DisposeWith(this);
 
             Definition = definition;
-            OnChange.Skip(1).Subscribe(Apply).AddTo(this);
+            OnChange.Skip(1).Subscribe(Apply).DisposeWith(this);
         }
 
         public void Apply() => Apply(Value);

@@ -94,7 +94,7 @@ namespace AlleyCat.Sensor
             AnimationManager
                 .OnAdvance
                 .Subscribe(OnAnimation)
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         private Basis DetectOrientation(int bone)

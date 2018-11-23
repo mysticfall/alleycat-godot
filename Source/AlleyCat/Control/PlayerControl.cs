@@ -106,9 +106,9 @@ namespace AlleyCat.Control
                 .MatchObservable(identity, Observable.Empty<Vector2>)
                 .Where(_ => Valid);
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
-            _perspective = new BehaviorSubject<Option<IPerspectiveView>>(None).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
+            _perspective = new BehaviorSubject<Option<IPerspectiveView>>(None).DisposeWith(this);
         }
 
         protected override void PostConstruct()
@@ -128,12 +128,12 @@ namespace AlleyCat.Control
                 perspective.OnActiveStateChange
                     .Where(s => Active && !s && Perspective.Contains(perspective))
                     .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)))
-                    .AddTo(this);
+                    .DisposeWith(this);
 
                 perspective.OnActiveStateChange
                     .Where(s => s && !Perspective.Contains(perspective))
                     .Subscribe(_ => Perspective = Some(perspective))
-                    .AddTo(this);
+                    .DisposeWith(this);
             }
 
             Perspective |= active;
@@ -143,19 +143,19 @@ namespace AlleyCat.Control
                 .Do(v => Perspective.Iter(p => p.Active = v))
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
                 .Subscribe()
-                .AddTo(this);
+                .DisposeWith(this);
 
             MovementInput
                 .Where(_ => Character.Exists(c => c.Valid))
                 .Where(_ => Perspective.Exists(p => p.AutoActivate))
                 .Select(v => new Vector3(v.x, 0, -v.y) * 2)
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)))
-                .AddTo(this);
+                .DisposeWith(this);
 
             OnPerspectiveChange
                 .Pairwise()
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2))
-                .AddTo(this);
+                .DisposeWith(this);
 
             var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
             var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
@@ -190,7 +190,7 @@ namespace AlleyCat.Control
                     (_, args) => args)
                 .Where(_ => Active && Valid)
                 .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
-                .AddTo(this);
+                .DisposeWith(this);
 
             tick
                 .Where(_ => Active && Valid)
@@ -198,7 +198,7 @@ namespace AlleyCat.Control
                 .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
                 .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)))
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         protected virtual void OnPerspectiveChanged(

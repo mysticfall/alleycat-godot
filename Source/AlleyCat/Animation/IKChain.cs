@@ -35,7 +35,7 @@ namespace AlleyCat.Animation
             tick
                 .Where(_ => IsRunning() && IgnoreRotation)
                 .Subscribe(_ => ResetRotation())
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             _skeleton = GetParentSkeleton();
             _tipIndex = _skeleton.FindBone(TipBone);

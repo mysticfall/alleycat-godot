@@ -29,7 +29,7 @@ namespace AlleyCat.Control
 
             Inputs = inputs.ToMap();
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
         protected override void PostConstruct()
@@ -38,7 +38,7 @@ namespace AlleyCat.Control
 
             OnActiveStateChange
                 .Subscribe(v => Inputs.Values.Iter(i => i.Active = v))
-                .AddTo(this);
+                .DisposeWith(this);
         }
     }
 }

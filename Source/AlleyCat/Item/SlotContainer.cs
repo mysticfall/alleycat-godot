@@ -35,8 +35,8 @@ namespace AlleyCat.Item
 
         protected SlotContainer(ILogger logger) : base(logger)
         {
-            _onAdd = new Subject<TItem>().AddTo(this);
-            _onRemove = new Subject<TItem>().AddTo(this);
+            _onAdd = new Subject<TItem>().DisposeWith(this);
+            _onRemove = new Subject<TItem>().DisposeWith(this);
         }
 
         protected override void PostConstruct()

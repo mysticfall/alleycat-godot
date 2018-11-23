@@ -92,7 +92,7 @@ namespace AlleyCat.View
                 .DistinctUntilChanged()
                 .Do(current => FocusedObject = current);
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
         }
 
         protected override void PostConstruct()
@@ -103,7 +103,7 @@ namespace AlleyCat.View
                 .Where(_ => Distance <= DistanceRange.Min)
                 .Where(v => v > 0)
                 .Subscribe(_ => this.Deactivate())
-                .AddTo(this);
+                .DisposeWith(this);
         }
     }
 }

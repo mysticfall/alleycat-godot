@@ -45,7 +45,7 @@ namespace AlleyCat.Character
 
             var morphs = definitions.Map(d => d.CreateMorph(this));
 
-            Morphs = new MorphSet(groups, morphs).AddTo(this);
+            Morphs = new MorphSet(groups, morphs).DisposeWith(this);
         }
     }
 }

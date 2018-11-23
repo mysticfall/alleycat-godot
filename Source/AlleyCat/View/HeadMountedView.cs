@@ -190,7 +190,7 @@ namespace AlleyCat.View
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
                 .Subscribe(this.SetFocalDistance)
-                .AddTo(this);
+                .DisposeWith(this);
 
             OnFocusChange = onRayCast
                 .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
@@ -199,7 +199,7 @@ namespace AlleyCat.View
                 .DistinctUntilChanged()
                 .Do(current => FocusedObject = current);
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
 
             _rotationInput = rotationInput;
             _deactivateInput = deactivateInput;
@@ -211,7 +211,7 @@ namespace AlleyCat.View
 
             OnActiveStateChange
                 .Subscribe(HandleActiveStateChange)
-                .AddTo(this);
+                .DisposeWith(this);
 
             InitializeInput();
             InitializeStabilization();
@@ -237,16 +237,16 @@ namespace AlleyCat.View
             RotationInput
                 .Select(v => v * 0.05f)
                 .Subscribe(v => Rotation -= v)
-                .AddTo(this);
+                .DisposeWith(this);
 
             OnRotationChange
                 .Merge(OnActiveStateChange.Where(identity).Select(_ => Rotation))
                 .Subscribe(r => Vision.Iter(v => v.Rotate(r)))
-                .AddTo(this);
+                .DisposeWith(this);
 
             DeactivateInput
                 .Subscribe(_ => this.Deactivate())
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         private void InitializeStabilization()
@@ -293,7 +293,7 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
                 .Subscribe(transform => Camera.SetGlobalTransform(transform))
-                .AddTo(this);
+                .DisposeWith(this);
         }
     }
 }

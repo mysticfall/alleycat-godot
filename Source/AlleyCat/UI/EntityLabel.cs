@@ -66,21 +66,21 @@ namespace AlleyCat.UI
 
             showTitle
                 .Subscribe(v => Visible = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
             showAction
                 .Subscribe(v => ActionPanel.Visible = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             title
                 .Subscribe(v => Title.Text = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
             action
                 .Subscribe(a => a.Iter(ActionTitle.SetText))
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             position
                 .Subscribe(pos => RectPosition = pos.Round())
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             var shortcut = InputMap
                 .GetActionList(InteractAction)

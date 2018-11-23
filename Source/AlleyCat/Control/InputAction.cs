@@ -35,7 +35,7 @@ namespace AlleyCat.Control
                 .Select(_ => CreateActionContext())
                 .Where(c => c.Exists(AllowedFor))
                 .Subscribe(c => c.Iter(Execute))
-                .AddTo(this);
+                .DisposeWith(this);
         }
     }
 }

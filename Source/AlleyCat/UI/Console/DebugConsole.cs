@@ -74,17 +74,17 @@ namespace AlleyCat.UI.Console
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
                 .Subscribe(AutoComplete)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
                 .Subscribe(_ => OnShown())
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
                 .Subscribe(_ => OnHidden())
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             Content.AddColorOverride("default_color", TextColor);
         }

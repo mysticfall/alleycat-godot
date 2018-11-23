@@ -107,7 +107,7 @@ namespace AlleyCat.Character
             var equipments = new EquipmentContainer(slots, this, logger);
 
             equipments.Initialize();
-            equipments.AddTo(this);
+            equipments.DisposeWith(this);
 
             Equipments = equipments;
 

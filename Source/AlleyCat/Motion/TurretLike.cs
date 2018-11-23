@@ -64,8 +64,8 @@ namespace AlleyCat.Motion
             YawRange = yawRange;
             PitchRange = pitchRange;
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
-            _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).DisposeWith(this);
         }
 
         public virtual void Reset()

@@ -64,9 +64,9 @@ namespace AlleyCat.Motion
             Target = target;
             TimeSource = timeSource;
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
-            _velocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
-            _rotationalVelocity = new BehaviorSubject<Vector3>(Vector3.Zero).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _velocity = new BehaviorSubject<Vector3>(Vector3.Zero).DisposeWith(this);
+            _rotationalVelocity = new BehaviorSubject<Vector3>(Vector3.Zero).DisposeWith(this);
         }
 
         protected override void PostConstruct()
@@ -76,12 +76,12 @@ namespace AlleyCat.Motion
             OnActiveStateChange
                 .Where(v => !v && Valid)
                 .Subscribe(_ => this.Stop())
-                .AddTo(this);
+                .DisposeWith(this);
 
             this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(ProcessLoop)
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         public void Move(Vector3 velocity) => _requestedMovement = velocity;

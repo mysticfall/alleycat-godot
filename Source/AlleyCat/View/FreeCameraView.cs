@@ -107,7 +107,7 @@ namespace AlleyCat.View
 
             TimeSource = timeSource;
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).AddTo(this);
+            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
 
             _rotationInput = rotationInput;
             _movementInput = movementInput;
@@ -120,7 +120,7 @@ namespace AlleyCat.View
             OnActiveStateChange
                 .Where(_ => Valid)
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Active = !v))
-                .AddTo(this);
+                .DisposeWith(this);
 
             InitializeInput();
             InitializeRaycast();
@@ -132,23 +132,23 @@ namespace AlleyCat.View
                 .Do(v => _rotationInput.Iter(i => i.Active = v))
                 .Do(v => _movementInput.Iter(i => i.Active = v))
                 .Subscribe()
-                .AddTo(this);
+                .DisposeWith(this);
 
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x))
                 .Do(v => Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
                 .Subscribe()
-                .AddTo(this);
+                .DisposeWith(this);
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
                 .Subscribe(Camera.TranslateObjectLocal)
-                .AddTo(this);
+                .DisposeWith(this);
 
             ToggleInput
                 .Subscribe(_ => Active = !Active)
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         private void InitializeRaycast()
@@ -156,7 +156,7 @@ namespace AlleyCat.View
             OnActiveStateChange
                 .Where(s => s)
                 .Subscribe(_ => this.EnableDof())
-                .AddTo(this);
+                .DisposeWith(this);
 
             TimeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)
@@ -170,7 +170,7 @@ namespace AlleyCat.View
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
                 .Subscribe(this.SetFocalDistance)
-                .AddTo(this);
+                .DisposeWith(this);
         }
     }
 }

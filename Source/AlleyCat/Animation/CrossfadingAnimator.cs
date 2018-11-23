@@ -61,7 +61,7 @@ namespace AlleyCat.Animation
 
             var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).AddTo(this);
+            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).DisposeWith(this);
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation))
@@ -74,7 +74,7 @@ namespace AlleyCat.Animation
 
                     Context.AnimationTree.Set(Parameter, next);
                 })
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         public static Option<CrossfadingAnimator> TryCreate(

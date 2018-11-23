@@ -31,7 +31,7 @@ namespace AlleyCat.Action
             Key = key;
             DisplayName = displayName;
          
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
         public void Execute(IActionContext context)

@@ -54,10 +54,10 @@ namespace AlleyCat.Animation
             ProcessMode = processMode;
             TimeSource = timeSource;
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
-            _onBeforeAdvance = new Subject<Unit>().AddTo(this);
-            _onAdvance = new Subject<float>().AddTo(this);
-            _onAnimationEvent = new Subject<AnimationEvent>().AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _onBeforeAdvance = new Subject<Unit>().DisposeWith(this);
+            _onAdvance = new Subject<float>().DisposeWith(this);
+            _onAnimationEvent = new Subject<AnimationEvent>().DisposeWith(this);
 
             Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
         }
@@ -69,7 +69,7 @@ namespace AlleyCat.Animation
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active)
                 .Subscribe(Advance)
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         public virtual void Advance(float delta)

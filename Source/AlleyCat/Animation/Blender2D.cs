@@ -30,11 +30,11 @@ namespace AlleyCat.Animation
 
             var current = (Vector2) context.AnimationTree.Get(parameter);
 
-            _position = new BehaviorSubject<Vector2>(current).AddTo(this);
+            _position = new BehaviorSubject<Vector2>(current).DisposeWith(this);
 
             _position
                 .Subscribe(v => context.AnimationTree.Set(parameter, v))
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         public static Option<Blender2D> TryCreate(

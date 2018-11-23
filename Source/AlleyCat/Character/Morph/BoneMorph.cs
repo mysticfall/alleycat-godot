@@ -50,7 +50,7 @@ namespace AlleyCat.Character.Morph
                     $"The morph '{Definition.Key}' does not have any target bones.");
             }
 
-            AnimationManager.OnAdvance.Subscribe(_ => Apply()).AddTo(this);
+            AnimationManager.OnAdvance.Subscribe(_ => Apply()).DisposeWith(this);
         }
 
         protected override void Apply(float value)

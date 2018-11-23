@@ -94,7 +94,7 @@ namespace AlleyCat.Item
                     .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
                     .Take(1)
                     .Subscribe(_ => holder.Equip(equipment, configuration))
-                    .AddTo(this);
+                    .DisposeWith(this);
 
                 if (manager is IAnimationStateManager stateManager &&
                     AnimatorPath.IsSome && StatesPath.IsSome)

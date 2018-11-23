@@ -17,7 +17,7 @@ namespace AlleyCat.Common
     {
         private const string NodeName = "DisposableCollector";
 
-        public static T AddTo<T>(this T disposable, IDisposableCollector collector)
+        public static T DisposeWith<T>(this T disposable, IDisposableCollector collector)
             where T : class, IDisposable
         {
             Ensure.That(disposable, nameof(disposable)).IsNotNull();
@@ -28,16 +28,22 @@ namespace AlleyCat.Common
             return disposable;
         }
 
-        public static IDisposableCollector GetCollector(this Node node)
+        public static T DisposeWith<T>(this T disposable, Node node)
+            where T : class, IDisposable
         {
+            Ensure.That(disposable, nameof(disposable)).IsNotNull();
             Ensure.That(node, nameof(node)).IsNotNull();
 
             if (node is IDisposableCollector collector)
             {
-                return collector;
+                collector.Collect(disposable);
+            }
+            else
+            {
+                node.GetComponent(NodeName, _ => new BaseNode(NodeName)).Collect(disposable);
             }
 
-            return node.GetComponent(_ => new BaseNode(NodeName));
+            return disposable;
         }
 
         public static void DisposeQuietly(this IDisposable disposable)

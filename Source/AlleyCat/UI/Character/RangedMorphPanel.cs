@@ -36,13 +36,13 @@ namespace AlleyCat.UI.Character
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
                 .Select(e => e.Value)
                 .Subscribe(v => Morph.Value = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             Morph.OnChange
                 .Do(Slider.SetValue)
                 .Do(Spinner.SetValue)
                 .Subscribe()
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
         }
     }
 }

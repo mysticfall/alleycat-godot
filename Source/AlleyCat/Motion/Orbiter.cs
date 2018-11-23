@@ -83,8 +83,8 @@ namespace AlleyCat.Motion
             ProcessMode = processMode;
             TimeSource = timeSource;
 
-            _distance = new BehaviorSubject<float>(InitialDistance).AddTo(this);
-            _offset = new BehaviorSubject<Vector3>(InitialOffset).AddTo(this);
+            _distance = new BehaviorSubject<float>(InitialDistance).DisposeWith(this);
+            _offset = new BehaviorSubject<Vector3>(InitialOffset).DisposeWith(this);
         }
 
         protected override void PostConstruct()
@@ -92,7 +92,7 @@ namespace AlleyCat.Motion
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)
-                .AddTo(this);
+                .DisposeWith(this);
         }
 
         public override void Reset()

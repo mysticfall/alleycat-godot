@@ -24,12 +24,12 @@ namespace AlleyCat.UI.Character
                 .Select(e => e.Color)
                 .Select(v => Morph.Definition.UseAlpha ? v : ToOpaqueColor(v))
                 .Subscribe(v => Morph.Value = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
 
             Morph
                 .OnChange
                 .Subscribe(v => Button.Color = v)
-                .AddTo(this.GetCollector());
+                .DisposeWith(this);
         }
 
         private Color ToOpaqueColor(Color color)

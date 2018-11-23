@@ -79,12 +79,12 @@ namespace AlleyCat.Animation
 
             var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).AddTo(this);
+            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).DisposeWith(this);
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
                 .Subscribe(AnimationNode.SetAnimation)
-                .AddTo(this);
+                .DisposeWith(this);
 
             _animation
                 .Subscribe(animation =>
@@ -98,26 +98,26 @@ namespace AlleyCat.Animation
                     BlenderNode.Filters = filters;
                     BlenderNode.FilterEnabled = filters.Any();
                 })
-                .AddTo(this);
+                .DisposeWith(this);
 
             var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
 
-            _amount = new BehaviorSubject<float>(currentAmount).AddTo(this);
+            _amount = new BehaviorSubject<float>(currentAmount).DisposeWith(this);
 
             _amount
                 .Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v))
-                .AddTo(this);
+                .DisposeWith(this);
 
             var currentSpeed = timeScaleParameter
                 .Map(context.AnimationTree.Get).OfType<float>().HeadOrNone().IfNone(1f);
 
-            _timeScale = new BehaviorSubject<float>(currentSpeed).AddTo(this);
+            _timeScale = new BehaviorSubject<float>(currentSpeed).DisposeWith(this);
 
             timeScaleParameter.Iter(param =>
             {
                 _timeScale
                     .Subscribe(v => context.AnimationTree.Set(param, v))
-                    .AddTo(this);
+                    .DisposeWith(this);
             });
         }
 

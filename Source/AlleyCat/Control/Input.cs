@@ -33,7 +33,7 @@ namespace AlleyCat.Control
             Key = key;
             Source = source;
 
-            _active = new BehaviorSubject<bool>(active).AddTo(this);
+            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
