@@ -1,0 +1,104 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Source/AlleyCat/Character/RaceRegistryFactory.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphableRaceFactory.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MorphGroupFactory.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/BoneMorphDefinitionFactory.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Character/Morph/MaterialColorMorphDefinitionFactory.cs" type="Script" id=5]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentSlotFactory.cs" type="Script" id=6]
+
+[node name="Data" type="Node"]
+_sections_unfolded = [ "Script" ]
+
+[node name="Races" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Human" type="Node" parent="Races"]
+script = ExtResource( 2 )
+Key = "Human"
+DisplayName = "race.Human"
+
+[node name="Morphs" type="Node" parent="Races/Human"]
+
+[node name="Female" type="Node" parent="Races/Human/Morphs"]
+
+[node name="Head" type="Node" parent="Races/Human/Morphs/Female"]
+script = ExtResource( 3 )
+Key = "morph.Head"
+DisplayName = "Head"
+
+[node name="Head Size" type="Node" parent="Races/Human/Morphs/Female/Head"]
+script = ExtResource( 4 )
+Key = "HeadSize"
+DisplayName = "morph.Head.HeadSize"
+Default = 1.0
+MinValue = 0.94
+MaxValue = 1.4
+MorphType = 0
+Modifier = Vector3( 1, 1, 1 )
+Bones = [ "head" ]
+
+[node name="Body" type="Node" parent="Races/Human/Morphs/Female"]
+script = ExtResource( 3 )
+Key = "morph.Body"
+DisplayName = "Body"
+
+[node name="Legs Size" type="Node" parent="Races/Human/Morphs/Female/Body"]
+script = ExtResource( 4 )
+Key = "LegsLength"
+DisplayName = "morph.Body.LegsLength"
+Default = 1.0
+MinValue = 0.85
+MaxValue = 1.1
+MorphType = 0
+Modifier = Vector3( 0, 0, 1 )
+Bones = [ "thigh_L", "thigh_R" ]
+
+[node name="Color" type="Node" parent="Races/Human/Morphs/Female"]
+script = ExtResource( 3 )
+Key = "morph.Color"
+DisplayName = "Color"
+
+[node name="Skin Tone" type="Node" parent="Races/Human/Morphs/Female/Color"]
+script = ExtResource( 5 )
+Key = "SkinTone"
+DisplayName = "morph.Color.SkinTone"
+Default = Color( 1, 1, 1, 1 )
+UseAlpha = false
+Mesh = "Body"
+Materials = [ "Skin" ]
+
+[node name="Slots" type="Node" parent="Races/Human"]
+
+[node name="Equipments" type="Node" parent="Races/Human/Slots"]
+
+[node name="Shirt" type="Node" parent="Races/Human/Slots/Equipments"]
+script = ExtResource( 6 )
+Key = "Shirt"
+DisplayName = "slot.Shirt"
+EquipType = 1
+
+[node name="Pants" type="Node" parent="Races/Human/Slots/Equipments"]
+script = ExtResource( 6 )
+Key = "Pants"
+DisplayName = "slot.Pants"
+EquipType = 1
+
+[node name="Left Hand" type="Node" parent="Races/Human/Slots/Equipments"]
+script = ExtResource( 6 )
+Key = "LeftHand"
+DisplayName = "slot.LeftHand"
+EquipType = 0
+
+[node name="Right Hand" type="Node" parent="Races/Human/Slots/Equipments"]
+script = ExtResource( 6 )
+Key = "RightHand"
+DisplayName = "slot.RightHand"
+EquipType = 0
+
+[node name="Necklace" type="Node" parent="Races/Human/Slots/Equipments"]
+script = ExtResource( 6 )
+Key = "Necklace"
+DisplayName = "slot.Necklace"
+EquipType = 1
+

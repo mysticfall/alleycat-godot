@@ -21,7 +21,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-AlleyCat="*res://Data/AlleyCat.tscn"
+Bootstrap="*res://Data/Bootstrap.tscn"
+Data="*res://Data/Data.tscn"
 
 [gui]
 

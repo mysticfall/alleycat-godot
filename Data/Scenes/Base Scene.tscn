@@ -359,7 +359,7 @@ Active = true
 Key = "ToggleConsole"
 DisplayName = "action.ToggleConsole"
 Modal = false
-UI = NodePath("/root/AlleyCat/UI/Console")
+UI = NodePath("/root/Bootstrap/UI/Console")
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
