@@ -26,15 +26,16 @@ namespace AlleyCat.Motion
         protected override Validation<string, T> CreateService(
             Range<float> yawRange,
             Range<float> pitchRange,
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
-            return CreateService(yawRange, pitchRange, new Range<float>(MinDistance, MaxDistance), logger);
+            return CreateService(
+                yawRange, pitchRange, new Range<float>(MinDistance, MaxDistance), loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(
-            Range<float> yawRange, 
-            Range<float> pitchRange, 
-            Range<float> distanceRange, 
-            ILogger logger);
+            Range<float> yawRange,
+            Range<float> pitchRange,
+            Range<float> distanceRange,
+            ILoggerFactory loggerFactory);
     }
 }

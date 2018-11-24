@@ -12,7 +12,7 @@ namespace AlleyCat.Character.Morph
             string displayName,
             Color defaultValue,
             bool useAlpha,
-            ILogger logger) : base(key, displayName, defaultValue, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, loggerFactory)
         {
             UseAlpha = useAlpha;
         }

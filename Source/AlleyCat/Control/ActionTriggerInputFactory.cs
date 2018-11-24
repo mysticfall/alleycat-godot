@@ -16,7 +16,7 @@ namespace AlleyCat.Control
         [Export]
         public bool StopPropagation { get; set; } = true;
 
-        protected override Validation<string, ActionTriggerInput> CreateService(ILogger logger)
+        protected override Validation<string, ActionTriggerInput> CreateService(ILoggerFactory loggerFactory)
         {
             return
                 from action in Action.TrimToOption()
@@ -26,7 +26,7 @@ namespace AlleyCat.Control
                     action,
                     this,
                     Active,
-                    logger)
+                    loggerFactory)
                 {
                     UnhandledOnly = UnhandledOnly,
                     StopPropagation = StopPropagation

@@ -17,16 +17,17 @@ namespace AlleyCat.Motion
         [Service]
         public Option<IOptions<Physics3DSettings>> PhysicsSettings { get; set; }
 
-        protected override Validation<string, TLocomotion> CreateService(KinematicBody target, ILogger logger)
+        protected override Validation<string, TLocomotion> CreateService(
+            KinematicBody target, ILoggerFactory loggerFactory)
         {
             return PhysicsSettings.Bind(v => Optional(v.Value))
                 .ToValidation("Failed to read physics 3D settings.")
-                .Bind(settings => CreateService(target, settings, logger));
+                .Bind(settings => CreateService(target, settings, loggerFactory));
         }
 
         protected abstract Validation<string, TLocomotion> CreateService(
             KinematicBody target,
             Physics3DSettings physicsSettings,
-            ILogger logger);
+            ILoggerFactory loggerFactory);
     }
 }

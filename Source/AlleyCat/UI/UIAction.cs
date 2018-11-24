@@ -25,7 +25,7 @@ namespace AlleyCat.UI
             Node node,
             bool modal,
             bool active,
-            ILogger logger) : base(key, displayName, input, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, input, active, loggerFactory)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 

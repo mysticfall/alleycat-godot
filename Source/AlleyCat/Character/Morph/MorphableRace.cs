@@ -14,7 +14,7 @@ namespace AlleyCat.Character.Morph
             string displayName,
             IEnumerable<EquipmentSlot> equipmentSlots,
             Map<Sex, IEnumerable<IMorphGroup>> morphGroups,
-            ILogger logger) : base(key, displayName, equipmentSlots, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, equipmentSlots, loggerFactory)
         {
             MorphGroups = morphGroups;
         }

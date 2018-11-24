@@ -33,7 +33,7 @@ namespace AlleyCat.Item
         public Array<string> Tags { get; set; } = new Array<string> {Carry, Hand};
 
         protected override Validation<string, PickupAction> CreateService(
-            string key, string displayName, ILogger logger)
+            string key, string displayName, ILoggerFactory loggerFactory)
         {
             return new PickupAction(
                 key,
@@ -44,7 +44,7 @@ namespace AlleyCat.Item
                 StatesPath.TrimToOption(),
                 ActionState.TrimToOption(),
                 Active,
-                logger)
+                loggerFactory)
             {
                 PickupDistance = PickupDistance,
                 Animation = Animation

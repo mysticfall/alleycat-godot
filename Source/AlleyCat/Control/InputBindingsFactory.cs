@@ -16,7 +16,7 @@ namespace AlleyCat.Control
         [Service(local: true)]
         public IEnumerable<IInput> Inputs { get; set; }
 
-        protected override Validation<string, InputBindings> CreateService(ILogger logger) =>
-            new InputBindings(Inputs, Active, logger);
+        protected override Validation<string, InputBindings> CreateService(ILoggerFactory loggerFactory) =>
+            new InputBindings(Inputs, Active, loggerFactory);
     }
 }

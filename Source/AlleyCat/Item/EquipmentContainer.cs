@@ -23,7 +23,7 @@ namespace AlleyCat.Item
         public EquipmentContainer(
             IEnumerable<EquipmentSlot> slots,
             IEquipmentHolder holder,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(slots, nameof(slots)).IsNotNull();
             Ensure.That(holder, nameof(holder)).IsNotNull();

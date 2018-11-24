@@ -17,11 +17,9 @@ namespace AlleyCat.Animation
         public Option<IAnimationControlFactory> ControlFactory { get; set; }
 
         protected override Validation<string, AnimationStateManager> CreateService(
-            AnimationPlayer player,
-            ILogger logger)
+            AnimationPlayer player, ILoggerFactory loggerFactory)
         {
-            return AnimationTree
-                .ToValidation("Missing the animation tree.")
+            return AnimationTree.ToValidation("Missing the animation tree.")
                 .Map(animationTree =>
                     new AnimationStateManager(
                         player,
@@ -31,7 +29,7 @@ namespace AlleyCat.Animation
                         ProcessMode,
                         this,
                         Active,
-                        logger));
+                        loggerFactory));
         }
     }
 }

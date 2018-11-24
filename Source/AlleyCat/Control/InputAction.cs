@@ -19,7 +19,7 @@ namespace AlleyCat.Control
             string displayName,
             ITriggerInput input,
             bool active,
-            ILogger logger) : base(key, displayName, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, active, loggerFactory)
         {
             Ensure.That(input, nameof(input)).IsNotNull();
 

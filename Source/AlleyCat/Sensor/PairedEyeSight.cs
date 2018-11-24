@@ -65,7 +65,7 @@ namespace AlleyCat.Sensor
             Range<float> yawRange,
             Range<float> pitchRange,
             bool active,
-            ILogger logger) : base(yawRange, pitchRange, active, logger)
+            ILoggerFactory loggerFactory) : base(yawRange, pitchRange, active, loggerFactory)
         {
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(animationManager, nameof(animationManager)).IsNotNull();

@@ -28,7 +28,7 @@ namespace AlleyCat.Item
             Set<string> tags,
             Set<string> meshesToSync,
             bool active,
-            ILogger logger) : base(key, slot, additionalSlots, tags, active, logger)
+            ILoggerFactory loggerFactory) : base(key, slot, additionalSlots, tags, active, loggerFactory)
         {
             MeshesToSync = meshesToSync;
         }

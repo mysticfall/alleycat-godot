@@ -72,7 +72,7 @@ namespace AlleyCat.View
         }
 
         protected override Validation<string, HeadMountedView> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, ILogger logger)
+            Range<float> yawRange, Range<float> pitchRange, ILoggerFactory loggerFactory)
         {
             return new HeadMountedView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
@@ -84,7 +84,7 @@ namespace AlleyCat.View
                 ProcessMode,
                 this,
                 Active,
-                logger)
+                loggerFactory)
             {
                 Offset = Offset,
                 MaxDofDistance = MaxDofDistance,

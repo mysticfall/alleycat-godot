@@ -33,7 +33,7 @@ namespace AlleyCat.View
             Range<float> yawRange, 
             Range<float> pitchRange, 
             Range<float> distanceRange, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             var pivot = Optional(Pivot).Bind(this.FindComponent<ITransformable>);
 
@@ -54,7 +54,7 @@ namespace AlleyCat.View
                 this,
                 this,
                 Active,
-                logger);
+                loggerFactory);
         }
     }
 }

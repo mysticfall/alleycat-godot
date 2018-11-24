@@ -59,7 +59,11 @@ namespace AlleyCat.Motion
 
         private readonly BehaviorSubject<Vector2> _rotation;
 
-        protected TurretLike(Range<float> yawRange, Range<float> pitchRange, bool active, ILogger logger) : base(logger)
+        protected TurretLike(
+            Range<float> yawRange, 
+            Range<float> pitchRange, 
+            bool active, 
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             YawRange = yawRange;
             PitchRange = pitchRange;

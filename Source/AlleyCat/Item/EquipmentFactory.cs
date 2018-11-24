@@ -4,12 +4,12 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Common.Generic;
-using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
@@ -54,11 +54,9 @@ namespace AlleyCat.Item
         [Service]
         protected Option<ILoggerFactory> LoggerFactory { get; set; }
 
-        protected virtual Option<ILogger> Logger => LoggerFactory.Map(p => p.CreateLogger(LogCategory));
-
         protected virtual string LogCategory => typeof(Equipment).FullName;
 
-        protected Validation<string, Equipment> CreateService(ILogger logger)
+        protected Validation<string, Equipment> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
@@ -84,7 +82,7 @@ namespace AlleyCat.Item
                     mesh,
                     itemMesh,
                     Markers,
-                    logger);
+                    loggerFactory);
         }
 
         public void AddServices(IServiceCollection collection)
@@ -96,11 +94,11 @@ namespace AlleyCat.Item
                 throw new InvalidOperationException("The service has been already created.");
             }
 
-            var logger = Logger.IfNone(() => new PrintLogger(LogCategory));
+            var loggerFactory = LoggerFactory.IfNone(() => new NullLoggerFactory());
 
-            (Service = CreateService(logger)).BiIter(
+            (Service = CreateService(loggerFactory)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => logger.LogError("Failed to create a service: {}.", error)
+                error => throw new ValidationException(error, this)
             );
         }
 

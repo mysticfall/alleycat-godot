@@ -8,7 +8,7 @@ namespace AlleyCat.Action
             string key,
             string displayName,
             bool active,
-            ILogger logger) : base(key, displayName, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, active, loggerFactory)
         {
         }
 

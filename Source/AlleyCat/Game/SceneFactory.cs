@@ -22,7 +22,7 @@ namespace AlleyCat.Game
         [Export]
         public NodePath UIPath { get; set; } = "UI";
 
-        protected override Validation<string, Scene> CreateService(ILogger logger)
+        protected override Validation<string, Scene> CreateService(ILoggerFactory loggerFactory)
         {
             return new Scene(
                 Key.TrimToOption().IfNone(GetName),
@@ -30,7 +30,7 @@ namespace AlleyCat.Game
                 Optional(CharactersPath),
                 Optional(ItemsPath),
                 Optional(UIPath),
-                logger);
+                loggerFactory);
         }
     }
 }

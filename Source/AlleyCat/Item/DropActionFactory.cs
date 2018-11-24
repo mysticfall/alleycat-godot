@@ -7,9 +7,9 @@ namespace AlleyCat.Item
     public class DropActionFactory : ActionFactory<DropAction>
     {
         protected override Validation<string, DropAction> CreateService(
-            string key, string displayName, ILogger logger)
+            string key, string displayName, ILoggerFactory loggerFactory)
         {
-            return new DropAction(key, displayName, Active, logger);
+            return new DropAction(key, displayName, Active, loggerFactory);
         }
     }
 }

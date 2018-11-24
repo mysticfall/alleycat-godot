@@ -13,7 +13,7 @@ namespace AlleyCat.Control
         [Export(PropertyHint.ExpRange, "0, 1")]
         public float Maximum { get; set; }
 
-        protected override Validation<string, MouseAxisInput> CreateService(ILogger logger)
+        protected override Validation<string, MouseAxisInput> CreateService(ILoggerFactory loggerFactory)
         {
             return new MouseAxisInput(
                 GetName(),
@@ -22,7 +22,7 @@ namespace AlleyCat.Control
                 this,
                 this,
                 Active,
-                logger)
+                loggerFactory)
             {
                 Maximum = Maximum,
                 Sensitivity = Sensitivity,

@@ -46,7 +46,7 @@ namespace AlleyCat.Animation
         public string ExitAnimatorPath { get; set; } = "States/Seated/Getting Up";
 
         protected override Validation<string, SitAction> CreateService(
-            string key, string displayName, ILogger logger)
+            string key, string displayName, ILoggerFactory loggerFactory)
         {
             return
                 from animation in Optional(Animation)
@@ -83,7 +83,7 @@ namespace AlleyCat.Animation
                     animatorPath,
                     exitAnimatorPath,
                     Active,
-                    logger)
+                    loggerFactory)
                 {
                     SittingDownAnimation = SittingDownAnimation,
                     GettingUpAnimation = GettingUpAnimation

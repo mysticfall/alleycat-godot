@@ -19,15 +19,15 @@ namespace AlleyCat.Item
         [Export, UsedImplicitly]
         public Array<string> AdditionalSlots { get; set; }
 
-        protected override Validation<string, T> CreateService(ILogger logger)
+        protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var slot = Slot.TrimToOption().IfNone(key);
 
-            return CreateService(key, slot, toSet(AdditionalSlots), logger);
+            return CreateService(key, slot, toSet(AdditionalSlots), loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(
-            string key, string slot, Set<string> additionalSlots, ILogger logger);
+            string key, string slot, Set<string> additionalSlots, ILoggerFactory loggerFactory);
     }
 }

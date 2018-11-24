@@ -13,7 +13,7 @@ namespace AlleyCat.Item
             Set<string> additionalSlots,
             Set<string> tags,
             bool active,
-            ILogger logger) : base(key, slot, additionalSlots, tags, active, logger)
+            ILoggerFactory loggerFactory) : base(key, slot, additionalSlots, tags, active, loggerFactory)
         {
         }
 

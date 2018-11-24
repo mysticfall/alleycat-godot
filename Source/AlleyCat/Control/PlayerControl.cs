@@ -89,7 +89,7 @@ namespace AlleyCat.Control
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(camera, nameof(camera)).IsNotNull();
             Ensure.That(perspectives, nameof(perspectives)).IsNotNull();

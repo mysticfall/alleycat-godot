@@ -35,7 +35,7 @@ namespace AlleyCat.Sensor
         }
 
         protected override Validation<string, PairedEyeSight> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, ILogger logger)
+            Range<float> yawRange, Range<float> pitchRange, ILoggerFactory loggerFactory)
         {
             return from skeleton in Skeleton
                     .ToValidation("Failed to find the skeleton.")
@@ -62,7 +62,7 @@ namespace AlleyCat.Sensor
                     yawRange,
                     pitchRange,
                     Active,
-                    logger);
+                    loggerFactory);
         }
     }
 }

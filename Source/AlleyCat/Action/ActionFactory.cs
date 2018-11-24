@@ -16,14 +16,15 @@ namespace AlleyCat.Action
         [Export]
         public string DisplayName { get; set; }
 
-        protected override Validation<string, T> CreateService(ILogger logger)
+        protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return CreateService(key, displayName, logger);
+            return CreateService(key, displayName, loggerFactory);
         }
 
-        protected abstract Validation<string, T> CreateService(string key, string displayName, ILogger logger);
+        protected abstract Validation<string, T> CreateService(
+            string key, string displayName, ILoggerFactory loggerFactory);
     }
 }

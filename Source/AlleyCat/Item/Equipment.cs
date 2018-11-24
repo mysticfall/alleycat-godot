@@ -79,7 +79,7 @@ namespace AlleyCat.Item
             MeshInstance mesh,
             Mesh itemMesh,
             IEnumerable<Marker> markers,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

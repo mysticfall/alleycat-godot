@@ -50,7 +50,7 @@ namespace AlleyCat.Control
             IInputSource source,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(key, source, timeSource, active, logger)
+            ILoggerFactory loggerFactory) : base(key, source, timeSource, active, loggerFactory)
         {
             PositiveAction = positiveAction;
             NegativeAction = negativeAction;

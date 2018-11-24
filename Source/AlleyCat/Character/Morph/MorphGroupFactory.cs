@@ -20,12 +20,12 @@ namespace AlleyCat.Character.Morph
         [Service]
         public IEnumerable<IMorphDefinition> Definitions { get; set; } = Seq<IMorphDefinition>();
 
-        protected override Validation<string, MorphGroup> CreateService(ILogger logger)
+        protected override Validation<string, MorphGroup> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return new MorphGroup(key, displayName, Definitions, logger);
+            return new MorphGroup(key, displayName, Definitions, loggerFactory);
         }
     }
 }

@@ -21,14 +21,14 @@ namespace AlleyCat.Animation
         [Service]
         public Option<AnimationPlayer> Player { get; set; }
 
-        protected override Validation<string, T> CreateService(ILogger logger)
+        protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
             return Player
                 .ToValidation("Missing the animation player.")
-                .Bind(player => CreateService(player, logger));
+                .Bind(player => CreateService(player, loggerFactory));
         }
 
-        protected abstract Validation<string, T> CreateService(AnimationPlayer player, ILogger logger);
+        protected abstract Validation<string, T> CreateService(AnimationPlayer player, ILoggerFactory loggerFactory);
 
         [UsedImplicitly]
         private void FireEvent(string name) => FireEvent(name, null);

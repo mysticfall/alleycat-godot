@@ -16,7 +16,7 @@ namespace AlleyCat.Item
             string key, 
             string slot, 
             Set<string> additionalSlots, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return new RiggedConfiguration(
                 key,
@@ -25,7 +25,7 @@ namespace AlleyCat.Item
                 Tags,
                 toSet(MeshesToSync),
                 Active,
-                logger)
+                loggerFactory)
             {
                 Mesh = Mesh,
                 Animation = Animation,

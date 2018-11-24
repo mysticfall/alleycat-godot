@@ -62,7 +62,7 @@ namespace AlleyCat.Animation
             string animatorPath,
             string exitAnimatorPath,
             bool active,
-            ILogger logger) : base(key, displayName, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, active, loggerFactory)
         {
             Ensure.That(animation, nameof(animation)).IsNotNull();
             Ensure.That(statesPath, nameof(statesPath)).IsNotNull();

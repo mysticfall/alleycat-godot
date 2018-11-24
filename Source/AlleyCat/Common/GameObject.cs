@@ -17,11 +17,11 @@ namespace AlleyCat.Common
 
         private bool _disposed;
 
-        protected GameObject(ILogger logger)
+        protected GameObject(ILoggerFactory loggerFactory)
         {
-            Ensure.That(logger, nameof(logger)).IsNotNull();
+            Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
-            Logger = logger;
+            Logger = loggerFactory.CreateLogger(GetType());
         }
 
         public void Collect(IDisposable disposable)

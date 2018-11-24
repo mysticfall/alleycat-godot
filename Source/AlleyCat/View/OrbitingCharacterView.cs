@@ -66,7 +66,7 @@ namespace AlleyCat.View
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(
+            ILoggerFactory loggerFactory) : base(
             camera,
             rotationInput,
             zoomInput,
@@ -78,7 +78,7 @@ namespace AlleyCat.View
             processMode,
             timeSource,
             active,
-            logger)
+            loggerFactory)
         {
             OnFocusChange = timeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)

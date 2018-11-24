@@ -6,7 +6,6 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Common.Generic;
-using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
@@ -14,6 +13,7 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
@@ -69,11 +69,9 @@ namespace AlleyCat.Character
         [Service]
         protected Option<ILoggerFactory> LoggerFactory { get; set; }
 
-        protected virtual Option<ILogger> Logger => LoggerFactory.Map(p => p.CreateLogger(LogCategory));
-
         protected virtual string LogCategory => typeof(TCharacter).FullName;
 
-        protected Validation<string, TCharacter> CreateService(ILogger logger)
+        protected Validation<string, TCharacter> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
@@ -94,7 +92,7 @@ namespace AlleyCat.Character
                 from animationManager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")
                 from character in CreateService(
-                    key, displayName, race, vision, locomotion, skeleton, animationManager, logger)
+                    key, displayName, race, vision, locomotion, skeleton, animationManager, loggerFactory)
                 select character;
         }
 
@@ -106,7 +104,7 @@ namespace AlleyCat.Character
             TLocomotion locomotion,
             Skeleton skeleton,
             IAnimationManager animationManager,
-            ILogger logger);
+            ILoggerFactory loggerFactory);
 
         public void AddServices(IServiceCollection collection)
         {
@@ -117,11 +115,11 @@ namespace AlleyCat.Character
                 throw new InvalidOperationException("The service has been already created.");
             }
 
-            var logger = Logger.IfNone(() => new PrintLogger(LogCategory));
+            var loggerFactory = LoggerFactory.IfNone(() => new NullLoggerFactory());
 
-            (Service = CreateService(logger)).BiIter(
+            (Service = CreateService(loggerFactory)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => logger.LogError("Failed to create a service: {}.", error)
+                error => throw new ValidationException(error, this)
             );
         }
 

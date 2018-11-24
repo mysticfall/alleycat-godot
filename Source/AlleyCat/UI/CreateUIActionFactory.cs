@@ -16,7 +16,7 @@ namespace AlleyCat.UI
         public NodePath Parent { get; set; }
 
         protected override Validation<string, CreateUIAction> CreateService(
-            string key, string displayName, ITriggerInput input, ILogger logger)
+            string key, string displayName, ITriggerInput input, ILoggerFactory loggerFactory)
         {
             var parent = Optional(Parent).Bind(this.FindComponent<Node>);
 
@@ -31,7 +31,7 @@ namespace AlleyCat.UI
                     this,
                     Modal,
                     Active,
-                    logger);
+                    loggerFactory);
         }
     }
 }

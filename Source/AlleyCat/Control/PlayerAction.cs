@@ -20,7 +20,7 @@ namespace AlleyCat.Control
             Option<IPlayerControl> playerControl,
             ITriggerInput input,
             bool active,
-            ILogger logger) : base(key, displayName, input, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, input, active, loggerFactory)
         {
             PlayerControl = playerControl;
         }

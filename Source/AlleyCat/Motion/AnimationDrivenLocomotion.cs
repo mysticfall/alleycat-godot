@@ -36,7 +36,7 @@ namespace AlleyCat.Motion
             Physics3DSettings physicsSettings,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(target, physicsSettings, timeSource, active, logger)
+            ILoggerFactory loggerFactory) : base(target, physicsSettings, timeSource, active, loggerFactory)
         {
             Ensure.That(animationTree, nameof(animationTree)).IsNotNull();
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();

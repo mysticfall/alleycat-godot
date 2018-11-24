@@ -31,7 +31,7 @@ namespace AlleyCat.Control
             string action,
             IInputSource source,
             bool active,
-            ILogger logger) : base(key, source, active, logger)
+            ILoggerFactory loggerFactory) : base(key, source, active, loggerFactory)
         {
             Action = action;
         }

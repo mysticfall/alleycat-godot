@@ -40,7 +40,7 @@ namespace AlleyCat.Control
 
         [Export] private NodePath _cameraPath;
 
-        protected override Validation<string, PlayerControl> CreateService(ILogger logger)
+        protected override Validation<string, PlayerControl> CreateService(ILoggerFactory loggerFactory)
         {
             return new PlayerControl(
                 Camera.IfNone(() => GetViewport().GetCamera()),
@@ -51,7 +51,7 @@ namespace AlleyCat.Control
                 ProcessMode,
                 this,
                 Active,
-                logger);
+                loggerFactory);
         }
     }
 }

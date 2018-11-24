@@ -23,7 +23,11 @@ namespace AlleyCat.Action
 
         private readonly BehaviorSubject<bool> _active;
 
-        protected Action(string key, string displayName, bool active, ILogger logger) : base(logger)
+        protected Action(
+            string key, 
+            string displayName, 
+            bool active, 
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

@@ -71,7 +71,7 @@ namespace AlleyCat.Motion
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(yawRange, pitchRange, active, logger)
+            ILoggerFactory loggerFactory) : base(yawRange, pitchRange, active, loggerFactory)
         {
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 

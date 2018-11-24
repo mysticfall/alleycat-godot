@@ -43,7 +43,7 @@ namespace AlleyCat.Item
             Option<string> statesPath,
             Option<string> actionState,
             bool active,
-            ILogger logger) : base(key, displayName, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, active, loggerFactory)
         {
             Tags = tags;
             IKChain = ikChain;

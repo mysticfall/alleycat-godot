@@ -17,14 +17,15 @@ namespace AlleyCat.Character.Morph
         [Export]
         public TVal Default { get; set; }
 
-        protected override Validation<string, TDef> CreateService(ILogger logger)
+        protected override Validation<string, TDef> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return CreateService(key, displayName, logger);
+            return CreateService(key, displayName, loggerFactory);
         }
 
-        protected abstract Validation<string, TDef> CreateService(string key, string displayName, ILogger logger);
+        protected abstract Validation<string, TDef> CreateService(
+            string key, string displayName, ILoggerFactory loggerFactory);
     }
 }

@@ -45,7 +45,7 @@ namespace AlleyCat.Animation
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(player, nameof(player)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();

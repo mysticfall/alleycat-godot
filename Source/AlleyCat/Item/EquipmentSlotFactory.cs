@@ -10,9 +10,9 @@ namespace AlleyCat.Item
         public EquipType EquipType { get; set; }
 
         protected override Validation<string, EquipmentSlot> CreateService(
-            string key, string displayName, ILogger logger)
+            string key, string displayName, ILoggerFactory loggerFactory)
         {
-            return new EquipmentSlot(key, displayName, EquipType, AllowedFor, logger);
+            return new EquipmentSlot(key, displayName, EquipType, AllowedFor, loggerFactory);
         }
     }
 }

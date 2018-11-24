@@ -18,13 +18,13 @@ namespace AlleyCat.Motion
 
         [Export] private NodePath _targetPath;
 
-        protected override Validation<string, TLocomotion> CreateService(ILogger logger)
+        protected override Validation<string, TLocomotion> CreateService(ILoggerFactory loggerFactory)
         {
             return Target
                 .ToValidation("Missing locomotion target.")
-                .Bind(target => CreateService(target, logger));
+                .Bind(target => CreateService(target, loggerFactory));
         }
 
-        protected abstract Validation<string, TLocomotion> CreateService(TTarget target, ILogger logger);
+        protected abstract Validation<string, TLocomotion> CreateService(TTarget target, ILoggerFactory loggerFactory);
     }
 }

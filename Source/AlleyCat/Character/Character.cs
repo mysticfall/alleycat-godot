@@ -77,7 +77,7 @@ namespace AlleyCat.Character
             IEnumerable<IAction> actions,
             IEnumerable<Marker> markers,
             Spatial node,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
@@ -104,7 +104,7 @@ namespace AlleyCat.Character
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
             var slots = Race.EquipmentSlots.Freeze();
-            var equipments = new EquipmentContainer(slots, this, logger);
+            var equipments = new EquipmentContainer(slots, this, loggerFactory);
 
             equipments.Initialize();
             equipments.DisposeWith(this);

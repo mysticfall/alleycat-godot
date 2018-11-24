@@ -9,7 +9,7 @@ namespace AlleyCat.Item
             string key, 
             string slot, 
             Set<string> additionalSlots, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return new AttachedConfiguration(
                 key,
@@ -17,7 +17,7 @@ namespace AlleyCat.Item
                 additionalSlots,
                 Tags,
                 Active, 
-                logger)
+                loggerFactory)
             {
                 Mesh = Mesh,
                 Animation = Animation,

@@ -54,7 +54,7 @@ namespace AlleyCat.Control
             IInputSource source,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(key, source, active, logger)
+            ILoggerFactory loggerFactory) : base(key, source, active, loggerFactory)
         {
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 

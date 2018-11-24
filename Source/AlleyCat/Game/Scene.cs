@@ -31,7 +31,7 @@ namespace AlleyCat.Game
             Option<NodePath> charactersPath,
             Option<NodePath> itemsPath,
             Option<NodePath> uiPath,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(root, nameof(root)).IsNotNull();

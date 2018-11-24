@@ -13,7 +13,11 @@ namespace AlleyCat.Item
 
         public Set<string> AdditionalSlots { get; }
 
-        protected SlotConfiguration(string key, string slot, Set<string> additionalSlots, ILogger logger) : base(logger)
+        protected SlotConfiguration(
+            string key, 
+            string slot, 
+            Set<string> additionalSlots, 
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(slot, nameof(slot)).IsNotNullOrEmpty();

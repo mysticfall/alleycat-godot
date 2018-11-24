@@ -25,7 +25,11 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<bool> _active;
 
-        protected Input(string key, IInputSource source, bool active, ILogger logger) : base(logger)
+        protected Input(
+            string key, 
+            IInputSource source, 
+            bool active, 
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(source, nameof(source)).IsNotNull();

@@ -23,7 +23,10 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<bool> _active;
 
-        public InputBindings(IEnumerable<IInput> inputs, bool active, ILogger logger) : base(logger)
+        public InputBindings(
+            IEnumerable<IInput> inputs,
+            bool active,
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(inputs, nameof(inputs)).IsNotNull();
 

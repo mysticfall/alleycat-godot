@@ -10,7 +10,7 @@ namespace AlleyCat.Character
     {
         public Map<string, Race> Races { get; }
 
-        public RaceRegistry(IEnumerable<Race> races, ILogger logger) : base(logger)
+        public RaceRegistry(IEnumerable<Race> races, ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(races, nameof(races)).IsNotNull();
 

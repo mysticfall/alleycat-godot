@@ -35,7 +35,7 @@ namespace AlleyCat.View
             Range<float> yawRange, 
             Range<float> pitchRange, 
             Range<float> distanceRange, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return new OrbitingCharacterView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
@@ -50,7 +50,7 @@ namespace AlleyCat.View
                 ProcessMode,
                 this,
                 Active,
-                logger)
+                loggerFactory)
             {
                 MaxFocalDistance = MaxFocalDistance
             };

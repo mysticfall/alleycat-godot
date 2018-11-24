@@ -17,7 +17,7 @@ namespace AlleyCat.Control
         [Export]
         public bool Polling { get; set; } = true;
 
-        protected override Validation<string, ActionAxisInput> CreateService(ILogger logger)
+        protected override Validation<string, ActionAxisInput> CreateService(ILoggerFactory loggerFactory)
         {
             return
                 from positiveAction in PositiveAction.TrimToOption()
@@ -31,7 +31,7 @@ namespace AlleyCat.Control
                     this,
                     this,
                     Active,
-                    logger)
+                    loggerFactory)
                 {
                     Sensitivity = Sensitivity,
                     Curve = Optional(Curve),

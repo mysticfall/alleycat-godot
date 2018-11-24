@@ -12,7 +12,7 @@ namespace AlleyCat.Character
         [Service]
         public IEnumerable<Race> Races { get; set; } = Prelude.Seq<Race>();
 
-        protected override Validation<string, RaceRegistry> CreateService(ILogger logger) =>
-            new RaceRegistry(Races, logger);
+        protected override Validation<string, RaceRegistry> CreateService(ILoggerFactory loggerFactory) =>
+            new RaceRegistry(Races, loggerFactory);
     }
 }

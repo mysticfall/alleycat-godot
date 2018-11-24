@@ -45,7 +45,7 @@ namespace AlleyCat.View
         }
 
         protected override Validation<string, FreeCameraView> CreateService(
-            Range<float> yawRange, Range<float> pitchRange, ILogger logger)
+            Range<float> yawRange, Range<float> pitchRange, ILoggerFactory loggerFactory)
         {
             return new FreeCameraView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
@@ -57,7 +57,7 @@ namespace AlleyCat.View
                 pitchRange,
                 this,
                 Active,
-                logger)
+                loggerFactory)
             {
                 FocusRange = FocusRange,
                 FocusSpeed = FocusSpeed,

@@ -31,7 +31,7 @@ namespace AlleyCat.Motion
         protected override Validation<string, AnimationDrivenLocomotion> CreateService(
             KinematicBody target, 
             Physics3DSettings physicsSettings, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return
                 from manager in AnimationManager
@@ -57,7 +57,7 @@ namespace AlleyCat.Motion
                     physicsSettings,
                     this,
                     Active,
-                    logger);
+                    loggerFactory);
         }
     }
 }

@@ -22,15 +22,15 @@ namespace AlleyCat.Motion
         [Export(PropertyHint.Range, "-90,90")]
         public float MinPitch { get; set; } = -90f;
 
-        protected override Validation<string, T> CreateService(ILogger logger) =>
+        protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory) =>
             CreateService(
                 new Range<float>(Mathf.Deg2Rad(MinYaw), Mathf.Deg2Rad(MaxYaw)),
                 new Range<float>(Mathf.Deg2Rad(MinPitch), Mathf.Deg2Rad(MaxPitch)),
-                logger);
+                loggerFactory);
 
         protected abstract Validation<string, T> CreateService(
             Range<float> yawRange, 
             Range<float> pitchRange, 
-            ILogger logger);
+            ILoggerFactory loggerFactory);
     }
 }

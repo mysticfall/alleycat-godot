@@ -13,7 +13,7 @@ namespace AlleyCat.Motion
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(target, timeSource, active, logger)
+            ILoggerFactory loggerFactory) : base(target, timeSource, active, loggerFactory)
         {
             ProcessMode = processMode;
         }

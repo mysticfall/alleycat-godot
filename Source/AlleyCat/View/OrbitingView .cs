@@ -40,7 +40,7 @@ namespace AlleyCat.View
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(
+            ILoggerFactory loggerFactory) : base(
             yawRange, 
             pitchRange, 
             distanceRange, 
@@ -49,7 +49,7 @@ namespace AlleyCat.View
             processMode, 
             timeSource, 
             active,
-            logger)
+            loggerFactory)
         {
             Ensure.That(camera, nameof(camera)).IsNotNull();
 

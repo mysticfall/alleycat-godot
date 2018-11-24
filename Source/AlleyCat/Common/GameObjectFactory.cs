@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common.Generic;
-using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
@@ -24,10 +24,6 @@ namespace AlleyCat.Common
         [Service]
         protected Option<ILoggerFactory> LoggerFactory { get; set; }
 
-        protected virtual Option<ILogger> Logger => LoggerFactory.Map(p => p.CreateLogger(LogCategory));
-
-        protected virtual string LogCategory => typeof(T).FullName;
-
         public void AddServices(IServiceCollection collection)
         {
             Ensure.That(collection, nameof(collection)).IsNotNull();
@@ -37,14 +33,14 @@ namespace AlleyCat.Common
                 throw new InvalidOperationException("The service has been already created.");
             }
 
-            var logger = Logger.IfNone(() => new PrintLogger(LogCategory));
+            var loggerFactory = LoggerFactory.IfNone(() => new NullLoggerFactory());
 
-            (Service = CreateService(logger)).BiIter(
+            (Service = CreateService(loggerFactory)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => logger.LogError("Failed to create a service: {}.", error));
+                error => throw new ValidationException(error, this));
         }
 
-        protected abstract Validation<string, T> CreateService(ILogger logger);
+        protected abstract Validation<string, T> CreateService(ILoggerFactory loggerFactory);
 
         [PostConstruct]
         protected virtual void PostConstruct()

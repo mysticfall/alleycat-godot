@@ -16,7 +16,7 @@ namespace AlleyCat.Control
             Option<IPlayerControl> playerControl,
             ITriggerInput input,
             bool active,
-            ILogger logger) : base(key, displayName, playerControl, input, active, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, playerControl, input, active, loggerFactory)
         {
             Ensure.That(action, nameof(action)).IsNotNull();
 

@@ -26,7 +26,7 @@ namespace AlleyCat.Character.Morph
             Vector3 modifier,
             Range<float> range,
             float defaultValue,
-            ILogger logger) : base(key, displayName, range, defaultValue, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, range, defaultValue, loggerFactory)
         {
             Bones = bones?.Freeze();
 

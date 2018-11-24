@@ -56,7 +56,7 @@ namespace AlleyCat.Motion
             T target,
             ITimeSource timeSource,
             bool active,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(target, nameof(target)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();

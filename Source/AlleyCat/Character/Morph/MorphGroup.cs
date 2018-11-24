@@ -17,7 +17,7 @@ namespace AlleyCat.Character.Morph
             string key,
             string displayName,
             IEnumerable<IMorphDefinition> definitions,
-            ILogger logger) : base(logger)
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

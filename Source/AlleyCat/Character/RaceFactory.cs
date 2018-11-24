@@ -5,7 +5,10 @@ namespace AlleyCat.Character
 {
     public class RaceFactory : BaseRaceFactory<Race>
     {
-        protected override Validation<string, Race> CreateService(string key, string displayName, ILogger logger) =>
-            new Race(key, displayName, EquipmentSlots, logger);
+        protected override Validation<string, Race> CreateService(
+            string key, string displayName, ILoggerFactory loggerFactory)
+        {
+            return new Race(key, displayName, EquipmentSlots, loggerFactory);
+        }
     }
 }

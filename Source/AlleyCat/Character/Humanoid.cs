@@ -26,7 +26,7 @@ namespace AlleyCat.Character
             IEnumerable<IAction> actions,
             IEnumerable<Marker> markers,
             Spatial node,
-            ILogger logger) : base(
+            ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             race,
@@ -38,7 +38,7 @@ namespace AlleyCat.Character
             actions,
             markers,
             node,
-            logger)
+            loggerFactory)
         {
             var groups = Race.MorphGroups.Find(Sex).Flatten().Freeze();
             var definitions = groups.Bind(g => g.Definitions);

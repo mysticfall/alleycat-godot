@@ -10,9 +10,9 @@ namespace AlleyCat.Control
             string displayName, 
             Option<IPlayerControl> control, 
             ITriggerInput input, 
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
-            return new PlayerInteraction(key, displayName, control, input, Active, logger);
+            return new PlayerInteraction(key, displayName, control, input, Active, loggerFactory);
         }
     }
 }

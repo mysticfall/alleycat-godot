@@ -15,7 +15,7 @@ namespace AlleyCat.UI
             string key,
             string displayName,
             ITriggerInput input,
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return
                 from ui in Optional(UI).ToValidation("Missing the target UI.")
@@ -27,7 +27,7 @@ namespace AlleyCat.UI
                     this,
                     Modal,
                     Active,
-                    logger);
+                    loggerFactory);
         }
     }
 }

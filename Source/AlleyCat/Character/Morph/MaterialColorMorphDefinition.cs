@@ -22,7 +22,7 @@ namespace AlleyCat.Character.Morph
             IEnumerable<string> materials,
             Color defaultValue,
             bool useAlpha,
-            ILogger logger) : base(key, displayName, defaultValue, useAlpha, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, useAlpha, loggerFactory)
         {
             Ensure.That(mesh, nameof(mesh)).IsNotNullOrEmpty();
 

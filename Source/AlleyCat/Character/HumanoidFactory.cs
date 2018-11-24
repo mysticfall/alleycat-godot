@@ -18,7 +18,7 @@ namespace AlleyCat.Character
             ILocomotion locomotion,
             Skeleton skeleton,
             IAnimationManager animationManager,
-            ILogger logger)
+            ILoggerFactory loggerFactory)
         {
             return new Humanoid(
                 key,
@@ -32,7 +32,7 @@ namespace AlleyCat.Character
                 Actions,
                 Markers,
                 this,
-                logger);
+                loggerFactory);
         }
     }
 }

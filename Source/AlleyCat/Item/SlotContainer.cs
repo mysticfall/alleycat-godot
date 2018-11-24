@@ -33,7 +33,7 @@ namespace AlleyCat.Item
 
         private readonly ISubject<TItem> _onRemove;
 
-        protected SlotContainer(ILogger logger) : base(logger)
+        protected SlotContainer(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             _onAdd = new Subject<TItem>().DisposeWith(this);
             _onRemove = new Subject<TItem>().DisposeWith(this);

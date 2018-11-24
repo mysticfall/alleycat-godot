@@ -16,7 +16,7 @@ namespace AlleyCat.Item
             string displayName,
             EquipType equipType,
             Option<ICondition<ISlotItem>> allowedCondition,
-            ILogger logger) : base(key, displayName, allowedCondition, logger)
+            ILoggerFactory loggerFactory) : base(key, displayName, allowedCondition, loggerFactory)
         {
             EquipType = equipType;
         }

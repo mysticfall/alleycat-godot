@@ -94,7 +94,7 @@ namespace AlleyCat.View
             ITimeSource timeSource,
             IInputSource inputSource,
             bool active,
-            ILogger logger) : base(
+            ILoggerFactory loggerFactory) : base(
             camera,
             rotationInput,
             zoomInput,
@@ -106,7 +106,7 @@ namespace AlleyCat.View
             processMode,
             timeSource,
             active,
-            logger)
+            loggerFactory)
         {
             Ensure.That(inputSource, nameof(inputSource)).IsNotNull();
 
