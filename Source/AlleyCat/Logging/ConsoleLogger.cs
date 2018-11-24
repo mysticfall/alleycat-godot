@@ -2,43 +2,41 @@
 using AlleyCat.UI.Console;
 using EnsureThat;
 using Godot;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
     [ProviderAlias("Console")]
-    public class ConsoleLogger : ILogger
+    public class ConsoleLogger : Logger
     {
-        public string Name { get; }
+        public IConsole Console { get; }
 
-        public DebugConsole Console { get; }
-
-        public ConsoleLogger(string name, DebugConsole console)
+        public ConsoleLogger(
+            string name,
+            IConsole console,
+            int categorySegments = 1,
+            bool showId = true) : this(name, console, None, categorySegments, showId)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
+        }
+
+        public ConsoleLogger(
+            string name,
+            IConsole console,
+            Option<IExternalScopeProvider> scopeProvider,
+            int categorySegments = 1,
+            bool showId = true) : base(name, scopeProvider, categorySegments, showId)
+        {
             Ensure.That(console, nameof(console)).IsNotNull();
 
-            Name = name;
             Console = console;
         }
 
-        public void Log<TState>(
-            LogLevel logLevel,
-            EventId eventId,
-            TState state,
-            Exception exception,
-            Func<TState, Exception, string> formatter)
+        protected override void Log(
+            LogLevel logLevel, string message, Option<string> loggerId, Option<Exception> exception)
         {
-            if (!IsEnabled(logLevel))
-            {
-                return;
-            }
-
-            var message = formatter(state, exception);
-
-            if (string.IsNullOrEmpty(message) && exception == null) return;
-
-            var prefix = GetLevelPrefix(logLevel);
+            var level = FormatLogLevel(logLevel);
 
             Color color;
 
@@ -56,23 +54,24 @@ namespace AlleyCat.Logging
                     break;
             }
 
-            // ReSharper disable once AssignNullToNotNullAttribute
             Console
-                .Highlight("[").Write(prefix, new TextStyle(color)).Highlight("]")
-                .Highlight("[").Text(Name).Highlight("] ")
-                .Text(message)
-                .NewLine();
+                .Write(level, new TextStyle(color)).Text(" - ")
+                .Highlight("[").Text(CategoryLabel).Highlight("] ");
+
+            loggerId.Iter(id => Console.Highlight("(").Text(id).Highlight(") "));
+
+            Console.Text(message).NewLine();
+
+            exception.Iter(e =>
+            {
+                var style = new TextStyle(Console.ErrorColor);
+
+                Console
+                    .Write(e.ToString(), style)
+                    .NewLine()
+                    .Write(e.StackTrace, style)
+                    .NewLine();
+            });
         }
-
-        public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
-
-        protected virtual string GetLevelPrefix(LogLevel level)
-        {
-            var prefix = level.ToString();
-
-            return prefix.Length < 6 ? prefix : prefix.Left(4);
-        }
-
-        public IDisposable BeginScope<TState>(TState state) => null;
     }
 }

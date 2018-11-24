@@ -311,6 +311,8 @@
     <Compile Include="Source\AlleyCat\Item\SlotConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\SlotContainer.cs" />
     <Compile Include="Source\AlleyCat\Item\SlotFactory.cs" />
+    <Compile Include="Source\AlleyCat\Logging\Logger.cs" />
+    <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotionFactory.cs" />
     <Compile Include="Source\AlleyCat\Motion\Billboard.cs" />

@@ -1,53 +1,59 @@
 ﻿using System;
-using EnsureThat;
+using System.Text;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
     [ProviderAlias("Editor")]
-    public class PrintLogger : ILogger
+    public class PrintLogger : Logger
     {
-        public string Name { get; }
+        private readonly StringBuilder _builder = new StringBuilder();
 
-        public PrintLogger(string name)
+        public PrintLogger(
+            string name,
+            int categorySegments = 1,
+            bool showId = true) : base(name, categorySegments, showId)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
-
-            Name = name;
         }
 
-        public void Log<TState>(
-            LogLevel logLevel,
-            EventId eventId,
-            TState state,
-            [CanBeNull] Exception exception,
-            Func<TState, Exception, string> formatter)
+        public PrintLogger(
+            string name,
+            Option<IExternalScopeProvider> scopeProvider,
+            int categorySegments = 1,
+            bool showId = true) : base(name, scopeProvider, categorySegments, showId)
         {
-            if (!IsEnabled(logLevel))
+        }
+
+        protected override void Log(
+            LogLevel logLevel, string message, Option<string> loggerId, Option<Exception> exception)
+        {
+            var level = FormatLogLevel(logLevel);
+
+            _builder.Append(level);
+            _builder.Append(" - [");
+            _builder.Append(CategoryLabel);
+            _builder.Append("] ");
+
+            loggerId.Iter(id =>
             {
-                return;
-            }
+                _builder.Append("(");
+                _builder.Append(id);
+                _builder.Append(") ");
+            });
 
-            var message = formatter(state, exception);
+            _builder.Append(message);
 
-            if (string.IsNullOrEmpty(message) && exception == null) return;
+            exception.Iter(e =>
+            {
+                _builder.AppendLine();
+                _builder.Append(e.ToString());
+            });
 
-            var prefix = GetLevelPrefix(logLevel);
+            GD.Print(_builder.ToString());
 
-            GD.Print($"[{prefix}][{Name}] {message}");
+            _builder.Clear();
         }
-
-        public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
-
-        protected virtual string GetLevelPrefix(LogLevel level)
-        {
-            var prefix = level.ToString();
-
-            return prefix.Length < 6 ? prefix : prefix.Left(4);
-        }
-
-        public IDisposable BeginScope<TState>(TState state) => null;
     }
 }

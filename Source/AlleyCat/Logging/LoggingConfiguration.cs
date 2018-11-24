@@ -43,7 +43,7 @@ namespace AlleyCat.Logging
         {
             Ensure.That(builder, nameof(builder)).IsNotNull();
 
-            var section = DefaultConfigSection.TrimToOption().IfNone(DefaultConfigSection);
+            var section = ConfigSection.TrimToOption().IfNone(DefaultConfigSection);
 
             Configuration
                 .Bind(c => Optional(c.GetSection(section)))
