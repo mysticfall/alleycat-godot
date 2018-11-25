@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
@@ -60,7 +61,9 @@ namespace AlleyCat.Control
         {
             if (Polling)
             {
-                return TimeSource.OnProcess.Select(_ => Value);
+                return TimeSource.OnProcess
+                    .Select(_ => Value)
+                    .DistinctUntilChanged(new NonZeroValueComparer());
             }
 
             var input = Source.OnInput;
@@ -73,7 +76,16 @@ namespace AlleyCat.Control
                 .Where(e => e.IsActionPressed(NegativeAction))
                 .Select(_ => -1f);
 
-            return positive.Merge(negative);
+            return positive.Merge(negative).DistinctUntilChanged(new NonZeroValueComparer());
         }
+    }
+
+    internal struct NonZeroValueComparer : IEqualityComparer<float>
+    {
+        private const float Threshold = 0.0000001f;
+
+        public bool Equals(float x, float y) => Mathf.Abs(x) < Threshold && Mathf.Abs(y) < Threshold;
+
+        public int GetHashCode(float obj) => obj.GetHashCode();
     }
 }

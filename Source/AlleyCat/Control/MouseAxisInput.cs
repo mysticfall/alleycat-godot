@@ -44,7 +44,8 @@ namespace AlleyCat.Control
                 .Where(_ => _maximumValue > 0)
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)
-                .Select(v => _maximumValue > 0 ? GetValue(v) / _maximumValue : 0);
+                .Select(v => _maximumValue > 0 ? GetValue(v) / _maximumValue : 0)
+                .DistinctUntilChanged();
         }
 
         private float GetValue(Vector2 position)
