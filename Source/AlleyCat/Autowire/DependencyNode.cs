@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -49,12 +50,12 @@ namespace AlleyCat.Autowire
 
             _processor = context => definition.Processors
                 .Where(p => p.ProcessPhase != AutowirePhase.Deferred)
-                .Iter(p => p.Process(context, node));
+                .Iter(p => ProcessNode(context, p, node));
 
             void ProcessDeferred(IAutowireContext context) =>
                 definition.Processors
                     .Where(p => p.ProcessPhase == AutowirePhase.Deferred)
-                    .Iter(p => p.Process(context, node));
+                    .Iter(p => ProcessNode(context, p, node));
 
             _deferredProcessor = Some((Action<IAutowireContext>) ProcessDeferred);
         }
@@ -62,6 +63,20 @@ namespace AlleyCat.Autowire
         public void Process(IAutowireContext context) => _processor.Invoke(context);
 
         public void ProcessDeferred(IAutowireContext context) => _deferredProcessor.Iter(p => p.Invoke(context));
+
+        private static void ProcessNode(IAutowireContext context, INodeProcessor processor, Node node)
+        {
+            try
+            {
+                context.LogDebug("Processing {} on '{}'.", processor, node);
+
+                processor.Process(context, node);
+            }
+            catch (Exception e)
+            {
+                context.LogError("Failed to process {} on '{}'.", e, processor, node);
+            }
+        }
 
         public void AddDependency(DependencyNode node)
         {
