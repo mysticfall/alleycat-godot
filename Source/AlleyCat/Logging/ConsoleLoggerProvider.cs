@@ -11,6 +11,6 @@ namespace AlleyCat.Logging
         public DebugConsole Console { get; private set; }
 
         protected override ILogger DoCreateLogger(string categoryName) =>
-            new ConsoleLogger(categoryName, Console, CategorySegments, ShowId);
+            new ConsoleLogger(categoryName, Console, MinimumLevel, CategorySegments, ShowId);
     }
 }

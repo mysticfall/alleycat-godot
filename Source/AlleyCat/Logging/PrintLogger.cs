@@ -12,16 +12,18 @@ namespace AlleyCat.Logging
 
         public PrintLogger(
             string category,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
-            bool showId = true) : base(category, categorySegments, showId)
+            bool showId = true) : base(category, minimumLevel, categorySegments, showId)
         {
         }
 
         public PrintLogger(
             string category,
             Option<IExternalScopeProvider> scopeProvider,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
-            bool showId = true) : base(category, scopeProvider, categorySegments, showId)
+            bool showId = true) : base(category, scopeProvider, minimumLevel, categorySegments, showId)
         {
         }
 

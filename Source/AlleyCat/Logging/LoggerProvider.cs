@@ -9,6 +9,9 @@ namespace AlleyCat.Logging
     [Singleton(typeof(ILoggerProvider))]
     public abstract class LoggerProvider : AutowiredNode, ILoggerProvider
     {
+        [Export]
+        public LogLevel MinimumLevel { get; set; } = LogLevel.Trace;
+
         [Export(PropertyHint.Range, "1,20")]
         public int CategorySegments { get; set; } = 1;
 

@@ -15,8 +15,9 @@ namespace AlleyCat.Logging
         public ConsoleLogger(
             string category,
             IConsole console,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
-            bool showId = true) : this(category, console, None, categorySegments, showId)
+            bool showId = true) : this(category, console, None, minimumLevel, categorySegments, showId)
         {
         }
 
@@ -24,8 +25,9 @@ namespace AlleyCat.Logging
             string category,
             IConsole console,
             Option<IExternalScopeProvider> scopeProvider,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
-            bool showId = true) : base(category, scopeProvider, categorySegments, showId)
+            bool showId = true) : base(category, scopeProvider, minimumLevel, categorySegments, showId)
         {
             Ensure.That(console, nameof(console)).IsNotNull();
 

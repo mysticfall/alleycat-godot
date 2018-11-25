@@ -14,6 +14,8 @@ namespace AlleyCat.Logging
     {
         public string Category { get; }
 
+        public LogLevel MinimumLevel { get; set; }
+
         public Option<string> LoggerId { get; }
 
         protected Option<IExternalScopeProvider> ScopeProvider { get; }
@@ -25,14 +27,16 @@ namespace AlleyCat.Logging
 
         protected Logger(
             string category,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
-            bool showId = true) : this(category, None, categorySegments, showId)
+            bool showId = true) : this(category, None, minimumLevel, categorySegments, showId)
         {
         }
 
         protected Logger(
             string category,
             Option<IExternalScopeProvider> scopeProvider,
+            LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
             bool showId = true)
         {
@@ -40,6 +44,7 @@ namespace AlleyCat.Logging
 
             Category = category;
             ScopeProvider = scopeProvider;
+            MinimumLevel = minimumLevel;
 
             var segments = Category.Split(".").Reverse().Take(categorySegments).Freeze();
 
@@ -72,6 +77,8 @@ namespace AlleyCat.Logging
             [CanBeNull] Exception exception,
             Func<TState, Exception, string> formatter)
         {
+            if (!IsEnabled(logLevel)) return;
+
             var message = formatter(state, exception);
 
             if (string.IsNullOrEmpty(message) && exception == null) return;
@@ -85,7 +92,7 @@ namespace AlleyCat.Logging
             Option<string> eventId,
             Option<Exception> exception);
 
-        public virtual bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
+        public virtual bool IsEnabled(LogLevel logLevel) => logLevel >= MinimumLevel;
 
         protected virtual string FormatLogLevel(LogLevel level)
         {

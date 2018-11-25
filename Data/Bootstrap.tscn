@@ -30,11 +30,13 @@ ConfigSection = "Logging"
 
 [node name="Game Console" type="Node" parent="Logging"]
 script = ExtResource( 6 )
+MinimumLevel = 3
 CategorySegments = 1
 ShowId = true
 
 [node name="Editor Console" type="Node" parent="Logging"]
 script = ExtResource( 7 )
+MinimumLevel = 2
 CategorySegments = 1
 ShowId = true
 
