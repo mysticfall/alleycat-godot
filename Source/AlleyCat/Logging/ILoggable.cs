@@ -83,6 +83,8 @@ namespace AlleyCat.Logging
                         return string.Join(":", arg.GetType().Name, identifiable.Key);
                     case Node node:
                         return node.GetPath();
+                    case Resource resource:
+                        return string.Join(":", arg.GetType().Name, resource.GetKey());
                     default:
                         return arg;
                 }
