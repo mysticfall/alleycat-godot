@@ -4,7 +4,9 @@ using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
@@ -75,16 +77,29 @@ namespace AlleyCat.Logging
 
             object Format(object arg)
             {
+                if (arg is Func<object> func)
+                {
+                    arg = func.Invoke();
+                }
+                else if (arg is IOptional opt)
+                {
+                    arg = opt.MatchUntyped(identity, () => "(None)");
+                }
+
                 switch (arg)
                 {
-                    case Func<object> fun:
-                        return fun.Invoke();
+                    case INamed named:
+                        return string.Join(":", arg.GetType().Name, named.DisplayName);
                     case IIdentifiable identifiable:
                         return string.Join(":", arg.GetType().Name, identifiable.Key);
                     case Node node:
                         return node.GetPath();
                     case Resource resource:
                         return string.Join(":", arg.GetType().Name, resource.GetKey());
+                    case Vector3 v3:
+                        return v3.ToFormatString();
+                    case Vector2 v2:
+                        return v2.ToFormatString();
                     default:
                         return arg;
                 }
