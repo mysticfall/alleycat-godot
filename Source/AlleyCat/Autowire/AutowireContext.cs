@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
-    public class AutowireContext : IAutowireContext
+    public class AutowireContext : IAutowireContext, ILoggable
     {
+        public string Key => Node.GetPath();
+
         public Node Node { get; }
 
         public Option<IAutowireContext> Parent =>
@@ -53,6 +58,23 @@ namespace AlleyCat.Autowire
             _processorFactories = _processorFactories.TryAdd(factory);
         }
 
+        public ILogger Logger
+        {
+            get
+            {
+                if (_logger.IsNone)
+                {
+                    _logger = _loggerFactory.Map(f => f.CreateLogger(this.GetLogCategory()));
+                }
+
+                return _logger.IfNone(NullLogger.Instance);
+            }
+        }
+
+        private Option<ILogger> _logger;
+
+        private static Option<ILoggerFactory> _loggerFactory;
+
         private AutowireContext(Node node)
         {
             Debug.Assert(node != null, "node != null");
@@ -78,6 +100,11 @@ namespace AlleyCat.Autowire
             provider.Invoke(_services);
 
             _provider = _services.BuildServiceProvider();
+
+            if (_loggerFactory.IsNone)
+            {
+                _loggerFactory = FindService<ILoggerFactory>();
+            }
         }
 
         internal void Register(Node node)
@@ -110,6 +137,8 @@ namespace AlleyCat.Autowire
             {
                 _queue.Add(node);
             }
+
+            this.LogDebug("Registering a node: {}.", fun(node.Instance.GetPath));
         }
 
         internal void Initialize()
@@ -134,6 +163,11 @@ namespace AlleyCat.Autowire
             }
 
             Requires = Requires.Except(provided);
+
+            this.LogDebug("Calculating dependencies.");
+
+            Provides.Iter(type => this.LogDebug("- Provides: {}", type));
+            Requires.Iter(type => this.LogDebug("- Requires: {}", type));
 
             Parent.BiIter(p => ((AutowireContext) p).Register(this), _ => Build());
         }
