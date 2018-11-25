@@ -1,17 +1,21 @@
 using System;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public abstract class AnimationGraph : IAnimationGraph, IDisposableCollector
+    public abstract class AnimationGraph : IAnimationGraph, ILoggable, IDisposableCollector
     {
-        public string Path { get; }
+        public string Key { get; }
 
         public AnimationRootNode Root { get; }
+
+        public ILogger Logger { get; }
 
         protected AnimationGraphContext Context { get; }
 
@@ -27,9 +31,12 @@ namespace AlleyCat.Animation
             Ensure.That(root, nameof(root)).IsNotNull();
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            Path = path;
+            Key = path;
             Root = root;
             Context = context;
+            Logger = context.LoggerFactory.CreateLogger(this.GetLogCategory());
+
+            this.LogDebug("Created animation graph.");
         }
 
         public abstract Option<AnimationNode> FindAnimationNode(string name);
@@ -72,6 +79,8 @@ namespace AlleyCat.Animation
 
         public virtual void Dispose()
         {
+            this.LogDebug("Disposing animation graph.");
+
             _children.Values.Iter(c => c.DisposeQuietly());
             _children = _children.Clear();
 

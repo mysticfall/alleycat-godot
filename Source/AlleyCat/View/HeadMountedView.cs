@@ -7,6 +7,7 @@ using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Game;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.Physics;
 using AlleyCat.Sensor;
@@ -196,8 +197,12 @@ namespace AlleyCat.View
                 .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
                 .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
                 .Select(entity => entity.Where(e => e.Valid && e.Visible))
-                .DistinctUntilChanged()
-                .Do(current => FocusedObject = current);
+                .DistinctUntilChanged();
+
+            OnFocusChange
+                .Do(v => this.LogDebug("Focusing on '{}'.", v))
+                .Subscribe(current => FocusedObject = current)
+                .DisposeWith(this);
 
             _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
 

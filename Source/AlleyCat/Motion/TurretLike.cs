@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using Godot;
 using Microsoft.Extensions.Logging;
 
@@ -70,6 +71,19 @@ namespace AlleyCat.Motion
 
             _active = new BehaviorSubject<bool>(active).DisposeWith(this);
             _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).DisposeWith(this);
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            if (Logger.IsEnabled(LogLevel.Trace))
+            {
+                OnRotationChange
+                    .DistinctUntilChanged()
+                    .Subscribe(v => this.LogTrace("Rotation changed = {}.", v))
+                    .DisposeWith(this);
+            }
         }
 
         public virtual void Reset()

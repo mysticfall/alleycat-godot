@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -8,10 +9,8 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public interface IAnimationGraph : IDisposable
+    public interface IAnimationGraph : IIdentifiable, IDisposable
     {
-        string Path { get; }
-
         AnimationRootNode Root { get; }
 
         Option<AnimationNode> FindAnimationNode(string name);
@@ -60,7 +59,7 @@ namespace AlleyCat.Animation
         {
             Option<IAnimationGraph> Find(IAnimationGraph parent, IEnumerable<string> segments) =>
                 segments.Match(
-                    () => None, 
+                    () => None,
                     parent.FindGraph,
                     (head, tail) => parent.FindGraph(head).Bind(p => Find(p, tail)));
 

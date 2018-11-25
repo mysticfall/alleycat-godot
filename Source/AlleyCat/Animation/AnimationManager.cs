@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -83,10 +84,17 @@ namespace AlleyCat.Animation
 
         protected virtual void ProcessFrames(float delta) => Player.Advance(delta);
 
-        public virtual void Play(Godot.Animation animation) => Player.Play(Player.AddAnimation(animation));
+        public virtual void Play(Godot.Animation animation)
+        {
+            this.LogDebug("Playing animation: '{}'.", animation);
+
+            Player.Play(Player.AddAnimation(animation));
+        }
 
         public void FireEvent(string name, Option<object> argument)
         {
+            this.LogDebug("Received animation event: '{}' (args: {}).", name, argument);
+
             _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
         }
     }

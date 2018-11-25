@@ -8,6 +8,7 @@ using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Game;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.View;
 using EnsureThat;
@@ -204,6 +205,8 @@ namespace AlleyCat.Control
         protected virtual void OnPerspectiveChanged(
             Option<IPerspectiveView> previous, Option<IPerspectiveView> current)
         {
+            this.LogDebug("Perspective has changed: {} -> {}.", previous, current);
+
             (
                 from previousRotatable in previous.OfType<ITurretLike>()
                 from currentRotatable in current.OfType<ITurretLike>()

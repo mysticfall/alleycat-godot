@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Item.Generic;
+using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -61,6 +62,8 @@ namespace AlleyCat.Item
 
             Items = Items.Add(item.Slot, item);
 
+            this.LogDebug("Item '{}' was added to the container.", item);
+
             _onAdd.OnNext(item);
         }
 
@@ -80,6 +83,8 @@ namespace AlleyCat.Item
             DoRemove(item);
 
             Items = Items.Remove(item.Slot);
+
+            this.LogDebug("Item '{}' was removed from the container.", item);
 
             _onRemove.OnNext(item);
         }

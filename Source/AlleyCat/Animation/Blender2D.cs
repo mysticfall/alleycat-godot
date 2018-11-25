@@ -2,9 +2,11 @@ using System;
 using System.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
@@ -21,10 +23,9 @@ namespace AlleyCat.Animation
 
         private readonly BehaviorSubject<Vector2> _position;
 
-        public Blender2D(string parameter, AnimationGraphContext context) : base(context)
+        public Blender2D(string key, string parameter, AnimationGraphContext context) : base(key, context)
         {
             Ensure.That(parameter, nameof(parameter)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             Parameter = parameter;
 
@@ -35,6 +36,13 @@ namespace AlleyCat.Animation
             _position
                 .Subscribe(v => context.AnimationTree.Set(parameter, v))
                 .DisposeWith(this);
+
+            if (Logger.IsEnabled(LogLevel.Trace))
+            {
+                _position
+                    .Subscribe(v => this.LogTrace("Changed blending position: {}.", v))
+                    .DisposeWith(this);
+            }
         }
 
         public static Option<Blender2D> TryCreate(
@@ -48,9 +56,9 @@ namespace AlleyCat.Animation
             if (parent.FindAnimationNode<AnimationNodeBlendSpace2D>(name).IsNone) return None;
 
             var parameter = string.Join("/",
-                new[] {"parameters", parent.Path, name, "blend_position"}.Where(v => v.Length > 0));
+                new[] {"parameters", parent.Key, name, "blend_position"}.Where(v => v.Length > 0));
 
-            return new Blender2D(parameter, context);
+            return new Blender2D(string.Join(":", parent.Key, name), parameter, context);
         }
     }
 

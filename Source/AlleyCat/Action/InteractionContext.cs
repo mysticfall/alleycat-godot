@@ -19,5 +19,7 @@ namespace AlleyCat.Action
             Actor = Some(actor);
             Target = target;
         }
+
+        public override string ToString() => $"InteractionContext[Actor = {Actor}, Target = {Target}]";
     }
 }

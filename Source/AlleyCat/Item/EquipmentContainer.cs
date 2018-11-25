@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -36,12 +37,21 @@ namespace AlleyCat.Item
         {
             base.PostConstruct();
 
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Slots.Values.Iter(s => this.LogDebug("Found slot: '{}'.", s));
+
+                this.LogDebug("Equipping initial items.");
+            }
+
             Items.Values.Iter(v => v.Equip(Holder));
         }
 
         protected override void DoAdd(Equipment item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
+
+            this.LogDebug("Equipping item '{}' to '{}'.", item, Holder);
 
             var transform = item.GetGlobalTransform();
 
@@ -60,6 +70,8 @@ namespace AlleyCat.Item
         protected override void DoRemove(Equipment item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
+
+            this.LogDebug("Removing item '{}' from '{}'.", item, Holder);
 
             var transform = item.GetGlobalTransform();
 

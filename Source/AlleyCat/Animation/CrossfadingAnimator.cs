@@ -3,10 +3,12 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -41,17 +43,17 @@ namespace AlleyCat.Animation
         private readonly BehaviorSubject<Option<Godot.Animation>> _animation;
 
         public CrossfadingAnimator(
+            string key,
             string parameter,
             AnimationNodeTransition transitionNode,
             AnimationNodeAnimation animationNode1,
             AnimationNodeAnimation animationNode2,
-            AnimationGraphContext context) : base(context)
+            AnimationGraphContext context) : base(key, context)
         {
             Ensure.That(parameter, nameof(parameter)).IsNotNull();
             Ensure.That(transitionNode, nameof(transitionNode)).IsNotNull();
             Ensure.That(animationNode1, nameof(animationNode1)).IsNotNull();
             Ensure.That(animationNode2, nameof(animationNode2)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             Parameter = parameter;
 
@@ -69,6 +71,10 @@ namespace AlleyCat.Animation
                 {
                     var next = Transition == 1 ? 2 : 1;
                     var node = next == 1 ? AnimationNode1 : AnimationNode2;
+
+                    this.LogDebug("Cross fading animation from '{}' to '{}'.",
+                        fun(node.GetAnimation),
+                        animation);
 
                     node.SetAnimation(animation.ValueUnsafe());
 
@@ -91,10 +97,12 @@ namespace AlleyCat.Animation
                 from animation2 in parent.FindAnimationNode<AnimationNodeAnimation>(name + " Animation 2")
                 select (transition, animation1, animation2)).Map(t =>
             {
+                var key = string.Join(":", parent.Key, name);
                 var parameter = string.Join("/",
-                    new[] {"parameters", parent.Path, name, "current"}.Where(v => v.Length > 0));
+                    new[] {"parameters", parent.Key, name, "current"}.Where(v => v.Length > 0));
 
-                return new CrossfadingAnimator(parameter, t.transition, t.animation1, t.animation2, context);
+                return new CrossfadingAnimator(
+                    key, parameter, t.transition, t.animation1, t.animation2, context);
             });
         }
     }

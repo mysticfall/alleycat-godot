@@ -6,6 +6,7 @@ using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Game;
+using AlleyCat.Logging;
 using AlleyCat.Physics;
 using Godot;
 using LanguageExt;
@@ -89,8 +90,12 @@ namespace AlleyCat.View
                     .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
                 .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
                 .Select(e => e.Filter(v => v.Valid && v.Visible))
-                .DistinctUntilChanged()
-                .Do(current => FocusedObject = current);
+                .DistinctUntilChanged();
+
+            OnFocusChange
+                .Do(v => this.LogDebug("Focusing on '{}'.", v))
+                .Subscribe(current => FocusedObject = current)
+                .DisposeWith(this);
 
             _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
         }

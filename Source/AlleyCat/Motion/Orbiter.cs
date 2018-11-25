@@ -89,6 +89,8 @@ namespace AlleyCat.Motion
 
         protected override void PostConstruct()
         {
+            base.PostConstruct();
+
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform)

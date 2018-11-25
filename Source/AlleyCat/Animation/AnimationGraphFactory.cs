@@ -14,7 +14,7 @@ namespace AlleyCat.Animation
 
             return parent.FindAnimationNode<AnimationRootNode>(name).Bind(node =>
             {
-                var path = string.IsNullOrEmpty(parent.Path) ? name : string.Join("/", parent.Path, name);
+                var path = string.IsNullOrEmpty(parent.Key) ? name : string.Join("/", parent.Key, name);
 
                 return TryCreate(path, node, context);
             });

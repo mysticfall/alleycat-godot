@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 
@@ -24,9 +25,9 @@ namespace AlleyCat.Action
         private readonly BehaviorSubject<bool> _active;
 
         protected Action(
-            string key, 
-            string displayName, 
-            bool active, 
+            string key,
+            string displayName,
+            bool active,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
@@ -40,9 +41,21 @@ namespace AlleyCat.Action
 
         public void Execute(IActionContext context)
         {
-            if (Active && Valid && AllowedFor(context))
+            var allowed = AllowedFor(context);
+
+            if (Active && Valid && allowed)
             {
+                this.LogDebug("Executing action with context: '{}'.", context);
+
                 DoExecute(context);
+            }
+            else
+            {
+                this.LogDebug(
+                    "Not executing action: Active = {}, Valid = {}, Allowed = {}.",
+                    Active,
+                    Valid,
+                    allowed);
             }
         }
 

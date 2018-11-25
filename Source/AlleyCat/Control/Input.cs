@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Control.Generic;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 
@@ -40,8 +41,17 @@ namespace AlleyCat.Control
             _active = new BehaviorSubject<bool>(active).DisposeWith(this);
         }
 
-        public virtual IDisposable Subscribe(IObserver<T> observer) =>
-            CreateObservable().Where(_ => Valid && Active).Subscribe(observer);
+        public virtual IDisposable Subscribe(IObserver<T> observer)
+        {
+            var source = CreateObservable().Where(_ => Valid && Active);
+
+            if (Logger.IsEnabled(LogLevel.Trace))
+            {
+                source = source.Do(v => this.LogTrace("Input value changed: '{}'.", v));
+            }
+
+            return source.Subscribe(observer);
+        }
 
         protected abstract IObservable<T> CreateObservable();
     }

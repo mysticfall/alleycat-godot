@@ -42,6 +42,8 @@ namespace AlleyCat.Common
                 throw new InvalidOperationException("The service has already been initialized.");
             }
 
+            this.LogDebug("Initializing game object.");
+
             PostConstruct();
 
             _initialized = true;
@@ -57,6 +59,8 @@ namespace AlleyCat.Common
             {
                 throw new InvalidOperationException("The service has already been disposed.");
             }
+
+            this.LogDebug("Disposing game object.");
 
             PreDestroy();
 

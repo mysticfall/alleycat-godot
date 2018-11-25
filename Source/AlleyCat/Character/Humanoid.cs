@@ -3,6 +3,7 @@ using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Character.Morph;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
@@ -43,7 +44,12 @@ namespace AlleyCat.Character
             var groups = Race.MorphGroups.Find(Sex).Flatten().Freeze();
             var definitions = groups.Bind(g => g.Definitions);
 
-            var morphs = definitions.Map(d => d.CreateMorph(this));
+            var morphs = definitions.Map(d => d.CreateMorph(this)).Freeze();
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                morphs.Iter(m => this.LogDebug("Found morph '{}'.", m));
+            }
 
             Morphs = new MorphSet(groups, morphs).DisposeWith(this);
         }

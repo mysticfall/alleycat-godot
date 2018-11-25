@@ -1,5 +1,6 @@
 ﻿using System;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -11,7 +12,7 @@ namespace AlleyCat.Animation
     {
         public AnimationTree AnimationTree { get; }
 
-        public string Path => string.Empty;
+        public string Key => string.Empty;
 
         public AnimationRootNode Root => _graph.Root;
 
@@ -40,7 +41,13 @@ namespace AlleyCat.Animation
             GraphFactory = graphFactory.IfNone(() => new AnimationGraphFactory());
             ControlFactory = controlFactory.IfNone(() => new AnimationControlFactory());
 
-            Context = new AnimationGraphContext(Player, AnimationTree, OnAdvance, GraphFactory, ControlFactory);
+            Context = new AnimationGraphContext(
+                Player,
+                AnimationTree,
+                OnAdvance,
+                GraphFactory,
+                ControlFactory,
+                loggerFactory);
 
             _graph = GraphFactory.TryCreate((AnimationRootNode) AnimationTree.TreeRoot, Context).IfNone(() =>
                 throw new ArgumentException(
@@ -48,6 +55,9 @@ namespace AlleyCat.Animation
                     nameof(animationTree)));
 
             AnimationTree.ProcessMode = AnimationTree.AnimationProcessMode.Manual;
+
+            this.LogDebug("Using graph factory: {}.", GraphFactory);
+            this.LogDebug("Using control factory: {}.", ControlFactory);
         }
 
         public Option<AnimationNode> FindAnimationNode(string name) => _graph.FindAnimationNode(name);

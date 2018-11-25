@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
@@ -82,6 +83,19 @@ namespace AlleyCat.Motion
                 .Where(_ => Active && Valid)
                 .Subscribe(ProcessLoop)
                 .DisposeWith(this);
+
+            if (Logger.IsEnabled(LogLevel.Trace))
+            {
+                OnVelocityChange
+                    .DistinctUntilChanged()
+                    .Subscribe(v => this.LogTrace("Velocity changed = {}.", v))
+                    .DisposeWith(this);
+
+                OnRotationalVelocityChange
+                    .DistinctUntilChanged()
+                    .Subscribe(v => this.LogTrace("Rotational velocity changed = {}.", v))
+                    .DisposeWith(this);
+            }
         }
 
         public void Move(Vector3 velocity) => _requestedMovement = velocity;
@@ -100,8 +114,11 @@ namespace AlleyCat.Motion
 
             if (delta <= 0) return;
 
-            _velocity.OnNext((Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta);
-            _rotationalVelocity.OnNext((before.basis.Inverse() * after.basis).GetEuler() / delta);
+            var currentVelocity = (Target.ToLocal(after.origin) - Target.ToLocal(before.origin)) / delta;
+            var currentRotationalVelocity = (before.basis.Inverse() * after.basis).GetEuler() / delta;
+
+            _velocity.OnNext(currentVelocity);
+            _rotationalVelocity.OnNext(currentRotationalVelocity);
         }
     }
 }

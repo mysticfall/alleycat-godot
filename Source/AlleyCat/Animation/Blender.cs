@@ -3,10 +3,12 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Animation
@@ -52,20 +54,22 @@ namespace AlleyCat.Animation
         private readonly BehaviorSubject<float> _timeScale;
 
         public Blender(
+            string key,
             string blendAmountParameter,
             AnimationNodeBlend2 blenderNode,
             AnimationNodeAnimation animationNode,
             AnimationGraphContext context) :
-            this(blendAmountParameter, null, blenderNode, animationNode, context)
+            this(key, blendAmountParameter, None, blenderNode, animationNode, context)
         {
         }
 
         public Blender(
+            string key,
             string blendAmountParameter,
             Option<string> timeScaleParameter,
             AnimationNodeBlend2 blenderNode,
             AnimationNodeAnimation animationNode,
-            AnimationGraphContext context) : base(context)
+            AnimationGraphContext context) : base(key, context)
         {
             Ensure.That(blendAmountParameter, nameof(blendAmountParameter)).IsNotNull();
             Ensure.That(blenderNode, nameof(blenderNode)).IsNotNull();
@@ -132,6 +136,9 @@ namespace AlleyCat.Animation
             Animation = animation;
             TimeScale = Mathf.Clamp(timeScale, 0, 1);
 
+            this.LogDebug("Blending animation: '{}' (timeScale = {}, amount = {}, transition = {}).",
+                animation, timeScale, amount, transition);
+
             var clampedAmount = Mathf.Clamp(amount, 0, 1);
             var clampedTransition = Mathf.Min(transition, 0);
 
@@ -158,6 +165,8 @@ namespace AlleyCat.Animation
 
         public void Unblend(float transition = 0f)
         {
+            this.LogDebug("Unblending animation: (transition = {}).", transition);
+
             if (transition > 0)
             {
                 var elapsed = Context.OnAdvance
@@ -197,16 +206,17 @@ namespace AlleyCat.Animation
                 from animation in parent.FindAnimationNode<AnimationNodeAnimation>(animationNodeKey)
                 select (blender, animation)).Map(t =>
             {
+                var key = string.Join(":", parent.Key, name);
                 var parameterBlendAmount = string.Join("/",
-                    new[] {"parameters", parent.Path, name, "blend_amount"}.Where(v => v.Length > 0));
+                    new[] {"parameters", parent.Key, name, "blend_amount"}.Where(v => v.Length > 0));
 
                 var parameterTimeScale = timeScaleNode == null
                     ? null
                     : string.Join("/",
-                        new[] {"parameters", parent.Path, timeScaleNodeKey, "scale"}.Where(v => v.Length > 0));
+                        new[] {"parameters", parent.Key, timeScaleNodeKey, "scale"}.Where(v => v.Length > 0));
 
                 return new Blender(
-                    parameterBlendAmount, parameterTimeScale, t.blender, t.animation, context);
+                    key, parameterBlendAmount, parameterTimeScale, t.blender, t.animation, context);
             });
         }
     }

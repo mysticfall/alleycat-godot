@@ -10,5 +10,7 @@ namespace AlleyCat.Action
         {
             Actor = actor;
         }
+
+        public override string ToString() => $"ActionContext[Actor = {Actor}]";
     }
 }

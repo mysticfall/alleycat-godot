@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -23,10 +24,9 @@ namespace AlleyCat.Animation
 
         private readonly BehaviorSubject<Option<Godot.Animation>> _animation;
 
-        public Animator(AnimationNodeAnimation node, AnimationGraphContext context) : base(context)
+        public Animator(string key, AnimationNodeAnimation node, AnimationGraphContext context) : base(key, context)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
-            Ensure.That(context, nameof(context)).IsNotNull();
 
             Node = node;
 
@@ -36,6 +36,7 @@ namespace AlleyCat.Animation
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
+                .Do(a => this.LogDebug("Animation has changed to '{}'.", a))
                 .Subscribe(Node.SetAnimation)
                 .DisposeWith(this);
         }
@@ -47,7 +48,8 @@ namespace AlleyCat.Animation
 
             return parent
                 .FindAnimationNode<AnimationNodeAnimation>(name)
-                .Map(n => new Animator(n, context)).HeadOrNone();
+                .Map(n => new Animator(string.Join(":", parent.Key, name), n, context))
+                .HeadOrNone();
         }
     }
 }

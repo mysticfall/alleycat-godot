@@ -1,8 +1,11 @@
 using System;
 using System.Reactive.Linq;
+using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
@@ -40,6 +43,13 @@ namespace AlleyCat.Animation
             OnStateChange = Context.OnAdvance
                 .Select(_ => Playback.GetCurrentNode())
                 .DistinctUntilChanged();
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                OnStateChange
+                    .Subscribe(s => this.LogDebug("Animation state has changed to '{}'.", s))
+                    .DisposeWith(this);
+            }
         }
 
         public override Option<AnimationNode> FindAnimationNode(string name)

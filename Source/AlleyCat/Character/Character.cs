@@ -4,6 +4,7 @@ using AlleyCat.Animation;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
 using AlleyCat.Item;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;
@@ -112,6 +113,15 @@ namespace AlleyCat.Character
             Equipments = equipments;
 
             _labelMarker = this.FindLabelMarker();
+
+            this.LogInfo("Created a character: Name = '{}', Race = {}, Sex = {}.", 
+                displayName, race.DisplayName, sex);
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Actions.Values.Iter(a => this.LogDebug("Found action: {}.", a));
+                Markers.Values.Iter(m => this.LogDebug("Found marker: {}.", m));
+            }
         }
     }
 }

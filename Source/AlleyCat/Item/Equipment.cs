@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Item.Generic;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -136,6 +137,8 @@ namespace AlleyCat.Item
 
         private void UpdateEquipState(bool equipped)
         {
+            this.LogDebug("Equipped state has changed: {}.", equipped);
+
             Node.Mode = equipped ? RigidBody.ModeEnum.Kinematic : RigidBody.ModeEnum.Rigid;
             Node.Sleeping = equipped;
             Node.InputRayPickable = !equipped;
