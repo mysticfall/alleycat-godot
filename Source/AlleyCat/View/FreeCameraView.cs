@@ -100,7 +100,8 @@ namespace AlleyCat.View
             MovementInput = movementInput
                 .Bind(i => i.AsVector2Input())
                 .MatchObservable(identity, Observable.Empty<Vector2>)
-                .Where(_ => Valid);
+                .Where(_ => Valid)
+                .Select(v => v * 2f);
             ToggleInput = toggleInput.Bind(i => i.FindTrigger().HeadOrNone())
                 .MatchObservable(identity, Observable.Empty<bool>)
                 .Where(_ => Valid);
