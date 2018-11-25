@@ -17,7 +17,6 @@ namespace AlleyCat.Autowire
             catch (Exception e)
             {
                 GD.Print(e.ToString());
-                GD.Print(e.StackTrace);
             }
         }
     }
