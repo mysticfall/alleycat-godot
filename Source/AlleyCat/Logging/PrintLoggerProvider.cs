@@ -2,6 +2,7 @@
 
 namespace AlleyCat.Logging
 {
+    [ProviderAlias("Editor")]
     public class PrintLoggerProvider : LoggerProvider
     {
         protected override ILogger DoCreateLogger(string categoryName) =>

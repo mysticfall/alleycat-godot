@@ -2,14 +2,7 @@
   "Logging": {
     "LogLevel": {
       "Default": "Warning",
-      "AlleyCat": "Information",
-      "AlleyCat.Item": "Debug"
-    },
-    "Console": {
-      "Default": "Warning"
-    },
-    "Editor": {
-      "Default": "Debug"
+      "AlleyCat": "Information"
     }
   }
 }

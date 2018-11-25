@@ -8,7 +8,6 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
-    [ProviderAlias("Console")]
     public class ConsoleLogger : Logger
     {
         public IConsole Console { get; }

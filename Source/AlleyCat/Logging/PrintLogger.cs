@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
-    [ProviderAlias("Editor")]
     public class PrintLogger : Logger
     {
         private readonly StringBuilder _builder = new StringBuilder();

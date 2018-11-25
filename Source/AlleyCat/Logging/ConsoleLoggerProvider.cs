@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Logging
 {
+    [ProviderAlias("Game")]
     public class ConsoleLoggerProvider : LoggerProvider
     {
         [Service]
