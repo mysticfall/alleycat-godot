@@ -12,22 +12,22 @@ namespace AlleyCat.Logging
         private readonly StringBuilder _builder = new StringBuilder();
 
         public PrintLogger(
-            string name,
+            string category,
             int categorySegments = 1,
-            bool showId = true) : base(name, categorySegments, showId)
+            bool showId = true) : base(category, categorySegments, showId)
         {
         }
 
         public PrintLogger(
-            string name,
+            string category,
             Option<IExternalScopeProvider> scopeProvider,
             int categorySegments = 1,
-            bool showId = true) : base(name, scopeProvider, categorySegments, showId)
+            bool showId = true) : base(category, scopeProvider, categorySegments, showId)
         {
         }
 
         protected override void Log(
-            LogLevel logLevel, string message, Option<string> loggerId, Option<Exception> exception)
+            LogLevel logLevel, string message, Option<string> eventId, Option<Exception> exception)
         {
             var level = FormatLogLevel(logLevel);
 
@@ -36,7 +36,7 @@ namespace AlleyCat.Logging
             _builder.Append(CategoryLabel);
             _builder.Append("] ");
 
-            loggerId.Iter(id =>
+            eventId.Iter(id =>
             {
                 _builder.Append("(");
                 _builder.Append(id);

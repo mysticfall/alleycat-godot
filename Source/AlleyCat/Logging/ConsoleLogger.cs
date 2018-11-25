@@ -14,19 +14,19 @@ namespace AlleyCat.Logging
         public IConsole Console { get; }
 
         public ConsoleLogger(
-            string name,
+            string category,
             IConsole console,
             int categorySegments = 1,
-            bool showId = true) : this(name, console, None, categorySegments, showId)
+            bool showId = true) : this(category, console, None, categorySegments, showId)
         {
         }
 
         public ConsoleLogger(
-            string name,
+            string category,
             IConsole console,
             Option<IExternalScopeProvider> scopeProvider,
             int categorySegments = 1,
-            bool showId = true) : base(name, scopeProvider, categorySegments, showId)
+            bool showId = true) : base(category, scopeProvider, categorySegments, showId)
         {
             Ensure.That(console, nameof(console)).IsNotNull();
 
@@ -34,7 +34,7 @@ namespace AlleyCat.Logging
         }
 
         protected override void Log(
-            LogLevel logLevel, string message, Option<string> loggerId, Option<Exception> exception)
+            LogLevel logLevel, string message, Option<string> eventId, Option<Exception> exception)
         {
             var level = FormatLogLevel(logLevel);
 
@@ -58,7 +58,7 @@ namespace AlleyCat.Logging
                 .Write(level, new TextStyle(color)).Text(" - ")
                 .Highlight("[").Text(CategoryLabel).Highlight("] ");
 
-            loggerId.Iter(id => Console.Highlight("(").Text(id).Highlight(") "));
+            eventId.Iter(id => Console.Highlight("(").Text(id).Highlight(") "));
 
             Console.Text(message).NewLine();
 

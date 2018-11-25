@@ -1,13 +1,14 @@
 using System;
+using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Common
 {
-    public abstract class GameObject : IValidatable, IInitializable, IDisposableCollector, IDisposable
+    public abstract class GameObject : IValidatable, IInitializable, ILoggable, IDisposableCollector, IDisposable
     {
-        protected ILogger Logger { get; }
+        public ILogger Logger { get; }
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
@@ -21,7 +22,7 @@ namespace AlleyCat.Common
         {
             Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
-            Logger = loggerFactory.CreateLogger(GetType());
+            Logger = loggerFactory.CreateLogger(this.GetLogCategory());
         }
 
         public void Collect(IDisposable disposable)

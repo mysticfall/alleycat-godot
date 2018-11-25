@@ -12,7 +12,9 @@ namespace AlleyCat.Logging
 {
     public abstract class Logger : ILogger
     {
-        public string Name { get; }
+        public string Category { get; }
+
+        public Option<string> LoggerId { get; }
 
         protected Option<IExternalScopeProvider> ScopeProvider { get; }
         protected string CategoryLabel { get; }
@@ -22,26 +24,44 @@ namespace AlleyCat.Logging
         private Lst<object> _scopes;
 
         protected Logger(
-            string name,
+            string category,
             int categorySegments = 1,
-            bool showId = true) : this(name, None, categorySegments, showId)
+            bool showId = true) : this(category, None, categorySegments, showId)
         {
         }
 
         protected Logger(
-            string name,
+            string category,
             Option<IExternalScopeProvider> scopeProvider,
             int categorySegments = 1,
             bool showId = true)
         {
-            Ensure.That(name, nameof(name)).IsNotNull();
+            Ensure.That(category, nameof(category)).IsNotNull();
 
-            Name = name;
+            Category = category;
             ScopeProvider = scopeProvider;
 
-            var segments = Name.Split(".");
+            var segments = Category.Split(".").Reverse().Take(categorySegments).Freeze();
 
-            CategoryLabel = string.Join(".", segments.Reverse().Take(categorySegments).Reverse());
+            var (label, id) = segments.Match(
+                () => ("", None),
+                head =>
+                {
+                    var values = head.Split(":");
+
+                    return values.Length == 2 ? (values[0], Some(values[1])) : (head, None);
+                },
+                More: (head, tail) =>
+                {
+                    var values = head.Split(":");
+                    var list = tail.Prepend(values.Length == 2 ? values[0] : head);
+
+                    return (string.Join(".", list.Reverse()), values.Skip(1).HeadOrNone());
+                });
+
+            CategoryLabel = label;
+            LoggerId = id;
+
             ShowId = showId;
         }
 
@@ -52,22 +72,17 @@ namespace AlleyCat.Logging
             [CanBeNull] Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel))
-            {
-                return;
-            }
-
             var message = formatter(state, exception);
 
             if (string.IsNullOrEmpty(message) && exception == null) return;
 
-            Log(logLevel, message, ShowId ? Optional(eventId.Name) : None, Optional(exception));
+            Log(logLevel, message, ShowId ? LoggerId | Optional(eventId.Name) : None, Optional(exception));
         }
 
         protected abstract void Log(
             LogLevel logLevel,
             string message,
-            Option<string> loggerId,
+            Option<string> eventId,
             Option<Exception> exception);
 
         public virtual bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
