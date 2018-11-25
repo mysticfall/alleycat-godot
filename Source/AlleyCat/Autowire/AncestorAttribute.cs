@@ -5,5 +5,7 @@
         public AncestorAttribute(bool required = false) : base(required)
         {
         }
+
+        public override string ToString() => "[Ancestor]";
     }
 }

@@ -18,5 +18,7 @@ namespace AlleyCat.Autowire
 
             Path = Some(path);
         }
+
+        public override string ToString() => "[Node]";
     }
 }

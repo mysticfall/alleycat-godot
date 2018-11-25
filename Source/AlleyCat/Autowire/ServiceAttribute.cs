@@ -8,5 +8,7 @@
         {
             Local = local;
         }
+
+        public override string ToString() => "[Service]";
     }
 }

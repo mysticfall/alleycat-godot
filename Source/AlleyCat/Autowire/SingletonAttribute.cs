@@ -7,5 +7,7 @@ namespace AlleyCat.Autowire
         public SingletonAttribute(params Type[] types) : base(types)
         {
         }
+
+        public override string ToString() => "[Singleton]";
     }
 }

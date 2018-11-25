@@ -13,5 +13,7 @@ namespace AlleyCat.Autowire
 
             Attribute = attribute;
         }
+
+        public override string ToString() => Attribute.ToString();
     }
 }

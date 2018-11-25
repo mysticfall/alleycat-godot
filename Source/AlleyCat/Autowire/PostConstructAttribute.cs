@@ -13,5 +13,7 @@ namespace AlleyCat.Autowire
         {
             Deferred = deferred;
         }
+
+        public override string ToString() => "[PostConstruct]";
     }
 }
