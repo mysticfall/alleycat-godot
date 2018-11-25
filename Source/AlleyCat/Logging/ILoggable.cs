@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using JetBrains.Annotations;
@@ -71,7 +72,7 @@ namespace AlleyCat.Logging
 
             if (!logger.IsEnabled(level)) return;
 
-            var evalArgs = args.Map(a => a is Func<object> fun ? fun.Invoke() : a);
+            var evalArgs = args.Map(a => a is Func<object> fun ? fun.Invoke() : a).ToArray();
 
             switch (level)
             {
