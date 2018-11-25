@@ -35,14 +35,15 @@ namespace AlleyCat.Logging
             _builder.Append(level);
             _builder.Append(" - [");
             _builder.Append(CategoryLabel);
-            _builder.Append("] ");
 
             eventId.Iter(id =>
             {
-                _builder.Append("(");
+                _builder.Append(" (");
                 _builder.Append(id);
-                _builder.Append(") ");
+                _builder.Append(")");
             });
+
+            _builder.Append("] ");
 
             _builder.Append(message);
 

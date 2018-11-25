@@ -57,11 +57,11 @@ namespace AlleyCat.Logging
 
             Console
                 .Write(level, new TextStyle(color)).Text(" - ")
-                .Highlight("[").Text(CategoryLabel).Highlight("] ");
+                .Highlight("[").Text(CategoryLabel);
 
-            eventId.Iter(id => Console.Highlight("(").Text(id).Highlight(") "));
+            eventId.Iter(id => Console.Highlight(" (").Text(id).Highlight(")"));
 
-            Console.Text(message).NewLine();
+            Console.Highlight("] ").Text(message).NewLine();
 
             exception.Iter(e =>
             {
