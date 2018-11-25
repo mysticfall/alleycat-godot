@@ -15,7 +15,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
-    public class AutowireContext : IAutowireContext, ILoggable
+    public class AutowireContext : IAutowireContext
     {
         public string Key => Node.GetPath();
 
@@ -138,7 +138,7 @@ namespace AlleyCat.Autowire
                 _queue.Add(node);
             }
 
-            this.LogDebug("Registering a node: {}.", fun(node.Instance.GetPath));
+            this.LogDebug("Registering a node: '{}'.", node.Instance);
         }
 
         internal void Initialize()

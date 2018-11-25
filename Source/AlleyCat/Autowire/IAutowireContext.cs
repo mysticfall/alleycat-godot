@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -9,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
-    public interface IAutowireContext : IIdentifiable, IDependencyResolver, IDisposable
+    public interface IAutowireContext : IIdentifiable, ILoggable, IDependencyResolver, IDisposable
     {
         Node Node { get; }
 

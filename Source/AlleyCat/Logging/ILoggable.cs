@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
+using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
@@ -72,7 +73,22 @@ namespace AlleyCat.Logging
 
             if (!logger.IsEnabled(level)) return;
 
-            var evalArgs = args.Map(a => a is Func<object> fun ? fun.Invoke() : a).ToArray();
+            object Format(object arg)
+            {
+                switch (arg)
+                {
+                    case Func<object> fun:
+                        return fun.Invoke();
+                    case IIdentifiable identifiable:
+                        return string.Join(":", arg.GetType().Name, identifiable.Key);
+                    case Node node:
+                        return node.GetPath();
+                    default:
+                        return arg;
+                }
+            }
+
+            var evalArgs = args.Map(Format).ToArray();
 
             switch (level)
             {
