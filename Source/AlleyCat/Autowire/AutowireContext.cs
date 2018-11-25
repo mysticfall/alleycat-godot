@@ -176,12 +176,16 @@ namespace AlleyCat.Autowire
         {
             CheckDisposed();
 
+            this.LogDebug("Started building autowire context.");
+
             _built = true;
 
             _queue.Iter(d => d.Process(this));
             _queue.Iter(d => d.ProcessDeferred(this));
 
             _queue.Clear();
+
+            this.LogDebug("Finished building autowire context.");
         }
 
         private ServiceDefinition CreateDefinition(Node node)
