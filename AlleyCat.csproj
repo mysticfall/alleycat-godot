@@ -263,7 +263,6 @@
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IInputSource.cs" />
-    <Compile Include="Source\AlleyCat\Event\IReadOnlyReactiveProperty.cs" />
     <Compile Include="Source\AlleyCat\Event\ITimeSource.cs" />
     <Compile Include="Source\AlleyCat\Event\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ProcessScheduler.cs" />
