@@ -5,6 +5,7 @@ using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
@@ -17,6 +18,8 @@ namespace AlleyCat.Logging
 
     public static class LoggableExtensions
     {
+        private static IMemoryCache _loggerCache = new MemoryCache(new MemoryCacheOptions());
+
         public static string GetLogCategory(this ILoggable loggable)
         {
             Ensure.That(loggable, nameof(loggable)).IsNotNull();
@@ -71,7 +74,7 @@ namespace AlleyCat.Logging
         {
             Ensure.That(loggable, nameof(loggable)).IsNotNull();
 
-            var logger = loggable.Logger;
+            var logger = Optional(loggable.Logger).IfNone(() => GetOrCreateDefaultLogger(loggable));
 
             if (!logger.IsEnabled(level)) return;
 
@@ -128,6 +131,13 @@ namespace AlleyCat.Logging
                     logger.LogCritical(exception, message, evalArgs);
                     break;
             }
+        }
+
+        private static ILogger GetOrCreateDefaultLogger(ILoggable loggable)
+        {
+            var category = loggable.GetLogCategory();
+
+            return _loggerCache.GetOrCreate(category, _ => new PrintLogger(category));
         }
     }
 }
