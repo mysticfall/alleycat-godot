@@ -65,12 +65,8 @@ namespace AlleyCat.Logging
 
             exception.Iter(e =>
             {
-                var style = new TextStyle(Console.ErrorColor);
-
                 Console
-                    .Write(e.ToString(), style)
-                    .NewLine()
-                    .Write(e.StackTrace, style)
+                    .Write(e.ToString(), new TextStyle(color))
                     .NewLine();
             });
         }
