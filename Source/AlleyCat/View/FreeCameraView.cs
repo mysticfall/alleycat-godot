@@ -157,7 +157,7 @@ namespace AlleyCat.View
                 .Where(_ => Active && Valid)
                 .Select(_ => Origin + Forward * MaxDofDistance)
                 .Select(to => Camera.GetWorld().IntersectRay(Origin, to))
-                .Select(hit => hit.Select(h => Origin.DistanceTo(h.Position)).IfNone(float.MaxValue))
+                .Select(hit => hit.Select(h => Origin.DistanceTo(h.GetPosition())).IfNone(float.MaxValue))
                 .Buffer(
                     TimeSpan.FromMilliseconds(FocusSpeed),
                     TimeSpan.FromMilliseconds(10),

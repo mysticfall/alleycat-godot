@@ -13,7 +13,7 @@ namespace AlleyCat.Physics
     {
         public const int NoCollisionLayer = 2147483647;
 
-        public static Option<Intersection> IntersectRay(
+        public static Option<IIntersection> IntersectRay(
             this World world,
             Vector3 from,
             Vector3 to,
@@ -22,7 +22,7 @@ namespace AlleyCat.Physics
             return IntersectRay(world, from, to, None, collisionLayer);
         }
 
-        public static Option<Intersection> IntersectRay(
+        public static Option<IIntersection> IntersectRay(
             this World world,
             Vector3 from,
             Vector3 to,
@@ -32,7 +32,7 @@ namespace AlleyCat.Physics
             return IntersectRay(world, from, to, Some(exclude), collisionLayer);
         }
 
-        private static Option<Intersection> IntersectRay(
+        private static Option<IIntersection> IntersectRay(
             this World world,
             Vector3 from,
             Vector3 to,
@@ -44,10 +44,10 @@ namespace AlleyCat.Physics
             var state = world.DirectSpaceState;
             var result = state.IntersectRay(from, to, exclude.ValueUnsafe(), collisionLayer);
 
-            return result.ContainsKey("collider") ? Some(new Intersection(result)) : None;
+            return result.ContainsKey("collider") ? Some((IIntersection) new Intersection(result)) : None;
         }
 
-        public static IEnumerable<Collision> IntersectShape(
+        public static IEnumerable<ICollision> IntersectShape(
             this World world,
             PhysicsShapeQueryParameters shape,
             int maxResults = 32)
@@ -57,11 +57,11 @@ namespace AlleyCat.Physics
             return world.DirectSpaceState
                 .IntersectShape(shape, maxResults)
                 .Cast<IDictionary<object, object>>()
-                .Where(d => d.ContainsKey("collider"))
-                .Select(d => new Collision(d));
+                .Filter(d => d.ContainsKey("collider"))
+                .Map(d => (ICollision) new Collision(d));
         }
 
-        public static IEnumerable<Collision> CollideShape(
+        public static IEnumerable<ICollision> CollideShape(
             this World world,
             PhysicsShapeQueryParameters shape,
             int maxResults = 32)
@@ -71,11 +71,11 @@ namespace AlleyCat.Physics
             return world.DirectSpaceState
                 .CollideShape(shape, maxResults)
                 .Cast<IDictionary<object, object>>()
-                .Where(d => d.ContainsKey("collider"))
-                .Select(d => new Collision(d));
+                .Filter(d => d.ContainsKey("collider"))
+                .Map(d => (ICollision) new Collision(d));
         }
 
-        public static Option<RestInfo> GetRestInfo(
+        public static Option<IRestInfo> GetRestInfo(
             this World world,
             PhysicsShapeQueryParameters shape)
         {
@@ -84,7 +84,7 @@ namespace AlleyCat.Physics
             var state = world.DirectSpaceState;
             var result = state.GetRestInfo(shape);
 
-            return result.ContainsKey("collider") ? Some(new RestInfo(result)) : None;
+            return result.ContainsKey("collider") ? Some((IRestInfo) new RestInfo(result)) : None;
         }
     }
 }

@@ -88,7 +88,7 @@ namespace AlleyCat.View
                 .Select(to => Character
                     .Map(c => new Array {c.Spatial})
                     .Bind(v => Camera.GetWorld().IntersectRay(Origin, to, v)))
-                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                .Select(hit => hit.Bind(h => h.GetCollider().FindEntity()))
                 .Select(e => e.Filter(v => v.Valid && v.Visible))
                 .DistinctUntilChanged();
 

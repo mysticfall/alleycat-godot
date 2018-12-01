@@ -340,7 +340,10 @@
     <Compile Include="Source\AlleyCat\Motion\TurretLike.cs" />
     <Compile Include="Source\AlleyCat\Motion\TurretLikeFactory.cs" />
     <Compile Include="Source\AlleyCat\Physics\Collision.cs" />
+    <Compile Include="Source\AlleyCat\Physics\ICollision.cs" />
+    <Compile Include="Source\AlleyCat\Physics\IIntersection.cs" />
     <Compile Include="Source\AlleyCat\Physics\Intersection.cs" />
+    <Compile Include="Source\AlleyCat\Physics\IRestInfo.cs" />
     <Compile Include="Source\AlleyCat\Physics\WorldExtensions.cs" />
     <Compile Include="Source\AlleyCat\Physics\RestInfo.cs" />
     <Compile Include="Source\AlleyCat\Sensor\PairedEyeSight.cs" />

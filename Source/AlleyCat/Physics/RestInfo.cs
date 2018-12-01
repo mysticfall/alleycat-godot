@@ -1,14 +1,17 @@
 using System.Collections.Generic;
-using Godot;
+using EnsureThat;
 
 namespace AlleyCat.Physics
 {
-    public class RestInfo : Collision
+    public struct RestInfo : IRestInfo
     {
-        public Vector3 LinearVelocity => (Vector3) Data["linear_velocity"];
+        public IDictionary<object, object> RawData { get; }
 
-        public RestInfo(IDictionary<object, object> data) : base(data)
+        public RestInfo(IDictionary<object, object> data)
         {
+            Ensure.That(data, nameof(data)).IsNotNull();
+
+            RawData = data;
         }
     }
 }

@@ -183,7 +183,7 @@ namespace AlleyCat.View
                     .Bind(filter => Camera.GetWorld().IntersectRay(Origin, to, filter)));
 
             onRayCast
-                .Select(hit => hit.Select(h => Viewpoint.DistanceTo(h.Position)).IfNone(float.MaxValue))
+                .Select(hit => hit.Select(h => Viewpoint.DistanceTo(h.GetPosition())).IfNone(float.MaxValue))
                 .Buffer(
                     TimeSpan.FromMilliseconds(FocusSpeed),
                     TimeSpan.FromMilliseconds(10),
@@ -193,8 +193,8 @@ namespace AlleyCat.View
                 .Subscribe(this.SetFocalDistance, this);
 
             OnFocusChange = onRayCast
-                .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
-                .Select(hit => hit.Bind(h => h.Collider.FindEntity()))
+                .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.GetPosition()) <= MaxFocalDistance))
+                .Select(hit => hit.Bind(h => h.GetCollider().FindEntity()))
                 .Select(entity => entity.Where(e => e.Valid && e.Visible))
                 .DistinctUntilChanged();
 

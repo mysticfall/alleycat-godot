@@ -1,16 +1,17 @@
 using System.Collections.Generic;
-using Godot;
+using EnsureThat;
 
 namespace AlleyCat.Physics
 {
-    public class Intersection : Collision
+    public struct Intersection : IIntersection
     {
-        public Vector3 Position => (Vector3) Data["position"];
+        public IDictionary<object, object> RawData { get; }
 
-        public Vector3 Normal => (Vector3) Data["normal"];
-
-        public Intersection(IDictionary<object, object> data) : base(data)
+        public Intersection(IDictionary<object, object> data)
         {
+            Ensure.That(data, nameof(data)).IsNotNull();
+
+            RawData = data;
         }
     }
 }
