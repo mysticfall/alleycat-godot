@@ -13,7 +13,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
-    [AutowireContext]
+    [AutowireContext, Singleton(typeof(IServiceFactory<ILogger>))]
     public class LoggingConfiguration : AutowiredNode, IServiceDefinitionProvider, IServiceFactory<ILogger>
     {
         public const string DefaultConfigSection = "Logging";
