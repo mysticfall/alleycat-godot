@@ -5,14 +5,18 @@ using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Event;
+using AlleyCat.Logging;
 using AlleyCat.View;
+using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     [AutowireContext]
-    public class CharacterCreator : AutowiredNode, ICharacterAware<IHumanoid>
+    public class CharacterCreator : AutowiredNode, ICharacterAware<IHumanoid>, ILoggable
     {
         [Service]
         public Option<IHumanoid> Character
@@ -22,6 +26,9 @@ namespace AlleyCat.UI.Character
         }
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
+
+        [Service, CanBeNull]
+        public ILogger Logger { get; private set; }
 
         [Service(true)]
         protected MorphListPanel MorphListPanel { get; private set; }
@@ -42,8 +49,7 @@ namespace AlleyCat.UI.Character
         {
             OnCharacterChange
                 .Do(character => View.Pivot = character.OfType<ITransformable>().HeadOrNone())
-                .Subscribe(MorphListPanel.Load)
-                .DisposeWith((IDisposableCollector) this);
+                .Subscribe(MorphListPanel.Load, (IDisposableCollector) this);
         }
     }
 }

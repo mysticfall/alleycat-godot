@@ -77,25 +77,23 @@ namespace AlleyCat.Motion
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
-                .Subscribe(_ => this.Stop())
-                .DisposeWith(this);
+                .Subscribe(_ => this.Stop(), this);
 
             this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
-                .Subscribe(ProcessLoop)
-                .DisposeWith(this);
+                .Subscribe(ProcessLoop, this);
 
             if (Logger.IsEnabled(LogLevel.Trace))
             {
                 OnVelocityChange
                     .DistinctUntilChanged()
-                    .Subscribe(v => this.LogTrace("Velocity changed = {}.", v))
-                    .DisposeWith(this);
+                    .Subscribe(
+                        v => this.LogTrace("Velocity changed = {}.", v), this);
 
                 OnRotationalVelocityChange
                     .DistinctUntilChanged()
-                    .Subscribe(v => this.LogTrace("Rotational velocity changed = {}.", v))
-                    .DisposeWith(this);
+                    .Subscribe(
+                        v => this.LogTrace("Rotational velocity changed = {}.", v), this);
             }
         }
 

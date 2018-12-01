@@ -6,6 +6,7 @@ using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Item;
 using AlleyCat.Item.Generic;
 using AlleyCat.View;
@@ -96,8 +97,7 @@ namespace AlleyCat.UI.Inventory
             items
                 .Do(_ => RemoveAllNodes())
                 .CombineLatest(container, (list, parent) => (list, parent))
-                .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)))
-                .DisposeWith(this);
+                .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)), this);
 
             _item = Some(
                 Tree.OnItemSelect()
@@ -109,9 +109,7 @@ namespace AlleyCat.UI.Inventory
                     .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
                     .Do(current => Item = current));
 
-            OnItemChange
-                .Subscribe(DisplayItem)
-                .DisposeWith(this);
+            OnItemChange.Subscribe(DisplayItem, this);
         }
 
         protected TreeItem CreateNode(Equipment item, IEquipmentContainer parent)

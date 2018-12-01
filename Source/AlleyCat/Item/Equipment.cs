@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
@@ -11,7 +11,6 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
-using Object = Godot.Object;
 
 namespace AlleyCat.Item
 {
@@ -108,8 +107,7 @@ namespace AlleyCat.Item
             _configurations?.ToObservable()
                 .SelectMany(c => c.OnActiveStateChange.Where(identity).Select(_ => c))
                 .SelectMany(active => _configurations.Where(c => c != active && c.Active))
-                .Subscribe(c => c.Deactivate())
-                .DisposeWith(this);
+                .Subscribe(c => c.Deactivate(), this);
 
             _labelMarker = this.FindLabelMarker();
         }

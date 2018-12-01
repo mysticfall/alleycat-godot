@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -92,8 +93,7 @@ namespace AlleyCat.Item
                 manager.OnAnimationEvent
                     .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
                     .Take(1)
-                    .Subscribe(_ => holder.Equip(equipment, configuration))
-                    .DisposeWith(this);
+                    .Subscribe(_ => holder.Equip(equipment, configuration), this);
 
                 if (manager is IAnimationStateManager stateManager &&
                     AnimatorPath.IsSome && StatesPath.IsSome)

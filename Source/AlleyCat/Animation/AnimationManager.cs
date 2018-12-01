@@ -70,8 +70,7 @@ namespace AlleyCat.Animation
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active)
-                .Subscribe(Advance)
-                .DisposeWith(this);
+                .Subscribe(Advance, this);
         }
 
         public virtual void Advance(float delta)

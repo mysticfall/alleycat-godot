@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -87,8 +88,7 @@ namespace AlleyCat.Animation
 
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
-                .Subscribe(AnimationNode.SetAnimation)
-                .DisposeWith(this);
+                .Subscribe(AnimationNode.SetAnimation, this);
 
             _animation
                 .Subscribe(animation =>
@@ -101,16 +101,13 @@ namespace AlleyCat.Animation
 
                     BlenderNode.Filters = filters;
                     BlenderNode.FilterEnabled = filters.Any();
-                })
-                .DisposeWith(this);
+                }, this);
 
             var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
 
             _amount = new BehaviorSubject<float>(currentAmount).DisposeWith(this);
 
-            _amount
-                .Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v))
-                .DisposeWith(this);
+            _amount.Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v), this);
 
             var currentSpeed = timeScaleParameter
                 .Map(context.AnimationTree.Get).OfType<float>().HeadOrNone().IfNone(1f);
@@ -119,9 +116,7 @@ namespace AlleyCat.Animation
 
             timeScaleParameter.Iter(param =>
             {
-                _timeScale
-                    .Subscribe(v => context.AnimationTree.Set(param, v))
-                    .DisposeWith(this);
+                _timeScale.Subscribe(v => context.AnimationTree.Set(param, v), this);
             });
         }
 
@@ -155,7 +150,7 @@ namespace AlleyCat.Animation
                     .Select(v => clampedTransition > 0 ? v / clampedTransition : 0f)
                     .Select(v => Mathf.Min(v * clampedAmount, 1f))
                     .TakeUntil(done)
-                    .Subscribe(v => Amount = v, () => Amount = clampedAmount);
+                    .Subscribe(v => Amount = v, () => Amount = clampedAmount, this);
             }
             else
             {
@@ -179,7 +174,7 @@ namespace AlleyCat.Animation
                 elapsed
                     .Select(v => Mathf.Max((1f - v / transition) * Amount, 0f))
                     .TakeUntil(done)
-                    .Subscribe(v => Amount = v, () => Amount = 0f);
+                    .Subscribe(v => Amount = v, () => Amount = 0f, this);
             }
             else
             {

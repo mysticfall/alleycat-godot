@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -79,8 +80,7 @@ namespace AlleyCat.Animation
                     node.SetAnimation(animation.ValueUnsafe());
 
                     Context.AnimationTree.Set(Parameter, next);
-                })
-                .DisposeWith(this);
+                }, this);
         }
 
         public static Option<CrossfadingAnimator> TryCreate(

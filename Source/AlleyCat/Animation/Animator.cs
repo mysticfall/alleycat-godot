@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -37,8 +38,7 @@ namespace AlleyCat.Animation
             _animation
                 .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
                 .Do(a => this.LogDebug("Animation has changed to '{}'.", a))
-                .Subscribe(Node.SetAnimation)
-                .DisposeWith(this);
+                .Subscribe(Node.SetAnimation, this);
         }
 
         public static Option<Animator> TryCreate(

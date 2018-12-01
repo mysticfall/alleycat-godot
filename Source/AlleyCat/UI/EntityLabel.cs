@@ -1,22 +1,26 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
-using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using Godot;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
-    public class EntityLabel : Panel
+    public class EntityLabel : Panel, ILoggable
     {
         [Export]
         public string InteractAction { get; set; } = "interact";
 
         [Export]
         public string DefaultKeyLabel { get; set; } = "?";
+
+        [Service, CanBeNull]
+        public ILogger Logger { get; private set; }
 
         [Node("Container/Title")]
         protected Label Title { get; private set; }
@@ -64,23 +68,13 @@ namespace AlleyCat.UI
                 .Select(e => PlayerControl.Camera.UnprojectPosition(e.LabelPosition))
                 .Select(pos => new Vector2(pos.x - RectSize.x / 2f, pos.y - RectSize.y / 2f));
 
-            showTitle
-                .Subscribe(v => Visible = v)
-                .DisposeWith(this);
-            showAction
-                .Subscribe(v => ActionPanel.Visible = v)
-                .DisposeWith(this);
+            showTitle.Subscribe(v => Visible = v, this);
+            showAction.Subscribe(v => ActionPanel.Visible = v, this);
 
-            title
-                .Subscribe(v => Title.Text = v)
-                .DisposeWith(this);
-            action
-                .Subscribe(a => a.Iter(ActionTitle.SetText))
-                .DisposeWith(this);
+            title.Subscribe(v => Title.Text = v, this);
+            action.Subscribe(a => a.Iter(ActionTitle.SetText), this);
 
-            position
-                .Subscribe(pos => RectPosition = pos.Round())
-                .DisposeWith(this);
+            position.Subscribe(pos => RectPosition = pos.Round(), this);
 
             var shortcut = InputMap
                 .GetActionList(InteractAction)

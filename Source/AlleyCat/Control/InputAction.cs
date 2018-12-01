@@ -1,7 +1,6 @@
-using System;
 using System.Reactive.Linq;
 using AlleyCat.Action;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -34,8 +33,7 @@ namespace AlleyCat.Control
                 .Where(v => v && Active)
                 .Select(_ => CreateActionContext())
                 .Where(c => c.Exists(AllowedFor))
-                .Subscribe(c => c.Iter(Execute))
-                .DisposeWith(this);
+                .Subscribe(c => c.Iter(Execute), this);
         }
     }
 }

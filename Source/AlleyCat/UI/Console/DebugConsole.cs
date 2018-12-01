@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
@@ -73,18 +72,15 @@ namespace AlleyCat.UI.Console
                 .Where(_ => Visible)
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
-                .Subscribe(AutoComplete)
-                .DisposeWith(this);
+                .Subscribe(AutoComplete, this);
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
-                .Subscribe(_ => OnShown())
-                .DisposeWith(this);
+                .Subscribe(_ => OnShown(), this);
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
-                .Subscribe(_ => OnHidden())
-                .DisposeWith(this);
+                .Subscribe(_ => OnHidden(), this);
 
             Content.AddColorOverride("default_color", TextColor);
         }

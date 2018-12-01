@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Logging;
 using Godot;
@@ -82,8 +83,7 @@ namespace AlleyCat.Motion
             {
                 OnRotationChange
                     .DistinctUntilChanged()
-                    .Subscribe(v => this.LogTrace("Rotation changed = {}.", v))
-                    .DisposeWith(this);
+                    .Subscribe(v => this.LogTrace("Rotation changed = {}.", v), this);
             }
         }
 

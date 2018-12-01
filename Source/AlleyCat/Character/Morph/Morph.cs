@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using EnsureThat;
 using LanguageExt;
 
@@ -46,7 +47,7 @@ namespace AlleyCat.Character.Morph
             _value = new BehaviorSubject<TVal>(definition.Default).DisposeWith(this);
 
             Definition = definition;
-            OnChange.Skip(1).Subscribe(Apply).DisposeWith(this);
+            OnChange.Skip(1).Subscribe(Apply, this);
         }
 
         public void Apply() => Apply(Value);

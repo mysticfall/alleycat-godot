@@ -2,14 +2,20 @@ using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
 using AlleyCat.Character.Morph.Generic;
+using AlleyCat.Logging;
 using Godot;
+using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
-    public abstract class MorphPanel : Container
+    public abstract class MorphPanel : Container, ILoggable
     {
+        [Service, CanBeNull]
+        public ILogger Logger { get; private set; }
+
         [Node(true)]
         protected Label Label { get; private set; }
 

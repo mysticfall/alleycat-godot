@@ -1,8 +1,7 @@
-using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.UI.Character.Generic;
 using Godot;
 
@@ -23,13 +22,10 @@ namespace AlleyCat.UI.Character
             Button.OnColorChange()
                 .Select(e => e.Color)
                 .Select(v => Morph.Definition.UseAlpha ? v : ToOpaqueColor(v))
-                .Subscribe(v => Morph.Value = v)
-                .DisposeWith(this);
+                .Subscribe(v => Morph.Value = v, this);
 
-            Morph
-                .OnChange
-                .Subscribe(v => Button.Color = v)
-                .DisposeWith(this);
+            Morph.OnChange
+                .Subscribe(v => Button.Color = v, this);
         }
 
         private Color ToOpaqueColor(Color color)

@@ -1,18 +1,24 @@
-using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Event;
+using AlleyCat.Logging;
 using Godot;
+using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
     //FIXME: A temporary workaround until godotengine/godot#21153 gets fixed.
-    public class IKChain : SkeletonIK
+    public class IKChain : SkeletonIK, ILoggable
     {
         [Export]
         public bool IgnoreRotation { get; set; } = true;
+
+        [Service, CanBeNull]
+        public ILogger Logger { get; private set; }
 
         private Skeleton _skeleton;
 
@@ -34,8 +40,7 @@ namespace AlleyCat.Animation
 
             tick
                 .Where(_ => IsRunning() && IgnoreRotation)
-                .Subscribe(_ => ResetRotation())
-                .DisposeWith(this);
+                .Subscribe(_ => ResetRotation(), this);
 
             _skeleton = GetParentSkeleton();
             _tipIndex = _skeleton.FindBone(TipBone);

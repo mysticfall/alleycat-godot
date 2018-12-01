@@ -190,8 +190,7 @@ namespace AlleyCat.View
                     TimeSource.PhysicsScheduler)
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
-                .Subscribe(this.SetFocalDistance)
-                .DisposeWith(this);
+                .Subscribe(this.SetFocalDistance, this);
 
             OnFocusChange = onRayCast
                 .Select(hit => hit.Where(h => Viewpoint.DistanceTo(h.Position) <= MaxFocalDistance))
@@ -201,8 +200,7 @@ namespace AlleyCat.View
 
             OnFocusChange
                 .Do(v => this.LogDebug("Focusing on '{}'.", v))
-                .Subscribe(current => FocusedObject = current)
-                .DisposeWith(this);
+                .Subscribe(current => FocusedObject = current, this);
 
             _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
 
@@ -214,9 +212,7 @@ namespace AlleyCat.View
         {
             base.PostConstruct();
 
-            OnActiveStateChange
-                .Subscribe(HandleActiveStateChange)
-                .DisposeWith(this);
+            OnActiveStateChange.Subscribe(HandleActiveStateChange, this);
 
             InitializeInput();
             InitializeStabilization();
@@ -241,17 +237,14 @@ namespace AlleyCat.View
         {
             RotationInput
                 .Select(v => v * 0.05f)
-                .Subscribe(v => Rotation -= v)
-                .DisposeWith(this);
+                .Subscribe(v => Rotation -= v, this);
 
             OnRotationChange
                 .Merge(OnActiveStateChange.Where(identity).Select(_ => Rotation))
-                .Subscribe(r => Vision.Iter(v => v.Rotate(r)))
-                .DisposeWith(this);
+                .Subscribe(r => Vision.Iter(v => v.Rotate(r)), this);
 
             DeactivateInput
-                .Subscribe(_ => this.Deactivate())
-                .DisposeWith(this);
+                .Subscribe(_ => this.Deactivate(), this);
         }
 
         private void InitializeStabilization()
@@ -297,8 +290,7 @@ namespace AlleyCat.View
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
-                .Subscribe(transform => Camera.SetGlobalTransform(transform))
-                .DisposeWith(this);
+                .Subscribe(transform => Camera.SetGlobalTransform(transform), this);
         }
     }
 }

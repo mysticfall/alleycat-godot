@@ -120,8 +120,7 @@ namespace AlleyCat.View
 
             OnActiveStateChange
                 .Where(_ => Valid)
-                .Subscribe(v => Character.Iter(c => c.Locomotion.Active = !v))
-                .DisposeWith(this);
+                .Subscribe(v => Character.Iter(c => c.Locomotion.Active = !v), this);
 
             InitializeInput();
             InitializeRaycast();
@@ -132,32 +131,27 @@ namespace AlleyCat.View
             OnActiveStateChange
                 .Do(v => _rotationInput.Iter(i => i.Active = v))
                 .Do(v => _movementInput.Iter(i => i.Active = v))
-                .Subscribe()
-                .DisposeWith(this);
+                .Subscribe(this);
 
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x))
                 .Do(v => Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
-                .Subscribe()
-                .DisposeWith(this);
+                .Subscribe(this);
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
-                .Subscribe(Camera.TranslateObjectLocal)
-                .DisposeWith(this);
+                .Subscribe(Camera.TranslateObjectLocal, this);
 
             ToggleInput
-                .Subscribe(_ => Active = !Active)
-                .DisposeWith(this);
+                .Subscribe(_ => Active = !Active, this);
         }
 
         private void InitializeRaycast()
         {
             OnActiveStateChange
                 .Where(s => s)
-                .Subscribe(_ => this.EnableDof())
-                .DisposeWith(this);
+                .Subscribe(_ => this.EnableDof(), this);
 
             TimeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)
@@ -170,8 +164,7 @@ namespace AlleyCat.View
                     TimeSource.PhysicsScheduler)
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
-                .Subscribe(this.SetFocalDistance)
-                .DisposeWith(this);
+                .Subscribe(this.SetFocalDistance, this);
         }
     }
 }

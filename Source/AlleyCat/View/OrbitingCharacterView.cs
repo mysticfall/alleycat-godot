@@ -94,8 +94,7 @@ namespace AlleyCat.View
 
             OnFocusChange
                 .Do(v => this.LogDebug("Focusing on '{}'.", v))
-                .Subscribe(current => FocusedObject = current)
-                .DisposeWith(this);
+                .Subscribe(current => FocusedObject = current, this);
 
             _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
         }
@@ -107,8 +106,7 @@ namespace AlleyCat.View
             ZoomInput
                 .Where(_ => Distance <= DistanceRange.Min)
                 .Where(v => v > 0)
-                .Subscribe(_ => this.Deactivate())
-                .DisposeWith(this);
+                .Subscribe(_ => this.Deactivate(), this);
         }
     }
 }

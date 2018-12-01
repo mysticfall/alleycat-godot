@@ -1,6 +1,6 @@
 using System;
 using System.Reactive.Linq;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -46,9 +46,8 @@ namespace AlleyCat.Animation
 
             if (Logger.IsEnabled(LogLevel.Debug))
             {
-                OnStateChange
-                    .Subscribe(s => this.LogDebug("Animation state has changed to '{}'.", s))
-                    .DisposeWith(this);
+                OnStateChange.Subscribe(
+                    s => this.LogDebug("Animation state has changed to '{}'.", s), this);
             }
         }
 

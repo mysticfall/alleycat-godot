@@ -1,19 +1,25 @@
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Control;
+using AlleyCat.Logging;
 using Godot;
+using JetBrains.Annotations;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
-    public class FullScreenModalPanel : Panel
+    public class FullScreenModalPanel : Panel, ILoggable
     {
         public Option<string> CloseAction
         {
             get => _closeAction.TrimToOption();
             set => _closeAction = value.ValueUnsafe();
         }
+
+        [Service, CanBeNull]
+        public ILogger Logger { get; private set; }
 
         protected IPlayerControl PlayerControl => _playerControl.Head();
 

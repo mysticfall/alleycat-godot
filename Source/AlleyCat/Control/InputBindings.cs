@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
@@ -41,8 +42,7 @@ namespace AlleyCat.Control
             base.PostConstruct();
 
             OnActiveStateChange
-                .Subscribe(v => Inputs.Values.Iter(i => i.Active = v))
-                .DisposeWith(this);
+                .Subscribe(v => Inputs.Values.Iter(i => i.Active = v), this);
         }
     }
 }

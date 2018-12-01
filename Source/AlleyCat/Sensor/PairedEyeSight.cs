@@ -1,6 +1,6 @@
-using System;
 using AlleyCat.Animation;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Motion;
 using EnsureThat;
 using Godot;
@@ -91,10 +91,7 @@ namespace AlleyCat.Sensor
         {
             base.PostConstruct();
 
-            AnimationManager
-                .OnAdvance
-                .Subscribe(OnAnimation)
-                .DisposeWith(this);
+            AnimationManager.OnAdvance.Subscribe(OnAnimation, this);
         }
 
         private Basis DetectOrientation(int bone)

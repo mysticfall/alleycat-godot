@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
-using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
@@ -17,6 +13,13 @@ namespace AlleyCat.Common
     {
         private const string NodeName = "DisposableCollector";
 
+        public static IDisposableCollector AsDisposableCollector(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return node as IDisposableCollector ?? node.GetComponent(NodeName, _ => new BaseNode(NodeName));
+        }
+
         public static T DisposeWith<T>(this T disposable, IDisposableCollector collector)
             where T : class, IDisposable
         {
@@ -27,19 +30,9 @@ namespace AlleyCat.Common
             return disposable;
         }
 
-        public static T DisposeWith<T>(this T disposable, Node node)
-            where T : class, IDisposable
+        public static T DisposeWith<T>(this T disposable, Node node) where T : IDisposable
         {
-            Ensure.That(node, nameof(node)).IsNotNull();
-
-            if (node is IDisposableCollector collector)
-            {
-                collector.Collect(disposable);
-            }
-            else
-            {
-                node.GetComponent(NodeName, _ => new BaseNode(NodeName)).Collect(disposable);
-            }
+            node.AsDisposableCollector().Collect(disposable);
 
             return disposable;
         }
@@ -56,25 +49,6 @@ namespace AlleyCat.Common
             {
                 // ignored
             }
-        }
-    }
-
-    internal struct ObserverDisposer<TObserver, TValue> : IDisposable
-        where TObserver : IObserver<TValue>
-    {
-        private Option<TObserver> _observer;
-
-        public ObserverDisposer(TObserver observer)
-        {
-            Debug.Assert(observer != null, "observer != null");
-
-            _observer = Some(observer);
-        }
-
-        public void Dispose()
-        {
-            _observer.Iter(o => o.CompleteAndDispose());
-            _observer = None;
         }
     }
 }

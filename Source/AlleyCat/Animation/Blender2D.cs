@@ -1,7 +1,7 @@
-using System;
 using System.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -33,15 +33,12 @@ namespace AlleyCat.Animation
 
             _position = new BehaviorSubject<Vector2>(current).DisposeWith(this);
 
-            _position
-                .Subscribe(v => context.AnimationTree.Set(parameter, v))
-                .DisposeWith(this);
+            _position.Subscribe(v => context.AnimationTree.Set(parameter, v), this);
 
             if (Logger.IsEnabled(LogLevel.Trace))
             {
-                _position
-                    .Subscribe(v => this.LogTrace("Changed blending position: {}.", v))
-                    .DisposeWith(this);
+                _position.Subscribe(
+                    v => this.LogTrace("Changed blending position: {}.", v), this);
             }
         }
 

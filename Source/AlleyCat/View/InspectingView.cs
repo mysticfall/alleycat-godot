@@ -145,12 +145,10 @@ namespace AlleyCat.View
             Input.SetMouseMode(Input.MouseMode.Visible);
 
             PanInput
-                .Subscribe(v => Offset += new Vector3(-v.x, v.y, 0))
-                .DisposeWith(this);
+                .Subscribe(v => Offset += new Vector3(-v.x, v.y, 0), this);
 
             OnActiveStateChange
-                .Subscribe(v => _panInput.Exists(p => p.Active = v))
-                .DisposeWith(this);
+                .Subscribe(v => _panInput.Exists(p => p.Active = v), this);
 
             var interacting =
                 from a in _rotating
@@ -160,8 +158,7 @@ namespace AlleyCat.View
             interacting
                 .MatchObservable(identity, Observable.Empty<bool>)
                 .Select(v => v ? Input.MouseMode.Captured : Input.MouseMode.Visible)
-                .Subscribe(Input.SetMouseMode)
-                .DisposeWith(this);
+                .Subscribe(Input.SetMouseMode, this);
 
             base.PostConstruct();
         }

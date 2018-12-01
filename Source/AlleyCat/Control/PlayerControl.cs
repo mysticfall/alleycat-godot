@@ -128,13 +128,11 @@ namespace AlleyCat.Control
 
                 perspective.OnActiveStateChange
                     .Where(s => Active && !s && Perspective.Contains(perspective))
-                    .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)))
-                    .DisposeWith(this);
+                    .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)), this);
 
                 perspective.OnActiveStateChange
                     .Where(s => s && !Perspective.Contains(perspective))
-                    .Subscribe(_ => Perspective = Some(perspective))
-                    .DisposeWith(this);
+                    .Subscribe(_ => Perspective = Some(perspective), this);
             }
 
             Perspective |= active;
@@ -143,20 +141,17 @@ namespace AlleyCat.Control
                 .Do(v => Character.Iter(c => c.Locomotion.Active = v))
                 .Do(v => Perspective.Iter(p => p.Active = v))
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
-                .Subscribe()
-                .DisposeWith(this);
+                .Subscribe(this);
 
             MovementInput
                 .Where(_ => Character.Exists(c => c.Valid))
                 .Where(_ => Perspective.Exists(p => p.AutoActivate))
                 .Select(v => new Vector3(v.x, 0, -v.y) * 2)
-                .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)))
-                .DisposeWith(this);
+                .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
 
             OnPerspectiveChange
                 .Pairwise()
-                .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2))
-                .DisposeWith(this);
+                .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2), this);
 
             var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
             var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
@@ -190,16 +185,14 @@ namespace AlleyCat.Control
                         .MostRecent((null, 0)),
                     (_, args) => args)
                 .Where(_ => Active && Valid)
-                .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle))
-                .DisposeWith(this);
+                .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle), this);
 
             tick
                 .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
-                .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)))
-                .DisposeWith(this);
+                .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)), this);
         }
 
         protected virtual void OnPerspectiveChanged(

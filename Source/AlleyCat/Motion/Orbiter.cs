@@ -93,8 +93,7 @@ namespace AlleyCat.Motion
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
-                .Subscribe(_ => Target.GlobalTransform = TargetTransform)
-                .DisposeWith(this);
+                .Subscribe(_ => Target.GlobalTransform = TargetTransform, this);
         }
 
         public override void Reset()

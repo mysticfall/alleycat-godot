@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using EnsureThat;
+using Godot;
 using Priority_Queue;
 
 namespace AlleyCat.Event
@@ -62,7 +63,16 @@ namespace AlleyCat.Event
 
                 while (_tasks.Count > 0 && _tasks.First.Ticks <= now)
                 {
-                    _tasks.Dequeue().Execute();
+                    try
+                    {
+                        _tasks.Dequeue().Execute();
+                    }
+                    catch (Exception e)
+                    {
+                        // TODO Use a logger to log errors.
+                        GD.Print("ERROR - Failed to execute a task.");
+                        GD.Print(e.ToString());
+                    }
                 }
             }
         }

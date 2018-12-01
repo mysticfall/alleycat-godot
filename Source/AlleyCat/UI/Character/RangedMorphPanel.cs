@@ -1,8 +1,7 @@
-using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.UI.Character.Generic;
 using Godot;
 
@@ -35,14 +34,12 @@ namespace AlleyCat.UI.Character
 
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
                 .Select(e => e.Value)
-                .Subscribe(v => Morph.Value = v)
-                .DisposeWith(this);
+                .Subscribe(v => Morph.Value = v, this);
 
             Morph.OnChange
                 .Do(Slider.SetValue)
                 .Do(Spinner.SetValue)
-                .Subscribe()
-                .DisposeWith(this);
+                .Subscribe(this);
         }
     }
 }

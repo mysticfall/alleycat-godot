@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
@@ -83,7 +84,7 @@ namespace AlleyCat.Item
 
                         mapping.Target.Set(mapping.Key, value);
                     }
-                }));
+                }, e => this.LogError(e, "Blend shape listener terminated with an error.")));
         }
 
         public override void OnUnequip(IEquipmentHolder holder, Equipment equipment)

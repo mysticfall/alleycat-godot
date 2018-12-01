@@ -1,8 +1,6 @@
-using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Animation;
-using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Setting.Project;
 using EnsureThat;
@@ -59,8 +57,7 @@ namespace AlleyCat.Motion
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
-                .Subscribe(_ => ResetAnimations())
-                .DisposeWith(this);
+                .Subscribe(_ => ResetAnimations(), this);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)
