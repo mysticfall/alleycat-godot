@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;

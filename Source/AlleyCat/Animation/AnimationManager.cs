@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;

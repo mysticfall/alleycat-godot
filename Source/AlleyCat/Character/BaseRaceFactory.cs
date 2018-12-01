@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Item;
 using Godot;
 using LanguageExt;

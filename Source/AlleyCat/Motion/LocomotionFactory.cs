@@ -1,5 +1,5 @@
 using AlleyCat.Autowire;
-using AlleyCat.Common;
+using AlleyCat.Game;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Motion
 {
     public abstract class LocomotionFactory<TLocomotion, TTarget> : GameObjectFactory<TLocomotion>
-        where TLocomotion : ILocomotion
+        where TLocomotion : ILocomotion, IGameObject
         where TTarget : Spatial
     {
         [Export]

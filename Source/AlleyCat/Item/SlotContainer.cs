@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
 using EnsureThat;

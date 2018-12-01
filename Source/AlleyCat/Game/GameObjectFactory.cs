@@ -2,22 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
-using AlleyCat.Common.Generic;
+using AlleyCat.Common;
+using AlleyCat.Game.Generic;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using static LanguageExt.Prelude;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Game
 {
-    public abstract class GameObjectFactory<T> : AutowiredNode, IGameObjectFactory<T>
+    public abstract class GameObjectFactory<T> : AutowiredNode, IGameObjectFactory<T> where T : IGameObject
     {
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<T>();
 
         public Validation<string, T> Service { get; private set; } =
-            Fail<string, T>("The factory has not been initialized yet.");
+            Prelude.Fail<string, T>("The factory has not been initialized yet.");
 
         Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
 
@@ -51,7 +51,7 @@ namespace AlleyCat.Common
         protected override void PreDestroy()
         {
             Service.SuccessAsEnumerable().OfType<IDisposable>().Iter(s => s.DisposeQuietly());
-            Service = Fail<string, T>("The factory has been disposed.");
+            Service = Prelude.Fail<string, T>("The factory has been disposed.");
 
             base.PreDestroy();
         }

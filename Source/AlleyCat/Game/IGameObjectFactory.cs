@@ -1,7 +1,7 @@
 using AlleyCat.Autowire;
 using LanguageExt;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Game
 {
     public interface IGameObjectFactory : IServiceDefinitionProvider
     {
@@ -10,7 +10,7 @@ namespace AlleyCat.Common
 
     namespace Generic
     {
-        public interface IGameObjectFactory<T> : IGameObjectFactory
+        public interface IGameObjectFactory<T> : IGameObjectFactory where T : IGameObject
         {
             new Validation<string, T> Service { get; }
         }

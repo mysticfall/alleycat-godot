@@ -3,6 +3,7 @@ using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Item;
 using AlleyCat.Logging;
 using AlleyCat.Motion;

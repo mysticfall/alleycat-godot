@@ -1,4 +1,4 @@
-using AlleyCat.Common;
+using AlleyCat.Game;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 

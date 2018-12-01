@@ -1,6 +1,6 @@
 using AlleyCat.Autowire;
-using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;

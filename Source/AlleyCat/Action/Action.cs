@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Microsoft.Extensions.Logging;

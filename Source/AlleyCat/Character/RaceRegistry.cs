@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;

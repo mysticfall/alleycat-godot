@@ -1,4 +1,4 @@
-using AlleyCat.Common;
+using AlleyCat.Game;
 using Godot;
 
 namespace AlleyCat.Control

@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using AlleyCat.Common;
 using AlleyCat.Control.Generic;
 using AlleyCat.Event;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Microsoft.Extensions.Logging;

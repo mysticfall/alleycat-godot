@@ -1,4 +1,5 @@
 using AlleyCat.Common;
+using AlleyCat.Game;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
@@ -8,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public abstract class SlotConfigurationFactory<T> : GameObjectFactory<T> where T : ISlotConfiguration
+    public abstract class SlotConfigurationFactory<T> : GameObjectFactory<T> where T : SlotConfiguration
     {
         [Export]
         public string Key { get; set; }

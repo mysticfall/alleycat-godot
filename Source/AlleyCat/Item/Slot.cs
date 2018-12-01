@@ -1,5 +1,5 @@
-using AlleyCat.Common;
 using AlleyCat.Condition.Generic;
+using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
