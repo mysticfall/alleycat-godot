@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Autowire;
 using EnsureThat;
 using LanguageExt;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface ITaggable
     {
         Set<string> Tags { get; }

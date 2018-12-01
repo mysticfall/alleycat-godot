@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AlleyCat.Game
 {
+    [NonInjectable]
     public abstract class GameObjectFactory<T> : AutowiredNode, IGameObjectFactory<T> where T : IGameObject
     {
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<T>();

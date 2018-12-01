@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
@@ -11,6 +12,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
 {
+    [NonInjectable]
     public interface ILoggable
     {
         ILogger Logger { get; }

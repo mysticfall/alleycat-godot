@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface ILabelled : INamed, IMeshObject
     {
         Vector3 LabelPosition { get; }

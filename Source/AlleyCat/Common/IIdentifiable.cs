@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using AlleyCat.Autowire;
 using EnsureThat;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface IIdentifiable
     {
         string Key { get; }

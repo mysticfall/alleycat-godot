@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AlleyCat.Autowire;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
@@ -11,6 +12,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public class BaseNode : Node, IDisposableCollector, ITimeSource, IInputSource, IValidatable
     {
         public virtual bool Valid => _valid;

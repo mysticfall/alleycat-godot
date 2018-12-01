@@ -3,6 +3,7 @@ using LanguageExt;
 
 namespace AlleyCat.Game
 {
+    [NonInjectable]
     public interface IGameObjectFactory : IServiceDefinitionProvider
     {
         Validation<string, object> Service { get; }

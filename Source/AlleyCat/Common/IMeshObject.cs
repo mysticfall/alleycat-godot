@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface IMeshObject : IBounded, IHideable
     {
         IEnumerable<MeshInstance> Meshes { get; }

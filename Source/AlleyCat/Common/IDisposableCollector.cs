@@ -1,9 +1,11 @@
 ﻿using System;
+using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface IDisposableCollector
     {
         void Collect(IDisposable disposable);

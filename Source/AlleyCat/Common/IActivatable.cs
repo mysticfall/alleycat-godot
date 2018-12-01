@@ -1,8 +1,10 @@
 using System;
+using AlleyCat.Autowire;
 using EnsureThat;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface IActivatable
     {
         bool Active { get; set; }

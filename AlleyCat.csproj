@@ -124,6 +124,7 @@
     <Compile Include="Source\AlleyCat\Autowire\NodeAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\NodeProcessor.cs" />
+    <Compile Include="Source\AlleyCat\Autowire\NonInjectableAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\OptionalHelper.cs" />
     <Compile Include="Source\AlleyCat\Autowire\PostConstructAttribute.cs" />
     <Compile Include="Source\AlleyCat\Autowire\PostConstructAttributeProcessor.cs" />

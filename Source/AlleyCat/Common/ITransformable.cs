@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 
 namespace AlleyCat.Common
 {
+    [NonInjectable]
     public interface ITransformable
     {
         Spatial Spatial { get; }

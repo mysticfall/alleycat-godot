@@ -4,6 +4,7 @@ using Godot;
 
 namespace AlleyCat.Autowire
 {
+    [NonInjectable]
     public class AutowiredNode : BaseNode
     {
         public override void _Ready()

@@ -1,4 +1,5 @@
 using System;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Logging;
 using EnsureThat;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Game
 {
+    [NonInjectable]
     public abstract class GameObject : IGameObject, ILoggable, IDisposableCollector
     {
         public ILogger Logger => _logger.Head();
