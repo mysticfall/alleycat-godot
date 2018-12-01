@@ -197,6 +197,7 @@
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IInitializable.cs" />
     <Compile Include="Source\AlleyCat\Common\ILabelled.cs" />
+    <Compile Include="Source\AlleyCat\Common\ILifecycleAware.cs" />
     <Compile Include="Source\AlleyCat\Common\IMarkable.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />

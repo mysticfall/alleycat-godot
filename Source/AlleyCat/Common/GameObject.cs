@@ -7,7 +7,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Common
 {
-    public abstract class GameObject : IValidatable, IInitializable, ILoggable, IDisposableCollector, IDisposable
+    public abstract class GameObject : IValidatable, ILifecycleAware, ILoggable, IDisposableCollector
     {
         public ILogger Logger => _logger.Head();
 
