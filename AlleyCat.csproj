@@ -432,11 +432,11 @@
     <Compile Include="Source\AlleyCat\View\OrbitingViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="8.0.0" />
-    <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory" Version="4.0.0.1" />
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
-    <PackageReference Include="LanguageExt.Core" Version="3.0.31" />
-    <PackageReference Include="LanguageExt.Rx" Version="3.0.31" />
+    <PackageReference Include="Ensure.That" Version="8.1.0" />
+    <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory" Version="4.0.0.2" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="LanguageExt.Core" Version="3.1.13" />
+    <PackageReference Include="LanguageExt.Rx" Version="3.1.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
@@ -446,7 +446,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.1.1" />
-    <PackageReference Include="OptimizedPriorityQueue" Version="4.1.1" />
+    <PackageReference Include="OptimizedPriorityQueue" Version="4.2.0" />
     <PackageReference Include="System.Reactive" Version="4.1.2" />
     <PackageReference Include="System.Reactive.Core" Version="4.1.2" />
     <PackageReference Include="System.Reactive.Interfaces" Version="4.1.2" />
