@@ -15,6 +15,8 @@ using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static AlleyCat.Common.MathUtils;
+using static Godot.Mathf;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
@@ -144,15 +146,28 @@ namespace AlleyCat.Control
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
                 .Subscribe(this);
 
-            MovementInput
-                .Where(_ => Character.Exists(c => c.Valid))
-                .Where(_ => Perspective.Exists(p => p.AutoActivate))
-                .Select(v => new Vector3(v.x, 0, -v.y) * 2)
-                .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
-
             OnPerspectiveChange
                 .Pairwise()
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2), this);
+
+            const float movementModifier = 2f;
+
+            var movementInput = MovementInput
+                .Where(_ => Character.Exists(c => c.Valid))
+                .Where(_ => Perspective.Exists(p => p.AutoActivate));
+
+            var facing = movementInput
+                .Select(v => Atan2(v.x, v.y));
+
+            var inputStrength = facing
+                .Select(v => Abs(Sin(v)) + Abs(Cos(v)))
+                .Select(v => (v - 1) / 0.414214f + 1);
+
+            movementInput
+                .CombineLatest(inputStrength, (input, strength) => (input, strength))
+                .Select(v => (Abs(v.input.x) + Abs(v.input.y)) / v.strength)
+                .Select(v => new Vector3(0, 0, -v) * movementModifier)
+                .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
 
             var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
             var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
@@ -161,17 +176,16 @@ namespace AlleyCat.Control
                 .SelectMany(l => l.MatchObservable(v => v.OnVelocityChange, () => Vector3.Zero))
                 .Select(v => v.Length());
 
-            var tick = TimeSource.OnProcess(ProcessMode);
+            var tick = TimeSource.OnProcess(ProcessMode).Where(_ => Active && Valid);
 
-            // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
-            var viewRotationSpeed = rotatableViews
-                .CombineLatest(linearSpeed, tick, (view, speed, delta) =>
-                    view.Map(v => -v.Yaw).Match(yaw =>
+            var viewRotationSpeed = rotatableViews.CombineLatest(linearSpeed, facing, tick,
+                (view, speed, offset, delta) =>
+                    view.Map(v => v.YawRange.Clamp(offset) - v.Yaw).Map(NormalizeAspectAngle).Match(target =>
                         {
-                            var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
-                                               Mathf.Sign(yaw) * speed;
+                            // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
+                            var angularSpeed = Min(Deg2Rad(120), Abs(target) * 3) * Sign(target) * Abs(speed);
 
-                            return Mathf.Abs(angularSpeed * delta) < Mathf.Abs(yaw) ? angularSpeed : yaw / delta;
+                            return Abs(angularSpeed * delta) < Abs(target) ? angularSpeed : target / delta;
                         },
                         () => 0
                     ));
@@ -186,10 +200,9 @@ namespace AlleyCat.Control
                         .MostRecent((null, 0)),
                     (_, args) => args)
                 .Where(_ => Active && Valid)
-                .Subscribe(t => t.view.Iter(v => v.Yaw += t.angle), this);
+                .Subscribe(t => t.view.Iter(v => v.Yaw = NormalizeAspectAngle(v.Yaw + t.angle)), this);
 
             tick
-                .Where(_ => Active && Valid)
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
