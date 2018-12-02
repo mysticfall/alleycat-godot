@@ -7,6 +7,7 @@ using AlleyCat.Game;
 using AlleyCat.Logging;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static AlleyCat.Common.MathUtils;
 
 namespace AlleyCat.Motion
 {
@@ -90,15 +91,6 @@ namespace AlleyCat.Motion
         public virtual void Reset()
         {
             Rotation = Vector2.Zero;
-        }
-
-        private static float NormalizeAspectAngle(float angle)
-        {
-            var value = angle;
-
-            while (value < 0) value += 2 * Mathf.Pi;
-
-            return value > Mathf.Pi ? value - 2 * Mathf.Pi : value;
         }
     }
 }

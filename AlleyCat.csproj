@@ -203,6 +203,7 @@
     <Compile Include="Source\AlleyCat\Common\ITransformable.cs" />
     <Compile Include="Source\AlleyCat\Common\IValidatable.cs" />
     <Compile Include="Source\AlleyCat\Common\Marker.cs" />
+    <Compile Include="Source\AlleyCat\Common\MathUtils.cs" />
     <Compile Include="Source\AlleyCat\Common\MeshInstanceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeException.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
