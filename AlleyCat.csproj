@@ -215,7 +215,6 @@
     <Compile Include="Source\AlleyCat\Autowire\IServiceDefinitionProvider.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AutowireContext.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeStore.cs" />
-    <Compile Include="Source\AlleyCat\Common\OptionalExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\Range.cs" />
     <Compile Include="Source\AlleyCat\Common\ResourceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\SceneTreeExtensions.cs" />

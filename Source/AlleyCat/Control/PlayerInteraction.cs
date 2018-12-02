@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Character;
@@ -13,7 +14,7 @@ namespace AlleyCat.Control
         public PlayerInteraction(
             string key,
             string displayName,
-            Option<IPlayerControl> playerControl,
+            Func<Option<IPlayerControl>> playerControl,
             ITriggerInput input,
             bool active,
             ILoggerFactory loggerFactory) : base(key, displayName, playerControl, input, active, loggerFactory)

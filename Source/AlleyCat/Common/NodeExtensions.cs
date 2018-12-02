@@ -104,7 +104,7 @@ namespace AlleyCat.Common
         }
 
         public static Option<T> FindClosestAncestor<T>(this Node node) where T : class =>
-            GetAncestors(node).Bind(n => OfType<T>(n)).HeadOrNone();
+            GetAncestors(node).Bind(n => n.OfType<T>()).HeadOrNone();
 
         public static Option<Node> FindClosestAncestor(this Node node, Func<Node, bool> predicate) =>
             GetAncestors(node).Find(predicate);

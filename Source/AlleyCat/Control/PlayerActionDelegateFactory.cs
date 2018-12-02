@@ -1,3 +1,4 @@
+using System;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
@@ -13,7 +14,7 @@ namespace AlleyCat.Control
         protected override Validation<string, PlayerActionDelegate> CreateService(
             string key,
             string displayName,
-            Option<IPlayerControl> control,
+            Func<Option<IPlayerControl>> control,
             ITriggerInput input,
             ILoggerFactory loggerFactory)
         {

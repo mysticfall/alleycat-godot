@@ -1,3 +1,4 @@
+using System;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
@@ -8,7 +9,7 @@ namespace AlleyCat.Control
         protected override Validation<string, PlayerInteraction> CreateService(
             string key, 
             string displayName, 
-            Option<IPlayerControl> control, 
+            Func<Option<IPlayerControl>> control, 
             ITriggerInput input, 
             ILoggerFactory loggerFactory)
         {

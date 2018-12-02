@@ -1,3 +1,4 @@
+using System;
 using AlleyCat.Action;
 using EnsureThat;
 using LanguageExt;
@@ -13,7 +14,7 @@ namespace AlleyCat.Control
             string key,
             string displayName,
             string action,
-            Option<IPlayerControl> playerControl,
+            Func<Option<IPlayerControl>> playerControl,
             ITriggerInput input,
             bool active,
             ILoggerFactory loggerFactory) : base(key, displayName, playerControl, input, active, loggerFactory)
