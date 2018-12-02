@@ -166,7 +166,7 @@ namespace AlleyCat.Control
             // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
             var viewRotationSpeed = rotatableViews
                 .CombineLatest(linearSpeed, tick, (view, speed, delta) =>
-                    view.Map(v => v.Yaw).Match(yaw =>
+                    view.Map(v => -v.Yaw).Match(yaw =>
                         {
                             var angularSpeed = Mathf.Min(Mathf.Deg2Rad(120), Mathf.Abs(yaw) * 3) *
                                                Mathf.Sign(yaw) * speed;
@@ -186,7 +186,7 @@ namespace AlleyCat.Control
                         .MostRecent((null, 0)),
                     (_, args) => args)
                 .Where(_ => Active && Valid)
-                .Subscribe(t => t.view.Iter(v => v.Yaw -= t.angle), this);
+                .Subscribe(t => t.view.Iter(v => v.Yaw += t.angle), this);
 
             tick
                 .Where(_ => Active && Valid)

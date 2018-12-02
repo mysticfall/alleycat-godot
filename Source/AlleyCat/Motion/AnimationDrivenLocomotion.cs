@@ -67,7 +67,7 @@ namespace AlleyCat.Motion
             Debug.Assert(Target != null, "Target != null");
 
             var transform = Target.GlobalTransform;
-            var basis = transform.basis * Basis.Identity.Rotated(Vector3.Up, rotationalVelocity.y * delta);
+            var basis = transform.basis * Basis.Identity.Rotated(Vector3.Up, -rotationalVelocity.y * delta);
 
             Target.GlobalTransform = new Transform(basis, transform.origin);
         }
