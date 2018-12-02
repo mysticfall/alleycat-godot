@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -55,12 +55,13 @@ namespace AlleyCat.Control
 
         public float MaxFocalDistance
         {
-            get => Perspective.OfType<IFocusTracker>().Map(p => p.MaxFocalDistance).HeadOrNone().IfNone(0f);
-            set => Perspective.OfType<IFocusTracker>().Iter(p => p.MaxFocalDistance = value);
+            get => FocusTracker.Map(p => p.MaxFocalDistance).IfNone(0f);
+            set => FocusTracker.Iter(p => p.MaxFocalDistance = value);
         }
 
-        public Option<IEntity> FocusedObject =>
-            Perspective.OfType<IFocusTracker>().Bind(p => p.FocusedObject).HeadOrNone();
+        public Option<IEntity> FocusedObject => FocusTracker.Bind(p => p.FocusedObject);
+
+        public Option<IFocusTracker> FocusTracker => Perspective.OfType<IFocusTracker>().HeadOrNone();
 
         public IObservable<Option<IEntity>> OnFocusChange =>
             OnPerspectiveChange
