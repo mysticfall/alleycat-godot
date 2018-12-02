@@ -1,4 +1,5 @@
 ﻿using AlleyCat.Event;
+using AlleyCat.Logging;
 using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
@@ -29,6 +30,8 @@ namespace AlleyCat.Motion
 
             Gravity = physicsSettings.DefaultGravity;
             GravityVector = physicsSettings.DefaultGravityVector;
+
+            this.LogDebug("Gravity: Strength = {}, Direction = {}.", Gravity, GravityVector);
         }
 
         protected override void Process(float delta, Vector3 velocity, Vector3 rotationalVelocity)

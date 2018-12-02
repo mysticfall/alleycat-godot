@@ -39,13 +39,13 @@ namespace AlleyCat.Common
 
         public static void Install()
         {
-//            if (_installed) return;
-//
-//            var converter = typeof(VariantTypeConverter);
-//
-//            VariantTypes.Iter(t => TypeDescriptor.AddAttributes(t, new TypeConverterAttribute(converter)));
-//
-//            _installed = true;
+            if (_installed) return;
+
+            var converter = typeof(VariantTypeConverter);
+
+            VariantTypes.Iter(t => TypeDescriptor.AddAttributes(t, new TypeConverterAttribute(converter)));
+
+            _installed = true;
         }
     }
 }
