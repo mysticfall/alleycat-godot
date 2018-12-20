@@ -4,15 +4,15 @@ using Godot;
 
 namespace AlleyCat.UI
 {
-    public interface IButtonEvent : IEvent<Button>
+    public interface IButtonEvent : IEvent<BaseButton>
     {
     }
 
     public struct ButtonPressedEvent : IButtonEvent
     {
-        public Button Source { get; }
+        public BaseButton Source { get; }
 
-        public ButtonPressedEvent(Button source)
+        public ButtonPressedEvent(BaseButton source)
         {
             Ensure.That(source, nameof(source)).IsNotNull();
 
@@ -22,9 +22,9 @@ namespace AlleyCat.UI
 
     public struct ButtonUpEvent : IButtonEvent
     {
-        public Button Source { get; }
+        public BaseButton Source { get; }
 
-        public ButtonUpEvent(Button source)
+        public ButtonUpEvent(BaseButton source)
         {
             Ensure.That(source, nameof(source)).IsNotNull();
 
@@ -34,9 +34,9 @@ namespace AlleyCat.UI
 
     public struct ButtonDownEvent : IButtonEvent
     {
-        public Button Source { get; }
+        public BaseButton Source { get; }
 
-        public ButtonDownEvent(Button source)
+        public ButtonDownEvent(BaseButton source)
         {
             Ensure.That(source, nameof(source)).IsNotNull();
 

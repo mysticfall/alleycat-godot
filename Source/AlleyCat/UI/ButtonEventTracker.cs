@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
-    public class ButtonEventTracker : EventTracker<Button>
+    public class ButtonEventTracker : EventTracker<BaseButton>
     {
         private const string SignalPressed = "pressed";
 
@@ -84,7 +84,7 @@ namespace AlleyCat.UI
             .SelectMany(o => Parent, (o, p) => (o, e: new ButtonDownEvent(p)))
             .Iter(t => t.o.OnNext(t.e));
 
-        protected override void Disconnect(Button parent)
+        protected override void Disconnect(BaseButton parent)
         {
             base.Disconnect(parent);
 
