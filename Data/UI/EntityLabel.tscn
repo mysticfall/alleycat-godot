@@ -1,9 +1,13 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/EntityLabel.cs" type="Script" id=1]
-[ext_resource path="res://Data/Fonts/Entity Title.tres" type="DynamicFont" id=2]
-[ext_resource path="res://Data/Fonts/Shortcut.tres" type="DynamicFont" id=3]
-[ext_resource path="res://Data/Fonts/Entity Action.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Data/Fonts/Title Text.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Data/Fonts/Small Outlined Text.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Data/Fonts/Outlined Text.tres" type="DynamicFont" id=4]
+
+
+
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
