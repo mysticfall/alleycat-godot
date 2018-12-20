@@ -17,7 +17,7 @@ namespace AlleyCat.UI.Console
     [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
     public class DebugConsole : Panel, ICommandConsole, IHideableUI
     {
-        public const string ThemeType = "Console";
+        public const string ThemeType = "Message";
 
         public const string ShowAnimation = "Show";
 

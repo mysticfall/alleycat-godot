@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Data/Themes/Default.tres" type="Theme" id=1]
+[ext_resource path="res://Data/Themes/Console.tres" type="Theme" id=1]
 [ext_resource path="res://Source/AlleyCat/UI/Console/DebugConsole.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/UI/Console/BasicConsoleCommands.cs" type="Script" id=3]
 
