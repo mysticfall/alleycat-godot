@@ -153,7 +153,7 @@ namespace AlleyCat.Event
             }
         }
 
-        public static void CompleteAndDispose<T>(this Subject<T> subject)
+        public static void CompleteAndDispose<T>(this ISubject<T> subject)
         {
             Ensure.That(subject, nameof(subject)).IsNotNull();
 
@@ -163,7 +163,7 @@ namespace AlleyCat.Event
             }
             finally
             {
-                subject.DisposeQuietly();
+                (subject as IDisposable)?.DisposeQuietly();
             }
         }
     }
