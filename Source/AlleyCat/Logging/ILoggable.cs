@@ -20,7 +20,7 @@ namespace AlleyCat.Logging
 
     public static class LoggableExtensions
     {
-        private static IMemoryCache _loggerCache = new MemoryCache(new MemoryCacheOptions());
+        private static readonly IMemoryCache LoggerCache = new MemoryCache(new MemoryCacheOptions());
 
         public static string GetLogCategory(this object loggable)
         {
@@ -139,7 +139,7 @@ namespace AlleyCat.Logging
         {
             var category = loggable.GetLogCategory();
 
-            return _loggerCache.GetOrCreate(category, _ => new PrintLogger(category));
+            return LoggerCache.GetOrCreate(category, _ => new PrintLogger(category));
         }
     }
 }
