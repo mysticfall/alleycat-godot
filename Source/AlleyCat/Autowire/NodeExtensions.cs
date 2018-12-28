@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
@@ -41,9 +44,9 @@ namespace AlleyCat.Autowire
             return GetRootContext(node);
         }
 
-        public static void Autowire(this Node node) => Autowire(node, None);
+        public static void Autowire(this Node node, bool abortOnError = false) => Autowire(node, None, abortOnError);
 
-        internal static void Autowire(this Node node, Option<AutowireContext> context)
+        internal static void Autowire(this Node node, Option<AutowireContext> context, bool abortOnError = false)
         {
             var target = context.IfNone((AutowireContext) GetAutowireContext(node));
 
@@ -54,6 +57,27 @@ namespace AlleyCat.Autowire
             if (target.Node == node)
             {
                 target.Initialize();
+            }
+
+            try
+            {
+            }
+            catch (Exception e)
+            {
+                if (abortOnError)
+                {
+                    throw;
+                }
+
+                var logger = target.FindService<ILoggerFactory>().Map(f => f.CreateLogger(node.GetLogCategory()));
+
+                logger.BiIter(
+                    l => l.LogError(e, "Failed to autowire node."),
+                    _ =>
+                    {
+                        GD.Print("Failed to autowire node:");
+                        GD.Print(e.ToString());
+                    });
             }
         }
     }
