@@ -22,7 +22,7 @@ namespace AlleyCat.Logging
     {
         private static IMemoryCache _loggerCache = new MemoryCache(new MemoryCacheOptions());
 
-        public static string GetLogCategory(this ILoggable loggable)
+        public static string GetLogCategory(this object loggable)
         {
             Ensure.That(loggable, nameof(loggable)).IsNotNull();
 
