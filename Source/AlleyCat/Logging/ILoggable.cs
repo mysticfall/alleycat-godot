@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -71,7 +72,7 @@ namespace AlleyCat.Logging
             ILoggable loggable,
             LogLevel level,
             string message,
-            object[] args,
+            IEnumerable<object> args,
             [CanBeNull] Exception exception = null)
         {
             Ensure.That(loggable, nameof(loggable)).IsNotNull();
@@ -82,13 +83,14 @@ namespace AlleyCat.Logging
 
             object Format(object arg)
             {
-                if (arg is Func<object> func)
+                switch (arg)
                 {
-                    arg = func.Invoke();
-                }
-                else if (arg is IOptional opt)
-                {
-                    arg = opt.MatchUntyped(identity, () => "(None)");
+                    case Func<object> func:
+                        arg = func.Invoke();
+                        break;
+                    case IOptional opt:
+                        arg = opt.MatchUntyped(identity, () => "(None)");
+                        break;
                 }
 
                 switch (arg)
@@ -131,6 +133,8 @@ namespace AlleyCat.Logging
                     break;
                 case LogLevel.Critical:
                     logger.LogCritical(exception, message, evalArgs);
+                    break;
+                case LogLevel.None:
                     break;
             }
         }
