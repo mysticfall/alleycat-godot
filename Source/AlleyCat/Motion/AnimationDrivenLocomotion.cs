@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;

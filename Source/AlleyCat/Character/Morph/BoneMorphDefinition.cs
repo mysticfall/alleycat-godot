@@ -39,7 +39,7 @@ namespace AlleyCat.Character.Morph
         public override IMorph CreateMorph(IMorphable morphable)
         {
             var morph = Optional(morphable)
-                .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this))
+                .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this, LoggerFactory))
                 .HeadOrNone();
 
             return morph.IfNone(() => throw new ArgumentOutOfRangeException(nameof(morphable),

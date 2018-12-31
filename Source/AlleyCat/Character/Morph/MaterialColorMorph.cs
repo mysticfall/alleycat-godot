@@ -4,6 +4,7 @@ using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -19,7 +20,8 @@ namespace AlleyCat.Character.Morph
 
         public MaterialColorMorph(MeshInstance mesh,
             IEnumerable<int> indexes,
-            MaterialColorMorphDefinition definition) : base(definition)
+            MaterialColorMorphDefinition definition,
+            ILoggerFactory loggerFactory) : base(definition, loggerFactory)
         {
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
 

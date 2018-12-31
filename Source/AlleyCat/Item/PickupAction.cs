@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Common;
-using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;

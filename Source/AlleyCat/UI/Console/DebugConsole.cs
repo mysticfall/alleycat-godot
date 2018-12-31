@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
@@ -67,20 +68,21 @@ namespace AlleyCat.UI.Console
 
             _commands = _providers.Bind(p => p.CreateCommands(this)).ToMap();
 
+            // Can't use ILoggable extension for Subscribe here, since ConsoleLogger depends on DebugConsole.
             InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
                 .Where(_ => Visible)
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
-                .Subscribe(AutoComplete, this);
+                .Subscribe(AutoComplete, e => GD.Print(e.ToString())); 
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
-                .Subscribe(_ => OnShown(), this);
+                .Subscribe(_ => OnShown(), e => GD.Print(e.ToString()));
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
-                .Subscribe(_ => OnHidden(), this);
+                .Subscribe(_ => OnHidden(), e => GD.Print(e.ToString()));
 
             Content.AddColorOverride("default_color", TextColor);
         }

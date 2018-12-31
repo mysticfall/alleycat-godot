@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Animation;
-using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
@@ -19,7 +20,8 @@ namespace AlleyCat.Character.Morph
         public BoneMorph(
             Skeleton skeleton,
             IAnimationManager manager,
-            BoneMorphDefinition definition) : base(definition)
+            BoneMorphDefinition definition,
+            ILoggerFactory loggerFactory) : base(definition, loggerFactory)
         {
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(manager, nameof(manager)).IsNotNull();

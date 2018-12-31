@@ -63,7 +63,7 @@ namespace AlleyCat.Character.Morph
 
             var materials = Materials.Select(name => indexes[name]);
 
-            return new MaterialColorMorph(instance, materials, this);
+            return new MaterialColorMorph(instance, materials, this, LoggerFactory);
         }
     }
 }

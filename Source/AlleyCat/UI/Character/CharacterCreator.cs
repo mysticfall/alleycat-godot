@@ -5,7 +5,6 @@ using System.Reactive.Subjects;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using AlleyCat.View;
 using JetBrains.Annotations;
@@ -49,7 +48,7 @@ namespace AlleyCat.UI.Character
         {
             OnCharacterChange
                 .Do(character => View.Pivot = character.OfType<ITransformable>().HeadOrNone())
-                .Subscribe(MorphListPanel.Load, (IDisposableCollector) this);
+                .Subscribe(MorphListPanel.Load, this);
         }
     }
 }

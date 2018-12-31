@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace AlleyCat.Character.Morph
 {
     public abstract class RangedMorph<T> : Morph<float, T> where T : RangedMorphDefinition
@@ -8,7 +10,7 @@ namespace AlleyCat.Character.Morph
             set => base.Value = Definition.Range.Clamp(value);
         }
 
-        protected RangedMorph(T definition) : base(definition)
+        protected RangedMorph(T definition, ILoggerFactory loggerFactory) : base(definition, loggerFactory)
         {
         }
     }

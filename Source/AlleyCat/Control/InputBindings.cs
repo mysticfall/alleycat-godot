@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
+using AlleyCat.Logging;
 using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;

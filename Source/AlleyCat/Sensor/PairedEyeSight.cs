@@ -1,6 +1,6 @@
 using AlleyCat.Animation;
 using AlleyCat.Common;
-using AlleyCat.Event;
+using AlleyCat.Logging;
 using AlleyCat.Motion;
 using EnsureThat;
 using Godot;

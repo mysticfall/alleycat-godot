@@ -21,6 +21,8 @@ namespace AlleyCat.Logging
 
     public static class LoggableExtensions
     {
+        private static readonly System.Action NoOp = () => { };
+
         private static readonly IMemoryCache LoggerCache = new MemoryCache(new MemoryCacheOptions());
 
         public static string GetLogCategory(this object loggable)
@@ -144,6 +146,34 @@ namespace AlleyCat.Logging
             var category = loggable.GetLogCategory();
 
             return LoggerCache.GetOrCreate(category, _ => new PrintLogger(category));
+        }
+
+        public static void Subscribe<T>(this IObservable<T> observable, ILoggable loggable)
+        {
+            Subscribe(observable, _ => { }, NoOp, loggable);
+        }
+
+        public static void Subscribe<T>(
+            this IObservable<T> observable, Action<T> onNext, ILoggable loggable)
+        {
+            Subscribe(observable, onNext, NoOp, loggable);
+        }
+
+        public static void Subscribe<T>(
+            this IObservable<T> observable,
+            Action<T> onNext,
+            System.Action onCompleted,
+            ILoggable loggable)
+        {
+            Ensure.That(observable, nameof(observable)).IsNotNull();
+            Ensure.That(onNext, nameof(onNext)).IsNotNull();
+
+            observable.Subscribe(onNext, OnError, onCompleted);
+
+            void OnError(Exception e)
+            {
+                loggable.LogError(e, "Subscription terminated with an error.");
+            }
         }
     }
 }

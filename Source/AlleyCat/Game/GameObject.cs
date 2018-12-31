@@ -5,13 +5,16 @@ using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
 {
     [NonInjectable]
     public abstract class GameObject : IGameObject, ILoggable, IDisposableCollector
     {
-        public ILogger Logger => _logger.Head();
+        public ILogger Logger => Some(_ => LoggerFactory.CreateLogger(this.GetLogCategory())).Head();
+
+        public ILoggerFactory LoggerFactory { get; }
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
@@ -27,7 +30,7 @@ namespace AlleyCat.Game
         {
             Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
-            _logger = Prelude.Some(_ => loggerFactory.CreateLogger(this.GetLogCategory()));
+            LoggerFactory = loggerFactory;
         }
 
         public void Collect(IDisposable disposable)

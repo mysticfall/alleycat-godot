@@ -3,13 +3,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Common;
-using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class Morph<TVal, TDef> : IMorph<TVal, TDef>, IDisposableCollector
+    public abstract class Morph<TVal, TDef> : IMorph<TVal, TDef>, ILoggable, IDisposableCollector
         where TDef : MorphDefinition<TVal>
     {
         public string Key => Definition.Key;
@@ -17,6 +18,8 @@ namespace AlleyCat.Character.Morph
         public string DisplayName => Definition.DisplayName;
 
         public TDef Definition { get; }
+
+        public ILogger Logger { get; }
 
         IMorphDefinition IMorph.Definition => Definition;
 
@@ -40,13 +43,15 @@ namespace AlleyCat.Character.Morph
 
         private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
-        protected Morph(TDef definition)
+        protected Morph(TDef definition, ILoggerFactory loggerFactory)
         {
             Ensure.That(definition, nameof(definition)).IsNotNull();
+            Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
             _value = new BehaviorSubject<TVal>(definition.Default).DisposeWith(this);
 
             Definition = definition;
+            Logger = loggerFactory.CreateLogger(this.GetLogCategory());
             OnChange.Skip(1).Subscribe(Apply, this);
         }
 
