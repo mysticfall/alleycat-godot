@@ -23,7 +23,7 @@ namespace AlleyCat.Animation
         public float Time
         {
             get => TransitionNode.XfadeTime;
-            set => TransitionNode.XfadeTime = Mathf.Min(value, 0);
+            set => TransitionNode.XfadeTime = Mathf.Max(value, 0);
         }
 
         public IObservable<Option<Godot.Animation>> OnAnimationChange => _animation.AsObservable();

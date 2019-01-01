@@ -68,7 +68,7 @@ namespace AlleyCat.View
         public float VelocityThreshold
         {
             get => _velocityThreshold;
-            set => _velocityThreshold = Mathf.Min(value, 0);
+            set => _velocityThreshold = Mathf.Max(value, 0);
         }
 
         public Option<IEntity> FocusedObject { get; private set; }

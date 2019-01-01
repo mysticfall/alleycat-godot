@@ -144,7 +144,7 @@ namespace AlleyCat.Animation
                 animation, timeScale, amount, transition);
 
             var clampedAmount = Mathf.Clamp(amount, 0, 1);
-            var clampedTransition = Mathf.Min(transition, 0);
+            var clampedTransition = Mathf.Max(transition, 0);
 
             if (transition > 0)
             {

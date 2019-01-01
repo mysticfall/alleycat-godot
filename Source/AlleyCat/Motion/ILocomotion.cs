@@ -27,18 +27,18 @@ namespace AlleyCat.Motion
         {
             Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
-            return locomotion.Velocity.LengthSquared() >= Mathf.Min(threshold, 0);
+            return locomotion.Velocity.LengthSquared() >= Mathf.Max(threshold, 0);
         }
 
         public static bool IsTurning(this ILocomotion locomotion, float threshold = 0.1f)
         {
             Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
 
-            return locomotion.RotationalVelocity.LengthSquared() >= Mathf.Min(threshold, 0);
+            return locomotion.RotationalVelocity.LengthSquared() >= Mathf.Max(threshold, 0);
         }
 
         public static bool IsStationary(this ILocomotion locomotion, float threshold = 0.1f) =>
-            !IsMoving(locomotion, threshold) && !IsTurning(locomotion, Mathf.Min(threshold, 0));
+            !IsMoving(locomotion, threshold) && !IsTurning(locomotion, Mathf.Max(threshold, 0));
 
         public static void Stop(this ILocomotion locomotion)
         {
