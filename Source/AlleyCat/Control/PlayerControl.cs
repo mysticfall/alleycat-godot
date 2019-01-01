@@ -68,7 +68,8 @@ namespace AlleyCat.Control
         public IObservable<Option<IEntity>> OnFocusChange =>
             OnPerspectiveChange
                 .Select(p => p.OfType<IFocusTracker>().HeadOrNone())
-                .SelectMany(p => p.MatchObservable(f => f.OnFocusChange, () => None));
+                .Select(p => p.MatchObservable(f => f.OnFocusChange, () => None))
+                .Switch();
 
         public ProcessMode ProcessMode { get; }
 
@@ -178,7 +179,8 @@ namespace AlleyCat.Control
             var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
 
             var linearSpeed = locomotion
-                .SelectMany(l => l.MatchObservable(v => v.OnVelocityChange, () => Vector3.Zero))
+                .Select(l => l.ToObservable()).Switch()
+                .Select(l => l.OnVelocityChange).Switch()
                 .Select(v => v.Length());
 
             var tick = TimeSource.OnProcess(ProcessMode).Where(_ => Active && Valid);
@@ -198,7 +200,8 @@ namespace AlleyCat.Control
             var offsetAngle = viewRotationSpeed.CombineLatest(tick, (speed, delta) => speed * delta);
 
             locomotion
-                .SelectMany(l => l.MatchObservable(v => v.OnProcess(ProcessMode), Observable.Empty<float>))
+                .Select(l=>l.ToObservable()).Switch()
+                .Select(l => l.OnProcess(ProcessMode)).Switch()
                 .Zip(
                     rotatableViews
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))

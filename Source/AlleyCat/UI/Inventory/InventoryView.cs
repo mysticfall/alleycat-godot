@@ -84,8 +84,8 @@ namespace AlleyCat.UI.Inventory
             Tree.SetColumnTitle(3, Tr("ui.InventoryView.weight"));
             Tree.SetColumnTitlesVisible(true);
 
-            var container = OnCharacterChange.SelectMany(c => c.Select(v => v.Equipments));
-            var items = container.SelectMany(c => c.OnItemsChange);
+            var container = OnCharacterChange.Select(c => c.Select(v => v.Equipments).ToObservable()).Switch();
+            var items = container.Select(c => c.OnItemsChange).Switch();
 
             void RemoveAllNodes()
             {
@@ -109,7 +109,7 @@ namespace AlleyCat.UI.Inventory
                     .Select(Optional)
                     .Merge(items.Select(_ => Option<string>.None))
                     .CombineLatest(container, (slot, slots) => (slot, slots))
-                    .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
+                    .Select(t => t.slot.Bind(s => t.slots.FindItem(s)).HeadOrNone())
                     .Do(current => Item = current));
 
             OnItemChange

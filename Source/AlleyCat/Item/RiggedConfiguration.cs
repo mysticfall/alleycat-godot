@@ -61,7 +61,7 @@ namespace AlleyCat.Item
                 meshes
                     .Select(m => (mesh: m, blendshapes: FindBlendShapes(m)))
                     .Where(i => i.blendshapes.Any())
-                    .SelectMany(i => i.blendshapes.Select(b => (blendshape: b, i.mesh)))
+                    .Bind(i => i.blendshapes.Select(b => (blendshape: b, i.mesh)))
                     .ToDictionary(i => i.blendshape, i => i.mesh);
 
             var sources = GetBlendShapeMap(obj.Meshes.Where(m => MeshesToSync.Contains(m.Name)));

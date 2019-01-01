@@ -65,8 +65,7 @@ namespace AlleyCat.Item
                 var animationArguments = Optional(holder)
                     .OfType<IAnimatable>()
                     .Map(a => a.AnimationManager)
-                    .SelectMany(manager => Animation,
-                        (manager, animation) => (animation, manager))
+                    .SelectMany(manager => Animation, (manager, animation) => (animation, manager))
                     .HeadOrNone();
 
                 animationArguments.Match(

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
@@ -104,9 +103,9 @@ namespace AlleyCat.Item
 
             Configurations = _configurations.ToMap();
 
-            _configurations?.ToObservable()
-                .SelectMany(c => c.OnActiveStateChange.Where(identity).Select(_ => c))
-                .SelectMany(active => _configurations.Where(c => c != active && c.Active))
+            _configurations.ToObservable()
+                .Select(c => c.OnActiveStateChange.Where(identity).Select(_ => c)).Switch()
+                .Select(active => _configurations.Where(c => c != active && c.Active).ToObservable()).Switch()
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(c => c.Deactivate(), this);
 

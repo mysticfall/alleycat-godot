@@ -23,7 +23,7 @@ namespace AlleyCat.Setting.Project
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            var keys = SettingsTypes.SelectMany(t => FindKeys(t));
+            var keys = SettingsTypes.Bind(t => FindKeys(t));
 
             return new ProjectSettingsConfigurationProvider(keys);
         }
@@ -96,13 +96,13 @@ namespace AlleyCat.Setting.Project
 
                     var keys = groups
                         .Where(g => g.Key == null)
-                        .SelectMany(g => g.AsEnumerable())
+                        .Bind(g => g.AsEnumerable())
                         .Select(m => string.Join(":", string.Join(":", prefix, key), m.member.Name));
 
                     var childKeys = groups
                         .Where(g => g.Key != null)
-                        .SelectMany(g => g.AsEnumerable())
-                        .SelectMany(g => FindKeys(g.type, path));
+                        .Bind(g => g.AsEnumerable())
+                        .Bind(g => FindKeys(g.type, path));
 
                     var children = keys.Concat(childKeys);
 

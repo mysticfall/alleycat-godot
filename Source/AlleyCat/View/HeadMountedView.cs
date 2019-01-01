@@ -262,9 +262,9 @@ namespace AlleyCat.View
             Quat GetUnstablizedQuat() => (this.GetTransform().basis * this.GetBasis()).Quat();
             Quat GetStablizedQuat() => (GetCharacterRotation() * this.GetBasis()).Quat();
 
-            var movingStateChange = _character
-                .Where(c => c.IsSome)
-                .SelectMany(c => c.First().Locomotion.OnVelocityChange)
+            var movingStateChange = OnCharacterChange
+                .Select(c => c.ToObservable()).Switch()
+                .Select(c => c.Locomotion.OnVelocityChange).Switch()
                 .Select(v => v.Length() >= VelocityThreshold)
                 .DistinctUntilChanged();
 
