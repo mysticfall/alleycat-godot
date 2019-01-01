@@ -34,7 +34,7 @@ namespace AlleyCat.Animation
 
         protected AnimationNodeTransition TransitionNode { get; }
 
-        protected AnimationNodeAnimation AnimationNode => Transition == 1 ? AnimationNode1 : AnimationNode2;
+        protected AnimationNodeAnimation AnimationNode => Transition == 0 ? AnimationNode1 : AnimationNode2;
 
         protected AnimationNodeAnimation AnimationNode1 { get; }
 
@@ -75,8 +75,8 @@ namespace AlleyCat.Animation
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(animation =>
                 {
-                    var next = Transition == 1 ? 2 : 1;
-                    var node = next == 1 ? AnimationNode1 : AnimationNode2;
+                    var next = Transition == 0 ? 1 : 0;
+                    var node = next == 0 ? AnimationNode1 : AnimationNode2;
 
                     this.LogDebug("Cross fading animation from '{}' to '{}'.",
                         fun(node.GetAnimation),
