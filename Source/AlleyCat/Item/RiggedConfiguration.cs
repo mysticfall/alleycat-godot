@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
 using AlleyCat.Logging;
@@ -76,7 +77,9 @@ namespace AlleyCat.Item
             if (!_blendShapeMappings.Any()) return;
 
             _blendShapeListener = Some(
-                animatable.AnimationManager.OnAdvance.Subscribe(_ =>
+                animatable.AnimationManager.OnAdvance
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(_ =>
                 {
                     foreach (var mapping in _blendShapeMappings)
                     {

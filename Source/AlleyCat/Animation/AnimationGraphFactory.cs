@@ -28,15 +28,21 @@ namespace AlleyCat.Animation
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
+            Option<IAnimationGraph> graph = None;
+
             switch (node)
             {
                 case AnimationNodeStateMachine states:
-                    return Some<IAnimationGraph>(new AnimationStates(path, states, context));
+                    graph = new AnimationStates(path, states, context);
+                    break;
                 case AnimationNodeBlendTree blendTree:
-                    return Some<IAnimationGraph>(new BlendTree(path, blendTree, context));
-                default:
-                    return None;
+                    graph = new BlendTree(path, blendTree, context);
+                    break;
             }
+
+            graph.Iter(g => g.Initialize());
+
+            return graph;
         }
     }
 }

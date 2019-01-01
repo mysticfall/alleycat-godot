@@ -1,7 +1,7 @@
+using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using Godot;
 using JetBrains.Annotations;
@@ -24,6 +24,8 @@ namespace AlleyCat.Animation
 
         private Option<int> _tipIndex;
 
+        private Option<IDisposable> _listener;
+
         public override void _Ready()
         {
             base._Ready();
@@ -32,15 +34,15 @@ namespace AlleyCat.Animation
         }
 
         [PostConstruct(true)]
-        protected virtual void OnInitialize()
+        protected virtual void PostConstruct()
         {
-            var tick = this.FindClosestAncestor<IAnimatable>()
+            var listener = this.FindClosestAncestor<IAnimatable>()
                 .Map(a => a.AnimationManager.OnAdvance)
-                .MatchObservable(identity, Observable.Empty<float>);
-
-            tick
+                .MatchObservable(identity, Observable.Empty<float>)
                 .Where(_ => IsRunning() && IgnoreRotation)
                 .Subscribe(_ => ResetRotation(), this);
+
+            _listener = Some(listener);
 
             _skeleton = GetParentSkeleton();
             _tipIndex = _skeleton.FindBone(TipBone);
@@ -52,6 +54,14 @@ namespace AlleyCat.Animation
             var transform = rotation.Map(r => new Transform(r, Target.origin));
 
             transform.Iter(t => Target = t);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _listener.Iter(l => l.DisposeQuietly());
+            _listener = None;
+
+            base.Dispose(disposing);
         }
     }
 }

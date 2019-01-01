@@ -109,7 +109,7 @@ namespace AlleyCat.View
 
             TimeSource = timeSource;
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
+            _character = CreateSubject(character);
 
             _rotationInput = rotationInput;
             _movementInput = movementInput;
@@ -121,6 +121,7 @@ namespace AlleyCat.View
 
             OnActiveStateChange
                 .Where(_ => Valid)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Active = !v), this);
 
             InitializeInput();
@@ -132,19 +133,23 @@ namespace AlleyCat.View
             OnActiveStateChange
                 .Do(v => _rotationInput.Iter(i => i.Active = v))
                 .Do(v => _movementInput.Iter(i => i.Active = v))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(this);
 
             RotationInput
                 .Select(v => v * 0.1f)
                 .Do(v => Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x))
                 .Do(v => Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(this);
 
             MovementInput
                 .Select(v => new Vector3(v.x, 0, -v.y) * 0.02f)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(Camera.TranslateObjectLocal, this);
 
             ToggleInput
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => Active = !Active, this);
         }
 
@@ -152,6 +157,7 @@ namespace AlleyCat.View
         {
             OnActiveStateChange
                 .Where(s => s)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => this.EnableDof(), this);
 
             TimeSource.OnPhysicsProcess
@@ -165,6 +171,7 @@ namespace AlleyCat.View
                     TimeSource.PhysicsScheduler)
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(this.SetFocalDistance, this);
         }
     }

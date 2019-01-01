@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -82,15 +81,30 @@ namespace AlleyCat.Animation
             BlenderNode = blenderNode;
             AnimationNode = animationNode;
 
-            var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
+            var currentAnim = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
+            var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
+            var currentSpeed = timeScaleParameter
+                .Map(context.AnimationTree.Get)
+                .OfType<float>()
+                .HeadOrNone()
+                .IfNone(1f);
 
-            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).DisposeWith(this);
+            _animation = CreateSubject(currentAnim);
+            _amount = CreateSubject(currentAmount);
+            _timeScale = CreateSubject(currentSpeed);
+        }
 
-            _animation
-                .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            OnAnimationChange
+                .Select(a => a.Map(Context.Player.AddAnimation).ValueUnsafe())
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(AnimationNode.SetAnimation, this);
 
-            _animation
+            OnAnimationChange
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(animation =>
                 {
                     var filters = new Array();
@@ -103,20 +117,15 @@ namespace AlleyCat.Animation
                     BlenderNode.FilterEnabled = filters.Any();
                 }, this);
 
-            var currentAmount = (float) context.AnimationTree.Get(blendAmountParameter);
+            OnAmountChange
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(v => Context.AnimationTree.Set(BlendAmountParameter, v), this);
 
-            _amount = new BehaviorSubject<float>(currentAmount).DisposeWith(this);
-
-            _amount.Subscribe(v => context.AnimationTree.Set(blendAmountParameter, v), this);
-
-            var currentSpeed = timeScaleParameter
-                .Map(context.AnimationTree.Get).OfType<float>().HeadOrNone().IfNone(1f);
-
-            _timeScale = new BehaviorSubject<float>(currentSpeed).DisposeWith(this);
-
-            timeScaleParameter.Iter(param =>
+            TimeScaleParameter.Iter(param =>
             {
-                _timeScale.Subscribe(v => context.AnimationTree.Set(param, v), this);
+                OnTimeScaleChange
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(v => Context.AnimationTree.Set(param, v), this);
             });
         }
 

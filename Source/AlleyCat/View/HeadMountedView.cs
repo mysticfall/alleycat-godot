@@ -190,6 +190,7 @@ namespace AlleyCat.View
                     TimeSource.PhysicsScheduler)
                 .Where(v => v.Any() && Active)
                 .Select(v => v.Aggregate((v1, v2) => v1 + v2) / v.Count)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(this.SetFocalDistance, this);
 
             OnFocusChange = onRayCast
@@ -200,9 +201,10 @@ namespace AlleyCat.View
 
             OnFocusChange
                 .Do(v => this.LogDebug("Focusing on '{}'.", v))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(current => FocusedObject = current, this);
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
+            _character = CreateSubject(character);
 
             _rotationInput = rotationInput;
             _deactivateInput = deactivateInput;
@@ -237,13 +239,16 @@ namespace AlleyCat.View
         {
             RotationInput
                 .Select(v => v * 0.05f)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Rotation -= v, this);
 
             OnRotationChange
                 .Merge(OnActiveStateChange.Where(identity).Select(_ => Rotation))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(r => Vision.Iter(v => v.Rotate(r)), this);
 
             DeactivateInput
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => this.Deactivate(), this);
         }
 
@@ -290,6 +295,7 @@ namespace AlleyCat.View
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
                 .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(transform => Camera.SetGlobalTransform(transform), this);
         }
     }

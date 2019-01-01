@@ -4,6 +4,7 @@ using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -33,6 +34,7 @@ namespace AlleyCat.Control
                 .Where(v => v && Active)
                 .Select(_ => CreateActionContext())
                 .Where(c => c.Exists(AllowedFor))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(c => c.Iter(Execute), this);
         }
     }

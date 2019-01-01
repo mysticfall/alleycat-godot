@@ -53,7 +53,7 @@ namespace AlleyCat.UI
         }
 
         [PostConstruct]
-        protected virtual void OnInitialize()
+        protected virtual void PostConstruct()
         {
         }
 

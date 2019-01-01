@@ -25,11 +25,11 @@ namespace AlleyCat.Logging
 
         protected abstract ILogger DoCreateLogger(string categoryName);
 
-        protected override void PreDestroy()
+        protected override void Dispose(bool disposing)
         {
             _cache.DisposeQuietly();
 
-            base.PreDestroy();
+            base.Dispose(disposing);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -64,10 +63,16 @@ namespace AlleyCat.Animation
 
             var current = AnimationNode.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).DisposeWith(this);
+            _animation = CreateSubject(current);
+        }
 
-            _animation
-                .Select(a => a.Map(context.Player.AddAnimation))
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            OnAnimationChange
+                .Select(a => a.Map(Context.Player.AddAnimation))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(animation =>
                 {
                     var next = Transition == 1 ? 2 : 1;

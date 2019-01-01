@@ -2,12 +2,12 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Logging;
 using Godot;
 using Microsoft.Extensions.Logging;
 using static AlleyCat.Common.MathUtils;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -72,8 +72,8 @@ namespace AlleyCat.Motion
             YawRange = yawRange;
             PitchRange = pitchRange;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
-            _rotation = new BehaviorSubject<Vector2>(Vector2.Zero).DisposeWith(this);
+            _active = CreateSubject(active);
+            _rotation = CreateSubject(Vector2.Zero);
         }
 
         protected override void PostConstruct()
@@ -84,6 +84,7 @@ namespace AlleyCat.Motion
             {
                 OnRotationChange
                     .DistinctUntilChanged()
+                    .TakeUntil(Disposed.Where(identity))
                     .Subscribe(v => this.LogTrace("Rotation changed = {}.", v), this);
             }
         }

@@ -51,7 +51,14 @@ namespace AlleyCat.Character
                 morphs.Iter(m => this.LogDebug("Found morph '{}'.", m));
             }
 
-            Morphs = new MorphSet(groups, morphs).DisposeWith(this);
+            Morphs = new MorphSet(groups, morphs);
+        }
+
+        protected override void PreDestroy()
+        {
+            base.PreDestroy();
+
+            Morphs.Dispose();
         }
     }
 }

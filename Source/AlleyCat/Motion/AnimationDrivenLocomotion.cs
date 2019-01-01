@@ -7,6 +7,7 @@ using AlleyCat.Setting.Project;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -58,6 +59,7 @@ namespace AlleyCat.Motion
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => ResetAnimations(), this);
         }
 

@@ -93,6 +93,7 @@ namespace AlleyCat.Item
                 manager.OnAnimationEvent
                     .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
                     .Take(1)
+                    .TakeUntil(Disposed.Where(identity))
                     .Subscribe(_ => holder.Equip(equipment, configuration), this);
 
                 if (manager is IAnimationStateManager stateManager &&

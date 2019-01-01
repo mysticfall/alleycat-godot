@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Item;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
@@ -67,12 +67,12 @@ namespace AlleyCat.UI.Inventory
 
         public InventoryView()
         {
-            _character = new BehaviorSubject<Option<ICharacter>>(None).DisposeWith(this);
+            _character = new BehaviorSubject<Option<ICharacter>>(None);
         }
 
-        protected override void OnInitialize()
+        protected override void PostConstruct()
         {
-            base.OnInitialize();
+            base.PostConstruct();
 
             Character |= this.FindPlayer<ICharacter>();
 
@@ -94,9 +94,12 @@ namespace AlleyCat.UI.Inventory
                 root.Children().Reverse().ToList().ForEach(root.RemoveChild);
             }
 
+            var onDispose = this.OnDispose().Where(identity);
+
             items
                 .Do(_ => RemoveAllNodes())
                 .CombineLatest(container, (list, parent) => (list, parent))
+                .TakeUntil(onDispose)
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)), this);
 
             _item = Some(
@@ -109,7 +112,9 @@ namespace AlleyCat.UI.Inventory
                     .Select(t => t.slot.SelectMany(s => t.slots.FindItem(s)).HeadOrNone())
                     .Do(current => Item = current));
 
-            OnItemChange.Subscribe(DisplayItem, this);
+            OnItemChange
+                .TakeUntil(onDispose)
+                .Subscribe(DisplayItem, this);
         }
 
         protected TreeItem CreateNode(Equipment item, IEquipmentContainer parent)
@@ -191,6 +196,13 @@ namespace AlleyCat.UI.Inventory
 
                 v.character.Actions[key].Execute(context);
             });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _character.CompleteAndDispose();
+
+            base.Dispose(disposing);
         }
     }
 }

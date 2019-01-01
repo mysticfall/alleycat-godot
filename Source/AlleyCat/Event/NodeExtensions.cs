@@ -10,13 +10,15 @@ namespace AlleyCat.Event
     {
         private const string EventTrackerName = "NodeEventTracker";
 
+        public static IObservable<bool> OnInitialize(this Node node) => GetReactiveNode(node).Initialized;
+
+        public static IObservable<bool> OnDispose(this Node node) => GetReactiveNode(node).Disposed;
+
         public static IObservable<float> OnProcess(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            if (node is BaseNode b) return b.OnProcess;
-
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
+            var tracker = GetReactiveNode(node);
 
             tracker.SetProcess(true);
 
@@ -27,42 +29,35 @@ namespace AlleyCat.Event
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            if (node is BaseNode b) return b.OnPhysicsProcess;
-
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
+            var tracker = GetReactiveNode(node);
 
             tracker.SetPhysicsProcess(true);
 
             return tracker.OnPhysicsProcess;
         }
 
-        public static IScheduler GetScheduler(this Node node)
+        public static ITimeSource GetTimeSource(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            if (node is BaseNode b) return b.Scheduler;
+            if (node is ITimeSource source) return source;
 
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
+            var tracker = GetReactiveNode(node);
 
-            return tracker.Scheduler;
+            tracker.SetPhysicsProcess(true);
+
+            return tracker;
         }
 
-        public static IScheduler GetPhysicsScheduler(this Node node)
-        {
-            Ensure.That(node, nameof(node)).IsNotNull();
+        public static IScheduler GetScheduler(this Node node) => GetTimeSource(node).Scheduler;
 
-            if (node is BaseNode b) return b.PhysicsScheduler;
-
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
-
-            return tracker.PhysicsScheduler;
-        }
+        public static IScheduler GetPhysicsScheduler(this Node node) => GetTimeSource(node).PhysicsScheduler;
 
         public static IObservable<InputEvent> OnInput(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
+            var tracker = GetReactiveNode(node);
 
             tracker.SetProcessInput(true);
 
@@ -73,12 +68,22 @@ namespace AlleyCat.Event
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            var tracker = node.GetComponent(EventTrackerName, _ => new BaseNode(EventTrackerName));
+            var tracker = GetReactiveNode(node);
 
             tracker.SetProcessUnhandledInput(true);
             tracker.SetProcessUnhandledKeyInput(true);
 
             return tracker.OnUnhandledInput;
+        }
+
+        private static ReactiveNode GetReactiveNode(this Node node)
+        {
+            if (node is ReactiveNode reactiveNode)
+            {
+                return reactiveNode;
+            }
+
+            return node.GetComponent(EventTrackerName, _ => new ReactiveNode(EventTrackerName));
         }
     }
 }

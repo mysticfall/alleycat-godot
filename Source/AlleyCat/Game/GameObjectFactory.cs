@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Game.Generic;
 using EnsureThat;
 using LanguageExt;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public abstract class GameObjectFactory<T> : AutowiredNode, IGameObjectFactory<T> where T : IGameObject
+    public abstract class GameObjectFactory<T> : ReactiveNode, IGameObjectFactory<T> where T : IGameObject
     {
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<T>();
 

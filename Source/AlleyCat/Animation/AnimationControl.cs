@@ -1,24 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Animation
 {
-    public abstract class AnimationControl : IAnimationControl, ILoggable, IDisposableCollector
+    public abstract class AnimationControl : ReactiveObject, IAnimationControl, ILoggable
     {
         public string Key { get; }
 
         public ILogger Logger { get; }
 
         protected AnimationGraphContext Context { get; }
-
-        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
 
         protected AnimationControl(string key, AnimationGraphContext context)
         {
@@ -28,23 +24,20 @@ namespace AlleyCat.Animation
             Key = key;
             Context = context;
             Logger = context.LoggerFactory.CreateLogger(this.GetLogCategory());
-
-            this.LogDebug("Created animation control.");
         }
 
-        public void Collect(IDisposable disposable)
+        protected override void PostConstruct()
         {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
+            this.LogDebug("Initializing animation control.");
 
-            _disposables += disposable;
+            base.PostConstruct();
         }
 
-        public virtual void Dispose()
+        protected override void PreDestroy()
         {
             this.LogDebug("Disposing animation control.");
 
-            _disposables.Iter(d => d.DisposeQuietly());
-            _disposables = _disposables.Clear();
+            base.PreDestroy();
         }
 
         protected static IEnumerable<NodePath> FindTransformTracks(Godot.Animation animation)

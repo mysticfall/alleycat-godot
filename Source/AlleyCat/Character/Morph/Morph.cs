@@ -2,15 +2,15 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Character.Morph.Generic;
-using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
-    public abstract class Morph<TVal, TDef> : IMorph<TVal, TDef>, ILoggable, IDisposableCollector
+    public abstract class Morph<TVal, TDef> : ReactiveObject, IMorph<TVal, TDef>, ILoggable
         where TDef : MorphDefinition<TVal>
     {
         public string Key => Definition.Key;
@@ -41,18 +41,20 @@ namespace AlleyCat.Character.Morph
 
         private readonly BehaviorSubject<TVal> _value;
 
-        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
-
         protected Morph(TDef definition, ILoggerFactory loggerFactory)
         {
             Ensure.That(definition, nameof(definition)).IsNotNull();
             Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
-            _value = new BehaviorSubject<TVal>(definition.Default).DisposeWith(this);
+            _value = CreateSubject(definition.Default);
 
             Definition = definition;
             Logger = loggerFactory.CreateLogger(this.GetLogCategory());
-            OnChange.Skip(1).Subscribe(Apply, this);
+
+            OnChange
+                .Skip(1)
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(Apply, this);
         }
 
         public void Apply() => Apply(Value);
@@ -60,18 +62,5 @@ namespace AlleyCat.Character.Morph
         protected abstract void Apply(TVal value);
 
         public void Reset() => Value = Definition.Default;
-
-        public void Collect(IDisposable disposable)
-        {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
-
-            _disposables += disposable;
-        }
-
-        public virtual void Dispose()
-        {
-            _disposables.Iter(d => d.DisposeQuietly());
-            _disposables = _disposables.Clear();
-        }
     }
 }

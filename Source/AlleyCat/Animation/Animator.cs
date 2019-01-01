@@ -2,12 +2,12 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -33,11 +33,17 @@ namespace AlleyCat.Animation
 
             var current = Node.Animation.TrimToOption().Bind(context.Player.FindAnimation);
 
-            _animation = new BehaviorSubject<Option<Godot.Animation>>(current).DisposeWith(this);
+            _animation = CreateSubject(current);
+        }
 
-            _animation
-                .Select(a => a.Map(context.Player.AddAnimation).ValueUnsafe())
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            OnAnimationChange
+                .Select(a => a.Map(Context.Player.AddAnimation).ValueUnsafe())
                 .Do(a => this.LogDebug("Animation has changed to '{}'.", a))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(Node.SetAnimation, this);
         }
 

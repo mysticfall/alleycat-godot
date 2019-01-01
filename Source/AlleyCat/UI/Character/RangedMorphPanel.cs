@@ -1,9 +1,11 @@
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character.Morph;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using AlleyCat.UI.Character.Generic;
 using Godot;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
@@ -16,7 +18,7 @@ namespace AlleyCat.UI.Character
         protected SpinBox Spinner { get; private set; }
 
         [PostConstruct]
-        protected virtual void OnInitialize()
+        protected virtual void PostConstruct()
         {
             Label.Text = Morph.DisplayName;
 
@@ -32,13 +34,17 @@ namespace AlleyCat.UI.Character
             Spinner.MaxValue = max;
             Spinner.Value = value;
 
+            var onDispose = this.OnDispose().Where(identity);
+
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
                 .Select(e => e.Value)
+                .TakeUntil(onDispose)
                 .Subscribe(v => Morph.Value = v, this);
 
             Morph.OnChange
                 .Do(Slider.SetValue)
                 .Do(Spinner.SetValue)
+                .TakeUntil(onDispose)
                 .Subscribe(this);
         }
     }

@@ -24,7 +24,7 @@ namespace AlleyCat.UI.Character
         [Export] private PackedScene _rangedMorphPanelScene;
 
         [PostConstruct]
-        protected virtual void OnInitialize()
+        protected virtual void PostConstruct()
         {
             Morphs
                 .Bind(m => CreateMorphPanel(m).AsEnumerable())

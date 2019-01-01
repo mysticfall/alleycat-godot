@@ -4,18 +4,19 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Autowire;
-using AlleyCat.Event;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Event
 {
     [NonInjectable]
-    public class BaseNode : Node, IDisposableCollector, ITimeSource, IInputSource, IValidatable
+    public class ReactiveNode : AutowiredNode, IReactiveObject, ITimeSource, IInputSource
     {
-        public virtual bool Valid => _valid;
+        public IObservable<bool> Initialized => _delegate.Initialized;
+
+        public IObservable<bool> Disposed => _delegate.Disposed;
 
         public IObservable<float> OnProcess => _onProcess.IfNone(() =>
         {
@@ -51,6 +52,8 @@ namespace AlleyCat.Common
             return (_onUnhandledInput = new Subject<InputEvent>()).Head();
         }).AsObservable();
 
+        private readonly ReactiveObject _delegate = new ReactiveObject();
+
         private Option<Subject<float>> _onProcess;
 
         private Option<Subject<float>> _onPhysicsProcess;
@@ -63,11 +66,9 @@ namespace AlleyCat.Common
 
         private Option<IScheduler> _physicsScheduler;
 
-        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
+        private bool _valid;
 
-        private bool _valid = true;
-
-        protected BaseNode()
+        protected ReactiveNode()
         {
             SetProcess(false);
             SetPhysicsProcess(false);
@@ -75,12 +76,23 @@ namespace AlleyCat.Common
             SetProcessUnhandledInput(false);
         }
 
-        public BaseNode(string name) : this()
+        public ReactiveNode(string name) : this()
         {
             Ensure.That(name, nameof(name)).IsNotNullOrEmpty();
 
             Name = name;
         }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            _delegate.Initialize();
+        }
+
+        public BehaviorSubject<T> CreateSubject<T>(T initialValue) => _delegate.CreateSubject(initialValue);
+
+        public ISubject<T> CreateSubject<T>() => _delegate.CreateSubject<T>();
 
         public override void _Process(float delta)
         {
@@ -121,47 +133,35 @@ namespace AlleyCat.Common
 
         public void SetInputAsHandled() => GetTree().SetInputAsHandled();
 
-        public void Collect(IDisposable disposable)
+        protected override void Dispose(bool disposing)
         {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
+            PreDestroy();
 
-            _disposables += disposable;
-        }
+            _onProcess.Iter(l => l.CompleteAndDispose());
+            _onProcess = Prelude.None;
 
-        public override void _Notification(int what)
-        {
-            base._Notification(what);
+            _onPhysicsProcess.Iter(l => l.CompleteAndDispose());
+            _onPhysicsProcess = Prelude.None;
 
-            if (what == NotificationPredelete)
-            {
-                PreDestroy();
-            }
+            _onInput.Iter(l => l.CompleteAndDispose());
+            _onInput = Prelude.None;
+
+            _onUnhandledInput.Iter(l => l.CompleteAndDispose());
+            _onUnhandledInput = Prelude.None;
+
+            _scheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
+            _scheduler = Prelude.None;
+
+            _physicsScheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
+            _physicsScheduler = Prelude.None;
+
+            _delegate.Dispose();
+
+            base.Dispose(disposing);
         }
 
         protected virtual void PreDestroy()
         {
-            _valid = false;
-
-            _onProcess.Iter(l => l.CompleteAndDispose());
-            _onProcess = None;
-
-            _onPhysicsProcess.Iter(l => l.CompleteAndDispose());
-            _onPhysicsProcess = None;
-
-            _onInput.Iter(l => l.CompleteAndDispose());
-            _onInput = None;
-
-            _onUnhandledInput.Iter(l => l.CompleteAndDispose());
-            _onUnhandledInput = None;
-
-            _scheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
-            _scheduler = None;
-
-            _physicsScheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
-            _physicsScheduler = None;
-
-            _disposables.Iter(d => d.DisposeQuietly());
-            _disposables = _disposables.Clear();
         }
     }
 }

@@ -107,6 +107,7 @@ namespace AlleyCat.Item
             _configurations?.ToObservable()
                 .SelectMany(c => c.OnActiveStateChange.Where(identity).Select(_ => c))
                 .SelectMany(active => _configurations.Where(c => c != active && c.Active))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(c => c.Deactivate(), this);
 
             _labelMarker = this.FindLabelMarker();

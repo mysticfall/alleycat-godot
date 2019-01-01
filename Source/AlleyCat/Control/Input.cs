@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Common;
 using AlleyCat.Control.Generic;
 using AlleyCat.Event;
 using AlleyCat.Game;
@@ -28,9 +27,9 @@ namespace AlleyCat.Control
         private readonly BehaviorSubject<bool> _active;
 
         protected Input(
-            string key, 
-            IInputSource source, 
-            bool active, 
+            string key,
+            IInputSource source,
+            bool active,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
@@ -39,7 +38,7 @@ namespace AlleyCat.Control
             Key = key;
             Source = source;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _active = CreateSubject(active);
         }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)

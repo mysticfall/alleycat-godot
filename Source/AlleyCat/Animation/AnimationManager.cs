@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Logging;
@@ -9,6 +8,7 @@ using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
@@ -56,12 +56,12 @@ namespace AlleyCat.Animation
             ProcessMode = processMode;
             TimeSource = timeSource;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
-            _onBeforeAdvance = new Subject<Unit>().DisposeWith(this);
-            _onAdvance = new Subject<float>().DisposeWith(this);
-            _onAnimationEvent = new Subject<AnimationEvent>().DisposeWith(this);
-
             Player.PlaybackProcessMode = AnimationPlayer.AnimationProcessMode.Manual;
+
+            _active = CreateSubject(active);
+            _onBeforeAdvance = CreateSubject<Unit>();
+            _onAdvance = CreateSubject<float>();
+            _onAnimationEvent = CreateSubject<AnimationEvent>();
         }
 
         protected override void PostConstruct()
@@ -70,6 +70,7 @@ namespace AlleyCat.Animation
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(Advance, this);
         }
 

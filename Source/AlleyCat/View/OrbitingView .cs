@@ -75,13 +75,16 @@ namespace AlleyCat.View
 
             RotationInput
                 .Select(v => v * 0.05f)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Rotation -= v, this);
             ZoomInput
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Distance -= v * 0.05f, this);
 
             OnActiveStateChange
                 .Do(v => _rotationInput.Iter(i => i.Active = v))
                 .Do(v => _zoomInput.Iter(i => i.Active = v))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(this);
         }
     }

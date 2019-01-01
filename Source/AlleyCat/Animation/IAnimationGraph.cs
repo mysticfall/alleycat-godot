@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public interface IAnimationGraph : IIdentifiable, IDisposable
+    public interface IAnimationGraph : IIdentifiable, IInitializable, IDisposable
     {
         AnimationRootNode Root { get; }
 

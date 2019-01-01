@@ -7,6 +7,7 @@ using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -84,8 +85,8 @@ namespace AlleyCat.Motion
             ProcessMode = processMode;
             TimeSource = timeSource;
 
-            _distance = new BehaviorSubject<float>(InitialDistance).DisposeWith(this);
-            _offset = new BehaviorSubject<Vector3>(InitialOffset).DisposeWith(this);
+            _distance = CreateSubject(InitialDistance);
+            _offset = CreateSubject(InitialOffset);
         }
 
         protected override void PostConstruct()
@@ -94,6 +95,7 @@ namespace AlleyCat.Motion
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => Target.GlobalTransform = TargetTransform, this);
         }
 

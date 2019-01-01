@@ -2,13 +2,13 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -66,9 +66,9 @@ namespace AlleyCat.Motion
             Target = target;
             TimeSource = timeSource;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
-            _velocity = new BehaviorSubject<Vector3>(Vector3.Zero).DisposeWith(this);
-            _rotationalVelocity = new BehaviorSubject<Vector3>(Vector3.Zero).DisposeWith(this);
+            _active = CreateSubject(active);
+            _velocity = CreateSubject(Vector3.Zero);
+            _rotationalVelocity = CreateSubject(Vector3.Zero);
         }
 
         protected override void PostConstruct()
@@ -77,23 +77,25 @@ namespace AlleyCat.Motion
 
             OnActiveStateChange
                 .Where(v => !v && Valid)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => this.Stop(), this);
 
             this.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(ProcessLoop, this);
 
             if (Logger.IsEnabled(LogLevel.Trace))
             {
                 OnVelocityChange
                     .DistinctUntilChanged()
-                    .Subscribe(
-                        v => this.LogTrace("Velocity changed = {}.", v), this);
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(v => this.LogTrace("Velocity changed = {}.", v), this);
 
                 OnRotationalVelocityChange
                     .DistinctUntilChanged()
-                    .Subscribe(
-                        v => this.LogTrace("Rotational velocity changed = {}.", v), this);
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(v => this.LogTrace("Rotational velocity changed = {}.", v), this);
             }
         }
 

@@ -50,7 +50,7 @@ namespace AlleyCat.Item
         {
             Tags = tags;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _active = CreateSubject(active);
         }
 
         public virtual void OnEquip(IEquipmentHolder holder, Equipment equipment)

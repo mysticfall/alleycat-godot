@@ -8,10 +8,17 @@ namespace AlleyCat.Animation
         public virtual Option<IAnimationControl> TryCreate(
             string name, IAnimationGraph parent, AnimationGraphContext context)
         {
-            return Animator.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
-                   Blender.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
-                   Blender2D.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
-                   CrossfadingAnimator.TryCreate(name, parent, context).Map(c => (IAnimationControl) c) |
+            IAnimationControl Initialize(IAnimationControl control)
+            {
+                control.Initialize();
+
+                return control;
+            }
+
+            return Animator.TryCreate(name, parent, context).Map(Initialize) |
+                   Blender.TryCreate(name, parent, context).Map(Initialize) |
+                   Blender2D.TryCreate(name, parent, context).Map(Initialize) |
+                   CrossfadingAnimator.TryCreate(name, parent, context).Map(Initialize) |
                    None;
         }
     }

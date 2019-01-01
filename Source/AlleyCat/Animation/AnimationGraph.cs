@@ -1,5 +1,5 @@
-using System;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public abstract class AnimationGraph : IAnimationGraph, ILoggable, IDisposableCollector
+    public abstract class AnimationGraph : ReactiveObject, IAnimationGraph, ILoggable
     {
         public string Key { get; }
 
@@ -23,8 +23,6 @@ namespace AlleyCat.Animation
 
         private Map<string, IAnimationControl> _controls = Map<string, IAnimationControl>();
 
-        private Lst<IDisposable> _disposables = Lst<IDisposable>.Empty;
-
         protected AnimationGraph(string path, AnimationRootNode root, AnimationGraphContext context)
         {
             Ensure.That(path, nameof(path)).IsNotNull();
@@ -35,11 +33,14 @@ namespace AlleyCat.Animation
             Root = root;
             Context = context;
             Logger = context.LoggerFactory.CreateLogger(this.GetLogCategory());
-
-            this.LogDebug("Created animation graph.");
         }
 
-        public abstract Option<AnimationNode> FindAnimationNode(string name);
+        protected override void PostConstruct()
+        {
+            this.LogDebug("Initializing animation graph.");
+
+            base.PostConstruct();
+        }
 
         public Option<IAnimationGraph> FindGraph(string name)
         {
@@ -53,6 +54,8 @@ namespace AlleyCat.Animation
 
             return result;
         }
+
+        public abstract Option<AnimationNode> FindAnimationNode(string name);
 
         public Option<IAnimationControl> FindControl(string name)
         {
@@ -70,14 +73,7 @@ namespace AlleyCat.Animation
             return result;
         }
 
-        public void Collect(IDisposable disposable)
-        {
-            Ensure.That(disposable, nameof(disposable)).IsNotNull();
-
-            _disposables += disposable;
-        }
-
-        public virtual void Dispose()
+        protected override void PreDestroy()
         {
             this.LogDebug("Disposing animation graph.");
 
@@ -87,8 +83,7 @@ namespace AlleyCat.Animation
             _controls.Values.Iter(c => c.DisposeQuietly());
             _controls = _controls.Clear();
 
-            _disposables.Iter(d => d.DisposeQuietly());
-            _disposables = _disposables.Clear();
+            base.PreDestroy();
         }
     }
 }

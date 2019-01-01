@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
@@ -52,7 +54,9 @@ namespace AlleyCat.Character.Morph
                     $"The morph '{Definition.Key}' does not have any target bones.");
             }
 
-            AnimationManager.OnAdvance.Subscribe(_ => Apply(), this);
+            AnimationManager.OnAdvance
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(_ => Apply(), this);
         }
 
         protected override void Apply(float value)

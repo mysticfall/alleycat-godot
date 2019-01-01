@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AlleyCat.Action;
 using AlleyCat.Animation;
@@ -109,7 +110,6 @@ namespace AlleyCat.Character
             var equipments = new EquipmentContainer(slots, this, loggerFactory);
 
             equipments.Initialize();
-            equipments.DisposeWith(this);
 
             Equipments = equipments;
 
@@ -123,6 +123,13 @@ namespace AlleyCat.Character
                 Actions.Values.Iter(a => this.LogDebug("Found action: {}.", a));
                 Markers.Values.Iter(m => this.LogDebug("Found marker: {}.", m));
             }
+        }
+
+        protected override void PreDestroy()
+        {
+            base.PreDestroy();
+
+            ((IDisposable) Equipments).Dispose();
         }
     }
 }

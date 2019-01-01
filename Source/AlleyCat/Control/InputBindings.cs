@@ -8,6 +8,7 @@ using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -34,7 +35,7 @@ namespace AlleyCat.Control
 
             Inputs = inputs.ToMap();
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _active = CreateSubject(active);
         }
 
         protected override void PostConstruct()
@@ -42,6 +43,7 @@ namespace AlleyCat.Control
             base.PostConstruct();
 
             OnActiveStateChange
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Inputs.Values.Iter(i => i.Active = v), this);
         }
     }

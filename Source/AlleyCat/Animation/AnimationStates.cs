@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Linq;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -43,11 +42,17 @@ namespace AlleyCat.Animation
             OnStateChange = Context.OnAdvance
                 .Select(_ => Playback.GetCurrentNode())
                 .DistinctUntilChanged();
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
 
             if (Logger.IsEnabled(LogLevel.Debug))
             {
-                OnStateChange.Subscribe(
-                    s => this.LogDebug("Animation state has changed to '{}'.", s), this);
+                OnStateChange
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(s => this.LogDebug("Animation state has changed to '{}'.", s), this);
             }
         }
 

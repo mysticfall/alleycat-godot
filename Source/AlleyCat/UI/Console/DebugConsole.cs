@@ -59,7 +59,7 @@ namespace AlleyCat.UI.Console
         private Input.MouseMode _mouseMode;
 
         [PostConstruct]
-        private void OnInitialize()
+        private void PostConstruct()
         {
             Visible = false;
 
@@ -68,20 +68,25 @@ namespace AlleyCat.UI.Console
 
             _commands = _providers.Bind(p => p.CreateCommands(this)).ToMap();
 
+            var onDispose = this.OnDispose().Where(identity);
+
             // Can't use ILoggable extension for Subscribe here, since ConsoleLogger depends on DebugConsole.
             InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
                 .Where(_ => Visible)
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
+                .TakeUntil(onDispose)
                 .Subscribe(AutoComplete, e => GD.Print(e.ToString())); 
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == ShowAnimation)
+                .TakeUntil(onDispose)
                 .Subscribe(_ => OnShown(), e => GD.Print(e.ToString()));
 
             Player.OnAnimationFinish()
                 .Where(e => e.Animation == HideAnimation)
+                .TakeUntil(onDispose)
                 .Subscribe(_ => OnHidden(), e => GD.Print(e.ToString()));
 
             Content.AddColorOverride("default_color", TextColor);

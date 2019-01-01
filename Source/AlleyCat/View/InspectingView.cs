@@ -146,9 +146,11 @@ namespace AlleyCat.View
             Input.SetMouseMode(Input.MouseMode.Visible);
 
             PanInput
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Offset += new Vector3(-v.x, v.y, 0), this);
 
             OnActiveStateChange
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => _panInput.Exists(p => p.Active = v), this);
 
             var interacting =
@@ -159,6 +161,7 @@ namespace AlleyCat.View
             interacting
                 .MatchObservable(identity, Observable.Empty<bool>)
                 .Select(v => v ? Input.MouseMode.Captured : Input.MouseMode.Visible)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(Input.SetMouseMode, this);
 
             base.PostConstruct();

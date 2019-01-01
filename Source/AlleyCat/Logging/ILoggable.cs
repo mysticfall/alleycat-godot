@@ -148,18 +148,18 @@ namespace AlleyCat.Logging
             return LoggerCache.GetOrCreate(category, _ => new PrintLogger(category));
         }
 
-        public static void Subscribe<T>(this IObservable<T> observable, ILoggable loggable)
+        public static IDisposable Subscribe<T>(this IObservable<T> observable, ILoggable loggable)
         {
-            Subscribe(observable, _ => { }, NoOp, loggable);
+            return Subscribe(observable, _ => { }, NoOp, loggable);
         }
 
-        public static void Subscribe<T>(
+        public static IDisposable Subscribe<T>(
             this IObservable<T> observable, Action<T> onNext, ILoggable loggable)
         {
-            Subscribe(observable, onNext, NoOp, loggable);
+            return Subscribe(observable, onNext, NoOp, loggable);
         }
 
-        public static void Subscribe<T>(
+        public static IDisposable Subscribe<T>(
             this IObservable<T> observable,
             Action<T> onNext,
             System.Action onCompleted,
@@ -168,12 +168,12 @@ namespace AlleyCat.Logging
             Ensure.That(observable, nameof(observable)).IsNotNull();
             Ensure.That(onNext, nameof(onNext)).IsNotNull();
 
-            observable.Subscribe(onNext, OnError, onCompleted);
-
             void OnError(Exception e)
             {
                 loggable.LogError(e, "Subscription terminated with an error.");
             }
+
+            return observable.Subscribe(onNext, OnError, onCompleted);
         }
     }
 }

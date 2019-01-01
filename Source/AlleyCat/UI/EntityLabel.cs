@@ -8,6 +8,7 @@ using AlleyCat.Logging;
 using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
@@ -45,7 +46,7 @@ namespace AlleyCat.UI
         }
 
         [PostConstruct]
-        protected virtual void OnInitialize()
+        protected virtual void PostConstruct()
         {
             var onFocus = PlayerControl.OnFocusChange;
             var ticks = this.OnProcess();
@@ -68,13 +69,25 @@ namespace AlleyCat.UI
                 .Select(e => PlayerControl.Camera.UnprojectPosition(e.LabelPosition))
                 .Select(pos => new Vector2(pos.x - RectSize.x / 2f, pos.y - RectSize.y / 2f));
 
-            showTitle.Subscribe(v => Visible = v, this);
-            showAction.Subscribe(v => ActionPanel.Visible = v, this);
+            var onDispose = this.OnDispose().Where(identity);
 
-            title.Subscribe(v => Title.Text = v, this);
-            action.Subscribe(a => a.Iter(ActionTitle.SetText), this);
+            showTitle
+                .TakeUntil(onDispose)
+                .Subscribe(v => Visible = v, this);
+            showAction
+                .TakeUntil(onDispose)
+                .Subscribe(v => ActionPanel.Visible = v, this);
 
-            position.Subscribe(pos => RectPosition = pos.Round(), this);
+            title
+                .TakeUntil(onDispose)
+                .Subscribe(v => Title.Text = v, this);
+            action
+                .TakeUntil(onDispose)
+                .Subscribe(a => a.Iter(ActionTitle.SetText), this);
+
+            position
+                .TakeUntil(onDispose)
+                .Subscribe(pos => RectPosition = pos.Round(), this);
 
             var shortcut = InputMap
                 .GetActionList(InteractAction)

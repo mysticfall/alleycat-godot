@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
@@ -37,7 +36,7 @@ namespace AlleyCat.Action
             Key = key;
             DisplayName = displayName;
 
-            _active = new BehaviorSubject<bool>(active).DisposeWith(this);
+            _active = CreateSubject(active);
         }
 
         public void Execute(IActionContext context)

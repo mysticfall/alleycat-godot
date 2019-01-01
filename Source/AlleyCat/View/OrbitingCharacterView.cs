@@ -12,6 +12,7 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Array = Godot.Collections.Array;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.View
 {
@@ -94,9 +95,10 @@ namespace AlleyCat.View
 
             OnFocusChange
                 .Do(v => this.LogDebug("Focusing on '{}'.", v))
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(current => FocusedObject = current, this);
 
-            _character = new BehaviorSubject<Option<IHumanoid>>(character).DisposeWith(this);
+            _character = CreateSubject(character);
         }
 
         protected override void PostConstruct()
@@ -106,6 +108,7 @@ namespace AlleyCat.View
             ZoomInput
                 .Where(_ => Distance <= DistanceRange.Min)
                 .Where(v => v > 0)
+                .TakeUntil(Disposed.Where(identity))
                 .Subscribe(_ => this.Deactivate(), this);
         }
     }
