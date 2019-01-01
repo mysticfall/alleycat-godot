@@ -97,7 +97,6 @@ namespace AlleyCat.Animation
             ExitAnimatorPath = exitAnimatorPath;
         }
 
-
         protected override void DoExecute(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
