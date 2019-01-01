@@ -45,6 +45,9 @@ namespace AlleyCat.Animation
         [Export]
         public string ExitAnimatorPath { get; set; } = "States/Seated/Getting Up";
 
+        [Export(PropertyHint.Range, "0,5")]
+        public float Transition { get; set; } = 0.5f;
+
         protected override Validation<string, SitAction> CreateService(
             string key, string displayName, ILoggerFactory loggerFactory)
         {

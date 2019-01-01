@@ -71,6 +71,7 @@ namespace AlleyCat.Animation
             base.PostConstruct();
 
             OnAnimationChange
+                .DistinctUntilChanged()
                 .Select(a => a.Map(Context.Player.AddAnimation))
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(animation =>
@@ -78,8 +79,8 @@ namespace AlleyCat.Animation
                     var next = Transition == 0 ? 1 : 0;
                     var node = next == 0 ? AnimationNode1 : AnimationNode2;
 
-                    this.LogDebug("Cross fading animation from '{}' to '{}'.",
-                        fun(node.GetAnimation),
+                    this.LogDebug("Crossfading animation from '{}' to '{}'.",
+                        fun(AnimationNode.GetAnimation),
                         animation);
 
                     node.SetAnimation(animation.ValueUnsafe());

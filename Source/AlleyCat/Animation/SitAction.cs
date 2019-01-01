@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
 using EnsureThat;
+using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static AlleyCat.Animation.SitState;
@@ -28,6 +29,12 @@ namespace AlleyCat.Animation
 
         public Option<Godot.Animation> GettingUpAnimation { get; set; }
 
+        public float Transition
+        {
+            get => _transition;
+            set => _transition = Mathf.Max(0, value);
+        }
+
         protected string StatesPath { get; }
 
         protected string SubStatesPath { get; }
@@ -47,6 +54,8 @@ namespace AlleyCat.Animation
         protected string ExitAnimatorPath { get; }
 
         private Godot.Animation _animation;
+
+        private float _transition = 0.5f;
 
         public SitAction(
             string key,
@@ -131,13 +140,14 @@ namespace AlleyCat.Animation
                 }
                 else
                 {
-                    UpdateAnimations();
+                    UpdateAnimations(Transition);
                 }
             }
 
-            void UpdateAnimations()
+            void UpdateAnimations(float transition = 0)
             {
                 enterControl.Iter(c => c.Animation = SittingDownAnimation);
+                control.OfType<CrossfadingAnimator>().Iter(c => c.Time = transition);
                 control.Iter(c => c.Animation = Animation);
                 exitControl.Iter(c => c.Animation = GettingUpAnimation);
             }
