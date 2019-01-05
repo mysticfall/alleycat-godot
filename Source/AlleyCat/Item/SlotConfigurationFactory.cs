@@ -25,7 +25,7 @@ namespace AlleyCat.Item
             var key = Key.TrimToOption().IfNone(GetName);
             var slot = Slot.TrimToOption().IfNone(key);
 
-            return CreateService(key, slot, toSet(AdditionalSlots), loggerFactory);
+            return CreateService(key, slot, toSet(Optional(AdditionalSlots).Flatten()), loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(

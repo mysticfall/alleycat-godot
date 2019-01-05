@@ -1,3 +1,4 @@
+using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
@@ -23,7 +24,7 @@ namespace AlleyCat.Item
                 slot,
                 additionalSlots,
                 Tags,
-                toSet(MeshesToSync),
+                toSet(Optional(MeshesToSync).Flatten()),
                 Active,
                 loggerFactory)
             {

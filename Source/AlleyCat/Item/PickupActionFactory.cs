@@ -38,7 +38,7 @@ namespace AlleyCat.Item
             return new PickupAction(
                 key,
                 displayName,
-                toSet(Tags),
+                toSet(Optional(Tags).Flatten()),
                 IkChain.TrimToOption(),
                 AnimatorPath.TrimToOption(),
                 StatesPath.TrimToOption(),
