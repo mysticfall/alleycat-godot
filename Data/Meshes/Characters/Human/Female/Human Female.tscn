@@ -36,37 +36,24 @@
 
 [sub_resource type="PhysicsMaterial" id=1]
 
-friction = 1.0
-rough = false
-bounce = 0.0
-absorbent = false
 
 [sub_resource type="PhysicsMaterial" id=2]
 
-friction = 1.0
-rough = false
-bounce = 0.0
-absorbent = false
 
 [sub_resource type="CapsuleShape" id=3]
 
-margin = 0.04
 radius = 0.246558
 height = 1.13148
-_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=4]
 
-resource_local_to_scene = true
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=5]
 
-resource_local_to_scene = true
 
 [node name="Human Female" index="0" instance=ExtResource( 1 )]
 transform = Transform( 1, 1.39698e-09, -2.44472e-09, -1.39698e-09, 1, 2.23518e-08, 2.44472e-09, -2.23518e-08, 1, -1.49012e-08, 1.19209e-07, -2.98023e-08 )
 script = ExtResource( 2 )
-_sections_unfolded = [ "Script" ]
 Key = "Female"
 DisplayName = "Female"
 Race = "Human"
@@ -80,18 +67,15 @@ bones/46/bound_children = [ NodePath("Right Hand") ]
 [node name="Body" parent="Rig" index="0"]
 extra_cull_margin = 0.5
 mesh = ExtResource( 3 )
-_sections_unfolded = [ "Geometry", "Material" ]
 
 [node name="Brows" parent="Rig" index="1"]
 extra_cull_margin = 0.5
 mesh = ExtResource( 4 )
-_sections_unfolded = [ "Geometry", "blend_shapes" ]
 
 [node name="Head" parent="Rig" index="2"]
 transform = Transform( 1, -5.46439e-17, 0, -5.46439e-17, 1, 0, 0, 0, 1, 0, 0, 0 )
 extra_cull_margin = 0.5
 mesh = ExtResource( 5 )
-_sections_unfolded = [ "Geometry", "blend_shapes" ]
 
 [node name="Short Hair" parent="Rig" index="3" instance=ExtResource( 6 )]
 
@@ -105,7 +89,6 @@ physics_material_override = SubResource( 2 )
 editor/display_folded = true
 transform = Transform( -1, -5.35921e-07, -7.3394e-08, -4.70539e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.5505e-09, 1.15451, 0.0304438 )
 bone_name = "spine03"
-_sections_unfolded = [ "Transform" ]
 
 [node name="Label" type="Spatial" parent="Rig/Chest" index="0"]
 transform = Transform( 1, 1.7053e-13, 4.26326e-14, 3.41061e-13, 1, 0, -8.52651e-14, -5.96046e-08, 1, 3.60053e-09, -0.0169366, 0.0746193 )
@@ -115,37 +98,25 @@ _key = "Label"
 [node name="Right Hand" type="BoneAttachment" parent="Rig" index="7"]
 transform = Transform( -0.0734933, -0.569706, -0.818556, 0.12992, -0.81925, 0.558526, -0.988797, -0.0652987, 0.134226, 0.575052, 1.05649, -0.0324161 )
 bone_name = "hand_R"
-_sections_unfolded = [ "Transform" ]
 
 [node name="Equip" type="Spatial" parent="Rig/Right Hand" index="0"]
 script = ExtResource( 9 )
-_sections_unfolded = [ "Transform" ]
 _key = "RightHand"
 
 [node name="Right Hand IK" type="SkeletonIK" parent="Rig" index="8"]
 root_bone = "upperarm_R"
 tip_bone = "hand_R"
 interpolation = 0.0
-target = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-use_magnet = false
-magnet = Vector3( 0, 0, 0 )
-target_node = NodePath("")
-min_distance = 0.01
-max_iterations = 10
 script = ExtResource( 10 )
-_sections_unfolded = [ "Script" ]
-IgnoreRotation = true
 
 [node name="Left Hand" type="BoneAttachment" parent="Rig" index="9"]
 editor/display_folded = true
 transform = Transform( -0.0731262, 0.570089, 0.818323, -0.130545, -0.818931, 0.558847, 0.988743, -0.0659607, 0.134307, -0.575052, 1.05649, -0.0324159 )
 bone_name = "hand_L"
-_sections_unfolded = [ "Transform" ]
 
 [node name="Equip" type="Spatial" parent="Rig/Left Hand" index="0"]
 transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0 )
 script = ExtResource( 9 )
-_sections_unfolded = [ "Transform" ]
 _key = "LeftHand"
 
 [node name="Binding" type="Node" parent="Rig" index="10"]
@@ -154,21 +125,14 @@ script = ExtResource( 11 )
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
 shape = SubResource( 3 )
-disabled = false
-_sections_unfolded = [ "Transform" ]
 
 [node name="Animations" type="Spatial" parent="." index="2"]
 script = ExtResource( 12 )
-Active = true
 ProcessMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations" index="0"]
 editor/display_folded = true
 root_node = NodePath("../../Rig")
-autoplay = ""
-playback_process_mode = 1
-playback_default_blend_time = 0.0
-playback_speed = 1.0
 anims/Breath = ExtResource( 13 )
 anims/GettingUp = ExtResource( 14 )
 anims/HoldInRightHand = ExtResource( 15 )
@@ -184,8 +148,6 @@ anims/WalkBackward = ExtResource( 24 )
 anims/WalkForward = ExtResource( 25 )
 anims/WalkLeft = ExtResource( 26 )
 anims/WalkRight = ExtResource( 27 )
-blend_times = [  ]
-_sections_unfolded = [ "Playback Options" ]
 
 [node name="Binding" type="Node" parent="Animations/AnimationPlayer" index="0"]
 script = ExtResource( 11 )
@@ -204,87 +166,44 @@ parameters/States/playback = SubResource( 4 )
 parameters/States/Moving/blend_position = Vector2( 0, 0 )
 parameters/States/Seated/playback = SubResource( 5 )
 parameters/States/Seated/Seated/Sit/current = 0
-_sections_unfolded = [ "Root Motion", "parameters", "parameters/Default State", "parameters/Hands", "parameters/States", "parameters/States/Seated", "parameters/States/Seated/Seated", "parameters/States/Seated/Seated/Sit", "parameters/States/Sit", "parameters/States/Sit/Sit", "parameters/States/Sit/Sit/Transition", "parameters/States/Sitting", "parameters/States/Sitting/Seated/Sit", "parameters/TimeScale", "parameters/Transition", "tree_root" ]
 
 [node name="Binding" type="Node" parent="Animations/AnimationTree" index="0"]
 script = ExtResource( 11 )
 
 [node name="Vision" type="Node" parent="." index="3"]
 script = ExtResource( 29 )
-Active = true
-MaxYaw = 80.0
-MinYaw = -80.0
-MaxPitch = 80.0
-MinPitch = -70.0
-HeadBone = "head"
-EyeBoneLeft = "eye_L"
-EyeBoneRight = "eye_R"
 
 [node name="Locomotion" type="Node" parent="." index="4"]
 script = ExtResource( 30 )
-Active = true
 _targetPath = NodePath("..")
-ApplyGravity = true
-IdleState = "Idle"
-MoveState = "Moving"
-StatesPath = "States"
-Blend2DPath = "States/Moving"
 
 [node name="Actions" type="Node" parent="." index="5"]
-_sections_unfolded = [ "Script" ]
 
 [node name="Pickup" type="Node" parent="Actions" index="0"]
 script = ExtResource( 31 )
-Active = true
 Key = "Pickup"
 DisplayName = "action.Pickup"
 PickupDistance = 1.2
 Animation = ExtResource( 20 )
-AnimatorPath = "States/Action"
-StatesPath = "States"
-ActionState = "Action"
-IkChain = "Right Hand IK"
-Tags = [ "TagCarry", "TagHand" ]
 
 [node name="Drop" type="Node" parent="Actions" index="1"]
 script = ExtResource( 32 )
-Active = true
 Key = "Drop"
 DisplayName = "action.Drop"
 
 [node name="Sit" type="Node" parent="Actions" index="2"]
 script = ExtResource( 33 )
-Active = true
 Key = "Sit"
 DisplayName = "action.Sit"
 SittingDownAnimation = ExtResource( 23 )
 Animation = ExtResource( 22 )
 GettingUpAnimation = ExtResource( 14 )
-StatesPath = "States"
-SubStatesPath = "States/Seated"
-IdleState = "Idle"
-EnterState = "Sitting Down"
-State = "Seated"
-ExitState = "Getting Up"
-EnterAnimatorPath = "States/Seated/Sitting Down"
-AnimatorPath = "States/Seated/Seated/Sit"
-ExitAnimatorPath = "States/Seated/Getting Up"
 
 [node name="Kneel" type="Node" parent="Actions" index="3"]
 script = ExtResource( 33 )
-Active = true
 Key = "Kneel"
 DisplayName = "action.Kneel"
 SittingDownAnimation = ExtResource( 19 )
 Animation = ExtResource( 17 )
 GettingUpAnimation = ExtResource( 18 )
-StatesPath = "States"
-SubStatesPath = "States/Seated"
-IdleState = "Idle"
-EnterState = "Sitting Down"
-State = "Seated"
-ExitState = "Getting Up"
-EnterAnimatorPath = "States/Seated/Sitting Down"
-AnimatorPath = "States/Seated/Seated/Sit"
-ExitAnimatorPath = "States/Seated/Getting Up"
 

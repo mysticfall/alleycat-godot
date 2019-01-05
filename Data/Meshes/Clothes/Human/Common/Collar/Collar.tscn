@@ -10,41 +10,14 @@
 
 [sub_resource type="PhysicsMaterial" id=1]
 
-friction = 1.0
-rough = false
-bounce = 0.0
-absorbent = false
 
 [sub_resource type="BoxShape" id=2]
 
-margin = 0.04
 extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
 [node name="Collar" type="RigidBody"]
 input_ray_pickable = false
-input_capture_on_drag = false
-collision_layer = 1
-collision_mask = 1
-mode = 0
-mass = 1.0
 physics_material_override = SubResource( 1 )
-gravity_scale = 1.0
-custom_integrator = false
-continuous_cd = false
-contacts_reported = 0
-contact_monitor = false
-sleeping = false
-can_sleep = true
-axis_lock_linear_x = false
-axis_lock_linear_y = false
-axis_lock_linear_z = false
-axis_lock_angular_x = false
-axis_lock_angular_y = false
-axis_lock_angular_z = false
-linear_velocity = Vector3( 0, 0, 0 )
-linear_damp = -1.0
-angular_velocity = Vector3( 0, 0, 0 )
-angular_damp = -1.0
 script = ExtResource( 1 )
 Key = "Collar"
 DisplayName = "item.Collar"
@@ -54,19 +27,10 @@ ItemMesh = ExtResource( 2 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
 editor/display_folded = true
-layers = 1
-material_override = null
-cast_shadow = 1
 extra_cull_margin = 0.5
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
 skeleton = NodePath("")
 material/0 = null
-_sections_unfolded = [ "Geometry" ]
 
 [node name="Binding" type="Node" parent="Mesh"]
 script = ExtResource( 3 )
@@ -75,7 +39,6 @@ script = ExtResource( 3 )
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0164012, -0.00723294 )
 shape = SubResource( 2 )
-disabled = false
 
 [node name="Binding" type="Node" parent="CollisionShape"]
 script = ExtResource( 3 )
@@ -88,25 +51,16 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 Key = "Wear"
 Slot = "Necklace"
-AdditionalSlots = null
-Active = false
-Mesh = null
-Animation = null
-AnimationBlend = null
 AnimationTransition = 1.0
-MeshesToSync = null
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
-"TagCarry",
 "TagHand",
 "TagOneHand",
+"TagCarry",
 ]]
 script = ExtResource( 5 )
 Key = "Carry"
 Slot = "RightHand"
-AdditionalSlots = null
-Active = false
-Mesh = null
 Animation = ExtResource( 6 )
 AnimationBlend = "Hands"
 AnimationTransition = 1.0

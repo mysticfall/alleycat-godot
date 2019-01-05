@@ -3,44 +3,22 @@
 [ext_resource path="res://Source/AlleyCat/UI/Character/RangedMorphPanel.cs" type="Script" id=1]
 
 [node name="RangedMorphPanel" type="Container"]
-anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 280, 30 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
 script = ExtResource( 1 )
-_sections_unfolded = [ "Grow Direction", "Rect" ]
 
 [node name="Label" type="Label" parent="."]
-anchor_left = 0.0
 anchor_top = 0.5
-anchor_right = 0.0
 anchor_bottom = 0.5
 margin_top = -8.0
 margin_right = 78.0
 margin_bottom = 6.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Label"
 align = 2
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Theme", "custom_fonts" ]
 
 [node name="Slider" type="HSlider" parent="."]
-anchor_left = 0.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
@@ -48,28 +26,7 @@ margin_left = 90.0
 margin_top = -9.0
 margin_right = -87.0
 margin_bottom = 7.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 0
-min_value = 0.0
-max_value = 100.0
 step = 0.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-allow_greater = false
-allow_lesser = false
-editable = true
-scrollable = true
-tick_count = 0
-ticks_on_borders = false
-focus_mode = 2
-_sections_unfolded = [ "Margin" ]
 
 [node name="Spinner" type="SpinBox" parent="."]
 anchor_left = 1.0
@@ -79,22 +36,5 @@ anchor_bottom = 0.5
 margin_left = -74.0
 margin_top = -12.0
 margin_bottom = 12.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-min_value = 0.0
-max_value = 100.0
 step = 0.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-allow_greater = false
-allow_lesser = false
-editable = true
-prefix = ""
-suffix = ""
 

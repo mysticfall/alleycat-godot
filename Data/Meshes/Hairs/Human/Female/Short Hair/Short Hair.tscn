@@ -4,18 +4,8 @@
 
 [node name="Short Hair" type="MeshInstance"]
 transform = Transform( 1.01048, 0, 0, 0, 1.00881, 0, 0, 0, 1.02248, 0.00223893, 1.50352, -0.0380732 )
-layers = 1
-material_override = null
-cast_shadow = 1
 extra_cull_margin = 0.5
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = ExtResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
 material/1 = null
-_sections_unfolded = [ "Geometry" ]
 

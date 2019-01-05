@@ -5,12 +5,9 @@
 
 [resource]
 
-size = 16
-outline_size = 0
-outline_color = Color( 1, 1, 1, 1 )
+size = 13
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 2 )
 fallback/0 = ExtResource( 1 )
-_sections_unfolded = [ "Font", "Settings" ]
 

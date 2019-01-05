@@ -21,10 +21,8 @@
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
-Key = null
 CharactersPath = NodePath("Entities/Characters")
 ItemsPath = NodePath("Entities/Items")
-UIPath = NodePath("UI")
 
 [node name="Environment" type="Node" parent="."]
 
@@ -34,19 +32,9 @@ UIPath = NodePath("UI")
 "MainCamera",
 ]]
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0.735734, 1.7292, 0.649309 )
-keep_aspect = 1
 cull_mask = 1
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
 current = true
-fov = 70.0
-size = 1.0
 near = 0.001
-far = 100.0
-_sections_unfolded = [ "Transform" ]
 
 [node name="Entities" type="Node" parent="."]
 
@@ -66,7 +54,6 @@ DisplayName = "Player"
 
 [node name="Player" type="Node" parent="Control"]
 script = ExtResource( 3 )
-Active = true
 ProcessMode = 1
 _characterPath = NodePath("../../Entities/Characters/Player")
 _cameraPath = NodePath("../../Cameras/Main Camera")
@@ -76,254 +63,130 @@ _cameraPath = NodePath("../../Cameras/Main Camera")
 [node name="Third Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 4 )
 Active = true
-MaxYaw = 180.0
-MinYaw = -180.0
-MaxPitch = 89.0
-MinPitch = -89.0
-MinDistance = 0.25
-MaxDistance = 10.0
 InitialDistance = 0.8
-InitialOffset = Vector3( 0, 0, 0 )
 ProcessMode = 1
-_camera = null
-MaxFocalDistance = 2.0
-_character = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
-Axis = 0
-Maximum = 0.1
+Maximum = 0.01
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 Axis = 1
-Maximum = 0.1
+Maximum = 0.01
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom"]
 script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )
-Active = false
-MaxYaw = 80.0
-MinYaw = -80.0
-MaxPitch = 80.0
-MinPitch = -70.0
 ProcessMode = 1
-Stabilization = 1
 MinStabilization = 0.2
 MaxStabilization = 0.8
-TransitionTime = 2.0
 VelocityThreshold = 0.2
-MaxDofDistance = 5.0
-MaxFocalDistance = 2.0
-FocusRange = 3.0
-FocusSpeed = 100.0
-_camera = null
-_character = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
-Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate"]
 script = ExtResource( 9 )
-Active = true
 Action = "zoom_out"
 UnhandledOnly = false
-StopPropagation = true
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 10 )
-Active = false
-MaxYaw = 180.0
-MinYaw = -180.0
-MaxPitch = 90.0
-MinPitch = -90.0
-MaxDofDistance = 5.0
-FocusRange = 3.0
-FocusSpeed = 100.0
-_character = null
-_camera = null
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
-Axis = 0
 Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 Axis = 1
 Maximum = 0.1
 
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 PositiveAction = "move_right"
 NegativeAction = "move_left"
-Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
-Polling = true
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle"]
 script = ExtResource( 9 )
-Active = true
 Action = "free_camera"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="Movement" type="Node" parent="Control/Player"]
 script = ExtResource( 5 )
-Active = true
 
 [node name="X" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 PositiveAction = "move_right"
 NegativeAction = "move_left"
-Polling = true
 
 [node name="Y" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
-Active = true
-Sensitivity = 0.5
-Curve = null
-DeadZone = 0.0
 Interpolate = true
-WindowSize = 5.0
-WindowShift = 1.0
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
-Polling = true
 
 [node name="Actions" type="Node" parent="Control/Player"]
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 11 )
-Active = true
 Key = "Interact"
 DisplayName = "action.Interact"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "interact"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="Sit" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
-Active = true
 Key = "Sit"
 DisplayName = "action.Sit"
 Action = "Sit"
@@ -331,14 +194,10 @@ Action = "Sit"
 [node name="Input" type="Node" parent="Control/Player/Actions/Sit"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "sit"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="Kneel" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
-Active = true
 Key = "Kneel"
 DisplayName = "action.Kneel"
 Action = "Kneel"
@@ -346,62 +205,45 @@ Action = "Kneel"
 [node name="Input" type="Node" parent="Control/Player/Actions/Kneel"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "kneel"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
 script = ExtResource( 13 )
-Active = true
 Key = "ToggleConsole"
 DisplayName = "action.ToggleConsole"
-Modal = false
 UI = NodePath("/root/Bootstrap/UI/Console")
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "ui_console"
 UnhandledOnly = false
-StopPropagation = true
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
-Active = true
 Key = "ShowInventory"
 DisplayName = "action.ShowInventory"
 Modal = true
 UI = ExtResource( 15 )
-Parent = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "inventory"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="Show Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
-Active = true
 Key = "ShowMenu"
 DisplayName = "action.ShowMenu"
 Modal = true
 UI = ExtResource( 16 )
-Parent = null
 
 [node name="Input" type="Node" parent="Control/Actions/Show Menu"]
 pause_mode = 2
 script = ExtResource( 9 )
-Active = true
 Action = "ui_cancel"
-UnhandledOnly = true
-StopPropagation = true
 
 [node name="UI" type="Node" parent="."]
 
@@ -414,15 +256,10 @@ margin_left = -3.0
 margin_top = -3.0
 margin_right = 3.0
 margin_bottom = 3.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 17 )
 stretch_mode = 4
-_sections_unfolded = [ "Rect", "texture" ]
 
 [node name="Entity Label" parent="UI" instance=ExtResource( 18 )]
 visible = false

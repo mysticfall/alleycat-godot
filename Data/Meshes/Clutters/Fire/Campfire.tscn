@@ -7,148 +7,59 @@
 [sub_resource type="PlaneMesh" id=1]
 
 material = ExtResource( 2 )
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-flip_faces = false
-size = Vector2( 2, 2 )
-subdivide_width = 0
-subdivide_depth = 0
-_sections_unfolded = [ "Resource", "material" ]
 
 [sub_resource type="ImageTexture" id=2]
 
 flags = 4
-storage = 0
-lossy_quality = 0.7
 flags = 4
 size = Vector2( 2048, 1 )
 
 [sub_resource type="Curve" id=3]
 
-min_value = 0.0
 max_value = 4.0
-bake_resolution = 100
 _data = [ Vector2( 0, 0 ), 0.0, 0.879381, 0, 0, Vector2( 1, 4.3333 ), 10.3945, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=4]
 
-flags = 4
 width = 128
 curve = SubResource( 3 )
-_sections_unfolded = [ "curve" ]
 
 [sub_resource type="ParticlesMaterial" id=5]
 
-render_priority = 0
 trail_divisor = 3
 trail_size_modifier = SubResource( 4 )
 emission_shape = 3
 emission_point_texture = SubResource( 2 )
 emission_point_count = 512
-flag_align_y = false
 flag_rotate_y = true
-flag_disable_z = false
 spread = 37.4
-flatness = 0.0
 gravity = Vector3( 0, 1, 0 )
 initial_velocity = 0.5
 initial_velocity_random = 0.1
-angular_velocity = 0.0
-angular_velocity_random = 0.0
-linear_accel = 0.0
-linear_accel_random = 0.0
-radial_accel = 0.0
-radial_accel_random = 0.0
 tangential_accel = 0.01
 tangential_accel_random = 0.1
-damping = 0.0
-damping_random = 0.0
-angle = 0.0
-angle_random = 0.0
-scale = 1.0
 scale_random = 0.2
-color = Color( 1, 1, 1, 1 )
-hue_variation = 0.0
-hue_variation_random = 0.0
-anim_speed = 0.0
-anim_speed_random = 0.0
-anim_offset = 0.0
-anim_offset_random = 0.0
-anim_loop = false
-_sections_unfolded = [ "Orbit Velocity", "Spread", "Trail", "color_ramp", "trail_color_modifier", "trail_size_modifier" ]
 
 [sub_resource type="SpatialMaterial" id=6]
 
-render_priority = 0
 flags_transparent = true
 flags_unshaded = true
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-flags_do_not_receive_shadows = false
-flags_disable_ambient_light = false
-flags_ensure_correct_normals = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
 params_cull_mode = 2
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
 params_billboard_mode = 3
-params_billboard_keep_scale = false
-params_grow = false
-params_use_alpha_scissor = false
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
-particles_anim_loop = 0
+particles_anim_loop = false
 albedo_color = Color( 0.466667, 0.466667, 0.466667, 0.0823529 )
 albedo_texture = ExtResource( 3 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.0
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_mode = 0
-_sections_unfolded = [ "Albedo" ]
 
 [sub_resource type="QuadMesh" id=7]
 
 material = SubResource( 6 )
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-flip_faces = false
 size = Vector2( 0.5, 0.5 )
-_sections_unfolded = [ "material" ]
 
 [sub_resource type="Animation" id=8]
 
-length = 1.0
 loop = true
-step = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:light_energy")
 tracks/0/interp = 1
@@ -164,148 +75,55 @@ tracks/0/keys = {
 
 [node name="Campfire" type="OmniLight"]
 transform = Transform( -0.997692, 0, 0.0679029, 0, 1, 0, -0.0679029, 0, -0.997692, 2.72103, 0.337319, -6.21106 )
-layers = 1
 light_color = Color( 0.94902, 0.815686, 0.705882, 1 )
 light_energy = 0.80265
 light_indirect_energy = 1.2
-light_negative = false
-light_specular = 0.5
-light_bake_mode = 1
 light_cull_mask = -1048575
 shadow_enabled = true
-shadow_color = Color( 0, 0, 0, 1 )
-shadow_bias = 0.15
-shadow_contact = 0.0
-shadow_reverse_cull_face = false
-editor_only = false
 omni_range = 22.0
 omni_attenuation = 2.0
-omni_shadow_mode = 1
-omni_shadow_detail = 1
-_sections_unfolded = [ "Light", "Omni", "Shadow" ]
 
 [node name="Fire" type="Spatial" parent="."]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15256e-07, -0.373477, 0 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.30326, 0.636375, 0.514044 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "mesh" ]
 
 [node name="MeshInstance3" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.288514, 0.636375, 0.0460079 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "mesh" ]
 
 [node name="MeshInstance4" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.381146, 0.636375, 0.0651255 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "mesh" ]
 
 [node name="MeshInstance2" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0412853, 0.636375, -0.0263918 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "mesh" ]
 
 [node name="MeshInstance5" type="MeshInstance" parent="Fire"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.51517, 0.636375, 0.541763 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
-skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "mesh" ]
 
 [node name="Smoke" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-06, 0.577897, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-emitting = true
 amount = 512
 lifetime = 5.0
-one_shot = false
 preprocess = 6.85929e-06
-speed_scale = 1.0
-explosiveness = 0.0
 randomness = 0.1
-fixed_fps = 0
-fract_delta = true
 visibility_aabb = AABB( -0.627217, -0.0460384, -0.649529, 1.38822, 1.54813, 1.0725 )
-local_coords = true
-draw_order = 0
 process_material = SubResource( 5 )
-draw_passes = 1
 draw_pass_1 = SubResource( 7 )
-_sections_unfolded = [ "Draw Passes", "Process Material", "Time", "Transform", "draw_pass_1", "process_material" ]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("..")
 autoplay = "Flicker"
-playback_process_mode = 1
-playback_default_blend_time = 0.0
-playback_speed = 1.0
 anims/Flicker = SubResource( 8 )
-blend_times = [  ]
-_sections_unfolded = [ "Playback Options" ]
 
