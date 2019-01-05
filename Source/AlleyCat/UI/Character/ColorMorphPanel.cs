@@ -24,7 +24,6 @@ namespace AlleyCat.UI.Character
             var onDispose = this.OnDispose().Where(identity);
 
             Button.OnColorChange()
-                .Select(e => e.Color)
                 .Select(v => Morph.Definition.UseAlpha ? v : ToOpaqueColor(v))
                 .TakeUntil(onDispose)
                 .Subscribe(v => Morph.Value = v, this);

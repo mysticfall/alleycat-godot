@@ -38,7 +38,7 @@ namespace AlleyCat.Animation
             return Optional(player.GetAnimation(name));
         }
 
-        public static IObservable<AnimationChangeEvent> OnAnimationChange(this AnimationPlayer player)
+        public static IObservable<ValueTuple<Option<string>, string>> OnAnimationChange(this AnimationPlayer player)
         {
             Option<ValueTuple<Option<string>, string>> GetArguments(IEnumerable<object> args)
             {
@@ -48,23 +48,19 @@ namespace AlleyCat.Animation
                     (head, tail) => tail.HeadOrNone().Map(v => (Optional(head), v)));
             }
 
-            return player.FromSignal("animation_started")
-                .SelectMany(args => GetArguments(args).ToObservable())
-                .Select(v => new AnimationChangeEvent(v.Item1, v.Item2, player));
+            return player.FromSignal("animation_started").SelectMany(args => GetArguments(args).ToObservable());
         }
 
-        public static IObservable<AnimationStartEvent> OnAnimationStart(this AnimationPlayer player)
+        public static IObservable<string> OnAnimationStart(this AnimationPlayer player)
         {
             return player.FromSignal("animation_started")
-                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable())
-                .Select(v => new AnimationStartEvent(v, player));
+                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable());
         }
 
-        public static IObservable<AnimationFinishEvent> OnAnimationFinish(this AnimationPlayer player)
+        public static IObservable<string> OnAnimationFinish(this AnimationPlayer player)
         {
             return player.FromSignal("animation_finished")
-                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable())
-                .Select(v => new AnimationFinishEvent(v, player));
+                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable());
         }
     }
 }

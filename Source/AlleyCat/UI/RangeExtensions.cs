@@ -8,11 +8,10 @@ namespace AlleyCat.UI
 {
     public static class RangeExtensions
     {
-        public static IObservable<ValueChangedEvent> OnValueChange(this Range range)
+        public static IObservable<float> OnValueChange(this Range range)
         {
             return range.FromSignal("value_changed")
-                .SelectMany(args => args.HeadOrNone().OfType<float>().ToObservable())
-                .Select(v => new ValueChangedEvent(v, range));
+                .SelectMany(args => args.HeadOrNone().OfType<float>().ToObservable());
         }
     }
 }

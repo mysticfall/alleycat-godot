@@ -24,14 +24,14 @@ namespace AlleyCat.UI
             return control.HasFont(name, type) ? Some(control.GetFont(name, type)) : None;
         }
 
-        public static IObservable<MouseEnteredEvent> OnMouseEnter(this Godot.Control control)
+        public static IObservable<Unit> OnMouseEnter(this Godot.Control control)
         {
-            return control.FromSignal("mouse_entered").Select(_ => new MouseEnteredEvent(control));
+            return control.FromSignal("mouse_entered").Select(_ => Unit.Default);
         }
 
-        public static IObservable<MouseExitedEvent> OnMouseExit(this Godot.Control control)
+        public static IObservable<Unit> OnMouseExit(this Godot.Control control)
         {
-            return control.FromSignal("mouse_exited").Select(_ => new MouseExitedEvent(control));
+            return control.FromSignal("mouse_exited").Select(_ => Unit.Default);
         }
     }
 }

@@ -37,7 +37,6 @@ namespace AlleyCat.UI.Character
             var onDispose = this.OnDispose().Where(identity);
 
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
-                .Select(e => e.Value)
                 .TakeUntil(onDispose)
                 .Subscribe(v => Morph.Value = v, this);
 

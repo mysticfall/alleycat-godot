@@ -80,12 +80,12 @@ namespace AlleyCat.UI.Console
                 .Subscribe(AutoComplete, e => GD.Print(e.ToString())); 
 
             Player.OnAnimationFinish()
-                .Where(e => e.Animation == ShowAnimation)
+                .Where(a => a == ShowAnimation)
                 .TakeUntil(onDispose)
                 .Subscribe(_ => OnShown(), e => GD.Print(e.ToString()));
 
             Player.OnAnimationFinish()
-                .Where(e => e.Animation == HideAnimation)
+                .Where(a => a == HideAnimation)
                 .TakeUntil(onDispose)
                 .Subscribe(_ => OnHidden(), e => GD.Print(e.ToString()));
 

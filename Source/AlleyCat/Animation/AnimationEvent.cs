@@ -1,11 +1,10 @@
-﻿using AlleyCat.Event;
-using EnsureThat;
+﻿using EnsureThat;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public struct AnimationEvent : IEvent<IAnimationManager>
+    public struct AnimationEvent
     {
         public string Name { get; }
 
