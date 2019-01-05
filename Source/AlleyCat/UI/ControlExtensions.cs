@@ -1,5 +1,6 @@
 using System;
-using AlleyCat.Common;
+using System.Reactive.Linq;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -9,8 +10,6 @@ namespace AlleyCat.UI
 {
     public static class ControlExtensions
     {
-        private const string NodeName = "ControlEventTracker";
-
         public static Option<Color> FindColor(this Godot.Control control, string name, string type)
         {
             Ensure.That(control, nameof(control)).IsNotNull();
@@ -27,16 +26,12 @@ namespace AlleyCat.UI
 
         public static IObservable<MouseEnteredEvent> OnMouseEnter(this Godot.Control control)
         {
-            Ensure.That(control, nameof(control)).IsNotNull();
-
-            return control.GetComponent(NodeName, _ => new ControlEventTracker()).OnMouseEnter;
+            return control.FromSignal("mouse_entered").Select(_ => new MouseEnteredEvent(control));
         }
 
         public static IObservable<MouseExitedEvent> OnMouseExit(this Godot.Control control)
         {
-            Ensure.That(control, nameof(control)).IsNotNull();
-
-            return control.GetComponent(NodeName, _ => new ControlEventTracker()).OnMouseExit;
+            return control.FromSignal("mouse_exited").Select(_ => new MouseExitedEvent(control));
         }
     }
 }

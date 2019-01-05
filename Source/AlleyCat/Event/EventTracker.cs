@@ -1,53 +1,34 @@
-﻿using System.Diagnostics;
-using Godot;
-using LanguageExt;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using static LanguageExt.Prelude;
+using Object = Godot.Object;
 
 namespace AlleyCat.Event
 {
-    public abstract class EventTracker<T> : Node where T : Node
+    public class EventTracker : Object
     {
-        protected Option<T> Parent { get; private set; }
+        public const string TargetMethod = nameof(OnNext);
 
-        public override void _EnterTree()
+        public IObservable<IEnumerable<object>> OnSignal => _subject.AsObservable();
+
+        private readonly Subject<IEnumerable<object>> _subject = new Subject<IEnumerable<object>>();
+
+        private void OnNext() => _subject.OnNext(Enumerable.Empty<object>());
+
+        private void OnNext(object arg) => _subject.OnNext(List(arg));
+
+        private void OnNext(object arg1, object arg2) => _subject.OnNext(List(arg1, arg2));
+
+        private void OnNext(object arg1, object arg2, object arg3) => _subject.OnNext(List(arg1, arg2, arg3));
+
+        protected override void Dispose(bool disposing)
         {
-            base._EnterTree();
+            _subject.CompleteAndDispose();
 
-            Parent = Some(GetParent() as T);
-
-            Debug.Assert(Parent.IsSome, "_parent.IsSome");
-        }
-
-        public override void _ExitTree()
-        {
-            base._ExitTree();
-
-            Parent = None;
-
-            Debug.Assert(Parent.IsNone, "_parent.IsNone");
-        }
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            SetProcess(false);
-            SetPhysicsProcess(false);
-            SetProcessInput(false);
-        }
-
-        public override void _Notification(int what)
-        {
-            base._Notification(what);
-
-            if (what == NotificationPredelete)
-            {
-                Parent.Iter(Disconnect);
-            }
-        }
-
-        protected virtual void Disconnect(T parent)
-        {
+            base.Dispose(disposing);
         }
     }
 }

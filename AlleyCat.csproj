@@ -75,7 +75,6 @@
     <Compile Include="Source\AlleyCat\Animation\AnimationManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationManagerFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEvents.cs" />
-    <Compile Include="Source\AlleyCat\Animation\AnimationPlayerEventTracker.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationPlayerExtensions.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationStateManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationStateManagerFactory.cs" />
@@ -256,7 +255,6 @@
     <Compile Include="Source\AlleyCat\Event\ILifecycleAware.cs" />
     <Compile Include="Source\AlleyCat\Event\IReactiveObject.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveNode.cs" />
-    <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Event\IEvent.cs" />
     <Compile Include="Source\AlleyCat\Event\IInputSource.cs" />
     <Compile Include="Source\AlleyCat\Event\ITimeSource.cs" />
@@ -265,6 +263,7 @@
     <Compile Include="Source\AlleyCat\Event\ObservableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Event\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveObject.cs" />
+    <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
     <Compile Include="Source\AlleyCat\Game\GameObject.cs" />
     <Compile Include="Source\AlleyCat\Game\GameObjectFactory.cs" />
     <Compile Include="Source\AlleyCat\Game\IEntity.cs" />
@@ -365,19 +364,16 @@
     <Compile Include="Source\AlleyCat\Setting\SettingsConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Setting\SettingsFileProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\ButtonEvents.cs" />
-    <Compile Include="Source\AlleyCat\UI\ButtonEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\ButtonExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\CharacterCreator.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\ColorMorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEvents.cs" />
-    <Compile Include="Source\AlleyCat\UI\ColorPickerButtonEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\ColorPickerButtonExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ConsoleExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\IAutoCompletionSupport.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlEvents.cs" />
-    <Compile Include="Source\AlleyCat\UI\ControlEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\CreateUIAction.cs" />
     <Compile Include="Source\AlleyCat\UI\CreateUIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\EntityLabel.cs" />
@@ -387,7 +383,6 @@
     <Compile Include="Source\AlleyCat\UI\Inventory\InventoryView.cs" />
     <Compile Include="Source\AlleyCat\UI\Inventory\ItemStand.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeEvents.cs" />
-    <Compile Include="Source\AlleyCat\UI\RangeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\RangeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\MorphGroupPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\MorphListPanel.cs" />
@@ -407,7 +402,6 @@
     <Compile Include="Source\AlleyCat\UI\ToggleUIAction.cs" />
     <Compile Include="Source\AlleyCat\UI\ToggleUIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeEvents.cs" />
-    <Compile Include="Source\AlleyCat\UI\TreeEventTracker.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\TreeItemChildren.cs" />
     <Compile Include="Source\AlleyCat\UI\UIAction.cs" />

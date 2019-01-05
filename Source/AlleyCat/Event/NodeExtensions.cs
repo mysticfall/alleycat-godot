@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
+using Object = Godot.Object;
 
 namespace AlleyCat.Event
 {
@@ -74,6 +78,26 @@ namespace AlleyCat.Event
             tracker.SetProcessUnhandledKeyInput(true);
 
             return tracker.OnUnhandledInput;
+        }
+
+        public static IObservable<IEnumerable<object>> FromSignal(this Object source, string signal)
+        {
+            Ensure.That(source, nameof(source)).IsNotNull();
+
+            return Observable.Create<IEnumerable<object>>(v =>
+            {
+                var tracker = new EventTracker();
+
+                source.Connect(signal, tracker, EventTracker.TargetMethod);
+
+                var subscription = tracker.OnSignal.Subscribe(v.OnNext);
+
+                return Disposable.Create(() =>
+                {
+                    subscription.DisposeQuietly();
+                    tracker.Free();
+                });
+            });
         }
 
         private static ReactiveNode GetReactiveNode(this Node node)

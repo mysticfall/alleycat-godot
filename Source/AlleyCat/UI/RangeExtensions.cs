@@ -1,19 +1,18 @@
 using System;
-using AlleyCat.Common;
-using EnsureThat;
+using System.Linq;
+using System.Reactive.Linq;
+using AlleyCat.Event;
 using Godot;
 
 namespace AlleyCat.UI
 {
     public static class RangeExtensions
     {
-        private const string NodeName = "RangeEventTracker";
-
         public static IObservable<ValueChangedEvent> OnValueChange(this Range range)
         {
-            Ensure.That(range, nameof(range)).IsNotNull();
-
-            return range.GetComponent(NodeName, _ => new RangeEventTracker()).OnValueChange;
+            return range.FromSignal("value_changed")
+                .SelectMany(args => args.HeadOrNone().OfType<float>().ToObservable())
+                .Select(v => new ValueChangedEvent(v, range));
         }
     }
 }

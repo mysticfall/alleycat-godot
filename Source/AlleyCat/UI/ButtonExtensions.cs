@@ -1,33 +1,25 @@
 using System;
-using AlleyCat.Common;
-using EnsureThat;
+using System.Reactive.Linq;
+using AlleyCat.Event;
 using Godot;
 
 namespace AlleyCat.UI
 {
     public static class ButtonExtensions
     {
-        private const string NodeName = "ButtonEventTracker";
-
         public static IObservable<ButtonPressedEvent> OnPress(this BaseButton button)
         {
-            Ensure.That(button, nameof(button)).IsNotNull();
-
-            return button.GetComponent(NodeName, _ => new ButtonEventTracker()).OnPressed;
+            return button.FromSignal("pressed").Select(_ => new ButtonPressedEvent(button));
         }
-        
+
         public static IObservable<ButtonUpEvent> OnButtonUp(this BaseButton button)
         {
-            Ensure.That(button, nameof(button)).IsNotNull();
-
-            return button.GetComponent(NodeName, _ => new ButtonEventTracker()).OnButtonUp;
+            return button.FromSignal("button_up").Select(_ => new ButtonUpEvent(button));
         }
-        
+
         public static IObservable<ButtonDownEvent> OnButtonDown(this BaseButton button)
         {
-            Ensure.That(button, nameof(button)).IsNotNull();
-
-            return button.GetComponent(NodeName, _ => new ButtonEventTracker()).OnButtonDown;
+            return button.FromSignal("button_down").Select(_ => new ButtonDownEvent(button));
         }
     }
 }

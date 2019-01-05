@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Common;
+using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -10,8 +14,6 @@ namespace AlleyCat.Animation
 {
     public static class AnimationPlayerExtensions
     {
-        private const string NodeName = "AnimationPlayerEventTracker";
-
         public static string AddAnimation(this AnimationPlayer player, Godot.Animation animation)
         {
             Ensure.That(player, nameof(player)).IsNotNull();
@@ -38,23 +40,31 @@ namespace AlleyCat.Animation
 
         public static IObservable<AnimationChangeEvent> OnAnimationChange(this AnimationPlayer player)
         {
-            Ensure.That(player, nameof(player)).IsNotNull();
+            Option<ValueTuple<Option<string>, string>> GetArguments(IEnumerable<object> args)
+            {
+                return args.Map(v => v?.ToString()).Freeze().Match(
+                    () => None,
+                    _ => None,
+                    (head, tail) => tail.HeadOrNone().Map(v => (Optional(head), v)));
+            }
 
-            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationChange;
+            return player.FromSignal("animation_started")
+                .SelectMany(args => GetArguments(args).ToObservable())
+                .Select(v => new AnimationChangeEvent(v.Item1, v.Item2, player));
         }
 
         public static IObservable<AnimationStartEvent> OnAnimationStart(this AnimationPlayer player)
         {
-            Ensure.That(player, nameof(player)).IsNotNull();
-
-            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationStart;
+            return player.FromSignal("animation_started")
+                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable())
+                .Select(v => new AnimationStartEvent(v, player));
         }
 
         public static IObservable<AnimationFinishEvent> OnAnimationFinish(this AnimationPlayer player)
         {
-            Ensure.That(player, nameof(player)).IsNotNull();
-
-            return player.GetComponent(NodeName, _ => new AnimationPlayerEventTracker()).OnAnimationFinish;
+            return player.FromSignal("animation_finished")
+                .SelectMany(args => args.HeadOrNone().OfType<string>().ToObservable())
+                .Select(v => new AnimationFinishEvent(v, player));
         }
     }
 }
