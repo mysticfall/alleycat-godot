@@ -4,7 +4,7 @@ namespace AlleyCat.Control
 {
     public abstract class AxisInputFactory<T> : InputFactory<T, float> where T : AxisInput
     {
-        [Export(PropertyHint.ExpRange, "0, 1, 0.5")]
+        [Export(PropertyHint.ExpRange, "0, 1, 0.1")]
         public float Sensitivity { get; set; } = 0.5f;
 
         [Export]
