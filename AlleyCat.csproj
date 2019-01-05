@@ -217,6 +217,7 @@
     <Compile Include="Source\AlleyCat\Common\ValidationException.cs" />
     <Compile Include="Source\AlleyCat\Common\VariantTypeConverter.cs" />
     <Compile Include="Source\AlleyCat\Common\VectorExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\ViewportExtensions.cs" />
     <Compile Include="Source\AlleyCat\Condition\ICondition.cs" />
     <Compile Include="Source\AlleyCat\Condition\IRestricted.cs" />
     <Compile Include="Source\AlleyCat\Condition\LogicalOperation.cs" />
