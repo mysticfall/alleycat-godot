@@ -27,14 +27,12 @@ script = ExtResource( 3 )
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
 Interpolate = true
-Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
 Sensitivity = 0.0
 Interpolate = true
 Axis = 1
-Maximum = 0.1
 
 [node name="Pan" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
@@ -43,13 +41,11 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 Sensitivity = 0.0
 Interpolate = true
-Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
 Interpolate = true
 Axis = 1
-Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 3 )

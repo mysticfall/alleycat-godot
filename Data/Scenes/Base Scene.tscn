@@ -72,13 +72,11 @@ script = ExtResource( 5 )
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
-Maximum = 0.01
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
 Axis = 1
-Maximum = 0.01
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
@@ -103,13 +101,11 @@ script = ExtResource( 5 )
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
-Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
 Axis = 1
-Maximum = 0.1
 
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
@@ -128,13 +124,11 @@ script = ExtResource( 5 )
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
-Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
 Interpolate = true
 Axis = 1
-Maximum = 0.1
 
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )

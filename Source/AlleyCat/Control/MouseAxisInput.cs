@@ -1,10 +1,14 @@
 using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using AlleyCat.Common;
 using AlleyCat.Event;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -12,15 +16,17 @@ namespace AlleyCat.Control
     {
         public MouseAxis Axis { get; set; }
 
-        public float Maximum
+        public float ViewportRatio
         {
-            get => _maximum;
-            set => _maximum = Mathf.Clamp(value, 0, 1);
+            get => _viewportRatio.Value;
+            set => _viewportRatio.OnNext(Mathf.Clamp(value, 0, 1));
         }
 
-        private float _maximum = 0.1f;
+        public IObservable<float> OnViewportRatioChange => _viewportRatio.AsObservable();
 
-        private readonly float _maximumValue;
+        protected IObservable<float> OnUnitDistanceChange { get; }
+
+        private readonly BehaviorSubject<float> _viewportRatio;
 
         public MouseAxisInput(
             string key,
@@ -35,16 +41,24 @@ namespace AlleyCat.Control
 
             Axis = axis;
 
-            _maximumValue = GetValue(viewport.Size) * Maximum;
+            _viewportRatio = CreateSubject(0.005f);
+
+            OnUnitDistanceChange = viewport.OnSizeChange()
+                .StartWith(viewport.Size)
+                .TakeUntil(Disposed.Where(identity))
+                .Select(GetValue)
+                .CombineLatest(OnViewportRatioChange, (size, ratio) => size * ratio)
+                .Where(v => v > 0)
+                .Do(v => this.LogDebug("Using unit distance: {}", v));
         }
 
         protected override IObservable<float> CreateRawObservable()
         {
             return Source.OnInput
-                .Where(_ => _maximumValue > 0)
                 .OfType<InputEventMouseMotion>()
                 .Select(e => e.Relative)
-                .Select(v => _maximumValue > 0 ? GetValue(v) / _maximumValue : 0)
+                .Select(GetValue)
+                .WithLatestFrom(OnUnitDistanceChange, (input, dist) => input / dist)
                 .DistinctUntilChanged();
         }
 

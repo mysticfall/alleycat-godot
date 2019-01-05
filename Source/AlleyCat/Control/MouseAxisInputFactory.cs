@@ -10,8 +10,8 @@ namespace AlleyCat.Control
         [Export]
         public MouseAxis Axis { get; set; }
 
-        [Export(PropertyHint.ExpRange, "0, 1")]
-        public float Maximum { get; set; }
+        [Export(PropertyHint.ExpRange, "0, 0.1, 0.001")]
+        public float ViewportRatio { get; set; } = 0.005f;
 
         protected override Validation<string, MouseAxisInput> CreateService(ILoggerFactory loggerFactory)
         {
@@ -24,7 +24,7 @@ namespace AlleyCat.Control
                 Active,
                 loggerFactory)
             {
-                Maximum = Maximum,
+                ViewportRatio = ViewportRatio,
                 Sensitivity = Sensitivity,
                 Curve = Optional(Curve),
                 DeadZone = DeadZone,
