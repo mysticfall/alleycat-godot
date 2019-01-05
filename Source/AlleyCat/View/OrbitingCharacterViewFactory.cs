@@ -23,7 +23,7 @@ namespace AlleyCat.View
             ProcessMode = ProcessMode.Idle;
 
             MinPitch = -89f;
-            MaxPitch = 89f;
+            MaxPitch = 75f;
             MinDistance = 0.25f;
             MaxDistance = 10f;
             InitialDistance = 0.8f;
