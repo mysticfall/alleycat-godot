@@ -105,7 +105,7 @@ namespace AlleyCat.Sensor
             var up = rotation.XformInv(Vector3.Up).ClosestGlobalAxis();
             var forward = rotation.XformInv(Vector3.Forward).ClosestGlobalAxis();
 
-            return BasisExtensions.CreateFromAxes(forward.Cross(up), up, forward * -1).Inverse();
+            return new Basis(forward.Cross(up), up, forward * -1).Inverse();
         }
 
         protected virtual void OnAnimation(float delta)

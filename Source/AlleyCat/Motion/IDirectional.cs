@@ -1,4 +1,3 @@
-using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 
@@ -21,8 +20,7 @@ namespace AlleyCat.Motion
         {
             Ensure.That(directional, nameof(directional)).IsNotNull();
 
-            var basis = BasisExtensions.CreateFromAxes(
-                directional.Right, directional.Up, directional.Forward * -1);
+            var basis = new Basis(directional.Right, directional.Up, directional.Forward * -1);
 
             return new Transform(basis, directional.Origin);
         }
