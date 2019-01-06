@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -126,21 +127,28 @@ namespace AlleyCat.Animation
             {
                 UpdateAnimations();
 
+                this.LogDebug("Sitting down");
+
                 states.Iter(s => s.State = State);
             }
-            else if (current.Contains(State) && subStates.Exists(s => s.State == State))
+            else if (current.Contains(State))
             {
                 if (control.Exists(c => c.Animation.Contains(Animation)))
                 {
-                    subStates.Iter(s => s.State = ExitState);
+                    this.LogDebug("Getting up");
 
-                    //FIXME A temporary workaround for godotengine/godot#22389
-                    states.Iter(s => s.State = IdleState);
+                    subStates.Iter(s => s.State = ExitState);
                 }
                 else
                 {
+                    this.LogDebug("Changing sitting posture");
+
                     UpdateAnimations(Transition);
                 }
+            }
+            else
+            {
+                this.LogDebug("Ignoring sit state '{}'", current);
             }
 
             void UpdateAnimations(float transition = 0)
