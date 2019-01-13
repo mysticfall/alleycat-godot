@@ -33,6 +33,7 @@ namespace AlleyCat.UI.Character
             Spinner.MinValue = min;
             Spinner.MaxValue = max;
             Spinner.Value = value;
+            Spinner.Step = (max - min) / 100;
 
             var onDispose = this.OnDispose().Where(identity);
 
