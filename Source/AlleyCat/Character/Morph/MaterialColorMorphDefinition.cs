@@ -1,35 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character.Morph
 {
     public class MaterialColorMorphDefinition : ColorMorphDefinition
     {
-        public string Mesh { get; }
-
-        public IEnumerable<string> Materials { get; }
+        public IEnumerable<MaterialTarget> Targets { get; }
 
         public MaterialColorMorphDefinition(
             string key,
             string displayName,
-            string mesh,
-            IEnumerable<string> materials,
+            IEnumerable<MaterialTarget> targets,
             Color defaultValue,
             bool useAlpha,
             ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, useAlpha, loggerFactory)
         {
-            Ensure.That(mesh, nameof(mesh)).IsNotNullOrEmpty();
+            Targets = targets?.Freeze();
 
-            Mesh = mesh;
-            Materials = materials?.Freeze();
-
-            Ensure.Enumerable.HasItems(Materials, nameof(materials));
+            Ensure.Enumerable.HasItems(Targets, nameof(targets));
         }
 
         public override IMorph CreateMorph(IMorphable morphable)
@@ -43,27 +35,7 @@ namespace AlleyCat.Character.Morph
                     "The specified morphable does not implement IMeshObject interface.");
             }
 
-            var instance = meshObject.Meshes.Find(m => m.Name == Mesh).IfNone(() =>
-                throw new ArgumentOutOfRangeException(
-                    nameof(morphable),
-                    $"The specified morphable does not contain mesh: '{Mesh}'."));
-
-            var mesh = Optional(instance.Mesh).OfType<ArrayMesh>().HeadOrNone();
-
-            if (!mesh.Any())
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(morphable),
-                    $"The specified morphable does not contain mesh: '{Mesh}'.");
-            }
-
-            var indexes = toMap(mesh
-                .Bind(m => Enumerable.Range(0, m.GetSurfaceCount()).Map(m.SurfaceGetName))
-                .Map((index, name) => (name, index)));
-
-            var materials = Materials.Select(name => indexes[name]);
-
-            return new MaterialColorMorph(instance, materials, this, LoggerFactory);
+            return new MaterialColorMorph(meshObject, Targets, this, LoggerFactory);
         }
     }
 }

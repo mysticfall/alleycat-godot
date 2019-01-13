@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Common;
@@ -10,30 +9,28 @@ namespace AlleyCat.Character.Morph
 {
     public class MaterialColorMorph : Morph<Color, MaterialColorMorphDefinition>
     {
-        public MeshInstance Mesh { get; }
+        public IMeshObject Parent { get; }
 
-        public IEnumerable<SpatialMaterial> Materials => SurfaceIndexes
-            .Bind(i => Mesh.FindSurfaceMaterial(i).AsEnumerable())
-            .OfType<SpatialMaterial>();
+        public IEnumerable<SpatialMaterial> Materials =>
+            from mesh in Parent.Meshes
+            from target in Targets
+            from material in target.FindMaterial(mesh)
+            select material;
 
-        public IEnumerable<int> SurfaceIndexes { get; }
+        public IEnumerable<MaterialTarget> Targets { get; }
 
-        public MaterialColorMorph(MeshInstance mesh,
-            IEnumerable<int> indexes,
+        public MaterialColorMorph(
+            IMeshObject parent,
+            IEnumerable<MaterialTarget> targets,
             MaterialColorMorphDefinition definition,
             ILoggerFactory loggerFactory) : base(definition, loggerFactory)
         {
-            Ensure.That(mesh, nameof(mesh)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
 
-            Mesh = mesh;
-            SurfaceIndexes = indexes.Freeze();
+            Parent = parent;
+            Targets = targets?.Freeze();
 
-            if (!SurfaceIndexes.Any())
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(definition),
-                    $"The morph '{Definition.Key}' does not have any target material defined.");
-            }
+            Ensure.Enumerable.HasItems(Targets, nameof(targets));
         }
 
         protected override void Apply(Color value) => Materials.Iter(m => m.AlbedoColor = value);

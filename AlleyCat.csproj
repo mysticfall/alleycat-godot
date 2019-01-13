@@ -156,6 +156,7 @@
     <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorph.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Character\Morph\MaterialTarget.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MorphableRaceFactory.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MorphDefinitionFactory.cs" />
     <Compile Include="Source\AlleyCat\Character\Morph\MorphGroupFactory.cs" />

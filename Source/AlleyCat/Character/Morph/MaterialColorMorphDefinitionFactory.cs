@@ -1,5 +1,4 @@
 using System.Linq;
-using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
@@ -11,21 +10,16 @@ namespace AlleyCat.Character.Morph
     public class MaterialColorMorphDefinitionFactory : ColorMorphDefinitionFactory<MaterialColorMorphDefinition>
     {
         [Export]
-        public string Mesh { get; set; }
-
-        [Export]
-        public Array<string> Materials { get; set; }
+        public Array<string> Targets { get; set; }
 
         protected override Validation<string, MaterialColorMorphDefinition> CreateService(
             string key, string displayName, ILoggerFactory loggerFactory)
         {
             return
-                from mesh in Mesh.TrimToOption()
-                    .ToValidation("Missing the target mesh's name.")
-                from materials in Optional(Materials).Filter(Enumerable.Any)
+                from targets in Optional(Targets).Filter(Enumerable.Any).Map(v => v.Map(MaterialTarget.Create))
                     .ToValidation("Missing the target material list.")
                 select new MaterialColorMorphDefinition(
-                    key, displayName, mesh, materials, Default, UseAlpha, loggerFactory);
+                    key, displayName, targets, Default, UseAlpha, loggerFactory);
         }
     }
 }

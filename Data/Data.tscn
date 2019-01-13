@@ -8,7 +8,6 @@
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentSlotFactory.cs" type="Script" id=6]
 
 [node name="Data" type="Node"]
-_sections_unfolded = [ "Script" ]
 
 [node name="Races" type="Node" parent="."]
 script = ExtResource( 1 )
@@ -34,7 +33,6 @@ DisplayName = "morph.Head.HeadSize"
 Default = 1.0
 MinValue = 0.94
 MaxValue = 1.4
-MorphType = 0
 Modifier = Vector3( 1, 1, 1 )
 Bones = [ "head" ]
 
@@ -50,7 +48,6 @@ DisplayName = "morph.Body.LegsLength"
 Default = 1.0
 MinValue = 0.85
 MaxValue = 1.1
-MorphType = 0
 Modifier = Vector3( 0, 0, 1 )
 Bones = [ "thigh_L", "thigh_R" ]
 
@@ -64,9 +61,7 @@ script = ExtResource( 5 )
 Key = "SkinTone"
 DisplayName = "morph.Color.SkinTone"
 Default = Color( 1, 1, 1, 1 )
-UseAlpha = false
-Mesh = "Body"
-Materials = [ "Skin" ]
+Targets = [ "Skin" ]
 
 [node name="Slots" type="Node" parent="Races/Human"]
 
@@ -88,13 +83,11 @@ EquipType = 1
 script = ExtResource( 6 )
 Key = "LeftHand"
 DisplayName = "slot.LeftHand"
-EquipType = 0
 
 [node name="Right Hand" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
 Key = "RightHand"
 DisplayName = "slot.RightHand"
-EquipType = 0
 
 [node name="Necklace" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
