@@ -53,7 +53,19 @@ namespace AlleyCat.Logging
                 _builder.Append(e.ToString());
             });
 
-            GD.Print(_builder.ToString());
+            switch (logLevel)
+            {
+                case LogLevel.Error:
+                case LogLevel.Critical:
+                    GD.PushError(_builder.ToString());
+                    break;
+                case LogLevel.Warning:
+                    GD.PushWarning(_builder.ToString());
+                    break;
+                default:
+                    GD.Print(_builder.ToString());
+                    break;
+            }
 
             _builder.Clear();
         }
