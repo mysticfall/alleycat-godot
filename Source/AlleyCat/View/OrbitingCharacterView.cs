@@ -42,7 +42,19 @@ namespace AlleyCat.View
 
         public bool AutoActivate => true;
 
-        public override Vector3 Origin => Character.Map(c => c.Vision.Head.origin).IfNone(Vector3.Zero);
+        public override Vector3 Origin
+        {
+            get
+            {
+                var eyeLevel = Character.Map(c => c.Vision.Head.origin).IfNone(Vector3.Zero);
+                var position = Character.Map(c => c.Origin()).IfNone(Vector3.Zero);
+
+                var ground = new Plane(Up, Up.Dot(position));
+                var distance = ground.DistanceTo(eyeLevel);
+
+                return position + Up * distance;
+            }
+        }
 
         public override Vector3 Up => Vector3.Up;
 
