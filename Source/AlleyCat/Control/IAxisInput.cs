@@ -38,7 +38,8 @@ namespace AlleyCat.Control
             return
                 from xAxis in FindAxis(bindings, xKey)
                 from yAxis in FindAxis(bindings, yKey)
-                select xAxis.CombineLatest(yAxis, (x, y) => new Vector2(x, y));
+                select xAxis.StartWith(0).CombineLatest(yAxis.StartWith(0),
+                    (x, y) => new Vector2(x, y));
         }
     }
 }
