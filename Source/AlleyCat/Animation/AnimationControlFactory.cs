@@ -19,6 +19,7 @@ namespace AlleyCat.Animation
                    Blender.TryCreate(name, parent, context).Map(Initialize) |
                    Blender2D.TryCreate(name, parent, context).Map(Initialize) |
                    CrossfadingAnimator.TryCreate(name, parent, context).Map(Initialize) |
+                   TimeScale.TryCreate(name, parent, context).Map(Initialize) |
                    None;
         }
     }

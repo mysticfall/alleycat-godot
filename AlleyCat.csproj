@@ -97,6 +97,7 @@
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Animation\SitActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\SitState.cs" />
+    <Compile Include="Source\AlleyCat\Animation\TimeScale.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessor.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttributeProcessorFactory.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AncestorAttribute.cs" />
