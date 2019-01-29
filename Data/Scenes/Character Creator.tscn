@@ -55,7 +55,6 @@ script = ExtResource( 5 )
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
-Polling = false
 
 [node name="UI" type="Node" parent="."]
 
@@ -83,7 +82,7 @@ mouse_default_cursor_shape = 6
 stretch = true
 
 [node name="Viewport" type="Viewport" parent="UI/Content Panel"]
-size = Vector2( 683, 599 )
+size = Vector2( 684, 600 )
 transparent_bg = true
 handle_input_locally = false
 msaa = 3
