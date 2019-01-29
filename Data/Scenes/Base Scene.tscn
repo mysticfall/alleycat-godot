@@ -138,12 +138,14 @@ script = ExtResource( 7 )
 Interpolate = true
 PositiveAction = "move_right"
 NegativeAction = "move_left"
+Polling = false
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
 Interpolate = true
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
+Polling = false
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
