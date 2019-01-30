@@ -46,13 +46,16 @@ namespace AlleyCat.View
         {
             get
             {
-                var eyeLevel = Character.Map(c => c.Vision.Head.origin).IfNone(Vector3.Zero);
+                var eyeLevel = Character.Map(c => c.Vision.Viewpoint).IfNone(Vector3.Zero);
                 var position = Character.Map(c => c.Origin()).IfNone(Vector3.Zero);
 
                 var ground = new Plane(Up, Up.Dot(position));
-                var distance = ground.DistanceTo(eyeLevel);
+                var height = ground.DistanceTo(eyeLevel);
 
-                return position + Up * distance;
+                var center = position + Up * height;
+                var distance = Distance;
+
+                return distance > 1 ? center : eyeLevel.LinearInterpolate(center, distance - 0.2f * (1 - distance));
             }
         }
 
