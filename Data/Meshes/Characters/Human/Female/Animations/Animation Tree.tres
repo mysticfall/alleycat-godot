@@ -1,96 +1,108 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=34 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=36 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 
-animation = "Breath"
+animation = "Blink"
 
-[sub_resource type="AnimationNodeTimeScale" id=2]
-
-
-[sub_resource type="AnimationNodeBlend2" id=3]
+[sub_resource type="AnimationNodeOneShot" id=2]
 
 filter_enabled = true
-filters = [ "Body:blend_shapes/Expressions_abdomExpansion_max", "Body:blend_shapes/Expressions_chestExpansion_max" ]
+filters = [ "Head:blend_shapes/Expressions_eyeClosedL_max", "Head:blend_shapes/Expressions_eyeClosedR_max" ]
+autorestart = true
+autorestart_delay = 3.0
+autorestart_random_delay = 1.0
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=3]
 
-resource_local_to_scene = true
-animation = "Reset"
+animation = "Breath"
+
+[sub_resource type="AnimationNodeTimeScale" id=4]
+
 
 [sub_resource type="AnimationNodeBlend2" id=5]
 
-resource_local_to_scene = true
+filter_enabled = true
+filters = [ "Body:blend_shapes/Expressions_abdomExpansion_max", "Body:blend_shapes/Expressions_chestExpansion_max" ]
 
 [sub_resource type="AnimationNodeAnimation" id=6]
 
 resource_local_to_scene = true
 animation = "Reset"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeBlend2" id=7]
+
+resource_local_to_scene = true
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+
+resource_local_to_scene = true
+animation = "Reset"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
 
 resource_local_to_scene = true
 animation = "Idle"
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=10]
 
 animation = "WalkForward"
 
-[sub_resource type="AnimationNodeAnimation" id=9]
+[sub_resource type="AnimationNodeAnimation" id=11]
 
 animation = "WalkBackward"
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=12]
 
 animation = "WalkLeft"
 
-[sub_resource type="AnimationNodeAnimation" id=11]
+[sub_resource type="AnimationNodeAnimation" id=13]
 
 animation = "WalkRight"
 
-[sub_resource type="AnimationNodeAnimation" id=12]
+[sub_resource type="AnimationNodeAnimation" id=14]
 
 animation = "RunForward"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=13]
+[sub_resource type="AnimationNodeBlendSpace2D" id=15]
 
-blend_point_0/node = SubResource( 8 )
+blend_point_0/node = SubResource( 10 )
 blend_point_0/pos = Vector2( 0, 1 )
-blend_point_1/node = SubResource( 9 )
+blend_point_1/node = SubResource( 11 )
 blend_point_1/pos = Vector2( 0, -0.5 )
-blend_point_2/node = SubResource( 10 )
+blend_point_2/node = SubResource( 12 )
 blend_point_2/pos = Vector2( -0.2, 0 )
-blend_point_3/node = SubResource( 11 )
+blend_point_3/node = SubResource( 13 )
 blend_point_3/pos = Vector2( 0.2, 0 )
-blend_point_4/node = SubResource( 12 )
+blend_point_4/node = SubResource( 14 )
 blend_point_4/pos = Vector2( 0, 1.8 )
 max_space = Vector2( 1, 2 )
 
-[sub_resource type="AnimationNodeTimeScale" id=14]
+[sub_resource type="AnimationNodeTimeScale" id=16]
 
 
-[sub_resource type="AnimationNodeBlendTree" id=15]
+[sub_resource type="AnimationNodeBlendTree" id=17]
 
-nodes/Direction/node = SubResource( 13 )
+nodes/Direction/node = SubResource( 15 )
 nodes/Direction/position = Vector2( 100, 60 )
-nodes/Speed/node = SubResource( 14 )
+nodes/Speed/node = SubResource( 16 )
 nodes/Speed/position = Vector2( 340, 60 )
 nodes/output/position = Vector2( 560, 60 )
 node_connections = [ "output", 0, "Speed", "Speed", 0, "Direction" ]
 
-[sub_resource type="AnimationNodeAnimation" id=16]
+[sub_resource type="AnimationNodeAnimation" id=18]
 
 resource_local_to_scene = true
 animation = "KneelEnd"
 
-[sub_resource type="AnimationNodeAnimation" id=17]
+[sub_resource type="AnimationNodeAnimation" id=19]
 
 animation = "Reset"
 
-[sub_resource type="AnimationNodeAnimation" id=18]
+[sub_resource type="AnimationNodeAnimation" id=20]
 
 animation = "Reset"
 
-[sub_resource type="AnimationNodeTransition" id=19]
+[sub_resource type="AnimationNodeTransition" id=21]
 
 input_count = 2
 xfade_time = 1.22644e-19
@@ -99,54 +111,44 @@ input_0/auto_advance = false
 input_1/name = "2"
 input_1/auto_advance = false
 
-[sub_resource type="AnimationNodeBlendTree" id=20]
+[sub_resource type="AnimationNodeBlendTree" id=22]
 
 graph_offset = Vector2( 24.5849, 57.5079 )
-nodes/Sit/node = SubResource( 19 )
+nodes/Sit/node = SubResource( 21 )
 nodes/Sit/position = Vector2( 520, 100 )
-"nodes/Sit Animation 1/node" = SubResource( 17 )
+"nodes/Sit Animation 1/node" = SubResource( 19 )
 "nodes/Sit Animation 1/position" = Vector2( 320, 80 )
-"nodes/Sit Animation 2/node" = SubResource( 18 )
+"nodes/Sit Animation 2/node" = SubResource( 20 )
 "nodes/Sit Animation 2/position" = Vector2( 300, 220 )
 nodes/output/position = Vector2( 720, 80 )
 node_connections = [ "output", 0, "Sit", "Sit", 0, "Sit Animation 1", "Sit", 1, "Sit Animation 2" ]
 
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=23]
 
 resource_local_to_scene = true
 animation = "KneelStart"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
 
 switch_mode = 2
 auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=23]
-
-
-[sub_resource type="AnimationNodeStateMachine" id=24]
-
-resource_local_to_scene = true
-"states/Getting Up/node" = SubResource( 16 )
-"states/Getting Up/position" = Vector2( 444.584, 49.2584 )
-states/Seated/node = SubResource( 20 )
-states/Seated/position = Vector2( 281.661, 49.2584 )
-"states/Sitting Down/node" = SubResource( 21 )
-"states/Sitting Down/position" = Vector2( 112.757, 49.2584 )
-transitions = [ "Sitting Down", "Seated", SubResource( 22 ), "Seated", "Getting Up", SubResource( 23 ) ]
-start_node = "Sitting Down"
-end_node = "Getting Up"
-graph_offset = Vector2( -6.99635, -42.9573 )
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
 
-switch_mode = 2
-auto_advance = true
-xfade_time = 0.2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+[sub_resource type="AnimationNodeStateMachine" id=26]
 
-xfade_time = 0.2
+resource_local_to_scene = true
+"states/Getting Up/node" = SubResource( 18 )
+"states/Getting Up/position" = Vector2( 444.584, 49.2584 )
+states/Seated/node = SubResource( 22 )
+states/Seated/position = Vector2( 281.661, 49.2584 )
+"states/Sitting Down/node" = SubResource( 23 )
+"states/Sitting Down/position" = Vector2( 112.757, 49.2584 )
+transitions = [ "Sitting Down", "Seated", SubResource( 24 ), "Seated", "Getting Up", SubResource( 25 ) ]
+start_node = "Sitting Down"
+end_node = "Getting Up"
+graph_offset = Vector2( -6.99635, -42.9573 )
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=27]
 
@@ -160,6 +162,8 @@ xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=29]
 
+switch_mode = 2
+auto_advance = true
 xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=30]
@@ -174,37 +178,49 @@ xfade_time = 0.2
 
 xfade_time = 0.2
 
-[sub_resource type="AnimationNodeStateMachine" id=33]
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachine" id=35]
 
 resource_local_to_scene = true
-states/Action/node = SubResource( 6 )
+states/Action/node = SubResource( 8 )
 states/Action/position = Vector2( 227.697, -20.672 )
-states/Idle/node = SubResource( 7 )
+states/Idle/node = SubResource( 9 )
 states/Idle/position = Vector2( 40.7945, 61.2465 )
-states/Moving/node = SubResource( 15 )
+states/Moving/node = SubResource( 17 )
 states/Moving/position = Vector2( 424.983, 61.2465 )
-states/Seated/node = SubResource( 24 )
+states/Seated/node = SubResource( 26 )
 states/Seated/position = Vector2( 227.697, 141.167 )
-transitions = [ "Seated", "Idle", SubResource( 25 ), "Idle", "Action", SubResource( 26 ), "Action", "Idle", SubResource( 27 ), "Idle", "Seated", SubResource( 28 ), "Moving", "Action", SubResource( 29 ), "Action", "Moving", SubResource( 30 ), "Moving", "Idle", SubResource( 31 ), "Idle", "Moving", SubResource( 32 ) ]
+transitions = [ "Seated", "Idle", SubResource( 27 ), "Idle", "Action", SubResource( 28 ), "Action", "Idle", SubResource( 29 ), "Idle", "Seated", SubResource( 30 ), "Moving", "Action", SubResource( 31 ), "Action", "Moving", SubResource( 32 ), "Moving", "Idle", SubResource( 33 ), "Idle", "Moving", SubResource( 34 ) ]
 start_node = "Idle"
 graph_offset = Vector2( -168.017, -64.0519 )
 
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -290, 23 )
-nodes/Breathing/node = SubResource( 3 )
+graph_offset = Vector2( 4, 93 )
+nodes/Blinking/node = SubResource( 2 )
+nodes/Blinking/position = Vector2( 580, 120 )
+"nodes/Blinking Animation/node" = SubResource( 1 )
+"nodes/Blinking Animation/position" = Vector2( 340, 300 )
+nodes/Breathing/node = SubResource( 5 )
 nodes/Breathing/position = Vector2( 300, 100 )
-"nodes/Breathing Animation/node" = SubResource( 1 )
-"nodes/Breathing Animation/position" = Vector2( -200, 280 )
-"nodes/Breathing Speed/node" = SubResource( 2 )
+"nodes/Breathing Animation/node" = SubResource( 3 )
+"nodes/Breathing Animation/position" = Vector2( -220, 380 )
+"nodes/Breathing Speed/node" = SubResource( 4 )
 "nodes/Breathing Speed/position" = Vector2( 60, 260 )
-nodes/Hands/node = SubResource( 5 )
-nodes/Hands/position = Vector2( 700, 80 )
-"nodes/Hands Animation/node" = SubResource( 4 )
-"nodes/Hands Animation/position" = Vector2( 480, 220 )
-nodes/States/node = SubResource( 33 )
+nodes/Hands/node = SubResource( 7 )
+nodes/Hands/position = Vector2( 980, 80 )
+"nodes/Hands Animation/node" = SubResource( 6 )
+"nodes/Hands Animation/position" = Vector2( 760, 280 )
+nodes/States/node = SubResource( 35 )
 nodes/States/position = Vector2( -180, 120 )
-nodes/output/position = Vector2( 920, 80 )
-node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Hands", 0, "Breathing", "Hands", 1, "Hands Animation" ]
+nodes/output/position = Vector2( 1180, 80 )
+node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed" ]
 
