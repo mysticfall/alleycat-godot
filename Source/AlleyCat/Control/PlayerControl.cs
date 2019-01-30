@@ -174,10 +174,13 @@ namespace AlleyCat.Control
                 .Select(v => Abs(Sin(v)) + Abs(Cos(v)))
                 .Select(v => (v - 1) / 0.414214f + 1);
 
+            var moving = movementInput.Select(v => v.Length() > 0.01f).DistinctUntilChanged();
+            var walkToRun = moving.Select(v => v ? WalkToRunInput : Observable.Return(0f)).Switch();
+
             movementInput
                 .CombineLatest(inputStrength, (input, strength) => (input, strength))
                 .Select(v => (Abs(v.input.x) + Abs(v.input.y)) / v.strength)
-                .CombineLatest(WalkToRunInput, (v, ratio) => v + ratio)
+                .CombineLatest(walkToRun, (v, ratio) => v + ratio)
                 .Select(v => new Vector3(0, 0, -v))
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
