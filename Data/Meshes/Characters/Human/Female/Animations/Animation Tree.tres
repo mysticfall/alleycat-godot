@@ -62,7 +62,7 @@ blend_point_2/pos = Vector2( -0.2, 0 )
 blend_point_3/node = SubResource( 11 )
 blend_point_3/pos = Vector2( 0.2, 0 )
 blend_point_4/node = SubResource( 12 )
-blend_point_4/pos = Vector2( 0, 1.2 )
+blend_point_4/pos = Vector2( 0, 1.8 )
 max_space = Vector2( 1, 2 )
 
 [sub_resource type="AnimationNodeTimeScale" id=14]
@@ -192,7 +192,7 @@ graph_offset = Vector2( -168.017, -64.0519 )
 [resource]
 
 resource_local_to_scene = true
-graph_offset = Vector2( -294, 28 )
+graph_offset = Vector2( -290, 23 )
 nodes/Breathing/node = SubResource( 3 )
 nodes/Breathing/position = Vector2( 300, 100 )
 "nodes/Breathing Animation/node" = SubResource( 1 )
@@ -206,5 +206,5 @@ nodes/Hands/position = Vector2( 700, 80 )
 nodes/States/node = SubResource( 33 )
 nodes/States/position = Vector2( -180, 120 )
 nodes/output/position = Vector2( 920, 80 )
-node_connections = [ "output", 0, "Hands", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Breathing Speed", 0, "Breathing Animation", "Hands", 0, "Breathing", "Hands", 1, "Hands Animation" ]
+node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Hands", 0, "Breathing", "Hands", 1, "Hands Animation" ]
 
