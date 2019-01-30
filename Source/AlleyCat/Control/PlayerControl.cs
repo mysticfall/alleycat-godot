@@ -163,8 +163,6 @@ namespace AlleyCat.Control
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2), this);
 
-            const float movementModifier = 2f;
-
             var movementInput = MovementInput
                 .Where(_ => Character.Exists(c => c.Valid))
                 .Where(_ => Perspective.Exists(p => p.AutoActivate));
@@ -180,7 +178,7 @@ namespace AlleyCat.Control
                 .CombineLatest(inputStrength, (input, strength) => (input, strength))
                 .Select(v => (Abs(v.input.x) + Abs(v.input.y)) / v.strength)
                 .CombineLatest(WalkToRunInput, (v, ratio) => v + ratio)
-                .Select(v => new Vector3(0, 0, -v) * movementModifier)
+                .Select(v => new Vector3(0, 0, -v))
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
 

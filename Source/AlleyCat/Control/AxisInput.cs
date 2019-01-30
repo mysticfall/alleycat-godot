@@ -41,7 +41,7 @@ namespace AlleyCat.Control
 
         protected ITimeSource TimeSource { get; }
 
-        private float _sensitivity = 0.5f;
+        private float _sensitivity = 1f;
 
         private float _deadZone;
 
