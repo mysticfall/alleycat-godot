@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -10,14 +10,15 @@
 [ext_resource path="res://Source/AlleyCat/View/HeadMountedViewFactory.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInputFactory.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegateFactory.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=13]
-[ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=14]
-[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=15]
-[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=16]
-[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=17]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Source/AlleyCat/Control/ActionTapInputFactory.cs" type="Script" id=11]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=12]
+[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegateFactory.cs" type="Script" id=13]
+[ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=14]
+[ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=15]
+[ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
@@ -166,10 +167,14 @@ Interpolate = true
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
 
+[node name="Run" type="Node" parent="Control/Player/Movement"]
+script = ExtResource( 11 )
+Action = "run"
+
 [node name="Actions" type="Node" parent="Control/Player"]
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 11 )
+script = ExtResource( 12 )
 Key = "Interact"
 DisplayName = "action.Interact"
 
@@ -179,7 +184,7 @@ script = ExtResource( 9 )
 Action = "interact"
 
 [node name="Sit" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 Key = "Sit"
 DisplayName = "action.Sit"
 Action = "Sit"
@@ -190,7 +195,7 @@ script = ExtResource( 9 )
 Action = "sit"
 
 [node name="Kneel" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 Key = "Kneel"
 DisplayName = "action.Kneel"
 Action = "Kneel"
@@ -203,7 +208,7 @@ Action = "kneel"
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
-script = ExtResource( 13 )
+script = ExtResource( 14 )
 Key = "ToggleConsole"
 DisplayName = "action.ToggleConsole"
 UI = NodePath("/root/Bootstrap/UI/Console")
@@ -215,11 +220,11 @@ Action = "ui_console"
 UnhandledOnly = false
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
-script = ExtResource( 14 )
+script = ExtResource( 15 )
 Key = "ShowInventory"
 DisplayName = "action.ShowInventory"
 Modal = true
-UI = ExtResource( 15 )
+UI = ExtResource( 16 )
 
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
@@ -227,11 +232,11 @@ script = ExtResource( 9 )
 Action = "inventory"
 
 [node name="Show Menu" type="Node" parent="Control/Actions"]
-script = ExtResource( 14 )
+script = ExtResource( 15 )
 Key = "ShowMenu"
 DisplayName = "action.ShowMenu"
 Modal = true
-UI = ExtResource( 16 )
+UI = ExtResource( 17 )
 
 [node name="Input" type="Node" parent="Control/Actions/Show Menu"]
 pause_mode = 2
@@ -251,9 +256,9 @@ margin_right = 3.0
 margin_bottom = 3.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource( 17 )
+texture = ExtResource( 18 )
 stretch_mode = 4
 
-[node name="Entity Label" parent="UI" instance=ExtResource( 18 )]
+[node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
 visible = false
 

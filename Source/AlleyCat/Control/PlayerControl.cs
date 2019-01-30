@@ -77,6 +77,8 @@ namespace AlleyCat.Control
 
         protected IObservable<Vector2> MovementInput { get; }
 
+        protected IObservable<float> WalkToRunInput { get; }
+
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
         private readonly BehaviorSubject<Option<IPerspectiveView>> _perspective;
@@ -110,6 +112,12 @@ namespace AlleyCat.Control
                 .Bind(i => i.AsVector2Input())
                 .MatchObservable(identity, Observable.Empty<Vector2>)
                 .Where(_ => Valid);
+
+            WalkToRunInput = movementInput
+                .Bind(i => i.Inputs.Find("Run").OfType<IObservable<float>>().HeadOrNone())
+                .MatchObservable(identity, Observable.Empty<float>)
+                .Where(_ => Valid)
+                .StartWith(0f);
 
             _active = CreateSubject(active);
             _character = CreateSubject(character);
@@ -171,6 +179,7 @@ namespace AlleyCat.Control
             movementInput
                 .CombineLatest(inputStrength, (input, strength) => (input, strength))
                 .Select(v => (Abs(v.input.x) + Abs(v.input.y)) / v.strength)
+                .CombineLatest(WalkToRunInput, (v, ratio) => v + ratio)
                 .Select(v => new Vector3(0, 0, -v) * movementModifier)
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
@@ -200,7 +209,7 @@ namespace AlleyCat.Control
             var offsetAngle = viewRotationSpeed.CombineLatest(tick, (speed, delta) => speed * delta);
 
             locomotion
-                .Select(l=>l.ToObservable()).Switch()
+                .Select(l => l.ToObservable()).Switch()
                 .Select(l => l.OnProcess(ProcessMode)).Switch()
                 .Zip(
                     rotatableViews

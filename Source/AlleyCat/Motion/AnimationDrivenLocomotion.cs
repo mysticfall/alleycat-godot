@@ -21,6 +21,8 @@ namespace AlleyCat.Motion
 
         protected Blender2D Blender { get; }
 
+        protected TimeScale TimeScale { get; }
+
         protected string IdleState { get; }
 
         protected string MoveState { get; }
@@ -30,6 +32,7 @@ namespace AlleyCat.Motion
             Skeleton skeleton,
             AnimationStates states,
             Blender2D blender,
+            TimeScale timeScale,
             string idleState,
             string moveState,
             KinematicBody target,
@@ -42,6 +45,7 @@ namespace AlleyCat.Motion
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(states, nameof(states)).IsNotNull();
             Ensure.That(blender, nameof(blender)).IsNotNull();
+            Ensure.That(timeScale, nameof(timeScale)).IsNotNull();
             Ensure.That(idleState, nameof(idleState)).IsNotNullOrEmpty();
             Ensure.That(moveState, nameof(moveState)).IsNotNullOrEmpty();
 
@@ -49,6 +53,7 @@ namespace AlleyCat.Motion
             Skeleton = skeleton;
             States = states;
             Blender = blender;
+            TimeScale = timeScale;
             IdleState = idleState;
             MoveState = moveState;
         }
@@ -89,10 +94,8 @@ namespace AlleyCat.Motion
                     States.State = MoveState;
                 }
 
-                Blender.Position = new Vector2(direction.x, -direction.z);
-
-                //FIXME Implement proper speed handling here.
-                //AnimationTree.TimescaleNodeSetScale(ScaleSpeed, speed);
+                Blender.Position = new Vector2(direction.x, -direction.z) * speed;
+                TimeScale.Speed = Mathf.Max(1, speed);
             }
             else if (current == MoveState)
             {

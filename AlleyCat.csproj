@@ -227,6 +227,8 @@
     <Compile Include="Source\AlleyCat\Condition\TypedCondition.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionAxisInputFactory.cs" />
+    <Compile Include="Source\AlleyCat\Control\ActionTapInput.cs" />
+    <Compile Include="Source\AlleyCat\Control\ActionTapInputFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInputFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInputFactory.cs" />

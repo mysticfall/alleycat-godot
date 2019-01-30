@@ -26,11 +26,14 @@ namespace AlleyCat.Motion
         public string StatesPath { get; set; } = "States";
 
         [Export]
-        public string Blend2DPath { get; set; } = "States/Moving";
+        public string Blend2DPath { get; set; } = "States/Moving/Direction";
+
+        [Export]
+        public string TimeScalePath { get; set; } = "States/Moving/Speed";
 
         protected override Validation<string, AnimationDrivenLocomotion> CreateService(
-            KinematicBody target, 
-            Physics3DSettings physicsSettings, 
+            KinematicBody target,
+            Physics3DSettings physicsSettings,
             ILoggerFactory loggerFactory)
         {
             return
@@ -42,6 +45,8 @@ namespace AlleyCat.Motion
                     .ToValidation($"Unable to find an AnimationStates control at '{StatesPath}'.")
                 from blender in Blend2DPath.TrimToOption().Bind(manager.FindBlender2D)
                     .ToValidation($"Unable to find a Blender2D control at '{Blend2DPath}'.")
+                from timeScale in TimeScalePath.TrimToOption().Bind(manager.FindTimeScale)
+                    .ToValidation($"Unable to find a TimeScale control at '{TimeScalePath}'.")
                 from idleState in IdleState.TrimToOption()
                     .ToValidation("Idle state value was not specified.")
                 from moveState in MoveState.TrimToOption()
@@ -51,6 +56,7 @@ namespace AlleyCat.Motion
                     skeleton,
                     states,
                     blender,
+                    timeScale,
                     idleState,
                     moveState,
                     target,
