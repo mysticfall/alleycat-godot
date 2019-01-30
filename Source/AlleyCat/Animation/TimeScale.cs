@@ -69,7 +69,7 @@ namespace AlleyCat.Animation
         }
     }
 
-    public static class TimeScalextensions
+    public static class TimeScaleExtensions
     {
         public static Option<TimeScale> FindTimeScale(this IAnimationGraph graph, string path)
         {
