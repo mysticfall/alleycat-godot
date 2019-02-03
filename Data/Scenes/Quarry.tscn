@@ -1,13 +1,14 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Data/Scenes/Base Scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Data/Environments/Quarry Noon.tres" type="Environment" id=2]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Data/Meshes/Environment/Quarry/Quarry.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Data/Textures/Particle/smoke.png" type="Texture" id=8]
+[ext_resource path="res://Data/Sound/Ambience/454361__kyles__wind-light-desert-day-steady-eerie-with-crickets.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Meshes/Environment/Quarry/Quarry.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Data/Textures/Particle/smoke.png" type="Texture" id=9]
 
 [sub_resource type="GIProbeData" id=1]
 
@@ -60,7 +61,7 @@ flags_unshaded = true
 flags_do_not_receive_shadows = true
 params_cull_mode = 2
 albedo_color = Color( 1, 1, 1, 0.0117647 )
-albedo_texture = ExtResource( 8 )
+albedo_texture = ExtResource( 9 )
 uv1_triplanar = true
 
 [sub_resource type="SphereMesh" id=6]
@@ -102,6 +103,11 @@ directional_shadow_normal_bias = 0.0
 directional_shadow_bias_split_scale = 0.0
 directional_shadow_max_distance = 30.0
 
+[node name="Ambience" type="AudioStreamPlayer" parent="Environment" index="2"]
+stream = ExtResource( 3 )
+autoplay = true
+bus = "Ambience"
+
 [node name="Player" parent="Entities/Characters" index="0" groups=[
 "Character",
 ]]
@@ -109,40 +115,40 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.949868, 0.24747, 1.29029 )
 
 [node name="Prisoner 1" parent="Entities/Characters" index="1" groups=[
 "Character",
-] instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10455, 0.235441, 1.36336 )
+] instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.10455, 0.298759, 1.36336 )
 Key = "Prisoner1"
 DisplayName = "Prisoner 1"
 
 [node name="Prisoner 2" parent="Entities/Characters" index="2" groups=[
 "Character",
-] instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0869, 0.235441, 1.35639 )
+] instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0869, 0.351671, 1.35639 )
 Key = "Prisoner2"
 DisplayName = "Prisoner 2"
 
-[node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 4 )]
+[node name="Collar" parent="Entities/Items" index="0" instance=ExtResource( 5 )]
 editor/display_folded = true
 transform = Transform( -0.977999, 0, -0.208612, 0, 1, 0, 0.208612, 0, -0.977999, 0.487872, 0.300541, -1.28358 )
 
-[node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 4 )]
+[node name="Collar2" parent="Entities/Items" index="1" instance=ExtResource( 5 )]
 editor/display_folded = true
 transform = Transform( -0.733005, 0, 0.680224, 0, 1, 0, -0.680224, 0, -0.733005, 1.05162, 0.288902, -1.29027 )
 
-[node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 5 )]
+[node name="Rag" parent="Entities/Items" index="2" instance=ExtResource( 6 )]
 editor/display_folded = true
 transform = Transform( -0.996036, 0, 0.0889565, 0, 1, 0, -0.0889565, 0, -0.996036, 0.493063, 0.248664, -1.21319 )
 
-[node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 5 )]
+[node name="Rag2" parent="Entities/Items" index="3" instance=ExtResource( 6 )]
 transform = Transform( -0.976579, 0, 0.215161, 0, 1, 0, -0.215161, 0, -0.976579, 1.12769, 0.248664, -1.16858 )
 
-[node name="Pickaxe" parent="Entities/Items" index="4" instance=ExtResource( 6 )]
+[node name="Pickaxe" parent="Entities/Items" index="4" instance=ExtResource( 7 )]
 transform = Transform( 0.736036, 0, -0.676943, -0.0463254, 0.997656, -0.0503693, 0.675356, 0.0684332, 0.734311, 2.0766, 0.270877, -0.946432 )
 
-[node name="Pickaxe2" parent="Entities/Items" index="5" instance=ExtResource( 6 )]
+[node name="Pickaxe2" parent="Entities/Items" index="5" instance=ExtResource( 7 )]
 transform = Transform( 0.218663, -0.0390729, -0.975019, 0.0598525, 0.997854, -0.0265651, 0.973964, -0.0525484, 0.220533, 2.5496, 0.199358, -0.946432 )
 
-[node name="Quarry" parent="Static Objects" index="0" instance=ExtResource( 7 )]
+[node name="Quarry" parent="Static Objects" index="0" instance=ExtResource( 8 )]
 
 [node name="Dust" type="Particles" parent="Static Objects" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.20199 )

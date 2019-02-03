@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/454361__kyles__wind-light-desert-day-steady-eerie-with-crickets.ogg-a110c9ac38f6a945042b69e7d5697346.oggstr"
+
+[deps]
+
+source_file="res://Data/Sound/Ambience/454361__kyles__wind-light-desert-day-steady-eerie-with-crickets.ogg"
+dest_files=[ "res://.import/454361__kyles__wind-light-desert-day-steady-eerie-with-crickets.ogg-a110c9ac38f6a945042b69e7d5697346.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
