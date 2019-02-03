@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.escn" type="PackedScene" id=1]
+
+[sub_resource type="CylinderShape" id=1]
+
+radius = 0.0268084
+height = 0.701519
+
+[sub_resource type="CylinderShape" id=2]
+
+radius = 0.0268084
+height = 0.776651
+
+[node name="Pickaxe" instance=ExtResource( 1 )]
+mass = 2.0
+
+[node name="HeadCollisionShape" type="CollisionShape" parent="." index="1"]
+transform = Transform( 1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, -0.399083, 0, 0 )
+shape = SubResource( 1 )
+
+[node name="HandleCollisionShape" type="CollisionShape" parent="." index="2"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.0441943, 0, 0 )
+shape = SubResource( 2 )
+

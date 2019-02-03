@@ -16,13 +16,17 @@ _global_script_class_icons={
 [application]
 
 config/name="AlleyCat"
-run/main_scene="res://Data/Scenes/Cave.tscn"
+run/main_scene="res://Data/Scenes/Quarry.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Bootstrap="*res://Data/Bootstrap.tscn"
 Data="*res://Data/Data.tscn"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "zylann.hterrain" )
 
 [gui]
 
