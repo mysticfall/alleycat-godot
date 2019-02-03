@@ -55,6 +55,7 @@ script = ExtResource( 5 )
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
+Polling = false
 
 [node name="UI" type="Node" parent="."]
 

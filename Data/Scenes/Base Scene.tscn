@@ -87,6 +87,7 @@ script = ExtResource( 7 )
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
+Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )

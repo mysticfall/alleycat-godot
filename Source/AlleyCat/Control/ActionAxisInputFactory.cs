@@ -14,6 +14,9 @@ namespace AlleyCat.Control
         [Export]
         public string NegativeAction { get; set; }
 
+        [Export]
+        public bool Polling { get; set; } = true;
+
         protected override Validation<string, ActionAxisInput> CreateService(ILoggerFactory loggerFactory)
         {
             return
@@ -35,7 +38,8 @@ namespace AlleyCat.Control
                     DeadZone = DeadZone,
                     Interpolate = Interpolate,
                     WindowSize = WindowSize,
-                    WindowShift = WindowShift
+                    WindowShift = WindowShift,
+                    Polling = Polling
                 };
         }
     }

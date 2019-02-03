@@ -32,6 +32,8 @@ namespace AlleyCat.Control
             }
         }
 
+        public bool Polling { get; set; } = true;
+
         private string _positiveAction;
 
         private string _negativeAction;
@@ -51,10 +53,25 @@ namespace AlleyCat.Control
 
         protected override IObservable<float> CreateRawObservable()
         {
+            if (Polling)
+            {
+                return TimeSource.OnProcess
+                    .Select(_ => GetValue())
+                    .DistinctUntilChanged(new NonZeroValueComparer());
+            }
+
             var positive = ObserveAction(PositiveAction);
             var negative = ObserveAction(NegativeAction);
 
             return positive.Merge(negative.Select(v => -v)).DistinctUntilChanged(new NonZeroValueComparer());
+        }
+
+        private float GetValue()
+        {
+            var positive = Input.IsActionPressed(PositiveAction) ? 1f : 0f;
+            var negative = Input.IsActionPressed(NegativeAction) ? -1f : 0f;
+
+            return positive + negative;
         }
 
         private IObservable<float> ObserveAction(string action)
