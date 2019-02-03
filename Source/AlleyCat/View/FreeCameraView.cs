@@ -137,7 +137,7 @@ namespace AlleyCat.View
                 .Subscribe(this);
 
             RotationInput
-                .Select(v => v * 0.1f)
+                .Select(v => v * 0.05f)
                 .Do(v => Camera.GlobalRotate(new Vector3(0, 1, 0), -v.x))
                 .Do(v => Camera.RotateObjectLocal(new Vector3(1, 0, 0), -v.y))
                 .TakeUntil(Disposed.Where(identity))
