@@ -12,11 +12,11 @@ namespace AlleyCat.Physics
 
     public static class CollisionInfoExtensions
     {
-        public static CollisionObject GetCollider(this ICollision collision)
+        public static Spatial GetCollider(this ICollision collision)
         {
             Ensure.That(collision, nameof(collision)).IsNotNull();
 
-            return (CollisionObject) collision.RawData["collider"];
+            return (Spatial) collision.RawData["collider"];
         }
 
         public static int GetColliderId(this ICollision collision)
