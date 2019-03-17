@@ -74,7 +74,7 @@ namespace AlleyCat.View
             base.PostConstruct();
 
             RotationInput
-                .Select(v => v * 0.03f)
+                .Select(v => v * 0.02f)
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(v => Rotation -= v, this);
             ZoomInput
