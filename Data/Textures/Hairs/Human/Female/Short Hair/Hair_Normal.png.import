@@ -1,0 +1,36 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/Hair_Normal.png-35da7c872fa9b4db0467611287d80bbb.s3tc.stex"
+path.etc2="res://.import/Hair_Normal.png-35da7c872fa9b4db0467611287d80bbb.etc2.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc2" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://Data/Textures/Hairs/Human/Female/Short Hair/Hair_Normal.png"
+dest_files=[ "res://.import/Hair_Normal.png-35da7c872fa9b4db0467611287d80bbb.s3tc.stex", "res://.import/Hair_Normal.png-35da7c872fa9b4db0467611287d80bbb.etc2.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=1
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=true
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

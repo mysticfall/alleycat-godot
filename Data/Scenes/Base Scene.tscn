@@ -33,6 +33,7 @@ ItemsPath = NodePath("Entities/Items")
 "MainCamera",
 ]]
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0.735734, 1.7292, 0.649309 )
+keep_aspect = 0
 cull_mask = 1
 current = true
 near = 0.001

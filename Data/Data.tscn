@@ -30,7 +30,7 @@ DisplayName = "Head"
 script = ExtResource( 4 )
 Key = "HeadSize"
 DisplayName = "morph.Head.HeadSize"
-Default = 1.0
+Default = 1.15
 MinValue = 0.94
 MaxValue = 1.4
 Modifier = Vector3( 1, 1, 1 )
@@ -60,7 +60,7 @@ DisplayName = "Color"
 script = ExtResource( 5 )
 Key = "SkinTone"
 DisplayName = "morph.Color.SkinTone"
-Default = Color( 1, 1, 1, 1 )
+Default = Color( 0.85098, 0.835294, 0.803922, 1 )
 Targets = [ "Skin" ]
 
 [node name="Slots" type="Node" parent="Races/Human"]

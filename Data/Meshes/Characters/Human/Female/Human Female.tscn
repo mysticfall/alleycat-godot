@@ -1,60 +1,48 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/HumanoidFactory.cs" type="Script" id=2]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Body.mesh" type="ArrayMesh" id=3]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Brows.mesh" type="ArrayMesh" id=4]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Head.mesh" type="ArrayMesh" id=5]
-[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Short Hair.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Worn.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=9]
-[ext_resource path="res://Source/AlleyCat/Animation/IKChain.cs" type="Script" id=10]
-[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=11]
-[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManagerFactory.cs" type="Script" id=12]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Expressions/Blink.tres.anim" type="Animation" id=13]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Breath.anim" type="Animation" id=14]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGroundEnd.anim" type="Animation" id=15]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=16]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Idle.anim" type="Animation" id=17]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/Kneel.anim" type="Animation" id=18]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/KneelEnd.anim" type="Animation" id=19]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/KneelStart.anim" type="Animation" id=20]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/PickUp.anim" type="Animation" id=21]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Reset.anim" type="Animation" id=22]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/RunForward.anim" type="Animation" id=23]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGround.anim" type="Animation" id=24]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGroundStart.anim" type="Animation" id=25]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkBackward.anim" type="Animation" id=26]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkForward.anim" type="Animation" id=27]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkLeft.anim" type="Animation" id=28]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkRight.anim" type="Animation" id=29]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Animation Tree.tres" type="AnimationNodeBlendTree" id=30]
-[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSightFactory.cs" type="Script" id=31]
-[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotionFactory.cs" type="Script" id=32]
-[ext_resource path="res://Source/AlleyCat/Item/PickupActionFactory.cs" type="Script" id=33]
-[ext_resource path="res://Source/AlleyCat/Item/DropActionFactory.cs" type="Script" id=34]
-[ext_resource path="res://Source/AlleyCat/Animation/SitActionFactory.cs" type="Script" id=35]
+[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Scalp.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Hair.mesh" type="ArrayMesh" id=4]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Worn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
+[ext_resource path="res://Source/AlleyCat/Animation/IKChain.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=9]
+[ext_resource path="res://Source/AlleyCat/Animation/AnimationStateManagerFactory.cs" type="Script" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations - Expressions/Blink.tres.anim" type="Animation" id=11]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Breath.anim" type="Animation" id=12]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldInRightHand.anim" type="Animation" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Idle.anim" type="Animation" id=14]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/Kneel.anim" type="Animation" id=15]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/KneelEnd.anim" type="Animation" id=16]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/KneelStart.anim" type="Animation" id=17]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/PickUp.anim" type="Animation" id=18]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Idle/Reset.anim" type="Animation" id=19]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/RunForward.anim" type="Animation" id=20]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGround.anim" type="Animation" id=21]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGroundEnd.anim" type="Animation" id=22]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Sit/SitOnGroundStart.anim" type="Animation" id=23]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkBackward.anim" type="Animation" id=24]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Locomotion/WalkForward.anim" type="Animation" id=25]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Animation Tree.tres" type="AnimationNodeBlendTree" id=26]
+[ext_resource path="res://Source/AlleyCat/Sensor/PairedEyeSightFactory.cs" type="Script" id=27]
+[ext_resource path="res://Source/AlleyCat/Motion/AnimationDrivenLocomotionFactory.cs" type="Script" id=28]
+[ext_resource path="res://Source/AlleyCat/Item/PickupActionFactory.cs" type="Script" id=29]
+[ext_resource path="res://Source/AlleyCat/Item/DropActionFactory.cs" type="Script" id=30]
+[ext_resource path="res://Source/AlleyCat/Animation/SitActionFactory.cs" type="Script" id=31]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
-
-[sub_resource type="PhysicsMaterial" id=2]
-
-
-[sub_resource type="CapsuleShape" id=3]
-
+[sub_resource type="CapsuleShape" id=2]
 radius = 0.246558
 height = 1.13148
 
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
+
 [sub_resource type="AnimationNodeStateMachinePlayback" id=4]
 
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
-
-
 [node name="Human Female" index="0" instance=ExtResource( 1 )]
-transform = Transform( 1, 1.39698e-09, -2.44472e-09, -1.39698e-09, 1, 2.23518e-08, 2.44472e-09, -2.23518e-08, 1, -1.49012e-08, 1.19209e-07, -2.98023e-08 )
 script = ExtResource( 2 )
 Key = "Female"
 DisplayName = "Female"
@@ -62,103 +50,101 @@ Race = "Human"
 Sex = 1
 
 [node name="Rig" parent="." index="0"]
-bones/16/bound_children = [ NodePath("Chest") ]
-bones/21/bound_children = [ NodePath("Left Hand") ]
-bones/46/bound_children = [ NodePath("Right Hand") ]
+bones_in_world_transform = true
+bones/24/bound_children = [ NodePath("Chest") ]
+bones/29/bound_children = [ NodePath("Left Hand") ]
+bones/54/bound_children = [ NodePath("Right Hand") ]
 
-[node name="Body" parent="Rig" index="0"]
+[node name="Head" parent="Rig" index="0"]
+extra_cull_margin = 3.0
+
+[node name="Body" parent="Rig" index="1"]
 extra_cull_margin = 0.5
+
+[node name="Scalp" type="MeshInstance" parent="Rig" index="2"]
+extra_cull_margin = 2.5
 mesh = ExtResource( 3 )
+material/0 = null
 
-[node name="Brows" parent="Rig" index="1"]
-extra_cull_margin = 0.5
+[node name="Hair" type="MeshInstance" parent="Rig" index="3"]
+extra_cull_margin = 2.5
 mesh = ExtResource( 4 )
+material/0 = null
 
-[node name="Head" parent="Rig" index="2"]
-transform = Transform( 1, -5.46439e-17, 0, -5.46439e-17, 1, 0, 0, 0, 1, 0, 0, 0 )
-extra_cull_margin = 0.5
-mesh = ExtResource( 5 )
-
-[node name="Short Hair" parent="Rig" index="3" instance=ExtResource( 6 )]
-
-[node name="Rag" parent="Rig" index="4" instance=ExtResource( 7 )]
+[node name="Rag" parent="Rig" index="4" instance=ExtResource( 5 )]
 physics_material_override = SubResource( 1 )
 
-[node name="Collar" parent="Rig" index="5" instance=ExtResource( 8 )]
-physics_material_override = SubResource( 2 )
+[node name="Collar" parent="Rig" index="5" instance=ExtResource( 6 )]
 
 [node name="Chest" type="BoneAttachment" parent="Rig" index="6"]
-editor/display_folded = true
-transform = Transform( -1, -5.35921e-07, -7.3394e-08, -4.70539e-08, 0.221344, -0.975196, 5.38872e-07, -0.975196, -0.221344, 9.5505e-09, 1.15451, 0.0304438 )
+transform = Transform( -1, -1.92883e-06, -3.13897e-07, 6.16747e-09, 0.157512, -0.987517, 1.95419e-06, -0.987517, -0.157512, 5.59759e-08, 1.11671, 0.0237317 )
 bone_name = "spine03"
 
 [node name="Label" type="Spatial" parent="Rig/Chest" index="0"]
-transform = Transform( 1, 1.7053e-13, 4.26326e-14, 3.41061e-13, 1, 0, -8.52651e-14, -5.96046e-08, 1, 3.60053e-09, -0.0169366, 0.0746193 )
-script = ExtResource( 9 )
+transform = Transform( 1, 2.27374e-13, 5.68434e-14, 6.82121e-13, 1, 2.98023e-08, -5.68434e-14, -8.9407e-08, 1, 3.60044e-09, -0.0169366, 0.000203967 )
+script = ExtResource( 7 )
 _key = "Label"
 
 [node name="Right Hand" type="BoneAttachment" parent="Rig" index="7"]
-transform = Transform( -0.0734933, -0.569706, -0.818556, 0.12992, -0.81925, 0.558526, -0.988797, -0.0652987, 0.134226, 0.575052, 1.05649, -0.0324161 )
+transform = Transform( -0.103311, -0.56271, -0.820174, 0.0403001, -0.826277, 0.561821, -0.993832, 0.0249901, 0.108041, 0.551869, 1.05762, -0.0311861 )
 bone_name = "hand_R"
 
 [node name="Equip" type="Spatial" parent="Rig/Right Hand" index="0"]
-script = ExtResource( 9 )
+script = ExtResource( 7 )
 _key = "RightHand"
 
 [node name="Right Hand IK" type="SkeletonIK" parent="Rig" index="8"]
 root_bone = "upperarm_R"
 tip_bone = "hand_R"
 interpolation = 0.0
-script = ExtResource( 10 )
+script = ExtResource( 8 )
 
 [node name="Left Hand" type="BoneAttachment" parent="Rig" index="9"]
 editor/display_folded = true
-transform = Transform( -0.0731262, 0.570089, 0.818323, -0.130545, -0.818931, 0.558847, 0.988743, -0.0659607, 0.134307, -0.575052, 1.05649, -0.0324159 )
+transform = Transform( -0.103017, 0.56284, 0.820121, -0.040945, -0.826208, 0.561874, 0.993836, 0.0243033, 0.108158, -0.551867, 1.05762, -0.0311835 )
 bone_name = "hand_L"
 
 [node name="Equip" type="Spatial" parent="Rig/Left Hand" index="0"]
 transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0 )
-script = ExtResource( 9 )
+script = ExtResource( 7 )
 _key = "LeftHand"
 
 [node name="Binding" type="Node" parent="Rig" index="10"]
-script = ExtResource( 11 )
+script = ExtResource( 9 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 
 [node name="Animations" type="Spatial" parent="." index="2"]
-script = ExtResource( 12 )
+script = ExtResource( 10 )
 ProcessMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations" index="0"]
 editor/display_folded = true
 root_node = NodePath("../../Rig")
-anims/Blink = ExtResource( 13 )
-anims/Breath = ExtResource( 14 )
-anims/GettingUp = ExtResource( 15 )
-anims/HoldInRightHand = ExtResource( 16 )
-anims/Idle = ExtResource( 17 )
-anims/Kneel = ExtResource( 18 )
-anims/KneelEnd = ExtResource( 19 )
-anims/KneelStart = ExtResource( 20 )
-anims/PickUp = ExtResource( 21 )
-anims/Reset = ExtResource( 22 )
-anims/RunForward = ExtResource( 23 )
-anims/SitOnGround = ExtResource( 24 )
-anims/SitOnGroundStart = ExtResource( 25 )
-anims/WalkBackward = ExtResource( 26 )
-anims/WalkForward = ExtResource( 27 )
-anims/WalkLeft = ExtResource( 28 )
-anims/WalkRight = ExtResource( 29 )
+anims/Blink = ExtResource( 11 )
+anims/Breath = ExtResource( 12 )
+anims/HoldInRightHand = ExtResource( 13 )
+anims/Idle = ExtResource( 14 )
+anims/Kneel = ExtResource( 15 )
+anims/KneelEnd = ExtResource( 16 )
+anims/KneelStart = ExtResource( 17 )
+anims/PickUp = ExtResource( 18 )
+anims/Reset = ExtResource( 19 )
+anims/RunForward = ExtResource( 20 )
+anims/SitOnGround = ExtResource( 21 )
+anims/SitOnGroundEnd = ExtResource( 22 )
+anims/SitOnGroundStart = ExtResource( 23 )
+anims/WalkBackward = ExtResource( 24 )
+anims/WalkForward = ExtResource( 25 )
 
 [node name="Binding" type="Node" parent="Animations/AnimationPlayer" index="0"]
-script = ExtResource( 11 )
+script = ExtResource( 9 )
 
 [node name="AnimationTree" type="AnimationTree" parent="Animations" index="1"]
 editor/display_folded = true
-tree_root = ExtResource( 30 )
+tree_root = ExtResource( 26 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 process_mode = 2
@@ -167,49 +153,49 @@ parameters/Blinking/active = true
 parameters/Breathing/blend_amount = 0.6
 "parameters/Breathing Speed/scale" = 1.0
 parameters/Hands/blend_amount = 0.0
-parameters/States/playback = SubResource( 4 )
-parameters/States/Moving/Direction/blend_position = Vector2( -0.000942528, -0.00431037 )
+parameters/States/playback = SubResource( 3 )
+parameters/States/Moving/Direction/blend_position = Vector2( -0.0018149, -0.00431037 )
 parameters/States/Moving/Speed/scale = 1.0
-parameters/States/Seated/playback = SubResource( 5 )
+parameters/States/Seated/playback = SubResource( 4 )
 parameters/States/Seated/Seated/Sit/current = 0
 
 [node name="Binding" type="Node" parent="Animations/AnimationTree" index="0"]
-script = ExtResource( 11 )
+script = ExtResource( 9 )
 
 [node name="Vision" type="Node" parent="." index="3"]
-script = ExtResource( 31 )
+script = ExtResource( 27 )
 
 [node name="Locomotion" type="Node" parent="." index="4"]
-script = ExtResource( 32 )
+script = ExtResource( 28 )
 _targetPath = NodePath("..")
 
 [node name="Actions" type="Node" parent="." index="5"]
 
 [node name="Pickup" type="Node" parent="Actions" index="0"]
-script = ExtResource( 33 )
+script = ExtResource( 29 )
 Key = "Pickup"
 DisplayName = "action.Pickup"
 PickupDistance = 1.2
-Animation = ExtResource( 21 )
+Animation = ExtResource( 18 )
 
 [node name="Drop" type="Node" parent="Actions" index="1"]
-script = ExtResource( 34 )
+script = ExtResource( 30 )
 Key = "Drop"
 DisplayName = "action.Drop"
 
 [node name="Sit" type="Node" parent="Actions" index="2"]
-script = ExtResource( 35 )
+script = ExtResource( 31 )
 Key = "Sit"
 DisplayName = "action.Sit"
-SittingDownAnimation = ExtResource( 25 )
-Animation = ExtResource( 24 )
-GettingUpAnimation = ExtResource( 15 )
+SittingDownAnimation = ExtResource( 23 )
+Animation = ExtResource( 21 )
+GettingUpAnimation = ExtResource( 22 )
 
 [node name="Kneel" type="Node" parent="Actions" index="3"]
-script = ExtResource( 35 )
+script = ExtResource( 31 )
 Key = "Kneel"
 DisplayName = "action.Kneel"
-SittingDownAnimation = ExtResource( 20 )
-Animation = ExtResource( 18 )
-GettingUpAnimation = ExtResource( 19 )
+SittingDownAnimation = ExtResource( 17 )
+Animation = ExtResource( 15 )
+GettingUpAnimation = ExtResource( 16 )
 
