@@ -202,9 +202,6 @@ limits/debugger_stdout/max_errors_per_frame=100
 
 [rendering]
 
-quality/filters/use_nearest_mipmap_filter=true
 quality/subsurface_scattering/quality=2
-quality/subsurface_scattering/scale=1
-quality/subsurface_scattering/follow_surface=true
 quality/filters/msaa=1
 environment/default_environment="res://Data/Environments/Editor.tres"
