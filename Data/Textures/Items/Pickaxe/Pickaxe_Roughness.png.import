@@ -4,6 +4,10 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/Pickaxe_Roughness.png-69435df136a16855e40afac55b6eeb9a.s3tc.stex"
 path.etc2="res://.import/Pickaxe_Roughness.png-69435df136a16855e40afac55b6eeb9a.etc2.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc2" ],
+"vram_texture": true
+}
 
 [deps]
 
