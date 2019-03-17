@@ -26,7 +26,7 @@ Data="*res://Data/Data.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "zylann.hterrain" )
+enabled=PoolStringArray(  )
 
 [gui]
 
