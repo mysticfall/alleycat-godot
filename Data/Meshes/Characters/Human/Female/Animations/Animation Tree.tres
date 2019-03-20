@@ -186,5 +186,5 @@ nodes/Hands/position = Vector2( 980, 80 )
 nodes/States/node = SubResource( 35 )
 nodes/States/position = Vector2( -180, 120 )
 nodes/output/position = Vector2( 1180, 80 )
-node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation" ]
+node_connections = [ "output", 0, "Hands", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Breathing Speed", 0, "Breathing Animation", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation" ]
 
