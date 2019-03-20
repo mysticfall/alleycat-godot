@@ -170,6 +170,7 @@ namespace AlleyCat.View
             RotationInput = rotationInput
                 .Bind(i => i.AsVector2Input())
                 .MatchObservable(identity, Observable.Empty<Vector2>)
+                .Select(v => v * 0.3f)
                 .Where(_ => Valid);
             DeactivateInput = deactivateInput.Bind(i => i.FindTrigger().HeadOrNone())
                 .MatchObservable(identity, Observable.Empty<bool>)

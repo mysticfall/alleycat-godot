@@ -63,8 +63,8 @@ namespace AlleyCat.View
 
         public HeadMountedViewFactory()
         {
-            MinYaw = -80;
-            MaxYaw = 80;
+            MinYaw = -70;
+            MaxYaw = 70;
             MinPitch = -70;
             MaxPitch = 80;
 

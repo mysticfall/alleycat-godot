@@ -28,8 +28,8 @@ namespace AlleyCat.Sensor
 
         public PairedEyeSightFactory()
         {
-            MinYaw = -80;
-            MaxYaw = 80;
+            MinYaw = -70;
+            MaxYaw = 70;
             MinPitch = -70;
             MaxPitch = 80;
         }
