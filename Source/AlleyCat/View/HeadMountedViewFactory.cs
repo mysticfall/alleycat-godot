@@ -18,6 +18,7 @@ namespace AlleyCat.View
         [Node]
         public Option<IHumanoid> Character { get; set; }
 
+        [Export]
         public float Offset { get; set; } = 0.01f;
 
         [Export]
