@@ -52,6 +52,9 @@ namespace AlleyCat.View
         [Export(PropertyHint.ExpRange, "10,1000")]
         public float FocusSpeed { get; set; } = 100f;
 
+        [Export]
+        public Curve PitchYawCurve { get; set; }
+
         [Node("Rotation")]
         public Option<IInputBindings> RotationInput { get; set; }
 
@@ -96,7 +99,8 @@ namespace AlleyCat.View
                 MinStabilization = MinStabilization,
                 MaxStabilization = MaxStabilization,
                 VelocityThreshold = VelocityThreshold,
-                TransitionTime = TransitionTime
+                TransitionTime = TransitionTime,
+                PitchYawCurve = PitchYawCurve
             };
         }
     }

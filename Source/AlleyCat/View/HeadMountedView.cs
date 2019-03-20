@@ -99,6 +99,8 @@ namespace AlleyCat.View
             set => _focusSpeed = Mathf.Max(value, 0);
         }
 
+        public Option<Curve> PitchYawCurve { get; set; }
+
         public Option<IVision> Vision => Character.Map<IVision>(c => c.Vision);
 
         public Vector3 Viewpoint => Vision.Map(v => v.Viewpoint).IfNone(Vector3.Zero);
@@ -113,7 +115,17 @@ namespace AlleyCat.View
 
         public override Range<float> YawRange => Vision.Map(v => v.YawRange).IfNone(() => base.YawRange);
 
-        public override Range<float> PitchRange => Vision.Map(v => v.PitchRange).IfNone(() => base.PitchRange);
+        public override Range<float> PitchRange
+        {
+            get
+            {
+                var ratio = Math.Abs(Yaw / (Yaw > 0 ? YawRange.Max : YawRange.Min));
+                var factor = PitchYawCurve.Map(c => c.Interpolate(ratio)).IfNone(1f);
+                var range = Vision.Map(v => v.PitchRange).IfNone(() => base.PitchRange);
+
+                return new Range<float>(range.Min * factor, range.Max);
+            }
+        }
 
         public float Offset { get; set; }
 
