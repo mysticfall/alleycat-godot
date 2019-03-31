@@ -16,4 +16,3 @@ ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.3
 ss_reflections_enabled = true
 ssao_enabled = true
-

@@ -94,4 +94,3 @@ script = ExtResource( 6 )
 Key = "Necklace"
 DisplayName = "slot.Necklace"
 EquipType = 1
-

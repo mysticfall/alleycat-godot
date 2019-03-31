@@ -31,4 +31,3 @@ dof_blur_near_transition = 0.5
 dof_blur_near_amount = 0.08
 adjustment_enabled = true
 adjustment_saturation = 0.83
-

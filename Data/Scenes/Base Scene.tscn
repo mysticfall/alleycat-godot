@@ -267,4 +267,3 @@ stretch_mode = 4
 
 [node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
 visible = false
-
