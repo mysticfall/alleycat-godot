@@ -2,4 +2,6 @@
 .idea
 .import
 .directory
+.sonarqube
+packages
 AlleyCat.sln.DotSettings.user
