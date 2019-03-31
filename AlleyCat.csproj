@@ -184,6 +184,7 @@
     <Compile Include="Source\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\EnumerableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\GeometryDebugger.cs" />
     <Compile Include="Source\AlleyCat\Common\IActivatable.cs" />
     <Compile Include="Source\AlleyCat\Common\IBounded.cs" />
     <Compile Include="Source\AlleyCat\Common\IDescribable.cs" />
