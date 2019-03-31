@@ -198,4 +198,3 @@ DisplayName = "action.Kneel"
 SittingDownAnimation = ExtResource( 17 )
 Animation = ExtResource( 15 )
 GettingUpAnimation = ExtResource( 16 )
-

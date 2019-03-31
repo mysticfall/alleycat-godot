@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -19,9 +19,6 @@
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
-
-[sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.501971, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.998587, 0.7046 ), -1.05959, 0.0, 0, 0 ]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
@@ -99,7 +96,6 @@ ProcessMode = 1
 MinStabilization = 0.2
 MaxStabilization = 0.8
 VelocityThreshold = 0.2
-PitchYawCurve = SubResource( 1 )
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )

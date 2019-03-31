@@ -99,13 +99,13 @@ namespace AlleyCat.View
             set => _focusSpeed = Mathf.Max(value, 0);
         }
 
-        public Option<Curve> PitchYawCurve { get; set; }
+        public Option<Curve> NeckRotationCurve { get; set; }
 
         public Option<IVision> Vision => Character.Map<IVision>(c => c.Vision);
 
         public Vector3 Viewpoint => Vision.Map(v => v.Viewpoint).IfNone(Vector3.Zero);
 
-        public Vector3 LookDirection => Vision.Map(v => v.LookDirection).IfNone(Vector3.Forward);
+        public Vector3 LineOfSight => Vision.Map(v => v.LineOfSight).IfNone(Vector3.Forward);
 
         public override Vector3 Origin => Vision.Map(v => v.Origin).IfNone(Vector3.Zero);
 
@@ -113,15 +113,13 @@ namespace AlleyCat.View
 
         public override Vector3 Forward => Vision.Map(v => v.Forward).IfNone(Vector3.Forward);
 
-        public override Range<float> YawRange => Vision.Map(v => v.YawRange).IfNone(() => base.YawRange);
-
         public override Range<float> PitchRange
         {
             get
             {
                 var ratio = Math.Abs(Yaw / (Yaw > 0 ? YawRange.Max : YawRange.Min));
-                var factor = PitchYawCurve.Map(c => c.Interpolate(ratio)).IfNone(1f);
-                var range = Vision.Map(v => v.PitchRange).IfNone(() => base.PitchRange);
+                var factor = NeckRotationCurve.Map(c => c.Interpolate(ratio)).IfNone(1f);
+                var range = base.PitchRange;
 
                 return new Range<float>(range.Min * factor, range.Max);
             }
@@ -190,7 +188,7 @@ namespace AlleyCat.View
 
             var onRayCast = TimeSource.OnPhysicsProcess
                 .Where(_ => Active && Valid)
-                .Select(_ => Viewpoint + LookDirection * Mathf.Max(MaxFocalDistance, MaxDofDistance))
+                .Select(_ => Viewpoint + LineOfSight * Mathf.Max(MaxFocalDistance, MaxDofDistance))
                 .Select(to => Character
                     .Map(c => new Array {c.Spatial})
                     .Bind(filter => Camera.GetWorld().IntersectRay(Origin, to, filter)));
@@ -227,9 +225,29 @@ namespace AlleyCat.View
         {
             base.PostConstruct();
 
-            OnActiveStateChange.Subscribe(HandleActiveStateChange, this);
+            OnActiveStateChange
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(HandleActiveStateChange, this);
 
-            InitializeInput();
+            RotationInput
+                .Select(v => v * 0.05f)
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(v => Rotation -= v, this);
+
+            DeactivateInput
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(_ => this.Deactivate(), this);
+
+            Vector3 AcquireTarget(IHumanoid character) =>
+                Origin + (character.GetGlobalTransform().basis * this.GetBasis()).Xform(Vector3.Forward);
+
+            TimeSource.OnProcess(ProcessMode)
+                .Where(_ => Active && Valid)
+                .WithLatestFrom(OnCharacterChange.Select(c => c.ToObservable()).Switch(), (_, c) => c)
+                .Select(AcquireTarget)
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(r => Vision.Iter(v => v.LookTarget = r), this);
+
             InitializeStabilization();
         }
 
@@ -244,36 +262,20 @@ namespace AlleyCat.View
             }
             else if (Valid)
             {
-                Vision.Iter(v => v.Reset());
+                Vision.Iter(v => v.LookAt(None));
             }
-        }
 
-        private void InitializeInput()
-        {
-            RotationInput
-                .Select(v => v * 0.05f)
-                .TakeUntil(Disposed.Where(identity))
-                .Subscribe(v => Rotation -= v, this);
-
-            OnRotationChange
-                .Merge(OnActiveStateChange.Where(identity).Select(_ => Rotation))
-                .TakeUntil(Disposed.Where(identity))
-                .Subscribe(r => Vision.Iter(v => v.Rotate(r)), this);
-
-            DeactivateInput
-                .TakeUntil(Disposed.Where(identity))
-                .Subscribe(_ => this.Deactivate(), this);
+            //TODO Should find a better way not to break the shadow and reflection.
+            Character
+                .Bind(c => c.Meshes)
+                .Find(m => m.GetName() == "Head")
+                .Iter(m => m.Visible = !active);
         }
 
         private void InitializeStabilization()
         {
             bool IsStablizationAllowed() =>
                 Stabilization == StabilizeMode.Always || Stabilization != StabilizeMode.Never;
-
-            Basis GetCharacterRotation() => Character.Select(c => c.GetGlobalTransform().basis).IfNone(Basis.Identity);
-
-            Quat GetUnstablizedQuat() => (this.GetTransform().basis * this.GetBasis()).Quat();
-            Quat GetStablizedQuat() => (GetCharacterRotation() * this.GetBasis()).Quat();
 
             var movingStateChange = OnCharacterChange
                 .Select(c => c.ToObservable()).Switch()
@@ -292,24 +294,22 @@ namespace AlleyCat.View
                 .Select(influence => influence / TransitionTime)
                 .Select(StabilizationFactor.Clamp);
 
-            var rotation = Observable.Merge(
-                transition
-                    .Where(v => v <= 0)
-                    .Select(_ => GetUnstablizedQuat()),
-                transition
-                    .Where(v => v >= 1)
-                    .Select(_ => GetStablizedQuat()),
-                transition
-                    .Select(ratio => GetUnstablizedQuat().Slerp(GetStablizedQuat(), ratio)));
+            Transform Stabilize(IHumanoid character, float ratio)
+            {
+                var vision = character.Vision;
 
-            var cameraTransform = rotation
-                .Select(basis => new Transform(basis, Viewpoint + LookDirection * Offset));
+                var up = vision.Up.LinearInterpolate(character.GetGlobalTransform().Up(), ratio);
+                var origin = Viewpoint + vision.Forward * Offset;
+
+                return new Transform(Basis.Identity, origin).LookingAt(origin + vision.LineOfSight * 10f, up);
+            } 
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
-                .Zip(cameraTransform.MostRecent(this.GetTransform()), (_, transform) => transform)
+                .WithLatestFrom(OnCharacterChange.Select(c => c.ToObservable()).Switch(), (_, c) => c)
+                .WithLatestFrom(transition, Stabilize)
                 .TakeUntil(Disposed.Where(identity))
-                .Subscribe(transform => Camera.SetGlobalTransform(transform), this);
+                .Subscribe(Camera.SetGlobalTransform, this);
         }
     }
 }

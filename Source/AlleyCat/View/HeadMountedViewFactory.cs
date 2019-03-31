@@ -19,7 +19,7 @@ namespace AlleyCat.View
         public Option<IHumanoid> Character { get; set; }
 
         [Export]
-        public float Offset { get; set; } = 0.01f;
+        public float Offset { get; set; } = 0.02f;
 
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
@@ -53,7 +53,7 @@ namespace AlleyCat.View
         public float FocusSpeed { get; set; } = 100f;
 
         [Export]
-        public Curve PitchYawCurve { get; set; }
+        public Curve NeckRotationCurve { get; set; }
 
         [Node("Rotation")]
         public Option<IInputBindings> RotationInput { get; set; }
@@ -67,8 +67,8 @@ namespace AlleyCat.View
 
         public HeadMountedViewFactory()
         {
-            MinYaw = -70;
-            MaxYaw = 70;
+            MinYaw = -95;
+            MaxYaw = 95;
             MinPitch = -70;
             MaxPitch = 80;
 
@@ -100,7 +100,7 @@ namespace AlleyCat.View
                 MaxStabilization = MaxStabilization,
                 VelocityThreshold = VelocityThreshold,
                 TransitionTime = TransitionTime,
-                PitchYawCurve = PitchYawCurve
+                NeckRotationCurve = NeckRotationCurve
             };
         }
     }
