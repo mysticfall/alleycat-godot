@@ -36,7 +36,7 @@ namespace AlleyCat.Autowire
             {
                 var parent = path.Bind(v => Optional(node.GetNode(v))).IfNone(node);
 
-                dependency = parent.GetChildren().Bind(c =>
+                dependency = parent.GetChildren().Cast<Node>().Bind(c =>
                     DependencyType.IsInstanceOfType(c)
                         ? Some(c)
                         : Some(c).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption())).Freeze();

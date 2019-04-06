@@ -109,12 +109,12 @@ namespace AlleyCat.Animation
                 {
                     var filters = new Array();
 
-                    animation.Bind(FindTransformTracks).Iter(filters.Add);
+                    animation.Bind(FindTransformTracks).Iter(p => filters.Add(p));
 
                     if (animation.IsNone) Amount = 0;
 
                     BlenderNode.Filters = filters;
-                    BlenderNode.FilterEnabled = filters.Any();
+                    BlenderNode.FilterEnabled = filters.Count > 0;
                 }, this);
 
             OnAmountChange

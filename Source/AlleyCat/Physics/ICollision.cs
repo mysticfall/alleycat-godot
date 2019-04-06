@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -7,7 +7,7 @@ namespace AlleyCat.Physics
 {
     public interface ICollision
     {
-        IDictionary<object, object> RawData { get; }
+        IDictionary RawData { get; }
     }
 
     public static class CollisionInfoExtensions
@@ -44,7 +44,7 @@ namespace AlleyCat.Physics
         {
             Ensure.That(collision, nameof(collision)).IsNotNull();
 
-            return collision.RawData.TryGetValue("metadata");
+            return collision.RawData["metadata"];
         }
     }
 }

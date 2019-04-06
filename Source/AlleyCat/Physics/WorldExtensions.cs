@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EnsureThat;
@@ -44,7 +45,7 @@ namespace AlleyCat.Physics
             var state = world.DirectSpaceState;
             var result = state.IntersectRay(from, to, exclude.ValueUnsafe(), collisionLayer);
 
-            return result.ContainsKey("collider") ? Some((IIntersection) new Intersection(result)) : None;
+            return result.Contains("collider") ? Some((IIntersection) new Intersection(result)) : None;
         }
 
         public static IEnumerable<ICollision> IntersectShape(
@@ -56,8 +57,8 @@ namespace AlleyCat.Physics
 
             return world.DirectSpaceState
                 .IntersectShape(shape, maxResults)
-                .Cast<IDictionary<object, object>>()
-                .Filter(d => d.ContainsKey("collider"))
+                .Cast<IDictionary>()
+                .Filter(d => d.Contains("collider"))
                 .Map(d => (ICollision) new Collision(d));
         }
 
@@ -70,8 +71,8 @@ namespace AlleyCat.Physics
 
             return world.DirectSpaceState
                 .CollideShape(shape, maxResults)
-                .Cast<IDictionary<object, object>>()
-                .Filter(d => d.ContainsKey("collider"))
+                .Cast<IDictionary>()
+                .Filter(d => d.Contains("collider"))
                 .Map(d => (ICollision) new Collision(d));
         }
 
@@ -84,7 +85,7 @@ namespace AlleyCat.Physics
             var state = world.DirectSpaceState;
             var result = state.GetRestInfo(shape);
 
-            return result.ContainsKey("collider") ? Some((IRestInfo) new RestInfo(result)) : None;
+            return result.Contains("collider") ? Some((IRestInfo) new RestInfo(result)) : None;
         }
     }
 }

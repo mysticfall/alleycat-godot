@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+using System.Collections;
 using EnsureThat;
 
 namespace AlleyCat.Physics
 {
     public struct RestInfo : IRestInfo
     {
-        public IDictionary<object, object> RawData { get; }
+        public IDictionary RawData { get; }
 
-        public RestInfo(IDictionary<object, object> data)
+        public RestInfo(IDictionary data)
         {
             Ensure.That(data, nameof(data)).IsNotNull();
 

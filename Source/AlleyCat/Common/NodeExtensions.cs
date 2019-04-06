@@ -22,7 +22,8 @@ namespace AlleyCat.Common
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return node.GetChildren().Bind(n => OfType<T>((Node) n)).HeadOrNone();
+            // ReSharper disable once ConvertClosureToMethodGroup
+            return node.GetChildren().Cast<Node>().Bind(n => OfType<T>(n)).HeadOrNone();
         }
 
         public static T GetComponent<T>(this Node node, NodePath path) where T : class
@@ -81,7 +82,8 @@ namespace AlleyCat.Common
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
-            return node.GetChildren().Bind(n => OfType<T>((Node) n));
+            // ReSharper disable once ConvertClosureToMethodGroup
+            return node.GetChildren().Cast<Node>().Bind(n => OfType<T>(n));
         }
 
         public static Option<T> FindParent<T>(this Node node) where T : class

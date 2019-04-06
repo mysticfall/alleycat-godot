@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+using System.Collections;
 using EnsureThat;
 
 namespace AlleyCat.Physics
 {
     public struct Intersection : IIntersection
     {
-        public IDictionary<object, object> RawData { get; }
+        public IDictionary RawData { get; }
 
-        public Intersection(IDictionary<object, object> data)
+        public Intersection(IDictionary data)
         {
             Ensure.That(data, nameof(data)).IsNotNull();
 
