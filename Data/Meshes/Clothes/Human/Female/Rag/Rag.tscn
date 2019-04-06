@@ -56,8 +56,8 @@ MeshesToSync = [ "Body" ]
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
 "TagCarry",
-"TagHand",
 "TagOneHand",
+"TagHand",
 ]]
 script = ExtResource( 6 )
 Key = "Carry"
@@ -72,4 +72,3 @@ AnimationTransition = 1.0
 transform = Transform( -1, -5.96046e-08, 0, 4.96565e-08, -0.833097, -0.553126, 3.29689e-08, -0.553126, 0.833097, 0, -0.0183101, 0.255009 )
 script = ExtResource( 8 )
 _key = "Carry"
-
