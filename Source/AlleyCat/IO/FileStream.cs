@@ -151,7 +151,7 @@ namespace AlleyCat.IO
 
             var file = new File();
 
-            file.Open(path, (int) ToModeFlags(access));
+            file.Open(path, ToModeFlags(access));
             file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
@@ -166,7 +166,7 @@ namespace AlleyCat.IO
 
             var file = new File();
 
-            file.OpenCompressed(path, (int) ToModeFlags(access), (int) mode);
+            file.OpenCompressed(path, ToModeFlags(access), mode);
             file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
@@ -179,7 +179,7 @@ namespace AlleyCat.IO
 
             var file = new File();
 
-            file.OpenEncrypted(path, (int) ToModeFlags(access), key);
+            file.OpenEncrypted(path, ToModeFlags(access), key);
             file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);
@@ -192,7 +192,7 @@ namespace AlleyCat.IO
 
             var file = new File();
 
-            file.OpenEncryptedWithPass(path, (int) ToModeFlags(access), password);
+            file.OpenEncryptedWithPass(path, ToModeFlags(access), password);
             file.GetError().ThrowOnError(e => $"Failed to open file: '{path}' ({e}).");
 
             return new FileStream(file, access);

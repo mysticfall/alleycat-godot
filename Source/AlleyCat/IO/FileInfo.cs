@@ -34,7 +34,7 @@ namespace AlleyCat.IO
             {
                 using (var file = new File())
                 {
-                    file.Open(Path, (int) File.ModeFlags.Read);
+                    file.Open(Path, File.ModeFlags.Read);
 
                     return file.GetLen();
                 }
