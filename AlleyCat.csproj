@@ -6,8 +6,7 @@
     <ProjectGuid>{553FDF29-DE90-461E-993A-779ACB9C504E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace />
     <AssemblyName>AlleyCat</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
@@ -149,38 +148,14 @@
     <Compile Include="Source\AlleyCat\Character\ICharacterAware.cs" />
     <Compile Include="Source\AlleyCat\Character\IHumanoid.cs" />
     <Compile Include="Source\AlleyCat\Character\IRaceRegistry.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorph.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphDefinition.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphDefinitionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\BoneMorphType.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\ColorMorphDefinition.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\ColorMorphDefinitionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorph.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorphDefinition.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MaterialColorMorphDefinitionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MaterialTarget.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphableRaceFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphDefinitionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphGroupFactory.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\RangedMorph.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\RangedMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Character\MorphableRace.cs" />
+    <Compile Include="Source\AlleyCat\Character\MorphableRaceFactory.cs" />
     <Compile Include="Source\AlleyCat\Character\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Character\Race.cs" />
     <Compile Include="Source\AlleyCat\Character\RaceFactory.cs" />
     <Compile Include="Source\AlleyCat\Character\RaceRegistry.cs" />
     <Compile Include="Source\AlleyCat\Character\RaceRegistryFactory.cs" />
     <Compile Include="Source\AlleyCat\Character\Sex.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\IMorph.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\IMorphable.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphableRace.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\IMorphDefinition.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\IMorphGroup.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\IMorphSet.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphGroup.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphSet.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\Morph.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\MorphDefinition.cs" />
-    <Compile Include="Source\AlleyCat\Character\Morph\RangedMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Common\BasisExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\EnumerableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\ErrorExtensions.cs" />
@@ -319,6 +294,30 @@
     <Compile Include="Source\AlleyCat\Logging\ILoggable.cs" />
     <Compile Include="Source\AlleyCat\Logging\Logger.cs" />
     <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BoneMorph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BoneMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BoneMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BoneMorphType.cs" />
+    <Compile Include="Source\AlleyCat\Morph\ColorMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\ColorMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\IMorph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\IMorphable.cs" />
+    <Compile Include="Source\AlleyCat\Morph\IMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\IMorphGroup.cs" />
+    <Compile Include="Source\AlleyCat\Morph\IMorphSet.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MaterialColorMorph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MaterialColorMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MaterialColorMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MaterialTarget.cs" />
+    <Compile Include="Source\AlleyCat\Morph\Morph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MorphGroup.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MorphGroupFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\MorphSet.cs" />
+    <Compile Include="Source\AlleyCat\Morph\RangedMorph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\RangedMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\RangedMorphDefinitionFactory.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotion.cs" />
     <Compile Include="Source\AlleyCat\Motion\AnimationDrivenLocomotionFactory.cs" />
     <Compile Include="Source\AlleyCat\Motion\Billboard.cs" />

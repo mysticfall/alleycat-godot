@@ -1,7 +1,7 @@
 using Godot;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class ColorMorphDefinition : MorphDefinition<Color>
     {

@@ -1,5 +1,4 @@
 using AlleyCat.Animation;
-using AlleyCat.Character.Morph;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;

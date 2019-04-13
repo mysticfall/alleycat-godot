@@ -1,7 +1,7 @@
 using System;
 using AlleyCat.Common;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public interface IMorph : INamed, IDisposable
     {

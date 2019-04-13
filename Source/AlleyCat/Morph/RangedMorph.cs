@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class RangedMorph<T> : Morph<float, T> where T : RangedMorphDefinition
     {

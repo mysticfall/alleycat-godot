@@ -3,7 +3,7 @@ using AlleyCat.Game;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public class MorphGroup : GameObject, IMorphGroup
     {

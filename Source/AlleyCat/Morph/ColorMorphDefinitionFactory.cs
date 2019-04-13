@@ -1,6 +1,6 @@
 using Godot;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class ColorMorphDefinitionFactory<T> : MorphDefinitionFactory<T, Color>
         where T : MorphDefinition<Color>

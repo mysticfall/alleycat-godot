@@ -1,8 +1,8 @@
 using System.Linq;
 using AlleyCat.Autowire;
-using AlleyCat.Character.Morph;
-using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Logging;
+using AlleyCat.Morph;
+using AlleyCat.Morph.Generic;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;

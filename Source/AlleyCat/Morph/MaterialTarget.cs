@@ -4,7 +4,7 @@ using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public struct MaterialTarget
     {

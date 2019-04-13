@@ -1,6 +1,6 @@
 using Godot;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class RangedMorphDefinitionFactory<T> : MorphDefinitionFactory<T, float>
         where T : MorphDefinition<float>

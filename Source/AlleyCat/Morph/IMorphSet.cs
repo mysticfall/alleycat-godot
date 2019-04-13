@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using LanguageExt;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public interface IMorphSet : IDisposable
     {

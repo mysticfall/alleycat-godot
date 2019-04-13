@@ -1,5 +1,5 @@
 ﻿using AlleyCat.Character.Generic;
-using AlleyCat.Character.Morph;
+using AlleyCat.Morph;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 

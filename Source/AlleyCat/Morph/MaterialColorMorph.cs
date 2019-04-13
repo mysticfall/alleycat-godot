@@ -5,7 +5,7 @@ using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public class MaterialColorMorph : Morph<Color, MaterialColorMorphDefinition>
     {

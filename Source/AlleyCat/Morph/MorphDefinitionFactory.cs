@@ -4,7 +4,7 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class MorphDefinitionFactory<TDef, TVal> : GameObjectFactory<TDef>
         where TDef : MorphDefinition<TVal>

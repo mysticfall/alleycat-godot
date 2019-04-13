@@ -1,6 +1,6 @@
 using AlleyCat.Common;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public interface IMorphDefinition : INamed
     {

@@ -5,7 +5,7 @@ using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public class MaterialColorMorphDefinitionFactory : ColorMorphDefinitionFactory<MaterialColorMorphDefinition>
     {

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using AlleyCat.Item;
+using AlleyCat.Morph;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Character
 {
     public class MorphableRace : Race
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using AlleyCat.Action;
 using AlleyCat.Animation;
-using AlleyCat.Character.Morph;
 using AlleyCat.Common;
 using AlleyCat.Logging;
+using AlleyCat.Morph;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;

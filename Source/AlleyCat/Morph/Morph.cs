@@ -1,14 +1,14 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Character.Morph.Generic;
 using AlleyCat.Event;
 using AlleyCat.Logging;
+using AlleyCat.Morph.Generic;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public abstract class Morph<TVal, TDef> : ReactiveObject, IMorph<TVal, TDef>, ILoggable
         where TDef : MorphDefinition<TVal>

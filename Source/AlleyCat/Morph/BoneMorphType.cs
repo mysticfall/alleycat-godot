@@ -1,4 +1,4 @@
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     public enum BoneMorphType
     {

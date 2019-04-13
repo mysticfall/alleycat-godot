@@ -7,7 +7,7 @@ using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Character.Morph
+namespace AlleyCat.Morph
 {
     [AutowireContext]
     public class MorphGroupFactory : GameObjectFactory<MorphGroup>

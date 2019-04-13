@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using AlleyCat.Autowire;
-using AlleyCat.Character.Morph;
-using AlleyCat.Character.Morph.Generic;
+using AlleyCat.Morph;
+using AlleyCat.Morph.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
