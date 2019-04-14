@@ -90,4 +90,3 @@ msaa = 3
 render_target_update_mode = 3
 
 [node name="Character" parent="UI/Content Panel/Viewport" instance=ExtResource( 8 )]
-

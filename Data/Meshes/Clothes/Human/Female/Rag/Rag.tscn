@@ -25,7 +25,6 @@ Description = "item.Rag.Description"
 ItemMesh = ExtResource( 2 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
-editor/display_folded = true
 extra_cull_margin = 0.5
 mesh = ExtResource( 2 )
 material/0 = null
@@ -34,7 +33,6 @@ material/0 = null
 script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0111699 )
 shape = SubResource( 2 )
 

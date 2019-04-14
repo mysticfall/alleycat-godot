@@ -6,15 +6,11 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-
 [sub_resource type="StyleBoxEmpty" id=2]
-
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
-
 [sub_resource type="Animation" id=4]
-
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:visible")
@@ -54,7 +50,6 @@ tracks/2/keys = {
 }
 
 [sub_resource type="Animation" id=5]
-
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:visible")
@@ -154,7 +149,6 @@ anims/Show = SubResource( 5 )
 
 [node name="Basic Commands" type="Node" parent="Commands"]
 script = ExtResource( 3 )
-
 [connection signal="text_entered" from="Container/InputPane/Input" to="." method="OnTextInput"]
 [connection signal="pressed" from="Container/InputPane/ClearButton" to="." method="Clear"]
 [connection signal="pressed" from="Container/InputPane/CloseButton" to="." method="Hide"]

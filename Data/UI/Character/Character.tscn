@@ -5,20 +5,16 @@
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=3]
 
 [sub_resource type="SpatialMaterial" id=1]
-
 flags_transparent = true
 flags_unshaded = true
 albedo_color = Color( 1, 1, 1, 0 )
 
 [sub_resource type="PlaneMesh" id=2]
-
 material = SubResource( 1 )
 
 [sub_resource type="PhysicsMaterial" id=3]
 
-
 [sub_resource type="PlaneShape" id=4]
-
 
 [node name="Character" type="Spatial"]
 
@@ -28,7 +24,6 @@ environment = ExtResource( 1 )
 current = true
 
 [node name="Character" parent="." instance=ExtResource( 2 )]
-editor/display_folded = true
 
 [node name="Binding" type="Node" parent="Character"]
 script = ExtResource( 3 )
@@ -42,4 +37,3 @@ physics_material_override = SubResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
 shape = SubResource( 4 )
-

@@ -4,7 +4,6 @@
 [ext_resource path="res://Data/Environments/Inspect.tres" type="Environment" id=2]
 
 [sub_resource type="CubeMesh" id=1]
-
 size = Vector3( 0.5, 0.5, 0.5 )
 
 [node name="Item Box" type="Spatial"]
@@ -24,5 +23,4 @@ far = 5.0
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.982306, -0.0496866, 0.18057, -0.033412, 0.902203, 0.430016, -0.184277, -0.428441, 0.884579, 0.803995, 1.14584, 3.17286 )
-light_cull_mask = -1048574
-
+light_cull_mask = 4293918722

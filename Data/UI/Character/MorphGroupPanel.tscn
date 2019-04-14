@@ -15,4 +15,3 @@ _rangedMorphPanelScene = ExtResource( 3 )
 [node name="MorphsPanel" type="VBoxContainer" parent="."]
 margin_right = 1024.0
 size_flags_horizontal = 3
-

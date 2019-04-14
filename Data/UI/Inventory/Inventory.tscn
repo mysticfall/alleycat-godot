@@ -13,7 +13,6 @@
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
-
 bg_color = Color( 0, 0, 0, 0.25098 )
 
 [node name="Inventory" type="Panel" groups=[
@@ -75,7 +74,7 @@ mouse_default_cursor_shape = 6
 stretch = true
 
 [node name="Viewport" type="Viewport" parent="Content Panel"]
-size = Vector2( 623, 599 )
+size = Vector2( 624, 600 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
@@ -147,16 +146,12 @@ script = ExtResource( 9 )
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
-Sensitivity = 1.0
 Interpolate = true
-Maximum = 0.1
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
-Sensitivity = 1.0
 Interpolate = true
 Axis = 1
-Maximum = 0.1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 9 )
@@ -167,4 +162,3 @@ Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
 Polling = false
-

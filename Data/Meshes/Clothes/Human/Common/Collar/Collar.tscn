@@ -11,9 +11,7 @@
 
 [sub_resource type="PhysicsMaterial" id=1]
 
-
 [sub_resource type="BoxShape" id=2]
-
 extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 
 [node name="Collar" type="RigidBody"]
@@ -27,7 +25,6 @@ EquipmentType = 1
 ItemMesh = ExtResource( 2 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
-editor/display_folded = true
 extra_cull_margin = 2.5
 mesh = ExtResource( 2 )
 skeleton = NodePath("")
@@ -37,7 +34,6 @@ material/0 = null
 script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0164012, -0.00723294 )
 shape = SubResource( 2 )
 
@@ -56,9 +52,9 @@ Mesh = ExtResource( 5 )
 AnimationTransition = 1.0
 
 [node name="Carry" type="Node" parent="Configurations" groups=[
-"TagCarry",
-"TagHand",
 "TagOneHand",
+"TagHand",
+"TagCarry",
 ]]
 script = ExtResource( 6 )
 Key = "Carry"
@@ -78,4 +74,3 @@ _key = "Label"
 transform = Transform( -0.890473, -0.454006, -0.0306126, 0.403806, -0.757416, -0.51309, 0.209759, -0.469254, 0.857788, -0.00525796, 0.0126396, 0.137194 )
 script = ExtResource( 8 )
 _key = "Carry"
-

@@ -67,7 +67,6 @@ margin_bottom = 172.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 3 )
 text = "ui.MainMenu.quit"
-
 [connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="." method="Resume"]
 [connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="." method="ShowSettings"]
 [connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="Quit"]

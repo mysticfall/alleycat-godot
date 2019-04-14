@@ -3,12 +3,10 @@
 [ext_resource path="res://logo.png" type="Texture" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
-
 bg_color = Color( 1, 1, 1, 1 )
 anti_aliasing = false
 
 [sub_resource type="Animation" id=2]
-
 resource_name = "Show Logo"
 length = 5.0
 tracks/0/type = "value"
@@ -46,4 +44,3 @@ stretch_mode = 4
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Logo"]
 autoplay = "Show Logo"
 "anims/Show Logo" = SubResource( 2 )
-
