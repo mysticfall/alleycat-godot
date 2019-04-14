@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Common;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Morph
 {
@@ -33,6 +36,15 @@ namespace AlleyCat.Morph
             Ensure.Enumerable.HasItems(Targets, nameof(targets));
         }
 
-        protected override void Apply(Color value) => Materials.Iter(m => m.AlbedoColor = value);
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            OnChange
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(Apply, this);
+        }
+
+        protected void Apply(Color value) => Materials.Iter(m => m.AlbedoColor = value);
     }
 }

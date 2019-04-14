@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using AlleyCat.Animation;
+using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Morph
 {
@@ -52,7 +55,16 @@ namespace AlleyCat.Morph
             }
         }
 
-        protected override void Apply(float value)
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            OnChange
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(Apply, this);
+        }
+
+        private void Apply(float value)
         {
             var defaultScale = new Vector3(1, 1, 1) * Definition.Default;
             var deltaScale = new Vector3(1, 1, 1) * Value - defaultScale;

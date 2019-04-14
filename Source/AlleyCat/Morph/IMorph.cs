@@ -3,15 +3,13 @@ using AlleyCat.Common;
 
 namespace AlleyCat.Morph
 {
-    public interface IMorph : INamed, IDisposable
+    public interface IMorph : INamed, IInitializable, IDisposable
     {
         IMorphDefinition Definition { get; }
 
         IObservable<object> OnChange { get; }
 
         object Value { get; set; }
-
-        void Apply();
 
         void Reset();
     }

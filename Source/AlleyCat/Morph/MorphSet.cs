@@ -29,8 +29,6 @@ namespace AlleyCat.Morph
 
             OnMorph = Morphs.Values.Map(m => m.OnChange.Select(_ => m)).Merge();
 
-            Morphs.Values.Iter(m => m.Apply());
-
             var groupsByMorph = toMap(Groups.Bind(g => g.Definitions.Map(d => (d.Key, g))));
 
             _morphsByGroup = toMap(
@@ -38,6 +36,8 @@ namespace AlleyCat.Morph
                     .Bind(m => groupsByMorph.Find(m.Key).Map(g => (group: g.Key, morphs: m)))
                     .GroupBy(v => v.group, v => v.morphs)
                     .Map(v => (v.Key, v.AsEnumerable())));
+
+            Morphs.Iter(m => m.Initialize());
         }
 
         public IEnumerable<IMorph> GetMorphs(IMorphGroup group)

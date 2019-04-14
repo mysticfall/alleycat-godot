@@ -6,7 +6,6 @@ using AlleyCat.Logging;
 using AlleyCat.Morph.Generic;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Morph
 {
@@ -50,16 +49,7 @@ namespace AlleyCat.Morph
 
             Definition = definition;
             Logger = loggerFactory.CreateLogger(this.GetLogCategory());
-
-            OnChange
-                .Skip(1)
-                .TakeUntil(Disposed.Where(identity))
-                .Subscribe(Apply, this);
         }
-
-        public void Apply() => Apply(Value);
-
-        protected abstract void Apply(TVal value);
 
         public void Reset() => Value = Definition.Default;
     }
