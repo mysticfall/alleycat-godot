@@ -67,7 +67,7 @@
     <Compile Include="Source\AlleyCat\Action\InteractionContext.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControl.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControlFactory.cs" />
-    <Compile Include="Source\AlleyCat\Animation\AnimationEvent.cs" />
+    <Compile Include="Source\AlleyCat\Animation\IAnimationEvent.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraph.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraphContext.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraphFactory.cs" />

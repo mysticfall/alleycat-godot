@@ -90,6 +90,7 @@ namespace AlleyCat.Item
                 }
 
                 manager.OnAnimationEvent
+                    .OfType<TriggerEvent>()
                     .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
                     .Take(1)
                     .TakeUntil(Disposed.Where(identity))

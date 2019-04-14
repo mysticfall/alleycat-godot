@@ -32,7 +32,7 @@ namespace AlleyCat.Animation
 
         protected ITimeSource TimeSource { get; }
 
-        public virtual IObservable<AnimationEvent> OnAnimationEvent => _onAnimationEvent.AsObservable();
+        public virtual IObservable<IAnimationEvent> OnAnimationEvent => _onAnimationEvent.AsObservable();
 
         private readonly BehaviorSubject<bool> _active;
 
@@ -40,7 +40,7 @@ namespace AlleyCat.Animation
 
         private readonly ISubject<float> _onAdvance;
 
-        private readonly ISubject<AnimationEvent> _onAnimationEvent;
+        private readonly ISubject<IAnimationEvent> _onAnimationEvent;
 
         public AnimationManager(
             AnimationPlayer player,
@@ -61,7 +61,7 @@ namespace AlleyCat.Animation
             _active = CreateSubject(active);
             _onBeforeAdvance = CreateSubject<Unit>();
             _onAdvance = CreateSubject<float>();
-            _onAnimationEvent = CreateSubject<AnimationEvent>();
+            _onAnimationEvent = CreateSubject<IAnimationEvent>();
         }
 
         protected override void PostConstruct()
@@ -92,11 +92,11 @@ namespace AlleyCat.Animation
             Player.Play(Player.AddAnimation(animation));
         }
 
-        public void FireEvent(string name, Option<object> argument)
+        public void FireEvent(IAnimationEvent @event)
         {
-            this.LogDebug("Received animation event: '{}' (args: {}).", name, argument);
+            this.LogDebug("Received animation event: '{}'.", @event);
 
-            _onAnimationEvent.OnNext(new AnimationEvent(name, argument, this));
+            _onAnimationEvent.OnNext(@event);
         }
     }
 }

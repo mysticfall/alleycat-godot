@@ -21,6 +21,8 @@ namespace AlleyCat.Animation
         [Service]
         public Option<AnimationPlayer> Player { get; set; }
 
+        private const string EventPrefix = "event.";
+
         protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
             return Player
@@ -35,6 +37,20 @@ namespace AlleyCat.Animation
 
         [UsedImplicitly]
         private void FireEvent(string name, [CanBeNull] object argument) =>
-            Service.Iter(s => s.FireEvent(name, Optional(argument)));
+            Service.Iter(s => s.FireEvent(new TriggerEvent(name, Optional(argument), s)));
+
+        public override bool _Set(string property, object value)
+        {
+            if (property.StartsWith(EventPrefix) && value is float v)
+            {
+                var name = property.Substring(EventPrefix.Length() + 1);
+
+                Service.Iter(s => s.FireEvent(new ValueChangeEvent(name, v, s)));
+
+                return true;
+            }
+
+            return base._Set(property, value);
+        }
     }
 }

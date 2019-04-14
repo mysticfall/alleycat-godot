@@ -10,7 +10,7 @@ namespace AlleyCat.Animation
 
         IObservable<float> OnAdvance { get; }
 
-        IObservable<AnimationEvent> OnAnimationEvent { get; }
+        IObservable<IAnimationEvent> OnAnimationEvent { get; }
 
         void Advance(float delta);
 
