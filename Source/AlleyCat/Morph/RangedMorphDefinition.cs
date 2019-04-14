@@ -12,7 +12,8 @@ namespace AlleyCat.Morph
             string displayName,
             Range<float> range,
             float defaultValue,
-            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, loggerFactory)
+            bool hidden,
+            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, hidden, loggerFactory)
         {
             Range = range;
         }

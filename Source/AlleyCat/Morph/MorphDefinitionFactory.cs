@@ -18,15 +18,18 @@ namespace AlleyCat.Morph
         [Export]
         public TVal Default { get; set; }
 
+        [Export]
+        public bool Hidden { get; set; }
+
         protected override Validation<string, TDef> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return CreateService(key, displayName, loggerFactory);
+            return CreateService(key, displayName, Hidden, loggerFactory);
         }
 
         protected abstract Validation<string, TDef> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory);
+            string key, string displayName, bool hidden, ILoggerFactory loggerFactory);
     }
 }

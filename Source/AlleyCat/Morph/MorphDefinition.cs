@@ -12,10 +12,13 @@ namespace AlleyCat.Morph
 
         public T Default { get; }
 
+        public bool Hidden { get; }
+
         protected MorphDefinition(
             string key,
             string displayName,
             T defaultValue,
+            bool hidden,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
@@ -24,6 +27,7 @@ namespace AlleyCat.Morph
             Key = key;
             DisplayName = displayName;
             Default = defaultValue;
+            Hidden = hidden;
         }
 
         public abstract IMorph CreateMorph(IMorphable morphable);

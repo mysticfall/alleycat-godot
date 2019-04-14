@@ -37,7 +37,7 @@ namespace AlleyCat.UI.Character
             Ensure.That(morphSet, nameof(morphSet)).IsNotNull();
 
             Group = group;
-            Morphs = morphSet.GetMorphs(group);
+            Morphs = morphSet.GetMorphs(group).Filter(m => !m.Definition.Hidden);
         }
 
         protected virtual Option<MorphPanel> CreateMorphPanel(IMorph morph)

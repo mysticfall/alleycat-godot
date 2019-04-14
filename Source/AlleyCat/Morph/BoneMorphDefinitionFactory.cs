@@ -20,14 +20,14 @@ namespace AlleyCat.Morph
         public Array<string> Bones { get; set; }
 
         protected override Validation<string, BoneMorphDefinition> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory)
+            string key, string displayName, bool hidden, ILoggerFactory loggerFactory)
         {
             var range = new Range<float>(MinValue, MaxValue);
 
             return Optional(Bones).Filter(Enumerable.Any)
                 .ToValidation("Missing the target material list.")
                 .Map(bones => new BoneMorphDefinition(
-                    key, displayName, bones, MorphType, Modifier, range, Default, loggerFactory));
+                    key, displayName, bones, MorphType, Modifier, range, Default, hidden, loggerFactory));
         }
     }
 }

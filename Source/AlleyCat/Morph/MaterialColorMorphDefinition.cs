@@ -17,7 +17,8 @@ namespace AlleyCat.Morph
             IEnumerable<MaterialTarget> targets,
             Color defaultValue,
             bool useAlpha,
-            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, useAlpha, loggerFactory)
+            bool hidden,
+            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, useAlpha, hidden, loggerFactory)
         {
             Targets = targets?.Freeze();
 

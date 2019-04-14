@@ -13,13 +13,13 @@ namespace AlleyCat.Morph
         public Array<string> Targets { get; set; }
 
         protected override Validation<string, MaterialColorMorphDefinition> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory)
+            string key, string displayName, bool hidden, ILoggerFactory loggerFactory)
         {
             return
                 from targets in Optional(Targets).Filter(Enumerable.Any).Map(v => v.Map(MaterialTarget.Create))
                     .ToValidation("Missing the target material list.")
                 select new MaterialColorMorphDefinition(
-                    key, displayName, targets, Default, UseAlpha, loggerFactory);
+                    key, displayName, targets, Default, UseAlpha, hidden, loggerFactory);
         }
     }
 }
