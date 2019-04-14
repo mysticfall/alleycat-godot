@@ -294,6 +294,10 @@
     <Compile Include="Source\AlleyCat\Logging\ILoggable.cs" />
     <Compile Include="Source\AlleyCat\Logging\Logger.cs" />
     <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BlendShapeMorph.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinition.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinitionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphMode.cs" />
     <Compile Include="Source\AlleyCat\Morph\BoneMorph.cs" />
     <Compile Include="Source\AlleyCat\Morph\BoneMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Morph\BoneMorphDefinitionFactory.cs" />
