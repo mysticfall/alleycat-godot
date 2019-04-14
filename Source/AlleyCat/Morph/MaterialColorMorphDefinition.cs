@@ -36,7 +36,7 @@ namespace AlleyCat.Morph
                     "The specified morphable does not implement IMeshObject interface.");
             }
 
-            return new MaterialColorMorph(meshObject, Targets, this, LoggerFactory);
+            return new MaterialColorMorph(meshObject, this, LoggerFactory);
         }
     }
 }
