@@ -86,6 +86,7 @@ namespace AlleyCat.Item
             Ensure.That(shape, nameof(shape)).IsNotNull();
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
             Ensure.That(itemMesh, nameof(itemMesh)).IsNotNull();
+            Ensure.That(markers, nameof(markers)).IsNotNull();
 
             Key = key;
             DisplayName = displayName;
