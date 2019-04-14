@@ -3,7 +3,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using AlleyCat.Autowire;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -48,82 +47,82 @@ namespace AlleyCat.Autowire
             return enumerable;
         }
     }
-}
 
-internal struct ServiceDependencyCollector : IEnumerable, IEnumerator
-{
-    public IEnumerator GetEnumerator() => this;
-
-    object IEnumerator.Current => _value.ValueUnsafe();
-
-    private readonly IAutowireContext _context;
-
-    private readonly Node _targetNode;
-
-    private readonly Type _targetType;
-
-    private Option<IAutowireContext> _current;
-
-    private Option<object> _value;
-
-    public ServiceDependencyCollector(
-        IAutowireContext context, Node targetNode, Type targetType)
+    internal struct ServiceDependencyCollector : IEnumerable, IEnumerator
     {
-        Ensure.That(context, nameof(context)).IsNotNull();
-        Ensure.That(targetNode, nameof(targetNode)).IsNotNull();
-        Ensure.That(targetType, nameof(targetType)).IsNotNull();
+        public IEnumerator GetEnumerator() => this;
 
-        _context = context;
-        _targetNode = targetNode;
-        _targetType = targetType;
+        object IEnumerator.Current => _value.ValueUnsafe();
 
-        _current = Some(context);
-        _value = None;
-    }
+        private readonly IAutowireContext _context;
 
-    public bool MoveNext()
-    {
-        if (_current.IsNone) return false;
+        private readonly Node _targetNode;
 
-        _value = _current.Bind(FindService);
-        _current = _current.Bind(c => c.Parent);
+        private readonly Type _targetType;
 
-        return _value.IsSome || _current.IsSome;
-    }
+        private Option<IAutowireContext> _current;
 
-    private Option<object> FindService(IAutowireContext context)
-    {
-        Debug.Assert(context != null, "context != null");
+        private Option<object> _value;
 
-        var targetType = _targetType;
-        var targetNode = _targetNode;
+        public ServiceDependencyCollector(
+            IAutowireContext context, Node targetNode, Type targetType)
+        {
+            Ensure.That(context, nameof(context)).IsNotNull();
+            Ensure.That(targetNode, nameof(targetNode)).IsNotNull();
+            Ensure.That(targetType, nameof(targetType)).IsNotNull();
 
-        return context.FindService(targetType).BiBind(
-            Some,
-            () =>
-            {
-                var factoryType = typeof(IServiceFactory<>).MakeGenericType(targetType);
-                var factory = context.FindService(factoryType);
+            _context = context;
+            _targetNode = targetNode;
+            _targetType = targetType;
 
-                return factory.Bind(f =>
+            _current = Some(context);
+            _value = None;
+        }
+
+        public bool MoveNext()
+        {
+            if (_current.IsNone) return false;
+
+            _value = _current.Bind(FindService);
+            _current = _current.Bind(c => c.Parent);
+
+            return _value.IsSome || _current.IsSome;
+        }
+
+        private Option<object> FindService(IAutowireContext context)
+        {
+            Debug.Assert(context != null, "context != null");
+
+            var targetType = _targetType;
+            var targetNode = _targetNode;
+
+            return context.FindService(targetType).BiBind(
+                Some,
+                () =>
                 {
-                    var method = typeof(IServiceFactory<>)
-                        .MakeGenericType(targetType)
-                        .GetMethod("Create", new[] {typeof(IAutowireContext), typeof(object)});
+                    var factoryType = typeof(IServiceFactory<>).MakeGenericType(targetType);
+                    var factory = context.FindService(factoryType);
 
-                    Debug.Assert(method != null, "method != null");
+                    return factory.Bind(f =>
+                    {
+                        var method = typeof(IServiceFactory<>)
+                            .MakeGenericType(targetType)
+                            .GetMethod("Create", new[] {typeof(IAutowireContext), typeof(object)});
 
-                    var service = method.Invoke(f, new object[] {context, targetNode});
+                        Debug.Assert(method != null, "method != null");
 
-                    return Optional(service);
-                });
-            }
-        );
-    }
+                        var service = method.Invoke(f, new object[] {context, targetNode});
 
-    public void Reset()
-    {
-        _current = Some(_context);
-        _value = None;
+                        return Optional(service);
+                    });
+                }
+            );
+        }
+
+        public void Reset()
+        {
+            _current = Some(_context);
+            _value = None;
+        }
     }
 }

@@ -77,19 +77,19 @@ namespace AlleyCat.Event
         protected virtual void PreDestroy()
         {
         }
-    }
 
-    internal struct ManagedSubject<T> : IDisposable
-    {
-        private readonly ISubject<T> _subject;
-
-        public ManagedSubject(ISubject<T> subject)
+        internal struct ManagedSubject<T> : IDisposable
         {
-            Debug.Assert(subject != null, "subject != null");
+            private readonly ISubject<T> _subject;
 
-            _subject = subject;
+            public ManagedSubject(ISubject<T> subject)
+            {
+                Debug.Assert(subject != null, "subject != null");
+
+                _subject = subject;
+            }
+
+            public void Dispose() => _subject.CompleteAndDispose();
         }
-
-        public void Dispose() => _subject.CompleteAndDispose();
     }
 }

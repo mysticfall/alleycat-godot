@@ -86,14 +86,14 @@ namespace AlleyCat.Control
 
             return pressed.Merge(released);
         }
-    }
 
-    internal struct NonZeroValueComparer : IEqualityComparer<float>
-    {
-        private const float Threshold = 0.0000001f;
+        internal struct NonZeroValueComparer : IEqualityComparer<float>
+        {
+            private const float Threshold = 0.0000001f;
 
-        public bool Equals(float x, float y) => Mathf.Abs(x) < Threshold && Mathf.Abs(y) < Threshold;
+            public bool Equals(float x, float y) => Mathf.Abs(x) < Threshold && Mathf.Abs(y) < Threshold;
 
-        public int GetHashCode(float obj) => obj.GetHashCode();
+            public int GetHashCode(float obj) => obj.GetHashCode();
+        }
     }
 }

@@ -111,28 +111,28 @@ namespace AlleyCat.Item
 
             _blendShapeMappings = Set<BlendShapeMapping>();
         }
-    }
-
-    internal struct BlendShapeMapping : IComparable<BlendShapeMapping>
-    {
-        public string Key { get; }
-
-        public MeshInstance Source { get; }
-
-        public MeshInstance Target { get; }
-
-        public BlendShapeMapping(string key, MeshInstance source, MeshInstance target)
+        
+        internal struct BlendShapeMapping : IComparable<BlendShapeMapping>
         {
-            Ensure.That(key, nameof(key)).IsNotNull();
-            Ensure.That(source, nameof(source)).IsNotNull();
-            Ensure.That(target, nameof(target)).IsNotNull();
+            public string Key { get; }
 
-            Key = key;
-            Source = source;
-            Target = target;
+            public MeshInstance Source { get; }
+
+            public MeshInstance Target { get; }
+
+            public BlendShapeMapping(string key, MeshInstance source, MeshInstance target)
+            {
+                Ensure.That(key, nameof(key)).IsNotNull();
+                Ensure.That(source, nameof(source)).IsNotNull();
+                Ensure.That(target, nameof(target)).IsNotNull();
+
+                Key = key;
+                Source = source;
+                Target = target;
+            }
+
+            public int CompareTo(BlendShapeMapping other) =>
+                string.Compare(Key, other.Key, StringComparison.Ordinal);
         }
-
-        public int CompareTo(BlendShapeMapping other) =>
-            string.Compare(Key, other.Key, StringComparison.Ordinal);
     }
 }
