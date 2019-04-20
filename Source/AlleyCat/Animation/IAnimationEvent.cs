@@ -1,4 +1,6 @@
-﻿using EnsureThat;
+﻿using System;
+using System.Collections.Generic;
+using EnsureThat;
 using LanguageExt;
 
 namespace AlleyCat.Animation
@@ -7,6 +9,8 @@ namespace AlleyCat.Animation
     {
         string Name { get; }
 
+        IEnumerable<string> Path { get; }
+
         IAnimationManager Source { get; }
     }
 
@@ -14,9 +18,13 @@ namespace AlleyCat.Animation
     {
         public string Name { get; }
 
+        public IEnumerable<string> Path => _path.Value;
+
         public Option<object> Argument { get; }
 
         public IAnimationManager Source { get; }
+
+        private readonly Lazy<IEnumerable<string>> _path;
 
         public TriggerEvent(string name, Option<object> argument, IAnimationManager source)
         {
@@ -26,6 +34,8 @@ namespace AlleyCat.Animation
             Name = name;
             Argument = argument;
             Source = source;
+
+            _path = new Lazy<IEnumerable<string>>(() => name.Split('.'));
         }
     }
 
@@ -33,9 +43,13 @@ namespace AlleyCat.Animation
     {
         public string Name { get; }
 
+        public IEnumerable<string> Path => _path.Value;
+
         public float Value { get; }
 
         public IAnimationManager Source { get; }
+
+        private readonly Lazy<IEnumerable<string>> _path;
 
         public ValueChangeEvent(string name, float value, IAnimationManager source)
         {
@@ -45,6 +59,8 @@ namespace AlleyCat.Animation
             Name = name;
             Value = value;
             Source = source;
+
+            _path = new Lazy<IEnumerable<string>>(() => name.Split('.'));
         }
     }
 }
