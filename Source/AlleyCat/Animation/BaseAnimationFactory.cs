@@ -43,7 +43,7 @@ namespace AlleyCat.Animation
         {
             if (property.StartsWith(EventPrefix) && value is float v)
             {
-                var name = property.Substring(EventPrefix.Length() + 1);
+                var name = property.Substring(EventPrefix.Length());
 
                 Service.Iter(s => s.FireEvent(new ValueChangeEvent(name, v, s)));
 
