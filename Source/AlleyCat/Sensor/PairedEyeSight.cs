@@ -163,27 +163,17 @@ namespace AlleyCat.Sensor
         {
             LookTarget.Iter(target =>
             {
-                Range<float> MergeRange(Range<float> range1, Range<float> range2) =>
-                    new Range<float>(range1.Min + range2.Min, range1.Max + range2.Max);
-
-                float Distance(Range<float> range, float value)
-                {
-                    var center = (range.Min + range.Max) / 2f;
-
-                    return Min(Abs(value - center), 1f);
-                }
-
                 var v = CalculateRotation(
                     target,
                     Neck.origin,
                     Chest.basis * ChestOrientation,
                     Vector2.Zero);
 
-                var yawRange = new[] {NeckYawRange, HeadYawRange, EyesYawRange}.Aggregate(MergeRange);
-                var pitchRange = new[] {NeckPitchRange, HeadPitchRange, EyesPitchRange}.Aggregate(MergeRange);
+                var yawRange = new[] {NeckYawRange, HeadYawRange, EyesYawRange}.Aggregate((r1, r2) => r1 + r2);
+                var pitchRange = new[] {NeckPitchRange, HeadPitchRange, EyesPitchRange}.Aggregate((r1, r2) => r1 + r2);
 
-                var yawDistance = Distance(yawRange, v.x);
-                var pitchDistance = Distance(pitchRange, v.y);
+                var yawDistance = Min(yawRange.Distance(v.x), 1f);
+                var pitchDistance = Min(pitchRange.Distance(v.y), 1f);
 
                 ApplyRotation(
                     target,

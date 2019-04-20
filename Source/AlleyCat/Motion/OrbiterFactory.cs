@@ -2,6 +2,7 @@ using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
 using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
@@ -29,7 +30,9 @@ namespace AlleyCat.Motion
             ILoggerFactory loggerFactory)
         {
             return CreateService(
-                yawRange, pitchRange, new Range<float>(MinDistance, MaxDistance), loggerFactory);
+                yawRange,
+                pitchRange,
+                new Range<float>(MinDistance, MaxDistance, TFloat.Inst), loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(

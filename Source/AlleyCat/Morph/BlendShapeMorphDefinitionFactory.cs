@@ -3,6 +3,7 @@ using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
@@ -19,7 +20,7 @@ namespace AlleyCat.Morph
         protected override Validation<string, BlendShapeMorphDefinition> CreateService(
             string key, string displayName, bool hidden, ILoggerFactory loggerFactory)
         {
-            var range = new Range<float>(MinValue, MaxValue);
+            var range = new Range<float>(MinValue, MaxValue, TFloat.Inst);
 
             return
                 from blendShapes in Optional(BlendShapes ?? Enumerable.Empty<string>())

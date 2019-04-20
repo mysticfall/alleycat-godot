@@ -2,6 +2,7 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using Godot;
 using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using static Godot.Mathf;
 
@@ -26,8 +27,8 @@ namespace AlleyCat.Motion
 
         protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory) =>
             CreateService(
-                new Range<float>(Deg2Rad(MinYaw), Deg2Rad(MaxYaw)),
-                new Range<float>(Deg2Rad(MinPitch), Deg2Rad(MaxPitch)),
+                new Range<float>(Deg2Rad(MinYaw), Deg2Rad(MaxYaw), TFloat.Inst),
+                new Range<float>(Deg2Rad(MinPitch), Deg2Rad(MaxPitch), TFloat.Inst),
                 loggerFactory);
 
         protected abstract Validation<string, T> CreateService(

@@ -4,6 +4,7 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using Godot;
 using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using static Godot.Mathf;
 
@@ -100,12 +101,12 @@ namespace AlleyCat.Sensor
                     headBone,
                     neckBone,
                     chestBone,
-                    new Range<float>(Deg2Rad(MinEyesYaw), Deg2Rad(MaxEyesYaw)),
-                    new Range<float>(Deg2Rad(MinEyesPitch), Deg2Rad(MaxEyesPitch)),
-                    new Range<float>(Deg2Rad(MinHeadYaw), Deg2Rad(MaxHeadYaw)),
-                    new Range<float>(Deg2Rad(MinHeadPitch), Deg2Rad(MaxHeadPitch)),
-                    new Range<float>(Deg2Rad(MinNeckYaw), Deg2Rad(MaxNeckYaw)),
-                    new Range<float>(Deg2Rad(MinNeckPitch), Deg2Rad(MaxNeckPitch)),
+                    new Range<float>(Deg2Rad(MinEyesYaw), Deg2Rad(MaxEyesYaw), TFloat.Inst),
+                    new Range<float>(Deg2Rad(MinEyesPitch), Deg2Rad(MaxEyesPitch), TFloat.Inst),
+                    new Range<float>(Deg2Rad(MinHeadYaw), Deg2Rad(MaxHeadYaw), TFloat.Inst),
+                    new Range<float>(Deg2Rad(MinHeadPitch), Deg2Rad(MaxHeadPitch), TFloat.Inst),
+                    new Range<float>(Deg2Rad(MinNeckYaw), Deg2Rad(MaxNeckYaw), TFloat.Inst),
+                    new Range<float>(Deg2Rad(MinNeckPitch), Deg2Rad(MaxNeckPitch), TFloat.Inst),
                     this,
                     Active,
                     loggerFactory);

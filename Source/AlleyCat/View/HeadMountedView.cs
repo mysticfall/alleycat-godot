@@ -14,6 +14,7 @@ using AlleyCat.Sensor;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 using Array = Godot.Collections.Array;
@@ -45,7 +46,7 @@ namespace AlleyCat.View
 
         public StabilizeMode Stabilization { get; set; } = StabilizeMode.WhileMoving;
 
-        public Range<float> StabilizationFactor => new Range<float>(_minStabilization, _maxStabilization);
+        public Range<float> StabilizationFactor => new Range<float>(_minStabilization, _maxStabilization, TFloat.Inst);
 
         public float MaxStabilization
         {
@@ -121,7 +122,7 @@ namespace AlleyCat.View
                 var factor = NeckRotationCurve.Map(c => c.Interpolate(ratio)).IfNone(1f);
                 var range = base.PitchRange;
 
-                return new Range<float>(range.Min * factor, range.Max);
+                return new Range<float>(range.Min * factor, range.Max, TFloat.Inst);
             }
         }
 
@@ -302,7 +303,7 @@ namespace AlleyCat.View
                 var origin = Viewpoint + vision.Forward * Offset;
 
                 return new Transform(Basis.Identity, origin).LookingAt(origin + vision.LineOfSight * 10f, up);
-            } 
+            }
 
             TimeSource.OnProcess(ProcessMode)
                 .Where(_ => Active && Valid)
