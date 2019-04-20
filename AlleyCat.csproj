@@ -8,10 +8,10 @@
     <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
     <RootNamespace />
     <AssemblyName>AlleyCat</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -429,6 +429,65 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ensure.That">
+      <Version>8.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="FluentCache.Microsoft.Extensions.Caching.Memory">
+      <Version>4.0.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="JetBrains.Annotations">
+      <Version>2019.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="LanguageExt.Core">
+      <Version>3.1.19</Version>
+    </PackageReference>
+    <PackageReference Include="LanguageExt.Rx">
+      <Version>3.1.19</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Ini">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration">
+      <Version>2.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="OptimizedPriorityQueue">
+      <Version>4.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive">
+      <Version>4.1.5</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Core">
+      <Version>4.1.5</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Interfaces">
+      <Version>4.1.5</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Linq">
+      <Version>4.1.5</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
