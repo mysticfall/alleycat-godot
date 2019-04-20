@@ -59,7 +59,7 @@ namespace AlleyCat.Autowire
         protected Option<NodePath> FindNodePath(Node node)
         {
             return NodePathField
-                .Map(f => f.GetValue(node))
+                .Bind(f => Optional(f.GetValue(node)))
                 .OfType<NodePath>()
                 .HeadOrNone()
                 .BiBind(Some,
