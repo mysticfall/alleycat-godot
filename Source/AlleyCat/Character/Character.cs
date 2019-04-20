@@ -66,7 +66,7 @@ namespace AlleyCat.Character
 
         ILocomotion ILocomotive.Locomotion => Locomotion;
 
-        private Option<Marker> _labelMarker;
+        private readonly Option<Marker> _labelMarker;
 
         protected Character(
             string key,

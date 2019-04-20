@@ -72,7 +72,7 @@ namespace AlleyCat.View
 
         private Option<ITransformable> _pivot;
 
-        private Option<IInputBindings> _panInput;
+        private readonly Option<IInputBindings> _panInput;
 
         private readonly Option<IObservable<bool>> _rotating;
 

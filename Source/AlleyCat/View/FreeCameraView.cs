@@ -67,9 +67,9 @@ namespace AlleyCat.View
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private Option<IInputBindings> _rotationInput;
+        private readonly Option<IInputBindings> _rotationInput;
 
-        private Option<IInputBindings> _movementInput;
+        private readonly Option<IInputBindings> _movementInput;
 
         private float _maxDofDistance = 5f;
 

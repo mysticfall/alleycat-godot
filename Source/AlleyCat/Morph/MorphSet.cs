@@ -17,7 +17,7 @@ namespace AlleyCat.Morph
 
         public IObservable<IMorph> OnMorph { get; }
 
-        private Map<string, IEnumerable<IMorph>> _morphsByGroup;
+        private readonly Map<string, IEnumerable<IMorph>> _morphsByGroup;
 
         public MorphSet(IEnumerable<IMorphGroup> groups, IEnumerable<IMorph> morphs)
         {

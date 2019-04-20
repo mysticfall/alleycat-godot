@@ -19,11 +19,11 @@ namespace AlleyCat.Game
 
         public Node UIRoot => _uiPath.Bind(Root.FindComponent<Node>).IfNone(Root);
 
-        private Option<NodePath> _charactersPath;
+        private readonly Option<NodePath> _charactersPath;
 
-        private Option<NodePath> _itemsPath;
+        private readonly Option<NodePath> _itemsPath;
 
-        private Option<NodePath> _uiPath;
+        private readonly Option<NodePath> _uiPath;
 
         public Scene(
             string key,

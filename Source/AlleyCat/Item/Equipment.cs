@@ -65,7 +65,7 @@ namespace AlleyCat.Item
 
         private readonly IEnumerable<EquipmentConfiguration> _configurations;
 
-        private Option<Marker> _labelMarker;
+        private readonly Option<Marker> _labelMarker;
 
         public Equipment(
             string key,

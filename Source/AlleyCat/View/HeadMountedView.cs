@@ -135,9 +135,9 @@ namespace AlleyCat.View
 
         protected virtual IObservable<bool> DeactivateInput { get; }
 
-        private Option<IInputBindings> _rotationInput;
+        private readonly Option<IInputBindings> _rotationInput;
 
-        private Option<IInputBindings> _deactivateInput;
+        private readonly Option<IInputBindings> _deactivateInput;
 
         private float _transitionTime = 2f;
 

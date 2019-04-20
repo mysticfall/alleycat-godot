@@ -23,7 +23,7 @@ namespace AlleyCat.Autowire
 
         private readonly IDependencyResolver _resolver;
 
-        private Option<Action<IAutowireContext>> _deferredProcessor;
+        private readonly Option<Action<IAutowireContext>> _deferredProcessor;
 
         public DependencyNode(AutowireContext context)
         {
