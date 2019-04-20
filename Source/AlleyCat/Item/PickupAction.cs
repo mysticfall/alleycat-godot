@@ -58,61 +58,73 @@ namespace AlleyCat.Item
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            holder.FindEquipConfiguration(equipment, Tags.ToArray()).Iter(ExecuteWithConfiguration);
+            holder.FindEquipConfiguration(equipment, Tags.ToArray()).Iter(WithConfiguration);
 
-            void ExecuteWithConfiguration(EquipmentConfiguration configuration)
+            void WithConfiguration(EquipmentConfiguration configuration)
             {
-                var animationArguments = Optional(holder)
-                    .OfType<IAnimatable>()
-                    .Map(a => a.AnimationManager)
-                    .SelectMany(manager => Animation, (manager, animation) => (animation, manager))
-                    .HeadOrNone();
+                var args =
+                    from manager in Optional(holder).OfType<IAnimatable>().Map(a => a.AnimationManager)
+                    from animation in configuration.EquipAnimation.Concat(Animation).HeadOrNone()
+                    select (manager, animation);
 
-                animationArguments.Match(
-                    t => ExecuteWithAnimation(configuration, t.animation, t.manager),
-                    () => holder.Equip(equipment, configuration)
+                args.HeadOrNone().Match(
+                    v => PlayAnimation(holder, equipment, configuration, v.animation, v.manager, context),
+                    () => Equip(holder, equipment, configuration, context)
                 );
             }
+        }
 
-            void ExecuteWithAnimation(
-                EquipmentConfiguration configuration,
-                Godot.Animation animation,
-                IAnimationManager manager)
+        protected virtual void PlayAnimation(
+            IEquipmentHolder holder,
+            Equipment equipment,
+            EquipmentConfiguration configuration,
+            Godot.Animation animation,
+            IAnimationManager animationManager,
+            InteractionContext context)
+        {
+            if (holder is IRigged rig)
             {
-                if (holder is IRigged rig)
-                {
-                    var chain = IKChain.Bind(c => rig.IKChains.Find(c));
-                    var marker = equipment.Markers.Find(configuration.Key);
+                var chain = IKChain.Bind(c => rig.IKChains.Find(c));
+                var marker = equipment.Markers.Find(configuration.Key);
 
-                    var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GetGlobalTransform);
+                var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GetGlobalTransform);
 
-                    chain.Iter(c => c.Target = target);
-                }
-
-                manager.OnAnimationEvent
-                    .OfType<TriggerEvent>()
-                    .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
-                    .Take(1)
-                    .TakeUntil(Disposed.Where(identity))
-                    .Subscribe(_ => holder.Equip(equipment, configuration), this);
-
-                if (manager is IAnimationStateManager stateManager &&
-                    AnimatorPath.IsSome && StatesPath.IsSome)
-                {
-                    (
-                        from animator in AnimatorPath.Bind(stateManager.FindAnimator)
-                        from states in StatesPath.Bind(stateManager.FindStates)
-                        select (animator, states)).Iter(t =>
-                    {
-                        t.animator.Animation = animation;
-                        ActionState.Iter(t.states.Playback.Travel);
-                    });
-                }
-                else
-                {
-                    manager.Play(animation);
-                }
+                chain.Iter(c => c.Target = target);
             }
+
+            animationManager.OnAnimationEvent
+                .OfType<TriggerEvent>()
+                .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
+                .Take(1)
+                .TakeUntil(Disposed.Where(identity))
+                .Subscribe(_ => Equip(holder, equipment, configuration, context), this);
+
+            if (animationManager is IAnimationStateManager stateManager &&
+                AnimatorPath.IsSome && StatesPath.IsSome)
+            {
+                (
+                    from animator in AnimatorPath.Bind(stateManager.FindAnimator)
+                    from states in StatesPath.Bind(stateManager.FindStates)
+                    from state in ActionState 
+                    select (animator, states, state)).Iter(t =>
+                {
+                    t.animator.Animation = animation;
+                    t.states.Playback.Travel(t.state);
+                });
+            }
+            else
+            {
+                animationManager.Play(animation);
+            }
+        }
+
+        protected virtual void Equip(
+            IEquipmentHolder holder,
+            Equipment equipment,
+            EquipmentConfiguration configuration,
+            InteractionContext context)
+        {
+            holder.Equip(equipment, configuration);
         }
 
         protected override bool AllowedFor(

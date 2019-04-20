@@ -1,4 +1,3 @@
-using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
 using JetBrains.Annotations;
@@ -29,6 +28,8 @@ namespace AlleyCat.Item
                 loggerFactory)
             {
                 Mesh = Mesh,
+                EquipAnimation = EquipAnimation,
+                UnequipAnimation = UnequipAnimation,
                 Animation = Animation,
                 AnimationBlend = AnimationBlend,
                 AnimationTransition = AnimationTransition

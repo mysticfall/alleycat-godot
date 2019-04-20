@@ -16,6 +16,12 @@ namespace AlleyCat.Item
         public Mesh Mesh { get; set; }
 
         [Export]
+        public Godot.Animation EquipAnimation { get; set; }
+
+        [Export]
+        public Godot.Animation UnequipAnimation { get; set; }
+
+        [Export]
         public Godot.Animation Animation { get; set; }
 
         [Export]

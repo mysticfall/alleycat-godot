@@ -24,7 +24,11 @@ namespace AlleyCat.Item
 
         public Option<Mesh> Mesh { get; set; }
 
+        public Option<Godot.Animation> EquipAnimation { get; set; }
+
         public Option<Godot.Animation> Animation { get; set; }
+
+        public Option<Godot.Animation> UnequipAnimation { get; set; }
 
         public Option<string> AnimationBlend { get; set; }
 

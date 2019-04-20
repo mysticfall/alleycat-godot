@@ -20,6 +20,8 @@ namespace AlleyCat.Item
                 loggerFactory)
             {
                 Mesh = Mesh,
+                EquipAnimation = EquipAnimation,
+                UnequipAnimation = UnequipAnimation,
                 Animation = Animation,
                 AnimationBlend = AnimationBlend,
                 AnimationTransition = AnimationTransition
