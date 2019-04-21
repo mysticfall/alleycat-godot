@@ -63,7 +63,7 @@ namespace AlleyCat.Item
 
             Items = Items.Add(item.Slot, item);
 
-            this.LogDebug("Item '{}' was added to the container.", item);
+            this.LogDebug("Item '{}' is added to the container.", item);
 
             _onAdd.OnNext(item);
         }
@@ -78,14 +78,14 @@ namespace AlleyCat.Item
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(item),
-                    $"The item is not added to this container: '{item.Key}'.");
+                    $"Item '{item.Key}' is not added in this container's slot: '{item.Slot}'.");
             }
 
             DoRemove(item);
 
             Items = Items.Remove(item.Slot);
 
-            this.LogDebug("Item '{}' was removed from the container.", item);
+            this.LogDebug("Item '{}' is removed from the container.", item);
 
             _onRemove.OnNext(item);
         }
