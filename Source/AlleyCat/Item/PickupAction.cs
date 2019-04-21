@@ -133,7 +133,9 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            return !equipment.Equipped && holder.DistanceTo(equipment) <= PickupDistance;
+            return !equipment.Equipped && 
+                   holder.DistanceTo(equipment) <= PickupDistance &&
+                   holder.FindEquipConfiguration(equipment, Tags).Any();
         }
     }
 
