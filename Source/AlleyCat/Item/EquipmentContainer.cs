@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using AlleyCat.Animation;
 using AlleyCat.Common;
+using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
@@ -20,6 +23,10 @@ namespace AlleyCat.Item
                 .Map(s => s.GetParent(Holder))
                 .Distinct()
                 .Bind(p => p.GetChildComponents<Equipment>());
+
+        private const string AnimationEventPrefix = "equipments";
+
+        private const string AnimationEventKeyMorph = "morph";
 
         public EquipmentContainer(
             IEnumerable<EquipmentSlot> slots,
@@ -42,6 +49,20 @@ namespace AlleyCat.Item
                 Slots.Values.Iter(s => this.LogDebug("Found slot: '{}'.", s));
 
                 this.LogDebug("Equipping initial items.");
+            }
+
+            if (Holder is IAnimatable animatable)
+            {
+                animatable.AnimationManager.OnAnimationEvent
+                    .Where(e => e.Path.HeadOrNone().Contains(AnimationEventPrefix))
+                    .Select(e => e.Path
+                        .Skip(1)
+                        .HeadOrNone()
+                        .Bind(this.FindItemInSlot)
+                        .Map(v => (@event: e, equipment: v)).ToObservable())
+                    .Switch()
+                    .TakeUntil(Disposed.Where(identity))
+                    .Subscribe(v => AnimateEquipment(v.equipment, v.@event), this);
             }
 
             Items.Values.Iter(v => v.Equip(Holder));
@@ -84,6 +105,29 @@ namespace AlleyCat.Item
 
         public override bool AllowedFor(ISlotConfiguration context) =>
             (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
+
+        protected virtual void AnimateEquipment(Equipment equipment, IAnimationEvent @event)
+        {
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
+            Ensure.That(@event, nameof(@event)).IsNotNull();
+
+            var path = @event.Path.ToSeq().Skip(2);
+
+            if (!path.Any()) return;
+
+            path.Deconstruct(out var command, out var args);
+
+            switch (@event)
+            {
+                case ValueChangeEvent v when command == AnimationEventKeyMorph:
+                    var key = args.HeadOrNone();
+                    var morph = key.Bind(equipment.Morphs.Morphs.Find);
+
+                    morph.Iter(m => m.Value = v.Value);
+
+                    break;
+            }
+        }
 
         protected override void PreDestroy()
         {

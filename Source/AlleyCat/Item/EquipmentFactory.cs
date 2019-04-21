@@ -5,6 +5,7 @@ using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Game.Generic;
+using AlleyCat.Morph;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -45,6 +46,9 @@ namespace AlleyCat.Item
         [Service(local: true)]
         public IEnumerable<Marker> Markers { get; set; } = Seq<Marker>();
 
+        [Node]
+        public Option<IMorphGroup> Morphs { get; set; }
+
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<Equipment>();
 
         public Validation<string, Equipment> Service { get; private set; } =
@@ -83,6 +87,7 @@ namespace AlleyCat.Item
                     mesh,
                     itemMesh,
                     Markers,
+                    Morphs,
                     loggerFactory);
         }
 

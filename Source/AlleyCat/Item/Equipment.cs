@@ -5,6 +5,7 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
+using AlleyCat.Morph;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -13,7 +14,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public class Equipment : GameObject, ISlotItem<RigidBody>, IMarkable, IEntity
+    public class Equipment : GameObject, ISlotItem<RigidBody>, IEntity, IMarkable, IMorphable
     {
         public string Key { get; }
 
@@ -32,6 +33,8 @@ namespace AlleyCat.Item
         public Option<EquipmentConfiguration> ActiveConfiguration => _configurations.Find(c => c.Active);
 
         public Map<string, EquipmentConfiguration> Configurations { get; }
+
+        public IMorphSet Morphs { get; }
 
         public RigidBody Node { get; }
 
@@ -78,6 +81,7 @@ namespace AlleyCat.Item
             MeshInstance mesh,
             Mesh itemMesh,
             IEnumerable<Marker> markers,
+            IEnumerable<IMorphGroup> morphGroups,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
@@ -87,6 +91,7 @@ namespace AlleyCat.Item
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
             Ensure.That(itemMesh, nameof(itemMesh)).IsNotNull();
             Ensure.That(markers, nameof(markers)).IsNotNull();
+            Ensure.That(morphGroups, nameof(morphGroups)).IsNotNull();
 
             Key = key;
             DisplayName = displayName;
@@ -111,6 +116,18 @@ namespace AlleyCat.Item
                 .Subscribe(c => c.Deactivate(), this);
 
             _labelMarker = this.FindLabelMarker();
+
+            var groups = morphGroups.Freeze();
+            var definitions = groups.Bind(g => g.Definitions);
+
+            var morphs = definitions.Map(d => d.CreateMorph(this)).Freeze();
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                morphs.Iter(m => this.LogDebug("Found morph '{}'.", m));
+            }
+
+            Morphs = new MorphSet(groups, morphs);
         }
 
         protected override void PostConstruct()
