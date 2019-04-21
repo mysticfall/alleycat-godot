@@ -16,7 +16,7 @@ namespace AlleyCat.Item
     public static class EquipmentContainerExtensions
     {
         public static Option<EquipmentConfiguration> FindConfiguration(
-            this IEquipmentContainer container, Equipment item, params string[] tags)
+            this IEquipmentContainer container, Equipment item, Set<string> tags)
         {
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(item, nameof(item)).IsNotNull();
@@ -27,7 +27,7 @@ namespace AlleyCat.Item
         }
 
         public static Option<Equipment> Equip(
-            this IEquipmentContainer container, Equipment item, params string[] tags)
+            this IEquipmentContainer container, Equipment item, Set<string> tags)
         {
             return FindConfiguration(container, item, tags).Map(c => Equip(container, item, c));
         }

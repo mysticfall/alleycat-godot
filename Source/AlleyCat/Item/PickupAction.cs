@@ -58,7 +58,7 @@ namespace AlleyCat.Item
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            holder.FindEquipConfiguration(equipment, Tags.ToArray()).Iter(WithConfiguration);
+            holder.FindEquipConfiguration(equipment, Tags).Iter(WithConfiguration);
 
             void WithConfiguration(EquipmentConfiguration configuration)
             {

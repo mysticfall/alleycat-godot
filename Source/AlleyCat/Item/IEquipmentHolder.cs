@@ -25,7 +25,7 @@ namespace AlleyCat.Item
         }
 
         public static Option<EquipmentConfiguration> FindEquipConfiguration(
-            this IEquipmentHolder holder, Equipment item, params string[] tags)
+            this IEquipmentHolder holder, Equipment item, Set<string> tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
@@ -33,7 +33,7 @@ namespace AlleyCat.Item
         }
 
         public static Option<Equipment> Equip(
-            this IEquipmentHolder holder, Equipment item, params string[] tags)
+            this IEquipmentHolder holder, Equipment item, Set<string> tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 

@@ -22,7 +22,7 @@ namespace AlleyCat.Common
         }
 
         public static IEnumerable<T> TaggedAll<T>(
-            this IEnumerable<T> items, params string[] tags) where T : ITaggable
+            this IEnumerable<T> items, Set<string> tags) where T : ITaggable
         {
             Ensure.That(items, nameof(items)).IsNotNull();
 
@@ -30,7 +30,7 @@ namespace AlleyCat.Common
         }
 
         public static IEnumerable<T> TaggedAny<T>(
-            this IEnumerable<T> items, params string[] tags) where T : ITaggable
+            this IEnumerable<T> items, Set<string> tags) where T : ITaggable
         {
             Ensure.That(items, nameof(items)).IsNotNull();
 
@@ -38,7 +38,7 @@ namespace AlleyCat.Common
         }
 
         public static IEnumerable<T> TaggedMost<T>(
-            this IEnumerable<T> items, params string[] tags) where T : ITaggable
+            this IEnumerable<T> items, Set<string> tags) where T : ITaggable
         {
             Ensure.That(items, nameof(items)).IsNotNull();
 
