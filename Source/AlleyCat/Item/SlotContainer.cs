@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
@@ -45,7 +44,7 @@ namespace AlleyCat.Item
         {
             base.PostConstruct();
 
-            Items = InitialItems.Filter(v => Slots.Keys.Contains(v.Slot)).ToMap();
+            Items = toMap(InitialItems.Filter(v => Slots.Keys.Contains(v.Slot)).Map(i=>(i.Slot, i)));
         }
 
         public virtual void Add(TItem item)
