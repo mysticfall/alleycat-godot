@@ -1,7 +1,10 @@
 using AlleyCat.Action;
 using AlleyCat.Common;
+using static AlleyCat.Item.CommonEquipmentTags;
 using Godot;
+using Godot.Collections;
 using LanguageExt;
+using static LanguageExt.Prelude;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
@@ -20,6 +23,9 @@ namespace AlleyCat.Item
         [Export]
         public string ActionState { get; set; } = "Action";
 
+        [Export]
+        public Array<string> Tags { get; set; } = new Array<string>(new[] {Carry});
+
         protected override Validation<string, DropAction> CreateService(
             string key, string displayName, ILoggerFactory loggerFactory)
         {
@@ -29,6 +35,7 @@ namespace AlleyCat.Item
                 AnimatorPath.TrimToOption(),
                 StatesPath.TrimToOption(),
                 ActionState.TrimToOption(),
+                toSet(Optional(Tags).Flatten()),
                 Active,
                 loggerFactory)
             {

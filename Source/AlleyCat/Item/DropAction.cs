@@ -11,13 +11,14 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
-using static AlleyCat.Item.CommonEquipmentTags;
 
 namespace AlleyCat.Item
 {
     public class DropAction : EquipmentAction
     {
         public Option<Godot.Animation> Animation { get; set; }
+
+        public Set<string> Tags { get; }
 
         protected Option<string> AnimatorPath { get; }
 
@@ -31,12 +32,14 @@ namespace AlleyCat.Item
             Option<string> animatorPath,
             Option<string> statesPath,
             Option<string> actionState,
+            Set<string> tags,
             bool active,
             ILoggerFactory loggerFactory) : base(key, displayName, active, loggerFactory)
         {
             AnimatorPath = animatorPath;
             StatesPath = statesPath;
             ActionState = actionState;
+            Tags = tags;
         }
 
         protected override void DoExecute(
@@ -108,7 +111,8 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            return holder.HasEquipment(equipment.Slot) && equipment.Configuration.HasTag(Carry);
+            return holder.HasEquipment(equipment.Slot) && 
+                   (Tags.IsEmpty || Tags.ForAll(equipment.Configuration.HasTag));
         }
     }
 
