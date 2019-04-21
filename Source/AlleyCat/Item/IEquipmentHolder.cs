@@ -1,3 +1,4 @@
+using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
 using EnsureThat;
@@ -14,14 +15,12 @@ namespace AlleyCat.Item
 
     public static class EquipmentHolderExtensions
     {
-        public static bool HasEquipment(this IEquipmentHolder holder, string slot) =>
-            FindEquipment(holder, slot).IsSome;
-
-        public static Option<Equipment> FindEquipment(this IEquipmentHolder holder, string slot)
+        public static bool HasEquipment(this IEquipmentHolder holder, Equipment equipment)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
+            Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            return holder.Equipments.Items.Find(slot);
+            return holder.Equipments.Items.Values.Contains(equipment);
         }
 
         public static Option<EquipmentConfiguration> FindEquipConfiguration(

@@ -111,8 +111,7 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            return holder.HasEquipment(equipment.Slot) && 
-                   (Tags.IsEmpty || Tags.ForAll(equipment.Configuration.HasTag));
+            return holder.HasEquipment(equipment) && (Tags.IsEmpty || Tags.ForAll(equipment.Configuration.HasTag));
         }
     }
 

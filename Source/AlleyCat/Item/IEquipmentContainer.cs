@@ -78,7 +78,7 @@ namespace AlleyCat.Item
         {
             Ensure.Any.IsNotNull(container, nameof(container));
 
-            return container.FindItem(slot).Map(i => Unequip(container, i, dropTo));
+            return container.FindItemInSlot(slot).Map(i => Unequip(container, i, dropTo));
         }
     }
 }

@@ -49,7 +49,7 @@ namespace AlleyCat.Item
                 return container.Items.Filter(t => t.Item2 == item).Map(t => t.Item1).HeadOrNone();
             }
 
-            public static Option<TItem> FindItem<TSlot, TItem>(
+            public static Option<TItem> FindItemInSlot<TSlot, TItem>(
                 this ISlotContainer<TSlot, TItem> container,
                 string slot)
                 where TSlot : ISlot
@@ -92,7 +92,7 @@ namespace AlleyCat.Item
                 var slotsToFree = allSlots.Intersect(occupiedSlots);
 
                 var itemsToFree = toSet(
-                    slotsToFree.Bind(s => FindItem(container, s)).Distinct());
+                    slotsToFree.Bind(s => FindItemInSlot(container, s)).Distinct());
 
                 itemsToFree.Iter(container.Remove);
 

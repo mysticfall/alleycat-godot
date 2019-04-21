@@ -107,7 +107,7 @@ namespace AlleyCat.UI.Inventory
                     .Select(v => v.Bind(i => Optional(i.GetMeta(SlotKey) as string)))
                     .Merge(items.Select(_ => Option<string>.None))
                     .CombineLatest(container, (slot, slots) => (slot, slots))
-                    .Select(t => t.slot.Bind(s => t.slots.FindItem(s)).HeadOrNone())
+                    .Select(t => t.slot.Bind(s => t.slots.FindItemInSlot(s)).HeadOrNone())
                     .Do(current => Item = current));
 
             OnItemChange
