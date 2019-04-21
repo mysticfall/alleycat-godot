@@ -15,14 +15,15 @@ namespace AlleyCat.Item
         protected override Validation<string, RiggedConfiguration> CreateService(
             string key, 
             string slot, 
-            Set<string> additionalSlots, 
+            Set<string> additionalSlots,
+            Set<string> tags, 
             ILoggerFactory loggerFactory)
         {
             return new RiggedConfiguration(
                 key,
                 slot,
                 additionalSlots,
-                Tags,
+                tags,
                 toSet(Optional(MeshesToSync).Flatten()),
                 Active,
                 loggerFactory)

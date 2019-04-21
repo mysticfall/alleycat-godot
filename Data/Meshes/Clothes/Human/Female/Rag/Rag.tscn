@@ -41,28 +41,24 @@ script = ExtResource( 3 )
 
 [node name="Configurations" type="Node" parent="."]
 
-[node name="Wear" type="Node" parent="Configurations" groups=[
-"TagWear",
-]]
+[node name="Wear" type="Node" parent="Configurations"]
 script = ExtResource( 4 )
 Key = "Wear"
 Slot = "Shirt"
 AdditionalSlots = [ "Pants" ]
 Mesh = ExtResource( 5 )
 AnimationTransition = 1.0
+Tags = [ "Wear" ]
 MeshesToSync = [ "Body" ]
 
-[node name="Carry" type="Node" parent="Configurations" groups=[
-"TagCarry",
-"TagOneHand",
-"TagHand",
-]]
+[node name="Carry" type="Node" parent="Configurations"]
 script = ExtResource( 6 )
 Key = "Carry"
 Slot = "RightHand"
 Animation = ExtResource( 7 )
 AnimationBlend = "Hands"
 AnimationTransition = 1.0
+Tags = [ "Carry", "Hand", "OneHand" ]
 
 [node name="Markers" type="Spatial" parent="."]
 

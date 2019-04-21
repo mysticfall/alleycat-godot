@@ -1,12 +1,12 @@
-using System.Linq;
-using AlleyCat.Common;
 using Godot;
+using Godot.Collections;
 using LanguageExt;
 using static LanguageExt.Prelude;
+using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
-    public abstract class EquipmentConfigurationFactory<T> : SlotConfigurationFactory<T>, ITaggable
+    public abstract class EquipmentConfigurationFactory<T> : SlotConfigurationFactory<T>
         where T : EquipmentConfiguration
     {
         [Export]
@@ -30,6 +30,25 @@ namespace AlleyCat.Item
         [Export(PropertyHint.ExpRange, "0,10")]
         public float AnimationTransition { get; set; }
 
-        public Set<string> Tags => toSet(GetGroups().OfType<string>());
+        [Export]
+        public Array<string> Tags { get; set; }
+
+        protected override Validation<string, T> CreateService(
+            string key, 
+            string slot, 
+            Set<string> additionalSlots, 
+            ILoggerFactory loggerFactory)
+        {
+            var tags = toSet(Optional(Tags).Flatten());
+
+            return CreateService(key, slot, additionalSlots, tags, loggerFactory);
+        }
+
+        protected abstract Validation<string, T> CreateService(
+            string key, 
+            string slot, 
+            Set<string> additionalSlots, 
+            Set<string> tags, 
+            ILoggerFactory loggerFactory);
     }
 }

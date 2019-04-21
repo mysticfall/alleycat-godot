@@ -9,13 +9,14 @@ namespace AlleyCat.Item
             string key, 
             string slot, 
             Set<string> additionalSlots, 
+            Set<string> tags, 
             ILoggerFactory loggerFactory)
         {
             return new AttachedConfiguration(
                 key,
                 slot,
                 additionalSlots,
-                Tags,
+                tags,
                 Active, 
                 loggerFactory)
             {

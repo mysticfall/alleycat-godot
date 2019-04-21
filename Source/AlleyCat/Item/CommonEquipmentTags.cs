@@ -2,16 +2,16 @@ namespace AlleyCat.Item
 {
     public static class CommonEquipmentTags
     {
-        public const string Carry = "TagCarry";
+        public const string Carry = "Carry";
 
-        public const string Hand = "TagHand";
+        public const string Hand = "Hand";
 
-        public const string OneHand = "TagOneHand";
+        public const string OneHand = "OneHand";
 
-        public const string TwoHands = "TagTwoHands";
+        public const string TwoHands = "TwoHands";
 
-        public const string Wear = "TagWear";
+        public const string Wear = "Wear";
 
-        public const string Wield = "TagWield";
+        public const string Wield = "Wield";
     }
 }
