@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using AlleyCat.Game;
 using EnsureThat;
@@ -11,7 +12,11 @@ namespace AlleyCat.Morph
 
         public virtual string DisplayName { get; }
 
-        public IEnumerable<IMorphDefinition> Definitions { get; }
+        public IEnumerator<IMorphDefinition> GetEnumerator() => _definitions.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => _definitions.GetEnumerator();
+
+        private readonly IEnumerable<IMorphDefinition> _definitions;
 
         public MorphGroup(
             string key,
@@ -25,7 +30,8 @@ namespace AlleyCat.Morph
 
             Key = key;
             DisplayName = displayName;
-            Definitions = definitions.Freeze();
+
+            _definitions = definitions.Freeze();
         }
     }
 }

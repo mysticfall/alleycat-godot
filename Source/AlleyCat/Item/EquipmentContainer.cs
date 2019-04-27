@@ -121,7 +121,7 @@ namespace AlleyCat.Item
             {
                 case ValueChangeEvent v when command == AnimationEventKeyMorph:
                     var key = args.HeadOrNone();
-                    var morph = key.Bind(equipment.Morphs.Morphs.Find);
+                    var morph = key.Bind(equipment.Morphs.TryGetValue);
 
                     morph.Iter(m => m.Value = v.Value);
 

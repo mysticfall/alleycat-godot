@@ -118,9 +118,7 @@ namespace AlleyCat.Item
             _labelMarker = this.FindLabelMarker();
 
             var groups = morphGroups.Freeze();
-            var definitions = groups.Bind(g => g.Definitions);
-
-            var morphs = definitions.Map(d => d.CreateMorph(this)).Freeze();
+            var morphs = groups.Flatten().Map(d => d.CreateMorph(this)).Freeze();
 
             if (Logger.IsEnabled(LogLevel.Debug))
             {
