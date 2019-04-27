@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
 [ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Source/AlleyCat/Action/ActionSetFactory.cs" type="Script" id=20]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
@@ -174,6 +175,7 @@ script = ExtResource( 11 )
 Action = "run"
 
 [node name="Actions" type="Node" parent="Control/Player"]
+script = ExtResource( 20 )
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
@@ -187,9 +189,9 @@ Action = "interact"
 
 [node name="Sit" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 13 )
-Key = "Sit"
-DisplayName = "action.Sit"
-Action = "Sit"
+Key = "SitOnGround"
+DisplayName = "action.SitOnGround"
+Action = "SitOnGround"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Sit"]
 pause_mode = 2

@@ -6,7 +6,7 @@ namespace AlleyCat.Action
 {
     public interface IActor
     {
-        Map<string, IAction> Actions { get; }
+        IActionSet Actions { get; }
     }
 
     public static class ActorExtensions

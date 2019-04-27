@@ -28,14 +28,14 @@ namespace AlleyCat.Control
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            context.Actor.Bind(a => a.Actions.Find(Action)).Iter(a => a.Execute(context));
+            context.Actor.Bind(a => a.Actions.TryGetValue(Action)).Iter(a => a.Execute(context));
         }
 
         public override bool AllowedFor(IActionContext context)
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            return context.Actor.Bind(a => a.Actions.Find(Action)).Exists(a => a.AllowedFor(context));
+            return context.Actor.Bind(a => a.Actions.TryGetValue(Action)).Exists(a => a.AllowedFor(context));
         }
     }
 }

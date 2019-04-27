@@ -42,7 +42,7 @@ namespace AlleyCat.Character
 
         public IEquipmentContainer Equipments { get; }
 
-        public Map<string, IAction> Actions { get; }
+        public IActionSet Actions { get; }
 
         public Spatial Spatial { get; }
 
@@ -77,7 +77,7 @@ namespace AlleyCat.Character
             TLocomotion locomotion,
             Skeleton skeleton,
             IAnimationManager animationManager,
-            IEnumerable<IAction> actions,
+            IActionSet actions,
             IEnumerable<Marker> markers,
             Spatial node,
             ILoggerFactory loggerFactory) : base(loggerFactory)
@@ -100,7 +100,7 @@ namespace AlleyCat.Character
             Locomotion = locomotion;
             Skeleton = skeleton;
             AnimationManager = animationManager;
-            Actions = actions.ToMap();
+            Actions = actions;
             Markers = markers.ToMap();
             Spatial = node;
 

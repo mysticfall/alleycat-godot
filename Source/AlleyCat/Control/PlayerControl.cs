@@ -53,7 +53,7 @@ namespace AlleyCat.Control
 
         public IObservable<Option<IPerspectiveView>> OnPerspectiveChange => _perspective.AsObservable();
 
-        public Map<string, IAction> Actions { get; }
+        public IActionSet Actions { get; }
 
         public float MaxFocalDistance
         {
@@ -91,7 +91,7 @@ namespace AlleyCat.Control
             Camera camera,
             Option<IHumanoid> character,
             IEnumerable<IPerspectiveView> perspectives,
-            IEnumerable<IAction> actions,
+            IActionSet actions,
             Option<IInputBindings> movementInput,
             ProcessMode processMode,
             ITimeSource timeSource,
@@ -104,7 +104,7 @@ namespace AlleyCat.Control
 
             Camera = camera;
             Perspectives = perspectives.Freeze();
-            Actions = actions.ToMap();
+            Actions = actions;
             ProcessMode = processMode;
             TimeSource = timeSource;
 

@@ -3,6 +3,7 @@
 "action.Pickup","Take","줍기"
 "action.Interact","Interact","조작"
 "action.Sit","Sit","앉기"
+"action.SitOnGround","Sit on Ground","땅에 앉기"
 "action.Kneel","Kneel","무릎 꿇기"
 "action.ToggleConsole","Toggle Console","콘솔을 보이거나 감춥니다"
 "action.ShowInventory","Show Inventory","소지품을 보입니다"

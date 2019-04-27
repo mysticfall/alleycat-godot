@@ -54,8 +54,8 @@ namespace AlleyCat.Character
         [Service]
         public Option<IRaceRegistry> RaceRegistry { get; set; }
 
-        [Service(local: true)]
-        public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
+        [Service]
+        public IActionSet Actions { get; set; }
 
         [Service(local: true)]
         public IEnumerable<Marker> Markers { get; set; } = Seq<Marker>();

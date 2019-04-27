@@ -30,8 +30,8 @@ namespace AlleyCat.Control
         [Service(local: true)]
         public IEnumerable<IPerspectiveView> Perspectives { get; set; } = Seq<IPerspectiveView>();
 
-        [Service(local: true)]
-        public IEnumerable<IAction> Actions { get; set; } = Seq<IAction>();
+        [Service]
+        public IActionSet Actions { get; set; }
 
         [Node("Movement")]
         public Option<IInputBindings> MovementInput { get; set; }

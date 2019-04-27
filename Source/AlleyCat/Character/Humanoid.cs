@@ -24,7 +24,7 @@ namespace AlleyCat.Character
             ILocomotion locomotion,
             Skeleton skeleton,
             IAnimationManager animationManager,
-            IEnumerable<IAction> actions,
+            IActionSet actions,
             IEnumerable<Marker> markers,
             Spatial node,
             ILoggerFactory loggerFactory) : base(
