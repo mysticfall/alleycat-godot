@@ -18,7 +18,7 @@ namespace AlleyCat.Morph
         [Export]
         public string DisplayName { get; set; }
 
-        [Service]
+        [Service(local: true)]
         public IEnumerable<IMorphDefinition> Definitions { get; set; } = Seq<IMorphDefinition>();
 
         protected override Validation<string, MorphGroup> CreateService(ILoggerFactory loggerFactory)
