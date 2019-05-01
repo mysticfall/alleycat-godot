@@ -29,7 +29,7 @@ namespace AlleyCat.Action
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
-            return new ActionGroup(key, displayName, Groups, Actions, loggerFactory);
+            return new ActionGroup(key, displayName, Actions, Groups, loggerFactory);
         }
     }
 }

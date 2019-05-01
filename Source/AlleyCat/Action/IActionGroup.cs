@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using AlleyCat.Common;
 
 namespace AlleyCat.Action
 {
-    public interface IActionGroup : INamed
+    public interface IActionGroup : INamed, IActionSet
     {
-        IEnumerable<IActionGroup> Groups { get; }
-
-        IEnumerable<IAction> Actions { get; }
     }
 }

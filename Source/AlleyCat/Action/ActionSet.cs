@@ -40,6 +40,8 @@ namespace AlleyCat.Action
 
         public IEnumerable<IAction> Values => _actions.Values;
 
+        public IEnumerable<IAction> Actions { get; }
+
         public IEnumerable<IActionGroup> Groups { get; }
 
         private readonly Map<string, IAction> _actions;
@@ -52,9 +54,10 @@ namespace AlleyCat.Action
             Ensure.That(actions, nameof(actions)).IsNotNull();
             Ensure.That(groups, nameof(groups)).IsNotNull();
 
+            Actions = actions.Freeze();
             Groups = groups.Freeze();
 
-            _actions = actions.Concat(Groups.Bind(g => g.Actions)).ToMap();
+            _actions = Groups.Fold(Actions, (a, g) => a.Concat(g.Values)).ToMap();
         }
     }
 }
