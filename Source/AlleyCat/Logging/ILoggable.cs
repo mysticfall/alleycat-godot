@@ -168,12 +168,36 @@ namespace AlleyCat.Logging
             Ensure.That(observable, nameof(observable)).IsNotNull();
             Ensure.That(onNext, nameof(onNext)).IsNotNull();
 
+            void OnNextLogError(T value)
+            {
+                try
+                {
+                    onNext(value);
+                }
+                catch (Exception e)
+                {
+                    loggable.LogError(e, "Exception occurred on onNext.");
+                }
+            }
+
+            void OnCompletedLogError()
+            {
+                try
+                {
+                    onCompleted();
+                }
+                catch (Exception e)
+                {
+                    loggable.LogError(e, "Exception occurred on onCompleted.");
+                }
+            }
+
             void OnError(Exception e)
             {
                 loggable.LogError(e, "Subscription terminated with an error.");
             }
 
-            return observable.Subscribe(onNext, OnError, onCompleted);
+            return observable.Subscribe(OnNextLogError, OnError, OnCompletedLogError);
         }
     }
 }
