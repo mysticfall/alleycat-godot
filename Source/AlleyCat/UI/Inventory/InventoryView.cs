@@ -87,12 +87,7 @@ namespace AlleyCat.UI.Inventory
             var container = OnCharacterChange.Select(c => c.Select(v => v.Equipments).ToObservable()).Switch();
             var items = container.Select(c => c.OnItemsChange).Switch();
 
-            void RemoveAllNodes()
-            {
-                var root = Tree.GetRoot();
-
-                root.Children().Reverse().ToList().ForEach(root.RemoveChild);
-            }
+            void RemoveAllNodes() => Tree.GetRoot().Children().Iter(c => c.Free());
 
             var onDispose = this.OnDispose().Where(identity);
 

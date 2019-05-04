@@ -1,4 +1,3 @@
-using System.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
@@ -43,12 +42,7 @@ namespace AlleyCat.UI.Character
             }
         }
 
-        protected virtual void ClearMorphs()
-        {
-            var children = TabContainer.GetChildComponents<Node>().Reverse();
-
-            children.Iter(child => TabContainer.RemoveChild(child));
-        }
+        protected virtual void ClearMorphs() => TabContainer.GetChildComponents<Node>().Iter(TabContainer.FreeChild);
 
         public override void _Ready()
         {

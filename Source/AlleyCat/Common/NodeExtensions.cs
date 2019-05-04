@@ -125,5 +125,23 @@ namespace AlleyCat.Common
                     return None;
             }
         }
+
+        public static void RemoveAndFree(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            Optional(node.GetParent()).Iter(p => p.RemoveChild(node));
+
+            node.QueueFree();
+        }
+
+        public static void FreeChild(this Node parent, Node child)
+        {
+            Ensure.That(parent, nameof(parent)).IsNotNull();
+            Ensure.That(child, nameof(child)).IsNotNull();
+
+            parent.RemoveChild(child);
+            child.QueueFree();
+        }
     }
 }
