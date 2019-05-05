@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Data/UI/Blur Effect.tres" type="Material" id=1]
+[ext_resource path="res://Data/Shaders/Blur Effect.tres" type="Material" id=1]
 [ext_resource path="res://Source/AlleyCat/UI/Inventory/InventoryView.cs" type="Script" id=2]
 [ext_resource path="res://Data/UI/Inventory/Action Button.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Data/Themes/Fullscreen UI.tres" type="Theme" id=4]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=11]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.25098 )
