@@ -131,20 +131,11 @@ namespace AlleyCat.Animation
 
                 states.Iter(s => s.State = State);
             }
-            else if (current.Contains(State))
+            else if (current.Contains(State) && !control.Exists(c => c.Animation.Contains(Animation)))
             {
-                if (control.Exists(c => c.Animation.Contains(Animation)))
-                {
-                    this.LogDebug("Getting up");
+                this.LogDebug("Changing sitting posture");
 
-                    subStates.Iter(s => s.State = ExitState);
-                }
-                else
-                {
-                    this.LogDebug("Changing sitting posture");
-
-                    UpdateAnimations(Transition);
-                }
+                UpdateAnimations(Transition);
             }
             else
             {
@@ -202,7 +193,16 @@ namespace AlleyCat.Animation
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            return context.Actor.Bind(GetAnimationStateManager).IsSome;
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            var animator = context.Actor.Bind(GetAnimationStateManager);
+            var control = animator.Bind(m => m.FindAnimator(AnimatorPath));
+
+            var state = animator.Bind(a => a.FindStates(StatesPath)).Map(s => s.State);
+            var subState = animator.Bind(a => a.FindStates(SubStatesPath)).Map(s => s.State);
+
+            return state.Contains(IdleState) ||
+                   subState.Contains(State) && !control.Exists(c => c.Animation.Contains(Animation));
         }
 
         private SitState GetStateEnum(string state)
@@ -273,27 +273,6 @@ namespace AlleyCat.Animation
             (from a in action
                 from s in state
                 where s == Standing || s == GettingUp
-                select a).Iter(a => a.Execute(new ActionContext(actor)));
-        }
-
-        public static void GetUp<T>(this T actor) where T : class, IActor, IAnimatable
-        {
-            Ensure.That(actor, nameof(actor)).IsNotNull();
-
-            var action = actor.Actions.Values.OfType<SitAction>().HeadOrNone();
-
-            if (action.IsNone)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(actor),
-                    "The specified actor does not support sit action.");
-            }
-
-            var state = action.Map(a => a.GetSitState(actor));
-
-            (from a in action
-                from s in state
-                where s == Seated || s == SittingDown
                 select a).Iter(a => a.Execute(new ActionContext(actor)));
         }
     }
