@@ -14,9 +14,9 @@ namespace AlleyCat.UI
 
         public bool Modal { get; }
 
-        public Option<IScene> Scene => _node.GetCurrentScene();
+        public Option<IScene> Scene => Node.GetCurrentScene();
 
-        private readonly Node _node;
+        protected Node Node { get; }
 
         protected UIAction(
             string key,
@@ -30,13 +30,12 @@ namespace AlleyCat.UI
             Ensure.That(node, nameof(node)).IsNotNull();
 
             Modal = modal;
-
-            _node = node;
+            Node = node;
         }
 
         protected override Option<IActionContext> CreateActionContext() => new ActionContext();
 
         public override bool AllowedFor(IActionContext context) =>
-            !Modal || _node.GetTree().GetNodesInGroup(TagModal).Count == 0;
+            !Modal || Node.GetTree().GetNodesInGroup(TagModal).Count == 0;
     }
 }
