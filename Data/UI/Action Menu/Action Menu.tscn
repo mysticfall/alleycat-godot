@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Source/AlleyCat/UI/Menu/ActionMenuProviderFactory.cs" type="Script" id=1]
+[ext_resource path="res://Data/Fonts/Outlined Text.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Source/AlleyCat/UI/Menu/Menu.cs" type="Script" id=3]
+[ext_resource path="res://Data/UI/Action Menu/Action Item.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Data/Themes/Overlay Background.tres" type="StyleBox" id=5]
+[ext_resource path="res://Data/UI/ShortcutLabel.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+
+[node name="Action Menu" type="Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 6
+theme = SubResource( 1 )
+script = ExtResource( 3 )
+ItemScene = ExtResource( 4 )
+_breadcrumb = NodePath("Bar/Breadcrumb")
+_itemsContainer = NodePath("Bar/Panel/Items")
+_upLabel = NodePath("Bar/Help/Up")
+_closeLabel = NodePath("Bar/Help/Close")
+
+[node name="Bar" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_right = -20.0
+margin_bottom = -10.0
+grow_vertical = 0
+
+[node name="Breadcrumb" type="Label" parent="Bar"]
+margin_top = 13.0
+margin_right = 57.0
+margin_bottom = 33.0
+grow_vertical = 2
+text = "Actions"
+valign = 1
+
+[node name="Panel" type="PanelContainer" parent="Bar"]
+margin_left = 375.0
+margin_right = 482.0
+margin_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_styles/panel = ExtResource( 5 )
+
+[node name="Items" type="HBoxContainer" parent="Bar/Panel"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 97.0
+margin_bottom = 36.0
+size_flags_horizontal = 6
+custom_constants/separation = 20
+
+[node name="Action Item" parent="Bar/Panel/Items" instance=ExtResource( 4 )]
+margin_right = 87.0
+
+[node name="Help" type="HBoxContainer" parent="Bar"]
+margin_left = 800.0
+margin_right = 984.0
+margin_bottom = 46.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 9
+size_flags_vertical = 5
+custom_constants/separation = 10
+
+[node name="Up" parent="Bar/Help" instance=ExtResource( 6 )]
+Label = "ui.ActionMenu.up"
+Action = "ui_back"
+
+[node name="Close" parent="Bar/Help" instance=ExtResource( 6 )]
+margin_left = 97.0
+margin_right = 184.0
+Label = "ui.ActionMenu.close"
+Action = "action_menu"
+
+[node name="Providers" type="Node" parent="."]
+
+[node name="Actions" type="Node" parent="Providers"]
+script = ExtResource( 1 )
+Key = "Actions"
+DisplayName = "ui.ActionMenu.Actions"

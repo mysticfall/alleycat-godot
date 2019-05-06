@@ -1,7 +1,7 @@
 [gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Data/UI/Action Menu/Action Menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControlFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=5]
@@ -12,7 +12,7 @@
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTapInputFactory.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=12]
-[ext_resource path="res://Source/AlleyCat/Control/PlayerActionDelegateFactory.cs" type="Script" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=15]
 [ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
@@ -45,7 +45,7 @@ near = 0.001
 
 [node name="Player" parent="Entities/Characters" groups=[
 "Player",
-] instance=ExtResource( 2 )]
+] instance=ExtResource( 13 )]
 Key = "Player"
 DisplayName = "Player"
 
@@ -187,34 +187,12 @@ pause_mode = 2
 script = ExtResource( 9 )
 Action = "interact"
 
-[node name="Sit" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 13 )
-Key = "SitOnGround"
-DisplayName = "action.SitOnGround"
-Action = "SitOnGround"
-
-[node name="Input" type="Node" parent="Control/Player/Actions/Sit"]
-pause_mode = 2
-script = ExtResource( 9 )
-Action = "sit"
-
-[node name="Kneel" type="Node" parent="Control/Player/Actions"]
-script = ExtResource( 13 )
-Key = "Kneel"
-DisplayName = "action.Kneel"
-Action = "Kneel"
-
-[node name="Input" type="Node" parent="Control/Player/Actions/Kneel"]
-pause_mode = 2
-script = ExtResource( 9 )
-Action = "kneel"
-
 [node name="Actions" type="Node" parent="Control"]
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
-Key = "ToggleConsole"
-DisplayName = "action.ToggleConsole"
+Key = "ShowConsole"
+DisplayName = "action.ShowConsole"
 UI = NodePath("/root/Bootstrap/UI/Console")
 
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
@@ -235,17 +213,28 @@ pause_mode = 2
 script = ExtResource( 9 )
 Action = "inventory"
 
-[node name="Show Menu" type="Node" parent="Control/Actions"]
+[node name="Show Main Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 15 )
 Key = "ShowMenu"
 DisplayName = "action.ShowMenu"
 Modal = true
 UI = ExtResource( 17 )
 
-[node name="Input" type="Node" parent="Control/Actions/Show Menu"]
+[node name="Input" type="Node" parent="Control/Actions/Show Main Menu"]
 pause_mode = 2
 script = ExtResource( 9 )
 Action = "ui_cancel"
+
+[node name="Show Action Menu" type="Node" parent="Control/Actions"]
+script = ExtResource( 14 )
+Key = "ShowActionMenu"
+DisplayName = "action.ShowActionMenu"
+UI = NodePath("../../../UI/Action Menu")
+
+[node name="Input" type="Node" parent="Control/Actions/Show Action Menu"]
+pause_mode = 2
+script = ExtResource( 9 )
+Action = "action_menu"
 
 [node name="UI" type="Node" parent="."]
 
@@ -264,4 +253,7 @@ texture = ExtResource( 18 )
 stretch_mode = 4
 
 [node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
+visible = false
+
+[node name="Action Menu" parent="UI" instance=ExtResource( 2 )]
 visible = false

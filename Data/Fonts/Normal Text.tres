@@ -4,10 +4,8 @@
 [ext_resource path="res://Data/Fonts/Inter-UI-Regular.ttf" type="DynamicFontData" id=2]
 
 [resource]
-
 size = 13
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 2 )
 fallback/0 = ExtResource( 1 )
-
