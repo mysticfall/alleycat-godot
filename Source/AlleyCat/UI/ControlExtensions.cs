@@ -24,6 +24,11 @@ namespace AlleyCat.UI
             return control.HasFont(name, type) ? Some(control.GetFont(name, type)) : None;
         }
 
+        public static IObservable<bool> OnVisibilityChange(this Godot.Control control)
+        {
+            return control.FromSignal("visibility_changed").Select(_ => control.Visible);
+        }
+
         public static IObservable<Unit> OnMouseEnter(this Godot.Control control)
         {
             return control.FromSignal("mouse_entered").Select(_ => Unit.Default);
