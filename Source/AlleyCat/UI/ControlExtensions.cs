@@ -31,12 +31,12 @@ namespace AlleyCat.UI
 
         public static IObservable<Unit> OnMouseEnter(this Godot.Control control)
         {
-            return control.FromSignal("mouse_entered").Select(_ => Unit.Default);
+            return control.FromSignal("mouse_entered").AsUnitObservable();
         }
 
         public static IObservable<Unit> OnMouseExit(this Godot.Control control)
         {
-            return control.FromSignal("mouse_exited").Select(_ => Unit.Default);
+            return control.FromSignal("mouse_exited").AsUnitObservable();
         }
     }
 }

@@ -1,8 +1,7 @@
 using System;
-using System.Reactive;
-using System.Reactive.Linq;
 using AlleyCat.Event;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.UI
 {
@@ -10,17 +9,17 @@ namespace AlleyCat.UI
     {
         public static IObservable<Unit> OnPress(this BaseButton button)
         {
-            return button.FromSignal("pressed").Select(_ => Unit.Default);
+            return button.FromSignal("pressed").AsUnitObservable();
         }
 
         public static IObservable<Unit> OnButtonUp(this BaseButton button)
         {
-            return button.FromSignal("button_up").Select(_ => Unit.Default);
+            return button.FromSignal("button_up").AsUnitObservable();
         }
 
         public static IObservable<Unit> OnButtonDown(this BaseButton button)
         {
-            return button.FromSignal("button_down").Select(_ => Unit.Default);
+            return button.FromSignal("button_down").AsUnitObservable();
         }
     }
 }

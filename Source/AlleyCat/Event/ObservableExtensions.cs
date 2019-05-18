@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
 using EnsureThat;
+using LanguageExt;
 
 namespace AlleyCat.Event
 {
@@ -15,6 +16,13 @@ namespace AlleyCat.Event
             return source.Scan(
                 Tuple.Create(default(T), default(T)),
                 (agg, current) => Tuple.Create(agg.Item2, current));
+        }
+
+        public static IObservable<Unit> AsUnitObservable<T>(this IObservable<T> source)
+        {
+            Ensure.That(source, nameof(source)).IsNotNull();
+
+            return source.Select(_ => Unit.Default);
         }
 
         public static void CompleteAndDispose<T>(this ISubject<T> subject)
