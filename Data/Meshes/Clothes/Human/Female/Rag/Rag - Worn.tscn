@@ -27,14 +27,14 @@ surfaces/0 = {
 mode = 3
 sleeping = true
 
-[node name="Mesh" parent="." index="0"]
+[node name="Mesh" parent="." index="1"]
 mesh = ExtResource( 2 )
 skeleton = NodePath("../..")
 blend_shapes/Expressions_abdomExpansion_max = 0.0
 blend_shapes/Expressions_abdomExpansion_min = 0.0
 blend_shapes/Expressions_chestExpansion_max = 0.0
 
-[node name="CollisionShape" parent="." index="1"]
+[node name="CollisionShape" parent="." index="2"]
 disabled = true
 
 [node name="Wear" parent="Configurations" index="0"]

@@ -17,6 +17,8 @@ extents = Vector3( 0.0625683, 0.0179809, 0.0861001 )
 [node name="Collar" type="RigidBody"]
 input_ray_pickable = false
 physics_material_override = SubResource( 1 )
+
+[node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
 Key = "Collar"
 DisplayName = "item.Collar"

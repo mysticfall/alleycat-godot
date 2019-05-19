@@ -14,7 +14,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public class Equipment : GameObject, ISlotItem<RigidBody>, IEntity, IMarkable, IMorphable
+    public class Equipment : DelegateObject<RigidBody>, ISlotItem<RigidBody>, IEntity, IMarkable, IMorphable
     {
         public string Key { get; }
 
@@ -35,8 +35,6 @@ namespace AlleyCat.Item
         public Map<string, EquipmentConfiguration> Configurations { get; }
 
         public IMorphSet Morphs { get; }
-
-        public RigidBody Node { get; }
 
         public override bool Valid => base.Valid && Object.IsInstanceValid(Node);
 
@@ -76,17 +74,16 @@ namespace AlleyCat.Item
             Option<string> description,
             EquipmentType equipmentType,
             IEnumerable<EquipmentConfiguration> configurations,
-            RigidBody node,
             CollisionShape shape,
             MeshInstance mesh,
             Mesh itemMesh,
             IEnumerable<Marker> markers,
             IEnumerable<IMorphGroup> morphGroups,
-            ILoggerFactory loggerFactory) : base(loggerFactory)
+            RigidBody node,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(node, nameof(node)).IsNotNull();
             Ensure.That(shape, nameof(shape)).IsNotNull();
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
             Ensure.That(itemMesh, nameof(itemMesh)).IsNotNull();
@@ -97,7 +94,6 @@ namespace AlleyCat.Item
             DisplayName = displayName;
             Description = description;
             EquipmentType = equipmentType;
-            Node = node;
             Mesh = mesh;
             Shape = shape;
             ItemMesh = itemMesh;

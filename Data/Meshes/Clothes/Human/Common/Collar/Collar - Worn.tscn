@@ -8,11 +8,11 @@ mode = 3
 mass = 0.306122
 sleeping = true
 
-[node name="Mesh" parent="." index="0"]
+[node name="Mesh" parent="." index="1"]
 mesh = ExtResource( 2 )
 skeleton = NodePath("../..")
 
-[node name="CollisionShape" parent="." index="1"]
+[node name="CollisionShape" parent="." index="2"]
 disabled = true
 
 [node name="Wear" parent="Configurations" index="0"]

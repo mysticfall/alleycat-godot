@@ -18,6 +18,8 @@ extents = Vector3( 0.231997, 0.0309091, 0.219546 )
 input_ray_pickable = false
 mass = 0.5
 physics_material_override = SubResource( 1 )
+
+[node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
 Key = "Rag"
 DisplayName = "item.Rag"
