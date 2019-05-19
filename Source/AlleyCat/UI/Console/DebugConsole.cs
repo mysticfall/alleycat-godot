@@ -16,7 +16,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.UI.Console
 {
     [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
-    public class DebugConsole : Panel, ICommandConsole, IHideableUI
+    public class DebugConsole : Panel, ICommandConsole, IHideable
     {
         public const string ThemeType = "Message";
 

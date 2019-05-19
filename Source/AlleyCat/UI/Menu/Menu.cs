@@ -17,7 +17,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.UI.Menu
 {
     [AutowireContext]
-    public class Menu : Godot.Control, IMenu, IHideableUI, ILoggable
+    public class Menu : Godot.Control, IMenu, IHideable, ILoggable
     {
         public Option<IMenuItem> Current => _current.Value;
 

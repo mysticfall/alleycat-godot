@@ -10,7 +10,7 @@ namespace AlleyCat.UI
 {
     public class ToggleUIAction : UIAction
     {
-        public Option<IHideableUI> UI => Node.FindComponent<IHideableUI>(_ui);
+        public Option<IHideable> UI => Node.FindComponent<IHideable>(_ui);
 
         public override bool Valid => base.Valid && UI.IsSome;
 
@@ -31,6 +31,6 @@ namespace AlleyCat.UI
             _ui = ui;
         }
 
-        protected override void DoExecute(IActionContext context) => UI.Iter(ui => ui.Toggle());
+        protected override void DoExecute(IActionContext context) => UI.Iter(ui => ui.ToggleVisibility());
     }
 }
