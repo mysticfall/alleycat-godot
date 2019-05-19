@@ -10,11 +10,11 @@ namespace AlleyCat.Logging
 {
     public class ConsoleLogger : Logger
     {
-        public IConsole Console { get; }
+        public Func<Option<IConsole>> Console { get; }
 
         public ConsoleLogger(
             string category,
-            IConsole console,
+            Func<Option<IConsole>> console,
             LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
             bool showId = true) : this(category, console, None, minimumLevel, categorySegments, showId)
@@ -23,7 +23,7 @@ namespace AlleyCat.Logging
 
         public ConsoleLogger(
             string category,
-            IConsole console,
+            Func<Option<IConsole>> console,
             Option<IExternalScopeProvider> scopeProvider,
             LogLevel minimumLevel = LogLevel.Trace,
             int categorySegments = 1,
@@ -37,6 +37,12 @@ namespace AlleyCat.Logging
         protected override void Log(
             LogLevel logLevel, string message, Option<string> eventId, Option<Exception> exception)
         {
+            Console().Iter(console => Log(console, logLevel, message, eventId, exception));
+        }
+
+        protected void Log(
+            IConsole console, LogLevel logLevel, string message, Option<string> eventId, Option<Exception> exception)
+        {
             var level = FormatLogLevel(logLevel);
 
             Color color;
@@ -44,28 +50,28 @@ namespace AlleyCat.Logging
             switch (logLevel)
             {
                 case LogLevel.Warning:
-                    color = Console.WarningColor;
+                    color = console.WarningColor;
                     break;
                 case LogLevel.Error:
                 case LogLevel.Critical:
-                    color = Console.ErrorColor;
+                    color = console.ErrorColor;
                     break;
                 default:
-                    color = Console.TextColor;
+                    color = console.TextColor;
                     break;
             }
 
-            Console
+            console
                 .Write(level, new TextStyle(color)).Text(" - ")
                 .Highlight("[").Text(CategoryLabel);
 
-            eventId.Iter(id => Console.Highlight(" (").Text(id).Highlight(")"));
+            eventId.Iter(id => console.Highlight(" (").Text(id).Highlight(")"));
 
-            Console.Highlight("] ").Text(message).NewLine();
+            console.Highlight("] ").Text(message).NewLine();
 
             exception.Iter(e =>
             {
-                Console
+                console
                     .Write(e.ToString(), new TextStyle(color))
                     .NewLine();
             });
