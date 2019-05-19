@@ -21,11 +21,15 @@ namespace AlleyCat.Autowire
             Ensure.That(node, nameof(node)).IsNotNull();
 
             var ancestors = node.GetAncestors().Bind(c =>
-                DependencyType.IsInstanceOfType(c)
-                    ? Some(c)
-                    : Some(c).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption())).Freeze();
+            {
+                var a = c.FindDelegate().IfNone(c);
 
-            return EnumerableHelper.OfType(ancestors, DependencyType);
+                return DependencyType.IsInstanceOfType(a)
+                    ? Some(a)
+                    : Some(a).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption());
+            });
+
+            return EnumerableHelper.OfType(ancestors.Freeze(), DependencyType);
         }
     }
 }

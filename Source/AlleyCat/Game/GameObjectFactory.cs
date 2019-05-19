@@ -10,6 +10,7 @@ using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
 {
@@ -19,7 +20,7 @@ namespace AlleyCat.Game
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<T>();
 
         public Validation<string, T> Service { get; private set; } =
-            Prelude.Fail<string, T>("The factory has not been initialized yet.");
+            Fail<string, T>("The factory has not been initialized yet.");
 
         Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
 
@@ -53,7 +54,7 @@ namespace AlleyCat.Game
         protected override void PreDestroy()
         {
             Service.SuccessAsEnumerable().OfType<IDisposable>().Iter(s => s.DisposeQuietly());
-            Service = Prelude.Fail<string, T>("The factory has been disposed.");
+            Service = Fail<string, T>("The factory has been disposed.");
 
             base.PreDestroy();
         }

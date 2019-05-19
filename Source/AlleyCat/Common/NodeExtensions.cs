@@ -122,7 +122,7 @@ namespace AlleyCat.Common
                 case IGameObjectFactory factory:
                     return factory.Service.ToOption().OfType<T>().HeadOrNone();
                 default:
-                    return None;
+                    return node.FindDelegate().Bind(OfType<T>).HeadOrNone();
             }
         }
 

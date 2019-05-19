@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Common;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -21,8 +22,22 @@ namespace AlleyCat.Autowire
 
         public Node Node { get; }
 
-        public Option<IAutowireContext> Parent =>
-            Node.GetTree().Root != Node ? Some(Node.GetParent().GetAutowireContext()) : None;
+        public Option<IAutowireContext> Parent
+        {
+            get
+            {
+                if (Node.GetTree().Root == Node) return None;
+
+                Option<Node> FindParent(Node node)
+                {
+                    var parent = Optional(node.GetParent());
+
+                    return parent.Bind(p => p.FindDelegate()).Contains(node) ? parent.Bind(FindParent) : parent;
+                }
+
+                return FindParent(Node).Map(n => n.GetAutowireContext());
+            }
+        }
 
         public LanguageExt.HashSet<Type> Requires { get; private set; } = HashSet<Type>();
 

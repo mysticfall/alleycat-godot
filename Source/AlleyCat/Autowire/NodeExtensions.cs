@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
+using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -28,14 +29,15 @@ namespace AlleyCat.Autowire
 
             while (current != null)
             {
-                var type = current.GetType();
+                var target = current.FindDelegate().IfNone(current);
+                var type = target.GetType();
 
                 var attribute = AttributeCache.GetOrCreate(
                     type, _ => type.GetCustomAttribute<AutowireContextAttribute>(true));
 
                 if (attribute != null)
                 {
-                    return AutowireContext.GetOrCreate(current);
+                    return AutowireContext.GetOrCreate(target);
                 }
 
                 current = current.GetParent();
@@ -52,18 +54,18 @@ namespace AlleyCat.Autowire
 
             Debug.Assert(target != null, "target != null");
 
-            target.Register(node);
-
-            if (target.Node == node)
-            {
-                target.Initialize();
-            }
-
             try
             {
+                target.Register(node);
+
+                if (target.Node == node)
+                {
+                    target.Initialize();
+                }
             }
             catch (Exception e)
             {
+                GD.PrintErr(e.ToString());
                 if (abortOnError)
                 {
                     throw;

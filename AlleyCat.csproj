@@ -252,6 +252,9 @@
     <Compile Include="Source\AlleyCat\Event\ProcessMode.cs" />
     <Compile Include="Source\AlleyCat\Event\ReactiveObject.cs" />
     <Compile Include="Source\AlleyCat\Event\EventTracker.cs" />
+    <Compile Include="Source\AlleyCat\Game\DelegateObject.cs" />
+    <Compile Include="Source\AlleyCat\Game\DelegateObjectExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Game\DelegateObjectFactory.cs" />
     <Compile Include="Source\AlleyCat\Game\GameObject.cs" />
     <Compile Include="Source\AlleyCat\Game\GameObjectFactory.cs" />
     <Compile Include="Source\AlleyCat\Game\IEntity.cs" />
@@ -259,6 +262,7 @@
     <Compile Include="Source\AlleyCat\Game\IGameObjectFactory.cs" />
     <Compile Include="Source\AlleyCat\Game\IScene.cs" />
     <Compile Include="Source\AlleyCat\Game\ISceneManager.cs" />
+    <Compile Include="Source\AlleyCat\Game\IDelegateObject.cs" />
     <Compile Include="Source\AlleyCat\Game\Scene.cs" />
     <Compile Include="Source\AlleyCat\Game\SceneFactory.cs" />
     <Compile Include="Source\AlleyCat\IO\DirectoryContents.cs" />
