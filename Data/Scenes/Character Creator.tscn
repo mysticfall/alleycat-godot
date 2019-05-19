@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreator.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/UI/Character/CharacterCreatorFactory.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/View/InspectingViewFactory.cs" type="Script" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=5]
-[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanel.cs" type="Script" id=6]
+[ext_resource path="res://Data/UI/Character/Character.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Data/UI/Character/MorphGroupPanel.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Data/UI/Character/Character.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Source/AlleyCat/UI/Character/MorphListPanelFactory.cs" type="Script" id=9]
 
 [node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
@@ -44,6 +44,7 @@ Interpolate = true
 
 [node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
+Sensitivity = 0.4
 Interpolate = true
 Axis = 1
 
@@ -52,6 +53,7 @@ script = ExtResource( 3 )
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 5 )
+Sensitivity = 0.7
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
@@ -62,8 +64,10 @@ Polling = false
 [node name="Morphs Panel" type="Panel" parent="UI"]
 anchor_bottom = 1.0
 margin_right = 340.0
-script = ExtResource( 6 )
-_groupPanelScene = ExtResource( 7 )
+
+[node name="Context" type="Node" parent="UI/Morphs Panel"]
+script = ExtResource( 9 )
+GroupPanelScene = ExtResource( 7 )
 
 [node name="Tab Container" type="TabContainer" parent="UI/Morphs Panel"]
 anchor_right = 1.0
@@ -89,4 +93,4 @@ handle_input_locally = false
 msaa = 3
 render_target_update_mode = 3
 
-[node name="Character" parent="UI/Content Panel/Viewport" instance=ExtResource( 8 )]
+[node name="Character" parent="UI/Content Panel/Viewport" instance=ExtResource( 6 )]

@@ -1,55 +1,67 @@
 ﻿using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Action;
-using AlleyCat.Autowire;
 using AlleyCat.Control;
 using AlleyCat.Event;
 using AlleyCat.Logging;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
-    public class EntityLabel : Panel, ILoggable
+    public class EntityLabel : UIControl
     {
-        [Export]
-        public string InteractAction { get; set; } = "interact";
+        public const string DefaultKeyLabel = "?";
 
-        [Export]
-        public string DefaultKeyLabel { get; set; } = "?";
+        public string InteractAction { get; }
 
-        [Service, CanBeNull]
-        public ILogger Logger { get; private set; }
+        protected IPlayerControl PlayerControl { get; }
 
-        [Node("Container/Title")]
-        protected Label Title { get; private set; }
+        protected Label TitleLabel { get; }
 
-        [Node("Container/Action")]
-        protected Container ActionPanel { get; private set; }
+        protected Option<Label> ShortcutLabel { get; }
 
-        [Node("Container/Action/Shortcut")]
-        protected Label Shortcut { get; private set; }
+        protected Option<Label> ActionLabel { get; }
 
-        [Node("Container/Action/Action Title")]
-        protected Label ActionTitle { get; private set; }
+        protected Option<Godot.Control> ActionPanel { get; }
 
-        [Service]
-        protected IPlayerControl PlayerControl { get; private set; }
+        protected ITimeSource TimeSource { get; }
 
-        public override void _Ready()
+        public EntityLabel(
+            IPlayerControl playerControl,
+            string interactAction,
+            Label titleLabel,
+            Option<Label> shortcutLabel,
+            Option<Label> actionLabel,
+            Option<Godot.Control> actionPanel,
+            ITimeSource timeSource,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
-            base._Ready();
+            Ensure.That(playerControl, nameof(playerControl)).IsNotNull();
+            Ensure.That(interactAction, nameof(interactAction)).IsNotNull();
+            Ensure.That(titleLabel, nameof(titleLabel)).IsNotNull();
+            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 
-            this.Autowire();
+            PlayerControl = playerControl;
+            InteractAction = interactAction;
+            TitleLabel = titleLabel;
+            ShortcutLabel = shortcutLabel;
+            ActionLabel = actionLabel;
+            ActionPanel = actionPanel;
+            TimeSource = timeSource;
+            InteractAction = interactAction;
         }
 
-        [PostConstruct]
-        protected virtual void PostConstruct()
+        protected override void PostConstruct()
         {
+            base.PostConstruct();
+
             var onFocus = PlayerControl.OnFocusChange;
-            var ticks = this.OnProcess();
+            var ticks = TimeSource.OnProcess;
 
             var showTitle = onFocus.Select(e => e.IsSome);
             var entity = onFocus.Where(e => e.IsSome).Select(e => e.First());
@@ -67,27 +79,35 @@ namespace AlleyCat.UI
             var position = ticks
                 .CombineLatest(entity, (_, e) => e)
                 .Select(e => PlayerControl.Camera.UnprojectPosition(e.LabelPosition))
-                .Select(pos => new Vector2(pos.x - RectSize.x / 2f, pos.y - RectSize.y / 2f));
+                .Select(pos => new Vector2(pos.x - Node.RectSize.x / 2f, pos.y - Node.RectSize.y / 2f));
 
-            var onDispose = this.OnDispose().Where(identity);
+            var onDispose = Disposed.Where(identity);
 
             showTitle
                 .TakeUntil(onDispose)
-                .Subscribe(v => Visible = v, this);
-            showAction
-                .TakeUntil(onDispose)
-                .Subscribe(v => ActionPanel.Visible = v, this);
+                .Subscribe(v => Node.Visible = v, this);
+
+            ActionPanel.Iter(panel =>
+            {
+                showAction
+                    .TakeUntil(onDispose)
+                    .Subscribe(v => panel.Visible = v, this);
+            });
 
             title
                 .TakeUntil(onDispose)
-                .Subscribe(v => Title.Text = v, this);
-            action
-                .TakeUntil(onDispose)
-                .Subscribe(a => a.Iter(ActionTitle.SetText), this);
+                .Subscribe(v => TitleLabel.Text = v, this);
+
+            ActionLabel.Iter(label =>
+            {
+                action
+                    .TakeUntil(onDispose)
+                    .Subscribe(a => a.Iter(v => label.Text = v), this);
+            });
 
             position
                 .TakeUntil(onDispose)
-                .Subscribe(pos => RectPosition = pos.Round(), this);
+                .Subscribe(pos => Node.RectPosition = pos.Round(), this);
 
             var shortcut = InputMap
                 .GetActionList(InteractAction)
@@ -97,7 +117,7 @@ namespace AlleyCat.UI
                 .IfNone(DefaultKeyLabel);
 
             //TODO Handle key mapping changes.
-            Shortcut.Text = shortcut;
+            ShortcutLabel.Iter(l => l.Text = shortcut);
         }
     }
 }

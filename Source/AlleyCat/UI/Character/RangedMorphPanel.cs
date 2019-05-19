@@ -1,25 +1,40 @@
 using System.Reactive.Linq;
-using AlleyCat.Autowire;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using AlleyCat.Morph;
+using AlleyCat.Morph.Generic;
 using AlleyCat.UI.Character.Generic;
+using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     public class RangedMorphPanel : MorphPanel<float, RangedMorphDefinition>
     {
-        [Node(true)] 
-        protected Slider Slider { get; private set; }
+        protected Slider Slider { get; }
 
-        [Node(true)] 
-        protected SpinBox Spinner { get; private set; }
+        protected SpinBox Spinner { get; }
 
-        [PostConstruct]
-        protected virtual void PostConstruct()
+        public RangedMorphPanel(
+            IMorph<float, RangedMorphDefinition> morph,
+            Slider slider,
+            SpinBox spinner,
+            Label label,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(morph, label, node, loggerFactory)
         {
+            Ensure.That(slider, nameof(slider)).IsNotNull();
+            Ensure.That(spinner, nameof(spinner)).IsNotNull();
+
+            Slider = slider;
+            Spinner = spinner;
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
             Label.Text = Morph.DisplayName;
 
             var max = Morph.Definition.Range.Max;
@@ -35,16 +50,16 @@ namespace AlleyCat.UI.Character
             Spinner.Value = value;
             Spinner.Step = (max - min) / 100;
 
-            var onDispose = this.OnDispose().Where(identity);
+            var disposed = Disposed.Where(identity);
 
             Slider.OnValueChange().Merge(Spinner.OnValueChange())
-                .TakeUntil(onDispose)
+                .TakeUntil(disposed)
                 .Subscribe(v => Morph.Value = v, this);
 
             Morph.OnChange
                 .Do(Slider.SetValue)
                 .Do(Spinner.SetValue)
-                .TakeUntil(onDispose)
+                .TakeUntil(disposed)
                 .Subscribe(this);
         }
     }

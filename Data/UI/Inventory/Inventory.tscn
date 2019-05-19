@@ -1,17 +1,16 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Data/Shaders/Blur Effect.tres" type="Material" id=1]
-[ext_resource path="res://Source/AlleyCat/UI/Inventory/InventoryView.cs" type="Script" id=2]
-[ext_resource path="res://Data/UI/Inventory/Action Button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Data/UI/Inventory/Item Box.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Source/AlleyCat/UI/Inventory/InventoryViewFactory.cs" type="Script" id=3]
 [ext_resource path="res://Data/Themes/Fullscreen UI.tres" type="Theme" id=4]
-[ext_resource path="res://Data/UI/Inventory/Item Box.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/UI/Inventory/Action Button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Data/Fonts/Large Title Text.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Data/Fonts/Outlined Text.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Source/AlleyCat/View/InspectingViewFactory.cs" type="Script" id=8]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=9]
 [ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionAxisInputFactory.cs" type="Script" id=11]
-
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.25098 )
@@ -26,9 +25,10 @@ anchor_bottom = 1.0
 mouse_filter = 2
 mouse_default_cursor_shape = 5
 custom_styles/panel = SubResource( 1 )
-script = ExtResource( 2 )
-PauseWhenVisible = false
-_actionButton = ExtResource( 3 )
+
+[node name="Context" type="Node" parent="."]
+script = ExtResource( 3 )
+ActionButton = ExtResource( 5 )
 
 [node name="List Panel" type="Panel" parent="."]
 anchor_bottom = 1.0
@@ -80,7 +80,7 @@ transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Item Box" parent="Content Panel/Viewport" instance=ExtResource( 5 )]
+[node name="Item Box" parent="Content Panel/Viewport" instance=ExtResource( 2 )]
 
 [node name="Info Panel" type="Panel" parent="Content Panel"]
 anchor_left = 0.5

@@ -11,7 +11,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    public class ActionMenuProvider : GameObject, IMenuItem, IMenuRenderer, IMenuStructureProvider, IMenuHandler
+    public class ActionMenuProvider : GameObject, IMenuModel, IMenuRenderer, IMenuStructureProvider, IMenuHandler
     {
         public string Key { get; }
 
@@ -19,7 +19,7 @@ namespace AlleyCat.UI.Menu
 
         public object Model => this;
 
-        public Option<IMenuItem> Parent => None;
+        public Option<IMenuModel> Parent => None;
 
         public PlayerControl PlayerControl { get; }
 
@@ -67,7 +67,7 @@ namespace AlleyCat.UI.Menu
             }
         }
 
-        protected virtual Option<IActionContext> CreateActionContext(IMenuItem item)
+        protected virtual Option<IActionContext> CreateActionContext(IMenuModel item)
         {
             var actor = PlayerControl.Character.OfType<IActor>().HeadOrNone();
 
@@ -75,7 +75,7 @@ namespace AlleyCat.UI.Menu
             {
                 case Interaction _:
 
-                    Option<IEntity> FindTarget(IMenuItem i) =>
+                    Option<IEntity> FindTarget(IMenuModel i) =>
                         i.Model is IEntity entity ? Some(entity) : i.Parent.Bind(FindTarget);
 
                     var target = FindTarget(item);
@@ -93,10 +93,10 @@ namespace AlleyCat.UI.Menu
             }
         }
 
-        public bool CanExecute(IMenuItem item) =>
+        public bool CanExecute(IMenuModel item) =>
             item.Model is IAction action && CreateActionContext(item).Exists(action.AllowedFor);
 
-        public void Execute(IMenuItem item)
+        public void Execute(IMenuModel item)
         {
             if (item.Model is IAction action)
             {

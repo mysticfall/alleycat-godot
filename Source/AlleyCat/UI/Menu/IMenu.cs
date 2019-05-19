@@ -8,15 +8,15 @@ namespace AlleyCat.UI.Menu
 {
     public interface IMenu
     {
-        Option<IMenuItem> Current { get; }
+        Option<IMenuModel> Current { get; }
 
-        IObservable<Option<IMenuItem>> OnNavigate { get; }
+        IObservable<Option<IMenuModel>> OnNavigate { get; }
 
-        IEnumerable<IMenuItem> Items { get; }
+        IEnumerable<IMenuModel> Items { get; }
 
-        IObservable<IEnumerable<IMenuItem>> OnItemsChange { get; }
+        IObservable<IEnumerable<IMenuModel>> OnItemsChange { get; }
 
-        void Navigate(Option<IMenuItem> item);
+        void Navigate(Option<IMenuModel> item);
     }
 
     public static class MenuExtensions

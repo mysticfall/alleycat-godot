@@ -6,16 +6,16 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    public interface IMenuItem : INamed
+    public interface IMenuModel : INamed
     {
         object Model { get; }
 
-        Option<IMenuItem> Parent { get; }
+        Option<IMenuModel> Parent { get; }
     }
 
     public static class MenuItemExtensions
     {
-        public static IEnumerable<IMenuItem> GetPath(this IMenuItem item)
+        public static IEnumerable<IMenuModel> GetPath(this IMenuModel item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 

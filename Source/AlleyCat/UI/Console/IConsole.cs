@@ -4,8 +4,6 @@ namespace AlleyCat.UI.Console
 {
     public interface IConsole
     {
-        int BufferSize { get; set; }
-
         Color TextColor { get; }
 
         Color HighlightColor { get; }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Source/AlleyCat/UI/EntityLabel.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/UI/EntityLabelFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Fonts/Title Text.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Data/Fonts/Small Outlined Text.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Data/Fonts/Outlined Text.tres" type="DynamicFont" id=4]
@@ -31,6 +31,8 @@ margin_right = -902.0
 margin_bottom = -530.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
+
+[node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
 
 [node name="Container" type="VBoxContainer" parent="."]

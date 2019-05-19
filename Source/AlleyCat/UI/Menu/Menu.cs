@@ -9,7 +9,6 @@ using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
@@ -17,105 +16,126 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.UI.Menu
 {
     [AutowireContext]
-    public class Menu : Godot.Control, IMenu, IHideable, ILoggable
+    public class Menu : UIControl, IMenu
     {
-        public Option<IMenuItem> Current => _current.Value;
+        public Option<IMenuModel> Current => _current.Value;
 
-        public IObservable<Option<IMenuItem>> OnNavigate => _current.AsObservable();
+        public IObservable<Option<IMenuModel>> OnNavigate => _current.AsObservable();
 
-        public IEnumerable<IMenuItem> Items { get; private set; }
+        public IEnumerable<IMenuModel> Items { get; private set; }
 
-        public IObservable<IEnumerable<IMenuItem>> OnItemsChange => OnNavigate.Select(CreateChildren);
+        public IObservable<IEnumerable<IMenuModel>> OnItemsChange => OnNavigate.Select(CreateChildren);
 
-        [Service, CanBeNull]
-        public ILogger Logger { get; private set; }
+        protected IEnumerable<IMenuModel> RootItems { get; }
 
-        [Service]
-        protected IEnumerable<IMenuRenderer> Renderers { get; private set; } = Seq<IMenuRenderer>();
+        protected IEnumerable<IMenuRenderer> Renderers { get; }
 
-        [Service]
-        protected IEnumerable<IMenuStructureProvider> StructureProviders { get; private set; } =
-            Seq<IMenuStructureProvider>();
+        protected IEnumerable<IMenuStructureProvider> StructureProviders { get; }
 
-        [Service]
-        protected IEnumerable<IMenuHandler> MenuHandlers { get; private set; } = Seq<IMenuHandler>();
+        protected IEnumerable<IMenuHandler> MenuHandlers { get; }
 
-        [Node]
-        protected Option<Label> Breadcrumb { get; set; }
+        protected Option<Label> Breadcrumb { get; }
 
-        [Node]
-        protected Option<ShortcutLabel> UpLabel { get; set; }
+        protected Option<ActionLabel> UpLabel { get; }
 
-        [Node]
-        protected Option<ShortcutLabel> CloseLabel { get; set; }
+        protected Option<ActionLabel> CloseLabel { get; }
 
-        [Node(true)]
-        protected Node ItemsContainer { get; private set; }
+        protected Node ItemsContainer { get; }
 
-        [Export, UsedImplicitly]
-        protected PackedScene ItemScene { get; private set; }
+        protected PackedScene ItemScene { get; }
 
-        [Export]
-        protected string BackAction { get; private set; } = "ui_back";
+        protected Option<string> BackAction { get; }
 
-        private readonly BehaviorSubject<Option<IMenuItem>> _current;
+        private readonly BehaviorSubject<Option<IMenuModel>> _current;
 
-        [Service(local: true)] private IEnumerable<IMenuItem> _rootItems = Seq<IMenuItem>();
-
-        [Export, UsedImplicitly] private NodePath _breadcrumb = "Breadcrumb";
-
-        [Export, UsedImplicitly] private NodePath _itemsContainer = "Items";
-
-        [Export, UsedImplicitly] private NodePath _upLabel = "Up";
-
-        [Export, UsedImplicitly] private NodePath _closeLabel = "Close";
-
-        public Menu()
+        public Menu(
+            IEnumerable<IMenuModel> rootItems,
+            IEnumerable<IMenuHandler> menuHandlers,
+            IEnumerable<IMenuStructureProvider> structureProviders,
+            IEnumerable<IMenuRenderer> renderers,
+            Option<string> backAction,
+            Godot.Control node,
+            Node itemsContainer,
+            Option<ActionLabel> closeLabel,
+            Option<ActionLabel> upLabel,
+            Option<Label> breadcrumb,
+            PackedScene itemScene,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
-            _current = new BehaviorSubject<Option<IMenuItem>>(None);
+            RootItems = rootItems;
+            MenuHandlers = menuHandlers;
+            StructureProviders = structureProviders;
+            Renderers = renderers;
+
+            Ensure.Enumerable.HasItems(RootItems, nameof(rootItems));
+            Ensure.Enumerable.HasItems(MenuHandlers, nameof(menuHandlers));
+            Ensure.Enumerable.HasItems(StructureProviders, nameof(structureProviders));
+            Ensure.Enumerable.HasItems(Renderers, nameof(renderers));
+
+            Ensure.That(itemsContainer, nameof(itemsContainer)).IsNotNull();
+            Ensure.That(itemScene, nameof(itemScene)).IsNotNull();
+
+            BackAction = backAction;
+            ItemsContainer = itemsContainer;
+            CloseLabel = closeLabel;
+            UpLabel = upLabel;
+            Breadcrumb = breadcrumb;
+            ItemScene = itemScene;
+
+            _current = CreateSubject<Option<IMenuModel>>(None);
         }
 
-        public override void _Ready()
+        protected override void PostConstruct()
         {
-            base._Ready();
+            base.PostConstruct();
 
-            this.Autowire();
-        }
+            var disposed = Disposed.Where(identity);
 
-        [PostConstruct]
-        protected virtual void PostConstruct()
-        {
             OnItemsChange
                 .Do(items => Items = items)
+                .TakeUntil(disposed)
                 .Subscribe(HandleItemsChange, this);
 
             OnNavigate
                 .Do(_ => UpLabel.Iter(l => l.Active = this.CanGoUp()))
                 .Select(i => i.Bind(v => v.GetPath()).Reverse())
                 .Select(p => string.Join(" > ", p.Map(v => v.DisplayName)))
+                .TakeUntil(disposed)
                 .Subscribe(v => Breadcrumb.Iter(b => b.Text = v), this);
 
             UpLabel
                 .Map(l => l.OnAction)
                 .ToObservable()
                 .Switch()
+                .TakeUntil(disposed)
                 .Subscribe(_ => this.GoUp());
             CloseLabel
                 .Map(l => l.OnAction)
                 .ToObservable()
                 .Switch()
-                .Subscribe(_ => Hide());
+                .TakeUntil(disposed)
+                .Subscribe(_ => this.Hide());
 
-            this.OnVisibilityChange()
+            Node.OnVisibilityChange()
                 .StartWith(Visible)
+                .TakeUntil(disposed)
                 .Subscribe(OnVisibilityChanged, this);
+
+            if (BackAction.IsSome)
+            {
+                Node.OnUnhandledInput()
+                    .Where(e => BackAction.Exists(e.IsActionPressed) && this.CanGoUp())
+                    .TakeUntil(disposed)
+                    .Do(_ => Node.GetTree().SetInputAsHandled())
+                    .Subscribe(_ => this.GoUp(), this);
+            }
         }
 
-        private void HandleItemsChange(IEnumerable<IMenuItem> items)
+        private void HandleItemsChange(IEnumerable<IMenuModel> items)
         {
             ItemsContainer.GetChildren().OfType<Node>().Iter(ItemsContainer.FreeChild);
 
-            bool IsValid(IMenuItem item)
+            bool IsValid(IMenuModel item)
             {
                 var hasChildren = StructureProviders.Exists(p => p.HasChildren(item.Model));
                 var executable = MenuHandlers.Exists(h => h.CanExecute(item));
@@ -123,19 +143,16 @@ namespace AlleyCat.UI.Menu
                 return hasChildren || executable;
             }
 
-            items.Filter(IsValid).Iter((index, item) =>
-            {
-                var control = CreateItemControl(item, index);
-
-                ItemsContainer.AddChild(control);
-            });
+            items
+                .Filter(IsValid)
+                .Iter((index, item) => CreateItemControl(item, index, ItemsContainer));
         }
 
         private void OnVisibilityChanged(bool visible)
         {
             this.ToTop();
 
-            SetProcessUnhandledInput(visible);
+            Node.SetProcessUnhandledInput(visible);
 
             UpLabel.Iter(l => l.Active = visible && this.CanGoUp());
             CloseLabel.Iter(l => l.Active = visible);
@@ -146,12 +163,12 @@ namespace AlleyCat.UI.Menu
             }
         }
 
-        public virtual void Navigate(Option<IMenuItem> item)
+        public virtual void Navigate(Option<IMenuModel> item)
         {
             void ExecuteAndHide(IMenuHandler h)
             {
                 item.Iter(h.Execute);
-                Hide();
+                this.Hide();
             }
 
             this.LogDebug("Navigating to {}.", item.Map(v => v.ToString()).IfNone("(Root)"));
@@ -161,7 +178,7 @@ namespace AlleyCat.UI.Menu
                 .BiIter(ExecuteAndHide, () => _current.OnNext(item));
         }
 
-        protected virtual Option<IMenuItem> CreateItem(object item, Option<IMenuItem> parent)
+        protected virtual Option<IMenuModel> CreateItem(object item, Option<IMenuModel> parent)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
@@ -169,12 +186,12 @@ namespace AlleyCat.UI.Menu
                 .Bind(c => Renderers.Find(r => r.CanRender(c)).Map(r => r.Render(c)))
                 .HeadOrNone();
 
-            return label.Map<IMenuItem>(v => new MenuItem(v.Key, v.DisplayName, item, parent));
+            return label.Map<IMenuModel>(v => new MenuModel(v.Key, v.DisplayName, item, parent));
         }
 
-        protected virtual IEnumerable<IMenuItem> CreateChildren(Option<IMenuItem> parent)
+        protected virtual IEnumerable<IMenuModel> CreateChildren(Option<IMenuModel> parent)
         {
-            if (parent.IsNone) return _rootItems;
+            if (parent.IsNone) return RootItems;
 
             var model = parent.Map(p => p.Model);
             var provider = StructureProviders.Find(p => model.Exists(p.HasChildren));
@@ -190,36 +207,29 @@ namespace AlleyCat.UI.Menu
             return children.Flatten().Bind(child => CreateItem(child, parent));
         }
 
-        public override void _UnhandledInput(InputEvent @event)
-        {
-            base._UnhandledInput(@event);
-
-            if (@event.IsActionPressed(BackAction) && this.CanGoUp())
-            {
-                this.GoUp();
-
-                GetTree().SetInputAsHandled();
-            }
-        }
-
-        protected virtual MenuItemControl CreateItemControl(IMenuItem item, int index)
+        protected virtual Option<MenuItem> CreateItemControl(IMenuModel item, int index, Node parent)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
+            Ensure.That(parent, nameof(parent)).IsNotNull();
 
-            var control = (MenuItemControl) ItemScene.Instance();
-            var shortcut = (index + 1).ToString().Head();
+            var node = ItemScene.Instance();
 
-            control.Model = Some(item);
-            control.Shortcut = Some(shortcut);
+            ItemsContainer.AddChild(node);
+
+            var control = node.FindComponent<MenuItem>();
+
+            control.Match(
+                c =>
+                {
+                    var shortcut = (index + 1).ToString().Head();
+
+                    c.Model = Some(item);
+                    c.Shortcut = Some(shortcut);
+                },
+                () => Logger.LogWarning("Failed to create menu item instance.")
+            );
 
             return control;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _current.CompleteAndDispose();
-
-            base.Dispose(disposing);
         }
     }
 }

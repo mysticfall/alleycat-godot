@@ -14,7 +14,8 @@ material = SubResource( 1 )
 
 [sub_resource type="PhysicsMaterial" id=3]
 
-[sub_resource type="PlaneShape" id=4]
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 1, 0.01, 1 )
 
 [node name="Character" type="Spatial"]
 

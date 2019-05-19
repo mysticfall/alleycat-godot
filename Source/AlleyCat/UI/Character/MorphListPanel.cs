@@ -1,20 +1,32 @@
-using AlleyCat.Autowire;
 using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Morph;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
-    [Singleton(typeof(MorphListPanel))]
-    public class MorphListPanel : Panel
+    public class MorphListPanel : UIControl
     {
-        [Node("Tab Container", true)]
-        protected TabContainer TabContainer { get; private set; }
+        protected TabContainer TabContainer { get; }
 
-        [Export] private PackedScene _groupPanelScene;
+        protected PackedScene GroupPanelScene { get; }
+
+        public MorphListPanel(
+            TabContainer tabContainer,
+            PackedScene groupPanelScene,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
+        {
+            Ensure.That(tabContainer, nameof(tabContainer)).IsNotNull();
+            Ensure.That(groupPanelScene, nameof(groupPanelScene)).IsNotNull();
+
+            TabContainer = tabContainer;
+            GroupPanelScene = groupPanelScene;
+        }
 
         public virtual void Load(Option<IHumanoid> character)
         {
@@ -31,24 +43,23 @@ namespace AlleyCat.UI.Character
 
             foreach (var group in morphSet.Groups)
             {
-                var tab = (MorphGroupPanel) _groupPanelScene.Instance();
+                var node = GroupPanelScene.Instance();
 
-                tab.LoadGroup(group, morphSet);
+                node.OfType<MorphGroupPanelFactory>().HeadOrNone().Match(
+                    tab =>
+                    {
+                        tab.Group = Some(group);
+                        tab.Morphs = Some(morphSet);
 
-                TabContainer.AddChild(tab);
-                TabContainer.SetTabTitle(index, group.DisplayName);
+                        TabContainer.AddChild(node);
+                        TabContainer.SetTabTitle(index, group.DisplayName);
 
-                index++;
+                        index++;
+                    },
+                    () => Logger.LogWarning("Invalid group panel scene."));
             }
         }
 
         protected virtual void ClearMorphs() => TabContainer.GetChildComponents<Node>().Iter(TabContainer.FreeChild);
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Autowire();
-        }
     }
 }

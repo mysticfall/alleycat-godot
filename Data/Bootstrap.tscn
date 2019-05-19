@@ -18,7 +18,6 @@ script = ExtResource( 2 )
 [node name="Framework Settings" type="Node" parent="Settings"]
 script = ExtResource( 3 )
 Optional = true
-ReloadOnChange = false
 File = "res://Data/AlleyCat.json"
 
 [node name="Project Settings" type="Node" parent="Settings"]
@@ -26,26 +25,15 @@ script = ExtResource( 4 )
 
 [node name="Logging" type="Node" parent="."]
 script = ExtResource( 5 )
-ConfigSection = "Logging"
 
 [node name="Game Console" type="Node" parent="Logging"]
 script = ExtResource( 6 )
 MinimumLevel = 3
-CategorySegments = 1
-ShowId = true
 
 [node name="Editor Console" type="Node" parent="Logging"]
 script = ExtResource( 7 )
 MinimumLevel = 2
-CategorySegments = 1
-ShowId = true
 
 [node name="UI" type="CanvasLayer" parent="."]
-layer = 1
-offset = Vector2( 0, 0 )
-rotation = 0.0
-scale = Vector2( 1, 1 )
-transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 [node name="Console" parent="UI" instance=ExtResource( 8 )]
-

@@ -2,8 +2,8 @@ namespace AlleyCat.UI.Menu
 {
     public interface IMenuHandler
     {
-        bool CanExecute(IMenuItem item);
+        bool CanExecute(IMenuModel item);
 
-        void Execute(IMenuItem item);
+        void Execute(IMenuModel item);
     }
 }

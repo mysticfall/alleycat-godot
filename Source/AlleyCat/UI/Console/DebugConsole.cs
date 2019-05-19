@@ -4,19 +4,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using AlleyCat.Animation;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Console
 {
-    [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
-    public class DebugConsole : Panel, ICommandConsole, IHideable
+    public class DebugConsole : UIControl, ICommandConsole
     {
         public const string ThemeType = "Message";
 
@@ -24,87 +23,116 @@ namespace AlleyCat.UI.Console
 
         public const string HideAnimation = "Hide";
 
-        [Export]
-        public int BufferSize
+        public override bool Visible
         {
-            get => _bufferSize;
-            set => _bufferSize = Mathf.Max(1, value);
+            get => base.Visible;
+            set
+            {
+                if (Player.IsSome)
+                {
+                    PlayAnimation(Visible ? HideAnimation : ShowAnimation);
+                }
+                else
+                {
+                    Node.Visible = value;
+                }
+            }
         }
 
-        public Color TextColor => GetColor("info", ThemeType);
+        public int BufferSize { get; }
 
-        public Color HighlightColor => GetColor("highlight", ThemeType);
+        public Color TextColor => Node.GetColor("info", ThemeType);
 
-        public Color WarningColor => GetColor("warning", ThemeType);
+        public Color HighlightColor => Node.GetColor("highlight", ThemeType);
 
-        public Color ErrorColor => GetColor("error", ThemeType);
+        public Color WarningColor => Node.GetColor("warning", ThemeType);
+
+        public Color ErrorColor => Node.GetColor("error", ThemeType);
 
         public IEnumerable<IConsoleCommand> SupportedCommands => _commands.Values;
 
-        [Node("AnimationPlayer", true)]
-        protected AnimationPlayer Player { get; private set; }
+        protected Option<AnimationPlayer> Player { get; }
 
-        [Node("Container/Content", true)]
-        protected RichTextLabel Content { get; private set; }
+        protected RichTextLabel Content { get; }
 
-        [Node("Container/InputPane/Input", true)]
-        protected LineEdit InputField { get; private set; }
+        protected LineEdit InputField { get; }
 
-        [Service] private IEnumerable<IConsoleCommandProvider> _providers = Seq<IConsoleCommandProvider>();
+        private readonly Map<string, IConsoleCommand> _commands;
 
-        private Map<string, IConsoleCommand> _commands = Map<string, IConsoleCommand>();
+        private Option<Input.MouseMode> _mouseMode;
 
-        private int _bufferSize = 300;
-
-        private Input.MouseMode _mouseMode;
-
-        [PostConstruct]
-        private void PostConstruct()
+        public DebugConsole(
+            IEnumerable<IConsoleCommandProvider> providers,
+            Option<AnimationPlayer> player,
+            int bufferSize,
+            RichTextLabel content,
+            LineEdit inputField,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
+            Ensure.That(providers, nameof(providers)).IsNotNull();
+            Ensure.That(content, nameof(content)).IsNotNull();
+            Ensure.That(inputField, nameof(inputField)).IsNotNull();
+
+            _commands = providers.Bind(p => p.CreateCommands(this)).ToMap();
+
+            Player = player;
+            BufferSize = Math.Max(1, bufferSize);
+            Content = content;
+            InputField = inputField;
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
             Visible = false;
 
-            SetProcess(false);
-            SetPhysicsProcess(false);
+            Node.SetProcess(false);
+            Node.SetPhysicsProcess(false);
 
-            _commands = _providers.Bind(p => p.CreateCommands(this)).ToMap();
-
-            var onDispose = this.OnDispose().Where(identity);
+            var disposed = Disposed.Where(identity);
 
             // Can't use ILoggable extension for Subscribe here, since ConsoleLogger depends on DebugConsole.
+            void LogError(Exception e) => GD.PrintErr(e);
+
             InputField.OnUnhandledInput()
                 .OfType<InputEventKey>()
                 .Where(_ => Visible)
                 .Where(e => e.Scancode == (int) KeyList.Space && e.Control && e.Pressed && !e.IsEcho())
                 .Select(_ => InputField.Text.Substring(0, InputField.CaretPosition))
-                .TakeUntil(onDispose)
-                .Subscribe(AutoComplete, e => GD.Print(e.ToString())); 
+                .TakeUntil(disposed)
+                .Subscribe(AutoComplete, LogError);
 
-            Player.OnAnimationFinish()
+            InputField.OnTextEntered()
+                .TakeUntil(disposed)
+                .Subscribe(OnTextInput, LogError);
+
+            var onAnimationFinish = Player.Map(p => p.OnAnimationFinish())
+                .ToObservable()
+                .Switch();
+
+            onAnimationFinish
                 .Where(a => a == ShowAnimation)
-                .TakeUntil(onDispose)
-                .Subscribe(_ => OnShown(), e => GD.Print(e.ToString()));
+                .TakeUntil(disposed)
+                .Subscribe(_ => OnShown(), LogError);
 
-            Player.OnAnimationFinish()
+            onAnimationFinish
                 .Where(a => a == HideAnimation)
-                .TakeUntil(onDispose)
-                .Subscribe(_ => OnHidden(), e => GD.Print(e.ToString()));
+                .TakeUntil(disposed)
+                .Subscribe(_ => OnHidden(), LogError);
+
+            Node.OnVisibilityChange()
+                .Select(v => v ? HideAnimation : ShowAnimation)
+                .TakeUntil(disposed)
+                .Subscribe(PlayAnimation, LogError);
 
             Content.AddColorOverride("default_color", TextColor);
         }
 
-        public new void Show()
-        {
-            if (!Visible) PlayAnimation(ShowAnimation);
-        }
-
-        public new void Hide()
-        {
-            if (Visible) PlayAnimation(HideAnimation);
-        }
-
         protected void OnShown()
         {
-            GetTree().SetPause(true);
+            Node.GetTree().SetPause(true);
 
             _mouseMode = Input.GetMouseMode();
 
@@ -114,17 +142,19 @@ namespace AlleyCat.UI.Console
 
         protected void OnHidden()
         {
-            Input.SetMouseMode(_mouseMode);
+            _mouseMode.Iter(Input.SetMouseMode);
+            _mouseMode = None;
 
-            GetTree().SetPause(false);
+            Node.GetTree().SetPause(false);
         }
 
         private void PlayAnimation(string name)
         {
-            if (Player.IsPlaying()) return;
-
-            InputField.Clear();
-            Player.Play(name);
+            Player.Filter(p => !p.IsPlaying()).Iter(player =>
+            {
+                InputField.Clear();
+                player.Play(name);
+            });
         }
 
         public IConsole Write(string text, TextStyle style)
@@ -155,7 +185,7 @@ namespace AlleyCat.UI.Console
                 action => action.Execute(arguments),
                 () =>
                 {
-                    var message = string.Format(Tr("console.error.command.invalid"), command);
+                    var message = string.Format(Translate("console.error.command.invalid"), command);
 
                     this.Warning(message).NewLine();
                 }
@@ -185,7 +215,7 @@ namespace AlleyCat.UI.Console
 
                 var suggestions = candidates.Select(c => c.Substring(normalized.Length).Trim()).Freeze();
 
-                this.Text(Tr("console.suggestions")).Text(": ");
+                this.Text(Translate("console.suggestions")).Text(": ");
 
                 var first = true;
 
@@ -270,7 +300,5 @@ namespace AlleyCat.UI.Console
                 Content.RemoveLine(count - 1);
             }
         }
-
-        public override void _Ready() => this.Autowire();
     }
 }

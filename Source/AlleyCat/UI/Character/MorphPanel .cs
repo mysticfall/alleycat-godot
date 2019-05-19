@@ -1,31 +1,28 @@
-using System.Linq;
-using AlleyCat.Autowire;
-using AlleyCat.Logging;
 using AlleyCat.Morph;
 using AlleyCat.Morph.Generic;
+using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
-    public abstract class MorphPanel : Container, ILoggable
+    public abstract class MorphPanel : UIControl
     {
-        [Service, CanBeNull]
-        public ILogger Logger { get; private set; }
+        public IMorph Morph { get; }
 
-        [Node(true)]
-        protected Label Label { get; private set; }
+        protected Label Label { get; }
 
-        public abstract void LoadMorph(IMorph morph);
-
-        public override void _Ready()
+        protected MorphPanel(
+            IMorph morph,
+            Label label,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
-            base._Ready();
+            Ensure.That(morph, nameof(morph)).IsNotNull();
+            Ensure.That(label, nameof(label)).IsNotNull();
 
-            this.Autowire();
+            Morph = morph;
+            Label = label;
         }
     }
 
@@ -33,13 +30,18 @@ namespace AlleyCat.UI.Character
     {
         public abstract class MorphPanel<TVal, TDef> : MorphPanel where TDef : IMorphDefinition
         {
-            public IMorph<TVal, TDef> Morph => _morph.Head();
+            public new IMorph<TVal, TDef> Morph { get; }
 
-            private Option<IMorph<TVal, TDef>> _morph;
-
-            public override void LoadMorph(IMorph morph)
+            protected MorphPanel(
+                IMorph<TVal, TDef> morph, 
+                Label label, 
+                Godot.Control node, 
+                ILoggerFactory loggerFactory) : base(morph, label, node, loggerFactory)
             {
-                _morph = Some(morph).Cast<IMorph<TVal, TDef>>().HeadOrNone();
+                Ensure.That(morph, nameof(morph)).IsNotNull();
+                Ensure.That(label, nameof(label)).IsNotNull();
+
+                Morph = morph;
             }
         }
     }

@@ -1,10 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Data/Shaders/Blur Effect.tres" type="Material" id=1]
-[ext_resource path="res://Source/AlleyCat/UI/GameMenu.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/UI/GameMenuFactory.cs" type="Script" id=2]
 [ext_resource path="res://Data/Themes/Fullscreen UI.tres" type="Theme" id=3]
 [ext_resource path="res://logo-trans.png" type="Texture" id=4]
-
 
 [node name="Menu Screen" type="Panel" groups=[
 "Modal",
@@ -14,6 +13,8 @@ material = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_default_cursor_shape = 5
+
+[node name="Context" type="Node" parent="."]
 script = ExtResource( 2 )
 
 [node name="Panel" type="Panel" parent="."]
@@ -68,6 +69,6 @@ margin_bottom = 172.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 3 )
 text = "ui.MainMenu.quit"
-[connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="." method="Resume"]
-[connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="." method="ShowSettings"]
-[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="Quit"]
+[connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="Context" method="Resume"]
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="Context" method="ShowSettings"]
+[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="Context" method="Quit"]

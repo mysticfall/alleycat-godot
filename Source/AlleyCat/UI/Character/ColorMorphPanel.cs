@@ -1,35 +1,48 @@
 using System.Reactive.Linq;
-using AlleyCat.Autowire;
-using AlleyCat.Event;
 using AlleyCat.Logging;
 using AlleyCat.Morph;
+using AlleyCat.Morph.Generic;
 using AlleyCat.UI.Character.Generic;
+using EnsureThat;
 using Godot;
+using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
     public class ColorMorphPanel : MorphPanel<Color, ColorMorphDefinition>
     {
-        [Node(true)]
-        protected ColorPickerButton Button { get; private set; }
+        protected ColorPickerButton Button { get; }
 
-        [PostConstruct]
-        protected virtual void PostConstruct()
+        public ColorMorphPanel(
+            IMorph<Color, ColorMorphDefinition> morph,
+            ColorPickerButton button,
+            Label label,
+            Godot.Control node,
+            ILoggerFactory loggerFactory) : base(morph, label, node, loggerFactory)
         {
+            Ensure.That(button, nameof(button)).IsNotNull();
+
+            Button = button;
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
             Label.Text = Morph.DisplayName;
 
             Button.EditAlpha = Morph.Definition.UseAlpha;
 
-            var onDispose = this.OnDispose().Where(identity);
+            var disposed = Disposed.Where(identity);
 
             Button.OnColorChange()
                 .Select(v => Morph.Definition.UseAlpha ? v : ToOpaqueColor(v))
-                .TakeUntil(onDispose)
+                .TakeUntil(disposed)
                 .Subscribe(v => Morph.Value = v, this);
 
             Morph.OnChange
-                .TakeUntil(onDispose)
+                .TakeUntil(disposed)
                 .Subscribe(v => Button.Color = v, this);
         }
 
