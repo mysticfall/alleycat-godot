@@ -73,9 +73,9 @@ namespace AlleyCat.Morph
 
             foreach (var index in BoneIndexes)
             {
-                var pose = Skeleton.GetBonePose(index);
+                var pose = new Transform(Basis.Identity, Vector3.Zero).Scaled(scale);
 
-                Skeleton.SetBoneCustomPose(index, pose.Scaled(scale));
+                Skeleton.SetBoneCustomPose(index, pose);
             }
         }
     }
