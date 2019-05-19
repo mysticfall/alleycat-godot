@@ -1,9 +1,11 @@
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
+    [NonInjectable]
     public abstract class UIControl : DelegateObject<Godot.Control>, IHideable
     {
         public virtual bool Visible

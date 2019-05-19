@@ -2,11 +2,13 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using AlleyCat.Autowire;
 using AlleyCat.Common;
 using LanguageExt;
 
 namespace AlleyCat.Event
 {
+    [NonInjectable]
     public class ReactiveObject : IReactiveObject, IInitializable
     {
         public IObservable<bool> Initialized => _initialized.AsObservable();

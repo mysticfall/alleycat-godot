@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,6 +12,7 @@ namespace AlleyCat.Autowire
     {
         private static LanguageExt.HashSet<Type> _excludedTypes = HashSet(
             typeof(IDisposable),
+            typeof(IEnumerable),
             typeof(Node),
             typeof(Object)
         );
