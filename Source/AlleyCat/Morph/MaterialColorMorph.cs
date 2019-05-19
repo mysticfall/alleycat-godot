@@ -14,7 +14,7 @@ namespace AlleyCat.Morph
     {
         public IMeshObject Parent { get; }
 
-        public IEnumerable<SpatialMaterial> Materials =>
+        public IEnumerable<Material> Materials =>
             from mesh in Parent.Meshes
             from target in Definition.Targets
             from material in target.FindMaterial(mesh)
@@ -39,6 +39,20 @@ namespace AlleyCat.Morph
                 .Subscribe(Apply, this);
         }
 
-        protected void Apply(Color value) => Materials.Iter(m => m.AlbedoColor = value);
+        protected void Apply(Color value)
+        {
+            Materials.Iter(m =>
+            {
+                switch (m)
+                {
+                    case SpatialMaterial spatial:
+                        spatial.AlbedoColor = value;
+                        break;
+                    case ShaderMaterial shader:
+                        shader.SetShaderParam("albedo", value);
+                        break;
+                }
+            });
+        }
     }
 }

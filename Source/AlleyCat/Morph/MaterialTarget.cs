@@ -20,7 +20,7 @@ namespace AlleyCat.Morph
             Mesh = mesh;
         }
 
-        public Option<SpatialMaterial> FindMaterial(MeshInstance instance)
+        public Option<Material> FindMaterial(MeshInstance instance)
         {
             Ensure.That(instance, nameof(instance)).IsNotNull();
 
@@ -39,12 +39,10 @@ namespace AlleyCat.Morph
 
             var lookup = toMap(indexes);
 
-            var result = 
+            return 
                 from m in target
                 from i in lookup.Find(material)
                 select m.SurfaceGetMaterial(i);
-
-            return result.OfType<SpatialMaterial>().HeadOrNone();
         }
 
         public static MaterialTarget Create(string value)
