@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -194,6 +194,8 @@ namespace AlleyCat.Autowire
             this.LogDebug("Started building autowire context.");
 
             _built = true;
+
+            _queue.UpdateDependencies();
 
             _queue.Iter(d => d.Process(this));
             _queue.Iter(d => d.ProcessDeferred(this));

@@ -83,6 +83,11 @@ namespace AlleyCat.Autowire
             Dependencies = Dependencies.TryAdd(node);
         }
 
+        public void ClearDependencies()
+        {
+            Dependencies = HashSet<DependencyNode>();
+        }
+
         public bool DependsOn(DependencyNode other) => DependsOn(other, this);
 
         private bool DependsOn(DependencyNode other, DependencyNode from)
@@ -122,5 +127,7 @@ namespace AlleyCat.Autowire
         public override bool Equals(object obj) => obj is DependencyNode node && node.Instance == Instance;
 
         public override int GetHashCode() => Instance.GetInstanceId();
+
+        public override string ToString() => $"{nameof(DependencyNode)}[{Instance.GetPath()}]";
     }
 }

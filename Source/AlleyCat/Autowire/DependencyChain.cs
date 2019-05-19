@@ -61,8 +61,10 @@ namespace AlleyCat.Autowire
 
         public void CopyTo(DependencyNode[] array, int arrayIndex) => _nodes.CopyTo(array, arrayIndex);
 
-        private void UpdateDependencies()
+        public void UpdateDependencies()
         {
+            _nodes.Iter(n => n.ClearDependencies());
+
             var tuples =
                 from source in _nodes
                 from target in _nodes
