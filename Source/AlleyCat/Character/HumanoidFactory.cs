@@ -1,8 +1,10 @@
+using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using Godot;
 using LanguageExt;
+using static LanguageExt.Prelude;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
@@ -16,7 +18,9 @@ namespace AlleyCat.Character
             IPairedEyeSight vision,
             ILocomotion locomotion,
             Skeleton skeleton,
+            IActionSet actions,
             IAnimationManager animationManager,
+            KinematicBody node,
             ILoggerFactory loggerFactory)
         {
             return new Humanoid(
@@ -28,9 +32,9 @@ namespace AlleyCat.Character
                 locomotion,
                 skeleton,
                 animationManager,
-                Actions,
-                Markers,
-                this,
+                actions,
+                Optional(Markers).Flatten(),
+                node,
                 loggerFactory);
         }
     }

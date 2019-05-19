@@ -17,7 +17,9 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
-    public abstract class Character<TRace, TVision, TLocomotion> : GameObject, ICharacter<TRace, TVision, TLocomotion>
+    public abstract class Character<TRace, TVision, TLocomotion> : GameObject,
+        IDelegateObject<KinematicBody>, 
+        ICharacter<TRace, TVision, TLocomotion>
         where TRace : Race
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
@@ -44,7 +46,9 @@ namespace AlleyCat.Character
 
         public IActionSet Actions { get; }
 
-        public Spatial Spatial { get; }
+        public KinematicBody Node { get; }
+
+        public Spatial Spatial => Node;
 
         public IEnumerable<MeshInstance> Meshes => Skeleton.GetChildComponents<MeshInstance>();
 
@@ -58,8 +62,8 @@ namespace AlleyCat.Character
 
         public bool Visible
         {
-            get => Spatial.Visible;
-            set => Spatial.Visible = value;
+            get => Node.Visible;
+            set => Node.Visible = value;
         }
 
         IVision ISeeing.Vision => Vision;
@@ -79,7 +83,7 @@ namespace AlleyCat.Character
             IAnimationManager animationManager,
             IActionSet actions,
             IEnumerable<Marker> markers,
-            Spatial node,
+            KinematicBody node,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
@@ -102,7 +106,7 @@ namespace AlleyCat.Character
             AnimationManager = animationManager;
             Actions = actions;
             Markers = markers.ToMap();
-            Spatial = node;
+            Node = node;
 
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
@@ -115,7 +119,7 @@ namespace AlleyCat.Character
 
             _labelMarker = this.FindLabelMarker();
 
-            this.LogInfo("Created a character: Name = '{}', Race = {}, Sex = {}.", 
+            this.LogInfo("Created a character: Name = '{}', Race = {}, Sex = {}.",
                 displayName, race.DisplayName, sex);
 
             if (Logger.IsEnabled(LogLevel.Debug))

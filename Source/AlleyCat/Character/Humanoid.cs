@@ -26,7 +26,7 @@ namespace AlleyCat.Character
             IAnimationManager animationManager,
             IActionSet actions,
             IEnumerable<Marker> markers,
-            Spatial node,
+            KinematicBody node,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,

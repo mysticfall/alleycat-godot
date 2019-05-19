@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
@@ -6,23 +5,18 @@ using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
-using AlleyCat.Game.Generic;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
-using EnsureThat;
 using Godot;
 using LanguageExt;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
     [AutowireContext]
-    public abstract class CharacterFactory<TCharacter, TRace, TVision, TLocomotion> : KinematicBody,
-        IGameObjectFactory<TCharacter>
-        where TCharacter : Character<TRace, TVision, TLocomotion>
+    public abstract class CharacterFactory<TCharacter, TRace, TVision, TLocomotion> :
+        DelegateObjectFactory<TCharacter, KinematicBody>
+        where TCharacter : Character<TRace, TVision, TLocomotion>, IDelegateObject<KinematicBody>
         where TRace : Race
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
@@ -55,24 +49,13 @@ namespace AlleyCat.Character
         public Option<IRaceRegistry> RaceRegistry { get; set; }
 
         [Service]
-        public IActionSet Actions { get; set; }
+        public Option<IActionSet> Actions { get; set; }
 
         [Service(local: true)]
-        public IEnumerable<Marker> Markers { get; set; } = Seq<Marker>();
+        public IEnumerable<Marker> Markers { get; set; }
 
-        public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<TCharacter>();
-
-        public Validation<string, TCharacter> Service { get; private set; } =
-            Fail<string, TCharacter>("The factory has not been initialized yet.");
-
-        Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
-
-        [Service]
-        protected Option<ILoggerFactory> LoggerFactory { get; set; }
-
-        protected virtual string LogCategory => typeof(TCharacter).FullName;
-
-        protected Validation<string, TCharacter> CreateService(ILoggerFactory loggerFactory)
+        protected override Validation<string, TCharacter> CreateService(KinematicBody node,
+            ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(GetName);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
@@ -90,10 +73,13 @@ namespace AlleyCat.Character
                     .ToValidation("Failed to find the race registry.")
                 from race in raceRegistry.Races.Find(raceName).OfType<TRace>().HeadOrNone()
                     .ToValidation($"Unknown race was specified: '{raceName}'.")
+                from actions in Actions
+                    .ToValidation("Failed to find the action set.")
                 from animationManager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")
                 from character in CreateService(
-                    key, displayName, race, vision, locomotion, skeleton, animationManager, loggerFactory)
+                    key, displayName, race, vision, locomotion, skeleton, actions, animationManager, node,
+                    loggerFactory)
                 select character;
         }
 
@@ -104,42 +90,9 @@ namespace AlleyCat.Character
             TVision vision,
             TLocomotion locomotion,
             Skeleton skeleton,
+            IActionSet actions,
             IAnimationManager animationManager,
+            KinematicBody node,
             ILoggerFactory loggerFactory);
-
-        public void AddServices(IServiceCollection collection)
-        {
-            Ensure.That(collection, nameof(collection)).IsNotNull();
-
-            if (Service.IsSuccess)
-            {
-                throw new InvalidOperationException("The service has been already created.");
-            }
-
-            var loggerFactory = LoggerFactory.IfNone(() => new NullLoggerFactory());
-
-            (Service = CreateService(loggerFactory)).BiIter(
-                service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => throw new ValidationException(error, this)
-            );
-        }
-
-        public override void _Ready()
-        {
-            base._Ready();
-
-            this.Autowire();
-        }
-
-        [PostConstruct]
-        protected virtual void PostConstruct() => Service.SuccessAsEnumerable().Iter(s => s.Initialize());
-
-        protected override void Dispose(bool disposing)
-        {
-            Service.SuccessAsEnumerable().Iter(s => s.DisposeQuietly());
-            Service = Fail<string, TCharacter>("The factory has been disposed.");
-
-            base.Dispose(disposing);
-        }
     }
 }

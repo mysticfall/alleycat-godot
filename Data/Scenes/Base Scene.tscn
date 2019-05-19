@@ -1,7 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Game/SceneFactory.cs" type="Script" id=1]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Data/UI/Action Menu/Action Menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerControlFactory.cs" type="Script" id=3]
 [ext_resource path="res://Source/AlleyCat/View/OrbitingCharacterViewFactory.cs" type="Script" id=4]
 [ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=5]
@@ -12,7 +12,7 @@
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTapInputFactory.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=12]
-[ext_resource path="res://Data/UI/Action Menu/Action Menu.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=15]
 [ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
@@ -45,7 +45,9 @@ near = 0.001
 
 [node name="Player" parent="Entities/Characters" groups=[
 "Player",
-] instance=ExtResource( 2 )]
+] instance=ExtResource( 13 )]
+
+[node name="Context" parent="Entities/Characters/Player" index="0"]
 Key = "Player"
 DisplayName = "Player"
 
@@ -254,5 +256,7 @@ stretch_mode = 4
 [node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
 visible = false
 
-[node name="Action Menu" parent="UI" instance=ExtResource( 13 )]
+[node name="Action Menu" parent="UI" instance=ExtResource( 2 )]
 visible = false
+
+[editable path="Entities/Characters/Player"]
