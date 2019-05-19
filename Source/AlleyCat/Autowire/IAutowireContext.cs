@@ -6,7 +6,6 @@ using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -29,7 +28,7 @@ namespace AlleyCat.Autowire
         {
             Ensure.That(context, nameof(context)).IsNotNull();
 
-            return context.FindService<IEnumerable<T>>().AsEnumerable().Bind(identity);
+            return context.FindService<IEnumerable<T>>().AsEnumerable().Flatten();
         }
     }
 }
