@@ -387,6 +387,7 @@
     <Compile Include="Source\AlleyCat\UI\Console\IAutoCompletionSupport.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
+    <Compile Include="Source\AlleyCat\UI\LineEditExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\CreateUIAction.cs" />
     <Compile Include="Source\AlleyCat\UI\CreateUIActionFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\EntityLabel.cs" />
