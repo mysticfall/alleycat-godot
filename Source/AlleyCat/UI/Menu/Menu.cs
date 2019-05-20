@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Logging;
@@ -15,7 +14,6 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    [AutowireContext]
     public class Menu : UIControl, IMenu
     {
         public Option<IMenuModel> Current => _current.Value;
