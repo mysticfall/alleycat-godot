@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -401,6 +401,8 @@
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ActionLabelFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\LineEditExtensions.cs" />
+    <Compile Include="Source\AlleyCat\UI\Menu\ItemMenuProvider.cs" />
+    <Compile Include="Source\AlleyCat\UI\Menu\ItemMenuProviderFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\Menu\MenuItemFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\Menu\PlayerMenuProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Menu\PlayerMenuProviderFactory.cs" />

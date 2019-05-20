@@ -64,6 +64,7 @@
 "ui.MainMenu.settings","Settings","게임 설정"
 "ui.MainMenu.quit","Quit","나가기"
 "ui.ActionMenu.Actions","Actions","행동"
+"ui.ActionMenu.Items","Items","아이템"
 "ui.ActionMenu.close","Close","닫기"
 "ui.ActionMenu.up","Up","위로"
 "ui.InventoryView.name","Name","이름"

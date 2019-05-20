@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Source/AlleyCat/UI/Menu/ActionMenuProviderFactory.cs" type="Script" id=1]
 [ext_resource path="res://Data/Fonts/Outlined Text.tres" type="DynamicFont" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Data/UI/Action Menu/Action Item.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Data/Themes/Overlay Background.tres" type="StyleBox" id=5]
 [ext_resource path="res://Source/AlleyCat/UI/Menu/MenuFactory.cs" type="Script" id=6]
+[ext_resource path="res://Source/AlleyCat/UI/Menu/ItemMenuProviderFactory.cs" type="Script" id=7]
 
 [sub_resource type="Theme" id=1]
 default_font = ExtResource( 2 )
@@ -89,3 +90,8 @@ margin_bottom = 26.0
 script = ExtResource( 1 )
 Key = "Actions"
 DisplayName = "ui.ActionMenu.Actions"
+
+[node name="Items" type="Node" parent="Providers"]
+script = ExtResource( 7 )
+Key = "Items"
+DisplayName = "ui.ActionMenu.Items"
