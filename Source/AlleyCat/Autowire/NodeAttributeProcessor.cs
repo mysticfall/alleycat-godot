@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using AlleyCat.Common;
-using AlleyCat.Game;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -36,21 +35,13 @@ namespace AlleyCat.Autowire
             {
                 var parent = path.Bind(v => Optional(node.GetNode(v))).IfNone(node);
 
-                dependency = parent.GetChildren().Cast<Node>().Bind(c =>
-                    DependencyType.IsInstanceOfType(c)
-                        ? Some(c)
-                        : Some(c).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption())).Freeze();
+                dependency = parent.GetChildren().Cast<Node>().Bind(c => c.OfType(DependencyType)).Freeze();
             }
             else
             {
                 var targetPath = path.IfNone(() => NormalizeMemberName(Member.Name));
 
-                var component = node.FindComponent<object>(targetPath);
-
-                var matchingType = component.Filter(DependencyType.IsInstanceOfType);
-                var fromFactory = component.OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption());
-
-                dependency = (matchingType | fromFactory.HeadOrNone()).Freeze();
+                dependency = node.FindComponent(targetPath, DependencyType).Freeze();
             }
 
             return EnumerableHelper.Cast(dependency, DependencyType);
