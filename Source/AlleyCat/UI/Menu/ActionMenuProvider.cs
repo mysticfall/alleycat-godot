@@ -10,30 +10,14 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    public class ActionMenuProvider : GameObject, IMenuModel, IMenuStructureProvider, IMenuHandler
+    public class ActionMenuProvider : PlayerMenuProvider, IMenuStructureProvider, IMenuHandler
     {
-        public string Key { get; }
-
-        public string DisplayName { get; }
-
-        public object Model => this;
-
-        public Option<IMenuModel> Parent => None;
-
-        public PlayerControl PlayerControl { get; }
-
         public ActionMenuProvider(
             string key,
             string displayName,
             PlayerControl playerControl,
-            ILoggerFactory loggerFactory) : base(loggerFactory)
+            ILoggerFactory loggerFactory) : base(key, displayName, playerControl, loggerFactory)
         {
-            Ensure.That(key, nameof(key)).IsNotNull();
-            Ensure.That(displayName, nameof(displayName)).IsNotNull();
-
-            Key = key;
-            DisplayName = displayName;
-            PlayerControl = playerControl;
         }
 
         public bool HasChildren(object item) => item == this || item is IActionSet;
@@ -64,7 +48,7 @@ namespace AlleyCat.UI.Menu
 
         protected virtual Option<IActionContext> CreateActionContext(IMenuModel item)
         {
-            var actor = PlayerControl.Character.OfType<IActor>().HeadOrNone();
+            Ensure.That(item, nameof(item)).IsNotNull();
 
             switch (item.Model)
             {
@@ -76,23 +60,29 @@ namespace AlleyCat.UI.Menu
                     var target = FindTarget(item);
 
                     var context =
-                        from a in actor
+                        from a in Actor
                         from t in target
                         select new InteractionContext(a, t);
 
                     return context.OfType<IActionContext>().HeadOrNone();
                 case IAction _:
-                    return Some<IActionContext>(new ActionContext(actor));
+                    return Some<IActionContext>(new ActionContext(Actor));
                 default:
                     return None;
             }
         }
 
-        public bool CanExecute(IMenuModel item) =>
-            item.Model is IAction action && CreateActionContext(item).Exists(action.AllowedFor);
+        public bool CanExecute(IMenuModel item)
+        {
+            Ensure.That(item, nameof(item)).IsNotNull();
+
+            return item.Model is IAction action && CreateActionContext(item).Exists(action.AllowedFor);
+        }
 
         public void Execute(IMenuModel item)
         {
+            Ensure.That(item, nameof(item)).IsNotNull();
+
             if (item.Model is IAction action)
             {
                 CreateActionContext(item).Iter(action.Execute);
