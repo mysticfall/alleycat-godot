@@ -64,6 +64,7 @@ namespace AlleyCat.UI
             _active = CreateSubject(true);
 
             OnAction = Node.OnUnhandledInput()
+                .Where(_ => Active && Valid)
                 .Where(e => e.IsActionPressed(Action) && !e.IsEcho())
                 .Do(_ => Node.GetTree().SetInputAsHandled())
                 .AsUnitObservable();
