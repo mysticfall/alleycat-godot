@@ -18,12 +18,28 @@ namespace AlleyCat.Common
             return node.HasNode(path) ? Optional(node.GetNode(path)).Bind(OfType<T>) : None;
         }
 
+        public static Option<object> FindComponent(this Node node, NodePath path, Type type)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            return node.HasNode(path) ? Optional(node.GetNode(path)).Bind(n => OfType(n, type)) : None;
+        }
+
         public static Option<T> FindComponent<T>(this Node node) where T : class
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
             // ReSharper disable once ConvertClosureToMethodGroup
             return node.GetChildren().Cast<Node>().Bind(n => OfType<T>(n)).HeadOrNone();
+        }
+
+        public static Option<object> FindComponent(this Node node, Type type)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            return node.GetChildren().Cast<Node>().Bind(n => OfType(n, type)).HeadOrNone();
         }
 
         public static T GetComponent<T>(this Node node, NodePath path) where T : class
@@ -123,6 +139,22 @@ namespace AlleyCat.Common
                     return factory.Service.ToOption().OfType<T>().HeadOrNone();
                 default:
                     return node.FindDelegate().Bind(OfType<T>).HeadOrNone();
+            }
+        }
+
+        public static Option<object> OfType(this Node node, Type type)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+            Ensure.That(type, nameof(type)).IsNotNull();
+
+            switch (node)
+            {
+                case Node result when type.IsInstanceOfType(result):
+                    return result;
+                case IGameObjectFactory factory:
+                    return factory.Service.ToOption().Filter(type.IsInstanceOfType).HeadOrNone();
+                default:
+                    return node.FindDelegate().Bind(n => OfType(n, type)).HeadOrNone();
             }
         }
 
