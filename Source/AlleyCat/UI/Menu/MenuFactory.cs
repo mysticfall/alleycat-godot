@@ -59,8 +59,6 @@ namespace AlleyCat.UI.Menu
                     .ToValidation("Menu must have at least one root item.")
                 from menuHandlers in Optional(MenuHandlers).Filter(Enumerable.Any)
                     .ToValidation("Menu must have at least menu handler.")
-                from renderers in Optional(Renderers).Filter(Enumerable.Any)
-                    .ToValidation("Menu must have at least one renderer.")
                 from itemsContainer in ItemsContainer
                     .ToValidation("Failed to find the items container.")
                 from itemScene in Optional(ItemScene)
@@ -69,7 +67,7 @@ namespace AlleyCat.UI.Menu
                     rootItems,
                     menuHandlers,
                     Optional(StructureProviders).Flatten(),
-                    renderers,
+                    Optional(Renderers).Flatten(),
                     BackAction.TrimToOption(),
                     node,
                     itemsContainer,

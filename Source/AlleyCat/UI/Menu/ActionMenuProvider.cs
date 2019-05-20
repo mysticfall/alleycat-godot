@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
-using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Game;
 using EnsureThat;
@@ -11,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    public class ActionMenuProvider : GameObject, IMenuModel, IMenuRenderer, IMenuStructureProvider, IMenuHandler
+    public class ActionMenuProvider : GameObject, IMenuModel, IMenuStructureProvider, IMenuHandler
     {
         public string Key { get; }
 
@@ -36,10 +35,6 @@ namespace AlleyCat.UI.Menu
             DisplayName = displayName;
             PlayerControl = playerControl;
         }
-
-        public bool CanRender(object item) => item is IAction || item is IActionGroup || item is IActor;
-
-        public virtual INamed Render(object item) => (INamed) item;
 
         public bool HasChildren(object item) => item == this || item is IActionSet;
 

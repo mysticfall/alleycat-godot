@@ -62,15 +62,16 @@ namespace AlleyCat.UI.Menu
             PackedScene itemScene,
             ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {
+            Ensure.That(renderers, nameof(renderers)).IsNotNull();
+
             RootItems = rootItems;
             MenuHandlers = menuHandlers;
             StructureProviders = structureProviders;
-            Renderers = renderers;
+            Renderers = renderers.Append(new FallbackRenderer());
 
             Ensure.Enumerable.HasItems(RootItems, nameof(rootItems));
             Ensure.Enumerable.HasItems(MenuHandlers, nameof(menuHandlers));
             Ensure.Enumerable.HasItems(StructureProviders, nameof(structureProviders));
-            Ensure.Enumerable.HasItems(Renderers, nameof(renderers));
 
             Ensure.That(itemsContainer, nameof(itemsContainer)).IsNotNull();
             Ensure.That(itemScene, nameof(itemScene)).IsNotNull();
@@ -230,6 +231,13 @@ namespace AlleyCat.UI.Menu
             );
 
             return control;
+        }
+
+        public class FallbackRenderer : IMenuRenderer
+        {
+            public bool CanRender(object item) => item is INamed;
+
+            public INamed Render(object item) => (INamed) item;
         }
     }
 }
