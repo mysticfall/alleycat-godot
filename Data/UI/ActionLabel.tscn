@@ -28,8 +28,6 @@ alignment = 1
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
-_textLabel = NodePath("../Label")
-_shortcutLabel = NodePath("../Shortcut")
 
 [node name="Shortcut" type="Label" parent="."]
 margin_top = 10.0

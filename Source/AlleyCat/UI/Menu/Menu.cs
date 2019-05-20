@@ -40,6 +40,8 @@ namespace AlleyCat.UI.Menu
 
         protected Option<ActionLabel> CloseLabel { get; }
 
+        protected Option<Label> EmptyLabel { get; }
+
         protected Node ItemsContainer { get; }
 
         protected PackedScene ItemScene { get; }
@@ -58,6 +60,7 @@ namespace AlleyCat.UI.Menu
             Node itemsContainer,
             Option<ActionLabel> closeLabel,
             Option<ActionLabel> upLabel,
+            Option<Label> emptyLabel,
             Option<Label> breadcrumb,
             PackedScene itemScene,
             ILoggerFactory loggerFactory) : base(node, loggerFactory)
@@ -80,6 +83,7 @@ namespace AlleyCat.UI.Menu
             ItemsContainer = itemsContainer;
             CloseLabel = closeLabel;
             UpLabel = upLabel;
+            EmptyLabel = emptyLabel;
             Breadcrumb = breadcrumb;
             ItemScene = itemScene;
 
@@ -134,7 +138,10 @@ namespace AlleyCat.UI.Menu
 
         private void HandleItemsChange(IEnumerable<IMenuModel> items)
         {
-            ItemsContainer.GetChildren().OfType<Node>().Iter(ItemsContainer.FreeChild);
+            ItemsContainer.GetChildren()
+                .OfType<Node>()
+                .Filter(c => !EmptyLabel.Contains(c))
+                .Iter(ItemsContainer.FreeChild);
 
             bool IsValid(IMenuModel item)
             {
@@ -144,9 +151,11 @@ namespace AlleyCat.UI.Menu
                 return hasChildren || executable;
             }
 
-            items
-                .Filter(IsValid)
-                .Iter((index, item) => CreateItemControl(item, index, ItemsContainer));
+            var list = items.Filter(IsValid).Freeze();
+
+            list.Iter((index, item) => CreateItemControl(item, index, ItemsContainer));
+
+            EmptyLabel.Iter(v => v.Visible = !list.Any());
         }
 
         private void OnVisibilityChanged(bool visible)
@@ -160,7 +169,10 @@ namespace AlleyCat.UI.Menu
 
             if (!visible)
             {
-                ItemsContainer.GetChildren().OfType<Node>().Iter(ItemsContainer.FreeChild);
+                ItemsContainer.GetChildren()
+                    .OfType<Node>()
+                    .Filter(c => !EmptyLabel.Contains(c))
+                    .Iter(ItemsContainer.FreeChild);
             }
         }
 

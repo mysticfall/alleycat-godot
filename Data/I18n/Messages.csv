@@ -67,6 +67,7 @@
 "ui.ActionMenu.Items","Items","아이템"
 "ui.ActionMenu.close","Close","닫기"
 "ui.ActionMenu.up","Up","위로"
+"ui.ActionMenu.empty","(No available actions)","(가능한 동작이 없습니다)"
 "ui.InventoryView.name","Name","이름"
 "ui.InventoryView.type","Type","유형"
 "ui.InventoryView.slot","Slot",""

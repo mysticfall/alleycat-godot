@@ -36,6 +36,9 @@ namespace AlleyCat.UI.Menu
         public Option<ActionLabel> CloseLabel { get; set; }
 
         [Node]
+        public Option<Label> EmptyLabel { get; set; }
+
+        [Node]
         public Option<Node> ItemsContainer { get; set; }
 
         [Export]
@@ -51,6 +54,8 @@ namespace AlleyCat.UI.Menu
         [Export, UsedImplicitly] private NodePath _upLabel = "../Up";
 
         [Export, UsedImplicitly] private NodePath _closeLabel = "../Close";
+
+        [Export, UsedImplicitly] private NodePath _emptyLabel = "../Items/Empty Label";
 
         protected override Validation<string, Menu> CreateService(Godot.Control node, ILoggerFactory loggerFactory)
         {
@@ -73,6 +78,7 @@ namespace AlleyCat.UI.Menu
                     itemsContainer,
                     CloseLabel,
                     UpLabel,
+                    EmptyLabel,
                     Breadcrumb,
                     itemScene,
                     loggerFactory);
