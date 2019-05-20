@@ -126,7 +126,7 @@ namespace AlleyCat.Autowire
 
         public override bool Equals(object obj) => obj is DependencyNode node && node.Instance == Instance;
 
-        public override int GetHashCode() => Instance.GetInstanceId();
+        public override int GetHashCode() => Instance.GetInstanceId().ToString().GetHashCode();
 
         public override string ToString() => $"{nameof(DependencyNode)}[{Instance.GetPath()}]";
     }

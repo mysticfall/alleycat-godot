@@ -62,7 +62,7 @@ namespace AlleyCat.UI.Menu
             OnAction = Node.OnUnhandledInput()
                 .OfType<InputEventKey>()
                 .Where(e => e.Pressed && !e.IsEcho())
-                .Where(e => Shortcut.Map(v => (int) v).Contains(e.Scancode))
+                .Where(e => Shortcut.Map(v => (uint) v).Contains(e.Scancode))
                 .Do(_ => Node.GetTree().SetInputAsHandled())
                 .AsUnitObservable();
         }
@@ -86,7 +86,7 @@ namespace AlleyCat.UI.Menu
                 OnShortcutChange
                     .Select(s => s.Map(v => v.ToString()).IfNone("?"))
                     .TakeUntil(disposed)
-                    .Subscribe(label.SetText, this);
+                    .Subscribe(v => label.Text = v, this);
             });
         }
 

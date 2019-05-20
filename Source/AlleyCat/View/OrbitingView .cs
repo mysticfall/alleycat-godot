@@ -19,7 +19,7 @@ namespace AlleyCat.View
 
         public override Spatial Target => Camera;
 
-        public override bool Valid => base.Valid && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Camera.Current;
 
         protected virtual IObservable<Vector2> RotationInput { get; }
 

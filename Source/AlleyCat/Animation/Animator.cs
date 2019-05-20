@@ -44,7 +44,7 @@ namespace AlleyCat.Animation
                 .Select(a => a.Map(Context.Player.AddAnimation).ValueUnsafe())
                 .Do(a => this.LogDebug("Animation has changed to '{}'.", a))
                 .TakeUntil(Disposed.Where(identity))
-                .Subscribe(Node.SetAnimation, this);
+                .Subscribe(v => Node.Animation = v, this);
         }
 
         public static Option<Animator> TryCreate(

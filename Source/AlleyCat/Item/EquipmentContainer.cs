@@ -84,7 +84,7 @@ namespace AlleyCat.Item
 
             item.SetGlobalTransform(transform);
 
-            item.Node.SetOwner(parent.GetOwner());
+            item.Node.Owner = parent.Owner;
             item.Equip(Holder);
         }
 

@@ -22,7 +22,7 @@ namespace AlleyCat.Control
                 from action in Action.TrimToOption()
                     .ToValidation("Action was not specified.")
                 select new ActionTriggerInput(
-                    GetName(),
+                    Name,
                     action,
                     this,
                     Active,

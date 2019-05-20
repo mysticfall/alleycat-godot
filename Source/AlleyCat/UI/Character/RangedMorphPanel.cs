@@ -57,8 +57,8 @@ namespace AlleyCat.UI.Character
                 .Subscribe(v => Morph.Value = v, this);
 
             Morph.OnChange
-                .Do(Slider.SetValue)
-                .Do(Spinner.SetValue)
+                .Do(v => Slider.Value = v)
+                .Do(v => Spinner.Value = v)
                 .TakeUntil(disposed)
                 .Subscribe(this);
         }

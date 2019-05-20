@@ -57,7 +57,7 @@ namespace AlleyCat.Character
         protected override Validation<string, TCharacter> CreateService(KinematicBody node,
             ILoggerFactory loggerFactory)
         {
-            var key = Key.TrimToOption().IfNone(GetName);
+            var key = Key.TrimToOption().IfNone(() => Name);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
             return

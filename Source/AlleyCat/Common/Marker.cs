@@ -6,7 +6,7 @@ namespace AlleyCat.Common
     [Singleton(typeof(Marker))]
     public class Marker : Spatial, IIdentifiable
     {
-        public string Key => _key.TrimToOption().IfNone(GetName);
+        public string Key => _key.TrimToOption().IfNone(() => Name);
 
         [Export] private string _key;
 

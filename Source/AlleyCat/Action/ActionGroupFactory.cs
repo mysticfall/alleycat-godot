@@ -26,7 +26,7 @@ namespace AlleyCat.Action
 
         protected override Validation<string, ActionGroup> CreateService(ILoggerFactory loggerFactory)
         {
-            var key = Key.TrimToOption().IfNone(GetName);
+            var key = Key.TrimToOption().IfNone(() => Name);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
             return new ActionGroup(key, displayName, Actions, Groups, loggerFactory);

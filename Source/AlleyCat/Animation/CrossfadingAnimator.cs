@@ -80,10 +80,10 @@ namespace AlleyCat.Animation
                     var node = next == 0 ? AnimationNode1 : AnimationNode2;
 
                     this.LogDebug("Crossfading animation from '{}' to '{}'.",
-                        fun(AnimationNode.GetAnimation),
+                        fun(() => AnimationNode.Animation),
                         animation);
 
-                    node.SetAnimation(animation.ValueUnsafe());
+                    node.Animation = animation.ValueUnsafe();
 
                     Context.AnimationTree.Set(Parameter, next);
                 }, this);

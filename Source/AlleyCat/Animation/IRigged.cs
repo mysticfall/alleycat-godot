@@ -41,7 +41,7 @@ namespace AlleyCat.Animation
             rig.IKChains.Find(name).Match(
                 chain =>
                 {
-                    chain.SetInterpolation(0f);
+                    chain.Interpolation = 0f;
                     chain.Stop();
                 },
                 () => throw new ArgumentOutOfRangeException(

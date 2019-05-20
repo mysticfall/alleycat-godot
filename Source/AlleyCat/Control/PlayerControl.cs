@@ -31,7 +31,7 @@ namespace AlleyCat.Control
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Character.IsSome && Camera.Current;
 
         public Option<IHumanoid> Character
         {

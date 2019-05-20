@@ -76,7 +76,7 @@ namespace AlleyCat.UI
             var disposed = Disposed.Where(identity);
 
             OnActiveStateChange
-                .Do(Node.SetVisible)
+                .Do(v => Node.Visible = v)
                 .Do(Node.SetProcessUnhandledInput)
                 .TakeUntil(disposed)
                 .Subscribe(this);
@@ -84,7 +84,7 @@ namespace AlleyCat.UI
             _label
                 .Select(Translate)
                 .TakeUntil(disposed)
-                .Subscribe(TextLabel.SetText, this);
+                .Subscribe(v => TextLabel.Text = v, this);
 
             ShortcutLabel.Iter(label =>
             {
@@ -98,7 +98,7 @@ namespace AlleyCat.UI
                 _action
                     .Select(FindShortcut)
                     .TakeUntil(disposed)
-                    .Subscribe(label.SetText, this);
+                    .Subscribe(v => label.Text = v, this);
             });
         }
     }

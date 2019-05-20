@@ -50,7 +50,7 @@ namespace AlleyCat.IO
             {
                 using (var file = new File())
                 {
-                    return new DateTimeOffset(file.GetModifiedTime(Path), TimeSpan.Zero);
+                    return new DateTimeOffset((long) file.GetModifiedTime(Path), TimeSpan.Zero);
                 }
             }
         }

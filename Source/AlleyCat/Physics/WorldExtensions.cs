@@ -18,7 +18,7 @@ namespace AlleyCat.Physics
             this World world,
             Vector3 from,
             Vector3 to,
-            int collisionLayer = NoCollisionLayer)
+            uint collisionLayer = NoCollisionLayer)
         {
             return IntersectRay(world, from, to, None, collisionLayer);
         }
@@ -28,7 +28,7 @@ namespace AlleyCat.Physics
             Vector3 from,
             Vector3 to,
             Array exclude,
-            int collisionLayer = NoCollisionLayer)
+            uint collisionLayer = NoCollisionLayer)
         {
             return IntersectRay(world, from, to, Some(exclude), collisionLayer);
         }
@@ -38,7 +38,7 @@ namespace AlleyCat.Physics
             Vector3 from,
             Vector3 to,
             Option<Array> exclude,
-            int collisionLayer = NoCollisionLayer)
+            uint collisionLayer = NoCollisionLayer)
         {
             Ensure.That(world, nameof(world)).IsNotNull();
 

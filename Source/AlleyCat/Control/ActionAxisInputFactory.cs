@@ -25,7 +25,7 @@ namespace AlleyCat.Control
                 from negativeAction in NegativeAction.TrimToOption()
                     .ToValidation("Negative action was not specified.")
                 select new ActionAxisInput(
-                    GetName(),
+                    Name,
                     positiveAction,
                     negativeAction,
                     this,

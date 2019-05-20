@@ -43,7 +43,7 @@ namespace AlleyCat.Common
 
         public void DrawLine(Vector3 origin, Vector3 direction, Color color)
         {
-            Material.Iter(SetMaterialOverride);
+            Material.Iter(v => MaterialOverride = v);
 
             Begin(Mesh.PrimitiveType.Lines);
 

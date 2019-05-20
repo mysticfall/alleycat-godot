@@ -13,7 +13,7 @@ namespace AlleyCat.Common
 {
     public class NodeStore<T> : Object
     {
-        private readonly IDictionary<int, T> _store = new Dictionary<int, T>();
+        private readonly IDictionary<ulong, T> _store = new Dictionary<ulong, T>();
 
         public Option<T> Find(Node node)
         {

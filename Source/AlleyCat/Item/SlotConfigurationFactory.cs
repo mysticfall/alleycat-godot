@@ -22,7 +22,7 @@ namespace AlleyCat.Item
 
         protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
-            var key = Key.TrimToOption().IfNone(GetName);
+            var key = Key.TrimToOption().IfNone(() => Name);
             var slot = Slot.TrimToOption().IfNone(key);
 
             return CreateService(key, slot, toSet(Optional(AdditionalSlots).Flatten()), loggerFactory);

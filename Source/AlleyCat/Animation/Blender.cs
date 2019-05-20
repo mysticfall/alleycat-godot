@@ -101,7 +101,7 @@ namespace AlleyCat.Animation
             OnAnimationChange
                 .Select(a => a.Map(Context.Player.AddAnimation).ValueUnsafe())
                 .TakeUntil(Disposed.Where(identity))
-                .Subscribe(AnimationNode.SetAnimation, this);
+                .Subscribe(v => AnimationNode.Animation = v, this);
 
             OnAnimationChange
                 .TakeUntil(Disposed.Where(identity))

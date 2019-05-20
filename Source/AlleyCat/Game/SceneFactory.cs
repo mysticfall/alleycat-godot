@@ -25,7 +25,7 @@ namespace AlleyCat.Game
         protected override Validation<string, Scene> CreateService(ILoggerFactory loggerFactory)
         {
             return new Scene(
-                Key.TrimToOption().IfNone(GetName),
+                Key.TrimToOption().IfNone(() => Name),
                 this,
                 Optional(CharactersPath),
                 Optional(ItemsPath),

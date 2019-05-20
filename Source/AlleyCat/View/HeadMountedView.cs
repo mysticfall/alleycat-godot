@@ -33,7 +33,7 @@ namespace AlleyCat.View
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Character.IsSome && Camera.Current;
 
         public bool AutoActivate => true;
 
@@ -269,7 +269,7 @@ namespace AlleyCat.View
             //TODO Should find a better way not to break the shadow and reflection.
             Character
                 .Bind(c => c.Meshes)
-                .Find(m => m.GetName() == "Head")
+                .Find(m => m.Name == "Head")
                 .Iter(m => m.Visible = !active);
         }
 
@@ -310,7 +310,7 @@ namespace AlleyCat.View
                 .WithLatestFrom(OnCharacterChange.Select(c => c.ToObservable()).Switch(), (_, c) => c)
                 .WithLatestFrom(transition, Stabilize)
                 .TakeUntil(Disposed.Where(identity))
-                .Subscribe(Camera.SetGlobalTransform, this);
+                .Subscribe(t => Camera.GlobalTransform = t, this);
         }
     }
 }

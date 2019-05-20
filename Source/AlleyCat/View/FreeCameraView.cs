@@ -19,7 +19,7 @@ namespace AlleyCat.View
 {
     public class FreeCameraView : TurretLike, IPerspectiveView, IAutoFocusingView
     {
-        public override bool Valid => base.Valid && Character.IsSome && Camera.IsCurrent();
+        public override bool Valid => base.Valid && Character.IsSome && Camera.Current;
 
         public Option<IHumanoid> Character
         {

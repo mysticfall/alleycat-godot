@@ -46,7 +46,7 @@ namespace AlleyCat.Item
 
         protected override Validation<string, Equipment> CreateService(RigidBody node, ILoggerFactory loggerFactory)
         {
-            var key = Key.TrimToOption().IfNone(GetName);
+            var key = Key.TrimToOption().IfNone(() => Name);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
             var description = Description.TrimToOption().Map(Tr);
 

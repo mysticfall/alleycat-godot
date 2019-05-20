@@ -132,7 +132,7 @@ namespace AlleyCat.UI.Console
 
         protected void OnShown()
         {
-            Node.GetTree().SetPause(true);
+            Node.GetTree().Paused = true;
 
             _mouseMode = Input.GetMouseMode();
 
@@ -145,7 +145,7 @@ namespace AlleyCat.UI.Console
             _mouseMode.Iter(Input.SetMouseMode);
             _mouseMode = None;
 
-            Node.GetTree().SetPause(false);
+            Node.GetTree().Paused = false;
         }
 
         private void PlayAnimation(string name)

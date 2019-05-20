@@ -24,7 +24,7 @@ namespace AlleyCat.Character
 
         protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
-            var key = Key.TrimToOption().IfNone(GetName);
+            var key = Key.TrimToOption().IfNone(() => Name);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
 
             return CreateService(key, displayName, loggerFactory);

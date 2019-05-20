@@ -16,7 +16,7 @@ namespace AlleyCat.Control
         protected override Validation<string, MouseAxisInput> CreateService(ILoggerFactory loggerFactory)
         {
             return new MouseAxisInput(
-                GetName(),
+                Name,
                 Axis,
                 GetViewport(),
                 this,
