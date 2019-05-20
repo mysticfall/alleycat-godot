@@ -74,7 +74,7 @@ namespace AlleyCat.Autowire
             }
             catch (Exception e)
             {
-                context.LogError("Failed to process {} on '{}'.", e, processor, node);
+                context.LogError(e, "Failed to process {} on '{}'.", processor, node);
             }
         }
 
