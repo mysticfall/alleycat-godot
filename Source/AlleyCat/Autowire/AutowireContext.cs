@@ -249,7 +249,7 @@ namespace AlleyCat.Autowire
 
         public void Dispose()
         {
-            CheckDisposed();
+            if (_disposed) return;
 
             _services.Clear();
             _queue.Clear();

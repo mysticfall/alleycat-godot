@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using EnsureThat;
 using Godot;
-using JetBrains.Annotations;
 using LanguageExt;
-using Array = Godot.Collections.Array;
 using Object = Godot.Object;
 
 namespace AlleyCat.Common
@@ -37,20 +34,19 @@ namespace AlleyCat.Common
 
             Debug.Assert(data != null, "data != null");
 
-            node.Connect("tree_exited", this, nameof(OnNodeExited), new Array {node});
+            var id = node.GetInstanceId();
+
+            node.OnTreeExiting().Subscribe(_ =>
+            {
+                (data as IDisposable)?.Dispose();
+
+                _store.Remove(id);
+            });
 
             _store.Add(node.GetInstanceId(), data);
 
             return data;
         });
-
-        [UsedImplicitly]
-        protected virtual void OnNodeExited(Node node)
-        {
-            Find(node).OfType<IDisposable>().Iter(d => d.Dispose());
-
-            _store.Remove(node.GetInstanceId());
-        }
 
         protected override void Dispose(bool disposing)
         {

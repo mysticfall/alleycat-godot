@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Event;
 using AlleyCat.Game;
 using EnsureThat;
 using Godot;
@@ -174,6 +175,16 @@ namespace AlleyCat.Common
 
             parent.RemoveChild(child);
             child.QueueFree();
+        }
+
+        public static IObservable<Unit> OnTreeExited(this Node node)
+        {
+            return node.FromSignal("tree_exited").AsUnitObservable();
+        }
+
+        public static IObservable<Unit> OnTreeExiting(this Node node)
+        {
+            return node.FromSignal("tree_exiting").AsUnitObservable();
         }
     }
 }
