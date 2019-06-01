@@ -121,7 +121,7 @@ namespace AlleyCat.Autowire
                 return -1;
             }
 
-            return DependsOn(other) ? 1 : 0;
+            return DependsOn(other) ? 1 : other.Instance.GetPath().ToString().CompareTo(Instance.GetPath());
         }
 
         public override bool Equals(object obj) => obj is DependencyNode node && node.Instance == Instance;
