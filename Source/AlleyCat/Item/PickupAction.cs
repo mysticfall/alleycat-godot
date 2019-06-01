@@ -82,22 +82,32 @@ namespace AlleyCat.Item
             IAnimationManager animationManager,
             InteractionContext context)
         {
-            if (holder is IRigged rig)
-            {
-                var chain = IKChain.Bind(c => rig.IKChains.Find(c));
-                var marker = equipment.Markers.Find(configuration.Key);
+            var rig = Optional(holder).OfType<IRigged>();
+            var chain = IKChain.Bind(c => rig.Bind(r => r.IKChains.Find(c))).HeadOrNone();
 
+            chain.Iter(c =>
+            {
+                var marker = equipment.Markers.Find(configuration.Key);
                 var target = marker.Map(m => m.GlobalTransform).IfNone(equipment.GetGlobalTransform);
 
-                chain.Iter(c => c.Target = target);
-            }
+                Logger.LogDebug($"Using IK chain {chain.Map(v => v.Name)} for marker {marker.Map(v => v.Name)}.");
+
+                c.Target = target;
+                c.Interpolation = 0;
+
+                c.Start();
+            });
 
             animationManager.OnAnimationEvent
                 .OfType<TriggerEvent>()
                 .Where(e => e.Name == "Action" && e.Argument.Contains(Key))
                 .Take(1)
                 .TakeUntil(Disposed.Where(identity))
-                .Subscribe(_ => Equip(holder, equipment, configuration, context), this);
+                .Subscribe(_ =>
+                {
+                    chain.Iter(c => c.Stop());
+                    Equip(holder, equipment, configuration, context);
+                }, this);
 
             if (animationManager is IAnimationStateManager stateManager &&
                 AnimatorPath.IsSome && StatesPath.IsSome)
@@ -105,7 +115,7 @@ namespace AlleyCat.Item
                 (
                     from animator in AnimatorPath.Bind(stateManager.FindAnimator)
                     from states in StatesPath.Bind(stateManager.FindStates)
-                    from state in ActionState 
+                    from state in ActionState
                     select (animator, states, state)).Iter(t =>
                 {
                     t.animator.Animation = animation;
@@ -133,7 +143,7 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
-            return !equipment.Equipped && 
+            return !equipment.Equipped &&
                    holder.DistanceTo(equipment) <= PickupDistance &&
                    holder.FindEquipConfiguration(equipment, Tags).Any();
         }
