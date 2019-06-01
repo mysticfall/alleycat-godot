@@ -132,35 +132,39 @@ namespace AlleyCat.Control
 
             Option<IPerspectiveView> active = None;
 
+            var disposed = Disposed.Where(identity);
+
             foreach (var perspective in Perspectives)
             {
-                perspective.Character = Character;
-
                 active |= Optional(perspective).Where(p => p.Active);
 
                 perspective.OnActiveStateChange
                     .Where(s => Active && !s && Perspective.Contains(perspective))
-                    .TakeUntil(Disposed.Where(identity))
+                    .TakeUntil(disposed)
                     .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)), this);
 
                 perspective.OnActiveStateChange
                     .Where(s => s && !Perspective.Contains(perspective))
-                    .TakeUntil(Disposed.Where(identity))
+                    .TakeUntil(disposed)
                     .Subscribe(_ => Perspective = Some(perspective), this);
             }
 
             Perspective |= active;
 
+            OnCharacterChange
+                .TakeUntil(disposed)
+                .Subscribe(c => Perspectives.Iter(p => p.Character = c), this);
+
             OnActiveStateChange
                 .Do(v => Character.Iter(c => c.Locomotion.Active = v))
                 .Do(v => Perspective.Iter(p => p.Active = v))
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
-                .TakeUntil(Disposed.Where(identity))
+                .TakeUntil(disposed)
                 .Subscribe(this);
 
             OnPerspectiveChange
                 .Pairwise()
-                .TakeUntil(Disposed.Where(identity))
+                .TakeUntil(disposed)
                 .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2), this);
 
             var movementInput = MovementInput
@@ -182,7 +186,7 @@ namespace AlleyCat.Control
                 .Select(v => (Abs(v.input.x) + Abs(v.input.y)) / v.strength)
                 .CombineLatest(walkToRun, (v, ratio) => v + ratio)
                 .Select(v => new Vector3(0, 0, -v))
-                .TakeUntil(Disposed.Where(identity))
+                .TakeUntil(disposed)
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
 
             var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
@@ -218,14 +222,14 @@ namespace AlleyCat.Control
                         .MostRecent((null, 0)),
                     (_, args) => args)
                 .Where(_ => Active && Valid)
-                .TakeUntil(Disposed.Where(identity))
+                .TakeUntil(disposed)
                 .Subscribe(t => t.view.Iter(v => v.Yaw = NormalizeAspectAngle(v.Yaw + t.angle)), this);
 
             tick
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
                 .Select(speed => Character.Map(c => c.GetGlobalTransform().Up() * speed).IfNone(Vector3.Zero))
                 .CombineLatest(locomotion, (velocity, loco) => (loco, velocity))
-                .TakeUntil(Disposed.Where(identity))
+                .TakeUntil(disposed)
                 .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)), this);
         }
 
