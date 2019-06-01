@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Common;
 using AlleyCat.Game;
-using AlleyCat.Item.Generic;
 using AlleyCat.Logging;
 using AlleyCat.Morph;
 using EnsureThat;
@@ -14,7 +13,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public class Equipment : DelegateObject<RigidBody>, ISlotItem<RigidBody>, IEntity, IMarkable, IMorphable
+    public class Equipment : DelegateObject<RigidBody>, IEquipment
     {
         public string Key { get; }
 

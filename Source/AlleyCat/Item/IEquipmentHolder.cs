@@ -15,7 +15,7 @@ namespace AlleyCat.Item
 
     public static class EquipmentHolderExtensions
     {
-        public static bool HasEquipment(this IEquipmentHolder holder, Equipment equipment)
+        public static bool HasEquipment(this IEquipmentHolder holder, IEquipment equipment)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
@@ -24,44 +24,43 @@ namespace AlleyCat.Item
         }
 
         public static Option<EquipmentConfiguration> FindEquipConfiguration(
-            this IEquipmentHolder holder, Equipment item, Set<string> tags)
+            this IEquipmentHolder holder, IEquipment item, Set<string> tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return holder.Equipments.FindConfiguration(item, tags);
         }
 
-        public static Option<Equipment> Equip(
-            this IEquipmentHolder holder, Equipment item, Set<string> tags)
+        public static Option<IEquipment> Equip(
+            this IEquipmentHolder holder, IEquipment item, Set<string> tags)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return holder.Equipments.Equip(item, tags);
         }
 
-        public static Equipment Equip(
-            this IEquipmentHolder holder, Equipment item, EquipmentConfiguration configuration)
+        public static IEquipment Equip(
+            this IEquipmentHolder holder, IEquipment item, EquipmentConfiguration configuration)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return holder.Equipments.Equip(item, configuration);
         }
 
-        public static Option<Equipment> Unequip(
-            this IEquipmentHolder holder, Equipment item) => Unequip(holder, item, None);
+        public static IEquipment Unequip(this IEquipmentHolder holder, IEquipment item) => Unequip(holder, item, None);
 
-        public static Option<Equipment> Unequip(
-            this IEquipmentHolder holder, Equipment item, Option<Node> dropTo)
+        public static IEquipment Unequip(
+            this IEquipmentHolder holder, IEquipment item, Option<Node> dropTo)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return holder.Equipments.Unequip(item, dropTo);
         }
 
-        public static Option<Equipment> Unequip(this IEquipmentHolder holder, string slot) =>
+        public static Option<IEquipment> Unequip(this IEquipmentHolder holder, string slot) =>
             Unequip(holder, slot, None);
 
-        public static Option<Equipment> Unequip(
+        public static Option<IEquipment> Unequip(
             this IEquipmentHolder holder, string slot, Option<Node> dropTo)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();

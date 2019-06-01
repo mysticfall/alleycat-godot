@@ -19,11 +19,11 @@ namespace AlleyCat.UI.Inventory
 {
     public class InventoryView : FullScreenModalPanel
     {
-        public Option<Equipment> Selected { get; private set; }
+        public Option<IEquipment> Selected { get; private set; }
 
-        public IObservable<Option<Equipment>> OnSelectionChange { get; }
+        public IObservable<Option<IEquipment>> OnSelectionChange { get; }
 
-        public IObservable<IEnumerable<Equipment>> OnItemsChange { get; }
+        public IObservable<IEnumerable<IEquipment>> OnItemsChange { get; }
 
         protected IObservable<IEquipmentContainer> OnEquipmentContainerChange { get; }
 
@@ -130,7 +130,7 @@ namespace AlleyCat.UI.Inventory
                 .Subscribe(DisplayItem, this);
         }
 
-        protected TreeItem CreateNode(Equipment item, IEquipmentContainer parent)
+        protected TreeItem CreateNode(IEquipment item, IEquipmentContainer parent)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
@@ -154,7 +154,7 @@ namespace AlleyCat.UI.Inventory
             return node;
         }
 
-        protected virtual void DisplayItem(Option<Equipment> item)
+        protected virtual void DisplayItem(Option<IEquipment> item)
         {
             _buttonListeners.Clear();
 

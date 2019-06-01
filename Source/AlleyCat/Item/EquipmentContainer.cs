@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -12,13 +13,13 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public class EquipmentContainer : SlotContainer<EquipmentSlot, Equipment>, IEquipmentContainer
+    public class EquipmentContainer : SlotContainer<EquipmentSlot, IEquipment>, IEquipmentContainer
     {
         public IEquipmentHolder Holder { get; }
 
         public override Map<string, EquipmentSlot> Slots { get; }
 
-        protected override IEnumerable<Equipment> InitialItems =>
+        protected override IEnumerable<IEquipment> InitialItems =>
             Slots.Values
                 .Map(s => s.GetParent(Holder))
                 .Distinct()
@@ -68,7 +69,7 @@ namespace AlleyCat.Item
             Items.Values.Iter(v => v.Equip(Holder));
         }
 
-        protected override void DoAdd(Equipment item)
+        protected override void DoAdd(IEquipment item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
@@ -88,7 +89,7 @@ namespace AlleyCat.Item
             item.Equip(Holder);
         }
 
-        protected override void DoRemove(Equipment item)
+        protected override void DoRemove(IEquipment item)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
 
@@ -106,7 +107,7 @@ namespace AlleyCat.Item
         public override bool AllowedFor(ISlotConfiguration context) =>
             (context is EquipmentConfiguration || context is Equipment) && base.AllowedFor(context);
 
-        protected virtual void AnimateEquipment(Equipment equipment, IAnimationEvent @event)
+        protected virtual void AnimateEquipment(IEquipment equipment, IAnimationEvent @event)
         {
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
             Ensure.That(@event, nameof(@event)).IsNotNull();
@@ -131,7 +132,7 @@ namespace AlleyCat.Item
 
         protected override void PreDestroy()
         {
-            Items.Values.Iter(v => v.DisposeQuietly());
+            Items.Values.OfType<IDisposable>().Iter(v => v.DisposeQuietly());
 
             base.PreDestroy();
         }

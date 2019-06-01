@@ -9,14 +9,14 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public interface IEquipmentContainer : ISlotContainer<EquipmentSlot, Equipment>
+    public interface IEquipmentContainer : ISlotContainer<EquipmentSlot, IEquipment>
     {
     }
 
     public static class EquipmentContainerExtensions
     {
         public static Option<EquipmentConfiguration> FindConfiguration(
-            this IEquipmentContainer container, Equipment item, Set<string> tags)
+            this IEquipmentContainer container, IEquipment item, Set<string> tags)
         {
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(item, nameof(item)).IsNotNull();
@@ -26,14 +26,14 @@ namespace AlleyCat.Item
             return (tags.Any() ? allConfigs.TaggedAny(tags) : allConfigs).Find(container.AllowedFor);
         }
 
-        public static Option<Equipment> Equip(
-            this IEquipmentContainer container, Equipment item, Set<string> tags)
+        public static Option<IEquipment> Equip(
+            this IEquipmentContainer container, IEquipment item, Set<string> tags)
         {
             return FindConfiguration(container, item, tags).Map(c => Equip(container, item, c));
         }
 
-        public static Equipment Equip(
-            this IEquipmentContainer container, Equipment item, EquipmentConfiguration configuration)
+        public static IEquipment Equip(
+            this IEquipmentContainer container, IEquipment item, EquipmentConfiguration configuration)
         {
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(configuration, nameof(configuration)).IsNotNull();
@@ -44,11 +44,11 @@ namespace AlleyCat.Item
             return item;
         }
 
-        public static Equipment Unequip(this IEquipmentContainer container, Equipment item) =>
+        public static IEquipment Unequip(this IEquipmentContainer container, IEquipment item) =>
             Unequip(container, item, None);
 
-        public static Equipment Unequip(
-            this IEquipmentContainer container, Equipment item, Option<Node> dropTo)
+        public static IEquipment Unequip(
+            this IEquipmentContainer container, IEquipment item, Option<Node> dropTo)
         {
             Ensure.That(container, nameof(container)).IsNotNull();
             Ensure.That(item, nameof(item)).IsNotNull();
@@ -70,10 +70,10 @@ namespace AlleyCat.Item
             return item;
         }
 
-        public static Option<Equipment> Unequip(this IEquipmentContainer container, string slot) =>
+        public static Option<IEquipment> Unequip(this IEquipmentContainer container, string slot) =>
             Unequip(container, slot, None);
 
-        public static Option<Equipment> Unequip(
+        public static Option<IEquipment> Unequip(
             this IEquipmentContainer container, string slot, Option<Node> dropTo)
         {
             Ensure.Any.IsNotNull(container, nameof(container));

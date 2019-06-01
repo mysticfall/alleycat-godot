@@ -277,6 +277,7 @@
     <Compile Include="Source\AlleyCat\Item\CommonEquipmentTags.cs" />
     <Compile Include="Source\AlleyCat\Item\DropAction.cs" />
     <Compile Include="Source\AlleyCat\Item\DropActionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Item\IEquipment.cs" />
     <Compile Include="Source\AlleyCat\Item\PickupActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\EquipmentConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\Equipment.cs" />
