@@ -16,6 +16,9 @@ namespace AlleyCat.View
         [Export(PropertyHint.ExpRange, "1,10")]
         public float MaxFocalDistance { get; set; } = 2f;
 
+        [Export(PropertyHint.ExpRange, "1,10")]
+        public float Convergence { get; set; } = 3f;
+
         [Export] private NodePath _character;
 
         public OrbitingCharacterViewFactory()
@@ -52,7 +55,8 @@ namespace AlleyCat.View
                 Active,
                 loggerFactory)
             {
-                MaxFocalDistance = MaxFocalDistance
+                MaxFocalDistance = MaxFocalDistance,
+                Convergence = Convergence
             };
         }
     }

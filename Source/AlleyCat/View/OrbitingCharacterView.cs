@@ -36,6 +36,12 @@ namespace AlleyCat.View
             set => _maxFocalDistance = Mathf.Max(value, 0);
         }
 
+        public float Convergence
+        {
+            get => _convergence;
+            set => _convergence = Mathf.Max(value, 0);
+        }
+
         public override Spatial Target => Camera;
 
         public override bool Valid => base.Valid && Character.IsSome;
@@ -46,16 +52,21 @@ namespace AlleyCat.View
         {
             get
             {
-                var eyeLevel = Character.Map(c => c.Vision.Viewpoint).IfNone(Vector3.Zero);
-                var position = Character.Map(c => c.Origin()).IfNone(Vector3.Zero);
-
-                var ground = new Plane(Up, Up.Dot(position));
-                var height = ground.DistanceTo(eyeLevel);
-
-                var center = position + Up * height;
+                var eyes = Character.Map(c => c.Vision.Viewpoint).IfNone(Vector3.Zero);
+                var center = Character.Map(c => c.Center()).IfNone(Vector3.Zero);
                 var distance = Distance;
 
-                return distance > 1 ? center : eyeLevel.LinearInterpolate(center, distance - 0.2f * (1 - distance));
+                if (distance > Convergence)
+                {
+                    return center;
+                }
+
+                if (Convergence > 0)
+                {
+                    return eyes.LinearInterpolate(center, (distance - DistanceRange.Min) / Convergence);
+                }
+
+                return eyes;
             }
         }
 
@@ -67,6 +78,8 @@ namespace AlleyCat.View
             .IfNone(Vector3.Forward);
 
         private float _maxFocalDistance = 2f;
+
+        private float _convergence = 3f;
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
