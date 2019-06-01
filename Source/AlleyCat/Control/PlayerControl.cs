@@ -41,17 +41,17 @@ namespace AlleyCat.Control
 
         public IObservable<Option<IHumanoid>> OnCharacterChange => _character.AsObservable();
 
-        public Camera Camera { get; }
+        public Camera Camera => Perspective.Camera;
 
         public IEnumerable<IPerspectiveView> Perspectives { get; }
 
-        public Option<IPerspectiveView> Perspective
+        public IPerspectiveView Perspective
         {
             get => _perspective.Value;
             set => _perspective.OnNext(value);
         }
 
-        public IObservable<Option<IPerspectiveView>> OnPerspectiveChange => _perspective.AsObservable();
+        public IObservable<IPerspectiveView> OnPerspectiveChange => _perspective.AsObservable();
 
         public IActionSet Actions { get; }
 
@@ -63,11 +63,10 @@ namespace AlleyCat.Control
 
         public Option<IEntity> FocusedObject => FocusTracker.Bind(p => p.FocusedObject);
 
-        public Option<IFocusTracker> FocusTracker => Perspective.OfType<IFocusTracker>().HeadOrNone();
+        public Option<IFocusTracker> FocusTracker => Optional(Perspective).OfType<IFocusTracker>().HeadOrNone();
 
         public IObservable<Option<IEntity>> OnFocusChange =>
-            OnPerspectiveChange
-                .Select(p => p.OfType<IFocusTracker>().HeadOrNone())
+            OnPerspectiveChange.Select(p => Optional(p).OfType<IFocusTracker>().HeadOrNone())
                 .Select(p => p.MatchObservable(f => f.OnFocusChange, () => None))
                 .Switch();
 
@@ -81,14 +80,13 @@ namespace AlleyCat.Control
 
         private readonly BehaviorSubject<Option<IHumanoid>> _character;
 
-        private readonly BehaviorSubject<Option<IPerspectiveView>> _perspective;
+        private readonly BehaviorSubject<IPerspectiveView> _perspective;
 
         private readonly BehaviorSubject<bool> _active;
 
         private Option<IPerspectiveView> _lastPerspective;
 
         public PlayerControl(
-            Camera camera,
             IEnumerable<IPerspectiveView> perspectives,
             IActionSet actions,
             Option<IInputBindings> movementInput,
@@ -97,12 +95,11 @@ namespace AlleyCat.Control
             bool active,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
-            Ensure.That(camera, nameof(camera)).IsNotNull();
-            Ensure.That(perspectives, nameof(perspectives)).IsNotNull();
+            Perspectives = perspectives?.Freeze();
+
+            Ensure.Enumerable.HasItems(Perspectives, nameof(perspectives));
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 
-            Camera = camera;
-            Perspectives = perspectives.Freeze();
             Actions = actions;
             ProcessMode = processMode;
             TimeSource = timeSource;
@@ -120,7 +117,15 @@ namespace AlleyCat.Control
 
             _active = CreateSubject(active);
             _character = CreateSubject(Option<IHumanoid>.None);
-            _perspective = CreateSubject<Option<IPerspectiveView>>(None);
+
+            var initial = Perspectives.Find(p => p.Active).IfNone(Perspectives.First);
+
+            if (!initial.Active)
+            {
+                initial.Activate();
+            }
+
+            _perspective = CreateSubject(initial);
         }
 
         protected override void PostConstruct()
@@ -129,26 +134,20 @@ namespace AlleyCat.Control
 
             Input.SetMouseMode(Input.MouseMode.Captured);
 
-            Option<IPerspectiveView> active = None;
-
             var disposed = Disposed.Where(identity);
 
             foreach (var perspective in Perspectives)
             {
-                active |= Optional(perspective).Where(p => p.Active);
+                perspective.OnActiveStateChange
+                    .Where(s => Active && !s && Perspective == perspective)
+                    .TakeUntil(disposed)
+                    .Subscribe(_ => FindNextValidPerspective(perspective).Iter(p => Perspective = p), this);
 
                 perspective.OnActiveStateChange
-                    .Where(s => Active && !s && Perspective.Contains(perspective))
+                    .Where(s => s && Perspective != perspective)
                     .TakeUntil(disposed)
-                    .Subscribe(_ => Perspective = FindNextValidPerspective(Some(perspective)), this);
-
-                perspective.OnActiveStateChange
-                    .Where(s => s && !Perspective.Contains(perspective))
-                    .TakeUntil(disposed)
-                    .Subscribe(_ => Perspective = Some(perspective), this);
+                    .Subscribe(_ => Perspective = perspective, this);
             }
-
-            Perspective |= active;
 
             OnCharacterChange
                 .TakeUntil(disposed)
@@ -156,7 +155,7 @@ namespace AlleyCat.Control
 
             OnActiveStateChange
                 .Do(v => Character.Iter(c => c.Locomotion.Active = v))
-                .Do(v => Perspective.Iter(p => p.Active = v))
+                .Do(v => Perspective.Active = v)
                 .Do(v => Actions.Values.Iter(p => p.Active = v))
                 .TakeUntil(disposed)
                 .Subscribe(this);
@@ -164,11 +163,12 @@ namespace AlleyCat.Control
             OnPerspectiveChange
                 .Pairwise()
                 .TakeUntil(disposed)
-                .Subscribe(t => OnPerspectiveChanged(t.Item1, t.Item2), this);
+                .Where(t => t.Item1 != null)
+                .Subscribe(t => OnPerspectiveChanged(Optional(t.Item1), t.Item2), this);
 
             var movementInput = MovementInput
                 .Where(_ => Character.Exists(c => c.Valid))
-                .Where(_ => Perspective.Exists(p => p.AutoActivate));
+                .Where(_ => Perspective.AutoActivate);
 
             var facing = movementInput
                 .Select(v => Atan2(v.x, v.y));
@@ -188,7 +188,7 @@ namespace AlleyCat.Control
                 .TakeUntil(disposed)
                 .Subscribe(v => Character.Iter(c => c.Locomotion.Move(v)), this);
 
-            var rotatableViews = OnPerspectiveChange.Select(p => p.OfType<ITurretLike>().HeadOrNone());
+            var rotatableViews = OnPerspectiveChange.OfType<ITurretLike>();
             var locomotion = _character.Select(c => c.Select(v => v.Locomotion));
 
             var linearSpeed = locomotion
@@ -200,15 +200,14 @@ namespace AlleyCat.Control
 
             var viewRotationSpeed = rotatableViews.CombineLatest(linearSpeed, facing, tick,
                 (view, speed, offset, delta) =>
-                    view.Map(v => v.YawRange.Clamp(offset) - v.Yaw).Map(NormalizeAspectAngle).Match(target =>
-                        {
-                            // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
-                            var angularSpeed = Min(Deg2Rad(120), Abs(target) * 3) * Sign(target) * Abs(speed);
+                {
+                    var target = NormalizeAspectAngle(view.YawRange.Clamp(offset) - view.Yaw);
 
-                            return Abs(angularSpeed * delta) < Abs(target) ? angularSpeed : target / delta;
-                        },
-                        () => 0
-                    ));
+                    // TODO: Workaround for smooth view rotation until we add max velocity and acceleration to ILocomotion.
+                    var angularSpeed = Min(Deg2Rad(120), Abs(target) * 3) * Sign(target) * Abs(speed);
+
+                    return Abs(angularSpeed * delta) < Abs(target) ? angularSpeed : target / delta;
+                });
 
             var offsetAngle = viewRotationSpeed.CombineLatest(tick, (speed, delta) => speed * delta);
 
@@ -220,9 +219,9 @@ namespace AlleyCat.Control
                         .CombineLatest(offsetAngle, (view, angle) => (view, angle))
                         .MostRecent((null, 0)),
                     (_, args) => args)
-                .Where(_ => Active && Valid)
+                .Where(t => Active && Valid && t.view != null)
                 .TakeUntil(disposed)
-                .Subscribe(t => t.view.Iter(v => v.Yaw = NormalizeAspectAngle(v.Yaw + t.angle)), this);
+                .Subscribe(t => t.view.Yaw = NormalizeAspectAngle(t.view.Yaw + t.angle), this);
 
             tick
                 .Zip(viewRotationSpeed.MostRecent(0), (_, speed) => speed)
@@ -232,33 +231,32 @@ namespace AlleyCat.Control
                 .Subscribe(t => t.loco.Iter(l => l.Rotate(t.velocity)), this);
         }
 
-        protected virtual void OnPerspectiveChanged(
-            Option<IPerspectiveView> previous, Option<IPerspectiveView> current)
+        protected virtual void OnPerspectiveChanged(Option<IPerspectiveView> previous, IPerspectiveView current)
         {
             this.LogDebug("Perspective has changed: {} -> {}.", previous, current);
 
             (
-                from previousRotatable in previous.OfType<ITurretLike>()
-                from currentRotatable in current.OfType<ITurretLike>()
+                from previousRotatable in Optional(previous).OfType<ITurretLike>()
+                from currentRotatable in Optional(current).OfType<ITurretLike>()
                 select (previousRotatable, currentRotatable)
             ).Iter(t => t.currentRotatable.Rotation = t.previousRotatable.Rotation);
 
-            if (!current.Exists(c => c is IAutoFocusingView))
+            if (!(current is IAutoFocusingView))
             {
                 previous.OfType<IAutoFocusingView>().Iter(v => v.DisableDof());
             }
 
             _lastPerspective = previous.Filter(p => p.AutoActivate);
 
-            current.Iter(c => c.Activate());
+            current.Activate();
             previous.Iter(p => p.Deactivate());
         }
 
-        protected virtual Option<IPerspectiveView> FindNextValidPerspective(Option<IPerspectiveView> current)
+        protected virtual Option<IPerspectiveView> FindNextValidPerspective(IPerspectiveView current)
         {
             return _lastPerspective
                 .Concat(Perspectives)
-                .Filter(p => !current.Contains(p) && p.Valid && p.AutoActivate)
+                .Filter(p => p != current && p.Valid && p.AutoActivate)
                 .HeadOrNone();
         }
     }

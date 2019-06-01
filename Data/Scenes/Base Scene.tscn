@@ -60,7 +60,6 @@ DisplayName = "Player"
 [node name="Player" type="Node" parent="Control"]
 script = ExtResource( 3 )
 ProcessMode = 1
-_camera = NodePath("../../Cameras/Main Camera")
 
 [node name="Views" type="Node" parent="Control/Player"]
 

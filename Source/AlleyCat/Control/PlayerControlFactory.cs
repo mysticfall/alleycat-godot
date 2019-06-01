@@ -20,9 +20,6 @@ namespace AlleyCat.Control
         [Export]
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
-        [Node]
-        public Option<Camera> Camera { get; set; }
-
         [Service(local: true)]
         public IEnumerable<IPerspectiveView> Perspectives { get; set; } = Seq<IPerspectiveView>();
 
@@ -37,7 +34,6 @@ namespace AlleyCat.Control
         protected override Validation<string, PlayerControl> CreateService(ILoggerFactory loggerFactory)
         {
             return new PlayerControl(
-                Camera.IfNone(() => GetViewport().GetCamera()),
                 Perspectives,
                 Actions,
                 MovementInput,
