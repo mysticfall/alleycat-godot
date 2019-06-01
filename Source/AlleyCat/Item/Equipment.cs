@@ -52,7 +52,7 @@ namespace AlleyCat.Item
 
         public MeshInstance Mesh { get; }
 
-        public CollisionShape Shape { get; }
+        public IEnumerable<CollisionShape> Colliders { get; }
 
         public IEnumerable<MeshInstance> Meshes => Seq1(Mesh).Filter(m => m.Visible);
 
@@ -74,7 +74,7 @@ namespace AlleyCat.Item
             Option<string> description,
             EquipmentType equipmentType,
             IEnumerable<EquipmentConfiguration> configurations,
-            CollisionShape shape,
+            IEnumerable<CollisionShape> colliders,
             MeshInstance mesh,
             Mesh itemMesh,
             IEnumerable<Marker> markers,
@@ -84,18 +84,20 @@ namespace AlleyCat.Item
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
-            Ensure.That(shape, nameof(shape)).IsNotNull();
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
             Ensure.That(itemMesh, nameof(itemMesh)).IsNotNull();
             Ensure.That(markers, nameof(markers)).IsNotNull();
             Ensure.That(morphGroups, nameof(morphGroups)).IsNotNull();
+
+            Colliders = colliders.Freeze();
+
+            Ensure.Enumerable.HasItems(Colliders, nameof(colliders));
 
             Key = key;
             DisplayName = displayName;
             Description = description;
             EquipmentType = equipmentType;
             Mesh = mesh;
-            Shape = shape;
             ItemMesh = itemMesh;
             Markers = markers.ToMap();
 
@@ -153,7 +155,7 @@ namespace AlleyCat.Item
             Node.Sleeping = equipped;
             Node.InputRayPickable = !equipped;
 
-            Shape.Disabled = equipped;
+            Colliders.Iter(c => c.Disabled = equipped);
         }
 
         public bool AllowedFor(ISlotContainer context) => true;

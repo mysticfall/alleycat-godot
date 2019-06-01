@@ -32,8 +32,8 @@ namespace AlleyCat.Item
         [Service]
         public Option<MeshInstance> Mesh { get; set; }
 
-        [Service]
-        public Option<CollisionShape> Shape { get; set; }
+        [Service(local: true)]
+        public IEnumerable<CollisionShape> Colliders { get; set; }
 
         [Service]
         public IEnumerable<EquipmentConfiguration> Configurations { get; set; }
@@ -53,7 +53,7 @@ namespace AlleyCat.Item
             return
                 from mesh in Mesh
                     .ToValidation("Failed to find the mesh instance.")
-                from shape in Shape
+                from colliders in Optional(Colliders).Filter(Enumerable.Any)
                     .ToValidation("Failed to find the collision shape.")
                 from itemMesh in Optional(ItemMesh)
                     .ToValidation("Failed to find the item mesh.")
@@ -65,7 +65,7 @@ namespace AlleyCat.Item
                     description,
                     EquipmentType,
                     configurations,
-                    shape,
+                    colliders,
                     mesh,
                     itemMesh,
                     Optional(Markers).Flatten(),
