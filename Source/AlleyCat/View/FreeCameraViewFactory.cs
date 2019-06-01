@@ -1,5 +1,4 @@
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Motion;
@@ -11,9 +10,6 @@ namespace AlleyCat.View
 {
     public class FreeCameraViewFactory : TurretLikeFactory<FreeCameraView>
     {
-        [Node]
-        public Option<IHumanoid> Character { get; set; }
-
         [Node]
         public Option<Camera> Camera { get; set; }
 
@@ -49,7 +45,6 @@ namespace AlleyCat.View
         {
             return new FreeCameraView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
-                Character | this.FindPlayer<IHumanoid>(),
                 RotationInput,
                 MovementInput,
                 ToggleInput,

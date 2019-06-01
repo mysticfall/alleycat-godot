@@ -79,7 +79,6 @@ namespace AlleyCat.View
 
         public FreeCameraView(
             Camera camera,
-            Option<IHumanoid> character,
             Option<IInputBindings> rotationInput,
             Option<IInputBindings> movementInput,
             Option<IInputBindings> toggleInput,
@@ -109,7 +108,7 @@ namespace AlleyCat.View
 
             TimeSource = timeSource;
 
-            _character = CreateSubject(character);
+            _character = CreateSubject(Option<IHumanoid>.None);
 
             _rotationInput = rotationInput;
             _movementInput = movementInput;

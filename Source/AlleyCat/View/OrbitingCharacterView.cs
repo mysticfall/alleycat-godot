@@ -85,7 +85,6 @@ namespace AlleyCat.View
 
         public OrbitingCharacterView(
             Camera camera,
-            Option<IHumanoid> character,
             Option<IInputBindings> rotationInput,
             Option<IInputBindings> zoomInput,
             Range<float> yawRange,
@@ -126,7 +125,7 @@ namespace AlleyCat.View
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(current => FocusedObject = current, this);
 
-            _character = CreateSubject(character);
+            _character = CreateSubject(Option<IHumanoid>.None);
         }
 
         protected override void PostConstruct()

@@ -10,9 +10,9 @@ namespace AlleyCat.View
     {
         IEnumerable<IPerspectiveView> Perspectives { get; }
 
-        Option<IPerspectiveView> Perspective { get; set; }
+        IPerspectiveView Perspective { get; set; }
 
-        IObservable<Option<IPerspectiveView>> OnPerspectiveChange { get; }
+        IObservable<IPerspectiveView> OnPerspectiveChange { get; }
     }
 
     public static class PerspectiveSwitcherExtensions

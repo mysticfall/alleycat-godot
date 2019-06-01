@@ -1,5 +1,4 @@
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Control;
 using AlleyCat.Event;
@@ -14,9 +13,6 @@ namespace AlleyCat.View
     {
         [Node]
         public Option<Camera> Camera { get; set; }
-
-        [Node]
-        public Option<IHumanoid> Character { get; set; }
 
         [Export]
         public float Offset { get; set; } = 0.02f;
@@ -80,7 +76,6 @@ namespace AlleyCat.View
         {
             return new HeadMountedView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
-                Character | this.FindPlayer<IHumanoid>(),
                 RotationInput,
                 DeactivateInput,
                 yawRange,

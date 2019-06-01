@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AlleyCat.Action;
 using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Event;
 using AlleyCat.Game;
 using AlleyCat.View;
@@ -22,9 +21,6 @@ namespace AlleyCat.Control
         public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
 
         [Node]
-        public Option<IHumanoid> Character { get; set; }
-
-        [Node]
         public Option<Camera> Camera { get; set; }
 
         [Service(local: true)]
@@ -36,15 +32,12 @@ namespace AlleyCat.Control
         [Node("Movement")]
         public Option<IInputBindings> MovementInput { get; set; }
 
-        [Export] private NodePath _characterPath;
-
-        [Export] private NodePath _cameraPath;
+        [Export] private NodePath _camera;
 
         protected override Validation<string, PlayerControl> CreateService(ILoggerFactory loggerFactory)
         {
             return new PlayerControl(
                 Camera.IfNone(() => GetViewport().GetCamera()),
-                Character | this.FindPlayer<IHumanoid>(),
                 Perspectives,
                 Actions,
                 MovementInput,

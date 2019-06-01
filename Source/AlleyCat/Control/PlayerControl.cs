@@ -89,7 +89,6 @@ namespace AlleyCat.Control
 
         public PlayerControl(
             Camera camera,
-            Option<IHumanoid> character,
             IEnumerable<IPerspectiveView> perspectives,
             IActionSet actions,
             Option<IInputBindings> movementInput,
@@ -120,7 +119,7 @@ namespace AlleyCat.Control
                 .StartWith(0f);
 
             _active = CreateSubject(active);
-            _character = CreateSubject(character);
+            _character = CreateSubject(Option<IHumanoid>.None);
             _perspective = CreateSubject<Option<IPerspectiveView>>(None);
         }
 

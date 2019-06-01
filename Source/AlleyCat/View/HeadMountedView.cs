@@ -160,7 +160,6 @@ namespace AlleyCat.View
 
         public HeadMountedView(
             Camera camera,
-            Option<IHumanoid> character,
             Option<IInputBindings> rotationInput,
             Option<IInputBindings> deactivateInput,
             Range<float> yawRange,
@@ -216,7 +215,7 @@ namespace AlleyCat.View
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(current => FocusedObject = current, this);
 
-            _character = CreateSubject(character);
+            _character = CreateSubject(Option<IHumanoid>.None);
 
             _rotationInput = rotationInput;
             _deactivateInput = deactivateInput;

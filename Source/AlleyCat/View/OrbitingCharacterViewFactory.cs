@@ -1,5 +1,3 @@
-using AlleyCat.Autowire;
-using AlleyCat.Character;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using Godot;
@@ -10,9 +8,6 @@ namespace AlleyCat.View
 {
     public class OrbitingCharacterViewFactory : OrbitingViewFactory<OrbitingCharacterView>
     {
-        [Node]
-        public Option<IHumanoid> Character { get; set; }
-
         [Export(PropertyHint.ExpRange, "1,10")]
         public float MaxFocalDistance { get; set; } = 2f;
 
@@ -42,7 +37,6 @@ namespace AlleyCat.View
         {
             return new OrbitingCharacterView(
                 Camera.IfNone(() => GetViewport().GetCamera()),
-                Character | this.FindPlayer<IHumanoid>(),
                 RotationInput,
                 ZoomInput,
                 yawRange,

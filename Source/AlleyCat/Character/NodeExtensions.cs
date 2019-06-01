@@ -9,7 +9,14 @@ namespace AlleyCat.Character
     {
         public const string PlayerTag = "Player";
 
-        public static Option<T> FindPlayer<T>(this Node node) where T : class, ICharacter
+        public static bool IsPlayer(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            return node.OfType<IHumanoid>().Exists(n => n.Spatial.GetGroups().Contains(PlayerTag));
+        }
+
+        public static Option<T> FindPlayer<T>(this Node node) where T : class, IHumanoid
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 
