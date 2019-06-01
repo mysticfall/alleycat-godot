@@ -40,9 +40,15 @@ namespace AlleyCat.Item
 
         public Set<string> Tags { get; }
 
+        public Option<IEquipmentHolder> Holder => _holder.Value;
+
+        public IObservable<Option<IEquipmentHolder>> OnHolderChange => _holder.AsObservable();
+
         private float _animationTransition = 1f;
 
         private readonly BehaviorSubject<bool> _active;
+
+        private readonly BehaviorSubject<Option<IEquipmentHolder>> _holder;
 
         protected EquipmentConfiguration(
             string key,
@@ -55,6 +61,7 @@ namespace AlleyCat.Item
             Tags = tags;
 
             _active = CreateSubject(active);
+            _holder= CreateSubject(Option<IEquipmentHolder>.None);
         }
 
         public virtual void OnEquip(IEquipmentHolder holder, Equipment equipment)
@@ -72,6 +79,8 @@ namespace AlleyCat.Item
             Mesh
                 .SelectMany(mesh => equipment.Meshes, (mesh, instance) => (mesh, instance))
                 .Iter(t => t.instance.Mesh = t.mesh);
+
+            _holder.OnNext(Some(holder));
         }
 
         public virtual void OnUnequip(IEquipmentHolder holder, Equipment equipment)
@@ -89,6 +98,8 @@ namespace AlleyCat.Item
                 mesh.Mesh = equipment.ItemMesh;
                 mesh.Skeleton = mesh.GetPathTo(equipment.Node);
             }
+
+            _holder.OnNext(None);
         }
     }
 }
