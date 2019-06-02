@@ -104,7 +104,7 @@ namespace AlleyCat.View
                 .Select(v => v * 2f);
             ToggleInput = toggleInput.Bind(i => i.FindTrigger().HeadOrNone())
                 .MatchObservable(identity, Observable.Empty<bool>)
-                .Where(_ => Valid);
+                .Where(v => v && Valid);
 
             TimeSource = timeSource;
 

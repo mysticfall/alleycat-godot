@@ -46,17 +46,19 @@ namespace AlleyCat.Control
             var input = UnhandledOnly ? Source.OnUnhandledInput : Source.OnInput;
 
             return input
-                .Select(e => e.IsActionPressed(Action))
-                .Where(identity)
+                .Select(e => (pressed: e.IsActionPressed(Action), released: e.IsActionReleased(Action)))
+                .Where(v => v.pressed || v.released)
+                .Select(v => v.pressed)
+                .DistinctUntilChanged()
                 .Do(_ =>
                 {
                     if (Active && StopPropagation) Source.SetInputAsHandled();
                 });
         }
-        
+
         public override bool ConflictsWith(IInput other) =>
-            other != this && 
-            other is IActionInput input && 
+            other != this &&
+            other is IActionInput input &&
             Actions.Any(input.Actions.Contains);
     }
 }
