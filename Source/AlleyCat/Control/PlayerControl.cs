@@ -55,6 +55,8 @@ namespace AlleyCat.Control
 
         public IActionSet Actions { get; }
 
+        public IEnumerable<IInput> Inputs { get; }
+
         public float MaxFocalDistance
         {
             get => FocusTracker.Map(p => p.MaxFocalDistance).IfNone(0f);
@@ -86,10 +88,10 @@ namespace AlleyCat.Control
 
         private Option<IPerspectiveView> _lastPerspective;
 
-        public PlayerControl(
-            IEnumerable<IPerspectiveView> perspectives,
+        public PlayerControl(IEnumerable<IPerspectiveView> perspectives,
             IActionSet actions,
             Option<IInputBindings> movementInput,
+            IEnumerable<IInput> inputs,
             ProcessMode processMode,
             ITimeSource timeSource,
             bool active,
@@ -98,9 +100,11 @@ namespace AlleyCat.Control
             Perspectives = perspectives?.Freeze();
 
             Ensure.Enumerable.HasItems(Perspectives, nameof(perspectives));
+            Ensure.That(inputs, nameof(inputs)).IsNotNull();
             Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
 
             Actions = actions;
+            Inputs = inputs;
             ProcessMode = processMode;
             TimeSource = timeSource;
 
@@ -163,7 +167,6 @@ namespace AlleyCat.Control
             OnPerspectiveChange
                 .Pairwise()
                 .TakeUntil(disposed)
-                .Where(t => t.Item1 != null)
                 .Subscribe(t => OnPerspectiveChanged(Optional(t.Item1), t.Item2), this);
 
             var movementInput = MovementInput

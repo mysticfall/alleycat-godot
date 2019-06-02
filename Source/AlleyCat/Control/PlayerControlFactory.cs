@@ -29,6 +29,9 @@ namespace AlleyCat.Control
         [Node("Movement")]
         public Option<IInputBindings> MovementInput { get; set; }
 
+        [Service(local: true)]
+        public IEnumerable<IInputBindings> Inputs { get; set; }
+
         [Export] private NodePath _camera;
 
         protected override Validation<string, PlayerControl> CreateService(ILoggerFactory loggerFactory)
@@ -37,6 +40,7 @@ namespace AlleyCat.Control
                 Perspectives,
                 Actions,
                 MovementInput,
+                Optional(Inputs).Flatten().Bind(b => b.Inputs.Values),
                 ProcessMode,
                 this,
                 Active,
