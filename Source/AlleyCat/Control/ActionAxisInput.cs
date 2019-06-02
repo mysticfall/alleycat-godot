@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    public class ActionAxisInput : AxisInput
+    public class ActionAxisInput : AxisInput, IActionInput
     {
         public string PositiveAction
         {
@@ -34,6 +36,8 @@ namespace AlleyCat.Control
 
         public bool Polling { get; set; } = true;
 
+        public IEnumerable<string> Actions { get; }
+
         private string _positiveAction;
 
         private string _negativeAction;
@@ -49,6 +53,8 @@ namespace AlleyCat.Control
         {
             PositiveAction = positiveAction;
             NegativeAction = negativeAction;
+
+            Actions = Seq(PositiveAction, NegativeAction);
         }
 
         protected override IObservable<float> CreateRawObservable()
@@ -95,5 +101,10 @@ namespace AlleyCat.Control
 
             public int GetHashCode(float obj) => obj.GetHashCode();
         }
+
+        public override bool ConflictsWith(IInput other) =>
+            other != this && 
+            other is IActionInput input && 
+            Actions.Any(input.Actions.Contains);
     }
 }

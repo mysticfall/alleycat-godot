@@ -54,5 +54,7 @@ namespace AlleyCat.Control
         }
 
         protected abstract IObservable<T> CreateObservable();
+
+        public abstract bool ConflictsWith(IInput other);
     }
 }

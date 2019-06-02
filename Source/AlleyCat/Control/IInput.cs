@@ -5,6 +5,7 @@ namespace AlleyCat.Control
 {
     public interface IInput : IIdentifiable, IActivatable
     {
+        bool ConflictsWith(IInput other);
     }
 
     namespace Generic

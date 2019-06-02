@@ -76,5 +76,10 @@ namespace AlleyCat.Control
                     return 0f;
             }
         }
+
+        public override bool ConflictsWith(IInput other) =>
+            other != this && 
+            other is MouseAxisInput input && 
+            input.Axis == Axis;
     }
 }

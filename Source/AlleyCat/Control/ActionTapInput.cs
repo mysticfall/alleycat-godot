@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
@@ -19,6 +22,8 @@ namespace AlleyCat.Control
                 _action = value;
             }
         }
+
+        public IEnumerable<string> Actions { get; }
 
         public int MaximumTapsPerSecond
         {
@@ -57,6 +62,7 @@ namespace AlleyCat.Control
             Ensure.That(action, nameof(action)).IsNotEmptyOrWhitespace();
 
             Action = action;
+            Actions = Seq1(action);
         }
 
         protected override IObservable<float> CreateRawObservable()
@@ -78,5 +84,10 @@ namespace AlleyCat.Control
 
             return taps.DistinctUntilChanged();
         }
+
+        public override bool ConflictsWith(IInput other) =>
+            other != this && 
+            other is IActionInput input && 
+            Actions.Any(input.Actions.Contains);
     }
 }

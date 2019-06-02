@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -217,6 +217,7 @@
     <Compile Include="Source\AlleyCat\Control\ActionTriggerInputFactory.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\AxisInputFactory.cs" />
+    <Compile Include="Source\AlleyCat\Control\IActionInput.cs" />
     <Compile Include="Source\AlleyCat\Control\IAxisInput.cs" />
     <Compile Include="Source\AlleyCat\Control\IInputBindings.cs" />
     <Compile Include="Source\AlleyCat\Control\Input.cs" />
