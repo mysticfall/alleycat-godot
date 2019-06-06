@@ -1,5 +1,6 @@
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
@@ -46,5 +47,8 @@ namespace AlleyCat.Game
 
             base.PreDestroy();
         }
+
+        public override string ToString() =>
+            this is INamed named ? $"{named.DisplayName}({named.Key})" : $"{GetType().Name}({GetHashCode()})";
     }
 }
