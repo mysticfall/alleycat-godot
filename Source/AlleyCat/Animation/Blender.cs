@@ -53,6 +53,8 @@ namespace AlleyCat.Animation
 
         private readonly BehaviorSubject<float> _timeScale;
 
+        private Option<IDisposable> _blendingProcess;
+
         public Blender(
             string key,
             string blendAmountParameter,
@@ -146,6 +148,8 @@ namespace AlleyCat.Animation
             var clampedAmount = Mathf.Clamp(amount, 0, 1);
             var clampedTransition = Mathf.Max(transition, 0);
 
+            _blendingProcess.Iter(p => p.Dispose());
+
             if (transition > 0)
             {
                 var elapsed = Context.OnAdvance
@@ -155,11 +159,11 @@ namespace AlleyCat.Animation
                     .Where(v => v >= clampedTransition)
                     .Take(1);
 
-                elapsed
+                _blendingProcess = Some(elapsed
                     .Select(v => clampedTransition > 0 ? v / clampedTransition : 0f)
                     .Select(v => Mathf.Min(v * clampedAmount, 1f))
                     .TakeUntil(done)
-                    .Subscribe(v => Amount = v, () => Amount = clampedAmount, this);
+                    .Subscribe(v => Amount = v, () => Amount = clampedAmount, this));
             }
             else
             {
@@ -171,6 +175,8 @@ namespace AlleyCat.Animation
         {
             this.LogDebug("Unblending animation: (transition = {}).", transition);
 
+            _blendingProcess.Iter(p => p.Dispose());
+
             if (transition > 0)
             {
                 var elapsed = Context.OnAdvance
@@ -180,10 +186,10 @@ namespace AlleyCat.Animation
                     .Where(v => v >= transition)
                     .Take(1);
 
-                elapsed
+                _blendingProcess = Some(elapsed
                     .Select(v => Mathf.Max((1f - v / transition) * Amount, 0f))
                     .TakeUntil(done)
-                    .Subscribe(v => Amount = v, () => Amount = 0f, this);
+                    .Subscribe(v => Amount = v, () => Amount = 0f, this));
             }
             else
             {
