@@ -69,6 +69,8 @@ namespace AlleyCat.Item
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
 
+            Logger.LogDebug($"Equipping {equipment} on {holder}.");
+
             Optional(holder.AnimationManager)
                 .OfType<IAnimationStateManager>()
                 .SelectMany(manager => Animation, (manager, animation) => new {manager, animation})
@@ -87,6 +89,8 @@ namespace AlleyCat.Item
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
             Ensure.That(equipment, nameof(equipment)).IsNotNull();
+
+            Logger.LogDebug($"Unequipping {equipment} from {holder}.");
 
             Optional(holder.AnimationManager)
                 .OfType<IAnimationStateManager>()
