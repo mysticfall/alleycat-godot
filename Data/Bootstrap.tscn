@@ -32,7 +32,7 @@ MinimumLevel = 3
 
 [node name="Editor Console" type="Node" parent="Logging"]
 script = ExtResource( 7 )
-MinimumLevel = 2
+MinimumLevel = 1
 
 [node name="UI" type="CanvasLayer" parent="."]
 

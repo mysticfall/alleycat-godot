@@ -2,8 +2,7 @@
   "Logging": {
     "LogLevel": {
       "Default": "Warning",
-      "AlleyCat": "Debug",
-      "AlleyCat.Autowire": "Information"
+      "AlleyCat": "Information"
     }
   }
 }
