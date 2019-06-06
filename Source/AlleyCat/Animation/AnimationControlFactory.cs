@@ -15,13 +15,15 @@ namespace AlleyCat.Animation
                 return control;
             }
 
-            return Animator.TryCreate(name, parent, context).Map(Initialize) |
-                   Blender.TryCreate(name, parent, context).Map(Initialize) |
-                   Blender2D.TryCreate(name, parent, context).Map(Initialize) |
-                   CrossfadingAnimator.TryCreate(name, parent, context).Map(Initialize) |
-                   TimeScale.TryCreate(name, parent, context).Map(Initialize) |
-                   Trigger.TryCreate(name, parent, context).Map(Initialize) |
-                   None;
+            return
+                SeekableAnimator.TryCreate(name, parent, context).Map(Initialize) |
+                Animator.TryCreate(name, parent, context).Map(Initialize) |
+                Blender.TryCreate(name, parent, context).Map(Initialize) |
+                Blender2D.TryCreate(name, parent, context).Map(Initialize) |
+                CrossfadingAnimator.TryCreate(name, parent, context).Map(Initialize) |
+                TimeScale.TryCreate(name, parent, context).Map(Initialize) |
+                Trigger.TryCreate(name, parent, context).Map(Initialize) |
+                None;
         }
     }
 }

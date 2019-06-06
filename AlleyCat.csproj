@@ -98,6 +98,7 @@
     <Compile Include="Source\AlleyCat\Animation\IAnimationStateManager.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationGraph.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimator.cs" />
+    <Compile Include="Source\AlleyCat\Animation\SeekableAnimator.cs" />
     <Compile Include="Source\AlleyCat\Animation\SitAction.cs" />
     <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
