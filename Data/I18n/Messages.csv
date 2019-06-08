@@ -60,6 +60,8 @@
 "item.Collar.Description","A heavy and rusty iron collar","쇠로 만든 녹슨 목갑"
 "item.Rag","Rag","누더기"
 "item.Rag.Description","A dirty and smelly piece of rag that serves as clothes","지저분하고 냄새 나는 누더기로 만든 옷"
+"item.Pickaxe","Pickaxe","곡괭이"
+"item.Pickaxe.Description","A sturdy iron pickaxe","튼튼한 쇠 곡괭이"
 "ui.MainMenu.resume","Resume","계속하기"
 "ui.MainMenu.settings","Settings","게임 설정"
 "ui.MainMenu.quit","Quit","나가기"

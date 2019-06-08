@@ -1,22 +1,102 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.escn" type="PackedScene" id=1]
+[ext_resource path="res://Source/AlleyCat/Control/InputBindingsFactory.cs" type="Script" id=1]
+[ext_resource path="res://Source/AlleyCat/Item/EquipmentFactory.cs" type="Script" id=2]
+[ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=3]
+[ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=4]
+[ext_resource path="res://Source/AlleyCat/Item/MeleeToolConfigurationFactory.cs" type="Script" id=5]
+[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.mesh" type="ArrayMesh" id=6]
+[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.escn" type="PackedScene" id=7]
+[ext_resource path="res://Source/AlleyCat/Control/MouseAxisInputFactory.cs" type="Script" id=8]
+[ext_resource path="res://Source/AlleyCat/Control/ActionTriggerInputFactory.cs" type="Script" id=9]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldTwoHands.anim" type="Animation" id=10]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/SwingPickaxe.anim" type="Animation" id=11]
 
 [sub_resource type="CylinderShape" id=1]
 radius = 0.0268084
-height = 0.701519
+height = 0.68
 
 [sub_resource type="CylinderShape" id=2]
 radius = 0.0268084
-height = 0.776651
+height = 0.76
 
-[node name="Pickaxe" index="0" instance=ExtResource( 1 )]
+[node name="Pickaxe" index="0" instance=ExtResource( 7 )]
 mass = 2.0
 
-[node name="HeadCollisionShape" type="CollisionShape" parent="." index="1"]
-transform = Transform( 1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, -0.399083, 0, 0 )
+[node name="Context" type="Node" parent="." index="0"]
+script = ExtResource( 2 )
+Key = "Pickaxe"
+DisplayName = "item.Pickaxe"
+Description = "item.Pickaxe.Description"
+EquipmentType = 2
+ItemMesh = ExtResource( 6 )
+
+[node name="Pickaxe" parent="." index="1"]
+transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0 )
+
+[node name="Binding" type="Node" parent="Pickaxe" index="0"]
+script = ExtResource( 4 )
+
+[node name="HeadCollisionShape" type="CollisionShape" parent="." index="2"]
+transform = Transform( 1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, -0.0275603, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="HandleCollisionShape" type="CollisionShape" parent="." index="2"]
-transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.0441943, 0, 0 )
+[node name="Binding" type="Node" parent="HeadCollisionShape" index="0"]
+script = ExtResource( 4 )
+
+[node name="HandleCollisionShape" type="CollisionShape" parent="." index="3"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.401973, 0, 0 )
 shape = SubResource( 2 )
+
+[node name="Binding" type="Node" parent="HandleCollisionShape" index="0"]
+script = ExtResource( 4 )
+
+[node name="Configurations" type="Node" parent="." index="4"]
+
+[node name="Carry" type="Node" parent="Configurations" index="0"]
+script = ExtResource( 5 )
+Key = "Carry"
+Slot = "RightHand"
+AdditionalSlots = [ "LeftHand" ]
+Animation = ExtResource( 10 )
+AnimationBlend = "Hands"
+AnimationTransition = 0.5
+Tags = [ "Carry", "Hand", "TwoHands" ]
+SwingAnimation = ExtResource( 11 )
+MaxPosition = 1.8
+MinPosition = 1.1
+
+[node name="Control" type="Node" parent="Configurations/Carry" index="0"]
+
+[node name="Swing" type="Node" parent="Configurations/Carry/Control" index="0"]
+script = ExtResource( 1 )
+
+[node name="X" type="Node" parent="Configurations/Carry/Control/Swing" index="0"]
+script = ExtResource( 8 )
+Interpolate = true
+
+[node name="Y" type="Node" parent="Configurations/Carry/Control/Swing" index="1"]
+script = ExtResource( 8 )
+Interpolate = true
+Axis = 1
+
+[node name="Arm" type="Node" parent="Configurations/Carry/Control" index="1"]
+script = ExtResource( 1 )
+
+[node name="Value" type="Node" parent="Configurations/Carry/Control/Arm" index="0"]
+script = ExtResource( 9 )
+Action = "point2"
+UnhandledOnly = false
+StopPropagation = false
+
+[node name="Markers" type="Spatial" parent="." index="5"]
+
+[node name="Label" type="Spatial" parent="Markers" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.400645, 0.0142181 )
+script = ExtResource( 3 )
+_key = "Label"
+
+[node name="Carry" type="Spatial" parent="Markers" index="1"]
+transform = Transform( -0.946138, 0.107905, 0.305254, 0.270716, 0.780805, 0.563076, -0.177585, 0.615386, -0.76796, 0.596112, 0.00469325, -0.0664358 )
+script = ExtResource( 3 )
+_key = "Carry"
