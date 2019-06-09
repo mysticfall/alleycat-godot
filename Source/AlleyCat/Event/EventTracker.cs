@@ -8,7 +8,7 @@ using Object = Godot.Object;
 
 namespace AlleyCat.Event
 {
-    public class EventTracker : Object
+    internal class EventTracker : Object
     {
         public const string TargetMethod = nameof(OnNext);
 
