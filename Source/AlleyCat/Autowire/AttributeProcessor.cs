@@ -1,9 +1,8 @@
-﻿using System;
-using EnsureThat;
+﻿using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class AttributeProcessor<T> : NodeProcessor where T : Attribute
+    public abstract class AttributeProcessor<T> : NodeProcessor where T : System.Attribute
     {
         public T Attribute { get; }
 

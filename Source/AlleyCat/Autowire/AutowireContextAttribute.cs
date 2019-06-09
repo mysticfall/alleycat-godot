@@ -5,7 +5,7 @@ namespace AlleyCat.Autowire
 {
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
-    public class AutowireContextAttribute : Attribute
+    public class AutowireContextAttribute : System.Attribute
     {
     }
 }

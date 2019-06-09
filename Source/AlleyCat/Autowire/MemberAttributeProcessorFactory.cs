@@ -6,7 +6,7 @@ using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class MemberAttributeProcessorFactory<T> : INodeProcessorFactory where T : Attribute
+    public abstract class MemberAttributeProcessorFactory<T> : INodeProcessorFactory where T : System.Attribute
     {
         public IEnumerable<INodeProcessor> Create(Type type)
         {

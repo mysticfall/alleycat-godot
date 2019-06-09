@@ -6,7 +6,7 @@ namespace AlleyCat.Autowire
 {
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
-    public abstract class InjectableAttribute : Attribute
+    public abstract class InjectableAttribute : System.Attribute
     {
         public Type[] Types { get; }
 

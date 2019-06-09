@@ -7,7 +7,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Autowire
 {
     public abstract class TypeAttributeProcessorFactory<T> : INodeProcessorFactory
-        where T : Attribute
+        where T : System.Attribute
     {
         public IEnumerable<INodeProcessor> Create(Type type)
         {

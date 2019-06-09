@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace AlleyCat.Setting
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class SettingsAttribute : Attribute
+    public class SettingsAttribute : System.Attribute
     {
         public string Key { get; }
 

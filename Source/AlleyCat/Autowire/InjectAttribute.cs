@@ -5,7 +5,7 @@ namespace AlleyCat.Autowire
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
-    public abstract class InjectAttribute : Attribute
+    public abstract class InjectAttribute : System.Attribute
     {
         public bool Required { get; }
 

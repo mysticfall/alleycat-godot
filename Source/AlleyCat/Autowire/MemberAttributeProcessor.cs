@@ -1,10 +1,9 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using EnsureThat;
 
 namespace AlleyCat.Autowire
 {
-    public abstract class MemberAttributeProcessor<T> : AttributeProcessor<T> where T : Attribute
+    public abstract class MemberAttributeProcessor<T> : AttributeProcessor<T> where T : System.Attribute
     {
         public MemberInfo Member { get; }
 
