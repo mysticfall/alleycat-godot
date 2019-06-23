@@ -22,7 +22,12 @@ namespace AlleyCat.Motion
         {
             return PhysicsSettings.Bind(v => Optional(v.Value))
                 .ToValidation("Failed to read physics 3D settings.")
-                .Bind(settings => CreateService(target, settings, loggerFactory));
+                .Bind(settings => CreateService(target, settings, loggerFactory))
+                .Map(service =>
+                {
+                    service.ApplyGravity = ApplyGravity;
+                    return service;
+                });
         }
 
         protected abstract Validation<string, TLocomotion> CreateService(
