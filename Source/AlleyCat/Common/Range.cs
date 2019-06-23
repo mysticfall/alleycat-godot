@@ -44,5 +44,7 @@ namespace AlleyCat.Common
 
             return new Range<T>(min, max, left._num);
         }
+
+        public override string ToString() => $"Range[Min = {Min}, Max = {Max}]";
     }
 }
