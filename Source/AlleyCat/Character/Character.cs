@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
+using AlleyCat.Attribute;
 using AlleyCat.Character.Generic;
 using AlleyCat.Common;
 using AlleyCat.Game;
@@ -18,7 +20,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Character
 {
     public abstract class Character<TRace, TVision, TLocomotion> : GameObject,
-        IDelegateObject<KinematicBody>, 
+        IDelegateObject<KinematicBody>,
         ICharacter<TRace, TVision, TLocomotion>
         where TRace : Race
         where TVision : class, IVision
@@ -41,6 +43,8 @@ namespace AlleyCat.Character
         public IAnimationManager AnimationManager { get; }
 
         public Skeleton Skeleton { get; }
+
+        public IAttributeSet Attributes { get; }
 
         public IEquipmentContainer Equipments { get; }
 
@@ -77,6 +81,7 @@ namespace AlleyCat.Character
             string displayName,
             TRace race,
             Sex sex,
+            IEnumerable<IAttribute> attributes,
             TVision vision,
             TLocomotion locomotion,
             Skeleton skeleton,
@@ -89,6 +94,8 @@ namespace AlleyCat.Character
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
             Ensure.That(race, nameof(race)).IsNotNull();
+            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(vision, nameof(vision)).IsNotNull();
             Ensure.That(locomotion, nameof(locomotion)).IsNotNull();
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
@@ -111,11 +118,9 @@ namespace AlleyCat.Character
             IKChains = toMap(Skeleton.GetChildComponents<SkeletonIK>().Map(i => (i.Name, i)));
 
             var slots = Race.EquipmentSlots.Freeze();
-            var equipments = new EquipmentContainer(slots, this, loggerFactory);
 
-            equipments.Initialize();
-
-            Equipments = equipments;
+            Attributes = new AttributeSet(attributes, this, loggerFactory);
+            Equipments = new EquipmentContainer(slots, this, loggerFactory);
 
             _labelMarker = this.FindLabelMarker();
 
@@ -129,11 +134,18 @@ namespace AlleyCat.Character
             }
         }
 
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            Seq<object>(Attributes, Equipments).OfType<IInitializable>().Iter(i => i.Initialize());
+        }
+
         protected override void PreDestroy()
         {
             base.PreDestroy();
 
-            ((IDisposable) Equipments).Dispose();
+            Seq<object>(Attributes, Equipments).OfType<IDisposable>().Iter(d => d.Dispose());
         }
     }
 }

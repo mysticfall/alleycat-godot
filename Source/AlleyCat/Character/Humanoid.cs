@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AlleyCat.Action;
 using AlleyCat.Animation;
+using AlleyCat.Attribute;
 using AlleyCat.Common;
 using AlleyCat.Logging;
 using AlleyCat.Morph;
@@ -20,6 +21,7 @@ namespace AlleyCat.Character
             string displayName,
             MorphableRace race,
             Sex sex,
+            IEnumerable<IAttribute> attributes,
             IPairedEyeSight vision,
             ILocomotion locomotion,
             Skeleton skeleton,
@@ -32,6 +34,7 @@ namespace AlleyCat.Character
             displayName,
             race,
             sex,
+            attributes,
             vision,
             locomotion,
             skeleton,

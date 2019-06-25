@@ -1,4 +1,5 @@
 using AlleyCat.Action;
+using AlleyCat.Attribute;
 using AlleyCat.Game;
 using AlleyCat.Item;
 using AlleyCat.Motion;
@@ -8,7 +9,7 @@ using AlleyCat.Sensor.Generic;
 
 namespace AlleyCat.Character
 {
-    public interface ICharacter : IEntity, IActor, ILocomotive, ISeeing, IEquipmentHolder
+    public interface ICharacter : IEntity, IActor, ILocomotive, ISeeing, IAttributeHolder, IEquipmentHolder
     {
         Race Race { get; }
 

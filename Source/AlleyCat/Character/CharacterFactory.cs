@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
+using AlleyCat.Attribute;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
@@ -32,6 +33,9 @@ namespace AlleyCat.Character
 
         [Export]
         public Sex Sex { get; set; }
+
+        [Service]
+        public IEnumerable<IAttribute> Attributes { get; set; }
 
         [Service]
         public Option<TVision> Vision { get; set; }
@@ -78,8 +82,8 @@ namespace AlleyCat.Character
                 from animationManager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")
                 from character in CreateService(
-                    key, displayName, race, vision, locomotion, skeleton, actions, animationManager, node,
-                    loggerFactory)
+                    key, displayName, race, Attributes, vision, locomotion, skeleton, actions,
+                    animationManager, node, loggerFactory)
                 select character;
         }
 
@@ -87,6 +91,7 @@ namespace AlleyCat.Character
             string key,
             string displayName,
             TRace race,
+            IEnumerable<IAttribute> attributes,
             TVision vision,
             TLocomotion locomotion,
             Skeleton skeleton,
