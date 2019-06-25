@@ -1,10 +1,10 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/HumanoidFactory.cs" type="Script" id=2]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Scalp.mesh" type="ArrayMesh" id=3]
 [ext_resource path="res://Data/Meshes/Hairs/Human/Female/Short Hair/Hair.mesh" type="ArrayMesh" id=4]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Worn.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Source/AlleyCat/Attribute/DelegateAttributeFactory.cs" type="Script" id=5]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=6]
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=7]
 [ext_resource path="res://Source/AlleyCat/Autowire/Binding.cs" type="Script" id=8]
@@ -33,19 +33,22 @@
 [ext_resource path="res://Source/AlleyCat/Action/ActionGroupFactory.cs" type="Script" id=31]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/SwingPickaxe.anim" type="Animation" id=32]
 [ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=33]
+[ext_resource path="res://Source/AlleyCat/Attribute/AccumulatingAttributeFactory.cs" type="Script" id=34]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Female/Rag/Rag - Worn.tscn" type="PackedScene" id=35]
 [ext_resource path="res://Source/AlleyCat/Action/ActionSetFactory.cs" type="Script" id=36]
+[ext_resource path="res://Source/AlleyCat/Attribute/ConstantAttributeFactory.cs" type="Script" id=37]
 [ext_resource path="res://Source/AlleyCat/Animation/GetUpActionFactory.cs" type="Script" id=38]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldTwoHands.anim" type="Animation" id=39]
 
-[sub_resource type="PhysicsMaterial" id=3]
+[sub_resource type="PhysicsMaterial" id=1]
 
-[sub_resource type="CapsuleShape" id=4]
+[sub_resource type="CapsuleShape" id=2]
 radius = 0.246558
 height = 1.13148
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=6]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=4]
 
 [node name="Human Female" index="0" instance=ExtResource( 6 )]
 
@@ -77,8 +80,8 @@ extra_cull_margin = 2.5
 mesh = ExtResource( 4 )
 material/0 = null
 
-[node name="Rag" parent="Rig" index="4" instance=ExtResource( 5 )]
-physics_material_override = SubResource( 3 )
+[node name="Rag" parent="Rig" index="4" instance=ExtResource( 35 )]
+physics_material_override = SubResource( 1 )
 
 [node name="Collar" parent="Rig" index="5" instance=ExtResource( 1 )]
 
@@ -123,7 +126,7 @@ script = ExtResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="2"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 2 )
 
 [node name="Animations" type="Spatial" parent="." index="3"]
 script = ExtResource( 9 )
@@ -162,10 +165,10 @@ parameters/Blinking/active = true
 parameters/Breathing/blend_amount = 0.6
 "parameters/Breathing Speed/scale" = 1.0
 parameters/Hands/blend_amount = 0.0
-parameters/States/playback = SubResource( 5 )
+parameters/States/playback = SubResource( 3 )
 parameters/States/Moving/Direction/blend_position = Vector2( -0.0018149, -0.00431037 )
 parameters/States/Moving/Speed/scale = 1.0
-parameters/States/Seated/playback = SubResource( 6 )
+parameters/States/Seated/playback = SubResource( 4 )
 parameters/States/Seated/Seated/Sit/current = 0
 "parameters/States/Swing/Swing Seek/seek_position" = -1.0
 "parameters/States/Swing/Swing Speed/scale" = 0.0
@@ -173,14 +176,55 @@ parameters/States/Seated/Seated/Sit/current = 0
 [node name="Binding" type="Node" parent="Animations/AnimationTree" index="0"]
 script = ExtResource( 8 )
 
-[node name="Vision" type="Node" parent="." index="4"]
+[node name="Attributes" type="Node" parent="." index="4"]
+
+[node name="Stamina" type="Node" parent="Attributes" index="0"]
+script = ExtResource( 34 )
+Key = "Stamina"
+DisplayName = "Stamina"
+Description = "Stamina"
+Active = true
+InitialValue = 100.0
+
+[node name="Min" type="Node" parent="Attributes/Stamina" index="0"]
+script = ExtResource( 37 )
+Key = "Min"
+DisplayName = "Min"
+Description = "Min"
+Active = true
+
+[node name="Max" type="Node" parent="Attributes/Stamina" index="1"]
+script = ExtResource( 37 )
+Key = "Max"
+DisplayName = "Max"
+Description = "Max"
+Active = true
+Value = 100.0
+
+[node name="Generator" type="Node" parent="Attributes/Stamina" index="2"]
+script = ExtResource( 5 )
+Key = "Generator"
+DisplayName = "Generator"
+Description = "Generator"
+Active = true
+Target = "StaminaRegen"
+
+[node name="Stamina Regen" type="Node" parent="Attributes" index="1"]
+script = ExtResource( 37 )
+Key = "StaminaRegen"
+DisplayName = "Stamina Regen"
+Description = "Stamina Regen"
+Active = true
+Value = 2.0
+
+[node name="Vision" type="Node" parent="." index="5"]
 script = ExtResource( 26 )
 
-[node name="Locomotion" type="Node" parent="." index="5"]
+[node name="Locomotion" type="Node" parent="." index="6"]
 script = ExtResource( 27 )
 _targetPath = NodePath("..")
 
-[node name="Actions" type="Node" parent="." index="6"]
+[node name="Actions" type="Node" parent="." index="7"]
 script = ExtResource( 36 )
 
 [node name="Pick Up" type="Node" parent="Actions" index="0"]

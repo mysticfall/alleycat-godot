@@ -35,9 +35,9 @@ namespace AlleyCat.Attribute
 
         public void Set(float value) => _value.OnNext(value);
 
-        protected override IObservable<float> CreateObservable(IAttributeSet attributes)
+        protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return _value.CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }

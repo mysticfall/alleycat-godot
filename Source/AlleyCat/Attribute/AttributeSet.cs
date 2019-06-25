@@ -12,6 +12,8 @@ namespace AlleyCat.Attribute
 {
     public class AttributeSet : GameObject, IAttributeSet
     {
+        public IAttributeHolder Holder { get; }
+
         public IObservable<IAttribute> OnChange { get; }
 
         public IEnumerator<KeyValuePair<string, IAttribute>> GetEnumerator() =>
@@ -45,9 +47,15 @@ namespace AlleyCat.Attribute
 
         private readonly Map<string, IAttribute> _attributes;
 
-        public AttributeSet(IEnumerable<IAttribute> attributes, ILoggerFactory loggerFactory) : base(loggerFactory)
+        public AttributeSet(
+            IEnumerable<IAttribute> attributes,
+            IAttributeHolder holder,
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
+
+            Holder = holder;
 
             _attributes = attributes.ToMap();
 
@@ -58,15 +66,14 @@ namespace AlleyCat.Attribute
         {
             base.PostConstruct();
 
-            // ReSharper disable once ImpureMethodCallOnReadonlyValueField
-            _attributes.Iter(m => m.Initialize(this));
+            Values.Iter(m => m.Initialize(Holder));
         }
 
         protected override void PreDestroy()
         {
             base.PreDestroy();
 
-            _attributes.Values.Iter(a => a.DisposeQuietly());
+            Values.Iter(a => a.DisposeQuietly());
         }
     }
 }

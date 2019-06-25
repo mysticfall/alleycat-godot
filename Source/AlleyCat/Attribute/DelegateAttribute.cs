@@ -40,18 +40,18 @@ namespace AlleyCat.Attribute
             _value = CreateSubject(Empty<float>());
         }
 
-        public override void Initialize(IAttributeSet attributes)
+        public override void Initialize(IAttributeHolder holder)
         {
-            base.Initialize(attributes);
+            base.Initialize(holder);
 
-            Target = attributes.TryGetValue(_target);
+            Target = holder.Attributes.TryGetValue(_target);
 
             _value.OnNext(Target.Select(a => a.OnChange).ToObservable().Switch());
         }
 
-        protected override IObservable<float> CreateObservable(IAttributeSet attributes)
+        protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return _value.Switch()
                 .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));

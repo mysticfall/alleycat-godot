@@ -54,13 +54,13 @@ namespace AlleyCat.Attribute
             _value = CreateSubject(Return(initialValue));
         }
 
-        public override void Initialize(IAttributeSet attributes)
+        public override void Initialize(IAttributeHolder holder)
         {
-            base.Initialize(attributes);
+            base.Initialize(holder);
 
             Generator.Iter(generator =>
             {
-                generator.Initialize(attributes);
+                generator.Initialize(holder);
 
                 var increments = Interval(Period, TimeSource.Scheduler(ProcessMode))
                     .Where(_ => Active)
@@ -79,9 +79,9 @@ namespace AlleyCat.Attribute
             _value.OnNext(value);
         }
 
-        protected override IObservable<float> CreateObservable(IAttributeSet attributes)
+        protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
 
             var source = _value
                 .SelectMany(identity)

@@ -89,16 +89,16 @@ namespace AlleyCat.Attribute
             OnChange = publisher.AsObservable();
         }
 
-        public virtual void Initialize(IAttributeSet attributes)
+        public virtual void Initialize(IAttributeHolder holder)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            Modifier.Iter(m => m.Initialize(attributes));
+            Modifier.Iter(m => m.Initialize(holder));
 
-            Min.Iter(m => m.Initialize(attributes));
-            Max.Iter(m => m.Initialize(attributes));
+            Min.Iter(m => m.Initialize(holder));
+            Max.Iter(m => m.Initialize(holder));
 
-            var source = CreateObservable(attributes).Where(_ => Active).DistinctUntilChanged();
+            var source = CreateObservable(holder).Where(_ => Active).DistinctUntilChanged();
 
             _source.OnNext(source);
         }
@@ -119,6 +119,6 @@ namespace AlleyCat.Attribute
             _subscriptions.DisposeQuietly();
         }
 
-        protected abstract IObservable<float> CreateObservable(IAttributeSet attributes);
+        protected abstract IObservable<float> CreateObservable(IAttributeHolder holder);
     }
 }

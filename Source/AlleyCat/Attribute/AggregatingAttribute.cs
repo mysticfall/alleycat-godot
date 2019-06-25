@@ -36,16 +36,16 @@ namespace AlleyCat.Attribute
             Attributes = attributes;
         }
 
-        public override void Initialize(IAttributeSet attributes)
+        public override void Initialize(IAttributeHolder holder)
         {
-            base.Initialize(attributes);
+            base.Initialize(holder);
 
-            Attributes.Iter(m => m.Initialize(attributes));
+            Attributes.Iter(m => m.Initialize(holder));
         }
 
-        protected override IObservable<float> CreateObservable(IAttributeSet attributes)
+        protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return Attributes
                 .Select(a => a.OnChange)

@@ -17,6 +17,6 @@ namespace AlleyCat.Attribute
 
         IObservable<float> OnChange { get; }
 
-        void Initialize(IAttributeSet attributes);
+        void Initialize(IAttributeHolder holder);
     }
 }
