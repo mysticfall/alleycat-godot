@@ -10,9 +10,6 @@ namespace AlleyCat.Attribute
     public class AccumulatingAttributeFactory : AttributeFactory<AccumulatingAttribute>
     {
         [Export]
-        public bool Active { get; set; }
-
-        [Export]
         public float InitialValue { get; set; }
 
         [Node]

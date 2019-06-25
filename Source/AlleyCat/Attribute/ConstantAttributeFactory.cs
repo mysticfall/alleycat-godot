@@ -7,9 +7,6 @@ namespace AlleyCat.Attribute
     public class ConstantAttributeFactory : AttributeFactory<ConstantAttribute>
     {
         [Export]
-        public bool Active { get; set; }
-
-        [Export]
         public float Value { get; set; }
 
         protected override Validation<string, ConstantAttribute> CreateService(

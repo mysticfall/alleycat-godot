@@ -7,9 +7,6 @@ namespace AlleyCat.Attribute
     public class VariableAttributeFactory : AttributeFactory<VariableAttribute>
     {
         [Export]
-        public bool Active { get; set; }
-
-        [Export]
         public float InitialValue { get; set; }
 
         protected override Validation<string, VariableAttribute> CreateService(

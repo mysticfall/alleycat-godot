@@ -8,9 +8,6 @@ namespace AlleyCat.Attribute
     public class DelegateAttributeFactory : AttributeFactory<DelegateAttribute>
     {
         [Export]
-        public bool Active { get; set; }
-
-        [Export]
         public string Target { get; set; }
 
         protected override Validation<string, DelegateAttribute> CreateService(

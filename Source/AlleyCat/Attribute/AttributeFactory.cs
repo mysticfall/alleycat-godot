@@ -19,6 +19,9 @@ namespace AlleyCat.Attribute
         [Export]
         public string Description { get; set; }
 
+        [Export]
+        public bool Active { get; set; }
+
         [Node]
         public Option<IAttribute> Min { get; set; }
 
