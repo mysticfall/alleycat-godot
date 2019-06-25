@@ -19,14 +19,13 @@ namespace AlleyCat.Item
     {
         public abstract Map<string, TSlot> Slots { get; }
 
-        public Map<string, TItem> Items { get; private set; }
+        public Map<string, TItem> Items => _items.Value;
 
         public IObservable<TItem> OnAdd => _onAdd.AsObservable();
 
         public IObservable<TItem> OnRemove => _onRemove.AsObservable();
 
-        public IObservable<IEnumerable<TItem>> OnItemsChange =>
-            OnAdd.Merge(OnRemove).Select(_ => Items.Values).StartWith(Items.Values);
+        public IObservable<IEnumerable<TItem>> OnItemsChange => _items.Select(v => v.Values);
 
         protected abstract IEnumerable<TItem> InitialItems { get; }
 
@@ -34,17 +33,20 @@ namespace AlleyCat.Item
 
         private readonly ISubject<TItem> _onRemove;
 
+        private readonly BehaviorSubject<Map<string, TItem>> _items;
+
         protected SlotContainer(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             _onAdd = CreateSubject<TItem>();
             _onRemove = CreateSubject<TItem>();
+            _items = CreateSubject(Map<string, TItem>());
         }
 
         protected override void PostConstruct()
         {
             base.PostConstruct();
 
-            Items = toMap(InitialItems.Filter(v => Slots.Keys.Contains(v.Slot)).Map(i=>(i.Slot, i)));
+            _items.OnNext(toMap(InitialItems.Filter(v => Slots.Keys.Contains(v.Slot)).Map(i => (i.Slot, i))));
         }
 
         public virtual void Add(TItem item)
@@ -60,7 +62,7 @@ namespace AlleyCat.Item
 
             DoAdd(item);
 
-            Items = Items.Add(item.Slot, item);
+            _items.OnNext(Items.Add(item.Slot, item));
 
             this.LogDebug("Item '{}' is added to the container.", item);
 
@@ -82,7 +84,7 @@ namespace AlleyCat.Item
 
             DoRemove(item);
 
-            Items = Items.Remove(item.Slot);
+            _items.OnNext(Items.Remove(item.Slot));
 
             this.LogDebug("Item '{}' is removed from the container.", item);
 
