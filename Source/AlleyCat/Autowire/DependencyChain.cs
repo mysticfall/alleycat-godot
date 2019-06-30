@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LanguageExt;
 
 namespace AlleyCat.Autowire
 {
@@ -10,7 +11,7 @@ namespace AlleyCat.Autowire
 
         public int Count => _nodes.Count;
 
-        private readonly List<DependencyNode> _nodes = new List<DependencyNode>();
+        private Lst<DependencyNode> _nodes;
 
         private bool _dirty;
 
@@ -28,7 +29,7 @@ namespace AlleyCat.Autowire
 
         public void Add(DependencyNode item)
         {
-            _nodes.Add(item);
+            _nodes += item;
 
             _dirty = true;
         }
@@ -37,14 +38,15 @@ namespace AlleyCat.Autowire
 
         public bool Remove(DependencyNode item)
         {
-            var removed = _nodes.Remove(item);
+            var count = _nodes.Count;
+
+            _nodes = _nodes.Remove(item);
+
+            var removed = count != _nodes.Count;
 
             if (removed)
             {
-                foreach (var node in _nodes)
-                {
-                    node.Dependencies.Remove(item);
-                }
+                _nodes.Iter(n => n.Dependencies.Remove(item));
             }
 
             _dirty |= removed;
@@ -54,12 +56,13 @@ namespace AlleyCat.Autowire
 
         public void Clear()
         {
-            _nodes.Clear();
+            _nodes = _nodes.Clear();
 
             _dirty = false;
         }
 
-        public void CopyTo(DependencyNode[] array, int arrayIndex) => _nodes.CopyTo(array, arrayIndex);
+        public void CopyTo(DependencyNode[] array, int arrayIndex) =>
+            Enumerable.ToArray(_nodes).CopyTo(array, arrayIndex);
 
         public void UpdateDependencies()
         {
@@ -74,9 +77,31 @@ namespace AlleyCat.Autowire
 
             tuples.Iter(t => t.target.AddDependency(t.source));
 
-            _nodes.Sort();
+            _nodes = Sort().Reverse();
 
             _dirty = false;
+        }
+
+        private Lst<DependencyNode> Sort() => Sort(Lst<DependencyNode>.Empty);
+
+        private Lst<DependencyNode> Sort(Lst<DependencyNode> sorted)
+        {
+            return _nodes.Find(n => n.SortMark != SortMark.Permanent).Match(
+                unmarked => Sort(Mark(unmarked, sorted)),
+                () => sorted);
+        }
+
+        private Lst<DependencyNode> Mark(DependencyNode node, Lst<DependencyNode> sorted)
+        {
+            if (node.SortMark != SortMark.Unmarked) return sorted;
+
+            node.SortMark = SortMark.Temporary;
+
+            var result = _nodes.Filter(node.DependsOn).Fold(sorted, (s, n) => Mark(n, s));
+
+            node.SortMark = SortMark.Permanent;
+
+            return node + result;
         }
     }
 }

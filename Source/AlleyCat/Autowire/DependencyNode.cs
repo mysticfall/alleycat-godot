@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
-    internal class DependencyNode : IDependencyResolver, IComparable<DependencyNode>
+    internal class DependencyNode : IDependencyResolver
     {
         public Node Instance { get; }
 
@@ -18,6 +18,8 @@ namespace AlleyCat.Autowire
         public HashSet<Type> Requires => _resolver.Requires;
 
         public HashSet<Type> Provides => _resolver.Provides;
+
+        public SortMark SortMark { get; set; } = SortMark.Unmarked;
 
         private readonly Action<IAutowireContext> _processor;
 
@@ -86,6 +88,7 @@ namespace AlleyCat.Autowire
         public void ClearDependencies()
         {
             Dependencies = HashSet<DependencyNode>();
+            SortMark = SortMark.Unmarked;
         }
 
         public bool DependsOn(DependencyNode other) => DependsOn(other, this);
@@ -114,20 +117,15 @@ namespace AlleyCat.Autowire
             return false;
         }
 
-        public int CompareTo(DependencyNode other)
-        {
-            if (other.DependsOn(this))
-            {
-                return -1;
-            }
-
-            return DependsOn(other) ? 1 : other.Instance.GetPath().ToString().CompareTo(Instance.GetPath());
-        }
-
         public override bool Equals(object obj) => obj is DependencyNode node && node.Instance == Instance;
 
         public override int GetHashCode() => Instance.GetInstanceId().ToString().GetHashCode();
 
         public override string ToString() => $"{nameof(DependencyNode)}[{Instance.GetPath()}]";
+    }
+
+    internal enum SortMark
+    {
+        Unmarked, Temporary, Permanent
     }
 }

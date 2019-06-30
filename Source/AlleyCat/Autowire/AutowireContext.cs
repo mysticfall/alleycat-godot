@@ -197,6 +197,13 @@ namespace AlleyCat.Autowire
 
             _queue.UpdateDependencies();
 
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                this.LogDebug("Dependency build order:");
+
+                _queue.Iter(d => this.LogDebug(" - {}", d.Instance.GetPath()));
+            }
+
             _queue.Iter(d => d.Process(this));
             _queue.Iter(d => d.ProcessDeferred(this));
 
