@@ -1,3 +1,4 @@
+using System;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
@@ -13,6 +14,8 @@ namespace AlleyCat.UI
             get => Node.Visible;
             set => Node.Visible = value;
         }
+
+        public IObservable<bool> OnVisibilityChange => Node.OnVisibilityChange();
 
         protected UIControl(Godot.Control node, ILoggerFactory loggerFactory) : base(node, loggerFactory)
         {

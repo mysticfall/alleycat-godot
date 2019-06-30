@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AlleyCat.Common;
 using Godot;
@@ -10,6 +11,8 @@ namespace AlleyCat.UI.Inventory
 
         public AABB Bounds => this.CalculateBounds();
 
-        public IEnumerable<MeshInstance> Meshes => new [] {this};
+        public IEnumerable<MeshInstance> Meshes => new[] {this};
+
+        public IObservable<bool> OnVisibilityChange => this.OnVisibilityChange();
     }
 }

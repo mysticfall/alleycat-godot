@@ -70,6 +70,8 @@ namespace AlleyCat.Character
             set => Node.Visible = value;
         }
 
+        public IObservable<bool> OnVisibilityChange => Node.OnVisibilityChange();
+
         IVision ISeeing.Vision => Vision;
 
         ILocomotion ILocomotive.Locomotion => Locomotion;

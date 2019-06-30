@@ -1,4 +1,5 @@
-﻿using AlleyCat.Autowire;
+﻿using System;
+using AlleyCat.Autowire;
 using EnsureThat;
 
 namespace AlleyCat.Common
@@ -7,6 +8,8 @@ namespace AlleyCat.Common
     public interface IHideable
     {
         bool Visible { get; set; }
+
+        IObservable<bool> OnVisibilityChange { get; }
     }
 
     public static class HideableExtensions

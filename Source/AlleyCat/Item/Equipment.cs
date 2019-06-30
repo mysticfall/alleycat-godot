@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -10,6 +11,7 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
+using Object = Godot.Object;
 
 namespace AlleyCat.Item
 {
@@ -42,6 +44,8 @@ namespace AlleyCat.Item
             get => Node.Visible;
             set => Node.Visible = value;
         }
+
+        public IObservable<bool> OnVisibilityChange => Node.OnVisibilityChange();
 
         public bool Equipped => ActiveConfiguration.IsSome && Node.FindClosestAncestor<IEquipmentHolder>().IsSome;
 
