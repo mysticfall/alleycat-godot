@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Attribute;
 using EnsureThat;
+using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ namespace AlleyCat.Motion
             string key,
             string displayName,
             Option<string> description,
+            Option<Texture> icon,
             Option<IAttribute> min,
             Option<IAttribute> max,
             Option<IAttribute> modifier,
@@ -23,6 +25,7 @@ namespace AlleyCat.Motion
             key,
             displayName,
             description,
+            icon,
             min,
             max,
             modifier,

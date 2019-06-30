@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using EnsureThat;
+using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
@@ -16,6 +17,7 @@ namespace AlleyCat.Attribute
             string key,
             string displayName,
             Option<string> description,
+            Option<Texture> icon,
             IEnumerable<IAttribute> attributes,
             Option<IAttribute> min,
             Option<IAttribute> max,
@@ -25,6 +27,7 @@ namespace AlleyCat.Attribute
             key,
             displayName,
             description,
+            icon,
             min,
             max,
             modifier,

@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Subjects;
 using AlleyCat.Event;
 using EnsureThat;
+using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static System.Reactive.Linq.Observable;
@@ -25,6 +26,7 @@ namespace AlleyCat.Attribute
             string key,
             string displayName,
             Option<string> description,
+            Option<Texture> icon,
             float initialValue,
             Option<IAttribute> min,
             Option<IAttribute> max,
@@ -38,6 +40,7 @@ namespace AlleyCat.Attribute
             key,
             displayName,
             description,
+            icon,
             min,
             max,
             modifier,

@@ -22,12 +22,17 @@ namespace AlleyCat.Attribute
         public float Period { get; set; } = 0.1f;
 
         protected override Validation<string, AccumulatingAttribute> CreateService(
-            string key, string displayName, Option<string> description, ILoggerFactory loggerFactory)
+            string key,
+            string displayName,
+            Option<string> description,
+            Option<Texture> icon,
+            ILoggerFactory loggerFactory)
         {
             return new AccumulatingAttribute(
                 key,
                 displayName,
                 description,
+                icon,
                 InitialValue,
                 Min,
                 Max,

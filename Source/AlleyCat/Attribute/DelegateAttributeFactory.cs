@@ -11,7 +11,11 @@ namespace AlleyCat.Attribute
         public string Target { get; set; }
 
         protected override Validation<string, DelegateAttribute> CreateService(
-            string key, string displayName, Option<string> description, ILoggerFactory loggerFactory)
+            string key,
+            string displayName,
+            Option<string> description,
+            Option<Texture> icon,
+            ILoggerFactory loggerFactory)
         {
             var target = Target.TrimToOption().ToValidation("Missing target attribute name.");
 
@@ -19,6 +23,7 @@ namespace AlleyCat.Attribute
                 key,
                 displayName,
                 description,
+                icon,
                 t,
                 Min,
                 Max,

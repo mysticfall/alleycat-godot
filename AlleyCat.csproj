@@ -190,6 +190,7 @@
     <Compile Include="Source\AlleyCat\Common\IDescribable.cs" />
     <Compile Include="Source\AlleyCat\Common\DisposableExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\IHideable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IIconSource.cs" />
     <Compile Include="Source\AlleyCat\Common\IIdentifiable.cs" />
     <Compile Include="Source\AlleyCat\Common\IInitializable.cs" />
     <Compile Include="Source\AlleyCat\Common\ILabelled.cs" />

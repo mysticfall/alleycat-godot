@@ -10,12 +10,17 @@ namespace AlleyCat.Attribute
         public float InitialValue { get; set; }
 
         protected override Validation<string, VariableAttribute> CreateService(
-            string key, string displayName, Option<string> description, ILoggerFactory loggerFactory)
+            string key,
+            string displayName,
+            Option<string> description,
+            Option<Texture> icon,
+            ILoggerFactory loggerFactory)
         {
             return new VariableAttribute(
                 key,
                 displayName,
                 description,
+                icon,
                 InitialValue,
                 Min,
                 Max,

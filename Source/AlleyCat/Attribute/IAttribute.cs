@@ -5,7 +5,7 @@ using LanguageExt;
 
 namespace AlleyCat.Attribute
 {
-    public interface IAttribute : INamed, IDescribable, IActivatable, IGameObject
+    public interface IAttribute : INamed, IDescribable, IIconSource, IActivatable, IGameObject
     {
         float Value { get; }
 

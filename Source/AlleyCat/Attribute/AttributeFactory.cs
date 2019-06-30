@@ -4,6 +4,7 @@ using AlleyCat.Game;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
@@ -18,6 +19,9 @@ namespace AlleyCat.Attribute
 
         [Export]
         public string Description { get; set; }
+
+        [Export]
+        public Texture Icon { get; set; }
 
         [Export]
         public bool Active { get; set; }
@@ -37,10 +41,14 @@ namespace AlleyCat.Attribute
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
             var description = Description.TrimToOption().Map(Tr);
 
-            return CreateService(key, displayName, description, loggerFactory);
+            return CreateService(key, displayName, description, Optional(Icon), loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(
-            string key, string displayName, Option<string> description, ILoggerFactory loggerFactory);
+            string key,
+            string displayName,
+            Option<string> description,
+            Option<Texture> icon,
+            ILoggerFactory loggerFactory);
     }
 }

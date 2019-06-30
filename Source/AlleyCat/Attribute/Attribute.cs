@@ -5,6 +5,7 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Logging;
 using EnsureThat;
+using Godot;
 using LanguageExt;
 using LanguageExt.ClassInstances;
 using Microsoft.Extensions.Logging;
@@ -60,10 +61,13 @@ namespace AlleyCat.Attribute
 
         private readonly CompositeDisposable _subscriptions = new CompositeDisposable();
 
+        private readonly Option<Texture> _icon;
+
         protected Attribute(
             string key,
             string displayName,
             Option<string> description,
+            Option<Texture> icon,
             Option<IAttribute> min,
             Option<IAttribute> max,
             Option<IAttribute> modifier,
@@ -81,6 +85,7 @@ namespace AlleyCat.Attribute
             Max = max;
             Modifier = modifier;
 
+            _icon = icon;
             _active = CreateSubject(active);
             _source = CreateSubject(Empty<float>());
 
@@ -102,6 +107,8 @@ namespace AlleyCat.Attribute
 
             _source.OnNext(source);
         }
+
+        public Option<Texture> FindIcon(int sizeHint) => _icon;
 
         protected override void PostConstruct()
         {

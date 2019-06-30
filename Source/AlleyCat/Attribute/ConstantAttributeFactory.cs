@@ -10,12 +10,17 @@ namespace AlleyCat.Attribute
         public float Value { get; set; }
 
         protected override Validation<string, ConstantAttribute> CreateService(
-            string key, string displayName, Option<string> description, ILoggerFactory loggerFactory)
+            string key,
+            string displayName,
+            Option<string> description,
+            Option<Texture> icon,
+            ILoggerFactory loggerFactory)
         {
             return new ConstantAttribute(
                 key,
                 displayName,
                 description,
+                icon,
                 Value,
                 Active,
                 loggerFactory);
