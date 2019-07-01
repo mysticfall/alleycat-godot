@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -427,6 +427,11 @@
     <Compile Include="Source\AlleyCat\UI\Console\ICommandConsole.cs" />
     <Compile Include="Source\AlleyCat\UI\ControlExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\ActionLabelFactory.cs" />
+    <Compile Include="Source\AlleyCat\UI\Widget\AttributeBar.cs" />
+    <Compile Include="Source\AlleyCat\UI\Widget\AttributeBarFactory.cs" />
+    <Compile Include="Source\AlleyCat\UI\Widget\AttributeWidgetFactory.cs" />
+    <Compile Include="Source\AlleyCat\UI\Widget\AttributeWidget.cs" />
+    <Compile Include="Source\AlleyCat\UI\Widget\IWidget.cs" />
     <Compile Include="Source\AlleyCat\UI\LineEditExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Menu\ItemMenuProvider.cs" />
     <Compile Include="Source\AlleyCat\UI\Menu\ItemMenuProviderFactory.cs" />
