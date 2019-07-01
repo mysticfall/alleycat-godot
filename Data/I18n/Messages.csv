@@ -24,6 +24,7 @@
 "console.ui.close","Close","닫기"
 "console.usage","Usage","사용법"
 "race.Human","Human","인간"
+"attribute.Stamina", "Stamina", "스태미나"
 "morph.Head","Head & Face","머리와 얼굴"
 "morph.Head.HeadSize","Head Size","머리 크기"
 "morph.Head.EyesSize","Eyes Size","눈 크기"

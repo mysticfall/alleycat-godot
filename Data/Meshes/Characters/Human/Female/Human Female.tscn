@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Attribute/AggregatingAttributeFactory.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/HumanoidFactory.cs" type="Script" id=2]
@@ -42,6 +42,7 @@
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=40]
 [ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=41]
 [ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=42]
+[ext_resource path="res://Data/Textures/Icons/running.svg" type="Texture" id=43]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -184,8 +185,9 @@ script = ExtResource( 8 )
 [node name="Stamina" type="Node" parent="Attributes" index="0"]
 script = ExtResource( 34 )
 Key = "Stamina"
-DisplayName = "Stamina"
-Description = "Stamina"
+DisplayName = "attribute.Stamina"
+Description = "attribute.Stamina"
+Icon = ExtResource( 43 )
 Active = true
 InitialValue = 100.0
 
@@ -241,7 +243,7 @@ Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
 Active = true
-Value = -0.08
+Value = -0.05
 
 [node name="Stamina Regen" type="Node" parent="Attributes" index="1"]
 script = ExtResource( 37 )
@@ -249,7 +251,7 @@ Key = "StaminaRegen"
 DisplayName = "Stamina Regen"
 Description = "Stamina Regen"
 Active = true
-Value = 5.0
+Value = 2.5
 
 [node name="Speed" type="Node" parent="Attributes" index="2"]
 script = ExtResource( 33 )
