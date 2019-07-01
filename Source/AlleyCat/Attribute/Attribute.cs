@@ -38,7 +38,7 @@ namespace AlleyCat.Attribute
 
         public Option<IAttribute> Modifier { get; }
 
-        public virtual IObservable<float> OnChange { get; }
+        public virtual IObservable<float> OnChange => _onChange.StartWith(Value).DistinctUntilChanged();
 
         public virtual IObservable<float> OnModifierChange =>
             Modifier.Select(m => m.OnChange.StartWith(m.Value)).IfNone(Return(1f));
@@ -63,6 +63,8 @@ namespace AlleyCat.Attribute
 
         private readonly Option<Texture> _icon;
 
+        private readonly IObservable<float> _onChange;
+
         protected Attribute(
             string key,
             string displayName,
@@ -86,12 +88,15 @@ namespace AlleyCat.Attribute
             Modifier = modifier;
 
             _icon = icon;
+
             _active = CreateSubject(active);
             _source = CreateSubject(Empty<float>());
 
-            var publisher = _source.Switch().Publish().AutoConnect(onConnect: _subscriptions.Add);
-
-            OnChange = publisher.AsObservable();
+            _onChange = _source
+                .Switch()
+                .Publish()
+                .AutoConnect(onConnect: _subscriptions.Add)
+                .AsObservable();
         }
 
         public virtual void Initialize(IAttributeHolder holder)
@@ -103,7 +108,7 @@ namespace AlleyCat.Attribute
             Min.Iter(m => m.Initialize(holder));
             Max.Iter(m => m.Initialize(holder));
 
-            var source = CreateObservable(holder).Where(_ => Active).DistinctUntilChanged();
+            var source = CreateObservable(holder).Where(_ => Active);
 
             _source.OnNext(source);
         }
