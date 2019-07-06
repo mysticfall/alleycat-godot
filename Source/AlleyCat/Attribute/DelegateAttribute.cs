@@ -12,6 +12,8 @@ namespace AlleyCat.Attribute
     {
         public Option<IAttribute> Target { get; private set; }
 
+        public bool AsRatio { get; }
+
         private readonly string _target;
 
         private readonly BehaviorSubject<IObservable<float>> _value;
@@ -22,6 +24,7 @@ namespace AlleyCat.Attribute
             Option<string> description,
             Option<Texture> icon,
             string target,
+            bool asRatio,
             Option<IAttribute> min,
             Option<IAttribute> max,
             Option<IAttribute> modifier,
@@ -39,6 +42,8 @@ namespace AlleyCat.Attribute
         {
             Ensure.That(target, nameof(target)).IsNotNull();
 
+            AsRatio = asRatio;
+
             _target = target;
             _value = CreateSubject(Empty<float>());
         }
@@ -49,7 +54,9 @@ namespace AlleyCat.Attribute
 
             Target = holder.Attributes.TryGetValue(_target);
 
-            _value.OnNext(Target.Select(a => a.OnChange).ToObservable().Switch());
+            _value.OnNext(AsRatio
+                ? Target.Map(a => a.OnRatioChange()).ToObservable().Switch()
+                : Target.Map(a => a.OnChange).ToObservable().Switch());
         }
 
         protected override IObservable<float> CreateObservable(IAttributeHolder holder)

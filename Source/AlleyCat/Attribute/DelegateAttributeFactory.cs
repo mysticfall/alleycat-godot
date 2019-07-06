@@ -10,6 +10,9 @@ namespace AlleyCat.Attribute
         [Export]
         public string Target { get; set; }
 
+        [Export]
+        public bool AsRatio { get; set; }
+
         protected override Validation<string, DelegateAttribute> CreateService(
             string key,
             string displayName,
@@ -25,6 +28,7 @@ namespace AlleyCat.Attribute
                 description,
                 icon,
                 t,
+                AsRatio,
                 Min,
                 Max,
                 Modifier,
