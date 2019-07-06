@@ -1,4 +1,4 @@
-namespace AlleyCat.Animation
+namespace AlleyCat.Action
 {
     public enum SitState
     {

@@ -1,10 +1,9 @@
-using AlleyCat.Action;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 
-namespace AlleyCat.Animation
+namespace AlleyCat.Action
 {
     public class GetUpActionFactory : ActionFactory<GetUpAction>
     {

@@ -1,11 +1,9 @@
-using AlleyCat.Action;
 using AlleyCat.Common;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
-using static LanguageExt.Prelude;
 
-namespace AlleyCat.Animation
+namespace AlleyCat.Action
 {
     public class SitActionFactory : ActionFactory<SitAction>
     {
@@ -52,7 +50,7 @@ namespace AlleyCat.Animation
             string key, string displayName, ILoggerFactory loggerFactory)
         {
             return
-                from animation in Optional(Animation)
+                from animation in Prelude.Optional(Animation)
                     .ToValidation("Animation was not specified.")
                 from statesPath in StatesPath.TrimToOption()
                     .ToValidation("States path was not specified.")

@@ -2,24 +2,22 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Action;
+using AlleyCat.Animation;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
-using static AlleyCat.Animation.SitState;
-using static LanguageExt.Prelude;
 
-namespace AlleyCat.Animation
+namespace AlleyCat.Action
 {
-    public class SitAction : Action.Action
+    public class SitAction : Action
     {
         public Option<Godot.Animation> SittingDownAnimation { get; set; }
 
         public Godot.Animation Animation
         {
-            get => Some(_animation).Head();
+            get => Prelude.Some(_animation).Head();
             set
             {
                 Ensure.That(value, nameof(value)).IsNotNull();
@@ -155,7 +153,7 @@ namespace AlleyCat.Animation
         {
             Debug.Assert(actor != null, "actor != null");
 
-            return Optional(actor)
+            return Prelude.Optional(actor)
                 .OfType<IAnimatable>()
                 .Map(a => a.AnimationManager)
                 .OfType<IAnimationStateManager>()
@@ -182,7 +180,7 @@ namespace AlleyCat.Animation
                 .Bind(a => a.FindStates(SubStatesPath))
                 .Map(s => s.OnStateChange.Select(GetStateEnum));
 
-            return states.Match(identity,
+            return states.Match(Prelude.identity,
                 () => throw new ArgumentOutOfRangeException(
                     nameof(actor),
                     "The specified actor does not support sit action.")
@@ -207,11 +205,11 @@ namespace AlleyCat.Animation
 
         private SitState GetStateEnum(string state)
         {
-            if (state == EnterState) return SittingDown;
-            if (state == State) return Seated;
-            if (state == ExitState) return GettingUp;
+            if (state == EnterState) return SitState.SittingDown;
+            if (state == State) return SitState.Seated;
+            if (state == ExitState) return SitState.GettingUp;
 
-            return Standing;
+            return SitState.Standing;
         }
     }
 
@@ -272,7 +270,7 @@ namespace AlleyCat.Animation
 
             (from a in action
                 from s in state
-                where s == Standing || s == GettingUp
+                where s == SitState.Standing || s == SitState.GettingUp
                 select a).Iter(a => a.Execute(new ActionContext(actor)));
         }
     }

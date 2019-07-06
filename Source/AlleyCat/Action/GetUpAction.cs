@@ -1,17 +1,15 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using AlleyCat.Action;
+using AlleyCat.Animation;
 using AlleyCat.Logging;
 using EnsureThat;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
-using static AlleyCat.Animation.SitState;
-using static LanguageExt.Prelude;
 
-namespace AlleyCat.Animation
+namespace AlleyCat.Action
 {
-    public class GetUpAction : Action.Action
+    public class GetUpAction : Action
     {
         protected string StatesPath { get; }
 
@@ -74,7 +72,7 @@ namespace AlleyCat.Animation
         {
             Debug.Assert(actor != null, "actor != null");
 
-            return Optional(actor)
+            return Prelude.Optional(actor)
                 .OfType<IAnimatable>()
                 .Map(a => a.AnimationManager)
                 .OfType<IAnimationStateManager>()
@@ -111,7 +109,7 @@ namespace AlleyCat.Animation
 
             (from a in action
                 from s in state
-                where s == Seated || s == SittingDown
+                where s == SitState.Seated || s == SitState.SittingDown
                 select a).Iter(a => a.Execute(new ActionContext(actor)));
         }
     }

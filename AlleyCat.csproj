@@ -64,6 +64,8 @@
     <Compile Include="Source\AlleyCat\Action\ActionGroupFactory.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionSet.cs" />
     <Compile Include="Source\AlleyCat\Action\ActionSetFactory.cs" />
+    <Compile Include="Source\AlleyCat\Action\GetUpAction.cs" />
+    <Compile Include="Source\AlleyCat\Action\GetUpActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Action\IAction.cs" />
     <Compile Include="Source\AlleyCat\Action\IActionContext.cs" />
     <Compile Include="Source\AlleyCat\Action\IActionGroup.cs" />
@@ -71,9 +73,11 @@
     <Compile Include="Source\AlleyCat\Action\IActionSet.cs" />
     <Compile Include="Source\AlleyCat\Action\Interaction.cs" />
     <Compile Include="Source\AlleyCat\Action\InteractionContext.cs" />
+    <Compile Include="Source\AlleyCat\Action\SitAction.cs" />
+    <Compile Include="Source\AlleyCat\Action\SitActionFactory.cs" />
+    <Compile Include="Source\AlleyCat\Action\SitState.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControl.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationControlFactory.cs" />
-    <Compile Include="Source\AlleyCat\Animation\GetUpActionFactory.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimationEvent.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraph.cs" />
     <Compile Include="Source\AlleyCat\Animation\AnimationGraphContext.cs" />
@@ -99,12 +103,8 @@
     <Compile Include="Source\AlleyCat\Animation\IAnimationGraph.cs" />
     <Compile Include="Source\AlleyCat\Animation\IAnimator.cs" />
     <Compile Include="Source\AlleyCat\Animation\SeekableAnimator.cs" />
-    <Compile Include="Source\AlleyCat\Animation\SitAction.cs" />
     <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
-    <Compile Include="Source\AlleyCat\Animation\SitActionFactory.cs" />
-    <Compile Include="Source\AlleyCat\Animation\SitState.cs" />
-    <Compile Include="Source\AlleyCat\Animation\GetUpAction.cs" />
     <Compile Include="Source\AlleyCat\Animation\TimeScale.cs" />
     <Compile Include="Source\AlleyCat\Animation\Trigger.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AccumulatingAttribute.cs" />
