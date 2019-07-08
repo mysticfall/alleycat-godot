@@ -7,19 +7,19 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Attribute
 {
     [AutowireContext]
-    public class AggregatingAttributeFactory : AttributeFactory<AggregatingAttribute>
+    public class AggregateAttributeFactory : AttributeFactory<AggregateAttribute>
     {
         [Service(local: true)]
         public IEnumerable<IAttribute> Attributes { get; set; }
 
-        protected override Validation<string, AggregatingAttribute> CreateService(
+        protected override Validation<string, AggregateAttribute> CreateService(
             string key, 
             string displayName, 
             Option<string> description,
             Option<Texture> icon,
             ILoggerFactory loggerFactory)
         {
-            return new AggregatingAttribute(
+            return new AggregateAttribute(
                 key,
                 displayName,
                 description,

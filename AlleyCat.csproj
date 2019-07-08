@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -107,13 +107,13 @@
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
     <Compile Include="Source\AlleyCat\Animation\TimeScale.cs" />
     <Compile Include="Source\AlleyCat\Animation\Trigger.cs" />
-    <Compile Include="Source\AlleyCat\Attribute\AccumulatingAttribute.cs" />
-    <Compile Include="Source\AlleyCat\Attribute\AccumulatingAttributeFactory.cs" />
-    <Compile Include="Source\AlleyCat\Attribute\AggregatingAttributeFactory.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\AccumulateAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\AccumulateAttributeFactory.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\AggregateAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AttributeSet.cs" />
     <Compile Include="Source\AlleyCat\Attribute\ConstantAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\DelegateAttributeFactory.cs" />
-    <Compile Include="Source\AlleyCat\Attribute\AggregatingAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\AggregateAttribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\Attribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\ConstantAttribute.cs" />

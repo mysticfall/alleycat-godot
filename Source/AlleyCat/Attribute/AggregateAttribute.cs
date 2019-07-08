@@ -9,11 +9,13 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Attribute
 {
-    public class AggregatingAttribute : Attribute
+    public class AggregateAttribute : Attribute
     {
         public IEnumerable<IAttribute> Attributes { get; }
 
-        public AggregatingAttribute(
+        protected override IEnumerable<IAttribute> Children => base.Children.Append(Attributes);
+
+        public AggregateAttribute(
             string key,
             string displayName,
             Option<string> description,
@@ -37,13 +39,6 @@ namespace AlleyCat.Attribute
             Ensure.That(attributes, nameof(attributes)).IsNotNull();
 
             Attributes = attributes;
-        }
-
-        public override void Initialize(IAttributeHolder holder)
-        {
-            base.Initialize(holder);
-
-            Attributes.Iter(m => m.Initialize(holder));
         }
 
         protected override IObservable<float> CreateObservable(IAttributeHolder holder)

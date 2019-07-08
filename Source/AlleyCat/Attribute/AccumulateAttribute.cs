@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Subjects;
 using AlleyCat.Event;
 using EnsureThat;
@@ -10,7 +11,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
-    public class AccumulatingAttribute : Attribute
+    public class AccumulateAttribute : Attribute
     {
         public Option<IAttribute> Generator { get; }
 
@@ -20,9 +21,11 @@ namespace AlleyCat.Attribute
 
         protected ITimeSource TimeSource { get; }
 
+        protected override IEnumerable<IAttribute> Children => base.Children.Append(Generator);
+
         private readonly BehaviorSubject<IObservable<float>> _value;
 
-        public AccumulatingAttribute(
+        public AccumulateAttribute(
             string key,
             string displayName,
             Option<string> description,
@@ -63,8 +66,6 @@ namespace AlleyCat.Attribute
 
             Generator.Iter(generator =>
             {
-                generator.Initialize(holder);
-
                 var increments = Interval(Period, TimeSource.Scheduler(ProcessMode))
                     .Where(_ => Active)
                     .WithLatestFrom(generator.OnChange, (_, v) => v);

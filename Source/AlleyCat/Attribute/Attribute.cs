@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
@@ -55,6 +56,8 @@ namespace AlleyCat.Attribute
             }
         }
 
+        protected virtual IEnumerable<IAttribute> Children => Min.Append(Max).Append(Modifier);
+
         private readonly BehaviorSubject<bool> _active;
 
         private readonly BehaviorSubject<IObservable<float>> _source;
@@ -103,15 +106,14 @@ namespace AlleyCat.Attribute
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            Modifier.Iter(m => m.Initialize(holder));
-
-            Min.Iter(m => m.Initialize(holder));
-            Max.Iter(m => m.Initialize(holder));
+            InitializeChildren(holder);
 
             var source = CreateObservable(holder).Where(_ => Active);
 
             _source.OnNext(source);
         }
+
+        protected virtual void InitializeChildren(IAttributeHolder holder) => Children.Iter(d => d.Initialize(holder));
 
         public Option<Texture> FindIcon(int sizeHint) => _icon;
 

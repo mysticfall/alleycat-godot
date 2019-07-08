@@ -1,5 +1,4 @@
 using System;
-using System.Reactive.Subjects;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -15,8 +14,6 @@ namespace AlleyCat.Attribute
         public bool AsRatio { get; }
 
         private readonly string _target;
-
-        private readonly BehaviorSubject<IObservable<float>> _value;
 
         public DelegateAttribute(
             string key,
@@ -45,25 +42,22 @@ namespace AlleyCat.Attribute
             AsRatio = asRatio;
 
             _target = target;
-            _value = CreateSubject(Empty<float>());
         }
 
         public override void Initialize(IAttributeHolder holder)
         {
-            base.Initialize(holder);
-
             Target = holder.Attributes.TryGetValue(_target);
 
-            _value.OnNext(AsRatio
-                ? Target.Map(a => a.OnRatioChange()).ToObservable().Switch()
-                : Target.Map(a => a.OnChange).ToObservable().Switch());
+            base.Initialize(holder);
         }
 
         protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            return _value.Switch()
+            var target = AsRatio ? Target.Map(a => a.OnRatioChange()) : Target.Map(a => a.OnChange);
+
+            return target.ToObservable().Switch()
                 .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }
     }

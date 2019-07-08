@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Attribute
 {
-    public class AccumulatingAttributeFactory : AttributeFactory<AccumulatingAttribute>
+    public class AccumulateAttributeFactory : AttributeFactory<AccumulateAttribute>
     {
         [Export]
         public float InitialValue { get; set; }
@@ -21,14 +21,14 @@ namespace AlleyCat.Attribute
         [Export(PropertyHint.Range, "0.1,60")]
         public float Period { get; set; } = 0.1f;
 
-        protected override Validation<string, AccumulatingAttribute> CreateService(
+        protected override Validation<string, AccumulateAttribute> CreateService(
             string key,
             string displayName,
             Option<string> description,
             Option<Texture> icon,
             ILoggerFactory loggerFactory)
         {
-            return new AccumulatingAttribute(
+            return new AccumulateAttribute(
                 key,
                 displayName,
                 description,
