@@ -46,7 +46,7 @@ namespace AlleyCat.Attribute
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
             return Attributes
-                .Select(a => a.OnChange)
+                .Select(a => a.OnChange.DistinctUntilChanged())
                 .CombineLatest(values => values.Sum())
                 .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }

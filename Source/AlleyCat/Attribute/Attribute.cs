@@ -39,7 +39,7 @@ namespace AlleyCat.Attribute
 
         public Option<IAttribute> Modifier { get; }
 
-        public virtual IObservable<float> OnChange => _onChange.StartWith(Value).DistinctUntilChanged();
+        public virtual IObservable<float> OnChange => _onChange.StartWith(Value);
 
         public virtual IObservable<float> OnModifierChange =>
             Modifier.Select(m => m.OnChange.StartWith(m.Value)).IfNone(Return(1f));
