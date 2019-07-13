@@ -33,7 +33,8 @@ namespace AlleyCat.Autowire
 
             if (Enumerable)
             {
-                var parent = path.Bind(v => Optional(node.GetNode(v))).IfNone(node);
+                var p = path.IfNone(NormalizeMemberName(Member.Name));
+                var parent = node.FindComponent<Node>(p).IfNone(node);
 
                 dependency = parent.GetChildren().Cast<Node>().Bind(c => c.OfType(DependencyType)).Freeze();
             }
@@ -53,8 +54,7 @@ namespace AlleyCat.Autowire
                 .Bind(f => Optional(f.GetValue(node)))
                 .OfType<NodePath>()
                 .HeadOrNone()
-                .BiBind(Some,
-                    () => Attribute.Path.Where(v => !string.IsNullOrEmpty(v)).Map(v => new NodePath(v)));
+                .BiBind(Some, () => Attribute.Path.Map(v => new NodePath(v)));
         }
 
         protected static string NormalizeMemberName(string name)

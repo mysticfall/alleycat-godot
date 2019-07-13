@@ -1,6 +1,6 @@
-﻿using EnsureThat;
+﻿using AlleyCat.Common;
+using EnsureThat;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
 {
@@ -16,7 +16,7 @@ namespace AlleyCat.Autowire
         {
             Ensure.That(path, nameof(path)).IsNotNull();
 
-            Path = Some(path);
+            Path = path.TrimToOption();
         }
 
         public override string ToString() => "[Node]";
