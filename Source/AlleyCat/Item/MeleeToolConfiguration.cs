@@ -19,11 +19,17 @@ namespace AlleyCat.Item
     {
         public Godot.Animation SwingAnimation { get; }
 
+        public IObservable<Unit> OnArm { get; }
+
+        public IObservable<Unit> OnDisarm { get; }
+
+        public IObservable<float> OnSwing { get; }
+
         protected IPlayerControl PlayerControl { get; }
 
-        protected virtual IObservable<bool> ArmInput { get; }
+        protected IObservable<bool> ArmInput { get; }
 
-        protected virtual IObservable<Vector2> SwingInput { get; }
+        protected IObservable<Vector2> SwingInput { get; }
 
         protected IEnumerable<IInput> ConflictingInputs { get; }
 
@@ -37,20 +43,7 @@ namespace AlleyCat.Item
 
         protected Range<float> AnimationRange { get; }
 
-        protected IObservable<IEquipmentHolder> OnPlayerChange => OnHolderChange
-            .CombineLatest(PlayerControl.OnCharacterChange, (h, p) => h.Filter(v => p.Contains(v)))
-            .Select(p => p.ToObservable())
-            .Switch();
-
-        protected IObservable<Unit> OnArm => OnPlayerChange
-            .Select(_ => ArmInput.Where(identity))
-            .Switch()
-            .AsUnitObservable();
-
-        protected IObservable<Unit> OnDisarm => Merge(
-            ArmInput.Where(v => !v).AsUnitObservable(),
-            OnHolderChange.Where(v => v.IsNone).AsUnitObservable(),
-            Disposed.Where(identity).AsUnitObservable());
+        protected IObservable<IEquipmentHolder> OnPlayerChange { get; }
 
         public MeleeToolConfiguration(
             string key,
@@ -76,15 +69,6 @@ namespace AlleyCat.Item
             Ensure.That(swingState, nameof(swingState)).IsNotNullOrEmpty();
             Ensure.That(playerControl, nameof(playerControl)).IsNotNull();
 
-            SwingInput = swingInput
-                .Bind(i => i.AsVector2Input())
-                .MatchObservable(identity, Empty<Vector2>)
-                .Where(_ => Valid)
-                .Select(v => v * 2f);
-            ArmInput = armInput.Bind(i => i.FindTrigger().HeadOrNone())
-                .MatchObservable(identity, Empty<bool>)
-                .Where(_ => Valid);
-
             SwingAnimation = swingAnimation;
             StatesPath = statesPath;
             SeekerPath = seekerPath;
@@ -93,29 +77,24 @@ namespace AlleyCat.Item
             AnimationRange = animationRange;
             PlayerControl = playerControl;
 
-            bool Conflicts(IInput input) => swingInput.Bind(i => i.Inputs.Values).Exists(input.ConflictsWith);
+            OnPlayerChange = OnHolderChange
+                .CombineLatest(PlayerControl.OnCharacterChange, (h, p) => h.Filter(v => p.Contains(v)))
+                .Select(p => p.ToObservable())
+                .Switch();
 
-            ConflictingInputs = playerControl.Inputs.Filter(i => i.Active).Filter(Conflicts);
-        }
+            SwingInput = swingInput
+                .Bind(i => i.AsVector2Input())
+                .MatchObservable(identity, Empty<Vector2>)
+                .Where(_ => Valid)
+                .Select(v => v * 2f);
 
-        protected override void PostConstruct()
-        {
-            base.PostConstruct();
-
-            var minPos = AnimationRange.Min;
-            var maxPos = AnimationRange.Max > AnimationRange.Min
-                ? AnimationRange.Max
-                : Animation.Map(a => a.Length).IfNone(1f);
-
-            Logger.LogDebug($"Using animation range: {minPos} - {maxPos}.");
+            ArmInput = armInput.Bind(i => i.FindTrigger().HeadOrNone())
+                .MatchObservable(identity, Empty<bool>)
+                .Where(_ => Valid);
 
             var manager = OnPlayerChange
                 .Select(p => p.AnimationManager)
                 .OfType<IAnimationStateManager>();
-
-            var value = SwingInput
-                .Scan(0f, (s, v) => Mathf.Clamp(s + v.y, 0f, 600f))
-                .Select(v => v / 600f * (maxPos - minPos) + minPos);
 
             var states = manager
                 .Select(m => m.FindStates(StatesPath).ToObservable())
@@ -129,35 +108,72 @@ namespace AlleyCat.Item
                 .Select(m => AnimationBlend.Bind(m.FindBlender).ToObservable())
                 .Switch();
 
-            var onArm = OnArm
+            OnArm = OnPlayerChange
+                .Select(_ => ArmInput.Where(identity))
+                .Switch()
+                .AsUnitObservable()
                 .WithLatestFrom(states, (a, s) => s.State == IdleState ? Return(a) : Empty<Unit>())
                 .Switch();
 
-            var onDisarm = OnDisarm
+            OnDisarm = Merge(
+                    ArmInput.Where(v => !v).AsUnitObservable(),
+                    OnHolderChange.Where(v => v.IsNone).AsUnitObservable(),
+                    Disposed.Where(identity).AsUnitObservable())
                 .WithLatestFrom(states, (a, s) => s.State == SwingState ? Return(a) : Empty<Unit>())
                 .Switch();
 
-            var conflictingInputs = onArm.Select(_ => ConflictingInputs.Freeze());
+            OnSwing = OnArm
+                .Select(_ => SwingInput.TakeUntil(OnDisarm).Select(v => v.y).DistinctUntilChanged())
+                .Switch()
+                .Scan(0f, (s, v) => Mathf.Clamp(s + v, 0f, 600f))
+                .Select(v => v / 600f);
+
+            bool Conflicts(IInput input) => swingInput.Bind(i => i.Inputs.Values).Exists(input.ConflictsWith);
+
+            ConflictingInputs = playerControl.Inputs.Filter(i => i.Active).Filter(Conflicts);
+        }
+
+        protected override void PostConstruct()
+        {
+            base.PostConstruct();
+
+            var manager = OnPlayerChange
+                .Select(p => p.AnimationManager)
+                .OfType<IAnimationStateManager>();
+
+            var states = manager
+                .Select(m => m.FindStates(StatesPath).ToObservable())
+                .Switch();
+
+            var seeker = manager
+                .Select(m => m.FindSeekableAnimator(SeekerPath).ToObservable())
+                .Switch();
+
+            var blender = manager
+                .Select(m => AnimationBlend.Bind(m.FindBlender).ToObservable())
+                .Switch();
+
+            var conflictingInputs = OnArm.Select(_ => ConflictingInputs.Freeze());
 
             var disposed = Disposed.Where(identity);
 
             // Change animation.
-            onArm
-                .Select(_ => seeker.TakeUntil(onDisarm))
+            OnArm
+                .Select(_ => seeker.TakeUntil(OnDisarm))
                 .Switch()
                 .TakeUntil(disposed)
                 .Subscribe(s => s.Animation = SwingAnimation, this);
 
             // Change animation state.
-            onArm
+            OnArm
                 .Select(_ => states)
                 .Switch()
                 .TakeUntil(disposed)
                 .Do(_ => Logger.LogDebug("Entering armed state."))
                 .Subscribe(s => s.State = SwingState, this);
 
-            onArm
-                .Select(_ => onDisarm)
+            OnArm
+                .Select(_ => OnDisarm)
                 .Switch()
                 .Select(_ => states)
                 .Switch()
@@ -169,32 +185,37 @@ namespace AlleyCat.Item
             conflictingInputs
                 .Do(_ => Logger.LogDebug("Deactivating conflicting view controls."))
                 .Do(i => i.Iter(v => v.Deactivate()))
-                .Select(v => onDisarm.Select(_ => v))
+                .Select(v => OnDisarm.Select(_ => v))
                 .Switch()
                 .Do(_ => Logger.LogDebug("Activating conflicting view controls."))
                 .Do(i => i.Iter(v => v.Activate()))
                 .TakeUntil(disposed)
                 .Subscribe(this);
 
+            var minPos = AnimationRange.Min;
+            var maxPos = AnimationRange.Max > AnimationRange.Min
+                ? AnimationRange.Max
+                : Animation.Map(a => a.Length).IfNone(1f);
+
+            Logger.LogDebug($"Using animation range: {minPos} - {maxPos}.");
+
             // Handle swing motion.
-            onArm
-                .Select(_ => value.TakeUntil(onDisarm))
-                .Switch()
+            OnSwing.Select(v => v * (maxPos - minPos) + minPos)
                 .SelectMany(v => seeker, (v, s) => (v, s))
                 .TakeUntil(disposed)
                 .Do(t => Logger.LogDebug("Changing animation position: {}.", t.v))
                 .Subscribe(t => t.s.Position = t.v, this);
 
             // Blend/unblend holding animation.
-            onArm
-                .Select(_ => blender.TakeUntil(onDisarm))
+            OnArm
+                .Select(_ => blender.TakeUntil(OnDisarm))
                 .Switch()
                 .Do(_ => Logger.LogDebug("Overriding default animation: '{}'.", Animation))
                 .TakeUntil(disposed)
                 .Subscribe(b => b.Unblend(AnimationTransition), this);
 
-            onArm
-                .Select(_ => onDisarm)
+            OnArm
+                .Select(_ => OnDisarm)
                 .Switch()
                 .Select(_ => blender)
                 .Switch()

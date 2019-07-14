@@ -304,6 +304,8 @@
     <Compile Include="Source\AlleyCat\Item\EncumbranceAttribute.cs" />
     <Compile Include="Source\AlleyCat\Item\EncumbranceAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\IEquipment.cs" />
+    <Compile Include="Source\AlleyCat\Item\MeleeFatigueAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Item\MeleeFatigueAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\MeleeToolConfiguration.cs" />
     <Compile Include="Source\AlleyCat\Item\MeleeToolConfigurationFactory.cs" />
     <Compile Include="Source\AlleyCat\Item\PickupActionFactory.cs" />

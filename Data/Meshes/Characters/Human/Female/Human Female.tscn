@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://Source/AlleyCat/Attribute/AggregateAttributeFactory.cs" type="Script" id=1]
 [ext_resource path="res://Source/AlleyCat/Character/HumanoidFactory.cs" type="Script" id=2]
@@ -39,10 +39,13 @@
 [ext_resource path="res://Source/AlleyCat/Attribute/ConstantAttributeFactory.cs" type="Script" id=37]
 [ext_resource path="res://Source/AlleyCat/Action/GetUpActionFactory.cs" type="Script" id=38]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Animations/Interactions/HoldTwoHands.anim" type="Animation" id=39]
-[ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=40]
-[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=41]
-[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=42]
+[ext_resource path="res://Source/AlleyCat/Item/MeleeFatigueAttributeFactory.cs" type="Script" id=40]
+[ext_resource path="res://Source/AlleyCat/Attribute/SampleAttributeFactory.cs" type="Script" id=41]
+[ext_resource path="res://Data/Meshes/Characters/Human/Female/Character.escn" type="PackedScene" id=42]
 [ext_resource path="res://Data/Textures/Icons/running.svg" type="Texture" id=43]
+[ext_resource path="res://Source/AlleyCat/Attribute/DebounceAttributeFactory.cs" type="Script" id=44]
+[ext_resource path="res://Data/Meshes/Clothes/Human/Common/Collar/Collar - Worn.tscn" type="PackedScene" id=45]
+[ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=46]
 
 [sub_resource type="PhysicsMaterial" id=1]
 
@@ -54,7 +57,7 @@ height = 1.13148
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=4]
 
-[node name="Human Female" index="0" instance=ExtResource( 40 )]
+[node name="Human Female" index="0" instance=ExtResource( 42 )]
 
 [node name="Context" type="Node" parent="." index="0"]
 script = ExtResource( 2 )
@@ -87,7 +90,7 @@ material/0 = null
 [node name="Rag" parent="Rig" index="4" instance=ExtResource( 6 )]
 physics_material_override = SubResource( 1 )
 
-[node name="Collar" parent="Rig" index="5" instance=ExtResource( 42 )]
+[node name="Collar" parent="Rig" index="5" instance=ExtResource( 45 )]
 
 [node name="Chest" type="BoneAttachment" parent="Rig" index="6"]
 transform = Transform( -1, -2.19802e-06, -2.87645e-07, -6.21602e-08, 0.157512, -0.987518, 2.21589e-06, -0.987518, -0.157512, 4.69658e-08, 1.11671, 0.0237305 )
@@ -106,7 +109,7 @@ bone_name = "hand_R"
 script = ExtResource( 7 )
 _key = "RightHand"
 
-[node name="Pickaxe" parent="Rig/Right Hand/Equip" index="0" instance=ExtResource( 41 )]
+[node name="Pickaxe" parent="Rig/Right Hand/Equip" index="0" instance=ExtResource( 46 )]
 
 [node name="Carry" parent="Rig/Right Hand/Equip/Pickaxe/Configurations" index="0"]
 Active = true
@@ -206,44 +209,41 @@ Description = "Max"
 Active = true
 Value = 100.0
 
-[node name="Generator" type="Node" parent="Attributes/Stamina" index="2"]
-script = ExtResource( 1 )
-Key = "Generator"
-DisplayName = "Generator"
-Description = "Generator"
-Active = true
+[node name="Sources" type="Node" parent="Attributes/Stamina" index="2"]
 
-[node name="Stamina Regen" type="Node" parent="Attributes/Stamina/Generator" index="0"]
-script = ExtResource( 5 )
+[node name="Stamina Regen" type="Node" parent="Attributes/Stamina/Sources" index="0"]
+script = ExtResource( 44 )
 Key = "StaminaRegen"
 DisplayName = "Stamina Regen"
 Description = "Stamina Regen"
 Active = true
-Target = "StaminaRegen"
+Target = "Source"
+Gate = "/Fatigue"
+Period = 0.5
 
-[node name="Fatigue from Movement" type="Node" parent="Attributes/Stamina/Generator" index="1"]
-script = ExtResource( 5 )
-Key = "MovementFatigue"
-DisplayName = "Fatigue from Movement"
-Description = "Fatigue from Movement"
+[node name="Source" type="Node" parent="Attributes/Stamina/Sources/Stamina Regen" index="0"]
+script = ExtResource( 41 )
+Key = "Source"
+DisplayName = "Source"
+Description = "Source"
 Active = true
-Target = "Speed"
+Target = "/StaminaRegen"
 
-[node name="Modifier" type="Node" parent="Attributes/Stamina/Generator/Fatigue from Movement" index="0"]
+[node name="Fatigue" type="Node" parent="Attributes/Stamina/Sources" index="1"]
 script = ExtResource( 5 )
-Key = "Modifier"
-DisplayName = "Modifier"
-Description = "Modifier"
+Key = "Fatigue"
+DisplayName = "Fatigue"
+Description = "Fatigue"
 Active = true
-Target = "Encumbrance"
+Target = "/Fatigue"
 
-[node name="Modifier" type="Node" parent="Attributes/Stamina/Generator/Fatigue from Movement/Modifier" index="0"]
+[node name="Modifier" type="Node" parent="Attributes/Stamina/Sources/Fatigue" index="0"]
 script = ExtResource( 37 )
 Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
 Active = true
-Value = -0.05
+Value = -0.001
 
 [node name="Stamina Regen" type="Node" parent="Attributes" index="1"]
 script = ExtResource( 37 )
@@ -251,7 +251,7 @@ Key = "StaminaRegen"
 DisplayName = "Stamina Regen"
 Description = "Stamina Regen"
 Active = true
-Value = 2.5
+Value = 0.5
 
 [node name="Speed" type="Node" parent="Attributes" index="2"]
 script = ExtResource( 33 )
@@ -266,6 +266,54 @@ Key = "Encumbrance"
 DisplayName = "Encumbrance"
 Description = "Encumbrance"
 Active = true
+
+[node name="Fatigue" type="Node" parent="Attributes" index="4"]
+script = ExtResource( 1 )
+Key = "Fatigue"
+DisplayName = "Fatigue"
+Description = "Fatigue"
+Active = true
+
+[node name="Sources" type="Node" parent="Attributes/Fatigue" index="0"]
+
+[node name="Movement" type="Node" parent="Attributes/Fatigue/Sources" index="0"]
+script = ExtResource( 5 )
+Key = "MovementFatigue"
+DisplayName = "Fatigue from Movement"
+Description = "Fatigue from Movement"
+Active = true
+Target = "/Speed"
+
+[node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Movement" index="0"]
+script = ExtResource( 5 )
+Key = "Modifier"
+DisplayName = "Modifier"
+Description = "Modifier"
+Active = true
+Target = "/Encumbrance"
+
+[node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Movement/Modifier" index="0"]
+script = ExtResource( 37 )
+Key = "Modifier"
+DisplayName = "Modifier"
+Description = "Modifier"
+Active = true
+Value = 0.001
+
+[node name="Wielding Item" type="Node" parent="Attributes/Fatigue/Sources" index="1"]
+script = ExtResource( 40 )
+Key = "Melee"
+DisplayName = "Melee"
+Description = "Melee"
+Active = true
+
+[node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Wielding Item" index="0"]
+script = ExtResource( 37 )
+Key = "Modifier"
+DisplayName = "Modifier"
+Description = "Modifier"
+Active = true
+Value = 10.0
 
 [node name="Vision" type="Node" parent="." index="5"]
 script = ExtResource( 26 )
