@@ -112,6 +112,8 @@
     <Compile Include="Source\AlleyCat\Attribute\AggregateAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AttributeSet.cs" />
     <Compile Include="Source\AlleyCat\Attribute\ConstantAttributeFactory.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\DebounceAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\DebounceAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\DelegateAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AggregateAttribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\Attribute.cs" />
