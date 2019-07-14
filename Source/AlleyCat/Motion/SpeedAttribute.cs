@@ -39,7 +39,9 @@ namespace AlleyCat.Motion
                 .Map(h => h.Locomotion.OnVelocityChange)
                 .ToObservable()
                 .Switch()
-                .Select(v => v.Length());
+                .Select(v => v.Length())
+                .Select(v => v < 0.05f ? 0f : v)
+                .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }
     }
 }

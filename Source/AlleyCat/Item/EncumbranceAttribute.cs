@@ -39,7 +39,8 @@ namespace AlleyCat.Item
                 .Map(h => h.Equipments.OnItemsChange)
                 .ToObservable()
                 .Switch()
-                .Select(v => v.Map(e => e.Node.Weight).Sum());
+                .Select(v => v.Map(e => e.Node.Weight).Sum())
+                .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }
     }
 }
