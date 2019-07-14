@@ -5,8 +5,8 @@ using AlleyCat.Attribute;
 using EnsureThat;
 using Godot;
 using LanguageExt;
-using static LanguageExt.Prelude;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
@@ -17,18 +17,14 @@ namespace AlleyCat.Motion
             string displayName,
             Option<string> description,
             Option<Texture> icon,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            min,
-            max,
-            modifier,
+            children,
             active,
             loggerFactory)
         {

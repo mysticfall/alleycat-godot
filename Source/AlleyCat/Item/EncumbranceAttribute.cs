@@ -17,18 +17,14 @@ namespace AlleyCat.Item
             string displayName,
             Option<string> description,
             Option<Texture> icon,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            min,
-            max,
-            modifier,
+            children,
             active,
             loggerFactory)
         {

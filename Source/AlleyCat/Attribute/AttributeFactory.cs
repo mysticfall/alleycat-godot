@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
@@ -27,21 +28,16 @@ namespace AlleyCat.Attribute
         public bool Active { get; set; }
 
         [Node]
-        public Option<IAttribute> Min { get; set; }
-
-        [Node]
-        public Option<IAttribute> Max { get; set; }
-
-        [Node]
-        public Option<IAttribute> Modifier { get; set; }
+        public IEnumerable<IAttribute> Children { get; set; }
 
         protected override Validation<string, T> CreateService(ILoggerFactory loggerFactory)
         {
             var key = Key.TrimToOption().IfNone(() => Name);
             var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
             var description = Description.TrimToOption().Map(Tr);
+            var children = Optional(Children).Flatten().ToMap();
 
-            return CreateService(key, displayName, description, Optional(Icon), loggerFactory);
+            return CreateService(key, displayName, description, Optional(Icon), children, loggerFactory);
         }
 
         protected abstract Validation<string, T> CreateService(
@@ -49,6 +45,7 @@ namespace AlleyCat.Attribute
             string displayName,
             Option<string> description,
             Option<Texture> icon,
+            Map<string, IAttribute> children,
             ILoggerFactory loggerFactory);
     }
 }

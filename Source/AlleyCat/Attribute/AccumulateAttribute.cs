@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
-using AlleyCat.Event;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -13,15 +12,7 @@ namespace AlleyCat.Attribute
 {
     public class AccumulateAttribute : Attribute
     {
-        public Option<IAttribute> Generator { get; }
-
-        public TimeSpan Period { get; }
-
-        public ProcessMode ProcessMode { get; }
-
-        protected ITimeSource TimeSource { get; }
-
-        protected override IEnumerable<IAttribute> Children => base.Children.Append(Generator);
+        public IEnumerable<IAttribute> Sources { get; }
 
         private readonly BehaviorSubject<IObservable<float>> _value;
 
@@ -31,31 +22,26 @@ namespace AlleyCat.Attribute
             Option<string> description,
             Option<Texture> icon,
             float initialValue,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
-            Option<IAttribute> generator,
-            TimeSpan period,
-            ProcessMode processMode,
-            ITimeSource timeSource,
+            IEnumerable<IAttribute> sources,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            min,
-            max,
-            modifier,
+            children,
             active,
             loggerFactory)
         {
-            Ensure.That(timeSource, nameof(timeSource)).IsNotNull();
+            Ensure.That(sources, nameof(sources)).IsNotNull();
 
-            Generator = generator;
-            Period = period;
-            ProcessMode = processMode;
-            TimeSource = timeSource;
+            Sources = sources;
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Logger.LogDebug("Using source attributes: {}", string.Join(", ", Sources));
+            }
 
             _value = CreateSubject(Return(initialValue));
         }
@@ -64,14 +50,7 @@ namespace AlleyCat.Attribute
         {
             base.Initialize(holder);
 
-            Generator.Iter(generator =>
-            {
-                var increments = Interval(Period, TimeSource.Scheduler(ProcessMode))
-                    .Where(_ => Active)
-                    .WithLatestFrom(generator.OnChange, (_, v) => v);
-
-                Add(increments);
-            });
+            Sources.Map(a => a.OnChange).Iter(Add);
         }
 
         public void Add(float value) => Add(Return(value));

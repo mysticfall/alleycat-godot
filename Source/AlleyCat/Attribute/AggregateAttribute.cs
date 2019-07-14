@@ -11,41 +11,40 @@ namespace AlleyCat.Attribute
 {
     public class AggregateAttribute : Attribute
     {
-        public IEnumerable<IAttribute> Attributes { get; }
-
-        protected override IEnumerable<IAttribute> Children => base.Children.Append(Attributes);
+        public IEnumerable<IAttribute> Sources { get; }
 
         public AggregateAttribute(
             string key,
             string displayName,
             Option<string> description,
             Option<Texture> icon,
-            IEnumerable<IAttribute> attributes,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
+            IEnumerable<IAttribute> sources,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            min,
-            max,
-            modifier,
+            children,
             active,
             loggerFactory)
         {
-            Ensure.That(attributes, nameof(attributes)).IsNotNull();
+            Ensure.That(sources, nameof(sources)).IsNotNull();
 
-            Attributes = attributes;
+            Sources = sources;
+
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Logger.LogDebug("Using source attributes: {}", string.Join(", ", Sources));
+            }
         }
 
         protected override IObservable<float> CreateObservable(IAttributeHolder holder)
         {
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            return Attributes
+            return Sources
                 .Select(a => a.OnChange.DistinctUntilChanged())
                 .CombineLatest(values => values.Sum())
                 .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));

@@ -22,18 +22,14 @@ namespace AlleyCat.Attribute
             Option<Texture> icon,
             string target,
             bool asRatio,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            min,
-            max,
-            modifier,
+            children,
             active,
             loggerFactory)
         {
@@ -46,7 +42,9 @@ namespace AlleyCat.Attribute
 
         public override void Initialize(IAttributeHolder holder)
         {
-            Target = holder.Attributes.TryGetValue(_target);
+            Target = this.FindAttribute(_target, holder);
+
+            Logger.LogDebug("Delegating to {}.", Target);
 
             base.Initialize(holder);
         }

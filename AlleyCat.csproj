@@ -118,6 +118,8 @@
     <Compile Include="Source\AlleyCat\Attribute\AttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\ConstantAttribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\DelegateAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\SampleAttribute.cs" />
+    <Compile Include="Source\AlleyCat\Attribute\SampleAttributeFactory.cs" />
     <Compile Include="Source\AlleyCat\Attribute\VariableAttribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\IAttribute.cs" />
     <Compile Include="Source\AlleyCat\Attribute\IAttributeHolder.cs" />

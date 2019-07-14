@@ -12,6 +12,7 @@ namespace AlleyCat.Motion
             string displayName,
             Option<string> description,
             Option<Texture> icon,
+            Map<string, IAttribute> children,
             ILoggerFactory loggerFactory)
         {
             return new SpeedAttribute(
@@ -19,9 +20,7 @@ namespace AlleyCat.Motion
                 displayName,
                 description,
                 icon,
-                Min,
-                Max,
-                Modifier,
+                children,
                 Active,
                 loggerFactory);
         }

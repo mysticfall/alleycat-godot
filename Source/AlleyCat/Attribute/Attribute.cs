@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using AlleyCat.Common;
@@ -56,7 +55,7 @@ namespace AlleyCat.Attribute
             }
         }
 
-        protected virtual IEnumerable<IAttribute> Children => Min.Append(Max).Append(Modifier);
+        public Map<string, IAttribute> Children { get; }
 
         private readonly BehaviorSubject<bool> _active;
 
@@ -73,9 +72,7 @@ namespace AlleyCat.Attribute
             string displayName,
             Option<string> description,
             Option<Texture> icon,
-            Option<IAttribute> min,
-            Option<IAttribute> max,
-            Option<IAttribute> modifier,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
@@ -85,10 +82,16 @@ namespace AlleyCat.Attribute
             Key = key;
             DisplayName = displayName;
             Description = description;
+            Children = children;
 
-            Min = min;
-            Max = max;
-            Modifier = modifier;
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Logger.LogDebug("Found children: {}", string.Join(", ", Children.Values));
+            }
+
+            Min = Children.Find("Min");
+            Max = Children.Find("Max");
+            Modifier = Children.Find("Modifier");
 
             _icon = icon;
 

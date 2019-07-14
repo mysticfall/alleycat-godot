@@ -14,6 +14,7 @@ namespace AlleyCat.Attribute
             string displayName,
             Option<string> description,
             Option<Texture> icon,
+            Map<string, IAttribute> children,
             ILoggerFactory loggerFactory)
         {
             return new VariableAttribute(
@@ -22,9 +23,7 @@ namespace AlleyCat.Attribute
                 description,
                 icon,
                 InitialValue,
-                Min,
-                Max,
-                Modifier,
+                children,
                 Active,
                 loggerFactory);
         }

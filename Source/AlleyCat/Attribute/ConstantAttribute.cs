@@ -4,7 +4,6 @@ using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static System.Reactive.Linq.Observable;
-using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
@@ -18,15 +17,14 @@ namespace AlleyCat.Attribute
             Option<string> description,
             Option<Texture> icon,
             float value,
+            Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
             key,
             displayName,
             description,
             icon,
-            None,
-            None,
-            None,
+            children,
             active,
             loggerFactory)
         {

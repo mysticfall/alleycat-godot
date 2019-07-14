@@ -1,9 +1,10 @@
-using System;
+using System.Collections.Generic;
 using AlleyCat.Autowire;
-using AlleyCat.Event;
+using AlleyCat.Common;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
@@ -13,34 +14,26 @@ namespace AlleyCat.Attribute
         public float InitialValue { get; set; }
 
         [Node]
-        public Option<IAttribute> Generator { get; set; }
-
-        [Export]
-        public ProcessMode ProcessMode { get; set; } = ProcessMode.Idle;
-
-        [Export(PropertyHint.Range, "0.1,60")]
-        public float Period { get; set; } = 0.1f;
+        public IEnumerable<IAttribute> Sources { get; set; }
 
         protected override Validation<string, AccumulateAttribute> CreateService(
             string key,
             string displayName,
             Option<string> description,
             Option<Texture> icon,
+            Map<string, IAttribute> children,
             ILoggerFactory loggerFactory)
         {
+            var sources = Optional(Sources).Flatten().Freeze();
+
             return new AccumulateAttribute(
                 key,
                 displayName,
                 description,
                 icon,
                 InitialValue,
-                Min,
-                Max,
-                Modifier,
-                Generator,
-                TimeSpan.FromSeconds(Math.Max(Period, 0.1f)),
-                ProcessMode,
-                this,
+                sources,
+                children.AddRange(sources.ToMap()),
                 Active,
                 loggerFactory);
         }
