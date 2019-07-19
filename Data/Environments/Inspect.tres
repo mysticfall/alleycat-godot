@@ -8,6 +8,9 @@ ground_bottom_color = Color( 0.101961, 0.145098, 0.188235, 1 )
 ground_horizon_color = Color( 0.482353, 0.788235, 0.952941, 1 )
 ground_curve = 0.01
 sun_longitude = 145.0
+__meta__ = {
+
+}
 
 [resource]
 background_mode = 2
@@ -16,3 +19,6 @@ ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.3
 ss_reflections_enabled = true
 ssao_enabled = true
+__meta__ = {
+
+}

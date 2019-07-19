@@ -4,3 +4,6 @@
 background_energy = 0.1
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 0.8
+__meta__ = {
+
+}

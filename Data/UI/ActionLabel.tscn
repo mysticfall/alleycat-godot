@@ -19,15 +19,24 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+__meta__ = {
+
+}
 
 [node name="Shortut Label" type="HBoxContainer"]
 margin_right = 87.0
 margin_bottom = 46.0
 custom_constants/separation = 5
 alignment = 1
+__meta__ = {
+
+}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Shortcut" type="Label" parent="."]
 margin_top = 10.0
@@ -40,6 +49,9 @@ custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.921569, 0.921569, 0.921569, 0.784314 )
 text = "?"
 align = 1
+__meta__ = {
+
+}
 
 [node name="Label" type="Label" parent="."]
 margin_left = 33.0
@@ -49,3 +61,6 @@ size_flags_horizontal = 7
 size_flags_vertical = 7
 text = "Action"
 valign = 1
+__meta__ = {
+
+}

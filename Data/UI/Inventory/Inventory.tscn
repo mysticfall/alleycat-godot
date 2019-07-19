@@ -14,6 +14,9 @@
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0, 0.25098 )
+__meta__ = {
+
+}
 
 [node name="Inventory" type="Panel" groups=[
 "Modal",
@@ -25,9 +28,15 @@ anchor_bottom = 1.0
 mouse_filter = 2
 mouse_default_cursor_shape = 5
 custom_styles/panel = SubResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 ActionButton = ExtResource( 5 )
 
 [node name="List Panel" type="Panel" parent="."]
@@ -37,6 +46,9 @@ margin_top = 10.0
 margin_right = 400.0
 margin_bottom = -10.0
 theme = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="Layout" type="GridContainer" parent="List Panel"]
 anchor_right = 1.0
@@ -46,6 +58,9 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 theme = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="Tree" type="Tree" parent="List Panel/Layout"]
 margin_right = 370.0
@@ -56,12 +71,18 @@ columns = 4
 hide_folding = true
 hide_root = true
 select_mode = 1
+__meta__ = {
+
+}
 
 [node name="Buttons Panel" type="GridContainer" parent="List Panel/Layout"]
 margin_top = 560.0
 margin_right = 370.0
 margin_bottom = 560.0
 columns = 3
+__meta__ = {
+
+}
 
 [node name="Content Panel" type="ViewportContainer" parent="."]
 anchor_right = 1.0
@@ -73,12 +94,18 @@ margin_bottom = -2.0
 mouse_filter = 2
 mouse_default_cursor_shape = 6
 stretch = true
+__meta__ = {
+
+}
 
 [node name="Viewport" type="Viewport" parent="Content Panel"]
 size = Vector2( 624, 600 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
+__meta__ = {
+
+}
 
 [node name="Item Box" parent="Content Panel/Viewport" instance=ExtResource( 2 )]
 
@@ -93,6 +120,9 @@ margin_right = 188.0
 margin_bottom = -10.0
 mouse_filter = 2
 theme = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="Title" type="Label" parent="Content Panel/Info Panel"]
 anchor_left = 0.5
@@ -106,6 +136,9 @@ custom_fonts/font = ExtResource( 6 )
 text = "Item"
 align = 1
 valign = 1
+__meta__ = {
+
+}
 
 [node name="Type" type="Label" parent="Content Panel/Info Panel"]
 anchor_left = 1.0
@@ -121,6 +154,9 @@ custom_colors/font_color = Color( 0.647059, 0.647059, 0.647059, 1 )
 text = "Type"
 align = 2
 valign = 1
+__meta__ = {
+
+}
 
 [node name="Description" type="RichTextLabel" parent="Content Panel/Info Panel"]
 anchor_right = 1.0
@@ -130,11 +166,20 @@ margin_top = 50.0
 margin_right = -10.0
 margin_bottom = -10.0
 text = "Description"
+__meta__ = {
+
+}
 
 [node name="Control" type="Node" parent="."]
+__meta__ = {
+
+}
 
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 MaxPitch = 89.5
 MinPitch = -89.5
 MinDistance = 0.2
@@ -144,21 +189,36 @@ Pivot = NodePath("../../Content Panel/Viewport/Item Box/Item")
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 9 )
+__meta__ = {
+
+}
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
+__meta__ = {
+
+}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 10 )
+__meta__ = {
+
+}
 Interpolate = true
 Axis = 1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 9 )
+__meta__ = {
+
+}
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 11 )
+__meta__ = {
+
+}
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"

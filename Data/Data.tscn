@@ -8,26 +8,47 @@
 [ext_resource path="res://Source/AlleyCat/Item/EquipmentSlotFactory.cs" type="Script" id=6]
 
 [node name="Data" type="Node"]
+__meta__ = {
+
+}
 
 [node name="Races" type="Node" parent="."]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Human" type="Node" parent="Races"]
 script = ExtResource( 2 )
+__meta__ = {
+
+}
 Key = "Human"
 DisplayName = "race.Human"
 
 [node name="Morphs" type="Node" parent="Races/Human"]
+__meta__ = {
+
+}
 
 [node name="Female" type="Node" parent="Races/Human/Morphs"]
+__meta__ = {
+
+}
 
 [node name="Head" type="Node" parent="Races/Human/Morphs/Female"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 Key = "morph.Head"
 DisplayName = "Head"
 
 [node name="Head Size" type="Node" parent="Races/Human/Morphs/Female/Head"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Key = "HeadSize"
 DisplayName = "morph.Head.HeadSize"
 Default = 1.1
@@ -38,11 +59,17 @@ Bones = [ "head" ]
 
 [node name="Body" type="Node" parent="Races/Human/Morphs/Female"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 Key = "morph.Body"
 DisplayName = "Body"
 
 [node name="Legs Size" type="Node" parent="Races/Human/Morphs/Female/Body"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Key = "LegsLength"
 DisplayName = "morph.Body.LegsLength"
 Default = 1.0
@@ -53,44 +80,71 @@ Bones = [ "thigh_L", "thigh_R" ]
 
 [node name="Color" type="Node" parent="Races/Human/Morphs/Female"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 Key = "morph.Color"
 DisplayName = "Color"
 
 [node name="Skin Tone" type="Node" parent="Races/Human/Morphs/Female/Color"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Key = "SkinTone"
 DisplayName = "morph.Color.SkinTone"
 Default = Color( 0.85098, 0.835294, 0.803922, 1 )
 Targets = [ "Skin" ]
 
 [node name="Slots" type="Node" parent="Races/Human"]
+__meta__ = {
+
+}
 
 [node name="Equipments" type="Node" parent="Races/Human/Slots"]
+__meta__ = {
+
+}
 
 [node name="Shirt" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "Shirt"
 DisplayName = "slot.Shirt"
 EquipType = 1
 
 [node name="Pants" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "Pants"
 DisplayName = "slot.Pants"
 EquipType = 1
 
 [node name="Left Hand" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "LeftHand"
 DisplayName = "slot.LeftHand"
 
 [node name="Right Hand" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "RightHand"
 DisplayName = "slot.RightHand"
 
 [node name="Necklace" type="Node" parent="Races/Human/Slots/Equipments"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "Necklace"
 DisplayName = "slot.Necklace"
 EquipType = 1

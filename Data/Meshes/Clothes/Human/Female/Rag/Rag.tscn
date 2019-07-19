@@ -10,17 +10,29 @@
 [ext_resource path="res://Source/AlleyCat/Common/Marker.cs" type="Script" id=8]
 
 [sub_resource type="PhysicsMaterial" id=1]
+__meta__ = {
+
+}
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.231997, 0.0309091, 0.219546 )
+__meta__ = {
+
+}
 
 [node name="Rag" type="RigidBody"]
 input_ray_pickable = false
 mass = 0.5
 physics_material_override = SubResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 Key = "Rag"
 DisplayName = "item.Rag"
 Description = "item.Rag.Description"
@@ -30,21 +42,39 @@ ItemMesh = ExtResource( 2 )
 extra_cull_margin = 0.5
 mesh = ExtResource( 2 )
 material/0 = null
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="Mesh"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0111699 )
 shape = SubResource( 2 )
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="CollisionShape"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 
 [node name="Configurations" type="Node" parent="."]
+__meta__ = {
+
+}
 
 [node name="Wear" type="Node" parent="Configurations"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Key = "Wear"
 Slot = "Shirt"
 AdditionalSlots = [ "Pants" ]
@@ -55,6 +85,9 @@ MeshesToSync = [ "Body" ]
 
 [node name="Carry" type="Node" parent="Configurations"]
 script = ExtResource( 6 )
+__meta__ = {
+
+}
 Key = "Carry"
 Slot = "RightHand"
 Animation = ExtResource( 7 )
@@ -63,8 +96,14 @@ AnimationTransition = 1.0
 Tags = [ "Carry", "Hand", "OneHand" ]
 
 [node name="Markers" type="Spatial" parent="."]
+__meta__ = {
+
+}
 
 [node name="Carry" type="Spatial" parent="Markers"]
 transform = Transform( -1, -5.96046e-08, 0, 4.96565e-08, -0.833097, -0.553126, 3.29689e-08, -0.553126, 0.833097, 0, -0.0183101, 0.255009 )
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 _key = "Carry"

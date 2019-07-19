@@ -8,12 +8,21 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 scroll_horizontal_enabled = false
+__meta__ = {
+
+}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 ColorMorphPanelScene = ExtResource( 2 )
 RangedMorphPanelScene = ExtResource( 3 )
 
 [node name="MorphsPanel" type="VBoxContainer" parent="."]
 margin_right = 1024.0
 size_flags_horizontal = 3
+__meta__ = {
+
+}

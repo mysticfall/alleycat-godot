@@ -15,16 +15,25 @@
 [sub_resource type="CylinderShape" id=1]
 radius = 0.0268084
 height = 0.68
+__meta__ = {
+
+}
 
 [sub_resource type="CylinderShape" id=2]
 radius = 0.0268084
 height = 0.76
+__meta__ = {
 
-[node name="Pickaxe" index="0" instance=ExtResource( 7 )]
+}
+
+[node name="Pickaxe" instance=ExtResource( 7 )]
 mass = 2.0
 
 [node name="Context" type="Node" parent="." index="0"]
 script = ExtResource( 2 )
+__meta__ = {
+
+}
 Key = "Pickaxe"
 DisplayName = "item.Pickaxe"
 Description = "item.Pickaxe.Description"
@@ -36,25 +45,46 @@ transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0 )
 
 [node name="Binding" type="Node" parent="Pickaxe" index="0"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="HeadCollisionShape" type="CollisionShape" parent="." index="2"]
 transform = Transform( 1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, -0.0275603, 0, 0 )
 shape = SubResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="HeadCollisionShape" index="0"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="HandleCollisionShape" type="CollisionShape" parent="." index="3"]
 transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.401973, 0, 0 )
 shape = SubResource( 2 )
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="HandleCollisionShape" index="0"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 
 [node name="Configurations" type="Node" parent="." index="4"]
+__meta__ = {
+
+}
 
 [node name="Carry" type="Node" parent="Configurations" index="0"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Key = "Carry"
 Slot = "RightHand"
 AdditionalSlots = [ "LeftHand" ]
@@ -67,36 +97,63 @@ MaxPosition = 1.8
 MinPosition = 1.1
 
 [node name="Control" type="Node" parent="Configurations/Carry" index="0"]
+__meta__ = {
+
+}
 
 [node name="Swing" type="Node" parent="Configurations/Carry/Control" index="0"]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [node name="X" type="Node" parent="Configurations/Carry/Control/Swing" index="0"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Configurations/Carry/Control/Swing" index="1"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 Interpolate = true
 Axis = 1
 
 [node name="Arm" type="Node" parent="Configurations/Carry/Control" index="1"]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Value" type="Node" parent="Configurations/Carry/Control/Arm" index="0"]
 script = ExtResource( 9 )
+__meta__ = {
+
+}
 Action = "point2"
 UnhandledOnly = false
 StopPropagation = false
 
 [node name="Markers" type="Spatial" parent="." index="5"]
+__meta__ = {
+
+}
 
 [node name="Label" type="Spatial" parent="Markers" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.400645, 0.0142181 )
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 _key = "Label"
 
 [node name="Carry" type="Spatial" parent="Markers" index="1"]
 transform = Transform( -0.946138, 0.107905, 0.305254, 0.270716, 0.780805, 0.563076, -0.177585, 0.615386, -0.76796, 0.596112, 0.00469325, -0.0664358 )
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 _key = "Carry"

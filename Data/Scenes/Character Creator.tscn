@@ -11,11 +11,20 @@
 
 [node name="Character Creator" type="Node"]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [node name="Control" type="Node" parent="."]
+__meta__ = {
+
+}
 
 [node name="View" type="Node" parent="Control"]
 script = ExtResource( 2 )
+__meta__ = {
+
+}
 MinDistance = 0.2
 InitialDistance = 1.5
 _camera = NodePath("../../UI/Content Panel/Viewport/Character/Camera")
@@ -23,36 +32,60 @@ Pivot = NodePath("")
 
 [node name="Rotation" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 
 [node name="X" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/View/Rotation"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Sensitivity = 0.0
 Interpolate = true
 Axis = 1
 
 [node name="Pan" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 
 [node name="X" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Sensitivity = 0.0
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/View/Pan"]
 script = ExtResource( 4 )
+__meta__ = {
+
+}
 Sensitivity = 0.4
 Interpolate = true
 Axis = 1
 
 [node name="Zoom" type="Node" parent="Control/View"]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 
 [node name="Value" type="Node" parent="Control/View/Zoom"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Sensitivity = 0.7
 Interpolate = true
 PositiveAction = "zoom_in"
@@ -60,13 +93,22 @@ NegativeAction = "zoom_out"
 Polling = false
 
 [node name="UI" type="Node" parent="."]
+__meta__ = {
+
+}
 
 [node name="Morphs Panel" type="Panel" parent="UI"]
 anchor_bottom = 1.0
 margin_right = 340.0
+__meta__ = {
+
+}
 
 [node name="Context" type="Node" parent="UI/Morphs Panel"]
 script = ExtResource( 9 )
+__meta__ = {
+
+}
 GroupPanelScene = ExtResource( 7 )
 
 [node name="Tab Container" type="TabContainer" parent="UI/Morphs Panel"]
@@ -77,6 +119,9 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 tab_align = 0
+__meta__ = {
+
+}
 
 [node name="Content Panel" type="ViewportContainer" parent="UI"]
 anchor_right = 1.0
@@ -85,6 +130,9 @@ margin_left = 340.0
 mouse_filter = 2
 mouse_default_cursor_shape = 6
 stretch = true
+__meta__ = {
+
+}
 
 [node name="Viewport" type="Viewport" parent="UI/Content Panel"]
 size = Vector2( 684, 600 )
@@ -92,5 +140,8 @@ transparent_bg = true
 handle_input_locally = false
 msaa = 3
 render_target_update_mode = 3
+__meta__ = {
+
+}
 
 [node name="Character" parent="UI/Content Panel/Viewport" instance=ExtResource( 6 )]

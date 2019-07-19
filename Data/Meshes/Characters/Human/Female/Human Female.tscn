@@ -48,19 +48,34 @@
 [ext_resource path="res://Data/Meshes/Items/Pickaxe/Pickaxe.tscn" type="PackedScene" id=46]
 
 [sub_resource type="PhysicsMaterial" id=1]
+__meta__ = {
+
+}
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.246558
 height = 1.13148
+__meta__ = {
+
+}
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=3]
+__meta__ = {
+
+}
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=4]
+__meta__ = {
+
+}
 
 [node name="Human Female" index="0" instance=ExtResource( 42 )]
 
 [node name="Context" type="Node" parent="." index="0"]
 script = ExtResource( 2 )
+__meta__ = {
+
+}
 Key = "Female"
 DisplayName = "Female"
 Race = "Human"
@@ -81,11 +96,17 @@ extra_cull_margin = 0.5
 extra_cull_margin = 2.5
 mesh = ExtResource( 3 )
 material/0 = null
+__meta__ = {
+
+}
 
 [node name="Hair" type="MeshInstance" parent="Rig" index="3"]
 extra_cull_margin = 2.5
 mesh = ExtResource( 4 )
 material/0 = null
+__meta__ = {
+
+}
 
 [node name="Rag" parent="Rig" index="4" instance=ExtResource( 6 )]
 physics_material_override = SubResource( 1 )
@@ -95,18 +116,30 @@ physics_material_override = SubResource( 1 )
 [node name="Chest" type="BoneAttachment" parent="Rig" index="6"]
 transform = Transform( -1, -2.19802e-06, -2.87645e-07, -6.21602e-08, 0.157512, -0.987518, 2.21589e-06, -0.987518, -0.157512, 4.69658e-08, 1.11671, 0.0237305 )
 bone_name = "spine03"
+__meta__ = {
+
+}
 
 [node name="Label" type="Spatial" parent="Rig/Chest" index="0"]
 transform = Transform( 1, 2.27374e-13, 5.68434e-14, 6.82121e-13, 1, 2.98023e-08, -5.68434e-14, -8.9407e-08, 1, 3.60044e-09, -0.0169366, 0.000203967 )
 script = ExtResource( 7 )
+__meta__ = {
+
+}
 _key = "Label"
 
 [node name="Right Hand" type="BoneAttachment" parent="Rig" index="7"]
 transform = Transform( -0.103278, -0.562712, -0.820176, 0.0402779, -0.826276, 0.561825, -0.993837, 0.0249891, 0.108002, 0.551872, 1.05762, -0.0311864 )
 bone_name = "hand_R"
+__meta__ = {
+
+}
 
 [node name="Equip" type="Spatial" parent="Rig/Right Hand" index="0"]
 script = ExtResource( 7 )
+__meta__ = {
+
+}
 _key = "RightHand"
 
 [node name="Pickaxe" parent="Rig/Right Hand/Equip" index="0" instance=ExtResource( 46 )]
@@ -118,25 +151,43 @@ Active = true
 root_bone = "upperarm_R"
 tip_bone = "hand_R"
 interpolation = 0.0
+__meta__ = {
+
+}
 
 [node name="Left Hand" type="BoneAttachment" parent="Rig" index="9"]
 transform = Transform( -0.102984, 0.562841, 0.820124, -0.0409233, -0.826209, 0.561878, 0.993842, 0.0243023, 0.10812, -0.551869, 1.05763, -0.0311835 )
 bone_name = "hand_L"
+__meta__ = {
+
+}
 
 [node name="Equip" type="Spatial" parent="Rig/Left Hand" index="0"]
 transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0 )
 script = ExtResource( 7 )
+__meta__ = {
+
+}
 _key = "LeftHand"
 
 [node name="Binding" type="Node" parent="Rig" index="10"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="2"]
 transform = Transform( -1, -3.25841e-07, 1.4243e-14, 0, -4.37114e-08, -1, 3.25841e-07, -1, 4.37114e-08, 0, 0.809487, 0 )
 shape = SubResource( 2 )
+__meta__ = {
+
+}
 
 [node name="Animations" type="Spatial" parent="." index="3"]
 script = ExtResource( 9 )
+__meta__ = {
+
+}
 ProcessMode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations" index="0"]
@@ -158,9 +209,15 @@ anims/SitOnGroundStart = ExtResource( 22 )
 anims/SwingPickaxe = ExtResource( 32 )
 anims/WalkBackward = ExtResource( 23 )
 anims/WalkForward = ExtResource( 24 )
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="Animations/AnimationPlayer" index="0"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 
 [node name="AnimationTree" type="AnimationTree" parent="Animations" index="1"]
 tree_root = ExtResource( 25 )
@@ -179,14 +236,26 @@ parameters/States/Seated/playback = SubResource( 4 )
 parameters/States/Seated/Seated/Sit/current = 0
 "parameters/States/Swing/Swing Seek/seek_position" = -1.0
 "parameters/States/Swing/Swing Speed/scale" = 0.0
+__meta__ = {
+
+}
 
 [node name="Binding" type="Node" parent="Animations/AnimationTree" index="0"]
 script = ExtResource( 8 )
+__meta__ = {
+
+}
 
 [node name="Attributes" type="Node" parent="." index="4"]
+__meta__ = {
+
+}
 
 [node name="Stamina" type="Node" parent="Attributes" index="0"]
 script = ExtResource( 34 )
+__meta__ = {
+
+}
 Key = "Stamina"
 DisplayName = "attribute.Stamina"
 Description = "attribute.Stamina"
@@ -196,6 +265,9 @@ InitialValue = 100.0
 
 [node name="Min" type="Node" parent="Attributes/Stamina" index="0"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "Min"
 DisplayName = "Min"
 Description = "Min"
@@ -203,6 +275,9 @@ Active = true
 
 [node name="Max" type="Node" parent="Attributes/Stamina" index="1"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "Max"
 DisplayName = "Max"
 Description = "Max"
@@ -210,9 +285,15 @@ Active = true
 Value = 100.0
 
 [node name="Sources" type="Node" parent="Attributes/Stamina" index="2"]
+__meta__ = {
+
+}
 
 [node name="Stamina Regen" type="Node" parent="Attributes/Stamina/Sources" index="0"]
 script = ExtResource( 44 )
+__meta__ = {
+
+}
 Key = "StaminaRegen"
 DisplayName = "Stamina Regen"
 Description = "Stamina Regen"
@@ -223,6 +304,9 @@ Period = 0.5
 
 [node name="Source" type="Node" parent="Attributes/Stamina/Sources/Stamina Regen" index="0"]
 script = ExtResource( 41 )
+__meta__ = {
+
+}
 Key = "Source"
 DisplayName = "Source"
 Description = "Source"
@@ -231,6 +315,9 @@ Target = "/StaminaRegen"
 
 [node name="Fatigue" type="Node" parent="Attributes/Stamina/Sources" index="1"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Key = "Fatigue"
 DisplayName = "Fatigue"
 Description = "Fatigue"
@@ -239,6 +326,9 @@ Target = "/Fatigue"
 
 [node name="Modifier" type="Node" parent="Attributes/Stamina/Sources/Fatigue" index="0"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
@@ -247,6 +337,9 @@ Value = -0.001
 
 [node name="Stamina Regen" type="Node" parent="Attributes" index="1"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "StaminaRegen"
 DisplayName = "Stamina Regen"
 Description = "Stamina Regen"
@@ -255,6 +348,9 @@ Value = 0.5
 
 [node name="Speed" type="Node" parent="Attributes" index="2"]
 script = ExtResource( 33 )
+__meta__ = {
+
+}
 Key = "Speed"
 DisplayName = "Speed"
 Description = "Speed"
@@ -262,6 +358,9 @@ Active = true
 
 [node name="Encumbrance" type="Node" parent="Attributes" index="3"]
 script = ExtResource( 35 )
+__meta__ = {
+
+}
 Key = "Encumbrance"
 DisplayName = "Encumbrance"
 Description = "Encumbrance"
@@ -269,15 +368,24 @@ Active = true
 
 [node name="Fatigue" type="Node" parent="Attributes" index="4"]
 script = ExtResource( 1 )
+__meta__ = {
+
+}
 Key = "Fatigue"
 DisplayName = "Fatigue"
 Description = "Fatigue"
 Active = true
 
 [node name="Sources" type="Node" parent="Attributes/Fatigue" index="0"]
+__meta__ = {
+
+}
 
 [node name="Movement" type="Node" parent="Attributes/Fatigue/Sources" index="0"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Key = "MovementFatigue"
 DisplayName = "Fatigue from Movement"
 Description = "Fatigue from Movement"
@@ -286,6 +394,9 @@ Target = "/Speed"
 
 [node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Movement" index="0"]
 script = ExtResource( 5 )
+__meta__ = {
+
+}
 Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
@@ -294,6 +405,9 @@ Target = "/Encumbrance"
 
 [node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Movement/Modifier" index="0"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
@@ -302,6 +416,9 @@ Value = 0.001
 
 [node name="Wielding Item" type="Node" parent="Attributes/Fatigue/Sources" index="1"]
 script = ExtResource( 40 )
+__meta__ = {
+
+}
 Key = "Melee"
 DisplayName = "Melee"
 Description = "Melee"
@@ -309,6 +426,9 @@ Active = true
 
 [node name="Modifier" type="Node" parent="Attributes/Fatigue/Sources/Wielding Item" index="0"]
 script = ExtResource( 37 )
+__meta__ = {
+
+}
 Key = "Modifier"
 DisplayName = "Modifier"
 Description = "Modifier"
@@ -317,16 +437,28 @@ Value = 10.0
 
 [node name="Vision" type="Node" parent="." index="5"]
 script = ExtResource( 26 )
+__meta__ = {
+
+}
 
 [node name="Locomotion" type="Node" parent="." index="6"]
 script = ExtResource( 27 )
+__meta__ = {
+
+}
 _targetPath = NodePath("..")
 
 [node name="Actions" type="Node" parent="." index="7"]
 script = ExtResource( 36 )
+__meta__ = {
+
+}
 
 [node name="Pick Up" type="Node" parent="Actions" index="0"]
 script = ExtResource( 28 )
+__meta__ = {
+
+}
 Key = "Pickup"
 DisplayName = "action.Pickup"
 PickupDistance = 1.2
@@ -334,21 +466,33 @@ Animation = ExtResource( 17 )
 
 [node name="Drop" type="Node" parent="Actions" index="1"]
 script = ExtResource( 29 )
+__meta__ = {
+
+}
 Key = "Drop"
 DisplayName = "action.Drop"
 
 [node name="Get Up" type="Node" parent="Actions" index="2"]
 script = ExtResource( 38 )
+__meta__ = {
+
+}
 Key = "GetUp"
 DisplayName = "action.GetUp"
 
 [node name="Sit" type="Node" parent="Actions" index="3"]
 script = ExtResource( 31 )
+__meta__ = {
+
+}
 Key = "Sit"
 DisplayName = "action.Sit"
 
 [node name="Sit" type="Node" parent="Actions/Sit" index="0"]
 script = ExtResource( 30 )
+__meta__ = {
+
+}
 Key = "SitOnGround"
 DisplayName = "action.SitOnGround"
 SittingDownAnimation = ExtResource( 22 )
@@ -357,6 +501,9 @@ GettingUpAnimation = ExtResource( 21 )
 
 [node name="Kneel" type="Node" parent="Actions/Sit" index="1"]
 script = ExtResource( 30 )
+__meta__ = {
+
+}
 Key = "Kneel"
 DisplayName = "action.Kneel"
 SittingDownAnimation = ExtResource( 16 )

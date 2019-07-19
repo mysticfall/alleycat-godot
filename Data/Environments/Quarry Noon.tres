@@ -4,6 +4,9 @@
 
 [sub_resource type="PanoramaSky" id=1]
 panorama = ExtResource( 1 )
+__meta__ = {
+
+}
 
 [resource]
 background_mode = 2
@@ -22,7 +25,6 @@ ss_reflections_enabled = true
 ss_reflections_max_steps = 48
 ssao_enabled = true
 ssao_intensity = 3.0
-ssao_quality = 1
 dof_blur_far_distance = 3.0
 dof_blur_far_transition = 2.0
 dof_blur_far_amount = 0.08
@@ -31,3 +33,6 @@ dof_blur_near_transition = 0.5
 dof_blur_near_amount = 0.08
 adjustment_enabled = true
 adjustment_saturation = 0.83
+__meta__ = {
+
+}

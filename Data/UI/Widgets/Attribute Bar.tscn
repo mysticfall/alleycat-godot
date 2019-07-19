@@ -11,6 +11,9 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+__meta__ = {
+
+}
 
 [sub_resource type="StyleBoxFlat" id=2]
 content_margin_top = 3.0
@@ -20,6 +23,9 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+__meta__ = {
+
+}
 
 [node name="Attribute" type="Control"]
 anchor_right = 0.229
@@ -34,6 +40,9 @@ __meta__ = {
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 3 )
+__meta__ = {
+
+}
 Attribute = "Stamina"
 
 [node name="Container" type="HBoxContainer" parent="."]
@@ -56,6 +65,9 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 2 )
 stretch_mode = 4
+__meta__ = {
+
+}
 
 [node name="Label" type="Label" parent="Container"]
 visible = false
@@ -68,6 +80,9 @@ custom_fonts/font = ExtResource( 1 )
 text = "Attribute"
 align = 2
 valign = 1
+__meta__ = {
+
+}
 
 [node name="Progress" type="ProgressBar" parent="Container"]
 margin_left = 34.0
@@ -81,6 +96,9 @@ custom_styles/bg = SubResource( 2 )
 custom_fonts/font = ExtResource( 4 )
 value = 50.0
 percent_visible = false
+__meta__ = {
+
+}
 
 [node name="Value" type="Label" parent="Container"]
 margin_left = 194.0
@@ -93,3 +111,6 @@ custom_fonts/font = ExtResource( 1 )
 text = "100"
 valign = 1
 clip_text = true
+__meta__ = {
+
+}
