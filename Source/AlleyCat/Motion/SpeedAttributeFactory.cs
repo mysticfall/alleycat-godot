@@ -7,6 +7,9 @@ namespace AlleyCat.Motion
 {
     public class SpeedAttributeFactory : AttributeFactory<SpeedAttribute>
     {
+        [Export(PropertyHint.Range, "0,10")]
+        public float Threshold { get; set; } = 0.05f;
+
         protected override Validation<string, SpeedAttribute> CreateService(
             string key,
             string displayName,
@@ -20,6 +23,7 @@ namespace AlleyCat.Motion
                 displayName,
                 description,
                 icon,
+                Threshold,
                 children,
                 Active,
                 loggerFactory);

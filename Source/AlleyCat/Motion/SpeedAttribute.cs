@@ -12,11 +12,14 @@ namespace AlleyCat.Motion
 {
     public class SpeedAttribute : Attribute.Attribute
     {
+        public float Threshold { get; }
+
         public SpeedAttribute(
             string key,
             string displayName,
             Option<string> description,
             Option<Texture> icon,
+            float threshold,
             Map<string, IAttribute> children,
             bool active,
             ILoggerFactory loggerFactory) : base(
@@ -28,6 +31,7 @@ namespace AlleyCat.Motion
             active,
             loggerFactory)
         {
+            Threshold = Mathf.Max(threshold, 0);
         }
 
         protected override IObservable<float> CreateObservable(IAttributeHolder holder)
@@ -40,7 +44,7 @@ namespace AlleyCat.Motion
                 .ToObservable()
                 .Switch()
                 .Select(v => v.Length())
-                .Select(v => v < 0.05f ? 0f : v)
+                .Select(v => v > Threshold ? v : 0f)
                 .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
         }
     }
