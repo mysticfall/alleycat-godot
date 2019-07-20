@@ -68,7 +68,8 @@ namespace AlleyCat.Item
 
             return speed
                 .WithLatestFrom(weight, (s, w) =>  s * w)
-                .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m));
+                .CombineLatest(OnModifierChange, OnRangeChange, (v, m, r) => r.Clamp(v * m))
+                .StartWith(0f);
         }
     }
 }
