@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -199,6 +199,7 @@
     <Compile Include="Source\AlleyCat\Common\IInitializable.cs" />
     <Compile Include="Source\AlleyCat\Common\ILabelled.cs" />
     <Compile Include="Source\AlleyCat\Common\IMarkable.cs" />
+    <Compile Include="Source\AlleyCat\Common\IMeshData.cs" />
     <Compile Include="Source\AlleyCat\Common\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Common\INamed.cs" />
     <Compile Include="Source\AlleyCat\Common\ITaggable.cs" />
@@ -207,6 +208,9 @@
     <Compile Include="Source\AlleyCat\Common\Marker.cs" />
     <Compile Include="Source\AlleyCat\Common\MathUtils.cs" />
     <Compile Include="Source\AlleyCat\Common\MeshInstanceExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Common\MeshSurface.cs" />
+    <Compile Include="Source\AlleyCat\Common\MeshSurfaceData.cs" />
+    <Compile Include="Source\AlleyCat\Common\MeshSurfaceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeException.cs" />
     <Compile Include="Source\AlleyCat\Common\NodeExtensions.cs" />
     <Compile Include="Source\AlleyCat\Autowire\AttributeProcessor.cs" />
