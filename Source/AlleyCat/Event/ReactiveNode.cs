@@ -18,19 +18,35 @@ namespace AlleyCat.Event
 
         public IObservable<bool> Disposed => _delegate.Disposed;
 
-        public IObservable<float> OnProcess => _onProcess.IfNone(() =>
+        public IObservable<float> OnProcess
         {
-            SetProcess(true);
+            get
+            {
+                if (_onProcess == null)
+                {
+                    SetProcess(true);
 
-            return (_onProcess = new Subject<float>()).Head();
-        }).AsObservable();
+                    _onProcess = new Subject<float>();
+                }
 
-        public IObservable<float> OnPhysicsProcess => _onPhysicsProcess.IfNone(() =>
+                return _onProcess.AsObservable();
+            }
+        }
+
+        public IObservable<float> OnPhysicsProcess
         {
-            SetPhysicsProcess(true);
+            get
+            {
+                if (_onPhysicsProcess == null)
+                {
+                    SetPhysicsProcess(true);
 
-            return (_onPhysicsProcess = new Subject<float>()).Head();
-        }).AsObservable();
+                    _onPhysicsProcess = new Subject<float>();
+                }
+
+                return _onPhysicsProcess.AsObservable();
+            }
+        }
 
         public IScheduler Scheduler => _scheduler.IfNone(
             () => (_scheduler = new ProcessScheduler(OnProcess)).Head());
@@ -38,29 +54,45 @@ namespace AlleyCat.Event
         public IScheduler PhysicsScheduler => _physicsScheduler.IfNone(
             () => (_physicsScheduler = new ProcessScheduler(OnPhysicsProcess)).Head());
 
-        public IObservable<InputEvent> OnInput => _onInput.IfNone(() =>
+        public IObservable<InputEvent> OnInput
         {
-            SetProcessInput(true);
+            get
+            {
+                if (_onInput == null)
+                {
+                    SetProcessInput(true);
 
-            return (_onInput = new Subject<InputEvent>()).Head();
-        }).AsObservable();
+                    _onInput = new Subject<InputEvent>();
+                }
 
-        public IObservable<InputEvent> OnUnhandledInput => _onUnhandledInput.IfNone(() =>
+                return _onInput.AsObservable();
+            }
+        }
+
+        public IObservable<InputEvent> OnUnhandledInput
         {
-            SetProcessUnhandledInput(true);
+            get
+            {
+                if (_onUnhandledInput == null)
+                {
+                    SetProcessUnhandledInput(true);
 
-            return (_onUnhandledInput = new Subject<InputEvent>()).Head();
-        }).AsObservable();
+                    _onUnhandledInput = new Subject<InputEvent>();
+                }
+
+                return _onUnhandledInput.AsObservable();
+            }
+        }
 
         private readonly ReactiveObject _delegate = new ReactiveObject();
 
-        private Option<Subject<float>> _onProcess;
+        private Subject<float> _onProcess;
 
-        private Option<Subject<float>> _onPhysicsProcess;
+        private Subject<float> _onPhysicsProcess;
 
-        private Option<Subject<InputEvent>> _onInput;
+        private Subject<InputEvent> _onInput;
 
-        private Option<Subject<InputEvent>> _onUnhandledInput;
+        private Subject<InputEvent> _onUnhandledInput;
 
         private Option<IScheduler> _scheduler;
 
@@ -98,21 +130,21 @@ namespace AlleyCat.Event
         {
             base._Process(delta);
 
-            _onProcess.Iter(l => l.OnNext(delta));
+            _onProcess?.OnNext(delta);
         }
 
         public override void _PhysicsProcess(float delta)
         {
             base._PhysicsProcess(delta);
 
-            _onPhysicsProcess.Iter(l => l.OnNext(delta));
+            _onPhysicsProcess?.OnNext(delta);
         }
 
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);
 
-            _onInput.Iter(i => i.OnNext(@event));
+            _onInput?.OnNext(@event);
         }
 
         public override void _UnhandledInput(InputEvent @event)
@@ -121,14 +153,14 @@ namespace AlleyCat.Event
 
             if (@event is InputEventKey) return;
 
-            _onUnhandledInput.Iter(i => i.OnNext(@event));
+            _onUnhandledInput?.OnNext(@event);
         }
 
         public override void _UnhandledKeyInput(InputEventKey @event)
         {
             base._UnhandledKeyInput(@event);
 
-            _onUnhandledInput.Iter(i => i.OnNext(@event));
+            _onUnhandledInput?.OnNext(@event);
         }
 
         public void SetInputAsHandled() => GetTree().SetInputAsHandled();
@@ -137,17 +169,17 @@ namespace AlleyCat.Event
         {
             PreDestroy();
 
-            _onProcess.Iter(l => l.CompleteAndDispose());
-            _onProcess = Prelude.None;
+            _onProcess?.CompleteAndDispose();
+            _onProcess = null;
 
-            _onPhysicsProcess.Iter(l => l.CompleteAndDispose());
-            _onPhysicsProcess = Prelude.None;
+            _onPhysicsProcess?.CompleteAndDispose();
+            _onPhysicsProcess = null;
 
-            _onInput.Iter(l => l.CompleteAndDispose());
-            _onInput = Prelude.None;
+            _onInput?.CompleteAndDispose();
+            _onInput = null;
 
-            _onUnhandledInput.Iter(l => l.CompleteAndDispose());
-            _onUnhandledInput = Prelude.None;
+            _onUnhandledInput?.CompleteAndDispose();
+            _onUnhandledInput = null;
 
             _scheduler.OfType<IDisposable>().Iter(d => d.DisposeQuietly());
             _scheduler = Prelude.None;
