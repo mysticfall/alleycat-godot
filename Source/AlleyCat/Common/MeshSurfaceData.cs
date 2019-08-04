@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -9,25 +7,25 @@ using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Common
 {
-    public struct MeshSurfaceData : IMeshData
+    public class MeshSurfaceData : IMeshData
     {
-        public IList<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
+        public Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
 
-        public IList<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
+        public Arr<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
 
-        public IList<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
+        public Arr<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
 
-        public IList<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
+        public Arr<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
 
-        public IList<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
+        public Arr<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
 
-        public IList<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
+        public Arr<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
 
-        public IList<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
+        public Arr<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
 
-        public IList<Vector2> UV2 => _uv2 ?? (_uv2 = Read<Vector2>(ArrayType.TexUv2));
+        public Arr<Vector2> UV2 => _uv2 ?? (_uv2 = Read<Vector2>(ArrayType.TexUv2));
 
-        public IList<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
+        public Arr<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
 
         public uint FormatMask { get; }
 
@@ -35,23 +33,23 @@ namespace AlleyCat.Common
 
         private Map<ArrayType, object> _cache;
 
-        private IList<Vector3> _vertices;
+        private Vector3[] _vertices;
 
-        private IList<Vector3> _normals;
+        private Vector3[] _normals;
 
-        private IList<float[]> _tangents;
+        private float[][] _tangents;
 
-        private IList<Color> _colors;
+        private Color[] _colors;
 
-        private IList<int[]> _bones;
+        private int[][] _bones;
 
-        private IList<float[]> _weights;
+        private float[][] _weights;
 
-        private IList<Vector2> _uv;
+        private Vector2[] _uv;
 
-        private IList<Vector2> _uv2;
+        private Vector2[] _uv2;
 
-        private IList<int> _indices;
+        private int[] _indices;
 
         public MeshSurfaceData(Array source, uint formatMask)
         {
@@ -72,7 +70,7 @@ namespace AlleyCat.Common
             _indices = null;
         }
 
-        private IList<T> Read<T>(ArrayType tpe)
+        private T[] Read<T>(ArrayType tpe)
         {
             ArrayFormat format;
 
@@ -111,7 +109,7 @@ namespace AlleyCat.Common
 
             if (!this.SupportsFormat(format))
             {
-                throw new ThreadStateException($"The mesh does not contain the data type: '{tpe}'.");
+                throw new InvalidOperationException($"The mesh does not contain the data type: '{tpe}'.");
             }
 
             return (T[]) _source[(int) tpe];
