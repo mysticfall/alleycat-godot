@@ -1,5 +1,6 @@
 using System;
-using AlleyCat.Common;
+using System.Collections;
+using System.Collections.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -8,7 +9,7 @@ using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurfaceData : IMeshData
+    public class MeshSurfaceData : IMeshData, IReadOnlyList<VertexData>
     {
         public Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
 
@@ -28,9 +29,13 @@ namespace AlleyCat.Mesh
 
         public Arr<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
 
+        public int Count => Vertices.Count;
+
         public uint FormatMask { get; }
 
         private readonly Array _source;
+
+        private readonly int _count;
 
         private Map<ArrayType, object> _cache;
 
@@ -56,9 +61,9 @@ namespace AlleyCat.Mesh
         {
             Ensure.That(source, nameof(source)).IsNotNull();
 
-            FormatMask = formatMask;
-
             _source = source;
+
+            FormatMask = formatMask;
 
             _vertices = null;
             _normals = null;
@@ -70,6 +75,18 @@ namespace AlleyCat.Mesh
             _uv2 = null;
             _indices = null;
         }
+
+        public IEnumerator<VertexData> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                yield return new VertexData(this, i);
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public VertexData this[int index] => new VertexData(this, Indices[index]);
 
         private T[] Read<T>(ArrayType tpe)
         {

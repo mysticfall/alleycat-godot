@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
@@ -9,7 +8,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public struct MeshSurface : IMeshData
+    public class MeshSurface : IMeshData
     {
         public ArrayMesh Mesh { get; }
 
