@@ -22,7 +22,7 @@ namespace AlleyCat.Item
 
         public IObservable<bool> OnActiveStateChange => _active.AsObservable();
 
-        public Option<Mesh> Mesh { get; set; }
+        public Option<Godot.Mesh> Mesh { get; set; }
 
         public Option<Godot.Animation> EquipAnimation { get; set; }
 

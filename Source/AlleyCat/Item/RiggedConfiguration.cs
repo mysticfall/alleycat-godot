@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Common;
 using AlleyCat.Logging;
+using AlleyCat.Mesh;
 using EnsureThat;
 using Godot;
 using Godot.Collections;

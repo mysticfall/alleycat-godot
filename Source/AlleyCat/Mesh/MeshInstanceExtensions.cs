@@ -3,7 +3,7 @@ using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Mesh
 {
     public static class MeshInstanceExtensions
     {

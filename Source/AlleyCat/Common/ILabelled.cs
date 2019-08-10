@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using AlleyCat.Autowire;
+using AlleyCat.Mesh;
 using EnsureThat;
 using Godot;
 using LanguageExt;

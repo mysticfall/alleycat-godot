@@ -27,7 +27,7 @@ namespace AlleyCat.Item
         public EquipmentType EquipmentType { get; set; }
 
         [Export]
-        public Mesh ItemMesh { get; set; }
+        public Godot.Mesh ItemMesh { get; set; }
 
         [Service]
         public Option<MeshInstance> Mesh { get; set; }

@@ -1,6 +1,7 @@
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
+using static Godot.Mesh;
 
 namespace AlleyCat.Common
 {
@@ -45,7 +46,7 @@ namespace AlleyCat.Common
         {
             Material.Iter(v => MaterialOverride = v);
 
-            Begin(Mesh.PrimitiveType.Lines);
+            Begin(PrimitiveType.Lines);
 
             SetColor(color);
 

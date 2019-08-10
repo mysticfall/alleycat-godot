@@ -13,7 +13,7 @@ namespace AlleyCat.Item
         public bool Active { get; set; }
 
         [Export]
-        public Mesh Mesh { get; set; }
+        public Godot.Mesh Mesh { get; set; }
 
         [Export]
         public Godot.Animation EquipAnimation { get; set; }

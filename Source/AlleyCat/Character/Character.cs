@@ -9,6 +9,7 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Item;
 using AlleyCat.Logging;
+using AlleyCat.Mesh;
 using AlleyCat.Motion;
 using AlleyCat.Sensor;
 using EnsureThat;

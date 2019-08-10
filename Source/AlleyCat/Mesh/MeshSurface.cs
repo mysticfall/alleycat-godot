@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Mesh
 {
     public struct MeshSurface : IMeshData
     {
@@ -51,7 +52,7 @@ namespace AlleyCat.Common
             }
         }
 
-        public Mesh.PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
+        public Godot.Mesh.PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
 
         private Option<MeshSurfaceData> _base;
 

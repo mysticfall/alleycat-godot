@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AlleyCat.Autowire;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Mesh
 {
     [NonInjectable]
     public interface IMeshObject : IBounded, IHideable

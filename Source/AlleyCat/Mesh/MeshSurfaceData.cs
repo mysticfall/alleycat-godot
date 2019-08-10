@@ -1,11 +1,12 @@
 using System;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using static Godot.ArrayMesh;
 using Array = Godot.Collections.Array;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Mesh
 {
     public class MeshSurfaceData : IMeshData
     {

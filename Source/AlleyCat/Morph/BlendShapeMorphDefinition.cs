@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AlleyCat.Common;
+using AlleyCat.Mesh;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 

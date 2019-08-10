@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using EnsureThat;
 using Godot;
 
-namespace AlleyCat.Common
+namespace AlleyCat.Mesh
 {
     public static class MeshSurfaceExtensions
     {

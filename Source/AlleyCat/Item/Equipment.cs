@@ -51,7 +51,7 @@ namespace AlleyCat.Item
 
         public Spatial Spatial => Node;
 
-        public Mesh ItemMesh { get; }
+        public Godot.Mesh ItemMesh { get; }
 
         public MeshInstance Mesh { get; }
 
@@ -79,7 +79,7 @@ namespace AlleyCat.Item
             IEnumerable<EquipmentConfiguration> configurations,
             IEnumerable<CollisionShape> colliders,
             MeshInstance mesh,
-            Mesh itemMesh,
+            Godot.Mesh itemMesh,
             IEnumerable<Marker> markers,
             IEnumerable<IMorphGroup> morphGroups,
             RigidBody node,
