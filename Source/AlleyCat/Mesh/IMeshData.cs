@@ -1,20 +1,36 @@
-using EnsureThat;
+using System.Collections;
+using System.Collections.Generic;
 using Godot;
+using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
-    public interface IMeshData
+    public interface IMeshData : IMeshArray, IEnumerable
     {
-        uint FormatMask { get; }
+        Arr<Vector3> Vertices { get; }
+
+        Arr<Vector3> Normals { get; }
+
+        Arr<float[]> Tangents { get; }
+
+        Arr<Color> Colors { get; }
+
+        Arr<int[]> Bones { get; }
+
+        Arr<float[]> Weights { get; }
+
+        Arr<Vector2> UV { get; }
+
+        Arr<Vector2> UV2 { get; }
+
+        Arr<int> Indices { get; }
     }
 
-    public static class MeshDataExtensions
+    namespace Generic
     {
-        public static bool SupportsFormat(this IMeshData data, ArrayMesh.ArrayFormat format)
+        public interface IMeshData<out TVertex> : IMeshData, IReadOnlyList<TVertex>
         {
-            Ensure.That(data, nameof(data)).IsNotNull();
-
-            return (data.FormatMask & (uint) format) > 0;
+            IEnumerable<TVertex> Indexed { get; }
         }
     }
 }

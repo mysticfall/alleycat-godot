@@ -8,7 +8,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurface : IMeshData
+    public class MeshSurface : IMeshArray
     {
         public ArrayMesh Mesh { get; }
 
@@ -22,20 +22,20 @@ namespace AlleyCat.Mesh
             set => Mesh.SurfaceSetName(Index, value);
         }
 
-        public MeshSurfaceData Base
+        public MeshData Base
         {
             get
             {
                 if (_base.IsNone)
                 {
-                    _base = new MeshSurfaceData(Mesh.SurfaceGetArrays(Index), FormatMask);
+                    _base = new MeshData(Mesh.SurfaceGetArrays(Index), FormatMask);
                 }
 
                 return _base.Head();
             }
         }
 
-        public IEnumerable<MeshSurfaceData> BlendShapes
+        public IEnumerable<MorphedMeshData> BlendShapes
         {
             get
             {
@@ -45,7 +45,7 @@ namespace AlleyCat.Mesh
 
                 _blendShapes = Mesh.SurfaceGetBlendShapeArrays(Index)
                     .OfType<Array>()
-                    .Map(a => new MeshSurfaceData(a, mask));
+                    .Map(source => new MorphedMeshData(source, Base, mask));
 
                 return _blendShapes;
             }
@@ -53,9 +53,9 @@ namespace AlleyCat.Mesh
 
         public Godot.Mesh.PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
 
-        private Option<MeshSurfaceData> _base;
+        private Option<MeshData> _base;
 
-        private IEnumerable<MeshSurfaceData> _blendShapes;
+        private IEnumerable<MorphedMeshData> _blendShapes;
 
         public MeshSurface(ArrayMesh mesh, int index)
         {

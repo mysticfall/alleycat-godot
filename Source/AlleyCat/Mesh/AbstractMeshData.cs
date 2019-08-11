@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
@@ -9,7 +10,7 @@ using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurfaceData : IMeshData, IReadOnlyList<VertexData>
+    public abstract class AbstractMeshData<TVertex> : IMeshData<TVertex> where TVertex : IVertex
     {
         public Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
 
@@ -33,7 +34,7 @@ namespace AlleyCat.Mesh
 
         public uint FormatMask { get; }
 
-        private readonly Array _source;
+        public Array Source { get; }
 
         private readonly int _count;
 
@@ -57,11 +58,11 @@ namespace AlleyCat.Mesh
 
         private int[] _indices;
 
-        public MeshSurfaceData(Array source, uint formatMask)
+        protected AbstractMeshData(Array source, uint formatMask)
         {
             Ensure.That(source, nameof(source)).IsNotNull();
 
-            _source = source;
+            Source = source;
 
             FormatMask = formatMask;
 
@@ -76,17 +77,30 @@ namespace AlleyCat.Mesh
             _indices = null;
         }
 
-        public IEnumerator<VertexData> GetEnumerator()
+        public IEnumerator<TVertex> GetEnumerator()
         {
             for (var i = 0; i < Count; i++)
             {
-                yield return new VertexData(this, i);
+                yield return CreateVertex(i);
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public VertexData this[int index] => new VertexData(this, Indices[index]);
+        public IEnumerable<TVertex> Indexed
+        {
+            get
+            {
+                for (var i = 0; i < Count; i++)
+                {
+                    yield return CreateVertex(Indices[i]);
+                }
+            }
+        }
+
+        public TVertex this[int index] => CreateVertex(Indices[index]);
+
+        protected abstract TVertex CreateVertex(int index);
 
         private T[] Read<T>(ArrayType tpe)
         {
@@ -130,7 +144,7 @@ namespace AlleyCat.Mesh
                 throw new InvalidOperationException($"The mesh does not contain the data type: '{tpe}'.");
             }
 
-            return (T[]) _source[(int) tpe];
+            return (T[]) Source[(int) tpe];
         }
     }
 }
