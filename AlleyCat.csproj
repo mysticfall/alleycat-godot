@@ -338,7 +338,7 @@
     <Compile Include="Source\AlleyCat\Mesh\AbstractMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IVertex.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\MorphedMeshData.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendShapeData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshArray.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Mesh\MeshInstanceExtensions.cs" />

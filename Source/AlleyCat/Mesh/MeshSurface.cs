@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AlleyCat.Common;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
@@ -8,19 +9,19 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurface : IMeshArray
+    public class MeshSurface : IMeshArray, IIdentifiable
     {
+        public string Key
+        {
+            get => Mesh.SurfaceGetName(Index);
+            set => Mesh.SurfaceSetName(Index, value);
+        }
+
         public ArrayMesh Mesh { get; }
 
         public uint FormatMask { get; }
 
         public int Index { get; }
-
-        public string Name
-        {
-            get => Mesh.SurfaceGetName(Index);
-            set => Mesh.SurfaceSetName(Index, value);
-        }
 
         public MeshData Base
         {
@@ -35,7 +36,7 @@ namespace AlleyCat.Mesh
             }
         }
 
-        public IEnumerable<MorphedMeshData> BlendShapes
+        public IEnumerable<BlendShapeData> BlendShapes
         {
             get
             {
@@ -45,7 +46,7 @@ namespace AlleyCat.Mesh
 
                 _blendShapes = Mesh.SurfaceGetBlendShapeArrays(Index)
                     .OfType<Array>()
-                    .Map(source => new MorphedMeshData(source, Base, mask));
+                    .Map((i, source) => new BlendShapeData(Mesh.GetBlendShapeName(i), source, Base, mask));
 
                 return _blendShapes;
             }
@@ -55,7 +56,7 @@ namespace AlleyCat.Mesh
 
         private Option<MeshData> _base;
 
-        private IEnumerable<MorphedMeshData> _blendShapes;
+        private IEnumerable<BlendShapeData> _blendShapes;
 
         public MeshSurface(ArrayMesh mesh, int index)
         {
