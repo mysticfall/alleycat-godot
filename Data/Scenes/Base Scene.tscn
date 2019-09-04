@@ -12,405 +12,253 @@
 [ext_resource path="res://Source/AlleyCat/View/FreeCameraViewFactory.cs" type="Script" id=10]
 [ext_resource path="res://Source/AlleyCat/Control/ActionTapInputFactory.cs" type="Script" id=11]
 [ext_resource path="res://Source/AlleyCat/Control/PlayerInteractionFactory.cs" type="Script" id=12]
-[ext_resource path="res://Data/UI/Widgets/Attribute List.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Source/AlleyCat/UI/ToggleUIActionFactory.cs" type="Script" id=14]
 [ext_resource path="res://Source/AlleyCat/UI/CreateUIActionFactory.cs" type="Script" id=15]
 [ext_resource path="res://Data/UI/Inventory/Inventory.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Data/UI/Menu Screen.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Data/Textures/UI/Crosshair.png" type="Texture" id=18]
-[ext_resource path="res://Data/UI/EntityLabel.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Data/UI/Widgets/Attribute List.tscn" type="PackedScene" id=19]
 [ext_resource path="res://Source/AlleyCat/Action/ActionSetFactory.cs" type="Script" id=20]
 [ext_resource path="res://Data/Meshes/Characters/Human/Female/Human Female.tscn" type="PackedScene" id=21]
 
-[sub_resource type="AnimationNodeAnimation" id=3]
+[sub_resource type="AnimationNodeAnimation" id=1]
 animation = "Blink"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeOneShot" id=4]
+[sub_resource type="AnimationNodeOneShot" id=2]
 filter_enabled = true
 filters = [ "Head:blend_shapes/Expressions_eyeClosedL_max", "Head:blend_shapes/Expressions_eyeClosedR_max" ]
 autorestart = true
 autorestart_delay = 3.0
 autorestart_random_delay = 1.0
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeAnimation" id=5]
+[sub_resource type="AnimationNodeAnimation" id=3]
 animation = "Breath"
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeTimeScale" id=4]
 
-[sub_resource type="AnimationNodeTimeScale" id=6]
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeBlend2" id=7]
+[sub_resource type="AnimationNodeBlend2" id=5]
 filter_enabled = true
 filters = [ "Body:blend_shapes/Expressions_abdomExpansion_max", "Body:blend_shapes/Expressions_chestExpansion_max" ]
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeAnimation" id=6]
+resource_local_to_scene = true
+animation = "Reset"
+
+[sub_resource type="AnimationNodeBlend2" id=7]
+resource_local_to_scene = true
 
 [sub_resource type="AnimationNodeAnimation" id=8]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeBlend2" id=9]
-resource_local_to_scene = true
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeAnimation" id=10]
-resource_local_to_scene = true
-animation = "Reset"
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeAnimation" id=11]
+[sub_resource type="AnimationNodeAnimation" id=9]
 resource_local_to_scene = true
 animation = "Idle"
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "WalkForward"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "WalkBackward"
 
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "WalkForward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=13]
-animation = "WalkBackward"
-__meta__ = {
-
-}
+animation = "WalkForward"
 
 [sub_resource type="AnimationNodeAnimation" id=14]
-animation = "WalkForward"
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeAnimation" id=15]
-animation = "WalkForward"
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeAnimation" id=16]
 animation = "RunForward"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=17]
-blend_point_0/node = SubResource( 12 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=15]
+blend_point_0/node = SubResource( 10 )
 blend_point_0/pos = Vector2( 0, 1 )
-blend_point_1/node = SubResource( 13 )
+blend_point_1/node = SubResource( 11 )
 blend_point_1/pos = Vector2( 0, -0.5 )
-blend_point_2/node = SubResource( 14 )
+blend_point_2/node = SubResource( 12 )
 blend_point_2/pos = Vector2( -0.2, 0 )
-blend_point_3/node = SubResource( 15 )
+blend_point_3/node = SubResource( 13 )
 blend_point_3/pos = Vector2( 0.2, 0 )
-blend_point_4/node = SubResource( 16 )
+blend_point_4/node = SubResource( 14 )
 blend_point_4/pos = Vector2( 0, 1.8 )
 max_space = Vector2( 1, 2 )
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeTimeScale" id=16]
 
-[sub_resource type="AnimationNodeTimeScale" id=18]
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeBlendTree" id=19]
-nodes/Direction/node = SubResource( 17 )
+[sub_resource type="AnimationNodeBlendTree" id=17]
+nodes/Direction/node = SubResource( 15 )
 nodes/Direction/position = Vector2( 100, 60 )
-nodes/Speed/node = SubResource( 18 )
+nodes/Speed/node = SubResource( 16 )
 nodes/Speed/position = Vector2( 340, 60 )
 nodes/output/position = Vector2( 560, 60 )
 node_connections = [ "output", 0, "Speed", "Speed", 0, "Direction" ]
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeAnimation" id=20]
+[sub_resource type="AnimationNodeAnimation" id=18]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=19]
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeAnimation" id=22]
+[sub_resource type="AnimationNodeAnimation" id=20]
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeTransition" id=23]
+[sub_resource type="AnimationNodeTransition" id=21]
 input_count = 2
 xfade_time = 1.22644e-19
 input_0/name = "1"
 input_0/auto_advance = false
 input_1/name = "2"
 input_1/auto_advance = false
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeBlendTree" id=24]
+[sub_resource type="AnimationNodeBlendTree" id=22]
 graph_offset = Vector2( 24.5849, 57.5079 )
-nodes/Sit/node = SubResource( 23 )
+nodes/Sit/node = SubResource( 21 )
 nodes/Sit/position = Vector2( 520, 100 )
-"nodes/Sit Animation 1/node" = SubResource( 21 )
+"nodes/Sit Animation 1/node" = SubResource( 19 )
 "nodes/Sit Animation 1/position" = Vector2( 300, 80 )
-"nodes/Sit Animation 2/node" = SubResource( 22 )
+"nodes/Sit Animation 2/node" = SubResource( 20 )
 "nodes/Sit Animation 2/position" = Vector2( 300, 220 )
 nodes/output/position = Vector2( 720, 100 )
 node_connections = [ "output", 0, "Sit", "Sit", 0, "Sit Animation 1", "Sit", 1, "Sit Animation 2" ]
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeAnimation" id=25]
+[sub_resource type="AnimationNodeAnimation" id=23]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
 switch_mode = 2
 auto_advance = true
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=27]
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeStateMachine" id=28]
+[sub_resource type="AnimationNodeStateMachine" id=26]
 resource_local_to_scene = true
-"states/Getting Up/node" = SubResource( 20 )
+"states/Getting Up/node" = SubResource( 18 )
 "states/Getting Up/position" = Vector2( 444.584, 49.2584 )
-states/Seated/node = SubResource( 24 )
+states/Seated/node = SubResource( 22 )
 states/Seated/position = Vector2( 281.661, 49.2584 )
-"states/Sitting Down/node" = SubResource( 25 )
+"states/Sitting Down/node" = SubResource( 23 )
 "states/Sitting Down/position" = Vector2( 113.757, 49.2584 )
-transitions = [ "Sitting Down", "Seated", SubResource( 26 ), "Seated", "Getting Up", SubResource( 27 ) ]
+transitions = [ "Sitting Down", "Seated", SubResource( 24 ), "Seated", "Getting Up", SubResource( 25 ) ]
 start_node = "Sitting Down"
 end_node = "Getting Up"
 graph_offset = Vector2( -6.99635, -42.9573 )
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeTimeSeek" id=27]
 
-[sub_resource type="AnimationNodeTimeSeek" id=29]
-__meta__ = {
+[sub_resource type="AnimationNodeTimeScale" id=28]
 
-}
-
-[sub_resource type="AnimationNodeTimeScale" id=30]
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeAnimation" id=31]
+[sub_resource type="AnimationNodeAnimation" id=29]
 animation = "Reset"
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeBlendTree" id=32]
+[sub_resource type="AnimationNodeBlendTree" id=30]
 graph_offset = Vector2( -5, 103 )
-nodes/Swing/node = SubResource( 31 )
+nodes/Swing/node = SubResource( 29 )
 nodes/Swing/position = Vector2( 200, 80 )
-"nodes/Swing Seek/node" = SubResource( 29 )
+"nodes/Swing Seek/node" = SubResource( 27 )
 "nodes/Swing Seek/position" = Vector2( 480, 60 )
-"nodes/Swing Speed/node" = SubResource( 30 )
+"nodes/Swing Speed/node" = SubResource( 28 )
 "nodes/Swing Speed/position" = Vector2( 400, 200 )
 nodes/output/position = Vector2( 700, 60 )
 node_connections = [ "output", 0, "Swing Seek", "Swing Seek", 0, "Swing Speed", "Swing Speed", 0, "Swing" ]
-__meta__ = {
 
-}
+[sub_resource type="AnimationNodeStateMachineTransition" id=31]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=33]
 switch_mode = 2
 auto_advance = true
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=34]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=35]
-switch_mode = 2
-auto_advance = true
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=36]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=37]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=38]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=39]
-xfade_time = 0.2
-__meta__ = {
-
-}
+xfade_time = 0.5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=40]
-xfade_time = 0.2
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=41]
 xfade_time = 0.5
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=42]
-xfade_time = 0.5
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeStateMachine" id=43]
+[sub_resource type="AnimationNodeStateMachine" id=41]
 resource_local_to_scene = true
-states/Action/node = SubResource( 10 )
+states/Action/node = SubResource( 8 )
 states/Action/position = Vector2( 227.697, -75.0519 )
-states/Idle/node = SubResource( 11 )
+states/Idle/node = SubResource( 9 )
 states/Idle/position = Vector2( 40.7945, 61.2465 )
-states/Moving/node = SubResource( 19 )
+states/Moving/node = SubResource( 17 )
 states/Moving/position = Vector2( 424.983, 61.2465 )
-states/Seated/node = SubResource( 28 )
+states/Seated/node = SubResource( 26 )
 states/Seated/position = Vector2( 227.697, 141.167 )
-states/Swing/node = SubResource( 32 )
+states/Swing/node = SubResource( 30 )
 states/Swing/position = Vector2( 40.7945, -75.0519 )
-transitions = [ "Seated", "Idle", SubResource( 33 ), "Idle", "Action", SubResource( 34 ), "Action", "Idle", SubResource( 35 ), "Idle", "Seated", SubResource( 36 ), "Moving", "Action", SubResource( 37 ), "Action", "Moving", SubResource( 38 ), "Moving", "Idle", SubResource( 39 ), "Idle", "Moving", SubResource( 40 ), "Idle", "Swing", SubResource( 41 ), "Swing", "Idle", SubResource( 42 ) ]
+transitions = [ "Seated", "Idle", SubResource( 31 ), "Idle", "Action", SubResource( 32 ), "Action", "Idle", SubResource( 33 ), "Idle", "Seated", SubResource( 34 ), "Moving", "Action", SubResource( 35 ), "Action", "Moving", SubResource( 36 ), "Moving", "Idle", SubResource( 37 ), "Idle", "Moving", SubResource( 38 ), "Idle", "Swing", SubResource( 39 ), "Swing", "Idle", SubResource( 40 ) ]
 start_node = "Idle"
 graph_offset = Vector2( -255.017, -103.091 )
-__meta__ = {
 
-}
-
-[sub_resource type="AnimationNodeBlendTree" id=44]
+[sub_resource type="AnimationNodeBlendTree" id=42]
 resource_local_to_scene = true
 graph_offset = Vector2( -383, 43 )
-nodes/Blinking/node = SubResource( 4 )
+nodes/Blinking/node = SubResource( 2 )
 nodes/Blinking/position = Vector2( 580, 120 )
-"nodes/Blinking Animation/node" = SubResource( 3 )
+"nodes/Blinking Animation/node" = SubResource( 1 )
 "nodes/Blinking Animation/position" = Vector2( 340, 300 )
-nodes/Breathing/node = SubResource( 7 )
+nodes/Breathing/node = SubResource( 5 )
 nodes/Breathing/position = Vector2( 300, 100 )
-"nodes/Breathing Animation/node" = SubResource( 5 )
+"nodes/Breathing Animation/node" = SubResource( 3 )
 "nodes/Breathing Animation/position" = Vector2( -220, 380 )
-"nodes/Breathing Speed/node" = SubResource( 6 )
+"nodes/Breathing Speed/node" = SubResource( 4 )
 "nodes/Breathing Speed/position" = Vector2( 60, 260 )
-nodes/Hands/node = SubResource( 9 )
+nodes/Hands/node = SubResource( 7 )
 nodes/Hands/position = Vector2( 980, 80 )
-"nodes/Hands Animation/node" = SubResource( 8 )
+"nodes/Hands Animation/node" = SubResource( 6 )
 "nodes/Hands Animation/position" = Vector2( 760, 280 )
-nodes/States/node = SubResource( 43 )
+nodes/States/node = SubResource( 41 )
 nodes/States/position = Vector2( -180, 120 )
 nodes/output/position = Vector2( 1180, 80 )
-node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation" ]
-__meta__ = {
+node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation" ]
 
-}
+[sub_resource type="AnimationNodeStateMachinePlayback" id=43]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=45]
-__meta__ = {
-
-}
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=46]
-__meta__ = {
-
-}
+[sub_resource type="AnimationNodeStateMachinePlayback" id=44]
 
 [node name="Base Scene" type="Node"]
 script = ExtResource( 1 )
-__meta__ = {
-
-}
 CharactersPath = NodePath("Entities/Characters")
 ItemsPath = NodePath("Entities/Items")
 
 [node name="Environment" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Cameras" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Main Camera" type="Camera" parent="Cameras" groups=[
 "MainCamera",
 ]]
 transform = Transform( 0.661697, 0, 0.749771, 0, 1, 0, -0.749771, 0, 0.661697, 0.735734, 1.7292, 0.649309 )
-keep_aspect = 0
-cull_mask = 1
 current = true
 near = 0.001
-__meta__ = {
-
-}
 
 [node name="Entities" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Characters" type="Node" parent="Entities"]
-__meta__ = {
-
-}
 
 [node name="Player" parent="Entities/Characters" groups=[
 "Player",
@@ -430,78 +278,45 @@ transform = Transform( -0.103278, -0.562712, -0.820176, 0.0402779, -0.826276, 0.
 transform = Transform( -0.102984, 0.562841, 0.820124, -0.0409233, -0.826209, 0.561878, 0.993842, 0.0243023, 0.10812, -0.551869, 1.05763, -0.0311835 )
 
 [node name="AnimationTree" parent="Entities/Characters/Player/Animations" index="1"]
-tree_root = SubResource( 44 )
-parameters/States/playback = SubResource( 45 )
-parameters/States/Seated/playback = SubResource( 46 )
+tree_root = SubResource( 42 )
+parameters/States/playback = SubResource( 43 )
+parameters/States/Seated/playback = SubResource( 44 )
 
 [node name="Items" type="Node" parent="Entities"]
-__meta__ = {
-
-}
 
 [node name="Static Objects" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Control" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Player" type="Node" parent="Control"]
 script = ExtResource( 3 )
-__meta__ = {
-
-}
 ProcessMode = 1
 
 [node name="Views" type="Node" parent="Control/Player"]
-__meta__ = {
-
-}
 
 [node name="Third Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 4 )
-__meta__ = {
-
-}
 Active = true
 InitialDistance = 0.8
 ProcessMode = 1
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="X" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/Third Person View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 Axis = 1
 
 [node name="Zoom" type="Node" parent="Control/Player/Views/Third Person View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Value" type="Node" parent="Control/Player/Views/Third Person View/Zoom"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Interpolate = true
 PositiveAction = "zoom_in"
 NegativeAction = "zoom_out"
@@ -509,176 +324,102 @@ Polling = false
 
 [node name="First Person View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 8 )
-__meta__ = {
-
-}
 ProcessMode = 1
-MinStabilization = 0.2
-MaxStabilization = 0.8
 VelocityThreshold = 0.2
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="X" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/First Person View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 Axis = 1
 
 [node name="Deactivate" type="Node" parent="Control/Player/Views/First Person View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Value" type="Node" parent="Control/Player/Views/First Person View/Deactivate"]
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "zoom_out"
 UnhandledOnly = false
 
 [node name="Free Camera View" type="Node" parent="Control/Player/Views"]
 script = ExtResource( 10 )
-__meta__ = {
-
-}
 
 [node name="Rotation" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Rotation"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 Interpolate = true
 Axis = 1
 
 [node name="Movement" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="X" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Interpolate = true
 PositiveAction = "move_right"
 NegativeAction = "move_left"
 
 [node name="Y" type="Node" parent="Control/Player/Views/Free Camera View/Movement"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Interpolate = true
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
 
 [node name="Toggle" type="Node" parent="Control/Player/Views/Free Camera View"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Value" type="Node" parent="Control/Player/Views/Free Camera View/Toggle"]
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "free_camera"
 
 [node name="Movement" type="Node" parent="Control/Player"]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="X" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Interpolate = true
 PositiveAction = "move_right"
 NegativeAction = "move_left"
 
 [node name="Y" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Interpolate = true
 PositiveAction = "move_forward"
 NegativeAction = "move_back"
 
 [node name="Run" type="Node" parent="Control/Player/Movement"]
 script = ExtResource( 11 )
-__meta__ = {
-
-}
 Action = "run"
 
 [node name="Actions" type="Node" parent="Control/Player"]
 script = ExtResource( 20 )
-__meta__ = {
-
-}
 
 [node name="Interact" type="Node" parent="Control/Player/Actions"]
 script = ExtResource( 12 )
-__meta__ = {
-
-}
 Key = "Interact"
 DisplayName = "action.Interact"
 
 [node name="Input" type="Node" parent="Control/Player/Actions/Interact"]
 pause_mode = 2
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "interact"
 
 [node name="Actions" type="Node" parent="Control"]
-__meta__ = {
-
-}
 
 [node name="Toggle Console" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
-__meta__ = {
-
-}
 Key = "ShowConsole"
 DisplayName = "action.ShowConsole"
 UI = NodePath("/root/Bootstrap/UI/Console")
@@ -686,17 +427,11 @@ UI = NodePath("/root/Bootstrap/UI/Console")
 [node name="Input" type="Node" parent="Control/Actions/Toggle Console"]
 pause_mode = 2
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "ui_console"
 UnhandledOnly = false
 
 [node name="Show Inventory" type="Node" parent="Control/Actions"]
 script = ExtResource( 15 )
-__meta__ = {
-
-}
 Key = "ShowInventory"
 DisplayName = "action.ShowInventory"
 Modal = true
@@ -705,16 +440,10 @@ UI = ExtResource( 16 )
 [node name="Input" type="Node" parent="Control/Actions/Show Inventory"]
 pause_mode = 2
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "inventory"
 
 [node name="Show Main Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 15 )
-__meta__ = {
-
-}
 Key = "ShowMenu"
 DisplayName = "action.ShowMenu"
 Modal = true
@@ -723,31 +452,19 @@ UI = ExtResource( 17 )
 [node name="Input" type="Node" parent="Control/Actions/Show Main Menu"]
 pause_mode = 2
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "ui_cancel"
 
 [node name="Show Action Menu" type="Node" parent="Control/Actions"]
 script = ExtResource( 14 )
-__meta__ = {
-
-}
 Key = "ShowActionMenu"
 DisplayName = "action.ShowActionMenu"
 UI = NodePath("../../../UI/Action Menu")
 
 [node name="Input" type="Node" parent="Control/Actions/Show Action Menu"]
 script = ExtResource( 9 )
-__meta__ = {
-
-}
 Action = "action_menu"
 
 [node name="UI" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Crosshair" type="TextureRect" parent="UI"]
 anchor_left = 0.5
@@ -762,17 +479,14 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource( 18 )
 stretch_mode = 4
-__meta__ = {
 
-}
-
-[node name="Entity Label" parent="UI" instance=ExtResource( 19 )]
+[node name="Entity Label" parent="UI" instance=ExtResource( 13 )]
 visible = false
 
 [node name="Action Menu" parent="UI" instance=ExtResource( 2 )]
 visible = false
 
-[node name="Attributes" parent="UI" instance=ExtResource( 13 )]
+[node name="Attributes" parent="UI" instance=ExtResource( 19 )]
 anchor_bottom = 0.208
 margin_left = 10.0
 margin_top = 10.0

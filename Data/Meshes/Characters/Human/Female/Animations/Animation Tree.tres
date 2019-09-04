@@ -2,9 +2,6 @@
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 animation = "Blink"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeOneShot" id=2]
 filter_enabled = true
@@ -12,84 +9,45 @@ filters = [ "Head:blend_shapes/Expressions_eyeClosedL_max", "Head:blend_shapes/E
 autorestart = true
 autorestart_delay = 3.0
 autorestart_random_delay = 1.0
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=3]
 animation = "Breath"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeTimeScale" id=4]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlend2" id=5]
 filter_enabled = true
 filters = [ "Body:blend_shapes/Expressions_abdomExpansion_max", "Body:blend_shapes/Expressions_chestExpansion_max" ]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=6]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlend2" id=7]
 resource_local_to_scene = true
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=8]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=9]
 resource_local_to_scene = true
 animation = "Idle"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 animation = "WalkForward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=11]
 animation = "WalkBackward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "WalkForward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=13]
 animation = "WalkForward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=14]
 animation = "RunForward"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlendSpace2D" id=15]
 blend_point_0/node = SubResource( 10 )
@@ -103,14 +61,8 @@ blend_point_3/pos = Vector2( 0.2, 0 )
 blend_point_4/node = SubResource( 14 )
 blend_point_4/pos = Vector2( 0, 1.8 )
 max_space = Vector2( 1, 2 )
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeTimeScale" id=16]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlendTree" id=17]
 nodes/Direction/node = SubResource( 15 )
@@ -119,28 +71,16 @@ nodes/Speed/node = SubResource( 16 )
 nodes/Speed/position = Vector2( 340, 60 )
 nodes/output/position = Vector2( 560, 60 )
 node_connections = [ "output", 0, "Speed", "Speed", 0, "Direction" ]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=18]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=19]
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=20]
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeTransition" id=21]
 input_count = 2
@@ -149,9 +89,6 @@ input_0/name = "1"
 input_0/auto_advance = false
 input_1/name = "2"
 input_1/auto_advance = false
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlendTree" id=22]
 graph_offset = Vector2( 24.5849, 57.5079 )
@@ -163,28 +100,16 @@ nodes/Sit/position = Vector2( 520, 100 )
 "nodes/Sit Animation 2/position" = Vector2( 300, 220 )
 nodes/output/position = Vector2( 720, 100 )
 node_connections = [ "output", 0, "Sit", "Sit", 0, "Sit Animation 1", "Sit", 1, "Sit Animation 2" ]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=23]
 resource_local_to_scene = true
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=24]
 switch_mode = 2
 auto_advance = true
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachine" id=26]
 resource_local_to_scene = true
@@ -198,25 +123,13 @@ transitions = [ "Sitting Down", "Seated", SubResource( 24 ), "Seated", "Getting 
 start_node = "Sitting Down"
 end_node = "Getting Up"
 graph_offset = Vector2( -6.99635, -42.9573 )
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeTimeSeek" id=27]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeTimeScale" id=28]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeAnimation" id=29]
 animation = "Reset"
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeBlendTree" id=30]
 graph_offset = Vector2( -5, 103 )
@@ -228,73 +141,40 @@ nodes/Swing/position = Vector2( 200, 80 )
 "nodes/Swing Speed/position" = Vector2( 400, 200 )
 nodes/output/position = Vector2( 700, 60 )
 node_connections = [ "output", 0, "Swing Seek", "Swing Seek", 0, "Swing Speed", "Swing Speed", 0, "Swing" ]
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=31]
 switch_mode = 2
 auto_advance = true
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=32]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=33]
 switch_mode = 2
 auto_advance = true
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=34]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=35]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=36]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=37]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=38]
 xfade_time = 0.2
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=39]
 xfade_time = 0.5
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=40]
 xfade_time = 0.5
-__meta__ = {
-
-}
 
 [sub_resource type="AnimationNodeStateMachine" id=41]
 resource_local_to_scene = true
@@ -311,9 +191,6 @@ states/Swing/position = Vector2( 40.7945, -75.0519 )
 transitions = [ "Seated", "Idle", SubResource( 31 ), "Idle", "Action", SubResource( 32 ), "Action", "Idle", SubResource( 33 ), "Idle", "Seated", SubResource( 34 ), "Moving", "Action", SubResource( 35 ), "Action", "Moving", SubResource( 36 ), "Moving", "Idle", SubResource( 37 ), "Idle", "Moving", SubResource( 38 ), "Idle", "Swing", SubResource( 39 ), "Swing", "Idle", SubResource( 40 ) ]
 start_node = "Idle"
 graph_offset = Vector2( -255.017, -103.091 )
-__meta__ = {
-
-}
 
 [resource]
 resource_local_to_scene = true
@@ -335,7 +212,4 @@ nodes/Hands/position = Vector2( 980, 80 )
 nodes/States/node = SubResource( 41 )
 nodes/States/position = Vector2( -180, 120 )
 nodes/output/position = Vector2( 1180, 80 )
-node_connections = [ "output", 0, "Hands", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing Speed", 0, "Breathing Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed" ]
-__meta__ = {
-
-}
+node_connections = [ "output", 0, "Hands", "Breathing Speed", 0, "Breathing Animation", "Blinking", 0, "Breathing", "Blinking", 1, "Blinking Animation", "Breathing", 0, "States", "Breathing", 1, "Breathing Speed", "Hands", 0, "Blinking", "Hands", 1, "Hands Animation" ]

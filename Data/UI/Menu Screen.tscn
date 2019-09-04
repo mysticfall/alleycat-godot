@@ -19,9 +19,6 @@ __meta__ = {
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 2 )
-__meta__ = {
-
-}
 
 [node name="Panel" type="Panel" parent="."]
 anchor_bottom = 1.0
@@ -30,9 +27,6 @@ margin_top = -1.0
 margin_right = 250.0
 margin_bottom = 1.0
 theme = ExtResource( 3 )
-__meta__ = {
-
-}
 
 [node name="Logo" type="TextureRect" parent="Panel"]
 anchor_left = 0.5
@@ -42,9 +36,6 @@ margin_top = 30.0
 margin_right = 100.0
 margin_bottom = 105.0
 texture = ExtResource( 4 )
-__meta__ = {
-
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 anchor_top = 1.0
@@ -56,9 +47,6 @@ margin_right = -10.0
 margin_bottom = -20.0
 custom_constants/separation = 10
 alignment = 2
-__meta__ = {
-
-}
 
 [node name="ResumeButton" type="Button" parent="Panel/VBoxContainer"]
 margin_top = 38.0
@@ -67,9 +55,6 @@ margin_bottom = 76.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 3 )
 text = "ui.MainMenu.resume"
-__meta__ = {
-
-}
 
 [node name="SettingsButton" type="Button" parent="Panel/VBoxContainer"]
 margin_top = 86.0
@@ -79,9 +64,6 @@ mouse_default_cursor_shape = 2
 theme = ExtResource( 3 )
 disabled = true
 text = "ui.MainMenu.settings"
-__meta__ = {
-
-}
 
 [node name="QuitButton" type="Button" parent="Panel/VBoxContainer"]
 margin_top = 134.0
@@ -90,9 +72,6 @@ margin_bottom = 172.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 3 )
 text = "ui.MainMenu.quit"
-__meta__ = {
-
-}
 [connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="Context" method="Resume"]
 [connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="Context" method="ShowSettings"]
 [connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="Context" method="Quit"]

@@ -5,9 +5,6 @@
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 1 )
 anti_aliasing = false
-__meta__ = {
-
-}
 
 [sub_resource type="Animation" id=2]
 resource_name = "Show Logo"
@@ -23,9 +20,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-__meta__ = {
-
 }
 
 [node name="Splash" type="Panel"]
@@ -49,13 +43,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 texture = ExtResource( 1 )
 stretch_mode = 4
-__meta__ = {
-
-}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Logo"]
 autoplay = "Show Logo"
 "anims/Show Logo" = SubResource( 2 )
-__meta__ = {
-
-}

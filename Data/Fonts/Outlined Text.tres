@@ -10,6 +10,3 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 2 )
 fallback/0 = ExtResource( 1 )
-__meta__ = {
-
-}

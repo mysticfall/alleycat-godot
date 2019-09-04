@@ -5,23 +5,14 @@
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 0.5, 0.5, 0.5 )
-__meta__ = {
-
-}
 
 [node name="Item Box" type="Spatial"]
-__meta__ = {
-
-}
 
 [node name="Item" type="MeshInstance" parent="."]
 layers = 2
 mesh = SubResource( 1 )
 material/0 = null
 script = ExtResource( 1 )
-__meta__ = {
-
-}
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.17517 )
@@ -29,13 +20,7 @@ cull_mask = 2
 environment = ExtResource( 2 )
 current = true
 far = 5.0
-__meta__ = {
-
-}
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.982306, -0.0496866, 0.18057, -0.033412, 0.902203, 0.430016, -0.184277, -0.428441, 0.884579, 0.803995, 1.14584, 3.17286 )
-light_cull_mask = 4293918722
-__meta__ = {
-
-}
+light_cull_mask = 2147483647

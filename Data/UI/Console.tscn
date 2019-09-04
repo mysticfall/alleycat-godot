@@ -5,19 +5,10 @@
 [ext_resource path="res://Source/AlleyCat/UI/Console/BasicConsoleCommands.cs" type="Script" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=1]
-__meta__ = {
-
-}
 
 [sub_resource type="StyleBoxEmpty" id=2]
-__meta__ = {
-
-}
 
 [sub_resource type="StyleBoxEmpty" id=3]
-__meta__ = {
-
-}
 
 [sub_resource type="Animation" id=4]
 length = 0.5
@@ -56,9 +47,6 @@ tracks/2/keys = {
 "transitions": PoolRealArray( -4, -4 ),
 "update": 0,
 "values": [ 0.0, 250.0 ]
-}
-__meta__ = {
-
 }
 
 [sub_resource type="Animation" id=5]
@@ -99,9 +87,6 @@ tracks/2/keys = {
 "update": 0,
 "values": [ 250.0, 0.0 ]
 }
-__meta__ = {
-
-}
 
 [node name="Console" type="Panel"]
 pause_mode = 2
@@ -111,15 +96,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -200.0
 theme = ExtResource( 1 )
-__meta__ = {
-
-}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 2 )
-__meta__ = {
-
-}
 
 [node name="Container" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -128,9 +107,6 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-__meta__ = {
-
-}
 
 [node name="Content" type="RichTextLabel" parent="Container"]
 margin_right = 1004.0
@@ -140,17 +116,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_following = true
 selection_enabled = true
-__meta__ = {
-
-}
 
 [node name="InputPane" type="HBoxContainer" parent="Container"]
 margin_top = 157.0
 margin_right = 1004.0
 margin_bottom = 180.0
-__meta__ = {
-
-}
 
 [node name="Input" type="LineEdit" parent="Container/InputPane"]
 margin_right = 773.0
@@ -160,44 +130,26 @@ custom_styles/read_only = SubResource( 1 )
 custom_styles/focus = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
 caret_blink = true
-__meta__ = {
-
-}
 
 [node name="ClearButton" type="Button" parent="Container/InputPane"]
 margin_left = 777.0
 margin_right = 887.0
 margin_bottom = 23.0
 text = "console.ui.clear"
-__meta__ = {
-
-}
 
 [node name="CloseButton" type="Button" parent="Container/InputPane"]
 margin_left = 891.0
 margin_right = 1004.0
 margin_bottom = 23.0
 text = "console.ui.close"
-__meta__ = {
-
-}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Hide = SubResource( 4 )
 anims/Show = SubResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Commands" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Basic Commands" type="Node" parent="Commands"]
 script = ExtResource( 3 )
-__meta__ = {
-
-}
 [connection signal="pressed" from="Container/InputPane/ClearButton" to="Context" method="Clear"]
 [connection signal="pressed" from="Container/InputPane/CloseButton" to="Context" method="Hide"]

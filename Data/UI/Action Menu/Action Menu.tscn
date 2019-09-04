@@ -10,9 +10,6 @@
 
 [sub_resource type="Theme" id=1]
 default_font = ExtResource( 2 )
-__meta__ = {
-
-}
 
 [node name="Action Menu" type="Control"]
 anchor_top = 1.0
@@ -25,15 +22,9 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 6
 theme = SubResource( 1 )
-__meta__ = {
-
-}
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 ItemScene = ExtResource( 4 )
 _breadcrumb = NodePath("../Label Container/Breadcrumb")
 _itemsContainer = NodePath("../Item Container/Panel/Items")
@@ -44,9 +35,6 @@ _emptyLabel = NodePath("../Item Container/Panel/Items/Empty Label")
 [node name="Label Container" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-
-}
 
 [node name="Breadcrumb" type="Label" parent="Label Container"]
 margin_top = 20.0
@@ -56,9 +44,6 @@ grow_vertical = 2
 size_flags_horizontal = 3
 text = "Actions"
 valign = 1
-__meta__ = {
-
-}
 
 [node name="Help" type="HBoxContainer" parent="Label Container"]
 margin_left = 820.0
@@ -69,9 +54,6 @@ grow_vertical = 2
 size_flags_horizontal = 9
 size_flags_vertical = 5
 custom_constants/separation = 10
-__meta__ = {
-
-}
 
 [node name="Up" parent="Label Container/Help" instance=ExtResource( 3 )]
 margin_right = 82.0
@@ -115,9 +97,6 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-
-}
 
 [node name="Panel" type="PanelContainer" parent="Item Container"]
 margin_left = 407.0
@@ -128,9 +107,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 custom_styles/panel = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Items" type="HBoxContainer" parent="Item Container/Panel"]
 margin_left = 10.0
@@ -142,9 +118,6 @@ grow_vertical = 2
 size_flags_horizontal = 6
 custom_constants/separation = 20
 alignment = 1
-__meta__ = {
-
-}
 
 [node name="Empty Label" type="Label" parent="Item Container/Panel/Items"]
 margin_right = 159.0
@@ -153,28 +126,16 @@ custom_fonts/font = ExtResource( 2 )
 text = "ui.ActionMenu.empty"
 align = 1
 valign = 1
-__meta__ = {
-
-}
 
 [node name="Providers" type="Node" parent="."]
-__meta__ = {
-
-}
 
 [node name="Actions" type="Node" parent="Providers"]
 script = ExtResource( 1 )
-__meta__ = {
-
-}
 Key = "Actions"
 DisplayName = "ui.ActionMenu.Actions"
 
 [node name="Items" type="Node" parent="Providers"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 Key = "Items"
 DisplayName = "ui.ActionMenu.Items"
 
