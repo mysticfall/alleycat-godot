@@ -5,6 +5,7 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
+using static Godot.Mesh;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
@@ -52,7 +53,7 @@ namespace AlleyCat.Mesh
             }
         }
 
-        public Godot.Mesh.PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
+        public PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
 
         private Option<MeshData> _base;
 
