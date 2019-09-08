@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
@@ -87,16 +88,7 @@ namespace AlleyCat.Mesh
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IEnumerable<TVertex> Indexed
-        {
-            get
-            {
-                for (var i = 0; i < Count; i++)
-                {
-                    yield return CreateVertex(Indices[i]);
-                }
-            }
-        }
+        public IEnumerable<TVertex> Indexed => Indices.Select(CreateVertex);
 
         public TVertex this[int index] => CreateVertex(Indices[index]);
 
