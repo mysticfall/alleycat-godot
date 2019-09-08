@@ -29,22 +29,30 @@ namespace AlleyCat.Mesh
             where TVertex : IVertex
         {
             var indexed = data.Indexed;
-            var e = indexed.GetEnumerator();
-            var index = 0;
-            var points = new TVertex[3];
 
-            while (e.MoveNext())
+            using (var e = indexed.GetEnumerator())
             {
-                points[index++] = e.Current;
-
-                if (index == 3)
+                while (true)
                 {
-                    index = 0;
+                    var points = new TVertex[3];
+
+                    if (!e.MoveNext()) break;
+
+                    points[0] = e.Current;
+
+                    if (!e.MoveNext()) break;
+                    
+                    points[1] = e.Current;
+
+                    var hasMore = e.MoveNext();
+
+                    points[2] = e.Current;
+
                     yield return new Triangle<TVertex>(points);
+
+                    if (!hasMore) break;
                 }
             }
-
-            e.Dispose();
         }
     }
 }
