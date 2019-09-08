@@ -41,21 +41,21 @@ namespace AlleyCat.Mesh
 
         public static Option<float[]> Weights(this IVertex vertex)
         {
-            return vertex.Source.SupportsFormat(ArrayFormat.Tangent)
+            return vertex.Source.SupportsFormat(ArrayFormat.Weights)
                 ? Some(vertex.Source.Weights[vertex.Index])
                 : None;
         }
 
         public static Option<Vector2> UV(this IVertex vertex)
         {
-            return vertex.Source.SupportsFormat(ArrayFormat.Tangent)
+            return vertex.Source.SupportsFormat(ArrayFormat.TexUv)
                 ? Some(vertex.Source.UV[vertex.Index])
                 : None;
         }
 
         public static Option<Vector2> UV2(this IVertex vertex)
         {
-            return vertex.Source.SupportsFormat(ArrayFormat.Tangent)
+            return vertex.Source.SupportsFormat(ArrayFormat.TexUv2)
                 ? Some(vertex.Source.UV2[vertex.Index])
                 : None;
         }
