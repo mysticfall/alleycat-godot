@@ -26,7 +26,7 @@ namespace AlleyCat.Mesh
             {
                 if (_base.IsNone)
                 {
-                    _base = new MeshData(Key, Mesh.SurfaceGetArrays(Index), FormatMask);
+                    _base = new ArrayMeshData(Key, Mesh.SurfaceGetArrays(Index), FormatMask);
                 }
 
                 return _base.Head();
@@ -51,7 +51,7 @@ namespace AlleyCat.Mesh
 
         public PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
 
-        private Option<MeshData> _base;
+        private Option<ArrayMeshData> _base;
 
         private IEnumerable<BlendShapeData> _blendShapes;
 

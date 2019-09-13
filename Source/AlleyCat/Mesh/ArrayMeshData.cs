@@ -2,9 +2,9 @@ using Godot.Collections;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshData : AbstractMeshData<Vertex>
+    public class ArrayMeshData : AbstractMeshData<Vertex>
     {
-        public MeshData(string key, Array source, uint formatMask) : base(key, source, formatMask)
+        public ArrayMeshData(string key, Array source, uint formatMask) : base(key, source, formatMask)
         {
         }
 
