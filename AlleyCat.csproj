@@ -57,6 +57,14 @@
     <Reference Include="System.Reactive.Core" />
     <Reference Include="System.Reactive.Interfaces" />
     <Reference Include="System.Reactive.Linq" />
+    <!-- 
+      Assemblies related to ImageSharp need to be built from the source and installed manually, until
+      a new version (beta 8) will be published to NuGet. 
+    --> 
+    <Reference Include="SixLabors.ImageSharp" />
+    <Reference Include="SixLabors.Core" />
+    <Reference Include="SixLabors.Shapes" />
+    <Reference Include="SixLabors.ImageSharp.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\AlleyCat\Action\Action.cs" />
@@ -338,6 +346,8 @@
     <Compile Include="Source\AlleyCat\Logging\Logger.cs" />
     <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
     <Compile Include="Source\AlleyCat\Mesh\AbstractMeshData.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapMetadata.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapGenerator.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshSurface.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IVertex.cs" />
@@ -353,6 +363,7 @@
     <Compile Include="Source\AlleyCat\Mesh\Quad.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Triangle.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Vertex.cs" />
+    <Compile Include="Source\AlleyCat\Morph\BlendMap\BlendMapTest.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorph.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinitionFactory.cs" />
