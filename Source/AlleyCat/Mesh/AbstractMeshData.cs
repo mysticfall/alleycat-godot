@@ -13,6 +13,8 @@ namespace AlleyCat.Mesh
 {
     public abstract class AbstractMeshData<TVertex> : IMeshData<TVertex> where TVertex : IVertex
     {
+        public string Key { get; }
+
         public Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
 
         public Arr<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
@@ -59,10 +61,12 @@ namespace AlleyCat.Mesh
 
         private int[] _indices;
 
-        protected AbstractMeshData(Array source, uint formatMask)
+        protected AbstractMeshData(string key, Array source, uint formatMask)
         {
+            Ensure.That(key, nameof(key)).IsNotNull();
             Ensure.That(source, nameof(source)).IsNotNull();
 
+            Key = key;
             Source = source;
 
             FormatMask = formatMask;

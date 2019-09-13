@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using AlleyCat.Common;
 using Godot;
 using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
-    public interface IMeshData : IMeshArray, IEnumerable
+    public interface IMeshData : IMeshArray, IEnumerable, IIdentifiable
     {
         Arr<Vector3> Vertices { get; }
 

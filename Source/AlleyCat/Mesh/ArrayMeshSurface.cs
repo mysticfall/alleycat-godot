@@ -12,11 +12,7 @@ namespace AlleyCat.Mesh
 {
     public class ArrayMeshSurface : IMeshSurface
     {
-        public string Key
-        {
-            get => Mesh.SurfaceGetName(Index);
-            set => Mesh.SurfaceSetName(Index, value);
-        }
+        public string Key { get; }
 
         public ArrayMesh Mesh { get; }
 
@@ -30,7 +26,7 @@ namespace AlleyCat.Mesh
             {
                 if (_base.IsNone)
                 {
-                    _base = new MeshData(Mesh.SurfaceGetArrays(Index), FormatMask);
+                    _base = new MeshData(Key, Mesh.SurfaceGetArrays(Index), FormatMask);
                 }
 
                 return _base.Head();
@@ -67,6 +63,7 @@ namespace AlleyCat.Mesh
             Mesh = mesh;
             Index = index;
 
+            Key = mesh.SurfaceGetName(index);
             FormatMask = Mesh.SurfaceGetFormat(index);
 
             _base = None;

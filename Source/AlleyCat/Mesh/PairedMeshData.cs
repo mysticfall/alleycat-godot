@@ -7,7 +7,7 @@ namespace AlleyCat.Mesh
     {
         public IMeshData Base { get; }
 
-        public PairedMeshData(MeshData source, IMeshData basis) : base(source.Source, source.FormatMask)
+        public PairedMeshData(MeshData source, IMeshData basis) : base(source.Key, source.Source, source.FormatMask)
         {
             Ensure.That(source, nameof(source)).IsNotNull();
             Ensure.That(basis, nameof(basis)).IsNotNull();

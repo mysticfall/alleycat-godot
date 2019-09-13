@@ -4,7 +4,7 @@ namespace AlleyCat.Mesh
 {
     public class MeshData : AbstractMeshData<Vertex>
     {
-        public MeshData(Array source, uint formatMask) : base(source, formatMask)
+        public MeshData(string key, Array source, uint formatMask) : base(key, source, formatMask)
         {
         }
 
