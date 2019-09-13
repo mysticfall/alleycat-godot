@@ -7,7 +7,7 @@ namespace AlleyCat.Mesh
 {
     public interface IMeshSurface : IMeshArray, IIdentifiable
     {
-        IMeshData<Vertex> Base { get; }
+        IMeshData<Vertex> Data { get; }
 
         IEnumerable<IMeshData<MorphedVertex>> BlendShapes { get; }
 

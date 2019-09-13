@@ -6,7 +6,7 @@ namespace AlleyCat.Mesh
 {
     public static class MeshSurfaceExtensions
     {
-        public static IMeshSurface GetSurface(this ArrayMesh mesh, int index) => new MeshSurface(mesh, index);
+        public static IMeshSurface GetSurface(this ArrayMesh mesh, int index) => new ArrayMeshSurface(mesh, index);
 
         public static IEnumerable<IMeshSurface> GetSurfaces(this ArrayMesh mesh)
         {
@@ -16,7 +16,7 @@ namespace AlleyCat.Mesh
 
             for (var i = 0; i < count; i++)
             {
-                yield return new MeshSurface(mesh, i);
+                yield return new ArrayMeshSurface(mesh, i);
             }
         }
     }

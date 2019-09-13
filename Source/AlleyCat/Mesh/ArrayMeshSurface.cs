@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurface : IMeshSurface
+    public class ArrayMeshSurface : IMeshSurface
     {
         public string Key
         {
@@ -24,7 +24,7 @@ namespace AlleyCat.Mesh
 
         public int Index { get; }
 
-        public IMeshData<Vertex> Base
+        public IMeshData<Vertex> Data
         {
             get
             {
@@ -47,7 +47,7 @@ namespace AlleyCat.Mesh
 
                 _blendShapes = Mesh.SurfaceGetBlendShapeArrays(Index)
                     .OfType<Array>()
-                    .Map((i, source) => new BlendShapeData(Mesh.GetBlendShapeName(i), source, Base, mask));
+                    .Map((i, source) => new BlendShapeData(Mesh.GetBlendShapeName(i), source, Data, mask));
 
                 return _blendShapes;
             }
@@ -59,7 +59,7 @@ namespace AlleyCat.Mesh
 
         private IEnumerable<BlendShapeData> _blendShapes;
 
-        public MeshSurface(ArrayMesh mesh, int index)
+        public ArrayMeshSurface(ArrayMesh mesh, int index)
         {
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
             Ensure.That(index, nameof(index)).IsGte(0);
