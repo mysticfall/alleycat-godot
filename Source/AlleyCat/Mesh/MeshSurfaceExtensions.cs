@@ -6,9 +6,9 @@ namespace AlleyCat.Mesh
 {
     public static class MeshSurfaceExtensions
     {
-        public static MeshSurface GetSurface(this ArrayMesh mesh, int index) => new MeshSurface(mesh, index);
+        public static IMeshSurface GetSurface(this ArrayMesh mesh, int index) => new MeshSurface(mesh, index);
 
-        public static IEnumerable<MeshSurface> GetSurfaces(this ArrayMesh mesh)
+        public static IEnumerable<IMeshSurface> GetSurfaces(this ArrayMesh mesh)
         {
             Ensure.That(mesh, nameof(mesh)).IsNotNull();
 

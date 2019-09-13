@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using AlleyCat.Common;
+using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public class MeshSurface : IMeshArray, IIdentifiable
+    public class MeshSurface : IMeshSurface
     {
         public string Key
         {
@@ -24,7 +24,7 @@ namespace AlleyCat.Mesh
 
         public int Index { get; }
 
-        public MeshData Base
+        public IMeshData<Vertex> Base
         {
             get
             {
@@ -37,7 +37,7 @@ namespace AlleyCat.Mesh
             }
         }
 
-        public IEnumerable<BlendShapeData> BlendShapes
+        public IEnumerable<IMeshData<MorphedVertex>> BlendShapes
         {
             get
             {
