@@ -5,8 +5,8 @@ using EnsureThat;
 using Godot;
 using Godot.Collections;
 using LanguageExt;
-using static Godot.Mesh;
 using static LanguageExt.Prelude;
+using static Godot.Mesh;
 
 namespace AlleyCat.Mesh
 {
@@ -49,9 +49,13 @@ namespace AlleyCat.Mesh
 
         public PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
 
+        public Option<Material> Material { get; }
+
         private Option<ArrayMeshData> _base;
 
         private IEnumerable<BlendShapeData> _blendShapes;
+
+        private Option<Material>? _material;
 
         public ArrayMeshSurface(ArrayMesh mesh, int index)
         {
@@ -63,6 +67,7 @@ namespace AlleyCat.Mesh
 
             Key = mesh.SurfaceGetName(index);
             FormatMask = Mesh.SurfaceGetFormat(index);
+            Material = Optional(Mesh.SurfaceGetMaterial(index));
         }
     }
 }

@@ -58,6 +58,8 @@ namespace AlleyCat.Mesh
 
             target.AddSurfaceFromArrays(surface.PrimitiveType, data, shapes);
             target.SurfaceSetName(newIndex, surface.Key);
+
+            surface.Material.Iter(m => target.SurfaceSetMaterial(newIndex, m));
         }
 
         public static IEnumerable<string> GetBlendShapeNames(this ArrayMesh mesh)
