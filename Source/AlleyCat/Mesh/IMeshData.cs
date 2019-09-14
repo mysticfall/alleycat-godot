@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AlleyCat.Common;
 using Godot;
+using Godot.Collections;
 using LanguageExt;
 
 namespace AlleyCat.Mesh
@@ -25,6 +26,8 @@ namespace AlleyCat.Mesh
         Arr<Vector2> UV2 { get; }
 
         Arr<int> Indices { get; }
+
+        Array Export();
     }
 
     namespace Generic

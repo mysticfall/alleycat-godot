@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
+using Godot.Collections;
 
 namespace AlleyCat.Mesh
 {
@@ -18,6 +21,43 @@ namespace AlleyCat.Mesh
             {
                 yield return new ArrayMeshSurface(mesh, i);
             }
+        }
+
+        public static void AddAsSurface(this IMeshSurface surface, ArrayMesh target)
+        {
+            Ensure.That(surface, nameof(surface)).IsNotNull();
+            Ensure.That(surface, nameof(surface)).IsNotNull();
+
+            var index = target.SurfaceFindByName(surface.Key);
+
+            if (index != -1)
+            {
+                target.SurfaceRemove(index);
+            }
+
+            var existingShapes = target.GetBlendShapeNames().ToHashSet();
+
+            surface.BlendShapes.Map(b => b.Key).Filter(k => !existingShapes.Contains(k)).Iter(target.AddBlendShape);
+
+            var newIndex = target.GetSurfaceCount();
+
+            Array CopyBlendShape(IMeshData<MorphedVertex> source)
+            {
+                var shape = new Array();
+
+                source.Export()
+                    .Cast<object>()
+                    .Map((i, a) => i == (int) ArrayMesh.ArrayType.Index ? null : a)
+                    .Iter(a => shape.Add(a));
+
+                return shape;
+            }
+
+            var data = surface.Data.Export();
+            var shapes = new Array(surface.BlendShapes.Map(CopyBlendShape));
+
+            target.AddSurfaceFromArrays(surface.PrimitiveType, data, shapes);
+            target.SurfaceSetName(newIndex, surface.Key);
         }
 
         public static IEnumerable<string> GetBlendShapeNames(this ArrayMesh mesh)

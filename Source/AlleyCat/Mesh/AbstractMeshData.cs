@@ -96,6 +96,8 @@ namespace AlleyCat.Mesh
 
         public TVertex this[int index] => CreateVertex(Indices[index]);
 
+        public Array Export() => Source;
+
         protected abstract TVertex CreateVertex(int index);
 
         private T[] Read<T>(ArrayType tpe)
