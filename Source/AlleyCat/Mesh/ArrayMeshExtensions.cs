@@ -39,6 +39,8 @@ namespace AlleyCat.Mesh
 
             surface.BlendShapes.Map(b => b.Key).Filter(k => !existingShapes.Contains(k)).Iter(target.AddBlendShape);
 
+            target.BlendShapeMode = surface.BlendShapeMode;
+
             var newIndex = target.GetSurfaceCount();
 
             Array CopyBlendShape(IMeshData<MorphedVertex> source)

@@ -33,6 +33,8 @@ namespace AlleyCat.Mesh
             }
         }
 
+        public PrimitiveType PrimitiveType { get; }
+
         public IEnumerable<IMeshData<MorphedVertex>> BlendShapes
         {
             get
@@ -47,7 +49,7 @@ namespace AlleyCat.Mesh
             }
         }
 
-        public PrimitiveType PrimitiveType => Mesh.SurfaceGetPrimitiveType(Index);
+        public BlendShapeMode BlendShapeMode { get; }
 
         public Option<Material> Material { get; }
 
@@ -55,7 +57,7 @@ namespace AlleyCat.Mesh
 
         private IEnumerable<BlendShapeData> _blendShapes;
 
-        private Option<Material>? _material;
+        private Option<Material> _material;
 
         public ArrayMeshSurface(ArrayMesh mesh, int index)
         {
@@ -67,7 +69,9 @@ namespace AlleyCat.Mesh
 
             Key = mesh.SurfaceGetName(index);
             FormatMask = Mesh.SurfaceGetFormat(index);
-            Material = Optional(Mesh.SurfaceGetMaterial(index));
+            PrimitiveType = Mesh.SurfaceGetPrimitiveType(Index);
+            BlendShapeMode = Mesh.BlendShapeMode;
+            Material = Optional(_ => Mesh.SurfaceGetMaterial(index));
         }
     }
 }
