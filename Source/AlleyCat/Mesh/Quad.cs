@@ -5,7 +5,7 @@ using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
-    public struct Quad<TVertex> : IPolygon<TVertex> where TVertex : IVertex
+    public struct Quad<TVertex> : IFace<TVertex> where TVertex : IVertex
     {
         public TVertex Point1 => Points[0];
 
