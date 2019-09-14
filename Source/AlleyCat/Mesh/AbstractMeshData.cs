@@ -15,25 +15,25 @@ namespace AlleyCat.Mesh
     {
         public string Key { get; }
 
-        public Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
+        public virtual Arr<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
 
-        public Arr<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
+        public virtual Arr<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
 
-        public Arr<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
+        public virtual Arr<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
 
-        public Arr<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
+        public virtual Arr<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
 
-        public Arr<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
+        public virtual Arr<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
 
-        public Arr<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
+        public virtual Arr<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
 
-        public Arr<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
+        public virtual Arr<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
 
-        public Arr<Vector2> UV2 => _uv2 ?? (_uv2 = Read<Vector2>(ArrayType.TexUv2));
+        public virtual Arr<Vector2> UV2 => _uv2 ?? (_uv2 = Read<Vector2>(ArrayType.TexUv2));
 
-        public Arr<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
+        public virtual Arr<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
 
-        public int Count => Vertices.Count;
+        public virtual int Count => Vertices.Count;
 
         public uint FormatMask { get; }
 
