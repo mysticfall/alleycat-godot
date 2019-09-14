@@ -63,9 +63,6 @@ namespace AlleyCat.Mesh
 
             Key = mesh.SurfaceGetName(index);
             FormatMask = Mesh.SurfaceGetFormat(index);
-
-            _base = None;
-            _blendShapes = null;
         }
     }
 }
