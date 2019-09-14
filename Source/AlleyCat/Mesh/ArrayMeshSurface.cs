@@ -39,11 +39,9 @@ namespace AlleyCat.Mesh
             {
                 if (_blendShapes != null) return _blendShapes;
 
-                var mask = FormatMask;
-
                 _blendShapes = Mesh.SurfaceGetBlendShapeArrays(Index)
                     .OfType<Array>()
-                    .Map((i, source) => new BlendShapeData(Mesh.GetBlendShapeName(i), source, Data, mask));
+                    .Map((i, source) => new BlendShapeData(Mesh.GetBlendShapeName(i), source, Data));
 
                 return _blendShapes;
             }

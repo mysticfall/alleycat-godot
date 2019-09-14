@@ -1,5 +1,6 @@
 using EnsureThat;
 using Godot.Collections;
+using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
@@ -7,8 +8,9 @@ namespace AlleyCat.Mesh
     {
         public IMeshData Base { get; }
 
-        public BlendShapeData(
-            string key, Array source, IMeshData basis, uint formatMask) : base(key, source, formatMask)
+        public override Arr<int> Indices => Base.Indices;
+
+        public BlendShapeData(string key, Array source, IMeshData basis) : base(key, source, basis.FormatMask)
         {
             Ensure.That(basis, nameof(basis)).IsNotNull();
 
