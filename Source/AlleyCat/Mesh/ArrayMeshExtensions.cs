@@ -19,5 +19,17 @@ namespace AlleyCat.Mesh
                 yield return new ArrayMeshSurface(mesh, i);
             }
         }
+
+        public static IEnumerable<string> GetBlendShapeNames(this ArrayMesh mesh)
+        {
+            Ensure.That(mesh, nameof(mesh)).IsNotNull();
+
+            var count = mesh.GetBlendShapeCount();
+
+            for (var i = 0; i < count; i++)
+            {
+                yield return mesh.GetBlendShapeName(i);
+            }
+        }
     }
 }
