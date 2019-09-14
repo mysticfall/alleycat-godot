@@ -357,7 +357,7 @@
     <Compile Include="Source\AlleyCat\Mesh\MeshInstanceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshSurface.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshData.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\MeshSurfaceExtensions.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\ArrayMeshExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IPolygon.cs" />
     <Compile Include="Source\AlleyCat\Mesh\MorphedVertex .cs" />
     <Compile Include="Source\AlleyCat\Mesh\PairedMeshData.cs" />

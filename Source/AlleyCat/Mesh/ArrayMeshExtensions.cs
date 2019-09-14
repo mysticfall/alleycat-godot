@@ -4,7 +4,7 @@ using Godot;
 
 namespace AlleyCat.Mesh
 {
-    public static class MeshSurfaceExtensions
+    public static class ArrayMeshExtensions
     {
         public static IMeshSurface GetSurface(this ArrayMesh mesh, int index) => new ArrayMeshSurface(mesh, index);
 
