@@ -345,7 +345,7 @@
     <Compile Include="Source\AlleyCat\Logging\ILoggable.cs" />
     <Compile Include="Source\AlleyCat\Logging\Logger.cs" />
     <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\AbstractArrayMeshData.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\ArrayMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\AbstractMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\BlendMapMetadata.cs" />
     <Compile Include="Source\AlleyCat\Mesh\BlendMapGenerator.cs" />
@@ -357,7 +357,7 @@
     <Compile Include="Source\AlleyCat\Mesh\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Mesh\MeshInstanceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshSurface.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\ArrayMeshData.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\SimpleMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IFace.cs" />
     <Compile Include="Source\AlleyCat\Mesh\MorphedVertex .cs" />

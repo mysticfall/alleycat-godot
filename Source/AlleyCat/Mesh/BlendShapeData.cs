@@ -4,7 +4,7 @@ using Godot.Collections;
 
 namespace AlleyCat.Mesh
 {
-    public class BlendShapeData : AbstractArrayMeshData<MorphedVertex>
+    public class BlendShapeData : ArrayMeshData<MorphedVertex>
     {
         public IMeshData Base { get; }
 
