@@ -3,7 +3,7 @@ using EnsureThat;
 
 namespace AlleyCat.Mesh
 {
-    public class PairedMeshData : AbstractMeshData<MorphedVertex>
+    public class PairedMeshData : AbstractArrayMeshData<MorphedVertex>
     {
         public IMeshData Base { get; }
 

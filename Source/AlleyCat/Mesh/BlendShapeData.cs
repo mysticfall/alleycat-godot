@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using EnsureThat;
 using Godot.Collections;
-using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
-    public class BlendShapeData : AbstractMeshData<MorphedVertex>
+    public class BlendShapeData : AbstractArrayMeshData<MorphedVertex>
     {
         public IMeshData Base { get; }
 

@@ -1,13 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
-using LanguageExt;
-using static Godot.ArrayMesh;
-using Array = Godot.Collections.Array;
+using Godot.Collections;
 
 namespace AlleyCat.Mesh
 {
@@ -15,71 +12,33 @@ namespace AlleyCat.Mesh
     {
         public string Key { get; }
 
-        public virtual IReadOnlyList<Vector3> Vertices => _vertices ?? (_vertices = Read<Vector3>(ArrayType.Vertex));
+        public abstract IReadOnlyList<Vector3> Vertices { get; }
+        
+        public abstract IReadOnlyList<Vector3> Normals { get; }
+        
+        public abstract IReadOnlyList<float[]> Tangents { get; }
+        
+        public abstract IReadOnlyList<Color> Colors { get; }
+        
+        public abstract IReadOnlyList<int[]> Bones { get; }
+        
+        public abstract IReadOnlyList<float[]> Weights { get; }
+        
+        public abstract IReadOnlyList<Vector2> UV { get; }
+        
+        public abstract IReadOnlyList<Vector2> UV2 { get; }
 
-        public virtual IReadOnlyList<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
-
-        public virtual IReadOnlyList<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
-
-        public virtual IReadOnlyList<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
-
-        public virtual IReadOnlyList<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
-
-        public virtual IReadOnlyList<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
-
-        public virtual IReadOnlyList<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
-
-        public virtual IReadOnlyList<Vector2> UV2 => _uv2 ?? (_uv2 = Read<Vector2>(ArrayType.TexUv2));
-
-        public virtual IReadOnlyList<int> Indices => _indices ?? (_indices = Read<int>(ArrayType.Index));
+        public abstract IReadOnlyList<int> Indices { get; }
 
         public virtual int Count => Vertices.Count;
 
-        public uint FormatMask { get; }
+        public abstract uint FormatMask { get; }
 
-        public Array Source { get; }
-
-        private readonly int _count;
-
-        private Map<ArrayType, object> _cache;
-
-        private Vector3[] _vertices;
-
-        private Vector3[] _normals;
-
-        private float[][] _tangents;
-
-        private Color[] _colors;
-
-        private int[][] _bones;
-
-        private float[][] _weights;
-
-        private Vector2[] _uv;
-
-        private Vector2[] _uv2;
-
-        private int[] _indices;
-
-        protected AbstractMeshData(string key, Array source, uint formatMask)
+        protected AbstractMeshData(string key)
         {
             Ensure.That(key, nameof(key)).IsNotNull();
-            Ensure.That(source, nameof(source)).IsNotNull();
 
             Key = key;
-            Source = source;
-
-            FormatMask = formatMask;
-
-            _vertices = null;
-            _normals = null;
-            _tangents = null;
-            _colors = null;
-            _bones = null;
-            _weights = null;
-            _uv = null;
-            _uv2 = null;
-            _indices = null;
         }
 
         public IEnumerator<TVertex> GetEnumerator()
@@ -96,53 +55,8 @@ namespace AlleyCat.Mesh
 
         public TVertex this[int index] => CreateVertex(Indices[index]);
 
-        public Array Export() => Source;
-
         protected abstract TVertex CreateVertex(int index);
 
-        private T[] Read<T>(ArrayType tpe)
-        {
-            ArrayFormat format;
-
-            switch (tpe)
-            {
-                case ArrayType.Vertex:
-                    format = ArrayFormat.Vertex;
-                    break;
-                case ArrayType.Normal:
-                    format = ArrayFormat.Normal;
-                    break;
-                case ArrayType.Tangent:
-                    format = ArrayFormat.Tangent;
-                    break;
-                case ArrayType.Color:
-                    format = ArrayFormat.Color;
-                    break;
-                case ArrayType.TexUv:
-                    format = ArrayFormat.TexUv;
-                    break;
-                case ArrayType.TexUv2:
-                    format = ArrayFormat.TexUv2;
-                    break;
-                case ArrayType.Bones:
-                    format = ArrayFormat.Bones;
-                    break;
-                case ArrayType.Weights:
-                    format = ArrayFormat.Weights;
-                    break;
-                case ArrayType.Index:
-                    format = ArrayFormat.Index;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(tpe), tpe, "Unknown array type: " + tpe);
-            }
-
-            if (!this.SupportsFormat(format))
-            {
-                throw new InvalidOperationException($"The mesh does not contain the data type: '{tpe}'.");
-            }
-
-            return (T[]) Source[(int) tpe];
-        }
+        public abstract Array Export();
     }
 }
