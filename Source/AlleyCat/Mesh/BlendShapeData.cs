@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EnsureThat;
 using Godot.Collections;
 using LanguageExt;
@@ -8,7 +9,7 @@ namespace AlleyCat.Mesh
     {
         public IMeshData Base { get; }
 
-        public override Arr<int> Indices => Base.Indices;
+        public override IReadOnlyList<int> Indices => Base.Indices;
 
         public BlendShapeData(string key, Array source, IMeshData basis) : base(key, source, basis.FormatMask)
         {

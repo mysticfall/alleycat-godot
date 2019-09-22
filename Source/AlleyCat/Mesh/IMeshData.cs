@@ -9,23 +9,23 @@ namespace AlleyCat.Mesh
 {
     public interface IMeshData : IMeshArray, IEnumerable, IIdentifiable
     {
-        Arr<Vector3> Vertices { get; }
+        IReadOnlyList<Vector3> Vertices { get; }
 
-        Arr<Vector3> Normals { get; }
+        IReadOnlyList<Vector3> Normals { get; }
 
-        Arr<float[]> Tangents { get; }
+        IReadOnlyList<float[]> Tangents { get; }
 
-        Arr<Color> Colors { get; }
+        IReadOnlyList<Color> Colors { get; }
 
-        Arr<int[]> Bones { get; }
+        IReadOnlyList<int[]> Bones { get; }
 
-        Arr<float[]> Weights { get; }
+        IReadOnlyList<float[]> Weights { get; }
 
-        Arr<Vector2> UV { get; }
+        IReadOnlyList<Vector2> UV { get; }
 
-        Arr<Vector2> UV2 { get; }
+        IReadOnlyList<Vector2> UV2 { get; }
 
-        Arr<int> Indices { get; }
+        IReadOnlyList<int> Indices { get; }
 
         Array Export();
     }
