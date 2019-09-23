@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
@@ -18,10 +20,10 @@ namespace AlleyCat.Mesh
 
         public static Vector3 Normal(this IVertex vertex) => vertex.Source.Normals[vertex.Index];
 
-        public static Option<float[]> Tangents(this IVertex vertex)
+        public static Option<IEnumerable<float>> Tangents(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Tangent)
-                ? Some(vertex.Source.Tangents[vertex.Index])
+                ? Some(vertex.Source.Tangents.Skip(vertex.Index * 4).Take(4))
                 : None;
         }
 
@@ -32,17 +34,17 @@ namespace AlleyCat.Mesh
                 : None;
         }
 
-        public static Option<int[]> Bones(this IVertex vertex)
+        public static Option<IEnumerable<int>> Bones(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Bones)
-                ? Some(vertex.Source.Bones[vertex.Index])
+                ? Some(vertex.Source.Bones.Skip(vertex.Index * 4).Take(4))
                 : None;
         }
 
-        public static Option<float[]> Weights(this IVertex vertex)
+        public static Option<IEnumerable<float>> Weights(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Weights)
-                ? Some(vertex.Source.Weights[vertex.Index])
+                ? Some(vertex.Source.Weights.Skip(vertex.Index * 4).Take(4))
                 : None;
         }
 

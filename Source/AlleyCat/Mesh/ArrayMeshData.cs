@@ -14,13 +14,13 @@ namespace AlleyCat.Mesh
 
         public override IReadOnlyList<Vector3> Normals => _normals ?? (_normals = Read<Vector3>(ArrayType.Normal));
 
-        public override IReadOnlyList<float[]> Tangents => _tangents ?? (_tangents = Read<float[]>(ArrayType.Tangent));
+        public override IReadOnlyList<float> Tangents => _tangents ?? (_tangents = Read<float>(ArrayType.Tangent));
 
         public override IReadOnlyList<Color> Colors => _colors ?? (_colors = Read<Color>(ArrayType.Color));
 
-        public override IReadOnlyList<int[]> Bones => _bones ?? (_bones = Read<int[]>(ArrayType.Bones));
+        public override IReadOnlyList<int> Bones => _bones ?? (_bones = Read<int>(ArrayType.Bones));
 
-        public override IReadOnlyList<float[]> Weights => _weights ?? (_weights = Read<float[]>(ArrayType.Weights));
+        public override IReadOnlyList<float> Weights => _weights ?? (_weights = Read<float>(ArrayType.Weights));
 
         public override IReadOnlyList<Vector2> UV => _uv ?? (_uv = Read<Vector2>(ArrayType.TexUv));
 
@@ -40,13 +40,13 @@ namespace AlleyCat.Mesh
 
         private Vector3[] _normals;
 
-        private float[][] _tangents;
+        private float[] _tangents;
 
         private Color[] _colors;
 
-        private int[][] _bones;
+        private int[] _bones;
 
-        private float[][] _weights;
+        private float[] _weights;
 
         private Vector2[] _uv;
 

@@ -13,19 +13,19 @@ namespace AlleyCat.Mesh
         public string Key { get; }
 
         public abstract IReadOnlyList<Vector3> Vertices { get; }
-        
+
         public abstract IReadOnlyList<Vector3> Normals { get; }
-        
-        public abstract IReadOnlyList<float[]> Tangents { get; }
-        
+
+        public abstract IReadOnlyList<float> Tangents { get; }
+
         public abstract IReadOnlyList<Color> Colors { get; }
-        
-        public abstract IReadOnlyList<int[]> Bones { get; }
-        
-        public abstract IReadOnlyList<float[]> Weights { get; }
-        
+
+        public abstract IReadOnlyList<int> Bones { get; }
+
+        public abstract IReadOnlyList<float> Weights { get; }
+
         public abstract IReadOnlyList<Vector2> UV { get; }
-        
+
         public abstract IReadOnlyList<Vector2> UV2 { get; }
 
         public abstract IReadOnlyList<int> Indices { get; }

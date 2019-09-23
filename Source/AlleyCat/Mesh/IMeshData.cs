@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AlleyCat.Common;
 using Godot;
 using Godot.Collections;
-using LanguageExt;
 
 namespace AlleyCat.Mesh
 {
@@ -13,13 +12,13 @@ namespace AlleyCat.Mesh
 
         IReadOnlyList<Vector3> Normals { get; }
 
-        IReadOnlyList<float[]> Tangents { get; }
+        IReadOnlyList<float> Tangents { get; }
 
         IReadOnlyList<Color> Colors { get; }
 
-        IReadOnlyList<int[]> Bones { get; }
+        IReadOnlyList<int> Bones { get; }
 
-        IReadOnlyList<float[]> Weights { get; }
+        IReadOnlyList<float> Weights { get; }
 
         IReadOnlyList<Vector2> UV { get; }
 
