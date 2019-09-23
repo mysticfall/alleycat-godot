@@ -23,7 +23,7 @@ namespace AlleyCat.Mesh
             }
         }
 
-        public static void AddAsSurface(this IMeshSurface surface, ArrayMesh target)
+        public static void CopyTo(this IMeshSurface surface, ArrayMesh target)
         {
             Ensure.That(surface, nameof(surface)).IsNotNull();
             Ensure.That(surface, nameof(surface)).IsNotNull();
