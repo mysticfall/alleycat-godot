@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using LanguageExt;
 using static LanguageExt.Prelude;
@@ -20,10 +20,10 @@ namespace AlleyCat.Mesh
 
         public static Vector3 Normal(this IVertex vertex) => vertex.Source.Normals[vertex.Index];
 
-        public static Option<IEnumerable<float>> Tangents(this IVertex vertex)
+        public static Option<IReadOnlyList<float>> Tangents(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Tangent)
-                ? Some(vertex.Source.Tangents.Skip(vertex.Index * 4).Take(4))
+                ? Some<IReadOnlyList<float>>(new OffsetList<float>(vertex.Source.Tangents, vertex.Index, 4))
                 : None;
         }
 
@@ -34,17 +34,17 @@ namespace AlleyCat.Mesh
                 : None;
         }
 
-        public static Option<IEnumerable<int>> Bones(this IVertex vertex)
+        public static Option<IReadOnlyList<int>> Bones(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Bones)
-                ? Some(vertex.Source.Bones.Skip(vertex.Index * 4).Take(4))
+                ? Some<IReadOnlyList<int>>(new OffsetList<int>(vertex.Source.Bones, vertex.Index, 4))
                 : None;
         }
 
-        public static Option<IEnumerable<float>> Weights(this IVertex vertex)
+        public static Option<IReadOnlyList<float>> Weights(this IVertex vertex)
         {
             return vertex.Source.SupportsFormat(ArrayFormat.Weights)
-                ? Some(vertex.Source.Weights.Skip(vertex.Index * 4).Take(4))
+                ? Some<IReadOnlyList<float>>(new OffsetList<float>(vertex.Source.Weights, vertex.Index, 4))
                 : None;
         }
 
@@ -60,6 +60,34 @@ namespace AlleyCat.Mesh
             return vertex.Source.SupportsFormat(ArrayFormat.TexUv2)
                 ? Some(vertex.Source.UV2[vertex.Index])
                 : None;
+        }
+
+        internal struct OffsetList<T> : IReadOnlyList<T>
+        {
+            public IReadOnlyList<T> Source { get; }
+
+            public int Offset { get; }
+
+            public int Count { get; }
+
+            public OffsetList(IReadOnlyList<T> source, int offset, int count)
+            {
+                Source = source;
+                Offset = offset;
+                Count = count;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                for (var i = 0; i < Count; i++)
+                {
+                    yield return this[i];
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public T this[int index] => Source[Offset * Count + index];
         }
     }
 }
