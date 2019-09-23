@@ -5,6 +5,7 @@ using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
 using Godot.Collections;
+using static Godot.ArrayMesh;
 
 namespace AlleyCat.Mesh
 {
@@ -57,6 +58,17 @@ namespace AlleyCat.Mesh
 
         protected abstract TVertex CreateVertex(int index);
 
-        public abstract Array Export();
+        public virtual Array Export() => new Array
+        {
+            Vertices,
+            Normals,
+            this.SupportsFormat(ArrayFormat.Tangent) ? Tangents : null,
+            this.SupportsFormat(ArrayFormat.Color) ? Colors : null,
+            this.SupportsFormat(ArrayFormat.TexUv) ? UV : null,
+            this.SupportsFormat(ArrayFormat.TexUv2) ? UV2 : null,
+            this.SupportsFormat(ArrayFormat.Bones) ? Bones : null,
+            this.SupportsFormat(ArrayFormat.Weights) ? Weights : null,
+            this.SupportsFormat(ArrayFormat.Index) ? Indices : null
+        };
     }
 }
