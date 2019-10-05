@@ -361,6 +361,7 @@
     <Compile Include="Source\AlleyCat\Mesh\IMeshObject.cs" />
     <Compile Include="Source\AlleyCat\Mesh\MeshInstanceExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshSurface.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\MeshSurface.cs" />
     <Compile Include="Source\AlleyCat\Mesh\SimpleMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IFace.cs" />
