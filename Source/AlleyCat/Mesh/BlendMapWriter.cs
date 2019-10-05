@@ -6,9 +6,7 @@ using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
@@ -19,91 +17,77 @@ using Color = SixLabors.ImageSharp.Color;
 
 namespace AlleyCat.Mesh
 {
-    public class BlendMapGenerator
+    public class BlendMapWriter : BlendMapConverter
     {
-        public IMeshData<MorphedVertex> Data { get; }
+        public int Size
+        {
+            get => _size;
+            set => _size = Mathf.Max(value, 100);
+        }
 
-        public int Size { get; }
+        public float Padding
+        {
+            get => _padding;
+            set => _padding = Mathf.Max(value, 0f);
+        }
 
-        public float Padding { get; }
+        public float Tolerance
+        {
+            get => _tolerance;
+            set => _tolerance = Mathf.Max(value, 0f);
+        }
 
-        public float Tolerance { get; }
+        private int _size = 512;
 
-        protected ILogger Logger { get; }
+        private float _padding = 2f;
 
-        public BlendMapGenerator(
-            IMeshData<MorphedVertex> data,
-            int size = 512,
-            float tolerance = 0.001f,
-            float padding = 2f) : this(data, new NullLoggerFactory(), size, tolerance, padding)
+        private float _tolerance = 0.001f;
+
+        public BlendMapWriter()
         {
         }
 
-        public BlendMapGenerator(
-            IMeshData<MorphedVertex> data,
-            ILoggerFactory loggerFactory,
-            int size = 512,
-            float tolerance = 0.001f,
-            float padding = 2f)
+        public BlendMapWriter(ILoggerFactory loggerFactory) : base(loggerFactory)
+        {
+        }
+
+        public void Write(IMeshData<MorphedVertex> data, string name, DirectoryInfo directory)
         {
             Ensure.That(data, nameof(data)).IsNotNull();
-            Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
-            Ensure.That(size, nameof(size)).IsGt(0);
-            Ensure.That(tolerance, nameof(tolerance)).IsGte(0);
-            Ensure.That(padding, nameof(padding)).IsGte(0);
+            Ensure.That(name, nameof(name)).IsNotNull();
 
-            Data = data;
-            Size = size;
-            Tolerance = tolerance;
-            Padding = padding;
+            Logger.LogInformation("Generating blend map '{}' under '{}'.", name, directory.Path);
 
-            Logger = loggerFactory.CreateLogger(GetType().FullName);
-        }
+            var position = Generate(directory.GetFile($"{name}.png"), data, v => v.Position());
+            var normal = Generate(directory.GetFile($"{name}.normal.png"), data, v => v.Normal());
 
-        public void Generate(string prefix)
-        {
-            Ensure.That(prefix, nameof(prefix)).IsNotNull();
+            var manifest = directory.GetFile($"{name}.json");
 
-            Logger.LogInformation("Generating blend maps for '{}'.", prefix);
-
-            var position = Generate(new FileInfo($"{prefix}.png"), v => v.Position());
-            var normal = Generate(new FileInfo($"{prefix}.normal.png"), v => v.Normal());
-
-            var metadata = new BlendMapMetadata(position, normal);
-
-            var resolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
-
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = resolver,
-                Formatting = Formatting.Indented,
-            };
-
-            var json = JsonConvert.SerializeObject(metadata, settings);
-            var path = $"{prefix}.json";
-
-            Logger.LogDebug("Writing blend map metadata: '{}'.", path);
+            Logger.LogDebug("Writing blend map metadata: '{}'.", manifest);
 
             using (var file = new File())
             {
-                file.Open(path, ModeFlags.Write);
+                var metadata = new Metadata(data.Key, position, normal);
+                var json = JsonConvert.SerializeObject(metadata, SerializerSettings);
+
+                file.Open(manifest.Path, ModeFlags.Write);
                 file.StoreString(json);
                 file.Close();
             }
         }
 
-        protected BlendMapTextureMetadata Generate(FileInfo file, Func<IVertex, Vector3> extractor)
+        protected TextureMetadata Generate(
+            FileInfo file, 
+            IMeshData<MorphedVertex> data, 
+            Func<IVertex, Vector3> extractor)
         {
             Logger.LogDebug("Generating blend map: '{}'.", file.Path);
 
-            var (min, max) = DetermineRange(extractor);
+            var (min, max) = DetermineRange(data, extractor);
 
             using (var texture = new Image<Rgba32>(Size, Size))
             {
-                texture.Mutate(ctx => Draw(ctx, extractor, min, max));
+                texture.Mutate(ctx => Draw(ctx, data, extractor, min, max));
 
                 using (var stream = file.CreateWriteStream())
                 {
@@ -111,10 +95,15 @@ namespace AlleyCat.Mesh
                 }
             }
 
-            return new BlendMapTextureMetadata(file.Name, min, max);
+            return new TextureMetadata(file.Name, min, max);
         }
 
-        protected void Draw(IImageProcessingContext image, Func<IVertex, Vector3> extractor, Vector3 min, Vector3 max)
+        protected void Draw(
+            IImageProcessingContext image,
+            IMeshData<MorphedVertex> data,
+            Func<IVertex, Vector3> extractor,
+            Vector3 min,
+            Vector3 max)
         {
             Color ToColor(Vector3 value)
             {
@@ -162,9 +151,9 @@ namespace AlleyCat.Mesh
                 return (path.Map(Pad).ToArray(), colors.ToArray());
             }
 
-            Logger.LogDebug($"Processing {Data.Count / 3} triangles.");
+            Logger.LogDebug($"Processing {data.Count / 3} triangles.");
 
-            Data
+            data
                 .Triangles()
                 .Filter(Validate)
                 .Map(t => t.Points)
@@ -178,7 +167,7 @@ namespace AlleyCat.Mesh
                 });
         }
 
-        protected (Vector3, Vector3) DetermineRange(Func<IVertex, Vector3> extractor)
+        protected (Vector3, Vector3) DetermineRange(IMeshData<MorphedVertex> data, Func<IVertex, Vector3> extractor)
         {
             Vector3 Agg(Func<float, float, float> agg, Vector3 v1, Vector3 v2) =>
                 new Vector3(agg(v1.x, v2.x), agg(v1.y, v2.y), agg(v1.z, v2.z));
@@ -188,7 +177,7 @@ namespace AlleyCat.Mesh
 
             (Vector3, Vector3) MinMax((Vector3, Vector3) agg, Vector3 v) => (Min(v, agg.Item1), Max(v, agg.Item2));
 
-            return Data.Map(v => extractor(v) - extractor(v.Basis)).Fold((Vector3.Zero, Vector3.Zero), MinMax);
+            return data.Map(v => extractor(v) - extractor(v.Basis)).Fold((Vector3.Zero, Vector3.Zero), MinMax);
         }
     }
 }

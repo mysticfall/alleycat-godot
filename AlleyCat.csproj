@@ -347,8 +347,12 @@
     <Compile Include="Source\AlleyCat\Logging\LoggerProvider.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\AbstractMeshData.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\BlendMapMetadata.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\BlendMapGenerator.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapConverter.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapReader.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapSet.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapMeshData.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMapWriter.cs" />
+    <Compile Include="Source\AlleyCat\Mesh\BlendMap.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IMeshSurface.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IVertex.cs" />
