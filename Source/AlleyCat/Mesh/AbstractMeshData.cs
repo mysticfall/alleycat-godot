@@ -58,17 +58,22 @@ namespace AlleyCat.Mesh
 
         protected abstract TVertex CreateVertex(int index);
 
-        public virtual Array Export() => new Array
+        public virtual Array Export()
         {
-            Vertices,
-            Normals,
-            this.SupportsFormat(ArrayFormat.Tangent) ? Tangents : null,
-            this.SupportsFormat(ArrayFormat.Color) ? Colors : null,
-            this.SupportsFormat(ArrayFormat.TexUv) ? UV : null,
-            this.SupportsFormat(ArrayFormat.TexUv2) ? UV2 : null,
-            this.SupportsFormat(ArrayFormat.Bones) ? Bones : null,
-            this.SupportsFormat(ArrayFormat.Weights) ? Weights : null,
-            this.SupportsFormat(ArrayFormat.Index) ? Indices : null
-        };
+            T[] ToArray<T>(IEnumerable<T> source) => source is T[] arr ? arr : source.ToArray();
+
+            return new Array
+            {
+                ToArray(Vertices),
+                ToArray(Normals),
+                this.SupportsFormat(ArrayFormat.Tangent) ? ToArray(Tangents) : null,
+                this.SupportsFormat(ArrayFormat.Color) ? ToArray(Colors) : null,
+                this.SupportsFormat(ArrayFormat.TexUv) ? ToArray(UV) : null,
+                this.SupportsFormat(ArrayFormat.TexUv2) ? ToArray(UV2) : null,
+                this.SupportsFormat(ArrayFormat.Bones) ? ToArray(Bones) : null,
+                this.SupportsFormat(ArrayFormat.Weights) ? ToArray(Weights) : null,
+                this.SupportsFormat(ArrayFormat.Index) ? ToArray(Indices) : null
+            };
+        }
     }
 }
