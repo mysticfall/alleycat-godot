@@ -7,7 +7,7 @@ using Directory = Godot.Directory;
 
 namespace AlleyCat.IO
 {
-    public class DirectoryInfo : IFileInfo
+    public struct DirectoryInfo : IFileInfo
     {
         public string Name { get; }
 
@@ -31,7 +31,7 @@ namespace AlleyCat.IO
         [CanBeNull]
         public string PhysicalPath => ProjectSettings.GlobalizePath(Path);
 
-        public DateTimeOffset LastModified { get; } = new DateTimeOffset(0, TimeSpan.Zero);
+        public DateTimeOffset LastModified => new DateTimeOffset(0, TimeSpan.Zero);
 
         public DirectoryInfo(string path)
         {
@@ -41,6 +41,8 @@ namespace AlleyCat.IO
 
             Name = index < 0 ? "" : Path.Substring(index + 1);
         }
+
+        public FileInfo GetFile(string name) => new FileInfo(string.Join(FileInfo.Separator, Path, name));
 
         public Stream CreateReadStream()
         {

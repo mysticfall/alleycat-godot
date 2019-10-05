@@ -7,7 +7,7 @@ using File = Godot.File;
 
 namespace AlleyCat.IO
 {
-    public class FileInfo : IWritableFileInfo
+    public struct FileInfo : IWritableFileInfo
     {
         public const string Separator = "/";
 
@@ -52,6 +52,16 @@ namespace AlleyCat.IO
                 {
                     return new DateTimeOffset((long) file.GetModifiedTime(Path), TimeSpan.Zero);
                 }
+            }
+        }
+
+        public DirectoryInfo Directory
+        {
+            get
+            {
+                var index = Path.LastIndexOf(Separator, StringComparison.Ordinal);
+
+                return new DirectoryInfo(Path.Substring(0, index));
             }
         }
 
