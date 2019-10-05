@@ -54,6 +54,6 @@ namespace AlleyCat.Mesh
             return new Vector3(Convert(color.X, 0), Convert(color.Y, 1), Convert(color.Z, 2));
         }
 
-        private float Convert(float value, int index) => value / (Max[index] - Min[index]) + Min[index];
+        private float Convert(float value, int index) => value * (Max[index] - Min[index]) + Min[index];
     }
 }
