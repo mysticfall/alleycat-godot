@@ -77,8 +77,8 @@ namespace AlleyCat.Mesh
         }
 
         protected TextureMetadata Generate(
-            FileInfo file, 
-            IMeshData<MorphedVertex> data, 
+            FileInfo file,
+            IMeshData<MorphedVertex> data,
             Func<IVertex, Vector3> extractor)
         {
             Logger.LogDebug("Generating blend map: '{}'.", file.Path);
@@ -118,7 +118,7 @@ namespace AlleyCat.Mesh
             {
                 var length = max[index] - min[index];
 
-                return length > 0 ? (byte) ((value[index] - min[index]) / length * 255) : (byte) min[index];
+                return length > 0 ? (byte) ((value[index] - min[index]) / length * byte.MaxValue) : (byte) min[index];
             }
 
             bool Validate(Triangle<MorphedVertex> triangle) => triangle.Points
@@ -152,6 +152,8 @@ namespace AlleyCat.Mesh
             }
 
             Logger.LogDebug($"Processing {data.Count / 3} triangles.");
+
+            image.Fill(ToColor(Vector3.Zero));
 
             data
                 .Triangles()
