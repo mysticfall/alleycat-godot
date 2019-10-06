@@ -41,7 +41,7 @@ namespace AlleyCat.Mesh
 
         public Vector3 GetOffset(Vector2 uv)
         {
-            var index = (int) (Width * uv.y + uv.x);
+            var index = Width * (int) (Height * uv.y) + (int) (Width * uv.x);
 
             if (Data.Count <= index)
             {
