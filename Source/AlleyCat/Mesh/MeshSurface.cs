@@ -16,7 +16,7 @@ namespace AlleyCat.Mesh
 
         public PrimitiveType PrimitiveType { get; }
 
-        public IEnumerable<IMeshData<MorphedVertex>> BlendShapes { get; }
+        public IEnumerable<IMeshData<MorphableVertex>> BlendShapes { get; }
 
         public BlendShapeMode BlendShapeMode { get; }
 
@@ -26,7 +26,7 @@ namespace AlleyCat.Mesh
             string key,
             PrimitiveType primitiveType,
             IMeshData<Vertex> data,
-            IEnumerable<IMeshData<MorphedVertex>> blendShapes,
+            IEnumerable<IMeshData<MorphableVertex>> blendShapes,
             BlendShapeMode blendShapeMode,
             Option<Material> material)
         {

@@ -51,7 +51,7 @@ namespace AlleyCat.Mesh
         {
         }
 
-        public void Write(IMeshData<MorphedVertex> data, string name, DirectoryInfo directory)
+        public void Write(IMeshData<MorphableVertex> data, string name, DirectoryInfo directory)
         {
             Ensure.That(data, nameof(data)).IsNotNull();
             Ensure.That(name, nameof(name)).IsNotNull();
@@ -78,7 +78,7 @@ namespace AlleyCat.Mesh
 
         protected TextureMetadata Generate(
             FileInfo file,
-            IMeshData<MorphedVertex> data,
+            IMeshData<MorphableVertex> data,
             Func<IVertex, Vector3> extractor)
         {
             Logger.LogDebug("Generating blend map: '{}'.", file.Path);
@@ -100,7 +100,7 @@ namespace AlleyCat.Mesh
 
         protected void Draw(
             IImageProcessingContext image,
-            IMeshData<MorphedVertex> data,
+            IMeshData<MorphableVertex> data,
             Func<IVertex, Vector3> extractor,
             Vector3 min,
             Vector3 max)
@@ -121,12 +121,12 @@ namespace AlleyCat.Mesh
                 return length > 0 ? (byte) ((value[index] - min[index]) / length * byte.MaxValue) : (byte) min[index];
             }
 
-            bool Validate(Triangle<MorphedVertex> triangle) => triangle.Points
+            bool Validate(Triangle<MorphableVertex> triangle) => triangle.Points
                 .Map(p => extractor(p) - extractor(p.Basis))
                 .Map(v => v.Length())
                 .ForAll(v => v >= Tolerance);
 
-            (PointF[] path, Color[] colors) CalculatePath(Arr<MorphedVertex> points)
+            (PointF[] path, Color[] colors) CalculatePath(Arr<MorphableVertex> points)
             {
                 var path = points
                     .Bind(p => p.UV())
@@ -169,7 +169,7 @@ namespace AlleyCat.Mesh
                 });
         }
 
-        protected (Vector3, Vector3) DetermineRange(IMeshData<MorphedVertex> data, Func<IVertex, Vector3> extractor)
+        protected (Vector3, Vector3) DetermineRange(IMeshData<MorphableVertex> data, Func<IVertex, Vector3> extractor)
         {
             Vector3 Agg(Func<float, float, float> agg, Vector3 v1, Vector3 v2) =>
                 new Vector3(agg(v1.x, v2.x), agg(v1.y, v2.y), agg(v1.z, v2.z));

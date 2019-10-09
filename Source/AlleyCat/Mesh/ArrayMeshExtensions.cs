@@ -43,7 +43,7 @@ namespace AlleyCat.Mesh
 
             var newIndex = target.GetSurfaceCount();
 
-            Array CopyBlendShape(IMeshData<MorphedVertex> source)
+            Array CopyBlendShape(IMeshData<MorphableVertex> source)
             {
                 var shape = new Array();
 

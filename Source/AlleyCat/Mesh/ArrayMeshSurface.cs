@@ -35,7 +35,7 @@ namespace AlleyCat.Mesh
 
         public PrimitiveType PrimitiveType { get; }
 
-        public IEnumerable<IMeshData<MorphedVertex>> BlendShapes
+        public IEnumerable<IMeshData<MorphableVertex>> BlendShapes
         {
             get
             {

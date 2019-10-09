@@ -365,7 +365,7 @@
     <Compile Include="Source\AlleyCat\Mesh\SimpleMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\ArrayMeshExtensions.cs" />
     <Compile Include="Source\AlleyCat\Mesh\IFace.cs" />
-    <Compile Include="Source\AlleyCat\Mesh\MorphedVertex .cs" />
+    <Compile Include="Source\AlleyCat\Mesh\MorphableVertex .cs" />
     <Compile Include="Source\AlleyCat\Mesh\PairedMeshData.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Quad.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Triangle.cs" />

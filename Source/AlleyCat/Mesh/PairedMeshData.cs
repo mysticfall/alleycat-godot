@@ -3,7 +3,7 @@ using EnsureThat;
 
 namespace AlleyCat.Mesh
 {
-    public class PairedMeshData : ArrayMeshData<MorphedVertex>
+    public class PairedMeshData : ArrayMeshData<MorphableVertex>
     {
         public IMeshData Base { get; }
 
@@ -15,12 +15,12 @@ namespace AlleyCat.Mesh
             Base = basis;
         }
 
-        protected override MorphedVertex CreateVertex(int index) => new MorphedVertex(this, Base, index);
+        protected override MorphableVertex CreateVertex(int index) => new MorphableVertex(this, Base, index);
     }
 
     public static class PairedMeshDataExtensions
     {
-        public static IMeshData<MorphedVertex> Join(this IMeshData basis, SimpleMeshData shape) =>
+        public static IMeshData<MorphableVertex> Join(this IMeshData basis, SimpleMeshData shape) =>
             new PairedMeshData(shape, basis);
     }
 }

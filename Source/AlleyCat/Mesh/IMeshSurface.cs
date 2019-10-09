@@ -13,7 +13,7 @@ namespace AlleyCat.Mesh
 
         PrimitiveType PrimitiveType { get; }
 
-        IEnumerable<IMeshData<MorphedVertex>> BlendShapes { get; }
+        IEnumerable<IMeshData<MorphableVertex>> BlendShapes { get; }
 
         BlendShapeMode BlendShapeMode { get; }
 

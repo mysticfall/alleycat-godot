@@ -7,7 +7,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Mesh
 {
-    public class BlendMapMeshData : AbstractMeshData<MorphedVertex>
+    public class BlendMapMeshData : AbstractMeshData<MorphableVertex>
     {
         public IMeshData Base { get; }
 
@@ -46,7 +46,7 @@ namespace AlleyCat.Mesh
             _normals = new VertexList(blendMap.Normal, basis.Normals, basis.UV);
         }
 
-        protected override MorphedVertex CreateVertex(int index) => new MorphedVertex(this, Base, index);
+        protected override MorphableVertex CreateVertex(int index) => new MorphableVertex(this, Base, index);
 
         internal class VertexList : IReadOnlyList<Vector3>
         {

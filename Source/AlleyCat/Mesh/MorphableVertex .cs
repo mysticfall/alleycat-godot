@@ -1,6 +1,6 @@
 namespace AlleyCat.Mesh
 {
-    public struct MorphedVertex : IVertex
+    public struct MorphableVertex : IVertex
     {
         public IMeshData Source { get; }
 
@@ -8,7 +8,7 @@ namespace AlleyCat.Mesh
 
         public int Index { get; }
 
-        public MorphedVertex(IMeshData source, IMeshData basis, int index)
+        public MorphableVertex(IMeshData source, IMeshData basis, int index)
         {
             Source = source;
             Basis = new Vertex(basis, index);
