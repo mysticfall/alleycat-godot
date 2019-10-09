@@ -1,26 +1,28 @@
 using AlleyCat.Mesh.Generic;
 using EnsureThat;
+using Godot;
 
 namespace AlleyCat.Mesh
 {
-    public class PairedMeshData : ArrayMeshData<MorphableVertex>
+    public class PairedMeshData : MorphableMeshData
     {
-        public IMeshData Base { get; }
+        public IMeshData Data { get; }
 
-        public PairedMeshData(SimpleMeshData source, IMeshData basis) : base(source.Key, source.Source, source.FormatMask)
+        public PairedMeshData(string key, IMeshData data, IMeshData basis) : base(key, basis)
         {
-            Ensure.That(source, nameof(source)).IsNotNull();
-            Ensure.That(basis, nameof(basis)).IsNotNull();
+            Ensure.That(data, nameof(data)).IsNotNull();
 
-            Base = basis;
+            Data = data;
         }
 
-        protected override MorphableVertex CreateVertex(int index) => new MorphableVertex(this, Base, index);
+        protected override Vector3 ReadVertex(int index) => Data.Vertices[index];
+
+        protected override Vector3 ReadNormal(int index) => Data.Normals[index];
     }
 
     public static class PairedMeshDataExtensions
     {
-        public static IMeshData<MorphableVertex> Join(this IMeshData basis, SimpleMeshData shape) =>
-            new PairedMeshData(shape, basis);
+        public static IMeshData<MorphableVertex> Join(this IMeshData basis, string key, IMeshData shape) =>
+            new PairedMeshData(key, shape, basis);
     }
 }
