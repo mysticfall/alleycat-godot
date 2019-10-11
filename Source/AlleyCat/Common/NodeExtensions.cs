@@ -110,6 +110,13 @@ namespace AlleyCat.Common
             return Optional(node.GetParent()).Bind(OfType<T>);
         }
 
+        public static void RemoveFromParent(this Node node)
+        {
+            Ensure.That(node, nameof(node)).IsNotNull();
+
+            Optional(node.GetParent()).Iter(p => p.RemoveChild(node));
+        }
+
         public static IEnumerable<Node> GetAncestors(this Node node)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
