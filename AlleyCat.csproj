@@ -371,7 +371,6 @@
     <Compile Include="Source\AlleyCat\Mesh\Quad.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Triangle.cs" />
     <Compile Include="Source\AlleyCat\Mesh\Vertex.cs" />
-    <Compile Include="Source\AlleyCat\Morph\BlendMap\BlendMapTest.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorph.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinition.cs" />
     <Compile Include="Source\AlleyCat\Morph\BlendShapeMorphDefinitionFactory.cs" />
