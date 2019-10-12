@@ -115,6 +115,7 @@
     <Compile Include="Source\AlleyCat\Animation\SeekableAnimator.cs" />
     <Compile Include="Source\AlleyCat\Animation\IKChain.cs" />
     <Compile Include="Source\AlleyCat\Animation\IRigged.cs" />
+    <Compile Include="Source\AlleyCat\Animation\Bone.cs" />
     <Compile Include="Source\AlleyCat\Animation\TimeScale.cs" />
     <Compile Include="Source\AlleyCat\Animation\Trigger.cs" />
     <Compile Include="Source\AlleyCat\Attribute\AccumulateAttribute.cs" />
