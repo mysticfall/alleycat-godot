@@ -1,15 +1,11 @@
 using System;
-using EnsureThat;
+using AlleyCat.Common;
+using AlleyCat.IO;
 using Godot;
-using LanguageExt;
-using Microsoft.Extensions.FileProviders;
-using SixLabors.ImageSharp.Advanced;
-using SixLabors.ImageSharp.PixelFormats;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace AlleyCat.Mesh
 {
-    public class BlendMap
+    public class BlendMap : IDisposable
     {
         public int Width { get; }
 
@@ -19,40 +15,33 @@ namespace AlleyCat.Mesh
 
         public Vector3 Max { get; }
 
-        protected Arr<Rgba32> Data { get; }
+        protected Image Image { get; }
 
-        public BlendMap(IFileInfo file, Vector3 min, Vector3 max)
+        public BlendMap(FileInfo file, Vector3 min, Vector3 max)
         {
-            Ensure.That(file, nameof(file)).IsNotNull();
-
             Min = min;
             Max = max;
 
-            using (var stream = file.CreateReadStream())
-            {
-                var image = Image.Load<Rgba32>(stream);
+            Image = new Image();
 
-                Width = image.Width;
-                Height = image.Height;
+            Image.Load(file.Path).ThrowOnError();
+            Image.Lock();
 
-                Data = image.GetPixelSpan().ToArray();
-            }
+            Width = Image.GetWidth();
+            Height = Image.GetHeight();
         }
 
         public Vector3 GetOffset(Vector2 uv)
         {
-            var index = Width * (int) (Height * uv.y) + (int) (Width * uv.x);
+            var x = (int) (uv.x * Width);
+            var y = (int) (uv.y * Height);
 
-            if (Data.Count <= index)
-            {
-                throw new ArgumentOutOfRangeException(nameof(uv),
-                    $"The specified coordinate ({uv.x}, {uv.y}) lies outside the image area ({Width} x {Height}).");
-            }
+            var color = Image.GetPixel(x, y);
 
-            var color = Data[index].ToVector4();
-
-            return new Vector3(Convert(color.X, 0), Convert(color.Y, 1), Convert(color.Z, 2));
+            return new Vector3(Convert(color.r, 0), Convert(color.g, 1), Convert(color.b, 2));
         }
+
+        public void Dispose() => Image.Dispose();
 
         private float Convert(float value, int index) => value * (Max[index] - Min[index]) + Min[index];
     }

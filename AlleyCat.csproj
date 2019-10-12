@@ -57,14 +57,6 @@
     <Reference Include="System.Reactive.Core" />
     <Reference Include="System.Reactive.Interfaces" />
     <Reference Include="System.Reactive.Linq" />
-    <!-- 
-      Assemblies related to ImageSharp need to be built from the source and installed manually, until
-      a new version (beta 8) will be published to NuGet. 
-    --> 
-    <Reference Include="SixLabors.ImageSharp" />
-    <Reference Include="SixLabors.Core" />
-    <Reference Include="SixLabors.Shapes" />
-    <Reference Include="SixLabors.ImageSharp.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\AlleyCat\Action\Action.cs" />

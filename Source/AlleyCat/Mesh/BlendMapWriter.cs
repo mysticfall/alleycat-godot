@@ -1,19 +1,19 @@
 using System;
 using System.Linq;
+using System.Reactive.Linq;
+using AlleyCat.Common;
+using AlleyCat.Event;
 using AlleyCat.IO;
+using AlleyCat.Logging;
 using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using static Godot.File;
-using Color = SixLabors.ImageSharp.Color;
+using static Godot.Viewport;
 
 namespace AlleyCat.Mesh
 {
@@ -37,18 +37,23 @@ namespace AlleyCat.Mesh
             set => _tolerance = Mathf.Max(value, 0f);
         }
 
+        protected Node Context { get; }
+
         private int _size = 512;
 
         private float _padding = 2f;
 
         private float _tolerance = 0.001f;
 
-        public BlendMapWriter()
+        public BlendMapWriter(Node context) : this(context, new NullLoggerFactory())
         {
         }
 
-        public BlendMapWriter(ILoggerFactory loggerFactory) : base(loggerFactory)
+        public BlendMapWriter(Node context, ILoggerFactory loggerFactory) : base(loggerFactory)
         {
+            Ensure.That(context, nameof(context)).IsNotNull();
+
+            Context = context;
         }
 
         public void Write(IMeshData<MorphableVertex> data, string name, DirectoryInfo directory)
@@ -85,21 +90,39 @@ namespace AlleyCat.Mesh
 
             var (min, max) = DetermineRange(data, extractor);
 
-            using (var texture = new Image<Rgba32>(Size, Size))
+            var canvas = new Canvas(ctx => { Draw(ctx, data, extractor, min, max); })
             {
-                texture.Mutate(ctx => Draw(ctx, data, extractor, min, max));
+                RectSize = new Vector2(Size, Size),
+                AnchorRight = 1,
+                AnchorBottom = 1
+            };
 
-                using (var stream = file.CreateWriteStream())
-                {
-                    texture.Save(stream, new PngEncoder());
-                }
-            }
+            var viewport = new Viewport
+            {
+                Size = new Vector2(Size, Size),
+                Usage = UsageEnum.Usage2d,
+                Disable3d = true,
+                Hdr = false,
+                GuiDisableInput = true,
+                RenderTargetUpdateMode = UpdateMode.Once,
+                RenderTargetVFlip = true
+            };
+
+            viewport.AddChild(canvas);
+            Context.AddChild(viewport);
+
+            canvas.OnProcess()
+                .Where(_ => canvas.Finished)
+                .Skip(1)
+                .Do(_ => viewport.GetTexture().GetData().SavePng(file.Path).ThrowOnError())
+                .Do(_ => viewport.QueueFree())
+                .Subscribe(this);
 
             return new TextureMetadata(file.Name, min, max);
         }
 
         protected void Draw(
-            IImageProcessingContext image,
+            CanvasItem canvas,
             IMeshData<MorphableVertex> data,
             Func<IVertex, Vector3> extractor,
             Vector3 min,
@@ -111,14 +134,14 @@ namespace AlleyCat.Mesh
                 var green = ToColorComponent(value, 1);
                 var blue = ToColorComponent(value, 2);
 
-                return Color.FromRgb(red, green, blue);
+                return new Color(red, green, blue);
             }
 
-            byte ToColorComponent(Vector3 value, int index)
+            float ToColorComponent(Vector3 value, int index)
             {
                 var length = max[index] - min[index];
 
-                return length > 0 ? (byte) ((value[index] - min[index]) / length * byte.MaxValue) : (byte) min[index];
+                return length > 0 ? (value[index] - min[index]) / length : min[index];
             }
 
             bool Validate(Triangle<MorphableVertex> triangle) => triangle.Points
@@ -126,22 +149,22 @@ namespace AlleyCat.Mesh
                 .Map(v => v.Length())
                 .ForAll(v => v >= Tolerance);
 
-            (PointF[] path, Color[] colors) CalculatePath(Arr<MorphableVertex> points)
+            (Vector2[] path, Color[] colors) CalculatePath(Arr<MorphableVertex> points)
             {
                 var path = points
                     .Bind(p => p.UV())
                     .Map(p => p * Size)
-                    .Map(p => new PointF(p.x, p.y))
+                    .Map(p => new Vector2(p.x, p.y))
                     .ToArr();
 
                 var center = path.Aggregate((p1, p2) => p1 + p2) / path.Count;
 
-                PointF Pad(PointF point)
+                Vector2 Pad(Vector2 point)
                 {
-                    var (x, y) = point - center;
-                    var direction = new Vector2(x, y).Normalized();
+                    var p = point - center;
+                    var direction = new Vector2(p.x, p.y).Normalized();
 
-                    return point + new PointF(direction.x, direction.y) * Padding;
+                    return point + new Vector2(direction.x, direction.y) * Padding;
                 }
 
                 var colors = points
@@ -153,20 +176,14 @@ namespace AlleyCat.Mesh
 
             Logger.LogDebug($"Processing {data.Count / 3} triangles.");
 
-            image.Fill(ToColor(Vector3.Zero));
+            canvas.DrawRect(new Rect2(0, 0, Size, Size), ToColor(Vector3.Zero));
 
             data
                 .Triangles()
                 .Filter(Validate)
                 .Map(t => t.Points)
                 .Map(CalculatePath)
-                .Iter(v =>
-                {
-                    var (path, colors) = v;
-                    var brush = new PathGradientBrush(path, colors);
-
-                    image.FillPolygon(brush, path);
-                });
+                .Iter(v => canvas.DrawPolygon(v.path, v.colors));
         }
 
         protected (Vector3, Vector3) DetermineRange(IMeshData<MorphableVertex> data, Func<IVertex, Vector3> extractor)
@@ -180,6 +197,29 @@ namespace AlleyCat.Mesh
             (Vector3, Vector3) MinMax((Vector3, Vector3) agg, Vector3 v) => (Min(v, agg.Item1), Max(v, agg.Item2));
 
             return data.Map(v => extractor(v) - extractor(v.Basis)).Fold((Vector3.Zero, Vector3.Zero), MinMax);
+        }
+
+        internal class Canvas : ColorRect
+        {
+            private readonly Action<CanvasItem> _callback;
+
+            public bool Finished { get; private set; }
+
+            public Canvas(Action<CanvasItem> callback)
+            {
+                _callback = callback;
+            }
+
+            public override void _Draw()
+            {
+                base._Draw();
+
+                if (Finished) return;
+
+                Finished = true;
+
+                _callback(this);
+            }
         }
     }
 }
