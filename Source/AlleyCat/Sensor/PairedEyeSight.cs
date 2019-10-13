@@ -228,7 +228,7 @@ namespace AlleyCat.Sensor
             {
                 var global = Skeleton.GetBoneGlobalPose(i);
 
-                Skeleton.SetBoneGlobalPose(i, new Transform(rotation * global.basis, global.origin));
+                Skeleton.SetBoneGlobalPoseOverride(i, new Transform(rotation * global.basis, global.origin), 1f);
             });
         }
 
