@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using DirectoryInfo = AlleyCat.IO.DirectoryInfo;
@@ -39,7 +40,7 @@ namespace AlleyCat.Mesh
 
                 Logger.LogDebug("Read vertex normal map: {}x{}.", normal.Width, normal.Height);
 
-                return new BlendMapSet(metadata.Name, position, normal);
+                return new BlendMapSet(metadata.Name, position, normal, metadata.Seams.ToHashSet());
             }
         }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AlleyCat.Logging;
 using EnsureThat;
 using Godot;
@@ -58,12 +59,15 @@ namespace AlleyCat.Mesh
 
             public TextureMetadata Normal { get; }
 
+            public IEnumerable<Vector3> Seams { get; }
+
             [JsonConstructor]
-            public Metadata(string name, TextureMetadata position, TextureMetadata normal)
+            public Metadata(string name, TextureMetadata position, TextureMetadata normal, IEnumerable<Vector3> seams)
             {
                 Name = name;
                 Position = position;
                 Normal = normal;
+                Seams = seams;
             }
         }
 

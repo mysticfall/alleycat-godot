@@ -27,13 +27,18 @@ namespace AlleyCat.Mesh
 
         protected override Vector3 ReadVertex(int index)
         {
-            var key = Base.Vertices[index];
+            var basis = Base.Vertices[index];
 
-            return _cache.TryGetValue(key).Match(identity, () =>
+            if (!BlendMap.Seams.Contains(basis))
             {
-                var value = Base.Vertices[index] + BlendMap.Position.GetOffset(UV[index]);
+                return basis + BlendMap.Position.GetOffset(UV[index]);
+            }
 
-                _cache.Add(key, value);
+            return _cache.TryGetValue(basis).Match(identity, () =>
+            {
+                var value = basis + BlendMap.Position.GetOffset(UV[index]);
+
+                _cache.Add(basis, value);
 
                 return value;
             });

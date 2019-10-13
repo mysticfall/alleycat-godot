@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Common;
@@ -9,6 +10,7 @@ using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
 using LanguageExt;
+using static LanguageExt.Prelude;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
@@ -65,6 +67,7 @@ namespace AlleyCat.Mesh
 
             var position = Generate(directory.GetFile($"{name}.png"), data, v => v.Position());
             var normal = Generate(directory.GetFile($"{name}.normal.png"), data, v => v.Normal());
+            var seams = FindSeams(data);
 
             var manifest = directory.GetFile($"{name}.json");
 
@@ -72,7 +75,7 @@ namespace AlleyCat.Mesh
 
             using (var file = new File())
             {
-                var metadata = new Metadata(data.Key, position, normal);
+                var metadata = new Metadata(data.Key, position, normal, seams);
                 var json = JsonConvert.SerializeObject(metadata, SerializerSettings);
 
                 file.Open(manifest.Path, ModeFlags.Write);
@@ -186,7 +189,24 @@ namespace AlleyCat.Mesh
                 .Iter(v => canvas.DrawPolygon(v.path, v.colors));
         }
 
-        protected (Vector3, Vector3) DetermineRange(IMeshData<MorphableVertex> data, Func<IVertex, Vector3> extractor)
+        protected IEnumerable<Vector3> FindSeams(IEnumerable<MorphableVertex> data)
+        {
+            return data
+                .Map(v => v.Basis)
+                .Fold(new Dictionary<Vector3, Set<int>>(), (agg, pos) =>
+                {
+                    var key = pos.Position();
+                    var uv = pos.UV().Map(v => v.GetHashCode());
+
+                    agg[key] = agg.TryGetValue(key, out var uvs) ? uvs.TryAddRange(uv) : toSet(uv);
+
+                    return agg;
+                })
+                .Filter(m => m.Value.Count > 1)
+                .Map(m => m.Key);
+        }
+
+        protected (Vector3, Vector3) DetermineRange(IEnumerable<MorphableVertex> data, Func<IVertex, Vector3> extractor)
         {
             Vector3 Agg(Func<float, float, float> agg, Vector3 v1, Vector3 v2) =>
                 new Vector3(agg(v1.x, v2.x), agg(v1.y, v2.y), agg(v1.z, v2.z));
