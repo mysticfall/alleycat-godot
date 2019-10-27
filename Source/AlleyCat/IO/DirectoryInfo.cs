@@ -42,6 +42,8 @@ namespace AlleyCat.IO
             Name = index < 0 ? "" : Path.Substring(index + 1);
         }
 
+        public IDirectoryContents Contents => new FileProvider().GetDirectoryContents(Path);
+
         public FileInfo GetFile(string name) => new FileInfo(string.Join(FileInfo.Separator, Path, name));
 
         public Stream CreateReadStream()
