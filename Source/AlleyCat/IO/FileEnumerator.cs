@@ -44,9 +44,10 @@ namespace AlleyCat.IO
             {
                 _directory.Open(path).ThrowOnError(e => $"Failed to open directory: '{path}' ({e}).");
             }
-            finally
+            catch
             {
                 _directory.Dispose();
+                throw;
             }
 
             _directory.ListDirBegin(skipNavigational, skipHidden);
