@@ -115,12 +115,10 @@ namespace AlleyCat.UI.Inventory
 
             Tree.SetColumnTitlesVisible(true);
 
-            void RemoveAllNodes() => Tree.GetRoot().Children().Iter(c => c.Free());
-
             var onDispose = Disposed.Where(identity);
 
             OnItemsChange
-                .Do(_ => RemoveAllNodes())
+                .Do(_ => Tree.RemoveAllNodes())
                 .CombineLatest(OnEquipmentContainerChange, (list, parent) => (list, parent))
                 .TakeUntil(onDispose)
                 .Subscribe(t => t.list.ToList().ForEach(item => CreateNode(item, t.parent)), this);
@@ -130,7 +128,7 @@ namespace AlleyCat.UI.Inventory
                 .Subscribe(DisplayItem, this);
         }
 
-        protected TreeItem CreateNode(IEquipment item, IEquipmentContainer parent)
+        protected void CreateNode(IEquipment item, IEquipmentContainer parent)
         {
             Ensure.That(item, nameof(item)).IsNotNull();
             Ensure.That(parent, nameof(parent)).IsNotNull();
@@ -150,8 +148,6 @@ namespace AlleyCat.UI.Inventory
 
             node.SetCellMode(3, TreeItem.TreeCellMode.String);
             node.SetText(3, $"{item.Node.Weight:F1}kg");
-
-            return node;
         }
 
         protected virtual void DisplayItem(Option<IEquipment> item)
