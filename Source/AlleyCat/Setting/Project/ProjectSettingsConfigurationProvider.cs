@@ -63,7 +63,7 @@ namespace AlleyCat.Setting.Project
             if (values.Length < 2 || values[0] != ProjectSettingsProvider.Prefix) return key;
 
             string ToSnakeCase(string v) => string
-                .Concat(v.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString()))
+                .Concat(v.Select((x, i) => i > 0 && char.IsUpper(x) ? $"_{x}" : x.ToString()))
                 .ToLower();
 
             string Replace(string v) =>
