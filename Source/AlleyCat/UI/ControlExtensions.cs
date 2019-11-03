@@ -38,5 +38,15 @@ namespace AlleyCat.UI
         {
             return control.FromSignal("mouse_exited").AsUnitObservable();
         }
+
+        public static IObservable<Unit> OnFocusEnter(this Godot.Control control)
+        {
+            return control.FromSignal("focus_entered").AsUnitObservable();
+        }
+
+        public static IObservable<Unit> OnFocusExit(this Godot.Control control)
+        {
+            return control.FromSignal("focus_exited").AsUnitObservable();
+        }
     }
 }
