@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using AlleyCat.Event;
 using EnsureThat;
@@ -14,7 +15,7 @@ namespace AlleyCat.UI
         {
             Ensure.That(tree, nameof(tree)).IsNotNull();
 
-            tree.GetRoot().Children().Iter(c => c.Free());
+            tree.GetRoot()?.Children().Reverse().Iter(c => c.Free());
         }
 
         public static IObservable<Option<TreeItem>> OnItemSelect(this Tree tree)
