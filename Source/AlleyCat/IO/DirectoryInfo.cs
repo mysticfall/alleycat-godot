@@ -19,7 +19,7 @@ namespace AlleyCat.IO
             {
                 using (var directory = new Directory())
                 {
-                    return directory.DirExists(Name);
+                    return directory.Open(Path) == Error.Ok;
                 }
             }
         }
