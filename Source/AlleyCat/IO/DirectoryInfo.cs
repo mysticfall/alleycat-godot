@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using AlleyCat.Common;
 using Godot;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
@@ -7,7 +8,7 @@ using Directory = Godot.Directory;
 
 namespace AlleyCat.IO
 {
-    public struct DirectoryInfo : IFileInfo
+    public struct DirectoryInfo : IFileInfo, IEquatable<DirectoryInfo>
     {
         public string Name { get; }
 
@@ -51,6 +52,31 @@ namespace AlleyCat.IO
             throw new InvalidOperationException($"The path represents  a directory: '{Path}'.");
         }
 
+        public void Create(bool recursive = true)
+        {
+            using (var directory = new Directory())
+            {
+                if (recursive)
+                {
+                    directory.MakeDir(Path).ThrowOnError();
+                }
+                else
+                {
+                    directory.MakeDirRecursive(Path).ThrowOnError();
+                }
+            }
+        }
+
         public override string ToString() => $"DirectoryInfo({Path})";
+
+        public bool Equals(DirectoryInfo other) => Path == other.Path;
+
+        public override bool Equals(object obj) => obj is DirectoryInfo other && Equals(other);
+
+        public override int GetHashCode() => Path != null ? Path.GetHashCode() : 0;
+
+        public static bool operator ==(DirectoryInfo left, DirectoryInfo right) => left.Equals(right);
+
+        public static bool operator !=(DirectoryInfo left, DirectoryInfo right) => !left.Equals(right);
     }
 }

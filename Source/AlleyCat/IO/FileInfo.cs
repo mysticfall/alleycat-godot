@@ -7,7 +7,7 @@ using File = Godot.File;
 
 namespace AlleyCat.IO
 {
-    public struct FileInfo : IWritableFileInfo
+    public struct FileInfo : IWritableFileInfo, IEquatable<FileInfo>
     {
         public const string Separator = "/";
 
@@ -83,5 +83,15 @@ namespace AlleyCat.IO
         public Stream CreateReadWriteStream() => FileStream.Open(Path, FileAccess.ReadWrite);
 
         public override string ToString() => $"FileInfo({Path})";
+
+        public bool Equals(FileInfo other) => Path == other.Path;
+
+        public override bool Equals(object obj) => obj is FileInfo other && Equals(other);
+
+        public override int GetHashCode() => Path != null ? Path.GetHashCode() : 0;
+
+        public static bool operator ==(FileInfo left, FileInfo right) => left.Equals(right);
+
+        public static bool operator !=(FileInfo left, FileInfo right) => !left.Equals(right);
     }
 }
