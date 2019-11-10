@@ -95,7 +95,7 @@ namespace AlleyCat.Event
                 return Disposable.Create(() =>
                 {
                     subscription.DisposeQuietly();
-                    tracker.Free();
+                    tracker.CallDeferred("free");
                 });
             });
         }
