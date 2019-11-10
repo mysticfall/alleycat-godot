@@ -65,6 +65,8 @@ namespace AlleyCat.Mesh
 
             Logger.LogInformation("Generating blend map '{}' under '{}'.", name, directory.Path);
 
+            if (!directory.Exists) directory.Create();
+
             var position = Generate(directory.GetFile($"{name}.png"), data, v => v.Position());
             var normal = Generate(directory.GetFile($"{name}.normal.png"), data, v => v.Normal());
             var seams = FindSeams(data);
