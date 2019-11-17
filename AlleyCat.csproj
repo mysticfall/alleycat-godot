@@ -464,6 +464,8 @@
     <Compile Include="Source\AlleyCat\UI\ActionLabelFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\FileDialogExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\PopupExtensions.cs" />
+    <Compile Include="Source\AlleyCat\UI\Tool\BlendMapGenerator.cs" />
+    <Compile Include="Source\AlleyCat\UI\Tool\BlendMapGeneratorFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\Widget\AttributeBar.cs" />
     <Compile Include="Source\AlleyCat\UI\Widget\AttributeBarFactory.cs" />
     <Compile Include="Source\AlleyCat\UI\Widget\AttributeWidgetFactory.cs" />

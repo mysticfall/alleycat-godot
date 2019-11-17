@@ -1,0 +1,258 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Data/Fonts/Large Title Text.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Source/AlleyCat/UI/Tool/BlendMapGeneratorFactory.cs" type="Script" id=2]
+
+[node name="BlendMapGenerator" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Context" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Container" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="Container"]
+margin_right = 1004.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 1 )
+text = "ui.BlendMapGenerator.title"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="Container"]
+margin_top = 42.0
+margin_right = 1004.0
+margin_bottom = 46.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputPanel" type="HBoxContainer" parent="Container"]
+margin_top = 56.0
+margin_right = 1004.0
+margin_bottom = 83.0
+custom_constants/separation = 10
+
+[node name="InputLabel" type="Label" parent="Container/InputPanel"]
+margin_top = 5.0
+margin_right = 234.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 130, 0 )
+text = "ui.BlendMapGenerator.directory.base"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Input" type="LineEdit" parent="Container/InputPanel"]
+margin_left = 244.0
+margin_right = 888.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+
+[node name="ChooseButton" type="Button" parent="Container/InputPanel"]
+margin_left = 898.0
+margin_right = 1004.0
+margin_bottom = 27.0
+text = "button.Choose"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OutputPanel" type="HBoxContainer" parent="Container"]
+margin_top = 93.0
+margin_right = 1004.0
+margin_bottom = 120.0
+custom_constants/separation = 10
+
+[node name="OutputLabel" type="Label" parent="Container/OutputPanel"]
+margin_top = 5.0
+margin_right = 246.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 130, 0 )
+text = "ui.BlendMapGenerator.directory.output"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Output" type="LineEdit" parent="Container/OutputPanel"]
+margin_left = 256.0
+margin_right = 888.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+
+[node name="ChooseButton" type="Button" parent="Container/OutputPanel"]
+margin_left = 898.0
+margin_right = 1004.0
+margin_bottom = 27.0
+text = "button.Choose"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ListPanel" type="HSplitContainer" parent="Container"]
+margin_top = 130.0
+margin_right = 1004.0
+margin_bottom = 499.0
+size_flags_vertical = 3
+
+[node name="Sources" type="VBoxContainer" parent="Container/ListPanel"]
+margin_right = 245.0
+margin_bottom = 369.0
+size_flags_horizontal = 3
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="Container/ListPanel/Sources"]
+margin_right = 245.0
+margin_bottom = 17.0
+text = "ui.BlendMapGenerator.meshes"
+valign = 1
+
+[node name="List" type="Tree" parent="Container/ListPanel/Sources"]
+margin_top = 27.0
+margin_right = 245.0
+margin_bottom = 369.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+hide_folding = true
+hide_root = true
+select_mode = 1
+
+[node name="Morphs" type="VBoxContainer" parent="Container/ListPanel"]
+margin_left = 257.0
+margin_right = 1004.0
+margin_bottom = 369.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="Container/ListPanel/Morphs"]
+margin_right = 747.0
+margin_bottom = 17.0
+text = "ui.BlendMapGenerator.morphs"
+valign = 1
+
+[node name="List" type="Tree" parent="Container/ListPanel/Morphs"]
+margin_top = 27.0
+margin_right = 747.0
+margin_bottom = 369.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 4
+hide_folding = true
+hide_root = true
+select_mode = 1
+
+[node name="ProgressPanel" type="HBoxContainer" parent="Container"]
+margin_top = 509.0
+margin_right = 1004.0
+margin_bottom = 526.0
+custom_constants/separation = 10
+
+[node name="ProgressLabel" type="Label" parent="Container/ProgressPanel"]
+margin_right = 100.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 100, 0 )
+text = "label.Progress"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="Container/ProgressPanel"]
+margin_left = 110.0
+margin_right = 1004.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator2" type="HSeparator" parent="Container"]
+margin_top = 536.0
+margin_right = 1004.0
+margin_bottom = 540.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonPanel" type="HBoxContainer" parent="Container"]
+margin_top = 550.0
+margin_right = 1004.0
+margin_bottom = 580.0
+rect_min_size = Vector2( 0, 30 )
+size_flags_vertical = 0
+custom_constants/separation = 10
+
+[node name="InfoLabel" type="Label" parent="Container/ButtonPanel"]
+margin_top = 6.0
+margin_right = 211.0
+margin_bottom = 23.0
+text = "ui.BlendMapGenerator.instruction"
+
+[node name="StartButton" type="Button" parent="Container/ButtonPanel"]
+margin_left = 813.0
+margin_right = 901.0
+margin_bottom = 30.0
+size_flags_horizontal = 10
+disabled = true
+text = "button.Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CloseButton" type="Button" parent="Container/ButtonPanel"]
+margin_left = 911.0
+margin_right = 1004.0
+margin_bottom = 30.0
+text = "button.Close"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -262.5
+margin_top = -172.5
+margin_right = 262.5
+margin_bottom = 172.5
+popup_exclusive = true
+window_title = "파일로 저장하기"
+resizable = true
+
+[node name="MessageDialog" type="AcceptDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -146.0
+margin_top = -61.0
+margin_right = 146.0
+margin_bottom = 61.0
+popup_exclusive = true
+window_title = "경고!"
+dialog_autowrap = true
