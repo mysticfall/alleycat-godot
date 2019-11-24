@@ -127,7 +127,7 @@ namespace AlleyCat.UI.Menu
             if (BackAction.IsSome)
             {
                 Node.OnUnhandledInput()
-                    .Where(e => BackAction.Exists(e.IsActionPressed) && this.CanGoUp())
+                    .Where(e => BackAction.Exists(v => e.IsActionPressed(v)) && this.CanGoUp())
                     .TakeUntil(disposed)
                     .Do(_ => Node.GetTree().SetInputAsHandled())
                     .Subscribe(_ => this.GoUp(), this);
