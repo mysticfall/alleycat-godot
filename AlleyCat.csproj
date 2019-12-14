@@ -504,7 +504,7 @@
     <Compile Include="Source\AlleyCat\UI\RangeExtensions.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\MorphGroupPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\MorphListPanel.cs" />
-    <Compile Include="Source\AlleyCat\UI\Character\MorphPanel .cs" />
+    <Compile Include="Source\AlleyCat\UI\Character\MorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\Character\RangedMorphPanel.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\BasicConsoleCommands.cs" />
     <Compile Include="Source\AlleyCat\UI\Console\ClearCommand.cs" />
