@@ -3,7 +3,7 @@ using Godot;
 
 namespace AlleyCat.Control
 {
-    public abstract class InputFactory<TInput, TValue> : GameObjectFactory<TInput>
+    public abstract class InputFactory<TInput, TValue> : GameNodeFactory<TInput>
         where TInput : Input<TValue>
     {
         [Export]

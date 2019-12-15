@@ -5,7 +5,7 @@ using LanguageExt;
 
 namespace AlleyCat.UI.Character
 {
-    public interface IMorphPanelFactory : IGameObjectFactory
+    public interface IMorphPanelFactory : IGameNodeFactory
     {
         Option<IMorph> Morph { get; set; }
     }

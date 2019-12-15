@@ -14,7 +14,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
-    public class CharacterCreator : GameObject, ICharacterAware<IHumanoid>
+    public class CharacterCreator : GameNode, ICharacterAware<IHumanoid>
     {
         public Option<IHumanoid> Character
         {

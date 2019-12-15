@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Menu
 {
-    public abstract class PlayerMenuProvider : GameObject, IMenuModel
+    public abstract class PlayerMenuProvider : GameNode, IMenuModel
     {
         public string Key { get; }
 

@@ -8,7 +8,7 @@ using static Godot.Mathf;
 
 namespace AlleyCat.Motion
 {
-    public abstract class TurretLikeFactory<T> : GameObjectFactory<T> where T : TurretLike
+    public abstract class TurretLikeFactory<T> : GameNodeFactory<T> where T : TurretLike
     {
         [Export]
         public bool Active { get; set; } = true;

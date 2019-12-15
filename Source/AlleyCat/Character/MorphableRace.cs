@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using AlleyCat.Item;
 using AlleyCat.Morph;
 using LanguageExt;
-using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
@@ -14,8 +13,7 @@ namespace AlleyCat.Character
             string key,
             string displayName,
             IEnumerable<EquipmentSlot> equipmentSlots,
-            Map<Sex, IEnumerable<IMorphGroup>> morphGroups,
-            ILoggerFactory loggerFactory) : base(key, displayName, equipmentSlots, loggerFactory)
+            Map<Sex, IEnumerable<IMorphGroup>> morphGroups) : base(key, displayName, equipmentSlots)
         {
             MorphGroups = morphGroups;
         }

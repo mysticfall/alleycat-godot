@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Animation
 {
     [AutowireContext]
-    public abstract class BaseAnimationManagerFactory<T> : GameObjectFactory<T> where T : AnimationManager
+    public abstract class BaseAnimationManagerFactory<T> : GameNodeFactory<T> where T : AnimationManager
     {
         [Export]
         public bool Active { get; set; } = true;

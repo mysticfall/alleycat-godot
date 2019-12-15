@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AlleyCat.Common;
 using AlleyCat.Mesh;
 using EnsureThat;
 using Godot;
@@ -18,15 +17,14 @@ namespace AlleyCat.Morph
             IEnumerable<MaterialTarget> targets,
             Color defaultValue,
             bool useAlpha,
-            bool hidden,
-            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, useAlpha, hidden, loggerFactory)
+            bool hidden) : base(key, displayName, defaultValue, useAlpha, hidden)
         {
             Targets = targets?.Freeze();
 
             Ensure.Enumerable.HasItems(Targets, nameof(targets));
         }
 
-        public override IMorph CreateMorph(IMorphable morphable)
+        public override IMorph CreateMorph(IMorphable morphable, ILoggerFactory loggerFactory)
         {
             Ensure.That(morphable, nameof(morphable)).IsNotNull();
 
@@ -37,7 +35,7 @@ namespace AlleyCat.Morph
                     "The specified morphable does not implement IMeshObject interface.");
             }
 
-            return new MaterialColorMorph(meshObject, this, LoggerFactory);
+            return new MaterialColorMorph(meshObject, this, loggerFactory);
         }
     }
 }

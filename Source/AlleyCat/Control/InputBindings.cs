@@ -12,7 +12,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    public class InputBindings : GameObject, IInputBindings
+    public class InputBindings : GameNode, IInputBindings
     {
         public bool Active
         {

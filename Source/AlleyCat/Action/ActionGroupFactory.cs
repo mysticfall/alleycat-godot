@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Action
 {
     [AutowireContext]
-    public class ActionGroupFactory : GameObjectFactory<ActionGroup>
+    public class ActionGroupFactory : GameNodeFactory<ActionGroup>
     {
         [Export]
         public string Key { get; set; }

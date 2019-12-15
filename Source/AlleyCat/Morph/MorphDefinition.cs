@@ -1,10 +1,9 @@
-using AlleyCat.Game;
 using EnsureThat;
 using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Morph
 {
-    public abstract class MorphDefinition<T> : GameObject, IMorphDefinition
+    public abstract class MorphDefinition<T> : IMorphDefinition
     {
         public string Key { get; }
 
@@ -18,8 +17,7 @@ namespace AlleyCat.Morph
             string key,
             string displayName,
             T defaultValue,
-            bool hidden,
-            ILoggerFactory loggerFactory) : base(loggerFactory)
+            bool hidden)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();
@@ -30,6 +28,6 @@ namespace AlleyCat.Morph
             Hidden = hidden;
         }
 
-        public abstract IMorph CreateMorph(IMorphable morphable);
+        public abstract IMorph CreateMorph(IMorphable morphable, ILoggerFactory loggerFactory);
     }
 }

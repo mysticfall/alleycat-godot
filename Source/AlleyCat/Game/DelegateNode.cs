@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public abstract class DelegateObject<T> : GameObject, IDelegateObject<T> where T : Node
+    public abstract class DelegateNode<T> : GameNode, IDelegateNode<T> where T : Node
     {
         public T Node { get; }
 
-        protected DelegateObject(T node, ILoggerFactory loggerFactory) : base(loggerFactory)
+        protected DelegateNode(T node, ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             Ensure.That(node, nameof(node)).IsNotNull();
 

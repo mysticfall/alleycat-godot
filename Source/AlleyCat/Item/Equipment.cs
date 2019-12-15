@@ -15,7 +15,7 @@ using Object = Godot.Object;
 
 namespace AlleyCat.Item
 {
-    public class Equipment : DelegateObject<RigidBody>, IEquipment
+    public class Equipment : DelegateNode<RigidBody>, IEquipment
     {
         public string Key { get; }
 
@@ -119,7 +119,7 @@ namespace AlleyCat.Item
             _labelMarker = this.FindLabelMarker();
 
             var groups = morphGroups.Freeze();
-            var morphs = groups.Flatten().Map(d => d.CreateMorph(this)).Freeze();
+            var morphs = groups.Flatten().Map(d => d.CreateMorph(this, LoggerFactory)).Freeze();
 
             if (Logger.IsEnabled(LogLevel.Debug))
             {

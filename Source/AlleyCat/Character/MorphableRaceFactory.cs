@@ -1,28 +1,35 @@
-using System;
 using System.Collections.Generic;
-using AlleyCat.Autowire;
-using AlleyCat.Common;
+using System.Linq;
 using AlleyCat.Morph;
 using Godot;
 using LanguageExt;
-using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
     public class MorphableRaceFactory : BaseRaceFactory<MorphableRace>
     {
-        [Node("Morphs")]
-        protected virtual IEnumerable<Node> MorphRoots { get; set; }
+        [Export]
+        public IEnumerable<SexMorphMapping> MorphMappings { get; set; }
 
-        protected override Validation<string, MorphableRace> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory)
+        protected override Validation<string, MorphableRace> CreateResource(string key, string displayName)
         {
-            Option<Sex> ParseSex(string name) => Enum.TryParse(name, out Sex sex) ? Some(sex) : None;
+            var slots = Optional(EquipmentSlots)
+                .Flatten()
+                .Map(s => s.Service)
+                .Sequence();
 
-            var groups = MorphRoots.Bind(r => ParseSex(r.Name).Map(sex => (sex, r.GetChildComponents<IMorphGroup>())));
+            var groups = Optional(MorphMappings)
+                .Flatten()
+                .Map(m => (m.Sex, Groups: Optional(m.MorphGroups).Flatten().Map(f => f.Service).Sequence()))
+                .Map(t => t.Groups.Map(g => (t.Sex, Groups: g.OfType<IMorphGroup>())))
+                .Sequence()
+                .Map(toMap);
 
-            return new MorphableRace(key, displayName, EquipmentSlots, toMap(groups), loggerFactory);
+            return
+                from s in slots
+                from g in groups
+                select new MorphableRace(key, displayName, s, g);
         }
     }
 }

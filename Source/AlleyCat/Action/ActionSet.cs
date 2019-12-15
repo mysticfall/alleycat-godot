@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
 {
-    public class ActionSet : GameObject, IActionSet
+    public class ActionSet : GameNode, IActionSet
     {
         public IEnumerator<KeyValuePair<string, IAction>> GetEnumerator() =>
             _actions.Map(p => new KeyValuePair<string, IAction>(p.Item1, p.Item2)).GetEnumerator();

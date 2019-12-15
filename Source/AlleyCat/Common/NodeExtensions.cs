@@ -143,7 +143,7 @@ namespace AlleyCat.Common
             {
                 case T result:
                     return result;
-                case IGameObjectFactory factory:
+                case IGameNodeFactory factory:
                     return factory.Service.ToOption().OfType<T>().HeadOrNone();
                 default:
                     return node.FindDelegate().Bind(OfType<T>).HeadOrNone();
@@ -159,7 +159,7 @@ namespace AlleyCat.Common
             {
                 case Node result when type.IsInstanceOfType(result):
                     return result;
-                case IGameObjectFactory factory:
+                case IGameNodeFactory factory:
                     return factory.Service.ToOption().Filter(type.IsInstanceOfType).HeadOrNone();
                 default:
                     return node.FindDelegate().Bind(n => OfType(n, type)).HeadOrNone();

@@ -9,8 +9,8 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI
 {
-    public abstract class FullScreenModalPanelFactory<TObj, TDel> : DelegateObjectFactory<TObj, TDel>
-        where TObj : IDelegateObject<TDel>
+    public abstract class FullScreenModalPanelFactory<TObj, TDel> : DelegateNodeFactory<TObj, TDel>
+        where TObj : IDelegateNode<TDel>
         where TDel : Node
     {
         [Export]

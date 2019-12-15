@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Widget
 {
-    public abstract class AttributeWidgetFactory<T> : DelegateObjectFactory<T, Godot.Control> where T : AttributeWidget
+    public abstract class AttributeWidgetFactory<T> : DelegateNodeFactory<T, Godot.Control> where T : AttributeWidget
     {
         [Export]
         public string Attribute { get; set; }

@@ -26,8 +26,7 @@ namespace AlleyCat.Morph
             Vector3 modifier,
             Range<float> range,
             float defaultValue,
-            bool hidden,
-            ILoggerFactory loggerFactory) : base(key, displayName, range, defaultValue, hidden, loggerFactory)
+            bool hidden) : base(key, displayName, range, defaultValue, hidden)
         {
             Bones = bones?.Freeze();
 
@@ -37,10 +36,10 @@ namespace AlleyCat.Morph
             Modifier = modifier;
         }
 
-        public override IMorph CreateMorph(IMorphable morphable)
+        public override IMorph CreateMorph(IMorphable morphable, ILoggerFactory loggerFactory)
         {
             var morph = Optional(morphable)
-                .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this, LoggerFactory))
+                .OfType<IRigged>().Map(r => new BoneMorph(r.Skeleton, r.AnimationManager, this, loggerFactory))
                 .HeadOrNone();
 
             return morph.IfNone(() => throw new ArgumentOutOfRangeException(nameof(morphable),

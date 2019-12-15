@@ -12,7 +12,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Animation
 {
-    public class AnimationManager : GameObject, IAnimationManager
+    public class AnimationManager : GameNode, IAnimationManager
     {
         public bool Active
         {

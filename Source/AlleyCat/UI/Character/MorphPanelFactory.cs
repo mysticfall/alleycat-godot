@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI.Character
 {
-    public abstract class MorphPanelFactory<TC, TVal, TDef> : DelegateObjectFactory<TC, Godot.Control>,
+    public abstract class MorphPanelFactory<TC, TVal, TDef> : DelegateNodeFactory<TC, Godot.Control>,
         IMorphPanelFactory<TVal, TDef>
         where TC : MorphPanel
         where TDef : IMorphDefinition

@@ -12,7 +12,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.UI.Menu
 {
     [AutowireContext]
-    public class MenuFactory : DelegateObjectFactory<Menu, Godot.Control>
+    public class MenuFactory : DelegateNodeFactory<Menu, Godot.Control>
     {
         [Service(local: true)]
         public IEnumerable<IMenuModel> RootItems { get; set; }

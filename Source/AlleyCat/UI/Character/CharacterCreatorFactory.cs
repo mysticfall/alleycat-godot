@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.UI.Character
 {
     [AutowireContext]
-    public class CharacterCreatorFactory : GameObjectFactory<CharacterCreator>
+    public class CharacterCreatorFactory : GameNodeFactory<CharacterCreator>
     {
         [Service]
         public Option<IHumanoid> Character { get; set; }

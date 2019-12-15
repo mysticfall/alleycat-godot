@@ -8,7 +8,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Action
 {
     [AutowireContext]
-    public class ActionSetFactory : GameObjectFactory<ActionSet>
+    public class ActionSetFactory : GameNodeFactory<ActionSet>
     {
         [Service(local: true)]
         public IEnumerable<IActionGroup> Groups { get; set; } = Seq<IActionGroup>();

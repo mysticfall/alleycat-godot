@@ -12,7 +12,7 @@ using Enumerable = System.Linq.Enumerable;
 namespace AlleyCat.Item
 {
     [AutowireContext]
-    public class EquipmentFactory : DelegateObjectFactory<Equipment, RigidBody>
+    public class EquipmentFactory : DelegateNodeFactory<Equipment, RigidBody>
     {
         [Export]
         public string Key { get; set; }

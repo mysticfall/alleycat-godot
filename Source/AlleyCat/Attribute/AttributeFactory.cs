@@ -10,7 +10,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Attribute
 {
     [AutowireContext]
-    public abstract class AttributeFactory<T> : GameObjectFactory<T> where T : IAttribute
+    public abstract class AttributeFactory<T> : GameNodeFactory<T> where T : IAttribute
     {
         [Export]
         public string Key { get; set; }

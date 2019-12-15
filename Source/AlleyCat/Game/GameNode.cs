@@ -11,7 +11,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public abstract class GameObject : ReactiveObject, IGameObject, ILoggable
+    public abstract class GameNode : ReactiveObject, IGameNode, ILoggable
     {
         public ILogger Logger => _logger.Invoke();
 
@@ -23,7 +23,7 @@ namespace AlleyCat.Game
 
         private bool _valid;
 
-        protected GameObject(ILoggerFactory loggerFactory)
+        protected GameNode(ILoggerFactory loggerFactory)
         {
             Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 

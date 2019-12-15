@@ -1,12 +1,10 @@
 using AlleyCat.Condition.Generic;
-using AlleyCat.Game;
 using EnsureThat;
 using LanguageExt;
-using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
-    public abstract class Slot : GameObject, ISlot
+    public abstract class Slot : ISlot
     {
         public string Key { get; }
 
@@ -14,11 +12,7 @@ namespace AlleyCat.Item
 
         public Option<ICondition<ISlotItem>> AllowedCondition { get; }
 
-        protected Slot(
-            string key,
-            string displayName,
-            Option<ICondition<ISlotItem>> allowedCondition,
-            ILoggerFactory loggerFactory) : base(loggerFactory)
+        protected Slot(string key, string displayName, Option<ICondition<ISlotItem>> allowedCondition)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI.Menu
 {
-    public class MenuItemFactory : DelegateObjectFactory<MenuItem, Godot.Control>
+    public class MenuItemFactory : DelegateNodeFactory<MenuItem, Godot.Control>
     {
         [Ancestor]
         public Option<IMenu> Parent { get; set; }

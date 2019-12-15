@@ -22,7 +22,6 @@ config/icon="res://icon.png"
 [autoload]
 
 Bootstrap="*res://Data/Bootstrap.tscn"
-Data="*res://Data/Data.tscn"
 
 [editor_plugins]
 

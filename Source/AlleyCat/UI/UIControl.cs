@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.UI
 {
     [NonInjectable]
-    public abstract class UIControl : DelegateObject<Godot.Control>, IHideable
+    public abstract class UIControl : DelegateNode<Godot.Control>, IHideable
     {
         public virtual bool Visible
         {

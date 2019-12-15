@@ -8,7 +8,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Game
 {
     [AutowireContext]
-    public class SceneFactory : GameObjectFactory<Scene>
+    public class SceneFactory : GameNodeFactory<Scene>
     {
         [Export]
         public string Key { get; set; }

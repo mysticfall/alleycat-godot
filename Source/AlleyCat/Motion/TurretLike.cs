@@ -11,7 +11,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
-    public abstract class TurretLike : GameObject, ITurretLike
+    public abstract class TurretLike : GameNode, ITurretLike
     {
         public bool Active
         {

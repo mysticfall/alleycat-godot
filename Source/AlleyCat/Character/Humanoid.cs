@@ -45,7 +45,7 @@ namespace AlleyCat.Character
             loggerFactory)
         {
             var groups = Race.MorphGroups.Find(Sex).Flatten().Freeze();
-            var morphs = groups.Flatten().Map(d => d.CreateMorph(this)).Freeze();
+            var morphs = groups.Flatten().Map(d => d.CreateMorph(this, LoggerFactory)).Freeze();
 
             if (Logger.IsEnabled(LogLevel.Debug))
             {

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://Source/AlleyCat/Morph/BoneMorphDefinitionFactory.cs" type="Script" id=1]
+
+[resource]
+resource_name = "Head Size"
+script = ExtResource( 1 )
+DisplayName = "morph.Head.HeadSize"
+Default = 1.1
+Hidden = false
+MinValue = 0.94
+MaxValue = 1.4
+MorphType = 0
+Modifier = Vector3( 0, 0, 0 )
+Bones = [ "head" ]

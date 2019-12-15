@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public abstract class SlotConfigurationFactory<T> : GameObjectFactory<T> where T : SlotConfiguration
+    public abstract class SlotConfigurationFactory<T> : GameNodeFactory<T> where T : SlotConfiguration
     {
         [Export]
         public string Key { get; set; }

@@ -7,8 +7,8 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
 {
-    public abstract class DelegateObjectFactory<TObj, TDel> : GameObjectFactory<TObj>
-        where TObj : IDelegateObject<TDel>
+    public abstract class DelegateNodeFactory<TObj, TDel> : GameNodeFactory<TObj>
+        where TObj : IDelegateNode<TDel>
         where TDel : Node
     {
         private Option<Node> _parent;
@@ -30,7 +30,7 @@ namespace AlleyCat.Game
                     _parent = Some(parent);
                     break;
                 case NotificationUnparented:
-                    _parent.Iter(DelegateObjectExtensions.ClearDelegate);
+                    _parent.Iter(DelegateNodeExtensions.ClearDelegate);
                     _parent = None;
                     break;
             }

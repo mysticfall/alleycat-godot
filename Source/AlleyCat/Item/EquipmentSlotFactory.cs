@@ -1,6 +1,5 @@
 using Godot;
 using LanguageExt;
-using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
@@ -9,10 +8,9 @@ namespace AlleyCat.Item
         [Export]
         public EquipType EquipType { get; set; }
 
-        protected override Validation<string, EquipmentSlot> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory)
+        protected override Validation<string, EquipmentSlot> CreateResource(string key, string displayName)
         {
-            return new EquipmentSlot(key, displayName, EquipType, AllowedFor, loggerFactory);
+            return new EquipmentSlot(key, displayName, EquipType, AllowedFor);
         }
     }
 }

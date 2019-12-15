@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI.Character
 {
-    public class MorphListPanelFactory : DelegateObjectFactory<MorphListPanel, Godot.Control>
+    public class MorphListPanelFactory : DelegateNodeFactory<MorphListPanel, Godot.Control>
     {
         [Node]
         public Option<TabContainer> TabContainer { get; set; }

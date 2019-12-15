@@ -17,7 +17,7 @@ using static Godot.Mathf;
 
 namespace AlleyCat.Sensor
 {
-    public class PairedEyeSight : GameObject, IPairedEyeSight
+    public class PairedEyeSight : GameNode, IPairedEyeSight
     {
         public bool Active
         {

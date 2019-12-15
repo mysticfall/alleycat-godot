@@ -12,7 +12,7 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Control
 {
     [AutowireContext]
-    public class PlayerControlFactory : GameObjectFactory<PlayerControl>
+    public class PlayerControlFactory : GameNodeFactory<PlayerControl>
     {
         [Export]
         public bool Active { get; set; } = true;

@@ -13,7 +13,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Item
 {
-    public abstract class SlotContainer<TSlot, TItem> : GameObject, ISlotContainer<TSlot, TItem>
+    public abstract class SlotContainer<TSlot, TItem> : GameNode, ISlotContainer<TSlot, TItem>
         where TSlot : ISlot
         where TItem : class, ISlotItem
     {

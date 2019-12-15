@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.UI.Console
 {
     [AutowireContext, Singleton(typeof(IConsole), typeof(ICommandConsole), typeof(DebugConsole))]
-    public class DebugConsoleFactory : DelegateObjectFactory<DebugConsole, Godot.Control>
+    public class DebugConsoleFactory : DelegateNodeFactory<DebugConsole, Godot.Control>
     {
         [Export]
         public int BufferSize { get; set; } = 300;

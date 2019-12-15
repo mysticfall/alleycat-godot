@@ -5,7 +5,7 @@ using AlleyCat.Event;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public interface IGameObject : ILifecycleAware, IValidatable
+    public interface IGameNode : ILifecycleAware, IValidatable
     {
     }
 }

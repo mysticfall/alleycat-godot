@@ -12,7 +12,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Motion
 {
-    public abstract class Locomotion<T> : GameObject, ILocomotion where T : Spatial
+    public abstract class Locomotion<T> : GameNode, ILocomotion where T : Spatial
     {
         public bool Active
         {

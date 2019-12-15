@@ -1,32 +1,31 @@
 using System.Collections.Generic;
-using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Game;
 using Godot;
 using LanguageExt;
-using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Morph
 {
-    [AutowireContext]
-    public class MorphGroupFactory : GameObjectFactory<MorphGroup>
+    public class MorphGroupFactory : GameResourceFactory<MorphGroup>
     {
-        [Export]
-        public string Key { get; set; }
-
         [Export]
         public string DisplayName { get; set; }
 
-        [Service(local: true)]
-        public IEnumerable<IMorphDefinition> Definitions { get; set; } = Seq<IMorphDefinition>();
+        [Export]
+        public IEnumerable<Resource> Morphs { get; set; }
 
-        protected override Validation<string, MorphGroup> CreateService(ILoggerFactory loggerFactory)
+        protected override Validation<string, MorphGroup> CreateResource()
         {
-            var key = Key.TrimToOption().IfNone(() => Name);
-            var displayName = DisplayName.TrimToOption().Map(Tr).IfNone(key);
+            var definitions = Optional(Morphs)
+                .Flatten()
+                .Map(m => m.Validate<IMorphDefinition>())
+                .Sequence();
 
-            return new MorphGroup(key, displayName, Definitions, loggerFactory);
+            return
+                from key in ValidateName
+                from morphs in definitions
+                select new MorphGroup(key, DisplayName.TrimToOption().Map(Tr).IfNone(key), morphs);
         }
     }
 }

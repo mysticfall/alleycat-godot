@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Attribute
 {
-    public class AttributeSet : GameObject, IAttributeSet
+    public class AttributeSet : GameNode, IAttributeSet
     {
         public IAttributeHolder Holder { get; }
 

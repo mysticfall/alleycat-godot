@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=9 format=2]
+
+[ext_resource path="res://Source/AlleyCat/Character/MorphableRaceFactory.cs" type="Script" id=1]
+[ext_resource path="res://Data/Actors/Human/Slots/Pants.tres" type="Resource" id=2]
+[ext_resource path="res://Data/Actors/Human/Slots/Shirt.tres" type="Resource" id=3]
+[ext_resource path="res://Data/Actors/Human/Slots/Right Hand.tres" type="Resource" id=4]
+[ext_resource path="res://Data/Actors/Human/Slots/Necklace.tres" type="Resource" id=5]
+[ext_resource path="res://Data/Actors/Human/Slots/Left Hand.tres" type="Resource" id=6]
+[ext_resource path="res://Data/Actors/Human/Morphs/Female Morphs.tres" type="Resource" id=7]
+[ext_resource path="res://Data/Actors/Human/Morphs/Male Morphs.tres" type="Resource" id=8]
+
+[resource]
+resource_name = "Human"
+script = ExtResource( 1 )
+DisplayName = "race.Human"
+EquipmentSlots = [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 3 ), ExtResource( 2 ) ]
+MorphMappings = [ ExtResource( 8 ), ExtResource( 7 ) ]

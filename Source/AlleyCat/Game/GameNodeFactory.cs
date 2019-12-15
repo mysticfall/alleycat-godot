@@ -15,14 +15,14 @@ using static LanguageExt.Prelude;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public abstract class GameObjectFactory<T> : ReactiveNode, IGameObjectFactory<T> where T : IGameObject
+    public abstract class GameNodeFactory<T> : ReactiveNode, IGameNodeFactory<T> where T : IGameNode
     {
         public virtual IEnumerable<Type> ProvidedTypes => TypeUtils.FindInjectableTypes<T>();
 
         public Validation<string, T> Service { get; private set; } =
             Fail<string, T>("The factory has not been initialized yet.");
 
-        Validation<string, object> IGameObjectFactory.Service => Service.Map(v => (object) v);
+        Validation<string, object> IServiceFactory.Service => Service.Map(v => (object) v);
 
         [Service]
         protected Option<ILoggerFactory> LoggerFactory { get; set; }
@@ -40,7 +40,7 @@ namespace AlleyCat.Game
 
             (Service = CreateService(loggerFactory)).BiIter(
                 service => ProvidedTypes.Iter(type => collection.AddSingleton(type, service)),
-                error => throw new ValidationException(error, this));
+                error => throw new ValidationException(error));
         }
 
         protected abstract Validation<string, T> CreateService(ILoggerFactory loggerFactory);

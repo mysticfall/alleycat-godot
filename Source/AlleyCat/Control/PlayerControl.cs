@@ -21,7 +21,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Control
 {
-    public class PlayerControl : GameObject, IPlayerControl
+    public class PlayerControl : GameNode, IPlayerControl
     {
         public bool Active
         {

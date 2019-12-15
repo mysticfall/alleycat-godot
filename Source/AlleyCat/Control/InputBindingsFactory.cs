@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace AlleyCat.Control
 {
     [AutowireContext]
-    public class InputBindingsFactory : GameObjectFactory<InputBindings>
+    public class InputBindingsFactory : GameNodeFactory<InputBindings>
     {
         [Export]
         public bool Active { get; set; } = true;

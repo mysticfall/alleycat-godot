@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
-    public class EntityLabelFactory : DelegateObjectFactory<EntityLabel, Godot.Control>
+    public class EntityLabelFactory : DelegateNodeFactory<EntityLabel, Godot.Control>
     {
         [Export]
         public string InteractAction { get; set; } = "interact";

@@ -4,7 +4,7 @@ using Godot;
 namespace AlleyCat.Game
 {
     [NonInjectable]
-    public interface IDelegateObject<out T> : IGameObject where T : Node 
+    public interface IDelegateNode<out T> : IGameNode where T : Node 
     {
         T Node { get; }
     }

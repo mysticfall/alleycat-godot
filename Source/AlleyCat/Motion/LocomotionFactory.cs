@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Motion
 {
-    public abstract class LocomotionFactory<TLocomotion, TTarget> : GameObjectFactory<TLocomotion>
-        where TLocomotion : ILocomotion, IGameObject
+    public abstract class LocomotionFactory<TLocomotion, TTarget> : GameNodeFactory<TLocomotion>
+        where TLocomotion : ILocomotion, IGameNode
         where TTarget : Spatial
     {
         [Export]

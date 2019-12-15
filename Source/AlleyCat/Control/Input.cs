@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Control
 {
-    public abstract class Input<T> : GameObject, IInput<T>
+    public abstract class Input<T> : GameNode, IInput<T>
     {
         public virtual string Key { get; }
 

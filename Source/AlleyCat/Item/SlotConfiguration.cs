@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Item
 {
-    public abstract class SlotConfiguration : GameObject, ISlotConfiguration
+    public abstract class SlotConfiguration : GameNode, ISlotConfiguration
     {
         public string Key { get; }
 

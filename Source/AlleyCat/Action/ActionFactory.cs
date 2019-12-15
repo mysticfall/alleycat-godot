@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
 {
-    public abstract class ActionFactory<T> : GameObjectFactory<T> where T : Action
+    public abstract class ActionFactory<T> : GameNodeFactory<T> where T : Action
     {
         [Export]
         public bool Active { get; set; } = true;

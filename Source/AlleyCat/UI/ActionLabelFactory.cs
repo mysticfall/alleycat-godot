@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI
 {
-    public class ActionLabelFactory : DelegateObjectFactory<ActionLabel, Godot.Control>
+    public class ActionLabelFactory : DelegateNodeFactory<ActionLabel, Godot.Control>
     {
         [Export]
         public bool Active { get; set; }

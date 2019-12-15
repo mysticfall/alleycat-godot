@@ -20,8 +20,7 @@ namespace AlleyCat.Morph
             BlendShapeMorphMode morphMode,
             Range<float> range,
             float defaultValue,
-            bool hidden,
-            ILoggerFactory loggerFactory) : base(key, displayName, range, defaultValue, hidden, loggerFactory)
+            bool hidden) : base(key, displayName, range, defaultValue, hidden)
         {
             BlendShapes = blendShapes?.Freeze();
 
@@ -30,7 +29,7 @@ namespace AlleyCat.Morph
             MorphMode = morphMode;
         }
 
-        public override IMorph CreateMorph(IMorphable morphable)
+        public override IMorph CreateMorph(IMorphable morphable, ILoggerFactory loggerFactory)
         {
             Ensure.That(morphable, nameof(morphable)).IsNotNull();
 
@@ -41,7 +40,7 @@ namespace AlleyCat.Morph
                     "The specified morphable does not implement IMeshObject interface.");
             }
 
-            return new BlendShapeMorph(meshObject, this, LoggerFactory);
+            return new BlendShapeMorph(meshObject, this, loggerFactory);
         }
     }
 }

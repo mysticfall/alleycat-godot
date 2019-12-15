@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
-    public interface IAttribute : INamed, IDescribable, IIconSource, IActivatable, IGameObject
+    public interface IAttribute : INamed, IDescribable, IIconSource, IActivatable, IGameNode
     {
         float Value { get; }
 

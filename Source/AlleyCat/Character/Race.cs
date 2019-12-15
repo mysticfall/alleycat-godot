@@ -3,11 +3,10 @@ using AlleyCat.Common;
 using AlleyCat.Game;
 using AlleyCat.Item;
 using EnsureThat;
-using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Character
 {
-    public class Race : GameObject, INamed
+    public class Race : IGameResource, INamed
     {
         public string Key { get; }
 
@@ -18,8 +17,7 @@ namespace AlleyCat.Character
         public Race(
             string key,
             string displayName,
-            IEnumerable<EquipmentSlot> equipmentSlots,
-            ILoggerFactory loggerFactory) : base(loggerFactory)
+            IEnumerable<EquipmentSlot> equipmentSlots)
         {
             Ensure.That(key, nameof(key)).IsNotNullOrEmpty();
             Ensure.That(displayName, nameof(displayName)).IsNotNullOrEmpty();

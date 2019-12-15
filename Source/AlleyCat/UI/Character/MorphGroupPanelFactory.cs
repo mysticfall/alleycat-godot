@@ -9,7 +9,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.UI.Character
 {
-    public class MorphGroupPanelFactory : DelegateObjectFactory<MorphGroupPanel, Godot.Control>
+    public class MorphGroupPanelFactory : DelegateNodeFactory<MorphGroupPanel, Godot.Control>
     {
         public Option<IMorphGroup> Group { get; set; }
 

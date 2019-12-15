@@ -6,7 +6,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Game
 {
-    public static class DelegateObjectExtensions
+    public static class DelegateNodeExtensions
     {
         private const string DelegateContextKey = "DelegateContext";
 

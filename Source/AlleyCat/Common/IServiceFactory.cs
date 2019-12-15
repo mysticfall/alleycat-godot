@@ -1,17 +1,17 @@
 using AlleyCat.Autowire;
 using LanguageExt;
 
-namespace AlleyCat.Game
+namespace AlleyCat.Common
 {
     [NonInjectable]
-    public interface IGameObjectFactory : IServiceDefinitionProvider
+    public interface IServiceFactory
     {
         Validation<string, object> Service { get; }
     }
 
     namespace Generic
     {
-        public interface IGameObjectFactory<T> : IGameObjectFactory where T : IGameObject
+        public interface IServiceFactory<T> : IServiceFactory
         {
             new Validation<string, T> Service { get; }
         }

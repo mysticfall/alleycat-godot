@@ -4,7 +4,6 @@ using Godot;
 using Godot.Collections;
 using LanguageExt;
 using LanguageExt.ClassInstances;
-using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Morph
@@ -17,8 +16,8 @@ namespace AlleyCat.Morph
         [Export]
         public BlendShapeMorphMode MorphMode { get; set; } = BlendShapeMorphMode.Parallel;
 
-        protected override Validation<string, BlendShapeMorphDefinition> CreateService(
-            string key, string displayName, bool hidden, ILoggerFactory loggerFactory)
+        protected override Validation<string, BlendShapeMorphDefinition> CreateResource(
+            string key, string displayName, bool hidden)
         {
             var range = new Range<float>(MinValue, MaxValue, TFloat.Inst);
 
@@ -27,7 +26,7 @@ namespace AlleyCat.Morph
                     .Filter(v => v.Any())
                     .ToValidation("Missing the target material list.")
                 select new BlendShapeMorphDefinition(
-                    key, displayName, blendShapes, MorphMode, range, Default, hidden, loggerFactory);
+                    key, displayName, blendShapes, MorphMode, range, Default, hidden);
         }
     }
 }

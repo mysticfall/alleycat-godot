@@ -1,16 +1,14 @@
 using System;
-using Godot;
 
 namespace AlleyCat.Common
 {
-    public class ValidationException : NodeException
+    public class ValidationException : Exception
     {
-        public ValidationException(string message, Node node) : base(message, node)
+        public ValidationException(string message) : base(message)
         {
         }
 
-        public ValidationException(string message, Exception innerException, Node node) :
-            base(message, innerException, node)
+        public ValidationException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Game
 {
-    public class Scene : GameObject, IScene
+    public class Scene : GameNode, IScene
     {
         public string Key { get; }
 

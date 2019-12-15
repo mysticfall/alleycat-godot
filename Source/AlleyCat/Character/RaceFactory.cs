@@ -1,14 +1,18 @@
 using LanguageExt;
-using Microsoft.Extensions.Logging;
+using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
     public class RaceFactory : BaseRaceFactory<Race>
     {
-        protected override Validation<string, Race> CreateService(
-            string key, string displayName, ILoggerFactory loggerFactory)
+        protected override Validation<string, Race> CreateResource(string key, string displayName)
         {
-            return new Race(key, displayName, EquipmentSlots, loggerFactory);
+            var slots = Optional(EquipmentSlots)
+                .Flatten()
+                .Map(s => s.Service)
+                .Sequence();
+
+            return slots.Map(s => new Race(key, displayName, s));
         }
     }
 }

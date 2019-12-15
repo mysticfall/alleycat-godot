@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI.Tool
 {
-    public class BlendMapGeneratorFactory : DelegateObjectFactory<BlendMapGenerator, Godot.Control>
+    public class BlendMapGeneratorFactory : DelegateNodeFactory<BlendMapGenerator, Godot.Control>
     {
         [Node]
         public Option<LineEdit> InputEdit { get; set; }

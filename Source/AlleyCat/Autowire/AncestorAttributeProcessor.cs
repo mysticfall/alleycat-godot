@@ -26,7 +26,7 @@ namespace AlleyCat.Autowire
 
                 return DependencyType.IsInstanceOfType(a)
                     ? Some(a)
-                    : Some(a).OfType<IGameObjectFactory>().Bind(f => f.Service.ToOption());
+                    : Some(a).OfType<IGameNodeFactory>().Bind(f => f.Service.ToOption());
             });
 
             return EnumerableHelper.OfType(ancestors.Freeze(), DependencyType);

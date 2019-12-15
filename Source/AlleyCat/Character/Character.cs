@@ -20,8 +20,8 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Character
 {
-    public abstract class Character<TRace, TVision, TLocomotion> : GameObject,
-        IDelegateObject<KinematicBody>,
+    public abstract class Character<TRace, TVision, TLocomotion> : GameNode,
+        IDelegateNode<KinematicBody>,
         ICharacter<TRace, TVision, TLocomotion>
         where TRace : Race
         where TVision : class, IVision

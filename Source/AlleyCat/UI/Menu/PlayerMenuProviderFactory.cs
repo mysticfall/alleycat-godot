@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.UI.Menu
 {
-    public abstract class PlayerMenuProviderFactory<T> : GameObjectFactory<T> where T : PlayerMenuProvider
+    public abstract class PlayerMenuProviderFactory<T> : GameNodeFactory<T> where T : PlayerMenuProvider
     {
         [Export]
         public string Key { get; set; }

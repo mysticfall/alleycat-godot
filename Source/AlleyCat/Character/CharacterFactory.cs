@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using AlleyCat.Action;
 using AlleyCat.Animation;
 using AlleyCat.Attribute;
@@ -16,8 +15,8 @@ namespace AlleyCat.Character
 {
     [AutowireContext]
     public abstract class CharacterFactory<TCharacter, TRace, TVision, TLocomotion> :
-        DelegateObjectFactory<TCharacter, KinematicBody>
-        where TCharacter : Character<TRace, TVision, TLocomotion>, IDelegateObject<KinematicBody>
+        DelegateNodeFactory<TCharacter, KinematicBody>
+        where TCharacter : Character<TRace, TVision, TLocomotion>, IDelegateNode<KinematicBody>
         where TRace : Race
         where TVision : class, IVision
         where TLocomotion : class, ILocomotion
@@ -29,7 +28,7 @@ namespace AlleyCat.Character
         public string DisplayName { get; set; }
 
         [Export]
-        public string Race { get; set; }
+        public Resource Race { get; set; }
 
         [Export]
         public Sex Sex { get; set; }
@@ -50,9 +49,6 @@ namespace AlleyCat.Character
         public Option<Skeleton> Skeleton { get; set; }
 
         [Service]
-        public Option<IRaceRegistry> RaceRegistry { get; set; }
-
-        [Service]
         public Option<IActionSet> Actions { get; set; }
 
         [Service(local: true)]
@@ -71,12 +67,7 @@ namespace AlleyCat.Character
                     .ToValidation("Failed to find the vision component.")
                 from locomotion in Locomotion
                     .ToValidation("Failed to find the locomotion component.")
-                from raceName in Race.TrimToOption()
-                    .ToValidation("Missing the race name.")
-                from raceRegistry in RaceRegistry
-                    .ToValidation("Failed to find the race registry.")
-                from race in raceRegistry.Races.Find(raceName).OfType<TRace>().HeadOrNone()
-                    .ToValidation($"Unknown race was specified: '{raceName}'.")
+                from race in Race.Validate<TRace>().MapFail(e => $"Invalid race: '{e}'.")
                 from actions in Actions
                     .ToValidation("Failed to find the action set.")
                 from animationManager in AnimationManager

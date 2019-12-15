@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Action
 {
-    public abstract class Action : GameObject, IAction
+    public abstract class Action : GameNode, IAction
     {
         public string Key { get; }
 

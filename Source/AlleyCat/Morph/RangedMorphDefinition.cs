@@ -1,5 +1,4 @@
 using AlleyCat.Common;
-using Microsoft.Extensions.Logging;
 
 namespace AlleyCat.Morph
 {
@@ -12,8 +11,7 @@ namespace AlleyCat.Morph
             string displayName,
             Range<float> range,
             float defaultValue,
-            bool hidden,
-            ILoggerFactory loggerFactory) : base(key, displayName, defaultValue, hidden, loggerFactory)
+            bool hidden) : base(key, displayName, defaultValue, hidden)
         {
             Range = range;
         }

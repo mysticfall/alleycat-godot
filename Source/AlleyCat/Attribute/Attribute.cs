@@ -14,7 +14,7 @@ using static LanguageExt.Prelude;
 
 namespace AlleyCat.Attribute
 {
-    public abstract class Attribute : GameObject, IAttribute
+    public abstract class Attribute : GameNode, IAttribute
     {
         public bool Active
         {
