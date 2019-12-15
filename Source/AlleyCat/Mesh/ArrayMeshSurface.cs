@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AlleyCat.Mesh.Generic;
 using EnsureThat;
 using Godot;
-using Godot.Collections;
 using LanguageExt;
 using static LanguageExt.Prelude;
 using static Godot.Mesh;
+using Array = Godot.Collections.Array;
 
 namespace AlleyCat.Mesh
 {
@@ -51,13 +52,13 @@ namespace AlleyCat.Mesh
 
         public BlendShapeMode BlendShapeMode { get; }
 
-        public Option<Material> Material { get; }
+        public Option<Material> Material => _material.Invoke();
 
         private Option<SimpleMeshData> _base;
 
         private IEnumerable<BlendShapeData> _blendShapes;
 
-        private Option<Material> _material;
+        private readonly Func<Option<Material>> _material;
 
         public ArrayMeshSurface(ArrayMesh mesh, int index)
         {
@@ -71,7 +72,8 @@ namespace AlleyCat.Mesh
             FormatMask = Mesh.SurfaceGetFormat(index);
             PrimitiveType = Mesh.SurfaceGetPrimitiveType(Index);
             BlendShapeMode = Mesh.BlendShapeMode;
-            Material = Optional(_ => Mesh.SurfaceGetMaterial(index));
+
+            _material = memo(() => Optional(Mesh.SurfaceGetMaterial(index)));
         }
     }
 }

@@ -4,8 +4,8 @@ using EnsureThat;
 using Godot;
 using JetBrains.Annotations;
 using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions.Internal;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Logging
@@ -118,6 +118,6 @@ namespace AlleyCat.Logging
         }
 
         public virtual IDisposable BeginScope<TState>(TState state) =>
-            ScopeProvider.Map(p => p.Push(state)).IfNone(NullScope.Instance);
+            ScopeProvider.Map(p => p.Push(state)).ValueUnsafe();
     }
 }

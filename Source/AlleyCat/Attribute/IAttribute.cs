@@ -53,12 +53,12 @@ namespace AlleyCat.Attribute
             Ensure.That(path, nameof(path)).IsNotNull();
             Ensure.That(holder, nameof(holder)).IsNotNull();
 
-            Option<IAttribute> ResolvePath(IAttribute context, ISeq<string> segments) => segments.Match(
+            Option<IAttribute> ResolvePath(IAttribute context, Seq<string> segments) => segments.Match(
                 () => None,
                 key => context.Children.Find(key),
                 (h, t) => context.Children.Find(h).Bind(a => ResolvePath(a, t)));
 
-            Option<IAttribute> ResolveAbsolutePath(ISeq<string> segments) => segments.Match(
+            Option<IAttribute> ResolveAbsolutePath(Seq<string> segments) => segments.Match(
                 () => None,
                 key => holder.Attributes.TryGetValue(key),
                 (h, t) => holder.Attributes.TryGetValue(h).Bind(c => ResolvePath(c, t)));

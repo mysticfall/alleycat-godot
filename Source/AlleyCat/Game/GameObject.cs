@@ -1,10 +1,10 @@
+using System;
 using System.Reactive.Linq;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
 using AlleyCat.Event;
 using AlleyCat.Logging;
 using EnsureThat;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
@@ -13,13 +13,13 @@ namespace AlleyCat.Game
     [NonInjectable]
     public abstract class GameObject : ReactiveObject, IGameObject, ILoggable
     {
-        public ILogger Logger => Some(_ => LoggerFactory.CreateLogger(this.GetLogCategory())).Head();
+        public ILogger Logger => _logger.Invoke();
 
         public ILoggerFactory LoggerFactory { get; }
 
         public virtual bool Valid => _valid;
 
-        private readonly Option<ILogger> _logger;
+        private readonly Func<ILogger> _logger;
 
         private bool _valid;
 
@@ -28,6 +28,8 @@ namespace AlleyCat.Game
             Ensure.That(loggerFactory, nameof(loggerFactory)).IsNotNull();
 
             LoggerFactory = loggerFactory;
+
+            _logger = memo(() => LoggerFactory.CreateLogger(this.GetLogCategory()));
         }
 
         protected override void PostConstruct()
