@@ -35,7 +35,8 @@ namespace AlleyCat.Morph
 
             var indexes = target
                 .Bind(m => Enumerable.Range(0, m.GetSurfaceCount()).Map(m.SurfaceGetName))
-                .Map((index, name) => (name, index));
+                .Map((index, name) => (name, index))
+                .Filter(v => v.name.Any());
 
             var lookup = toMap(indexes);
 
