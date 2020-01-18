@@ -11,7 +11,6 @@ using LanguageExt;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using static LanguageExt.Prelude;
 
 namespace AlleyCat.Autowire
@@ -82,7 +81,7 @@ namespace AlleyCat.Autowire
                     _logger = _loggerFactory.Map(f => f.CreateLogger(this.GetLogCategory()));
                 }
 
-                return _logger.IfNone(NullLogger.Instance);
+                return _logger.IfNone(new PrintLogger(this.GetLogCategory(), LogLevel.Information));
             }
         }
 
