@@ -123,7 +123,7 @@ namespace AlleyCat.IO
 
         protected override void Dispose(bool disposing)
         {
-            if (_file.IsOpen())
+            if (Godot.Object.IsInstanceValid(_file) && _file.IsOpen())
             {
                 _file.Close();
             }
