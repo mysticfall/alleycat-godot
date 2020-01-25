@@ -264,12 +264,6 @@ namespace AlleyCat.View
             {
                 Vision.Iter(v => v.LookAt(None));
             }
-
-            //TODO Should find a better way not to break the shadow and reflection.
-            Character
-                .Bind(c => c.Meshes)
-                .Find(m => m.Name == "Head")
-                .Iter(m => m.Visible = !active);
         }
 
         private void InitializeStabilization()
