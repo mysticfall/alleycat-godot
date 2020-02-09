@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using AlleyCat.Common;
 using AlleyCat.Logging;
 using AlleyCat.Mesh;
 using EnsureThat;
