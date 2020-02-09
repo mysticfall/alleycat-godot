@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using AlleyCat.Animation;
@@ -29,7 +27,7 @@ namespace AlleyCat.Sensor
 
         public Skeleton Skeleton { get; }
 
-        public IAnimationManager AnimationManager { get; }
+        public IAnimationStateManager AnimationManager { get; }
 
         public Transform Head => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(HeadBone);
 
@@ -37,9 +35,9 @@ namespace AlleyCat.Sensor
 
         public Transform Chest => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(ChestBone);
 
-        public Transform LeftEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(LeftEyeBone);
+        public Transform LeftEye => LeftEyeMarker.GlobalTransform;
 
-        public Transform RightEye => Skeleton.GlobalTransform * Skeleton.GetBoneGlobalPose(RightEyeBone);
+        public Transform RightEye => RightEyeMarker.GlobalTransform;
 
         public Vector3 Viewpoint => (LeftEye.origin + RightEye.origin) / 2f;
 
@@ -60,6 +58,10 @@ namespace AlleyCat.Sensor
 
         public virtual Range<float> NeckPitchRange { get; }
 
+        public virtual Range<float> YawRange => NeckYawRange + HeadYawRange + EyesYawRange;
+
+        public virtual Range<float> PitchRange => NeckPitchRange + HeadPitchRange + EyesPitchRange;
+
         public Vector3 Origin => Neck.origin;
 
         public Vector3 Up => (Neck.origin - Chest.origin).Normalized();
@@ -68,15 +70,19 @@ namespace AlleyCat.Sensor
 
         public Vector3 Right => Forward.Cross(Up);
 
+        protected SeekableAnimator HorizontalEyesControl { get; }
+
+        protected SeekableAnimator VerticalEyesControl { get; }
+
         protected int HeadBone { get; }
 
         protected int NeckBone { get; }
 
         protected int ChestBone { get; }
 
-        protected int LeftEyeBone { get; }
+        protected Marker RightEyeMarker { get; }
 
-        protected int RightEyeBone { get; }
+        protected Marker LeftEyeMarker { get; }
 
         protected Basis HeadOrientation { get; }
 
@@ -88,11 +94,15 @@ namespace AlleyCat.Sensor
 
         private readonly BehaviorSubject<bool> _active;
 
+        private Seq<Chain> _chains;
+
         public PairedEyeSight(
             Skeleton skeleton,
-            IAnimationManager animationManager,
-            int rightEyeBone,
-            int leftEyeBone,
+            IAnimationStateManager animationManager,
+            SeekableAnimator horizontalEyesControl,
+            SeekableAnimator verticalEyesControl,
+            Marker rightEyeMarker,
+            Marker leftEyeMarker,
             int headBone,
             int neckBone,
             int chestBone,
@@ -108,8 +118,10 @@ namespace AlleyCat.Sensor
         {
             Ensure.That(skeleton, nameof(skeleton)).IsNotNull();
             Ensure.That(animationManager, nameof(animationManager)).IsNotNull();
-            Ensure.That(rightEyeBone, nameof(rightEyeBone)).IsGte(0);
-            Ensure.That(leftEyeBone, nameof(leftEyeBone)).IsGte(0);
+            Ensure.That(horizontalEyesControl, nameof(horizontalEyesControl)).IsNotNull();
+            Ensure.That(verticalEyesControl, nameof(verticalEyesControl)).IsNotNull();
+            Ensure.That(rightEyeMarker, nameof(rightEyeMarker)).IsNotNull();
+            Ensure.That(leftEyeMarker, nameof(leftEyeMarker)).IsNotNull();
             Ensure.That(headBone, nameof(headBone)).IsGte(0);
             Ensure.That(neckBone, nameof(neckBone)).IsGte(0);
             Ensure.That(chestBone, nameof(chestBone)).IsGte(0);
@@ -118,8 +130,12 @@ namespace AlleyCat.Sensor
             Skeleton = skeleton;
             AnimationManager = animationManager;
 
-            LeftEyeBone = leftEyeBone;
-            RightEyeBone = rightEyeBone;
+            HorizontalEyesControl = horizontalEyesControl;
+            VerticalEyesControl = verticalEyesControl;
+
+            RightEyeMarker = rightEyeMarker;
+            LeftEyeMarker = leftEyeMarker;
+
             HeadBone = headBone;
             NeckBone = neckBone;
             ChestBone = chestBone;
@@ -144,6 +160,29 @@ namespace AlleyCat.Sensor
         {
             base.PostConstruct();
 
+            var neck = new BoneChain(
+                () => new Transform(Chest.basis * ChestOrientation, Neck.origin),
+                NeckYawRange,
+                NeckPitchRange,
+                Skeleton,
+                NeckBone);
+
+            var head = new BoneChain(
+                () => new Transform(Neck.basis * NeckOrientation, Head.origin),
+                HeadYawRange,
+                HeadPitchRange,
+                Skeleton,
+                HeadBone);
+
+            var eyes = new AnimatedChain(
+                () => new Transform(Head.basis * HeadOrientation, Viewpoint),
+                EyesYawRange,
+                EyesPitchRange,
+                HorizontalEyesControl,
+                VerticalEyesControl);
+
+            _chains = Seq<Chain>(neck, head, eyes);
+
             AnimationManager.OnAdvance
                 .TakeUntil(Disposed.Where(identity))
                 .Subscribe(OnAnimation, this);
@@ -161,85 +200,126 @@ namespace AlleyCat.Sensor
 
         protected virtual void OnAnimation(float delta)
         {
-            LookTarget.Iter(target =>
-            {
-                var v = CalculateRotation(
-                    target,
-                    Neck.origin,
-                    Chest.basis * ChestOrientation,
-                    Vector2.Zero);
+            var transform = new Transform(Chest.basis * ChestOrientation, Neck.origin);
 
-                var yawRange = new[] {NeckYawRange, HeadYawRange, EyesYawRange}.Aggregate((r1, r2) => r1 + r2);
-                var pitchRange = new[] {NeckPitchRange, HeadPitchRange, EyesPitchRange}.Aggregate((r1, r2) => r1 + r2);
+            var v = LookTarget
+                .Map(t => CalculateRotation(t, transform, Vector2.Zero))
+                .IfNone(Vector2.Zero);
 
-                var yawDistance = Min(yawRange.Distance(v.x), 1f);
-                var pitchDistance = Min(pitchRange.Distance(v.y), 1f);
+            var yawDistance = Min(YawRange.Distance(v.x), 1f);
+            var pitchDistance = Min(PitchRange.Distance(v.y), 1f);
 
-                ApplyRotation(
-                    target,
-                    Neck.origin,
-                    Chest.basis * ChestOrientation,
-                    new[] {NeckBone},
-                    NeckYawRange,
-                    NeckPitchRange,
-                    new Vector2(0, Deg2Rad(-15f)),
-                    new Vector2(yawDistance, pitchDistance));
+            var offset = new Vector2(0, Deg2Rad(-15f));
+            var influence = new Vector2(yawDistance, pitchDistance);
 
-                ApplyRotation(
-                    target,
-                    Head.origin,
-                    Neck.basis * NeckOrientation,
-                    new[] {HeadBone},
-                    HeadYawRange,
-                    HeadPitchRange,
-                    new Vector2(0, Deg2Rad(-15f)),
-                    new Vector2(yawDistance, pitchDistance));
-
-                ApplyRotation(
-                    target,
-                    Viewpoint,
-                    Head.basis * HeadOrientation,
-                    new[] {LeftEyeBone, RightEyeBone},
-                    EyesYawRange,
-                    EyesPitchRange,
-                    Vector2.Zero,
-                    Vector2.One);
-            });
+            _chains.Iter(c => c.Rotate(LookTarget, offset, influence));
         }
 
-        protected virtual void ApplyRotation(
-            Vector3 target,
-            Vector3 origin,
-            Basis reference,
-            IEnumerable<int> bones,
-            Range<float> yawRange,
-            Range<float> pitchRange,
-            Vector2 offset,
-            Vector2 influence)
+        public abstract class Chain
         {
-            var v = CalculateRotation(target, origin, reference, offset) * influence;
+            public Func<Transform> Transform { get; }
 
-            var h = Basis.Identity.Rotated(Vector3.Up, yawRange.Clamp(v.x));
-            var r = h.Xform(Vector3.Right);
+            public Range<float> YawRange { get; }
 
-            var rotation = h.Rotated(r, pitchRange.Clamp(v.y));
+            public Range<float> PitchRange { get; }
 
-            bones.Iter(i =>
+            public Chain(
+                Func<Transform> transform,
+                Range<float> yawRange,
+                Range<float> pitchRange)
             {
-                var global = Skeleton.GetBoneGlobalPose(i);
+                Transform = transform;
+                YawRange = yawRange;
+                PitchRange = pitchRange;
+            }
 
-                Skeleton.SetBoneGlobalPoseOverride(i, new Transform(rotation * global.basis, global.origin), 1f);
-            });
+            public abstract void Rotate(Option<Vector3> target, Vector2 offset, Vector2 influence);
         }
 
-        protected virtual Vector2 CalculateRotation(
-            Vector3 target,
-            Vector3 origin,
-            Basis reference,
-            Vector2 offset)
+        public class BoneChain : Chain
         {
-            var up = reference.Xform(Vector3.Up);
-            var right = reference.Xform(Vector3.Right);
+            public Skeleton Skeleton { get; }
+
+            public int Bone { get; }
+
+            public BoneChain(
+                Func<Transform> transform,
+                Range<float> yawRange,
+                Range<float> pitchRange,
+                Skeleton skeleton,
+                int bone) : base(transform, yawRange, pitchRange)
+            {
+                Skeleton = skeleton;
+                Bone = bone;
+            }
+
+            public override void Rotate(Option<Vector3> target, Vector2 offset, Vector2 influence)
+            {
+                var transform = Transform();
+
+                //FIXME: A temporary workaround until godotengine/godot#33552 gets fixed.
+                Skeleton.SetBoneGlobalPoseOverride(Bone, Godot.Transform.Identity, 0f, false);
+
+                target.Iter(t =>
+                {
+                    var v = CalculateRotation(t, transform, offset) * influence;
+
+                    var h = Basis.Identity.Rotated(Vector3.Up, YawRange.Clamp(v.x));
+                    var r = h.Xform(Vector3.Right);
+
+                    var global = Skeleton.GetBoneGlobalPose(Bone);
+
+                    var rotation = h.Rotated(r, PitchRange.Clamp(v.y));
+                    var rotated = new Transform(rotation * global.basis, global.origin);
+
+                    Skeleton.SetBoneGlobalPoseOverride(Bone, rotated, 1f, true);
+                });
+            }
+        }
+
+        public class AnimatedChain : Chain
+        {
+            public SeekableAnimator HorizontalControl { get; }
+
+            public SeekableAnimator VerticalControl { get; }
+
+            public AnimatedChain(
+                Func<Transform> transform,
+                Range<float> yawRange,
+                Range<float> pitchRange,
+                SeekableAnimator horizontalControl,
+                SeekableAnimator verticalControl) : base(transform, yawRange, pitchRange)
+            {
+                HorizontalControl = horizontalControl;
+                VerticalControl = verticalControl;
+            }
+
+            public override void Rotate(Option<Vector3> target, Vector2 offset, Vector2 influence)
+            {
+                Vector2 GetMorph(Vector3 t)
+                {
+                    var rotation = CalculateRotation(t, Transform(), offset) * influence;
+
+                    var horizontal = (1f - YawRange.Ratio(YawRange.Clamp(rotation.x))) * 0.5f;
+                    var vertical = (1f + PitchRange.Ratio(PitchRange.Clamp(rotation.y))) * 0.5f;
+
+                    return new Vector2(horizontal, vertical);
+                }
+
+                var morph = target.Map(GetMorph).IfNone(new Vector2(0.5f, 0.5f));
+
+                HorizontalControl.Position = morph.x;
+                VerticalControl.Position = morph.y;
+            }
+        }
+
+        private static Vector2 CalculateRotation(Vector3 target, Transform transform, Vector2 offset)
+        {
+            var basis = transform.basis;
+            var origin = transform.origin;
+
+            var up = basis.Xform(Vector3.Up);
+            var right = basis.Xform(Vector3.Right);
             var forward = up.Cross(right);
 
             var direction = (target - origin).Normalized();

@@ -11,5 +11,5 @@ Hidden = false
 MinValue = 0.85
 MaxValue = 1.1
 MorphType = 0
-Modifier = Vector3( 0, 0, 0 )
+Modifier = Vector3( 0, 0, 1 )
 Bones = [ "thigh_L", "thigh_R" ]

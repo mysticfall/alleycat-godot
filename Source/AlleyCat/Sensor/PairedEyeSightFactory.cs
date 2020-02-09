@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AlleyCat.Animation;
 using AlleyCat.Autowire;
 using AlleyCat.Common;
@@ -19,13 +21,22 @@ namespace AlleyCat.Sensor
         public Option<Skeleton> Skeleton { get; set; }
 
         [Service]
-        public Option<IAnimationManager> AnimationManager { get; set; }
+        public Option<IAnimationStateManager> AnimationManager { get; set; }
+
+        [Service]
+        public IEnumerable<Marker> Markers { get; set; }
 
         [Export]
-        public string EyeBoneLeft { get; set; } = "eye_L";
+        public string HorizontalEyesControl { get; set; } = "Eyes Control/Horizontal";
 
         [Export]
-        public string EyeBoneRight { get; set; } = "eye_R";
+        public string VerticalEyesControl { get; set; } = "Eyes Control/Vertical";
+
+        [Export]
+        public string RightEyeMarker { get; set; } = "Right Eye";
+
+        [Export]
+        public string LeftEyeMarker { get; set; } = "Left Eye";
 
         [Export]
         public string HeadBone { get; set; } = "head";
@@ -78,12 +89,16 @@ namespace AlleyCat.Sensor
                     .ToValidation("Failed to find the skeleton.")
                 from animationManager in AnimationManager
                     .ToValidation("Failed to find the animation manager.")
-                from leftEyeBone in EyeBoneLeft.TrimToOption()
-                    .Map(skeleton.FindBone).Filter(i => i > -1)
-                    .ToValidation("Failed to find the left eye bone.")
-                from rightEyeBone in EyeBoneRight.TrimToOption()
-                    .Map(skeleton.FindBone).Filter(i => i > -1)
-                    .ToValidation("Failed to find the right eye bone.")
+                from horizontalEyesControl in HorizontalEyesControl.TrimToOption()
+                    .Bind(animationManager.FindSeekableAnimator)
+                    .ToValidation("Failed to find an animation control for horizontal eyes movement.")
+                from verticalEyesControl in VerticalEyesControl.TrimToOption()
+                    .Bind(animationManager.FindSeekableAnimator)
+                    .ToValidation("Failed to find an animation control for vertical eyes movement.")
+                from rightEye in Markers.Find(m => RightEyeMarker.TrimToOption().Contains(m.Key))
+                    .ToValidation("Failed to find the right eye marker.")
+                from leftEye in Markers.Find(m => LeftEyeMarker.TrimToOption().Contains(m.Key))
+                    .ToValidation("Failed to find the left eye marker.")
                 from headBone in HeadBone.TrimToOption()
                     .Map(skeleton.FindBone).Filter(i => i > -1)
                     .ToValidation("Failed to find the head bone.")
@@ -96,8 +111,10 @@ namespace AlleyCat.Sensor
                 select new PairedEyeSight(
                     skeleton,
                     animationManager,
-                    rightEyeBone,
-                    leftEyeBone,
+                    horizontalEyesControl,
+                    verticalEyesControl,
+                    rightEye,
+                    leftEye,
                     headBone,
                     neckBone,
                     chestBone,

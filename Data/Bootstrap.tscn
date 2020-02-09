@@ -11,53 +11,29 @@
 
 [node name="Bootstrap" type="Node"]
 script = ExtResource( 1 )
-__meta__ = {
-
-}
 
 [node name="Settings" type="Node" parent="."]
 script = ExtResource( 2 )
-__meta__ = {
-
-}
 
 [node name="Framework Settings" type="Node" parent="Settings"]
 script = ExtResource( 3 )
-__meta__ = {
-
-}
 Optional = true
 File = "res://Data/AlleyCat.json"
 
 [node name="Project Settings" type="Node" parent="Settings"]
 script = ExtResource( 4 )
-__meta__ = {
-
-}
 
 [node name="Logging" type="Node" parent="."]
 script = ExtResource( 5 )
-__meta__ = {
-
-}
 
 [node name="Game Console" type="Node" parent="Logging"]
 script = ExtResource( 6 )
-__meta__ = {
-
-}
 MinimumLevel = 3
 
 [node name="Editor Console" type="Node" parent="Logging"]
 script = ExtResource( 7 )
-__meta__ = {
-
-}
 MinimumLevel = 1
 
 [node name="UI" type="CanvasLayer" parent="."]
-__meta__ = {
-
-}
 
 [node name="Console" parent="UI" instance=ExtResource( 8 )]
