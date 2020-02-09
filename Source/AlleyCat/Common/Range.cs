@@ -37,6 +37,15 @@ namespace AlleyCat.Common
             return _num.Product(diff, _num.Signum(diff));
         }
 
+        public T Ratio(T value)
+        {
+            var center = _num.Divide(_num.Plus(Min, Max), _num.FromFloat(2f));
+            var length = _num.Divide(_num.Subtract(Max, Min), _num.FromFloat(2f));
+            var diff = _num.Subtract(value, center);
+
+            return _num.Divide(diff, length);
+        }
+
         public static Range<T> operator +(Range<T> left, Range<T> right)
         {
             var min = left._num.Plus(left.Min, right.Min);
