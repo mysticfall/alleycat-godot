@@ -67,7 +67,7 @@ namespace AlleyCat.Morph
         private void Apply(float value)
         {
             var defaultScale = new Vector3(1, 1, 1) * Definition.Default;
-            var deltaScale = new Vector3(1, 1, 1) * Value - defaultScale;
+            var deltaScale = new Vector3(1, 1, 1) * value - defaultScale;
 
             var scale = defaultScale + deltaScale * Definition.Modifier;
 
