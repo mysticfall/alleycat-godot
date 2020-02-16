@@ -168,12 +168,14 @@ namespace AlleyCat.UI.Tool
             var meshes = onDirectoryChange
                 .Select(v => v.Input.Contents)
                 .Select(FindMeshes)
-                .Select(v => v.Cast<FileInfo>().Freeze());
+                .Select(v => v.Cast<FileInfo>().Freeze())
+                .Publish();
 
             var meshSets = meshes.CombineLatest(onDirectoryChange, (files, paths) => (files, paths))
                 .Do(v => Logger.LogDebug("Searching for base meshes in '{}'.", v.paths.Input.Path))
                 .Select(v => v.files.Bind(f => MeshSet.TryCreate(f, v.paths, v.files, Logger)))
-                .Select(v => v.Freeze());
+                .Select(v => v.Freeze())
+                .Publish();
 
             var shownTasks = SourceList.OnItemSelect()
                 .Select(v => v.Map(i => i.GetText(0)))
@@ -206,6 +208,9 @@ namespace AlleyCat.UI.Tool
             CloseButton.OnPress()
                 .TakeUntil(disposed)
                 .Subscribe(_ => Quit(), this);
+
+            meshes.Connect();
+            meshSets.Connect();
         }
 
         private void CreateNode(MeshSet mesh)
