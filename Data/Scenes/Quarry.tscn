@@ -9,7 +9,7 @@
 [ext_resource path="res://Data/Scenes/Base Scene.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Data/Environment/Quarry/Quarry.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Data/Textures/Particle/smoke.png" type="Texture" id=10]
-[ext_resource path="res://Data/Actors/Human/Female/Asian.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Data/Actors/Human/Female/Female.tscn" type="PackedScene" id=11]
 
 [sub_resource type="Image" id=1]
 data = {

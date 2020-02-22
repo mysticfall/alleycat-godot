@@ -1,6 +1,7 @@
 [gd_scene load_steps=55 format=2]
 
-[ext_resource path="res://Data/Actors/Human/Female/Asian.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Data/Actors/Human/Female/Female.tscn" type="PackedScene" id=1]
+
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 animation = "Blink"

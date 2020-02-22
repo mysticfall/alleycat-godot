@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Asian.escn-ef4cdd32d699a9c69dc1f64126830bdc.scn"
+path="res://.import/Female.escn-088268b49d510ea1d85ea447032f2ff1.scn"
 
 [deps]
 
-source_file="res://Data/Actors/Human/Female/Asian.escn"
-dest_files=[ "res://.import/Asian.escn-ef4cdd32d699a9c69dc1f64126830bdc.scn" ]
+source_file="res://Data/Actors/Human/Female/Female.escn"
+dest_files=[ "res://.import/Female.escn-088268b49d510ea1d85ea447032f2ff1.scn" ]
 
 [params]
 
